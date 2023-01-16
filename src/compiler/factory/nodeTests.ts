@@ -187,6 +187,7 @@ import {
     SpreadElement,
     StaticKeyword,
     StringLiteral,
+    SubtypeOfKeyword,
     SuperExpression,
     SwitchStatement,
     SyntaxKind,
@@ -385,6 +386,11 @@ export function isImportKeyword(node: Node): node is ImportExpression {
 /** @internal */
 export function isCaseKeyword(node: Node): node is CaseKeyword {
     return node.kind === SyntaxKind.CaseKeyword;
+}
+
+/** @internal */
+export function isSubtypeOfKeyword(node: Node): node is SubtypeOfKeyword {
+    return node.kind === SyntaxKind.SubtypeOfKeyword;
 }
 
 // Names

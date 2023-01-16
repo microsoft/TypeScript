@@ -1,0 +1,168 @@
+=== tests/cases/compiler/typePredicateSubtypeOf.ts ===
+declare function isInteger(arg: any): arg is subtypeof number;
+>isInteger : Symbol(isInteger, Decl(typePredicateSubtypeOf.ts, 0, 0))
+>arg : Symbol(arg, Decl(typePredicateSubtypeOf.ts, 0, 27))
+>arg : Symbol(arg, Decl(typePredicateSubtypeOf.ts, 0, 27))
+
+declare const a: string | number;
+>a : Symbol(a, Decl(typePredicateSubtypeOf.ts, 1, 13))
+
+if (isInteger(a)) {
+>isInteger : Symbol(isInteger, Decl(typePredicateSubtypeOf.ts, 0, 0))
+>a : Symbol(a, Decl(typePredicateSubtypeOf.ts, 1, 13))
+
+    a;
+>a : Symbol(a, Decl(typePredicateSubtypeOf.ts, 1, 13))
+
+} else {
+    a;
+>a : Symbol(a, Decl(typePredicateSubtypeOf.ts, 1, 13))
+}
+a;
+>a : Symbol(a, Decl(typePredicateSubtypeOf.ts, 1, 13))
+
+const array = ["foo", 42, true];
+>array : Symbol(array, Decl(typePredicateSubtypeOf.ts, 9, 5))
+
+const b = array.filter(isInteger);
+>b : Symbol(b, Decl(typePredicateSubtypeOf.ts, 10, 5))
+>array.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(typePredicateSubtypeOf.ts, 9, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isInteger : Symbol(isInteger, Decl(typePredicateSubtypeOf.ts, 0, 0))
+
+const c = array.filter((v): v is subtypeof string => v === v.toString().toLowerCase());
+>c : Symbol(c, Decl(typePredicateSubtypeOf.ts, 11, 5))
+>array.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(typePredicateSubtypeOf.ts, 9, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(typePredicateSubtypeOf.ts, 11, 24))
+>v : Symbol(v, Decl(typePredicateSubtypeOf.ts, 11, 24))
+>v : Symbol(v, Decl(typePredicateSubtypeOf.ts, 11, 24))
+>v.toString().toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>v.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(typePredicateSubtypeOf.ts, 11, 24))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+interface A { a: string; isCatOrDog(): this is subtypeof C }
+>A : Symbol(A, Decl(typePredicateSubtypeOf.ts, 11, 87))
+>a : Symbol(A.a, Decl(typePredicateSubtypeOf.ts, 13, 13))
+>isCatOrDog : Symbol(A.isCatOrDog, Decl(typePredicateSubtypeOf.ts, 13, 24))
+>C : Symbol(C, Decl(typePredicateSubtypeOf.ts, 14, 35))
+
+interface B extends A { b: string }
+>B : Symbol(B, Decl(typePredicateSubtypeOf.ts, 13, 60))
+>A : Symbol(A, Decl(typePredicateSubtypeOf.ts, 11, 87))
+>b : Symbol(B.b, Decl(typePredicateSubtypeOf.ts, 14, 23))
+
+interface C extends A { c: string }
+>C : Symbol(C, Decl(typePredicateSubtypeOf.ts, 14, 35))
+>A : Symbol(A, Decl(typePredicateSubtypeOf.ts, 11, 87))
+>c : Symbol(C.c, Decl(typePredicateSubtypeOf.ts, 15, 23))
+
+interface D { d: string; isCatOrDog(): this is subtypeof D }
+>D : Symbol(D, Decl(typePredicateSubtypeOf.ts, 15, 35))
+>d : Symbol(D.d, Decl(typePredicateSubtypeOf.ts, 16, 13))
+>isCatOrDog : Symbol(D.isCatOrDog, Decl(typePredicateSubtypeOf.ts, 16, 24))
+>D : Symbol(D, Decl(typePredicateSubtypeOf.ts, 15, 35))
+
+declare function isCatOrDog(arg: any): arg is subtypeof (C | D);
+>isCatOrDog : Symbol(isCatOrDog, Decl(typePredicateSubtypeOf.ts, 16, 60))
+>arg : Symbol(arg, Decl(typePredicateSubtypeOf.ts, 18, 28))
+>arg : Symbol(arg, Decl(typePredicateSubtypeOf.ts, 18, 28))
+>C : Symbol(C, Decl(typePredicateSubtypeOf.ts, 14, 35))
+>D : Symbol(D, Decl(typePredicateSubtypeOf.ts, 15, 35))
+
+declare const pet: A | D;
+>pet : Symbol(pet, Decl(typePredicateSubtypeOf.ts, 19, 13))
+>A : Symbol(A, Decl(typePredicateSubtypeOf.ts, 11, 87))
+>D : Symbol(D, Decl(typePredicateSubtypeOf.ts, 15, 35))
+
+if (isCatOrDog(pet)) {
+>isCatOrDog : Symbol(isCatOrDog, Decl(typePredicateSubtypeOf.ts, 16, 60))
+>pet : Symbol(pet, Decl(typePredicateSubtypeOf.ts, 19, 13))
+
+    pet;
+>pet : Symbol(pet, Decl(typePredicateSubtypeOf.ts, 19, 13))
+
+} else {
+    pet;
+>pet : Symbol(pet, Decl(typePredicateSubtypeOf.ts, 19, 13))
+}
+pet;
+>pet : Symbol(pet, Decl(typePredicateSubtypeOf.ts, 19, 13))
+
+if (pet.isCatOrDog()) {
+>pet.isCatOrDog : Symbol(isCatOrDog, Decl(typePredicateSubtypeOf.ts, 13, 24), Decl(typePredicateSubtypeOf.ts, 16, 24))
+>pet : Symbol(pet, Decl(typePredicateSubtypeOf.ts, 19, 13))
+>isCatOrDog : Symbol(isCatOrDog, Decl(typePredicateSubtypeOf.ts, 13, 24), Decl(typePredicateSubtypeOf.ts, 16, 24))
+
+    pet;
+>pet : Symbol(pet, Decl(typePredicateSubtypeOf.ts, 19, 13))
+
+} else {
+    pet;
+>pet : Symbol(pet, Decl(typePredicateSubtypeOf.ts, 19, 13))
+}
+pet;
+>pet : Symbol(pet, Decl(typePredicateSubtypeOf.ts, 19, 13))
+
+declare function isNumber(arg: any): arg is number;
+>isNumber : Symbol(isNumber, Decl(typePredicateSubtypeOf.ts, 32, 4))
+>arg : Symbol(arg, Decl(typePredicateSubtypeOf.ts, 34, 26))
+>arg : Symbol(arg, Decl(typePredicateSubtypeOf.ts, 34, 26))
+
+declare function isSafeInteger(arg: any): arg is subtypeof number;
+>isSafeInteger : Symbol(isSafeInteger, Decl(typePredicateSubtypeOf.ts, 34, 51))
+>arg : Symbol(arg, Decl(typePredicateSubtypeOf.ts, 35, 31))
+>arg : Symbol(arg, Decl(typePredicateSubtypeOf.ts, 35, 31))
+
+type t1 = typeof isSafeInteger extends typeof isInteger ? true : false;
+>t1 : Symbol(t1, Decl(typePredicateSubtypeOf.ts, 35, 66))
+>isSafeInteger : Symbol(isSafeInteger, Decl(typePredicateSubtypeOf.ts, 34, 51))
+>isInteger : Symbol(isInteger, Decl(typePredicateSubtypeOf.ts, 0, 0))
+
+type t2 = typeof isInteger extends typeof isNumber ? true : false;
+>t2 : Symbol(t2, Decl(typePredicateSubtypeOf.ts, 37, 71))
+>isInteger : Symbol(isInteger, Decl(typePredicateSubtypeOf.ts, 0, 0))
+>isNumber : Symbol(isNumber, Decl(typePredicateSubtypeOf.ts, 32, 4))
+
+type t3 = typeof isNumber extends typeof isSafeInteger ? true : false;
+>t3 : Symbol(t3, Decl(typePredicateSubtypeOf.ts, 38, 66))
+>isNumber : Symbol(isNumber, Decl(typePredicateSubtypeOf.ts, 32, 4))
+>isSafeInteger : Symbol(isSafeInteger, Decl(typePredicateSubtypeOf.ts, 34, 51))
+
+type IsTypeIdenticalTo<X, Y> =
+>IsTypeIdenticalTo : Symbol(IsTypeIdenticalTo, Decl(typePredicateSubtypeOf.ts, 39, 70))
+>X : Symbol(X, Decl(typePredicateSubtypeOf.ts, 41, 23))
+>Y : Symbol(Y, Decl(typePredicateSubtypeOf.ts, 41, 25))
+
+  (<T>() => T extends X ? 1 : 0) extends
+>T : Symbol(T, Decl(typePredicateSubtypeOf.ts, 42, 4))
+>T : Symbol(T, Decl(typePredicateSubtypeOf.ts, 42, 4))
+>X : Symbol(X, Decl(typePredicateSubtypeOf.ts, 41, 23))
+
+  (<T>() => T extends Y ? 1 : 0) ? true : false;
+>T : Symbol(T, Decl(typePredicateSubtypeOf.ts, 43, 4))
+>T : Symbol(T, Decl(typePredicateSubtypeOf.ts, 43, 4))
+>Y : Symbol(Y, Decl(typePredicateSubtypeOf.ts, 41, 25))
+
+type t4 = IsTypeIdenticalTo<typeof isSafeInteger, typeof isInteger>;
+>t4 : Symbol(t4, Decl(typePredicateSubtypeOf.ts, 43, 48))
+>IsTypeIdenticalTo : Symbol(IsTypeIdenticalTo, Decl(typePredicateSubtypeOf.ts, 39, 70))
+>isSafeInteger : Symbol(isSafeInteger, Decl(typePredicateSubtypeOf.ts, 34, 51))
+>isInteger : Symbol(isInteger, Decl(typePredicateSubtypeOf.ts, 0, 0))
+
+type t5 = IsTypeIdenticalTo<typeof isInteger, typeof isNumber>;
+>t5 : Symbol(t5, Decl(typePredicateSubtypeOf.ts, 44, 68))
+>IsTypeIdenticalTo : Symbol(IsTypeIdenticalTo, Decl(typePredicateSubtypeOf.ts, 39, 70))
+>isInteger : Symbol(isInteger, Decl(typePredicateSubtypeOf.ts, 0, 0))
+>isNumber : Symbol(isNumber, Decl(typePredicateSubtypeOf.ts, 32, 4))
+
+type t6 = IsTypeIdenticalTo<typeof isNumber, typeof isSafeInteger>;
+>t6 : Symbol(t6, Decl(typePredicateSubtypeOf.ts, 45, 63))
+>IsTypeIdenticalTo : Symbol(IsTypeIdenticalTo, Decl(typePredicateSubtypeOf.ts, 39, 70))
+>isNumber : Symbol(isNumber, Decl(typePredicateSubtypeOf.ts, 32, 4))
+>isSafeInteger : Symbol(isSafeInteger, Decl(typePredicateSubtypeOf.ts, 34, 51))
+

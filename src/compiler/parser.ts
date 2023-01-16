@@ -660,6 +660,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.TypePredicate]: function forEachChildInTypePredicate<T>(node: TypePredicateNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.assertsModifier) ||
             visitNode(cbNode, node.parameterName) ||
+            visitNode(cbNode, node.subtypeOfModifier) ||
             visitNode(cbNode, node.type);
     },
     [SyntaxKind.TypeQuery]: function forEachChildInTypeQuery<T>(node: TypeQueryNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -3689,7 +3690,8 @@ namespace Parser {
 
     function parseThisTypePredicate(lhs: ThisTypeNode): TypePredicateNode {
         nextToken();
-        return finishNode(factory.createTypePredicateNode(/*assertsModifier*/ undefined, lhs, parseType()), lhs.pos);
+        const subtypeOfModifier = parseOptionalToken(SyntaxKind.SubtypeOfKeyword);
+        return finishNode(factory.createTypePredicateNode(/*assertsModifier*/ undefined, lhs, parseType(), subtypeOfModifier), lhs.pos);
     }
 
     function parseThisTypeNode(): ThisTypeNode {
@@ -4772,12 +4774,12 @@ namespace Parser {
     function parseTypeOrTypePredicate(): TypeNode {
         const pos = getNodePos();
         const typePredicateVariable = isIdentifier() && tryParse(parseTypePredicatePrefix);
-        const type = parseType();
         if (typePredicateVariable) {
-            return finishNode(factory.createTypePredicateNode(/*assertsModifier*/ undefined, typePredicateVariable, type), pos);
+            const subtypeOfModifier = parseOptionalToken(SyntaxKind.SubtypeOfKeyword);
+            return finishNode(factory.createTypePredicateNode(/*assertsModifier*/ undefined, typePredicateVariable, parseType(), subtypeOfModifier), pos);
         }
         else {
-            return type;
+            return parseType();
         }
     }
 
@@ -4793,8 +4795,13 @@ namespace Parser {
         const pos = getNodePos();
         const assertsModifier = parseExpectedToken(SyntaxKind.AssertsKeyword);
         const parameterName = token() === SyntaxKind.ThisKeyword ? parseThisTypeNode() : parseIdentifier();
-        const type = parseOptional(SyntaxKind.IsKeyword) ? parseType() : undefined;
-        return finishNode(factory.createTypePredicateNode(assertsModifier, parameterName, type), pos);
+        let subtypeOfModifier: Token<SyntaxKind.SubtypeOfKeyword> | undefined;
+        let type: TypeNode | undefined;
+        if (parseOptional(SyntaxKind.IsKeyword)) {
+            subtypeOfModifier = parseOptionalToken(SyntaxKind.SubtypeOfKeyword);
+            type = parseType();
+        }
+        return finishNode(factory.createTypePredicateNode(assertsModifier, parameterName, type, subtypeOfModifier), pos);
     }
 
     function parseType(): TypeNode {

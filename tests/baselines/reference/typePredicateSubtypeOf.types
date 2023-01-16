@@ -1,0 +1,160 @@
+=== tests/cases/compiler/typePredicateSubtypeOf.ts ===
+declare function isInteger(arg: any): arg is subtypeof number;
+>isInteger : (arg: any) => arg is subtypeof number
+>arg : any
+
+declare const a: string | number;
+>a : string | number
+
+if (isInteger(a)) {
+>isInteger(a) : boolean
+>isInteger : (arg: any) => arg is subtypeof number
+>a : string | number
+
+    a;
+>a : number
+
+} else {
+    a;
+>a : string | number
+}
+a;
+>a : string | number
+
+const array = ["foo", 42, true];
+>array : (string | number | boolean)[]
+>["foo", 42, true] : (string | number | boolean)[]
+>"foo" : "foo"
+>42 : 42
+>true : true
+
+const b = array.filter(isInteger);
+>b : number[]
+>array.filter(isInteger) : number[]
+>array.filter : { <S extends string | number | boolean>(predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => unknown, thisArg?: any): (string | number | boolean)[]; }
+>array : (string | number | boolean)[]
+>filter : { <S extends string | number | boolean>(predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => unknown, thisArg?: any): (string | number | boolean)[]; }
+>isInteger : (arg: any) => arg is subtypeof number
+
+const c = array.filter((v): v is subtypeof string => v === v.toString().toLowerCase());
+>c : string[]
+>array.filter((v): v is subtypeof string => v === v.toString().toLowerCase()) : string[]
+>array.filter : { <S extends string | number | boolean>(predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => unknown, thisArg?: any): (string | number | boolean)[]; }
+>array : (string | number | boolean)[]
+>filter : { <S extends string | number | boolean>(predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | number | boolean, index: number, array: (string | number | boolean)[]) => unknown, thisArg?: any): (string | number | boolean)[]; }
+>(v): v is subtypeof string => v === v.toString().toLowerCase() : (v: string | number | boolean) => v is subtypeof string
+>v : string | number | boolean
+>v === v.toString().toLowerCase() : boolean
+>v : string | number | boolean
+>v.toString().toLowerCase() : string
+>v.toString().toLowerCase : () => string
+>v.toString() : string
+>v.toString : (() => string) | ((radix?: number) => string) | (() => string)
+>v : string | number | boolean
+>toString : (() => string) | ((radix?: number) => string) | (() => string)
+>toLowerCase : () => string
+
+interface A { a: string; isCatOrDog(): this is subtypeof C }
+>a : string
+>isCatOrDog : () => this is subtypeof C
+
+interface B extends A { b: string }
+>b : string
+
+interface C extends A { c: string }
+>c : string
+
+interface D { d: string; isCatOrDog(): this is subtypeof D }
+>d : string
+>isCatOrDog : () => this is subtypeof D
+
+declare function isCatOrDog(arg: any): arg is subtypeof (C | D);
+>isCatOrDog : (arg: any) => arg is subtypeof C | D
+>arg : any
+
+declare const pet: A | D;
+>pet : A | D
+
+if (isCatOrDog(pet)) {
+>isCatOrDog(pet) : boolean
+>isCatOrDog : (arg: any) => arg is subtypeof C | D
+>pet : A | D
+
+    pet;
+>pet : C | D
+
+} else {
+    pet;
+>pet : A | D
+}
+pet;
+>pet : A | D
+
+if (pet.isCatOrDog()) {
+>pet.isCatOrDog() : boolean
+>pet.isCatOrDog : (() => this is subtypeof C) | (() => this is subtypeof D)
+>pet : A | D
+>isCatOrDog : (() => this is subtypeof C) | (() => this is subtypeof D)
+
+    pet;
+>pet : C | D
+
+} else {
+    pet;
+>pet : A | D
+}
+pet;
+>pet : A | D
+
+declare function isNumber(arg: any): arg is number;
+>isNumber : (arg: any) => arg is number
+>arg : any
+
+declare function isSafeInteger(arg: any): arg is subtypeof number;
+>isSafeInteger : (arg: any) => arg is subtypeof number
+>arg : any
+
+type t1 = typeof isSafeInteger extends typeof isInteger ? true : false;
+>t1 : true
+>isSafeInteger : (arg: any) => arg is subtypeof number
+>isInteger : (arg: any) => arg is subtypeof number
+>true : true
+>false : false
+
+type t2 = typeof isInteger extends typeof isNumber ? true : false;
+>t2 : true
+>isInteger : (arg: any) => arg is subtypeof number
+>isNumber : (arg: any) => arg is number
+>true : true
+>false : false
+
+type t3 = typeof isNumber extends typeof isSafeInteger ? true : false;
+>t3 : false
+>isNumber : (arg: any) => arg is number
+>isSafeInteger : (arg: any) => arg is subtypeof number
+>true : true
+>false : false
+
+type IsTypeIdenticalTo<X, Y> =
+>IsTypeIdenticalTo : IsTypeIdenticalTo<X, Y>
+
+  (<T>() => T extends X ? 1 : 0) extends
+  (<T>() => T extends Y ? 1 : 0) ? true : false;
+>true : true
+>false : false
+
+type t4 = IsTypeIdenticalTo<typeof isSafeInteger, typeof isInteger>;
+>t4 : true
+>isSafeInteger : (arg: any) => arg is subtypeof number
+>isInteger : (arg: any) => arg is subtypeof number
+
+type t5 = IsTypeIdenticalTo<typeof isInteger, typeof isNumber>;
+>t5 : false
+>isInteger : (arg: any) => arg is subtypeof number
+>isNumber : (arg: any) => arg is number
+
+type t6 = IsTypeIdenticalTo<typeof isNumber, typeof isSafeInteger>;
+>t6 : false
+>isNumber : (arg: any) => arg is number
+>isSafeInteger : (arg: any) => arg is subtypeof number
+

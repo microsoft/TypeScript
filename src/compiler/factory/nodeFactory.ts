@@ -411,6 +411,7 @@ import {
     Statement,
     StringLiteral,
     stringToToken,
+    SubtypeOfKeyword,
     SuperExpression,
     SwitchStatement,
     SyntaxKind,
@@ -2135,21 +2136,23 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createTypePredicateNode(assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined) {
+    function createTypePredicateNode(assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined, subtypeOfModifier?: SubtypeOfKeyword) {
         const node = createBaseNode<TypePredicateNode>(SyntaxKind.TypePredicate);
         node.assertsModifier = assertsModifier;
         node.parameterName = asName(parameterName);
         node.type = type;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.subtypeOfModifier = subtypeOfModifier;
         return node;
     }
 
     // @api
-    function updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined) {
+    function updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined, subtypeOfModifier?: SubtypeOfKeyword) {
         return node.assertsModifier !== assertsModifier
             || node.parameterName !== parameterName
             || node.type !== type
-            ? update(createTypePredicateNode(assertsModifier, parameterName, type), node)
+            || node.subtypeOfModifier !== subtypeOfModifier
+            ? update(createTypePredicateNode(assertsModifier, parameterName, type, subtypeOfModifier), node)
             : node;
     }
 

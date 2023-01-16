@@ -73,6 +73,7 @@ import {
     isReadonlyKeywordOrPlusOrMinusToken,
     isStatement,
     isStringLiteralOrJsxExpression,
+    isSubtypeOfKeyword,
     isTemplateHead,
     isTemplateLiteral,
     isTemplateLiteralTypeSpan,
@@ -656,7 +657,8 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateTypePredicateNode(node,
             nodeVisitor(node.assertsModifier, visitor, isAssertsKeyword),
             nodeVisitor(node.parameterName, visitor, isIdentifierOrThisTypeNode),
-            nodeVisitor(node.type, visitor, isTypeNode));
+            nodeVisitor(node.type, visitor, isTypeNode),
+            nodeVisitor(node.subtypeOfModifier, visitor, isSubtypeOfKeyword));
     },
 
     [SyntaxKind.TypeReference]: function visitEachChildOfTypeReferenceNode(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {

@@ -2668,6 +2668,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
             writeKeyword("is");
             writeSpace();
+            if (node.subtypeOfModifier) {
+                emit(node.subtypeOfModifier);
+                writeSpace();
+            }
             emit(node.type);
         }
     }
