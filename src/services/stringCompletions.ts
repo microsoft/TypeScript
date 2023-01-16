@@ -198,7 +198,7 @@ export function getStringLiteralCompletions(
     if (isInString(sourceFile, position, contextToken)) {
         if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
         const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, program.getTypeChecker(), options, host, preferences);
-        return convertStringLiteralCompletions(entries, contextToken, sourceFile, host, program, log, options, preferences);
+        return convertStringLiteralCompletions(entries, contextToken, sourceFile, host, program, log, options, preferences, position);
     }
 }
 
@@ -211,6 +211,7 @@ function convertStringLiteralCompletions(
     log: Log,
     options: CompilerOptions,
     preferences: UserPreferences,
+    position: number,
 ): CompletionInfo | undefined {
     if (completion === undefined) {
         return undefined;
@@ -228,6 +229,7 @@ function convertStringLiteralCompletions(
                 contextToken,
                 contextToken,
                 sourceFile,
+                position,
                 sourceFile,
                 host,
                 program,
