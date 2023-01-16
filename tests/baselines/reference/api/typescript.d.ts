@@ -31,21 +31,6 @@ declare namespace ts {
     interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
-    /** Common read methods for ES6 Map/Set. */
-    interface ReadonlyCollection<K> {
-        readonly size: number;
-        has(key: K): boolean;
-        keys(): Iterator<K>;
-    }
-    /** Common write methods for ES6 Map/Set. */
-    interface Collection<K> extends ReadonlyCollection<K> {
-        delete(key: K): boolean;
-        clear(): void;
-    }
-    /** Array that is only intended to be pushed to, never read. */
-    interface Push<T> {
-        push(...values: T[]): void;
-    }
     type Path = string & {
         __pathBrand: any;
     };
@@ -664,11 +649,15 @@ declare namespace ts {
          * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
          */
         readonly escapedText: __String;
-        readonly originalKeywordKind?: SyntaxKind;
-        isInJSDocNamespace?: boolean;
     }
     interface Identifier {
         readonly text: string;
+    }
+    interface Identifier {
+        /** @deprecated Use `idKeyword(identifier)` instead. */
+        readonly originalKeywordKind?: SyntaxKind;
+        /** @deprecated Use `.parent` or the surrounding context to determine this instead. */
+        readonly isInJSDocNamespace?: boolean;
     }
     interface TransientIdentifier extends Identifier {
         resolvedSymbol: Symbol;
@@ -3098,6 +3087,7 @@ declare namespace ts {
     interface CompilerOptions {
         allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
+        allowArbitraryExtensions?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowUmdGlobalAccess?: boolean;
         allowUnreachableCode?: boolean;
@@ -3361,7 +3351,7 @@ declare namespace ts {
          * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
          * This is optional for backwards-compatibility, but will be added if not provided.
          */
-        extension: Extension;
+        extension: string;
         packageId?: PackageId;
     }
     /**
@@ -4634,7 +4624,7 @@ declare namespace ts {
         resolvePath(path: string): string;
         fileExists(fileName: string): boolean;
         readFile(fileName: string): string | undefined;
-    }, errors?: Push<Diagnostic>): void;
+    }, errors?: Diagnostic[]): void;
     function getOriginalNode(node: Node): Node;
     function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
     function getOriginalNode(node: Node | undefined): Node | undefined;
@@ -4678,6 +4668,11 @@ declare namespace ts {
      */
     function unescapeLeadingUnderscores(identifier: __String): string;
     function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string;
+    /**
+     * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
+     * SyntaxKind for the matching keyword.
+     */
+    function identifierToKeywordKind(node: Identifier): KeywordSyntaxKind | undefined;
     function symbolName(symbol: Symbol): string;
     function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined;
     function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;
@@ -5214,7 +5209,7 @@ declare namespace ts {
     /**
      * Convert the json syntax tree into the json value
      */
-    function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any;
+    function convertToObject(sourceFile: JsonSourceFile, errors: Diagnostic[]): any;
     /**
      * Parse the contents of a config file (tsconfig.json).
      * @param json The contents of the config file to parse
@@ -5292,7 +5287,6 @@ declare namespace ts {
     function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-    function moduleResolutionSupportsResolvingTsExtensions(compilerOptions: CompilerOptions): boolean;
     function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string): boolean | "" | undefined;
     interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
     }

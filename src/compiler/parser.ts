@@ -84,7 +84,9 @@ import {
     Expression,
     ExpressionStatement,
     ExpressionWithTypeArguments,
+    Extension,
     ExternalModuleReference,
+    fileExtensionIs,
     fileExtensionIsOneOf,
     findIndex,
     forEach,
@@ -98,6 +100,7 @@ import {
     FunctionOrConstructorTypeNode,
     FunctionTypeNode,
     GetAccessorDeclaration,
+    getBaseFileName,
     getBinaryOperatorPrecedence,
     getFullWidth,
     getJSDocCommentRanges,
@@ -328,6 +331,7 @@ import {
     SpreadElement,
     startsWith,
     Statement,
+    stringContains,
     StringLiteral,
     supportedDeclarationExtensions,
     SwitchStatement,
@@ -1454,7 +1458,6 @@ namespace Parser {
     let currentToken: SyntaxKind;
     let nodeCount: number;
     let identifiers: Map<string, string>;
-    let privateIdentifiers: Map<string, string>;
     let identifierCount: number;
 
     let parsingContext: ParsingContext;
@@ -1681,7 +1684,6 @@ namespace Parser {
         parseDiagnostics = [];
         parsingContext = 0;
         identifiers = new Map<string, string>();
-        privateIdentifiers = new Map<string, string>();
         identifierCount = 0;
         nodeCount = 0;
         sourceFlags = 0;
@@ -2549,7 +2551,7 @@ namespace Parser {
 
         const pos = getNodePos();
         const result =
-            kind === SyntaxKind.Identifier ? factory.createIdentifier("", /*typeArguments*/ undefined, /*originalKeywordKind*/ undefined) :
+            kind === SyntaxKind.Identifier ? factory.createIdentifier("", /*originalKeywordKind*/ undefined) :
             isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, "", "", /*templateFlags*/ undefined) :
             kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral("", /*numericLiteralFlags*/ undefined) :
             kind === SyntaxKind.StringLiteral ? factory.createStringLiteral("", /*isSingleQuote*/ undefined) :
@@ -2578,7 +2580,7 @@ namespace Parser {
             const text = internIdentifier(scanner.getTokenValue());
             const hasExtendedUnicodeEscape = scanner.hasExtendedUnicodeEscape();
             nextTokenWithoutCheck();
-            return finishNode(factory.createIdentifier(text, /*typeArguments*/ undefined, originalKeywordKind, hasExtendedUnicodeEscape), pos);
+            return finishNode(factory.createIdentifier(text, originalKeywordKind, hasExtendedUnicodeEscape), pos);
         }
 
         if (token() === SyntaxKind.PrivateIdentifier) {
@@ -2661,17 +2663,9 @@ namespace Parser {
         return finishNode(factory.createComputedPropertyName(expression), pos);
     }
 
-    function internPrivateIdentifier(text: string): string {
-        let privateIdentifier = privateIdentifiers.get(text);
-        if (privateIdentifier === undefined) {
-            privateIdentifiers.set(text, privateIdentifier = text);
-        }
-        return privateIdentifier;
-    }
-
     function parsePrivateIdentifier(): PrivateIdentifier {
         const pos = getNodePos();
-        const node = factory.createPrivateIdentifier(internPrivateIdentifier(scanner.getTokenValue()));
+        const node = factory.createPrivateIdentifier(internIdentifier(scanner.getTokenValue()));
         nextToken();
         return finishNode(node, pos);
     }
@@ -3068,9 +3062,9 @@ namespace Parser {
             return undefined;
         }
 
-        if (canHaveJSDoc(node) && node.jsDocCache) {
+        if (canHaveJSDoc(node) && node.jsDoc?.jsDocCache) {
             // jsDocCache may include tags from parent nodes, which might have been modified.
-            node.jsDocCache = undefined;
+            node.jsDoc.jsDocCache = undefined;
         }
 
         return node;
@@ -3195,7 +3189,7 @@ namespace Parser {
                     // into an actual .ConstructorDeclaration.
                     const methodDeclaration = node as MethodDeclaration;
                     const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
-                        methodDeclaration.name.originalKeywordKind === SyntaxKind.ConstructorKeyword;
+                        methodDeclaration.name.escapedText === "constructor";
 
                     return !nameIsConstructor;
             }
@@ -3462,14 +3456,12 @@ namespace Parser {
     function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
         const pos = getNodePos();
         let entity: EntityName = allowReservedWords ? parseIdentifierName(diagnosticMessage) : parseIdentifier(diagnosticMessage);
-        let dotPos = getNodePos();
         while (parseOptional(SyntaxKind.DotToken)) {
             if (token() === SyntaxKind.LessThanToken) {
-                // the entity is part of a JSDoc-style generic, so record the trailing dot for later error reporting
-                entity.jsdocDotPos = dotPos;
+                // The entity is part of a JSDoc-style generic. We will use the gap between `typeName` and
+                // `typeArguments` to report it as a grammar error in the checker.
                 break;
             }
-            dotPos = getNodePos();
             entity = finishNode(
                 factory.createQualifiedName(
                     entity,
@@ -9264,7 +9256,7 @@ namespace Parser {
                 }
 
                 if (nested) {
-                    typeNameOrNamespaceName.isInJSDocNamespace = true;
+                    (typeNameOrNamespaceName as Mutable<Identifier>).flags |= NodeFlags.IdentifierIsInJSDocNamespace;
                 }
                 return typeNameOrNamespaceName;
             }
@@ -9487,7 +9479,7 @@ namespace Parser {
                 const end = scanner.getTextPos();
                 const originalKeywordKind = token();
                 const text = internIdentifier(scanner.getTokenValue());
-                const result = finishNode(factory.createIdentifier(text, /*typeArguments*/ undefined, originalKeywordKind), pos, end);
+                const result = finishNode(factory.createIdentifier(text, originalKeywordKind), pos, end);
                 nextTokenJSDoc();
                 return result;
             }
@@ -10124,7 +10116,7 @@ namespace IncrementalParser {
 
 /** @internal */
 export function isDeclarationFileName(fileName: string): boolean {
-    return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions);
+    return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions) || (fileExtensionIs(fileName, Extension.Ts) && stringContains(getBaseFileName(fileName), ".d."));
 }
 
 function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {
