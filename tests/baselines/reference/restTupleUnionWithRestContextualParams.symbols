@@ -78,3 +78,33 @@ const f12: (...args: [...strs: string[], num: number]) => void = (a, ...rest) =>
 >a : Symbol(a, Decl(restTupleUnionWithRestContextualParams.ts, 20, 66))
 >rest : Symbol(rest, Decl(restTupleUnionWithRestContextualParams.ts, 20, 68))
 
+// #49218#pullrequestreview-1241473951
+const f13: <T extends string[]>(...rest: [number, ...T, boolean] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
+>f13 : Symbol(f13, Decl(restTupleUnionWithRestContextualParams.ts, 23, 5))
+>T : Symbol(T, Decl(restTupleUnionWithRestContextualParams.ts, 23, 12))
+>rest : Symbol(rest, Decl(restTupleUnionWithRestContextualParams.ts, 23, 32))
+>T : Symbol(T, Decl(restTupleUnionWithRestContextualParams.ts, 23, 12))
+>a : Symbol(a, Decl(restTupleUnionWithRestContextualParams.ts, 23, 78))
+>arg : Symbol(arg, Decl(restTupleUnionWithRestContextualParams.ts, 23, 88))
+
+const f14: <T extends boolean>(...rest: [number, ...string[], T] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
+>f14 : Symbol(f14, Decl(restTupleUnionWithRestContextualParams.ts, 25, 5))
+>T : Symbol(T, Decl(restTupleUnionWithRestContextualParams.ts, 25, 12))
+>rest : Symbol(rest, Decl(restTupleUnionWithRestContextualParams.ts, 25, 31))
+>T : Symbol(T, Decl(restTupleUnionWithRestContextualParams.ts, 25, 12))
+>a : Symbol(a, Decl(restTupleUnionWithRestContextualParams.ts, 25, 78))
+>arg : Symbol(arg, Decl(restTupleUnionWithRestContextualParams.ts, 25, 88))
+
+const f15: <T extends string>(...rest: [number, ...T[], boolean] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
+>f15 : Symbol(f15, Decl(restTupleUnionWithRestContextualParams.ts, 26, 5))
+>T : Symbol(T, Decl(restTupleUnionWithRestContextualParams.ts, 26, 12))
+>rest : Symbol(rest, Decl(restTupleUnionWithRestContextualParams.ts, 26, 30))
+>T : Symbol(T, Decl(restTupleUnionWithRestContextualParams.ts, 26, 12))
+>a : Symbol(a, Decl(restTupleUnionWithRestContextualParams.ts, 26, 78))
+>arg : Symbol(arg, Decl(restTupleUnionWithRestContextualParams.ts, 26, 88))
+
+let fn: (...rest: [...string[], number]) => void = (...rest: [...string[], number]) => {};
+>fn : Symbol(fn, Decl(restTupleUnionWithRestContextualParams.ts, 28, 3))
+>rest : Symbol(rest, Decl(restTupleUnionWithRestContextualParams.ts, 28, 9))
+>rest : Symbol(rest, Decl(restTupleUnionWithRestContextualParams.ts, 28, 52))
+

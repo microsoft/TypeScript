@@ -22,3 +22,11 @@ const f10: Fn1 = (...[arg1, arg2]: [string | number, string | number]) => {}
 const f11: Fn1 = (...[arg1, arg2, arg3]: [string | number, string | number, string | number]) => {}
 
 const f12: (...args: [...strs: string[], num: number]) => void = (a, ...rest) => {}
+
+// #49218#pullrequestreview-1241473951
+const f13: <T extends string[]>(...rest: [number, ...T, boolean] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
+
+const f14: <T extends boolean>(...rest: [number, ...string[], T] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
+const f15: <T extends string>(...rest: [number, ...T[], boolean] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
+
+let fn: (...rest: [...string[], number]) => void = (...rest: [...string[], number]) => {};

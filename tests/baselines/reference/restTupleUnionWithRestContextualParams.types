@@ -83,3 +83,31 @@ const f12: (...args: [...strs: string[], num: number]) => void = (a, ...rest) =>
 >a : string | number
 >rest : (string | number)[]
 
+// #49218#pullrequestreview-1241473951
+const f13: <T extends string[]>(...rest: [number, ...T, boolean] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
+>f13 : <T extends string[]>(...rest: [number, ...T, boolean]) => void
+>rest : [number, ...T, boolean]
+>(a: number, ...arg: [...string[], boolean]) => {} : (a: number, ...arg: [...string[], boolean]) => void
+>a : number
+>arg : [...string[], boolean]
+
+const f14: <T extends boolean>(...rest: [number, ...string[], T] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
+>f14 : <T extends boolean>(...rest: [number, ...string[], T]) => void
+>rest : [number, ...string[], T]
+>(a: number, ...arg: [...string[], boolean]) => {} : (a: number, ...arg: [...string[], boolean]) => void
+>a : number
+>arg : [...string[], boolean]
+
+const f15: <T extends string>(...rest: [number, ...T[], boolean] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
+>f15 : <T extends string>(...rest: [number, ...T[], boolean]) => void
+>rest : [number, ...T[], boolean]
+>(a: number, ...arg: [...string[], boolean]) => {} : (a: number, ...arg: [...string[], boolean]) => void
+>a : number
+>arg : [...string[], boolean]
+
+let fn: (...rest: [...string[], number]) => void = (...rest: [...string[], number]) => {};
+>fn : (...rest: [...string[], number]) => void
+>rest : [...string[], number]
+>(...rest: [...string[], number]) => {} : (...rest: [...string[], number]) => void
+>rest : [...string[], number]
+
