@@ -107,6 +107,7 @@ export interface LoggingHost {
 let currentAssertionLevel = AssertionLevel.None;
 
 /** @internal */
+// eslint-disable-next-line prefer-const
 export let currentLogLevel = LogLevel.Warning;
 
 /** @internal */
