@@ -14,7 +14,6 @@ import {
     FlowSwitchClause,
     getEffectiveModifierFlagsNoCache,
     getEmitFlags,
-    getOwnKeys,
     getParseTreeNode,
     getSourceFileOfNode,
     getSourceTextOfNodeFromSourceFile,
@@ -61,13 +60,11 @@ import {
     isUnionTypeNode,
     LiteralType,
     map,
-    MatchingKeys,
     ModifierFlags,
     Node,
     NodeArray,
     NodeFlags,
     nodeIsSynthesized,
-    noop,
     objectAllocator,
     ObjectFlags,
     ObjectType,
@@ -107,17 +104,32 @@ export interface LoggingHost {
     log(level: LogLevel, s: string): void;
 }
 
-/** @internal */
-export namespace Debug {
-/* eslint-disable prefer-const */
 let currentAssertionLevel = AssertionLevel.None;
+
+/** @internal */
 export let currentLogLevel = LogLevel.Warning;
+
+/** @internal */
 export let isDebugging = false;
+
+/** @internal */
+export function setIsDebugging(newIsDebugging: boolean) {
+    isDebugging = newIsDebugging;
+}
+
+/** @internal */
 export let loggingHost: LoggingHost | undefined;
-/* eslint-enable prefer-const */
 
-type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
+/** @internal */
+export function setLoggingHost(newLoggingHost: LoggingHost | undefined) {
+    loggingHost = newLoggingHost;
+}
 
+
+// type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
+type AssertionKeys = any;
+
+/** @internal */
 export function shouldLog(level: LogLevel): boolean {
     return currentLogLevel <= level;
 }
@@ -128,10 +140,12 @@ function logMessage(level: LogLevel, s: string): void {
     }
 }
 
+/** @internal */
 export function log(s: string): void {
     logMessage(LogLevel.Info, s);
 }
 
+/** @internal */
 export namespace log {
     export function error(s: string): void {
         logMessage(LogLevel.Error, s);
@@ -150,28 +164,31 @@ export namespace log {
     }
 }
 
-const assertionCache: Partial<Record<AssertionKeys, { level: AssertionLevel, assertion: AnyFunction }>> = {};
+// const assertionCache: Partial<Record<AssertionKeys, { level: AssertionLevel, assertion: AnyFunction }>> = {};
 
+/** @internal */
 export function getAssertionLevel() {
     return currentAssertionLevel;
 }
 
+/** @internal */
 export function setAssertionLevel(level: AssertionLevel) {
-    const prevAssertionLevel = currentAssertionLevel;
+    // const prevAssertionLevel = currentAssertionLevel;
     currentAssertionLevel = level;
 
-    if (level > prevAssertionLevel) {
-        // restore assertion functions for the current assertion level (see `shouldAssertFunction`).
-        for (const key of getOwnKeys(assertionCache) as AssertionKeys[]) {
-            const cachedFunc = assertionCache[key];
-            if (cachedFunc !== undefined && Debug[key] !== cachedFunc.assertion && level >= cachedFunc.level) {
-                (Debug as any)[key] = cachedFunc;
-                assertionCache[key] = undefined;
-            }
-        }
-    }
+    // if (level > prevAssertionLevel) {
+    //     // restore assertion functions for the current assertion level (see `shouldAssertFunction`).
+    //     for (const key of getOwnKeys(assertionCache) as AssertionKeys[]) {
+    //         const cachedFunc = assertionCache[key];
+    //         if (cachedFunc !== undefined && Debug[key] !== cachedFunc.assertion && level >= cachedFunc.level) {
+    //             (Debug as any)[key] = cachedFunc;
+    //             assertionCache[key] = undefined;
+    //         }
+    //     }
+    // }
 }
 
+/** @internal */
 export function shouldAssert(level: AssertionLevel): boolean {
     return currentAssertionLevel >= level;
 }
@@ -182,15 +199,16 @@ export function shouldAssert(level: AssertionLevel): boolean {
  * @param level The minimum assertion level required.
  * @param name The name of the current assertion function.
  */
-function shouldAssertFunction<K extends AssertionKeys>(level: AssertionLevel, name: K): boolean {
-    if (!shouldAssert(level)) {
-        assertionCache[name] = { level, assertion: Debug[name] };
-        (Debug as any)[name] = noop;
-        return false;
-    }
+function shouldAssertFunction<K extends AssertionKeys>(_level: AssertionLevel, _name: K): boolean {
+    // if (!shouldAssert(level)) {
+    //     assertionCache[name] = { level, assertion: Debug[name] };
+    //     (Debug as any)[name] = noop;
+    //     return false;
+    // }
     return true;
 }
 
+/** @internal */
 export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
     debugger;
     const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
@@ -200,12 +218,14 @@ export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
     throw e;
 }
 
+/** @internal */
 export function failBadSyntaxKind(node: Node, message?: string, stackCrawlMark?: AnyFunction): never {
     return fail(
         `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
         stackCrawlMark || failBadSyntaxKind);
 }
 
+/** @internal */
 export function assert(expression: unknown, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): asserts expression {
     if (!expression) {
         message = message ? `False expression: ${message}` : "False expression.";
@@ -216,6 +236,7 @@ export function assert(expression: unknown, message?: string, verboseDebugInfo?:
     }
 }
 
+/** @internal */
 export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string, stackCrawlMark?: AnyFunction): void {
     if (a !== b) {
         const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
@@ -223,24 +244,28 @@ export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string, stackCra
     }
 }
 
+/** @internal */
 export function assertLessThan(a: number, b: number, msg?: string, stackCrawlMark?: AnyFunction): void {
     if (a >= b) {
         fail(`Expected ${a} < ${b}. ${msg || ""}`, stackCrawlMark || assertLessThan);
     }
 }
 
+/** @internal */
 export function assertLessThanOrEqual(a: number, b: number, stackCrawlMark?: AnyFunction): void {
     if (a > b) {
         fail(`Expected ${a} <= ${b}`, stackCrawlMark || assertLessThanOrEqual);
     }
 }
 
+/** @internal */
 export function assertGreaterThanOrEqual(a: number, b: number, stackCrawlMark?: AnyFunction): void {
     if (a < b) {
         fail(`Expected ${a} >= ${b}`, stackCrawlMark || assertGreaterThanOrEqual);
     }
 }
 
+/** @internal */
 export function assertIsDefined<T>(value: T, message?: string, stackCrawlMark?: AnyFunction): asserts value is NonNullable<T> {
     // eslint-disable-next-line no-null/no-null
     if (value === undefined || value === null) {
@@ -248,12 +273,15 @@ export function assertIsDefined<T>(value: T, message?: string, stackCrawlMark?: 
     }
 }
 
+/** @internal */
 export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T {
     assertIsDefined(value, message, stackCrawlMark || checkDefined);
     return value;
 }
 
+/** @internal */
 export function assertEachIsDefined<T extends Node>(value: NodeArray<T>, message?: string, stackCrawlMark?: AnyFunction): asserts value is NodeArray<T>;
+/** @internal */
 export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction): asserts value is readonly NonNullable<T>[];
 export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction) {
     for (const v of value) {
@@ -261,20 +289,27 @@ export function assertEachIsDefined<T>(value: readonly T[], message?: string, st
     }
 }
 
+/** @internal */
 export function checkEachDefined<T, A extends readonly T[]>(value: A, message?: string, stackCrawlMark?: AnyFunction): A {
     assertEachIsDefined(value, message, stackCrawlMark || checkEachDefined);
     return value;
 }
 
+/** @internal */
 export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
     const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
     return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
 }
 
+/** @internal */
 export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T>, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U>;
+/** @internal */
 export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
+/** @internal */
 export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U> | undefined;
+/** @internal */
 export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[] | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[] | undefined;
+/** @internal */
 export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction): void;
 export function assertEachNode(nodes: readonly Node[] | undefined, test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
@@ -286,7 +321,9 @@ export function assertEachNode(nodes: readonly Node[] | undefined, test: (node: 
     }
 }
 
+/** @internal */
 export function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
+/** @internal */
 export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
 export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertNode")) {
@@ -298,7 +335,9 @@ export function assertNode(node: Node | undefined, test: ((node: Node) => boolea
     }
 }
 
+/** @internal */
 export function assertNotNode<T extends Node, U extends T>(node: T | undefined, test: (node: Node) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is Exclude<T, U>;
+/** @internal */
 export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
 export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertNotNode")) {
@@ -310,8 +349,11 @@ export function assertNotNode(node: Node | undefined, test: ((node: Node) => boo
     }
 }
 
+/** @internal */
 export function assertOptionalNode<T extends Node, U extends T>(node: T, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
+/** @internal */
 export function assertOptionalNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U | undefined;
+/** @internal */
 export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
 export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalNode")) {
@@ -323,8 +365,11 @@ export function assertOptionalNode(node: Node | undefined, test: ((node: Node) =
     }
 }
 
+/** @internal */
 export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }>;
+/** @internal */
 export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }> | undefined;
+/** @internal */
 export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
 export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalToken")) {
@@ -336,6 +381,7 @@ export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | u
     }
 }
 
+/** @internal */
 export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction): asserts node is undefined;
 export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction) {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertMissingNode")) {
@@ -351,10 +397,13 @@ export function assertMissingNode(node: Node | undefined, message?: string, stac
  * Asserts a value has the specified type in typespace only (does not perform a runtime assertion).
  * This is useful in cases where we switch on `node.kind` and can be reasonably sure the type is accurate, and
  * as a result can reduce the number of unnecessary casts.
+ *
+ * @internal
  */
 export function type<T>(value: unknown): asserts value is T;
 export function type(_value: unknown) { }
 
+/** @internal */
 export function getFunctionName(func: AnyFunction) {
     if (typeof func !== "function") {
         return "";
@@ -369,12 +418,15 @@ export function getFunctionName(func: AnyFunction) {
     }
 }
 
+/** @internal */
 export function formatSymbol(symbol: Symbol): string {
     return `{ name: ${unescapeLeadingUnderscores(symbol.escapedName)}; flags: ${formatSymbolFlags(symbol.flags)}; declarations: ${map(symbol.declarations, node => formatSyntaxKind(node.kind))} }`;
 }
 
 /**
  * Formats an enum value as a string for debugging and debug assertions.
+ *
+ * @internal
  */
 export function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
     const members = getEnumMembers(enumObject);
@@ -431,62 +483,77 @@ function getEnumMembers(enumObject: any) {
     return sorted;
 }
 
+/** @internal */
 export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
     return formatEnum(kind, (ts as any).SyntaxKind, /*isFlags*/ false);
 }
 
+/** @internal */
 export function formatSnippetKind(kind: SnippetKind | undefined): string {
     return formatEnum(kind, (ts as any).SnippetKind, /*isFlags*/ false);
 }
 
+/** @internal */
 export function formatNodeFlags(flags: NodeFlags | undefined): string {
     return formatEnum(flags, (ts as any).NodeFlags, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatModifierFlags(flags: ModifierFlags | undefined): string {
     return formatEnum(flags, (ts as any).ModifierFlags, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatTransformFlags(flags: TransformFlags | undefined): string {
     return formatEnum(flags, (ts as any).TransformFlags, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatEmitFlags(flags: EmitFlags | undefined): string {
     return formatEnum(flags, (ts as any).EmitFlags, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatSymbolFlags(flags: SymbolFlags | undefined): string {
     return formatEnum(flags, (ts as any).SymbolFlags, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatTypeFlags(flags: TypeFlags | undefined): string {
     return formatEnum(flags, (ts as any).TypeFlags, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatSignatureFlags(flags: SignatureFlags | undefined): string {
     return formatEnum(flags, (ts as any).SignatureFlags, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatObjectFlags(flags: ObjectFlags | undefined): string {
     return formatEnum(flags, (ts as any).ObjectFlags, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatFlowFlags(flags: FlowFlags | undefined): string {
     return formatEnum(flags, (ts as any).FlowFlags, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatRelationComparisonResult(result: RelationComparisonResult | undefined): string {
     return formatEnum(result, (ts as any).RelationComparisonResult, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatCheckMode(mode: CheckMode | undefined): string {
     return formatEnum(mode, (ts as any).CheckMode, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatSignatureCheckMode(mode: SignatureCheckMode | undefined): string {
     return formatEnum(mode, (ts as any).SignatureCheckMode, /*isFlags*/ true);
 }
 
+/** @internal */
 export function formatTypeFacts(facts: TypeFacts | undefined): string {
     return formatEnum(facts, (ts as any).TypeFacts, /*isFlags*/ true);
 }
@@ -524,6 +591,7 @@ function attachFlowNodeDebugInfoWorker(flowNode: FlowNodeBase) {
     }
 }
 
+/** @internal */
 export function attachFlowNodeDebugInfo(flowNode: FlowNodeBase) {
     if (isDebugInfoEnabled) {
         if (typeof Object.setPrototypeOf === "function") {
@@ -563,6 +631,7 @@ function attachNodeArrayDebugInfoWorker(array: NodeArray<Node>) {
     }
 }
 
+/** @internal */
 export function attachNodeArrayDebugInfo(array: NodeArray<Node>) {
     if (isDebugInfoEnabled) {
         if (typeof Object.setPrototypeOf === "function") {
@@ -583,6 +652,8 @@ export function attachNodeArrayDebugInfo(array: NodeArray<Node>) {
 
 /**
  * Injects debug information into frequently used types.
+ *
+ * @internal
  */
 export function enableDebugInfo() {
     if (isDebugInfoEnabled) return;
@@ -739,6 +810,7 @@ export function enableDebugInfo() {
     isDebugInfoEnabled = true;
 }
 
+/** @internal */
 export function formatVariance(varianceFlags: VarianceFlags) {
     const variance = varianceFlags & VarianceFlags.VarianceMask;
     let result =
@@ -756,7 +828,9 @@ export function formatVariance(varianceFlags: VarianceFlags) {
     return result;
 }
 
+/** @internal */
 export type DebugType = Type & { __debugTypeToString(): string }; // eslint-disable-line @typescript-eslint/naming-convention
+/** @internal */
 export class DebugTypeMapper {
     declare kind: TypeMapKind;
     __debugToString(): string { // eslint-disable-line @typescript-eslint/naming-convention
@@ -780,6 +854,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
     }
 }
 
+/** @internal */
 export function attachDebugPrototypeIfDebug(mapper: TypeMapper): TypeMapper {
     if (isDebugging) {
         return Object.setPrototypeOf(mapper, DebugTypeMapper.prototype);
@@ -787,10 +862,12 @@ export function attachDebugPrototypeIfDebug(mapper: TypeMapper): TypeMapper {
     return mapper;
 }
 
+/** @internal */
 export function printControlFlowGraph(flowNode: FlowNode) {
     return console.log(formatControlFlowGraph(flowNode));
 }
 
+/** @internal */
 export function formatControlFlowGraph(flowNode: FlowNode) {
     let nextDebugFlowId = -1;
 
@@ -1166,5 +1243,4 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
         }
         return s;
     }
-}
 }

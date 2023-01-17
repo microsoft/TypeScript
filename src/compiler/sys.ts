@@ -2032,5 +2032,5 @@ if (sys && sys.getEnvironmentVariable) {
         : AssertionLevel.None);
 }
 if (sys && sys.debugMode) {
-    Debug.isDebugging = true;
+    Debug.setIsDebugging(true);
 }
