@@ -1,16 +1,15 @@
 tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(17,36): error TS2339: Property 'foo' does not exist on type 'unknown'.
 tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(18,37): error TS2339: Property 'foo' does not exist on type 'unknown'.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(19,23): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(20,23): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(25,23): error TS2339: Property 'toLowerCase' does not exist on type 'number'.
 tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(29,29): error TS2492: Cannot redeclare identifier 'x' in catch clause.
 tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(30,29): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'boolean', but here has type 'string'.
 tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(36,22): error TS2339: Property 'x' does not exist on type '{}'.
 tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(37,22): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(38,27): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(39,27): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(38,22): error TS2339: Property 'x' does not exist on type '{}'.
+tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(39,22): error TS2339: Property 'x' does not exist on type 'Error'.
 
 
-==== tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts (10 errors) ====
+==== tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts (9 errors) ====
     type any1 = any;
     type unknown1 = unknown;
     
@@ -34,16 +33,14 @@ tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.t
                                         ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'unknown'.
         try { } catch (x: Error) { } // error in the type
-                          ~~~~~
-!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
         try { } catch (x: object) { } // error in the type
-                          ~~~~~~
-!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
     
         try { console.log(); }
         // @ts-ignore
         catch (e: number) { // e should not be a `number`
             console.log(e.toLowerCase());
+                          ~~~~~~~~~~~
+!!! error TS2339: Property 'toLowerCase' does not exist on type 'number'.
         }
     
         // minor bug: shows that the `catch` argument is skipped when checking scope
@@ -66,10 +63,10 @@ tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.t
                          ~
 !!! error TS2339: Property 'x' does not exist on type '{}'.
         try { } catch ({ x }: object) { } // error in the type
-                              ~~~~~~
-!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+                         ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
         try { } catch ({ x }: Error) { } // error in the type
-                              ~~~~~
-!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+                         ~
+!!! error TS2339: Property 'x' does not exist on type 'Error'.
     }
     

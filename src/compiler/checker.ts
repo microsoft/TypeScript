@@ -10219,11 +10219,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Use type from type annotation if one is present
         const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
-        if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
-            if (declaredType) {
-                // If the catch clause is explicitly annotated with any or unknown, accept it, otherwise error.
-                return isTypeAny(declaredType) || declaredType === unknownType ? declaredType : errorType;
-            }
+        if (!declaredType && isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
             // If the catch clause is not explicitly annotated, treat it as though it were explicitly
             // annotated with unknown or any, depending on useUnknownInCatchVariables.
             return useUnknownInCatchVariables ? unknownType : anyType;
@@ -41230,14 +41226,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (catchClause.variableDeclaration) {
                 const declaration = catchClause.variableDeclaration;
                 checkVariableLikeDeclaration(declaration);
-                const typeNode = getEffectiveTypeAnnotationNode(declaration);
-                if (typeNode) {
-                    const type = getTypeFromTypeNode(typeNode);
-                    if (type && !(type.flags & TypeFlags.AnyOrUnknown)) {
-                        grammarErrorOnFirstToken(typeNode, Diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified);
-                    }
-                }
-                else if (declaration.initializer) {
+                if (declaration.initializer) {
                     grammarErrorOnFirstToken(declaration.initializer, Diagnostics.Catch_clause_variable_cannot_have_an_initializer);
                 }
                 else {

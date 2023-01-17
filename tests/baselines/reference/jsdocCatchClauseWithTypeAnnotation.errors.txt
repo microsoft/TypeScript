@@ -1,15 +1,14 @@
 tests/cases/conformance/jsdoc/foo.js(20,54): error TS2339: Property 'foo' does not exist on type 'unknown'.
 tests/cases/conformance/jsdoc/foo.js(21,54): error TS2339: Property 'foo' does not exist on type 'unknown'.
-tests/cases/conformance/jsdoc/foo.js(22,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
-tests/cases/conformance/jsdoc/foo.js(23,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+tests/cases/conformance/jsdoc/foo.js(28,25): error TS2339: Property 'toLowerCase' does not exist on type 'number'.
 tests/cases/conformance/jsdoc/foo.js(35,7): error TS2492: Cannot redeclare identifier 'err' in catch clause.
 tests/cases/conformance/jsdoc/foo.js(46,45): error TS2339: Property 'x' does not exist on type '{}'.
 tests/cases/conformance/jsdoc/foo.js(47,45): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/conformance/jsdoc/foo.js(48,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
-tests/cases/conformance/jsdoc/foo.js(49,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+tests/cases/conformance/jsdoc/foo.js(48,43): error TS2339: Property 'x' does not exist on type 'Error'.
+tests/cases/conformance/jsdoc/foo.js(49,44): error TS2339: Property 'x' does not exist on type '{}'.
 
 
-==== tests/cases/conformance/jsdoc/foo.js (9 errors) ====
+==== tests/cases/conformance/jsdoc/foo.js (8 errors) ====
     /**
      * @typedef {any} Any
      */
@@ -36,16 +35,14 @@ tests/cases/conformance/jsdoc/foo.js(49,31): error TS1196: Catch clause variable
                                                          ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'unknown'.
         try { } catch (/** @type {Error} */ err) { }                     // error in the type
-                                  ~~~~~
-!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
         try { } catch (/** @type {object} */ err) { }                    // error in the type
-                                  ~~~~~~
-!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
     
         try { console.log(); }
         // @ts-ignore
         catch (/** @type {number} */ err) { // e should not be a `number`
             console.log(err.toLowerCase());
+                            ~~~~~~~~~~~
+!!! error TS2339: Property 'toLowerCase' does not exist on type 'number'.
         }
     
     	// minor bug: shows that the `catch` argument is skipped when checking scope
@@ -72,10 +69,10 @@ tests/cases/conformance/jsdoc/foo.js(49,31): error TS1196: Catch clause variable
                                                 ~
 !!! error TS2339: Property 'x' does not exist on type '{}'.
         try { } catch (/** @type {Error} */ { x }) { }                   // error in the type
-                                  ~~~~~
-!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+                                              ~
+!!! error TS2339: Property 'x' does not exist on type 'Error'.
         try { } catch (/** @type {object} */ { x }) { }                  // error in the type
-                                  ~~~~~~
-!!! error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+                                               ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
     }
     

@@ -72,10 +72,10 @@ function fn() {
 >foo : any
 
     try { } catch (/** @type {Error} */ err) { }                     // error in the type
->err : any
+>err : Error
 
     try { } catch (/** @type {object} */ err) { }                    // error in the type
->err : any
+>err : object
 
     try { console.log(); }
 >console.log() : void
@@ -85,7 +85,7 @@ function fn() {
 
     // @ts-ignore
     catch (/** @type {number} */ err) { // e should not be a `number`
->err : any
+>err : number
 
         console.log(err.toLowerCase());
 >console.log(err.toLowerCase()) : void
@@ -94,7 +94,7 @@ function fn() {
 >log : (...data: any[]) => void
 >err.toLowerCase() : any
 >err.toLowerCase : any
->err : any
+>err : number
 >toLowerCase : any
     }
 

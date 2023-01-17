@@ -607,10 +607,6 @@
         "category": "Error",
         "code": 1195
     },
-    "Catch clause variable type annotation must be 'any' or 'unknown' if specified.": {
-        "category": "Error",
-        "code": 1196
-    },
     "Catch clause variable cannot have an initializer.": {
         "category": "Error",
         "code": 1197

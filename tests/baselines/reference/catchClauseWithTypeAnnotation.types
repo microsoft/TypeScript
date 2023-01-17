@@ -72,10 +72,10 @@ function fn(x: boolean) {
 >foo : any
 
     try { } catch (x: Error) { } // error in the type
->x : any
+>x : Error
 
     try { } catch (x: object) { } // error in the type
->x : any
+>x : object
 
     try { console.log(); }
 >console.log() : void
@@ -85,7 +85,7 @@ function fn(x: boolean) {
 
     // @ts-ignore
     catch (e: number) { // e should not be a `number`
->e : any
+>e : number
 
         console.log(e.toLowerCase());
 >console.log(e.toLowerCase()) : void
@@ -94,7 +94,7 @@ function fn(x: boolean) {
 >log : (...data: any[]) => void
 >e.toLowerCase() : any
 >e.toLowerCase : any
->e : any
+>e : number
 >toLowerCase : any
     }
 
