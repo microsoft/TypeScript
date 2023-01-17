@@ -3418,7 +3418,7 @@ function getExtendsConfigPath(
         return resolved.resolvedModule.resolvedFileName;
     }
     if (extendedConfig === "") {
-        errors.push(createDiagnostic(Diagnostics.Compiler_option_0_cannot_be_empty, "extends"));
+        errors.push(createDiagnostic(Diagnostics.Compiler_option_0_cannot_be_given_an_empty_string, "extends"));
     }
     else {
         errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));

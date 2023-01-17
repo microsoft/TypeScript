@@ -360,14 +360,14 @@ describe("unittests:: config:: configurationExtension", () => {
                 messageText: `Compiler option 'extends' requires a value of type string or Array.`
             }]);
 
-            testFailure("can error when 'extends' is an empty string", "extends3.json", [{
+            testFailure("can error when 'extends' is given an empty string", "extends3.json", [{
                 code: 18051,
-                messageText: `Compiler option 'extends' cannot be empty.`
+                messageText: `Compiler option 'extends' cannot be given an empty string.`
             }]);
 
-            testFailure("can error when 'extends' is an empty string in an array", "extends4.json", [{
+            testFailure("can error when 'extends' is given an empty string in an array", "extends4.json", [{
                 code: 18051,
-                messageText: `Compiler option 'extends' cannot be empty.`
+                messageText: `Compiler option 'extends' cannot be given an empty string.`
             }]);
 
             testSuccess("can overwrite compiler options using extended 'null'", "configs/third.json", {
