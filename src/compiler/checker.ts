@@ -39811,6 +39811,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkGrammarStatementInAmbientContext(node);
         const type = checkTruthinessExpression(node.expression);
         checkTestingKnownTruthyCallableOrAwaitableType(node.expression, type, node.thenStatement);
+        checkTestingKnownFalsyCallableOrAwaitableType(node.expression, type, node.thenStatement);
         checkSourceElement(node.thenStatement);
 
         if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -39835,7 +39836,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 ? condExpr.right
                 : condExpr;
             if (isModuleExportsAccessExpression(location)) return;
-            const type = location === condExpr ? condType : checkTruthinessExpression(location);
+            const type = location === condExpr ? condType : checkTruthinessExpression(location); // >> TODO (bug?): why are we comparing with internal condExpr insteaf of external one???
             const isPropertyExpressionCast = isPropertyAccessExpression(location) && isTypeAssertion(location.expression);
             if (!(getTypeFacts(type) & TypeFacts.Truthy) || isPropertyExpressionCast) return;
 
@@ -39872,6 +39873,89 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else {
                     error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
                 }
+            }
+        }
+    }
+
+    /**
+     * Considerations:
+     *  An always truthy value makes an `||` always true
+     *  An always falsy value makes an `&&` always false
+     */
+    function checkTestingKnownFalsyCallableOrAwaitableType(condExpr: Expression, condType: Type, body?: Statement | Expression): void {
+        if (!strictNullChecks) return;
+
+        helper(condExpr, body);
+        while (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+            condExpr = condExpr.left;
+            helper(condExpr, body);
+        }
+
+        function helper(condExpr: Expression, body: Expression | Statement | undefined) {
+            const location = isBinaryExpression(condExpr) &&
+                (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)
+                ? condExpr.right
+                : condExpr;
+            if (isModuleExportsAccessExpression(location)) return;
+            const type = location === condExpr ? condType : checkTruthinessExpression(location); // >> TODO (bug?): why are we comparing with internal condExpr insteaf of external one???
+            const isPropertyExpressionCast = isPropertyAccessExpression(location) && isTypeAssertion(location.expression);
+            if (!(getTypeFacts(type) & TypeFacts.Falsy) || isPropertyExpressionCast) return;
+            // >> TODO: should we also return if the type can be truthy??
+            if (getTypeFacts(type) & TypeFacts.Truthy) {
+                // >>
+            }
+            if (isPrefixUnaryExpression(location) && location.operator === SyntaxKind.ExclamationToken) {
+                const operandType = checkTruthinessExpression(location.operand);
+                const isPromise = !!getAwaitedTypeOfPromise(type);
+                if (isPromise) {
+                    checkAlwaysTruthy(location.operand, operandType, condExpr, body);
+                }
+            }
+        }
+    }
+
+    function checkAlwaysTruthy(location: Node, type: Type, condExpr: Expression, body: Expression | Statement | undefined, assumeTrue = true): void {
+        // While it technically should be invalid for any known-truthy value
+        // to be tested, we de-scope to functions and Promises unreferenced in
+        // the block as a heuristic to identify the most common bugs. There
+        // are too many false positives for values sourced from type
+        // definitions without strictNullChecks otherwise.
+        const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
+        const isPromise = !!getAwaitedTypeOfPromise(type);
+        if (callSignatures.length === 0 && !isPromise) {
+            return;
+        }
+
+        const testedNode = isIdentifier(location) ? location
+            : isPropertyAccessExpression(location) ? location.name
+            : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
+            : undefined;
+        const testedSymbol = testedNode && getSymbolAtLocation(testedNode);
+        if (!testedSymbol && !isPromise) {
+            return;
+        }
+
+        const isUsed = testedSymbol && isBinaryExpression(condExpr.parent) && isSymbolUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
+            || testedSymbol && body && isSymbolUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
+        if (!isUsed) {
+            if (isPromise) {
+                if (assumeTrue) {
+                    errorAndMaybeSuggestAwait(
+                        location,
+                        /*maybeMissingAwait*/ true,
+                        Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined,
+                        getTypeNameForErrorDisplay(type));
+                }
+                else {
+                    errorAndMaybeSuggestAwait(
+                        location.parent,
+                        /*maybeMissingAwait*/ true,
+                        Diagnostics.This_condition_will_always_return_false_since_this_0_is_always_defined,
+                        getTypeNameForErrorDisplay(type));
+                }
+            }
+            else {
+                error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
             }
         }
     }
