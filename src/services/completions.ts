@@ -1050,10 +1050,10 @@ function getExhaustiveCaseSnippets(
             else if (!tracker.hasValue(type.value)) {
                 switch (typeof type.value) {
                     case "object":
-                        elements.push(factory.createBigIntLiteral(type.value));
+                        elements.push(type.value.negative ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createBigIntLiteral({ negative: false, base10Value: type.value.base10Value })) : factory.createBigIntLiteral(type.value));
                         break;
                     case "number":
-                        elements.push(factory.createNumericLiteral(type.value));
+                        elements.push(type.value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-type.value)) : factory.createNumericLiteral(type.value));
                         break;
                     case "string":
                         elements.push(factory.createStringLiteral(type.value, quotePreference === QuotePreference.Single));
