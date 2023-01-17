@@ -10205,7 +10205,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isOptional = includeOptionality && isOptionalDeclaration(declaration);
 
         // Use type from type annotation if one is present
-        let declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
+        const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
         if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
             if (declaredType) {
                 // If the catch clause is explicitly annotated with any or unknown, accept it, otherwise error.
@@ -10213,7 +10213,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // If the catch clause is not explicitly annotated, treat it as though it were explicitly
             // annotated with unknown or any, depending on useUnknownInCatchVariables.
-            declaredType = useUnknownInCatchVariables ? unknownType : anyType;
+            return useUnknownInCatchVariables ? unknownType : anyType;
         }
         if (declaredType) {
             return addOptionality(declaredType, isProperty, isOptional);
