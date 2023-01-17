@@ -401,8 +401,8 @@ export function assertMissingNode(node: Node | undefined, message?: string, stac
  *
  * @internal
  */
-export function type<T>(value: unknown): asserts value is T;
-export function type(_value: unknown) { }
+export function assertType<T>(value: unknown): asserts value is T;
+export function assertType(_value: unknown) { }
 
 /** @internal */
 export function getFunctionName(func: AnyFunction) {
@@ -835,7 +835,7 @@ export type DebugType = Type & { __debugTypeToString(): string }; // eslint-disa
 export class DebugTypeMapper {
     declare kind: TypeMapKind;
     __debugToString(): string { // eslint-disable-line @typescript-eslint/naming-convention
-        type<TypeMapper>(this);
+        assertType<TypeMapper>(this);
         switch (this.kind) {
             case TypeMapKind.Function: return this.debugInfo?.() || "(function mapper)";
             case TypeMapKind.Simple: return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
