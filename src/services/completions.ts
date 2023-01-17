@@ -1053,7 +1053,7 @@ function getExhaustiveCaseSnippets(
                         elements.push(factory.createBigIntLiteral(type.value));
                         break;
                     case "number":
-                        elements.push(factory.createNumericLiteral(type.value));
+                        elements.push(type.value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-type.value)) : factory.createNumericLiteral(type.value));
                         break;
                     case "string":
                         elements.push(factory.createStringLiteral(type.value, quotePreference === QuotePreference.Single));
