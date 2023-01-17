@@ -591,6 +591,8 @@ import {
     isLiteralExpressionOfObject,
     isLiteralImportTypeNode,
     isLiteralTypeNode,
+    isLogicalOrCoalescingBinaryExpression,
+    isLogicalOrCoalescingBinaryOperator,
     isMetaProperty,
     isMethodDeclaration,
     isMethodSignature,
@@ -35561,13 +35563,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 setLeftType(state, leftType);
                 setLastResult(state, /*type*/ undefined);
                 const operator = operatorToken.kind;
-                if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
-                    if (operator === SyntaxKind.AmpersandAmpersandToken) {
-                        let parent = node.parent;
-                        while (parent.kind === SyntaxKind.ParenthesizedExpression
-                            || isBinaryExpression(parent) && (parent.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || parent.operatorToken.kind === SyntaxKind.BarBarToken)) {
-                            parent = parent.parent;
-                        }
+                if (isLogicalOrCoalescingBinaryOperator(operator)) {
+                    let parent = node.parent;
+                    while (parent.kind === SyntaxKind.ParenthesizedExpression || isLogicalOrCoalescingBinaryExpression(parent)) {
+                        parent = parent.parent;
+                    }
+                    if (operator === SyntaxKind.AmpersandAmpersandToken || isIfStatement(parent)) {
                         checkTestingKnownTruthyCallableOrAwaitableType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
                     }
                     checkTruthinessOfType(leftType, node.left);
@@ -35656,7 +35657,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode, right.kind === SyntaxKind.ThisKeyword);
         }
         let leftType: Type;
-        if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
+        if (isLogicalOrCoalescingBinaryOperator(operator)) {
             leftType = checkTruthinessExpression(left, checkMode);
         }
         else {
@@ -39921,19 +39922,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkTestingKnownTruthyCallableOrAwaitableType(condExpr: Expression, condType: Type, body?: Statement | Expression) {
         if (!strictNullChecks) return;
+        bothHelper(condExpr, body);
 
-        helper(condExpr, body);
-        while (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.BarBarToken) {
-            condExpr = condExpr.left;
+        function bothHelper(condExpr: Expression, body: Expression | Statement | undefined) {
+            condExpr = skipParentheses(condExpr);
+
             helper(condExpr, body);
+
+            while (isBinaryExpression(condExpr) && (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.QuestionQuestionToken)) {
+                condExpr = skipParentheses(condExpr.left);
+                helper(condExpr, body);
+            }
         }
 
         function helper(condExpr: Expression, body: Expression | Statement | undefined) {
-            const location = isBinaryExpression(condExpr) &&
-                (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)
-                ? condExpr.right
-                : condExpr;
-            if (isModuleExportsAccessExpression(location)) return;
+            const location = isLogicalOrCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
+            if (isModuleExportsAccessExpression(location)) {
+                return;
+            }
+            if (isLogicalOrCoalescingBinaryExpression(location)) {
+                bothHelper(location, body);
+                return;
+            }
             const type = location === condExpr ? condType : checkTruthinessExpression(location);
             const isPropertyExpressionCast = isPropertyAccessExpression(location) && isTypeAssertion(location.expression);
             if (!(getTypeFacts(type) & TypeFacts.Truthy) || isPropertyExpressionCast) return;
@@ -39951,7 +39961,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const testedNode = isIdentifier(location) ? location
                 : isPropertyAccessExpression(location) ? location.name
-                : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
                 : undefined;
             const testedSymbol = testedNode && getSymbolAtLocation(testedNode);
             if (!testedSymbol && !isPromise) {
