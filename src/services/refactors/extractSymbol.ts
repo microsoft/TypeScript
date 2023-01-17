@@ -21,7 +21,6 @@ import {
     ContinueStatement,
     createDiagnosticForNode,
     createFileDiagnostic,
-    Debug,
     Declaration,
     Diagnostic,
     DiagnosticCategory,
@@ -163,6 +162,7 @@ import {
     refactorKindBeginsWith,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+import * as Debug from "../../compiler/debug";
 
 const refactorName = "Extract Symbol";
 

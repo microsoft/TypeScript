@@ -22,7 +22,6 @@ import {
     createSet,
     createTextSpan,
     createTextSpanFromBounds,
-    Debug,
     decodedTextSpanIntersectsWith,
     deduplicate,
     DefinitionInfo,
@@ -178,6 +177,7 @@ import {
     toNormalizedPath,
     updateProjectIfDirty,
 } from "./_namespaces/ts.server";
+import * as Debug from "../compiler/debug";
 
 interface StackTraceError extends Error {
     stack?: string;

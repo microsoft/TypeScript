@@ -12,7 +12,6 @@ import {
     chainBundle,
     ClassDeclaration,
     collectExternalModuleInfo,
-    Debug,
     Declaration,
     DestructuringAssignment,
     EmitFlags,
@@ -134,6 +133,7 @@ import {
     visitNodes,
     VisitResult,
 } from "../../_namespaces/ts";
+import * as Debug from "../../debug";
 
 /** @internal */
 export function transformModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

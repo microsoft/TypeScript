@@ -5,7 +5,6 @@ import {
     ClassLikeDeclaration,
     CodeFixAction,
     createSymbolTable,
-    Debug,
     Diagnostics,
     ExpressionWithTypeArguments,
     find,
@@ -37,6 +36,7 @@ import {
     registerCodeFix,
     TypeConstructionContext,
 } from "../_namespaces/ts.codefix";
+import * as Debug from "../../compiler/debug";
 
 const errorCodes = [
     Diagnostics.Class_0_incorrectly_implements_interface_1.code,

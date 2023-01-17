@@ -6,7 +6,6 @@ import {
     CompilerOptions,
     consumesNodeCoreModules,
     createMultiMap,
-    Debug,
     emptyArray,
     findIndex,
     firstDefined,
@@ -60,6 +59,7 @@ import {
     unmangleScopedPackageName,
     UserPreferences,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export const enum ImportKind {

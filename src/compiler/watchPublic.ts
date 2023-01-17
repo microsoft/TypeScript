@@ -26,7 +26,6 @@ import {
     createWatchCompilerHostOfConfigFile,
     createWatchCompilerHostOfFilesAndCompilerOptions,
     createWatchFactory,
-    Debug,
     Diagnostic,
     DiagnosticMessage,
     DiagnosticReporter,
@@ -92,6 +91,7 @@ import {
     WatchTypeRegistry,
     WildcardDirectoryWatcher,
 } from "./_namespaces/ts";
+import * as Debug from "./debug";
 
 export interface ReadBuildProgramHost {
     useCaseSensitiveFileNames(): boolean;

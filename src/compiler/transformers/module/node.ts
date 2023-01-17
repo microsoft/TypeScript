@@ -1,6 +1,5 @@
 import {
     Bundle,
-    Debug,
     EmitHint,
     isSourceFile,
     map,
@@ -12,6 +11,7 @@ import {
     transformECMAScriptModule,
     transformModule,
 } from "../../_namespaces/ts";
+import * as Debug from "../../debug";
 
 /** @internal */
 export function transformNodeModule(context: TransformationContext) {

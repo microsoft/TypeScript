@@ -50,7 +50,6 @@ import {
     CharacterCodes,
     combinePaths,
     createQueue,
-    Debug,
     directorySeparator,
     DirectoryWatcherCallback,
     FileWatcher,
@@ -77,6 +76,7 @@ import {
     versionMajorMinor,
     WatchOptions,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 interface LogOptions {
     file?: string;
@@ -309,11 +309,11 @@ export function initializeNodeSystem(): StartInput {
     Debug.setLoggingHost({
         log(level, s) {
             switch (level) {
-                case ts.Debug.LogLevel.Error:
-                case ts.Debug.LogLevel.Warning:
+                case Debug.LogLevel.Error:
+                case Debug.LogLevel.Warning:
                     return logger.msg(s, Msg.Err);
-                case ts.Debug.LogLevel.Info:
-                case ts.Debug.LogLevel.Verbose:
+                case Debug.LogLevel.Info:
+                case Debug.LogLevel.Verbose:
                     return logger.msg(s, Msg.Info);
             }
         }

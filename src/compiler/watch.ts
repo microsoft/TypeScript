@@ -20,7 +20,6 @@ import {
     CreateProgram,
     createWriteFileMeasuringIO,
     CustomTransformers,
-    Debug,
     Diagnostic,
     DiagnosticCategory,
     DiagnosticMessage,
@@ -106,6 +105,7 @@ import {
     whitespaceOrMapCommentRegExp,
     WriteFileCallback,
 } from "./_namespaces/ts";
+import * as Debug from "./debug";
 
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCurrentDirectory: () => sys.getCurrentDirectory(),

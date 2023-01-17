@@ -4,7 +4,6 @@ import {
     Classifications,
     ClassifiedSpan2020,
     createTextSpan,
-    Debug,
     Declaration,
     EndOfLineState,
     forEachChild,
@@ -44,6 +43,7 @@ import {
     TypeChecker,
     VariableDeclaration,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export const enum TokenEncodingConsts {

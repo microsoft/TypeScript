@@ -1,7 +1,6 @@
 import {
     append,
     createScanner,
-    Debug,
     isJsxAttribute,
     isJsxElement,
     isJsxText,
@@ -21,6 +20,7 @@ import {
     TextRangeWithTriviaKind,
     TokenInfo,
 } from "../_namespaces/ts.formatting";
+import * as Debug from "../../compiler/debug";
 
 const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
 const jsxScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.JSX);

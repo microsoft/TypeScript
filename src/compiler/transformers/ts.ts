@@ -26,7 +26,6 @@ import {
     createRuntimeTypeSerializer,
     createTokenRange,
     createUnparsedSourceFile,
-    Debug,
     Declaration,
     Decorator,
     ElementAccessExpression,
@@ -198,6 +197,7 @@ import {
     visitParameterList,
     VisitResult,
 } from "../_namespaces/ts";
+import * as Debug from "../debug";
 
 /**
  * Indicates whether to emit type metadata in the new format.

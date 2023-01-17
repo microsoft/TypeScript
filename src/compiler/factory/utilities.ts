@@ -20,7 +20,6 @@ import {
     CommaListExpression,
     compareStringsCaseSensitive,
     CompilerOptions,
-    Debug,
     Declaration,
     EmitFlags,
     EmitHelperFactory,
@@ -167,6 +166,7 @@ import {
     TypeNode,
     TypeParameterDeclaration,
 } from "../_namespaces/ts";
+import * as Debug from "../debug";
 
 // Compound nodes
 

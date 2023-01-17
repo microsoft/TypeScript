@@ -4,7 +4,6 @@ import {
     BinaryOperator,
     copyTrailingAsLeadingComments,
     copyTrailingComments,
-    Debug,
     Diagnostics,
     emptyArray,
     Expression,
@@ -37,6 +36,7 @@ import {
     Token,
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
+import * as Debug from "../../compiler/debug";
 
 const refactorName = "Convert to template string";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);

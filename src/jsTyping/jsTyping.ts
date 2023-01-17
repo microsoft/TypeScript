@@ -3,7 +3,6 @@ import {
     combinePaths,
     compareStringsCaseSensitive,
     CompilerOptions,
-    Debug,
     deduplicate,
     equateStringsCaseSensitive,
     Extension,
@@ -30,6 +29,7 @@ import {
     Version,
     versionMajorMinor,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export interface TypingResolutionHost {

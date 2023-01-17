@@ -7,7 +7,6 @@ import {
     compareStringsCaseSensitive,
     CompilerOptions,
     createGetCanonicalFileName,
-    Debug,
     DirectoryWatcherCallback,
     emptyArray,
     emptyFileSystemEntries,
@@ -54,6 +53,7 @@ import {
     WatchFileKind,
     WatchOptions,
 } from "./_namespaces/ts";
+import * as Debug from "./debug";
 
 /**
  * Partial interface of the System thats needed to support the caching of directory structure

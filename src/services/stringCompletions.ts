@@ -22,7 +22,6 @@ import {
     createSortedArray,
     createTextSpan,
     createTextSpanFromStringLiteralLikeContent,
-    Debug,
     deduplicate,
     directorySeparator,
     ElementAccessExpression,
@@ -155,6 +154,7 @@ import {
     Log,
     SortText,
 } from "./_namespaces/ts.Completions";
+import * as Debug from "../compiler/debug";
 
 interface NameAndKindSet {
     add(value: NameAndKind): void;

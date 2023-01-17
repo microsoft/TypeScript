@@ -9,7 +9,6 @@ import {
     canHaveModifiers,
     canHaveSymbol,
     cast,
-    Debug,
     ExportAssignment,
     ExportDeclaration,
     FileReference,
@@ -81,6 +80,7 @@ import {
     VariableDeclaration,
     walkUpBindingElementsAndPatterns,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 /* Code for finding imports of an exported symbol. Used only by FindAllReferences. */
 

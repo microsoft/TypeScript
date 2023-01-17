@@ -1,5 +1,4 @@
 import {
-    Debug,
     every,
     FormatCodeSettings,
     FormattingHost,
@@ -14,6 +13,7 @@ import {
     RuleAction,
     RuleSpec,
 } from "../_namespaces/ts.formatting";
+import * as Debug from "../../compiler/debug";
 
 /** @internal */
 export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {

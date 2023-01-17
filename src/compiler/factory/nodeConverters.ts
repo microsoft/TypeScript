@@ -7,7 +7,6 @@ import {
     Block,
     cast,
     ConciseBody,
-    Debug,
     Expression,
     FunctionDeclaration,
     getStartsOnNewLine,
@@ -32,6 +31,7 @@ import {
     setTextRange,
     SyntaxKind,
 } from "../_namespaces/ts";
+import * as Debug from "../debug";
 
 /** @internal */
 export function createNodeConverters(factory: NodeFactory): NodeConverters {

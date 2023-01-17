@@ -8,7 +8,6 @@ import {
     createProgram,
     createSourceFile,
     CustomTransformers,
-    Debug,
     Diagnostic,
     fileExtensionIs,
     filter,
@@ -27,6 +26,7 @@ import {
     toPath,
     transpileOptionValueCompilerOptions,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 export interface TranspileOptions {
     compilerOptions?: CompilerOptions;

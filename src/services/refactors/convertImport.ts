@@ -2,7 +2,6 @@ import {
     ApplicableRefactorInfo,
     arrayFrom,
     codefix,
-    Debug,
     Diagnostics,
     emptyArray,
     Expression,
@@ -49,6 +48,7 @@ import {
     RefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+import * as Debug from "../../compiler/debug";
 
 const refactorName = "Convert import";
 

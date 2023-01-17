@@ -1,7 +1,6 @@
 import {
     combinePaths,
     createPackageJsonInfo,
-    Debug,
     forEachAncestorDirectory,
     getDirectoryPath,
     Path,
@@ -10,6 +9,7 @@ import {
     tryFileExists,
 } from "./_namespaces/ts";
 import { ProjectService } from "./_namespaces/ts.server";
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export interface PackageJsonCache {

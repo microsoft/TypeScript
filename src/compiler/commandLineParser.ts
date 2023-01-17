@@ -20,7 +20,6 @@ import {
     createCompilerDiagnostic,
     createDiagnosticForNodeInSourceFile,
     createGetCanonicalFileName,
-    Debug,
     Diagnostic,
     DiagnosticMessage,
     Diagnostics,
@@ -120,6 +119,7 @@ import {
     WatchFileKind,
     WatchOptions,
 } from "./_namespaces/ts";
+import * as Debug from "./debug";
 
 /** @internal */
 export const compileOnSaveCommandLineOption: CommandLineOption = {

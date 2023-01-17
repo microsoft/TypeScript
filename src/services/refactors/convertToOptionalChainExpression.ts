@@ -4,7 +4,6 @@ import {
     CallExpression,
     ConditionalExpression,
     createTextSpanFromBounds,
-    Debug,
     Diagnostics,
     ElementAccessExpression,
     emptyArray,
@@ -46,6 +45,7 @@ import {
     RefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+import * as Debug from "../../compiler/debug";
 
 const refactorName = "Convert to optional chain expression";
 const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);

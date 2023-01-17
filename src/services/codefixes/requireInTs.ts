@@ -1,6 +1,5 @@
 import {
     cast,
-    Debug,
     Diagnostics,
     factory,
     first,
@@ -27,6 +26,7 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+import * as Debug from "../../compiler/debug";
 
 const fixId = "requireInTs";
 const errorCodes = [Diagnostics.require_call_may_be_converted_to_an_import.code];

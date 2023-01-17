@@ -3,7 +3,6 @@ import {
     CharacterCodes,
     Comparer,
     Comparison,
-    Debug,
     EqualityComparer,
     isWhiteSpaceLike,
     MapLike,
@@ -14,7 +13,7 @@ import {
     TextSpan,
     UnderscoreEscapedMap,
 } from "./_namespaces/ts";
-
+import * as Debug from "./debug";
 
 /** @internal */
 export const emptyArray: never[] = [] as never[];

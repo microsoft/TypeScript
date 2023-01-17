@@ -3,7 +3,6 @@ import {
     computeLineStarts,
     createTextChangeRange,
     createTextSpan,
-    Debug,
     IScriptSnapshot,
     TextChangeRange,
     TextSpan,
@@ -13,6 +12,7 @@ import {
     emptyArray,
     protocol,
 } from "./_namespaces/ts.server";
+import * as Debug from "../compiler/debug";
 
 const lineCollectionCapacity = 4;
 

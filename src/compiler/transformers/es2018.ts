@@ -21,7 +21,6 @@ import {
     ConstructorDeclaration,
     createForOfBindingStatement,
     createSuperAccessVariableStatement,
-    Debug,
     ElementAccessExpression,
     EmitFlags,
     EmitHint,
@@ -111,6 +110,7 @@ import {
     VoidExpression,
     YieldExpression,
 } from "../_namespaces/ts";
+import * as Debug from "../debug";
 
 const enum ESNextSubstitutionFlags {
     /** Enables substitutions for async methods with `super` calls. */

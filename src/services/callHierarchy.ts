@@ -18,7 +18,6 @@ import {
     createTextRangeFromNode,
     createTextSpanFromBounds,
     createTextSpanFromRange,
-    Debug,
     Decorator,
     ElementAccessExpression,
     EmitHint,
@@ -105,6 +104,7 @@ import {
     usingSingleLineStringWriter,
     VariableDeclaration,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export type NamedExpression =

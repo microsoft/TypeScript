@@ -29,7 +29,6 @@ import {
     createGetSymbolAccessibilityDiagnosticForNodeName,
     createSymbolTable,
     createUnparsedSourceFile,
-    Debug,
     Declaration,
     DeclarationDiagnosticProducing,
     DeclarationName,
@@ -212,6 +211,7 @@ import {
     VisitResult,
 } from "../_namespaces/ts";
 import * as moduleSpecifiers from "../_namespaces/ts.moduleSpecifiers";
+import * as Debug from "../debug";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {

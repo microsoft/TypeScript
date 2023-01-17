@@ -72,7 +72,6 @@ import {
     createDocumentRegistryInternal,
     createGetCanonicalFileName,
     createMultiMap,
-    Debug,
     Diagnostic,
     directorySeparator,
     DirectoryStructureHost,
@@ -179,6 +178,7 @@ import {
     WatchType,
     WildcardDirectoryWatcher,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 /** @internal */

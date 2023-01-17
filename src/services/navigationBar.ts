@@ -18,7 +18,6 @@ import {
     contains,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     DeclarationName,
     declarationNameToString,
@@ -109,6 +108,7 @@ import {
     unescapeLeadingUnderscores,
     VariableDeclaration,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 /**
  * Matches all whitespace characters in a string. Eg:

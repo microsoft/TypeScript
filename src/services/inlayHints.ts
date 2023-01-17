@@ -3,7 +3,6 @@ import {
     ArrowFunction,
     CallExpression,
     createPrinter,
-    Debug,
     EmitHint,
     EnumMember,
     equateStringsCaseInsensitive,
@@ -69,6 +68,7 @@ import {
     usingSingleLineStringWriter,
     VariableDeclaration,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 const maxHintsLength = 30;
 

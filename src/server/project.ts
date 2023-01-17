@@ -44,7 +44,6 @@ import {
     createLanguageService,
     createResolutionCache,
     createSymlinkCache,
-    Debug,
     Diagnostic,
     DirectoryStructureHost,
     DirectoryWatcherCallback,
@@ -148,6 +147,7 @@ import {
     WatchOptions,
     WatchType,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 export enum ProjectKind {
     Inferred,

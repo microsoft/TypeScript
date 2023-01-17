@@ -17,7 +17,6 @@ import {
     createModuleSpecifierResolutionHost,
     createMultiMap,
     createPackageJsonImportFilter,
-    Debug,
     DiagnosticAndArguments,
     Diagnostics,
     DiagnosticWithLocation,
@@ -143,6 +142,7 @@ import {
     eachDiagnostic,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+import * as Debug from "../../compiler/debug";
 
 /** @internal */
 export const importFixName = "import";

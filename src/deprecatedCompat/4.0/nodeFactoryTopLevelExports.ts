@@ -12,7 +12,6 @@ import {
     ConciseBody,
     ConditionalExpression,
     ConstructorTypeNode,
-    Debug,
     Decorator,
     DeprecationOptions,
     EntityName,
@@ -65,6 +64,7 @@ import {
     YieldExpression,
 } from "../_namespaces/ts";
 import { deprecate } from "../deprecate";
+import * as Debug from "../../compiler/debug";
 
 // DEPRECATION: Node factory top-level exports
 // DEPRECATION PLAN:

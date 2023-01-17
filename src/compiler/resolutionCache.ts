@@ -12,7 +12,6 @@ import {
     createMultiMap,
     createTypeReferenceDirectiveResolutionCache,
     createTypeReferenceResolutionLoader,
-    Debug,
     Diagnostics,
     directorySeparator,
     DirectoryWatcherCallback,
@@ -73,6 +72,7 @@ import {
     updateResolutionField,
     WatchDirectoryFlags,
 } from "./_namespaces/ts";
+import * as Debug from "./debug";
 
 /**
  * This is the cache of module/typedirectives resolution that can be retained across program

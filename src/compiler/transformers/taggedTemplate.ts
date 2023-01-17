@@ -1,6 +1,5 @@
 import {
     CallExpression,
-    Debug,
     Expression,
     factory,
     getSourceTextOfNodeFromSourceFile,
@@ -23,6 +22,7 @@ import {
     visitNode,
     Visitor,
 } from "../_namespaces/ts";
+import * as Debug from "../debug";
 
 /** @internal */
 export enum ProcessLevel {

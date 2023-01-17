@@ -4,7 +4,6 @@ import {
     createGetCanonicalFileName,
     createLanguageServiceSourceFile,
     CreateSourceFileOptions,
-    Debug,
     ensureScriptKind,
     firstDefinedIterator,
     forEachEntry,
@@ -27,6 +26,7 @@ import {
     tracing,
     updateLanguageServiceSourceFile,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 /**
  * The document registry represents a store of SourceFile objects that can be shared between

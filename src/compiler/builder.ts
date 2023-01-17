@@ -25,7 +25,6 @@ import {
     createGetCanonicalFileName,
     createProgram,
     CustomTransformers,
-    Debug,
     Diagnostic,
     DiagnosticCategory,
     DiagnosticMessageChain,
@@ -80,6 +79,7 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
 } from "./_namespaces/ts";
+import * as Debug from "./debug";
 
 /** @internal */
 export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {

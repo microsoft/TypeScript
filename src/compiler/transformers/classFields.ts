@@ -26,7 +26,6 @@ import {
     createAccessorPropertyGetRedirector,
     createAccessorPropertySetRedirector,
     createMemberAccessForPropertyName,
-    Debug,
     ElementAccessExpression,
     EmitFlags,
     EmitHint,
@@ -172,6 +171,7 @@ import {
     visitParameterList,
     VisitResult,
 } from "../_namespaces/ts";
+import * as Debug from "../debug";
 
 const enum ClassPropertySubstitutionFlags {
     /**

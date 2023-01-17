@@ -24,7 +24,6 @@ import {
 import {
     combinePaths,
     createGetCanonicalFileName,
-    Debug,
     forEachAncestorDirectory,
     getDirectoryPath,
     MapLike,
@@ -35,6 +34,7 @@ import {
     toPath,
     version,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 class FileLog implements Log {
     constructor(private logFile: string | undefined) {

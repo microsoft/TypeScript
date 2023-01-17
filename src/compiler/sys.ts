@@ -8,7 +8,6 @@ import {
     containsPath,
     createGetCanonicalFileName,
     createMultiMap,
-    Debug,
     directorySeparator,
     emptyArray,
     emptyFileSystemEntries,
@@ -47,6 +46,7 @@ import {
     WatchOptions,
     writeFileEnsuringDirectories,
 } from "./_namespaces/ts";
+import * as Debug from "./debug";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;

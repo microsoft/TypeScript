@@ -7,12 +7,12 @@ import {
     StartInput,
 } from "./_namespaces/ts.server";
 import {
-    Debug,
     getNodeMajorVersion,
     setStackTraceLimit,
     sys,
     version,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 export * from "./_namespaces/ts";
 

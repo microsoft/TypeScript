@@ -41,7 +41,6 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     DefaultClause,
     Diagnostics,
@@ -364,6 +363,7 @@ import {
     walkUpParenthesizedExpressions,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
+import * as Debug from "../compiler/debug";
 
 // Exported only for tests
 /** @internal */

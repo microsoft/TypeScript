@@ -11,7 +11,6 @@ import {
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
-    Debug,
     EmitHint,
     emptyArray,
     Expression,
@@ -83,6 +82,7 @@ import {
     TypeChecker,
     TypeParameter,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 const enum InvocationKind { Call, TypeArgs, Contextual }
 interface CallInvocation { readonly kind: InvocationKind.Call; readonly node: CallLikeExpression; }

@@ -29,7 +29,6 @@ import {
     createWatchCompilerHostOfConfigFile,
     createWatchCompilerHostOfFilesAndCompilerOptions,
     createWatchProgram,
-    Debug,
     Diagnostic,
     DiagnosticMessage,
     DiagnosticReporter,
@@ -88,6 +87,7 @@ import {
     WatchOptions,
 } from "./_namespaces/ts";
 import * as performance from "../compiler/_namespaces/ts.performance";
+import * as Debug from "../compiler/debug";
 
 interface Statistic {
     name: string;

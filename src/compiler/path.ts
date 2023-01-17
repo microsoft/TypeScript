@@ -4,7 +4,6 @@ import {
     compareStringsCaseSensitive,
     compareValues,
     Comparison,
-    Debug,
     endsWith,
     equateStringsCaseInsensitive,
     equateStringsCaseSensitive,
@@ -17,6 +16,7 @@ import {
     startsWith,
     stringContains,
 } from "./_namespaces/ts";
+import * as Debug from "./debug";
 
 /**
  * Internally, we represent paths as strings with '/' as the directory separator.

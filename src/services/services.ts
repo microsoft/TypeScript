@@ -46,7 +46,6 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     deduplicate,
     DefinitionInfo,
@@ -318,6 +317,7 @@ import {
     UserPreferences,
     VariableDeclaration,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";

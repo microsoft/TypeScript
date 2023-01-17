@@ -10,7 +10,6 @@ import {
     CatchClause,
     ClassDeclaration,
     createTextSpanFromBounds,
-    Debug,
     DestructuringPattern,
     DoStatement,
     EnumDeclaration,
@@ -71,6 +70,7 @@ import {
     WhileStatement,
     WithStatement,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 /**
  * Get the breakpoint span in given sourceFile

@@ -3,7 +3,6 @@ import {
     compact,
     contains,
     createTextSpanFromBounds,
-    Debug,
     findIndex,
     first,
     getTokenPosOfNode,
@@ -47,6 +46,7 @@ import {
     textSpanIntersectsWithPosition,
     textSpansEqual,
 } from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {

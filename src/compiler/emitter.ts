@@ -68,7 +68,6 @@ import {
     createSourceMapGenerator,
     createTextWriter,
     CustomTransformers,
-    Debug,
     DebuggerStatement,
     DeclarationName,
     Decorator,
@@ -451,6 +450,7 @@ import {
     YieldExpression,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+import * as Debug from "./debug";
 
 const brackets = createBracketsMap();
 

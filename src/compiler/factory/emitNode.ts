@@ -3,7 +3,6 @@ import {
     append,
     appendIfUnique,
     AutoGenerateInfo,
-    Debug,
     EmitFlags,
     EmitHelper,
     EmitNode,
@@ -26,6 +25,7 @@ import {
     TypeNode,
     TypeParameterDeclaration,
 } from "../_namespaces/ts";
+import * as Debug from "../debug";
 
 /**
  * Associates a node with the current transformation, initializing
