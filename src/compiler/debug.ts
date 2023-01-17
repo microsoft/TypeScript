@@ -14,6 +14,7 @@ import {
     FlowSwitchClause,
     getEffectiveModifierFlagsNoCache,
     getEmitFlags,
+    getOwnKeys,
     getParseTreeNode,
     getSourceFileOfNode,
     getSourceTextOfNodeFromSourceFile,
@@ -65,6 +66,7 @@ import {
     NodeArray,
     NodeFlags,
     nodeIsSynthesized,
+    noop,
     objectAllocator,
     ObjectFlags,
     ObjectType,
@@ -126,10 +128,6 @@ export function setLoggingHost(newLoggingHost: LoggingHost | undefined) {
     loggingHost = newLoggingHost;
 }
 
-
-// type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
-type AssertionKeys = any;
-
 /** @internal */
 export function shouldLog(level: LogLevel): boolean {
     return currentLogLevel <= level;
@@ -165,8 +163,6 @@ export namespace log {
     }
 }
 
-// const assertionCache: Partial<Record<AssertionKeys, { level: AssertionLevel, assertion: AnyFunction }>> = {};
-
 /** @internal */
 export function getAssertionLevel() {
     return currentAssertionLevel;
@@ -174,19 +170,15 @@ export function getAssertionLevel() {
 
 /** @internal */
 export function setAssertionLevel(level: AssertionLevel) {
-    // const prevAssertionLevel = currentAssertionLevel;
+    const prevAssertionLevel = currentAssertionLevel;
     currentAssertionLevel = level;
 
-    // if (level > prevAssertionLevel) {
-    //     // restore assertion functions for the current assertion level (see `shouldAssertFunction`).
-    //     for (const key of getOwnKeys(assertionCache) as AssertionKeys[]) {
-    //         const cachedFunc = assertionCache[key];
-    //         if (cachedFunc !== undefined && Debug[key] !== cachedFunc.assertion && level >= cachedFunc.level) {
-    //             (Debug as any)[key] = cachedFunc;
-    //             assertionCache[key] = undefined;
-    //         }
-    //     }
-    // }
+    if (level > prevAssertionLevel) {
+        // restore assertion functions for the current assertion level (see `shouldAssertFunction`).
+        for (const name of getOwnKeys(assertionCache) as AssertionKeys[]) {
+            assertionCache[name].enable(level);
+        }
+    }
 }
 
 /** @internal */
@@ -200,12 +192,11 @@ export function shouldAssert(level: AssertionLevel): boolean {
  * @param level The minimum assertion level required.
  * @param name The name of the current assertion function.
  */
-function shouldAssertFunction<K extends AssertionKeys>(_level: AssertionLevel, _name: K): boolean {
-    // if (!shouldAssert(level)) {
-    //     assertionCache[name] = { level, assertion: Debug[name] };
-    //     (Debug as any)[name] = noop;
-    //     return false;
-    // }
+function shouldAssertFunction<K extends AssertionKeys>(level: AssertionLevel, name: K): boolean {
+    if (!shouldAssert(level)) {
+        assertionCache[name].disable(level);
+        return false;
+    }
     return true;
 }
 
@@ -303,16 +294,13 @@ export function assertNever(member: never, message = "Illegal value:", stackCraw
 }
 
 /** @internal */
-export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T>, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U>;
-/** @internal */
-export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
-/** @internal */
-export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U> | undefined;
-/** @internal */
-export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[] | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[] | undefined;
-/** @internal */
-export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction): void;
-export function assertEachNode(nodes: readonly Node[] | undefined, test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) {
+export let assertEachNode: {
+    <T extends Node, U extends T>(nodes: NodeArray<T>, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U>;
+    <T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
+    <T extends Node, U extends T>(nodes: NodeArray<T> | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U> | undefined;
+    <T extends Node, U extends T>(nodes: readonly T[] | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[] | undefined;
+    (nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction): void;
+} = (nodes: readonly Node[] | undefined, test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) => {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
         assert(
             test === undefined || every(nodes, test),
@@ -320,13 +308,13 @@ export function assertEachNode(nodes: readonly Node[] | undefined, test: (node: 
             () => `Node array did not pass test '${getFunctionName(test)}'.`,
             stackCrawlMark || assertEachNode);
     }
-}
+};
 
 /** @internal */
-export function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
-/** @internal */
-export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+export let assertNode: {
+    <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
+    (node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+} = (node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) => {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertNode")) {
         assert(
             node !== undefined && (test === undefined || test(node)),
@@ -334,13 +322,13 @@ export function assertNode(node: Node | undefined, test: ((node: Node) => boolea
             () => `Node ${formatSyntaxKind(node?.kind)} did not pass test '${getFunctionName(test!)}'.`,
             stackCrawlMark || assertNode);
     }
-}
+};
 
 /** @internal */
-export function assertNotNode<T extends Node, U extends T>(node: T | undefined, test: (node: Node) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is Exclude<T, U>;
-/** @internal */
-export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+export let assertNotNode: {
+    <T extends Node, U extends T>(node: T | undefined, test: (node: Node) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is Exclude<T, U>;
+    (node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+} = (node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) => {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertNotNode")) {
         assert(
             node === undefined || test === undefined || !test(node),
@@ -348,15 +336,14 @@ export function assertNotNode(node: Node | undefined, test: ((node: Node) => boo
             () => `Node ${formatSyntaxKind(node!.kind)} should not have passed test '${getFunctionName(test!)}'.`,
             stackCrawlMark || assertNotNode);
     }
-}
+};
 
 /** @internal */
-export function assertOptionalNode<T extends Node, U extends T>(node: T, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
-/** @internal */
-export function assertOptionalNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U | undefined;
-/** @internal */
-export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+export let assertOptionalNode: {
+    <T extends Node, U extends T>(node: T, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
+    <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U | undefined;
+    (node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+} = (node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) => {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalNode")) {
         assert(
             test === undefined || node === undefined || test(node),
@@ -364,15 +351,14 @@ export function assertOptionalNode(node: Node | undefined, test: ((node: Node) =
             () => `Node ${formatSyntaxKind(node?.kind)} did not pass test '${getFunctionName(test!)}'.`,
             stackCrawlMark || assertOptionalNode);
     }
-}
+};
 
 /** @internal */
-export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }>;
-/** @internal */
-export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }> | undefined;
-/** @internal */
-export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+export let assertOptionalToken: {
+    <T extends Node, K extends SyntaxKind>(node: T, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }>;
+    <T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }> | undefined;
+    (node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+} = (node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) => {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalToken")) {
         assert(
             kind === undefined || node === undefined || node.kind === kind,
@@ -380,11 +366,13 @@ export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | u
             () => `Node ${formatSyntaxKind(node?.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
             stackCrawlMark || assertOptionalToken);
     }
-}
+};
 
 /** @internal */
-export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction): asserts node is undefined;
-export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+export let assertMissingNode: {
+    // eslint-disable-next-line @typescript-eslint/prefer-function-type
+    (node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction): asserts node is undefined;
+} = (node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction) => {
     if (shouldAssertFunction(AssertionLevel.Normal, "assertMissingNode")) {
         assert(
             node === undefined,
@@ -392,7 +380,39 @@ export function assertMissingNode(node: Node | undefined, message?: string, stac
             () => `Node ${formatSyntaxKind(node!.kind)} was unexpected'.`,
             stackCrawlMark || assertMissingNode);
     }
+};
+
+interface AssertionCacheEntry {
+    readonly disable: (level: AssertionLevel) => void,
+    readonly enable: (level: AssertionLevel) => void;
 }
+
+function createAssertionCacheEntry<T extends AnyFunction>(original: T, set: (fn: T) => void): AssertionCacheEntry {
+    let currentLevel: AssertionLevel | undefined;
+    return {
+        disable(level) {
+            set(noop as T);
+            currentLevel = level;
+        },
+        enable(level) {
+            if (currentLevel !== undefined && level >= currentLevel) {
+                set(original);
+                currentLevel = undefined;
+            }
+        },
+    };
+}
+
+const assertionCache = {
+    assertEachNode: createAssertionCacheEntry(assertEachNode, fn => assertEachNode = fn),
+    assertNode: createAssertionCacheEntry(assertNode, fn => assertNode = fn),
+    assertNotNode: createAssertionCacheEntry(assertNotNode, fn => assertNotNode = fn),
+    assertOptionalNode: createAssertionCacheEntry(assertOptionalNode, fn => assertOptionalNode = fn),
+    assertOptionalToken: createAssertionCacheEntry(assertOptionalToken, fn => assertOptionalToken = fn),
+    assertMissingNode: createAssertionCacheEntry(assertMissingNode, fn => assertMissingNode = fn),
+} as const;
+
+type AssertionKeys = keyof typeof assertionCache;
 
 /**
  * Asserts a value has the specified type in typespace only (does not perform a runtime assertion).
