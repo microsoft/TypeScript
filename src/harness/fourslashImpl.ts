@@ -984,14 +984,18 @@ export class TestState {
         if (actual.insertText !== expected.insertText) {
             this.raiseError(`At entry ${actual.name}: Completion insert text did not match: ${showTextDiff(expected.insertText || "", actual.insertText || "")}`);
         }
+
         const convertedReplacementSpan = expected.replacementSpan && ts.createTextSpanFromRange(expected.replacementSpan);
-        if (convertedReplacementSpan?.length) {
+        if (convertedReplacementSpan) {
             try {
                 assert.deepEqual(actual.replacementSpan, convertedReplacementSpan);
             }
             catch {
                 this.raiseError(`At entry ${actual.name}: Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`);
             }
+        }
+        else if (ts.hasProperty(expected, "replacementSpan")) { // Expected `replacementSpan` is explicitly set as `undefined`.
+            assert.equal(actual.replacementSpan, undefined, `At entry ${actual.name}: Expected 'replacementSpan' properties to match`);
         }
 
         if (expected.kind !== undefined || expected.kindModifiers !== undefined) {

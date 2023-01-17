@@ -927,6 +927,7 @@ function completionInfoFromData(
         /*replacementToken*/ undefined,
         contextToken,
         location,
+        position,
         sourceFile,
         host,
         program,
@@ -1316,6 +1317,7 @@ function createCompletionEntry(
     replacementToken: Node | undefined,
     contextToken: Node | undefined,
     location: Node,
+    position: number,
     sourceFile: SourceFile,
     host: LanguageServiceHost,
     program: Program,
@@ -1406,7 +1408,8 @@ function createCompletionEntry(
         completionKind === CompletionKind.MemberLike &&
         isClassLikeMemberCompletion(symbol, location, sourceFile)) {
         let importAdder;
-        ({ insertText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
+        ({ insertText, isSnippet, importAdder, replacementSpan } =
+            getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext));
         sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
         if (importAdder?.hasFixes()) {
             hasAction = true;
@@ -1545,6 +1548,7 @@ function getEntryForMemberCompletion(
     name: string,
     symbol: Symbol,
     location: Node,
+    position: number,
     contextToken: Node | undefined,
     formatContext: formatting.FormatContext | undefined,
 ): { insertText: string, isSnippet?: true, importAdder?: codefix.ImportAdder, replacementSpan?: TextSpan } {
@@ -1586,7 +1590,7 @@ function getEntryForMemberCompletion(
     let modifiers = ModifierFlags.None;
     // Whether the suggested member should be abstract.
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
-    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken);
+    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken, sourceFile, position);
     const isAbstract = !!(presentModifiers & ModifierFlags.Abstract);
     const completionNodes: Node[] = [];
     codefix.addNewNodeForMemberSymbol(
@@ -1650,8 +1654,13 @@ function getEntryForMemberCompletion(
     return { insertText, isSnippet, importAdder, replacementSpan };
 }
 
-function getPresentModifiers(contextToken: Node | undefined): { modifiers: ModifierFlags, span?: TextSpan } {
-    if (!contextToken) {
+function getPresentModifiers(
+    contextToken: Node | undefined,
+    sourceFile: SourceFile,
+    position: number): { modifiers: ModifierFlags, span?: TextSpan } {
+    if (!contextToken ||
+        getLineAndCharacterOfPosition(sourceFile, position).line
+            > getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line) {
         return { modifiers: ModifierFlags.None };
     }
     let modifiers = ModifierFlags.None;
@@ -2086,6 +2095,7 @@ export function getCompletionEntriesFromSymbols(
     replacementToken: Node | undefined,
     contextToken: Node | undefined,
     location: Node,
+    position: number,
     sourceFile: SourceFile,
     host: LanguageServiceHost,
     program: Program,
@@ -2132,6 +2142,7 @@ export function getCompletionEntriesFromSymbols(
             replacementToken,
             contextToken,
             location,
+            position,
             sourceFile,
             host,
             program,
@@ -2471,6 +2482,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             name,
             symbol,
             location,
+            position,
             contextToken,
             formatContext);
         if (importAdder) {
