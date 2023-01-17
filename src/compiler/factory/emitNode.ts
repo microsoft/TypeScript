@@ -2,15 +2,20 @@ import {
     AccessExpression,
     append,
     appendIfUnique,
+    AutoGenerateInfo,
     Debug,
     EmitFlags,
     EmitHelper,
     EmitNode,
     getParseTreeNode,
     getSourceFileOfNode,
+    Identifier,
+    ImportSpecifier,
     isParseTreeNode,
     Node,
+    NodeArray,
     orderedRemoveItem,
+    PrivateIdentifier,
     SnippetElement,
     some,
     SourceFile,
@@ -19,6 +24,7 @@ import {
     SynthesizedComment,
     TextRange,
     TypeNode,
+    TypeParameterDeclaration,
 } from "../_namespaces/ts";
 
 /**
@@ -317,4 +323,37 @@ export function setTypeNode<T extends Node>(node: T, type: TypeNode): T {
 /** @internal */
 export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
     return node.emitNode?.typeNode;
+}
+
+/** @internal */
+export function setIdentifierTypeArguments<T extends Identifier>(node: T, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined) {
+    getOrCreateEmitNode(node).identifierTypeArguments = typeArguments;
+    return node;
+}
+
+/** @internal */
+export function getIdentifierTypeArguments(node: Identifier): NodeArray<TypeNode | TypeParameterDeclaration> | undefined {
+    return node.emitNode?.identifierTypeArguments;
+}
+
+/** @internal */
+export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifier>(node: T, autoGenerate: AutoGenerateInfo | undefined) {
+    getOrCreateEmitNode(node).autoGenerate = autoGenerate;
+    return node;
+}
+
+/** @internal */
+export function getIdentifierAutoGenerate(node: Identifier | PrivateIdentifier): AutoGenerateInfo | undefined {
+    return node.emitNode?.autoGenerate;
+}
+
+/** @internal */
+export function setIdentifierGeneratedImportReference<T extends Identifier | PrivateIdentifier>(node: T, value: ImportSpecifier | undefined) {
+    getOrCreateEmitNode(node).generatedImportReference = value;
+    return node;
+}
+
+/** @internal */
+export function getIdentifierGeneratedImportReference(node: Identifier | PrivateIdentifier): ImportSpecifier | undefined {
+    return node.emitNode?.generatedImportReference;
 }

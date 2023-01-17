@@ -440,3 +440,9 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                          ~~~~~~~~~~~~~~~~~
 !!! error TS2730: An arrow function cannot have a 'this' parameter.
     
+    class Derived3 extends Base2 {
+        f(this: this) {
+            super.polymorphic();
+        }
+    }
+    

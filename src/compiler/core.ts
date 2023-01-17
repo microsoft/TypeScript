@@ -15,30 +15,6 @@ import {
     UnderscoreEscapedMap,
 } from "./_namespaces/ts";
 
-/** @internal */
-export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
-    I extends ReadonlyMap<infer K, infer V> ? [K, V] :
-    I extends ReadonlySet<infer T> ? T :
-    I extends readonly (infer T)[] ? T :
-    I extends undefined ? undefined :
-    never>;
-/** @internal */
-export function getIterator<K, V>(iterable: ReadonlyMap<K, V>): Iterator<[K, V]>;
-/** @internal */
-export function getIterator<K, V>(iterable: ReadonlyMap<K, V> | undefined): Iterator<[K, V]> | undefined;
-/** @internal */
-export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T>): Iterator<T>;
-/** @internal */
-export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T> | undefined): Iterator<T> | undefined;
-/** @internal */
-export function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
-    if (iterable) {
-        if (isArray(iterable)) return arrayIterator(iterable);
-        if (iterable instanceof Map) return iterable.entries();
-        if (iterable instanceof Set) return iterable.values();
-        throw new Error("Iteration not supported.");
-    }
-}
 
 /** @internal */
 export const emptyArray: never[] = [] as never[];
@@ -108,25 +84,24 @@ export function firstDefined<T, U>(array: readonly T[] | undefined, callback: (e
 }
 
 /** @internal */
-export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
-    while (true) {
-        const iterResult = iter.next();
-        if (iterResult.done) {
-            return undefined;
-        }
-        const result = callback(iterResult.value);
+export function firstDefinedIterator<T, U>(iter: Iterable<T>, callback: (element: T) => U | undefined): U | undefined {
+    for (const value of iter) {
+        const result = callback(value);
         if (result !== undefined) {
             return result;
         }
     }
+    return undefined;
 }
 
 /** @internal */
-export function reduceLeftIterator<T, U>(iterator: Iterator<T> | undefined, f: (memo: U, value: T, i: number) => U, initial: U): U {
+export function reduceLeftIterator<T, U>(iterator: Iterable<T> | undefined, f: (memo: U, value: T, i: number) => U, initial: U): U {
     let result = initial;
     if (iterator) {
-        for (let step = iterator.next(), pos = 0; !step.done; step = iterator.next(), pos++) {
-            result = f(result, step.value, pos);
+        let pos = 0;
+        for (const value of iterator) {
+            result = f(result, value, pos);
+            pos++;
         }
     }
     return result;
@@ -140,31 +115,6 @@ export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], cal
         result.push(callback(arrayA[i], arrayB[i], i));
     }
     return result;
-}
-
-/** @internal */
-export function zipToIterator<T, U>(arrayA: readonly T[], arrayB: readonly U[]): Iterator<[T, U]> {
-    Debug.assertEqual(arrayA.length, arrayB.length);
-    let i = 0;
-    return {
-        next() {
-            if (i === arrayA.length) {
-                return { value: undefined as never, done: true };
-            }
-            i++;
-            return { value: [arrayA[i - 1], arrayB[i - 1]] as [T, U], done: false };
-        }
-    };
-}
-
-/** @internal */
-export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): Map<K, V> {
-    Debug.assert(keys.length === values.length);
-    const map = new Map<K, V>();
-    for (let i = 0; i < keys.length; ++i) {
-        map.set(keys[i], values[i]);
-    }
-    return map;
 }
 
 /**
@@ -401,13 +351,10 @@ export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) 
 
 
 /** @internal */
-export function mapIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
-    return {
-        next() {
-            const iterRes = iter.next();
-            return iterRes.done ? iterRes as { done: true, value: never } : { value: mapFn(iterRes.value), done: false };
-        }
-    };
+export function *mapIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U) {
+    for (const x of iter) {
+        yield mapFn(x);
+    }
 }
 
 /**
@@ -509,31 +456,11 @@ export function flatMapToMutable<T, U>(array: readonly T[] | undefined, mapfn: (
 }
 
 /** @internal */
-export function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => readonly U[] | Iterator<U> | undefined): Iterator<U> {
-    const first = iter.next();
-    if (first.done) {
-        return emptyIterator;
-    }
-    let currentIter = getIterator(first.value);
-    return {
-        next() {
-            while (true) {
-                const currentRes = currentIter.next();
-                if (!currentRes.done) {
-                    return currentRes;
-                }
-                const iterRes = iter.next();
-                if (iterRes.done) {
-                    return iterRes as { done: true, value: never };
-                }
-                currentIter = getIterator(iterRes.value);
-            }
-        },
-    };
-
-    function getIterator(x: T): Iterator<U> {
-        const res = mapfn(x);
-        return res === undefined ? emptyIterator : isArray(res) ? arrayIterator(res) : res;
+export function *flatMapIterator<T, U>(iter: Iterable<T>, mapfn: (x: T) => readonly U[] | Iterable<U> | undefined) {
+    for (const x of iter) {
+        const iter2 = mapfn(x);
+        if (!iter2) continue;
+        yield* iter2;
     }
 }
 
@@ -601,21 +528,13 @@ export function mapDefined<T, U>(array: readonly T[] | undefined, mapFn: (x: T, 
 }
 
 /** @internal */
-export function mapDefinedIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): Iterator<U> {
-    return {
-        next() {
-            while (true) {
-                const res = iter.next();
-                if (res.done) {
-                    return res as { done: true, value: never };
-                }
-                const value = mapFn(res.value);
-                if (value !== undefined) {
-                    return { value, done: false };
-                }
-            }
+export function *mapDefinedIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U | undefined) {
+    for (const x of iter) {
+        const value = mapFn(x);
+        if (value !== undefined) {
+            yield value;
         }
-    };
+    }
 }
 
 /** @internal */
@@ -643,24 +562,6 @@ export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | und
 }
 
 /** @internal */
-export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1>, f: (value: V1) => V2 | undefined): Set<V2>;
-/** @internal */
-export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1> | undefined, f: (value: V1) => V2 | undefined): Set<V2> | undefined;
-/** @internal */
-export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1> | undefined, f: (value: V1) => V2 | undefined): Set<V2> | undefined {
-    if (set) {
-        const result = new Set<V2>();
-        set.forEach(value => {
-            const newValue = f(value);
-            if (newValue !== undefined) {
-                result.add(newValue);
-            }
-        });
-        return result;
-    }
-}
-
-/** @internal */
 export function getOrUpdate<K, V>(map: Map<K, V>, key: K, callback: () => V) {
     if (map.has(key)) {
         return map.get(key)!;
@@ -680,18 +581,8 @@ export function tryAddToSet<T>(set: Set<T>, value: T) {
 }
 
 /** @internal */
-export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
-
-/** @internal */
-export function singleIterator<T>(value: T): Iterator<T> {
-    let done = false;
-    return {
-        next() {
-            const wasDone = done;
-            done = true;
-            return wasDone ? { value: undefined as never, done: true } : { value, done: false };
-        }
-    };
+export function *singleIterator<T>(value: T) {
+    yield value;
 }
 
 /**
@@ -1087,15 +978,6 @@ export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | und
     return result;
 }
 
-/** @internal */
-export function sum<T extends Record<K, number>, K extends string>(array: readonly T[], prop: K): number {
-    let result = 0;
-    for (const v of array) {
-        result += v[prop];
-    }
-    return result;
-}
-
 /**
  * Appends a value to an array, returning the array.
  *
@@ -1233,33 +1115,10 @@ export function sort<T>(array: readonly T[], comparer?: Comparer<T>): SortedRead
 }
 
 /** @internal */
-export function arrayIterator<T>(array: readonly T[]): Iterator<T> {
-    let i = 0;
-    return { next: () => {
-        if (i === array.length) {
-            return { value: undefined as never, done: true };
-        }
-        else {
-            i++;
-            return { value: array[i - 1], done: false };
-        }
-    }};
-}
-
-/** @internal */
-export function arrayReverseIterator<T>(array: readonly T[]): Iterator<T> {
-    let i = array.length;
-    return {
-        next: () => {
-            if (i === 0) {
-                return { value: undefined as never, done: true };
-            }
-            else {
-                i--;
-                return { value: array[i], done: false };
-            }
-        }
-    };
+export function *arrayReverseIterator<T>(array: readonly T[]) {
+    for (let i = array.length - 1; i >= 0; i--) {
+        yield array[i];
+    }
 }
 
 /**
@@ -1290,15 +1149,17 @@ export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: 
  *
  * @internal
  */
-export function elementAt<T>(array: readonly T[] | undefined, offset: number): T | undefined {
-    if (array) {
-        offset = toOffset(array, offset);
-        if (offset < array.length) {
-            return array[offset];
+export const elementAt: <T>(array: readonly T[] | undefined, offset: number) => T | undefined = !!Array.prototype.at
+    ? (array, offset) => array?.at(offset)
+    : (array, offset) => {
+        if (array) {
+            offset = toOffset(array, offset);
+            if (offset < array.length) {
+                return array[offset];
+            }
         }
-    }
-    return undefined;
-}
+        return undefined;
+    };
 
 /**
  * Returns the first element of an array if non-empty, `undefined` otherwise.
@@ -1310,9 +1171,27 @@ export function firstOrUndefined<T>(array: readonly T[] | undefined): T | undefi
 }
 
 /** @internal */
+export function firstOrUndefinedIterator<T>(iter: Iterable<T> | undefined): T | undefined {
+    if (iter) {
+        for (const value of iter) {
+            return value;
+        }
+    }
+    return undefined;
+}
+
+/** @internal */
 export function first<T>(array: readonly T[]): T {
     Debug.assert(array.length !== 0);
     return array[0];
+}
+
+/** @internal */
+export function firstIterator<T>(iter: Iterable<T>): T {
+    for (const value of iter) {
+        return value;
+    }
+    Debug.fail("iterator is empty");
 }
 
 /**
@@ -1526,20 +1405,6 @@ export function getOwnValues<T>(collection: MapLike<T> | T[]): T[] {
     return values;
 }
 
-const _entries = Object.entries || (<T>(obj: MapLike<T>) => {
-    const keys = getOwnKeys(obj);
-    const result: [string, T][] = Array(keys.length);
-    for (let i = 0; i < keys.length; i++) {
-        result[i] = [keys[i], obj[keys[i]]];
-    }
-    return result;
-});
-
-/** @internal */
-export function getEntries<T>(obj: MapLike<T>): [string, T][] {
-    return obj ? _entries(obj) : [];
-}
-
 /** @internal */
 export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
     const result = new Array(count);
@@ -1554,18 +1419,17 @@ export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
  *
  * @internal
  */
-export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
+export function arrayFrom<T, U>(iterator: Iterable<T>, map: (t: T) => U): U[];
 /** @internal */
-export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
+export function arrayFrom<T>(iterator: Iterable<T>): T[];
 /** @internal */
-export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map?: (t: T) => U): (T | U)[] {
+export function arrayFrom<T, U>(iterator: Iterable<T>, map?: (t: T) => U): (T | U)[] {
     const result: (T | U)[] = [];
-    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-        result.push(map ? map(iterResult.value) : iterResult.value);
+    for (const value of iterator) {
+        result.push(map ? map(value) : value);
     }
     return result;
 }
-
 
 /** @internal */
 export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
@@ -1848,36 +1712,15 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
     const multiMap = new Map<THash, TElement | TElement[]>();
     let size = 0;
 
-    function getElementIterator(): IterableIterator<TElement> {
-        const valueIt = multiMap.values();
-        let arrayIt: Iterator<TElement> | undefined;
-        const it: IterableIterator<TElement> = {
-            next: () => {
-                while (true) {
-                    if (arrayIt) {
-                        const n = arrayIt.next();
-                        if (!n.done) {
-                            return { value: n.value };
-                        }
-                        arrayIt = undefined;
-                    }
-                    else {
-                        const n = valueIt.next();
-                        if (n.done) {
-                            return { value: undefined, done: true };
-                        }
-                        if (!isArray(n.value)) {
-                            return { value: n.value };
-                        }
-                        arrayIt = arrayIterator(n.value);
-                    }
-                }
-            },
-            [Symbol.iterator]: () => {
-                return it;
+    function *getElementIterator(): IterableIterator<TElement> {
+        for (const value of multiMap.values()) {
+            if (isArray(value)) {
+                yield* value;
             }
-        };
-        return it;
+            else {
+                yield value;
+            }
+        }
     }
 
     const set: Set<TElement> = {
@@ -1977,16 +1820,10 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
         values(): IterableIterator<TElement> {
             return getElementIterator();
         },
-        entries(): IterableIterator<[TElement, TElement]> {
-            const it = getElementIterator();
-            const it2: IterableIterator<[TElement, TElement]> = {
-                next: () => {
-                    const n = it.next();
-                    return n.done ? n : { value: [ n.value, n.value ] };
-                },
-                [Symbol.iterator]: () => it2,
-            };
-            return it2;
+        *entries(): IterableIterator<[TElement, TElement]> {
+            for (const value of getElementIterator()) {
+                yield [value, value];
+            }
         },
         [Symbol.iterator]: () => {
             return getElementIterator();
@@ -2003,7 +1840,8 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
  * @internal
  */
 export function isArray(value: any): value is readonly unknown[] {
-    return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    // See: https://github.com/microsoft/TypeScript/issues/17002
+    return Array.isArray(value);
 }
 
 /** @internal */
@@ -2198,42 +2036,6 @@ export function memoizeWeak<A extends object, T>(callback: (arg: A) => T): (arg:
         }
         return value!;
     };
-}
-
-/**
- * High-order function, composes functions. Note that functions are composed inside-out;
- * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
- *
- * @param args The functions to compose.
- *
- * @internal
- */
-export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
-/** @internal */
-export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
-    if (!!e) {
-        const args: ((t: T) => T)[] = [];
-        for (let i = 0; i < arguments.length; i++) {
-            args[i] = arguments[i];
-        }
-
-        return t => reduceLeft(args, (u, f) => f(u), t);
-    }
-    else if (d) {
-        return t => d(c(b(a(t))));
-    }
-    else if (c) {
-        return t => c(b(a(t)));
-    }
-    else if (b) {
-        return t => b(a(t));
-    }
-    else if (a) {
-        return t => a(t);
-    }
-    else {
-        return t => t;
-    }
 }
 
 /** @internal */
@@ -2901,15 +2703,6 @@ export function enumerateInsertsAndDeletes<T, U>(newItems: readonly T[], oldItem
         hasChanges = true;
     }
     return hasChanges;
-}
-
-/** @internal */
-export function fill<T>(length: number, cb: (index: number) => T): T[] {
-    const result = Array<T>(length);
-    for (let i = 0; i < length; i++) {
-        result[i] = cb(i);
-    }
-    return result;
 }
 
 /** @internal */

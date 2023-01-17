@@ -159,7 +159,7 @@ import {
 interface NameAndKindSet {
     add(value: NameAndKind): void;
     has(name: string): boolean;
-    values(): Iterator<NameAndKind>;
+    values(): IterableIterator<NameAndKind>;
 }
 const kindPrecedence = {
     [ScriptElementKind.directory]: 0,
@@ -198,7 +198,7 @@ export function getStringLiteralCompletions(
     if (isInString(sourceFile, position, contextToken)) {
         if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
         const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, program.getTypeChecker(), options, host, preferences);
-        return convertStringLiteralCompletions(entries, contextToken, sourceFile, host, program, log, options, preferences);
+        return convertStringLiteralCompletions(entries, contextToken, sourceFile, host, program, log, options, preferences, position);
     }
 }
 
@@ -211,6 +211,7 @@ function convertStringLiteralCompletions(
     log: Log,
     options: CompilerOptions,
     preferences: UserPreferences,
+    position: number,
 ): CompletionInfo | undefined {
     if (completion === undefined) {
         return undefined;
@@ -228,6 +229,7 @@ function convertStringLiteralCompletions(
                 contextToken,
                 contextToken,
                 sourceFile,
+                position,
                 sourceFile,
                 host,
                 program,
@@ -691,6 +693,10 @@ function getCompletionEntriesForDirectoryFragment(
 }
 
 function getFilenameWithExtensionOption(name: string, compilerOptions: CompilerOptions, extensionOptions: ExtensionOptions): { name: string, extension: Extension | undefined } {
+    const nonJsResult = moduleSpecifiers.tryGetRealFileNameForNonJsDeclarationFileName(name);
+    if (nonJsResult) {
+        return { name: nonJsResult, extension: tryGetExtensionFromPath(nonJsResult) };
+    }
     if (extensionOptions.referenceKind === ReferenceKind.Filename) {
         return { name, extension: tryGetExtensionFromPath(name) };
     }

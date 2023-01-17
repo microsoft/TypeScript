@@ -31,6 +31,7 @@ import {
     flatten,
     forEach,
     forEachAncestorDirectory,
+    getBaseFileName,
     GetCanonicalFileName,
     getDirectoryPath,
     getEmitModuleResolutionKind,
@@ -85,6 +86,7 @@ import {
     pathIsBareSpecifier,
     pathIsRelative,
     PropertyAccessExpression,
+    removeExtension,
     removeFileExtension,
     removeSuffix,
     ResolutionMode,
@@ -1036,6 +1038,10 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
     if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) {
         return noExtension + getJSExtensionForFile(fileName, options);
     }
+    else if (!fileExtensionIsOneOf(fileName, [Extension.Dts]) && fileExtensionIsOneOf(fileName, [Extension.Ts]) && stringContains(fileName, ".d.")) {
+        // `foo.d.json.ts` and the like - remap back to `foo.json`
+        return tryGetRealFileNameForNonJsDeclarationFileName(fileName)!;
+    }
 
     switch (allowedEndings[0]) {
         case ModuleSpecifierEnding.Minimal:
@@ -1064,6 +1070,15 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
         default:
             return Debug.assertNever(allowedEndings[0]);
     }
+}
+
+/** @internal */
+export function tryGetRealFileNameForNonJsDeclarationFileName(fileName: string) {
+    const baseName = getBaseFileName(fileName);
+    if (!endsWith(fileName, Extension.Ts) || !stringContains(baseName, ".d.") || fileExtensionIsOneOf(baseName, [Extension.Dts])) return undefined;
+    const noExtension = removeExtension(fileName, Extension.Ts);
+    const ext = noExtension.substring(noExtension.lastIndexOf("."));
+    return noExtension.substring(0, noExtension.indexOf(".d.")) + ext;
 }
 
 function getJSExtensionForFile(fileName: string, options: CompilerOptions): Extension {

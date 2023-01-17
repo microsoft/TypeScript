@@ -189,7 +189,7 @@ export function sourceFileToJSON(file: ts.Node): string {
             o.containsParseError = true;
         }
 
-        for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier)[]) {
+        for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier | keyof ts.StringLiteral)[]) {
             switch (propertyName) {
                 case "parent":
                 case "symbol":
@@ -201,7 +201,7 @@ export function sourceFileToJSON(file: ts.Node): string {
                 case "symbolCount":
                 case "identifierCount":
                 case "scriptSnapshot":
-                case "autoGenerate":
+                case "emitNode":
                     // Blocklist of items we never put in the baseline file.
                     break;
 
@@ -219,7 +219,13 @@ export function sourceFileToJSON(file: ts.Node): string {
                     // Clear the flags that are produced by aggregating child values. That is ephemeral
                     // data we don't care about in the dump. We only care what the parser set directly
                     // on the AST.
-                    const flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
+                    let flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
+                    if (ts.isIdentifier(n)) {
+                        if (flags & ts.NodeFlags.IdentifierHasExtendedUnicodeEscape) {
+                            o.hasExtendedUnicodeEscape = true;
+                            flags &= ~ts.NodeFlags.IdentifierHasExtendedUnicodeEscape;
+                        }
+                    }
                     if (flags) {
                         o[propertyName] = getNodeFlagName(flags);
                     }
