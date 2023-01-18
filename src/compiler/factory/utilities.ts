@@ -1134,15 +1134,10 @@ export function canHaveIllegalModifiers(node: Node): node is HasIllegalModifiers
 
 /** @internal */
 export const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration) as (node: Node) => node is TypeNode | TypeParameterDeclaration;
-/** @internal */
 export const isQuestionOrExclamationToken = or(isQuestionToken, isExclamationToken) as (node: Node) => node is QuestionToken | ExclamationToken;
-/** @internal */
 export const isIdentifierOrThisTypeNode = or(isIdentifier, isThisTypeNode) as (node: Node) => node is Identifier | ThisTypeNode;
-/** @internal */
 export const isReadonlyKeywordOrPlusOrMinusToken = or(isReadonlyKeyword, isPlusToken, isMinusToken) as (node: Node) => node is ReadonlyKeyword | PlusToken | MinusToken;
-/** @internal */
 export const isQuestionOrPlusOrMinusToken = or(isQuestionToken, isPlusToken, isMinusToken) as (node: Node) => node is QuestionToken | PlusToken | MinusToken;
-/** @internal */
 export const isModuleName = or(isIdentifier, isStringLiteral) as (node: Node) => node is ModuleName;
 
 /** @internal */
@@ -1250,7 +1245,6 @@ function isBinaryOperator(kind: SyntaxKind): kind is BinaryOperator {
         || kind === SyntaxKind.CommaToken;
 }
 
-/** @internal */
 export function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken {
     return isBinaryOperator(node.kind);
 }

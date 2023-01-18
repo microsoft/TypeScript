@@ -291,27 +291,22 @@ export function isAsteriskToken(node: Node): node is AsteriskToken {
     return node.kind === SyntaxKind.AsteriskToken;
 }
 
-/** @internal */
 export function isExclamationToken(node: Node): node is ExclamationToken {
     return node.kind === SyntaxKind.ExclamationToken;
 }
 
-/** @internal */
 export function isQuestionToken(node: Node): node is QuestionToken {
     return node.kind === SyntaxKind.QuestionToken;
 }
 
-/** @internal */
 export function isColonToken(node: Node): node is ColonToken {
     return node.kind === SyntaxKind.ColonToken;
 }
 
-/** @internal */
 export function isQuestionDotToken(node: Node): node is QuestionDotToken {
     return node.kind === SyntaxKind.QuestionDotToken;
 }
 
-/** @internal */
 export function isEqualsGreaterThanToken(node: Node): node is EqualsGreaterThanToken {
     return node.kind === SyntaxKind.EqualsGreaterThanToken;
 }
@@ -338,12 +333,10 @@ export function isAsyncModifier(node: Node): node is AsyncKeyword {
     return node.kind === SyntaxKind.AsyncKeyword;
 }
 
-/** @internal */
 export function isAssertsKeyword(node: Node): node is AssertsKeyword {
     return node.kind === SyntaxKind.AssertsKeyword;
 }
 
-/** @internal */
 export function isAwaitKeyword(node: Node): node is AwaitKeyword {
     return node.kind === SyntaxKind.AwaitKeyword;
 }

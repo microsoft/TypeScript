@@ -8802,10 +8802,12 @@ declare namespace ts {
      */
     function isTypeNode(node: Node): node is TypeNode;
     function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode;
+    function isArrayBindingElement(node: Node): node is ArrayBindingElement;
     function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName;
     function isCallLikeExpression(node: Node): node is CallLikeExpression;
     function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
     function isTemplateLiteral(node: Node): node is TemplateLiteral;
+    function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
     /**
      * Determines whether a node is an expression based only on its kind.
      */
@@ -8813,6 +8815,16 @@ declare namespace ts {
     function isAssertionExpression(node: Node): node is AssertionExpression;
     function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
     function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
+    function isConciseBody(node: Node): node is ConciseBody;
+    function isForInitializer(node: Node): node is ForInitializer;
+    function isModuleBody(node: Node): node is ModuleBody;
+    function isNamedImportBindings(node: Node): node is NamedImportBindings;
+    function isStatement(node: Node): node is Statement;
+    function isModuleReference(node: Node): node is ModuleReference;
+    function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression;
+    function isJsxChild(node: Node): node is JsxChild;
+    function isJsxAttributeLike(node: Node): node is JsxAttributeLike;
+    function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression;
     function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
@@ -8925,8 +8937,15 @@ declare namespace ts {
     function isPlusToken(node: Node): node is PlusToken;
     function isMinusToken(node: Node): node is MinusToken;
     function isAsteriskToken(node: Node): node is AsteriskToken;
+    function isExclamationToken(node: Node): node is ExclamationToken;
+    function isQuestionToken(node: Node): node is QuestionToken;
+    function isColonToken(node: Node): node is ColonToken;
+    function isQuestionDotToken(node: Node): node is QuestionDotToken;
+    function isEqualsGreaterThanToken(node: Node): node is EqualsGreaterThanToken;
     function isIdentifier(node: Node): node is Identifier;
     function isPrivateIdentifier(node: Node): node is PrivateIdentifier;
+    function isAssertsKeyword(node: Node): node is AssertsKeyword;
+    function isAwaitKeyword(node: Node): node is AwaitKeyword;
     function isQualifiedName(node: Node): node is QualifiedName;
     function isComputedPropertyName(node: Node): node is ComputedPropertyName;
     function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration;
@@ -9115,6 +9134,12 @@ declare namespace ts {
     function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
     function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
     function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
+    function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken;
+    const isQuestionOrExclamationToken: (node: Node) => node is QuestionToken | ExclamationToken;
+    const isIdentifierOrThisTypeNode: (node: Node) => node is Identifier | ThisTypeNode;
+    const isReadonlyKeywordOrPlusOrMinusToken: (node: Node) => node is ReadonlyKeyword | PlusToken | MinusToken;
+    const isQuestionOrPlusOrMinusToken: (node: Node) => node is QuestionToken | PlusToken | MinusToken;
+    const isModuleName: (node: Node) => node is ModuleName;
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
     function canHaveModifiers(node: Node): node is HasModifiers;
     function canHaveDecorators(node: Node): node is HasDecorators;
