@@ -1,3 +1,43 @@
+=== /tests/cases/fourslash/a.js ===
+// /**
+//  * The typedef tag should not appear in the quickinfo.
+//  * @typedef {{ foo: 'foo' }} Foo
+//  */
+// function f() { }
+// f()
+// ^
+// | ----------------------------------------------------------------------
+// | function f(): void
+// | ----------------------------------------------------------------------
+// /**
+//  * A removed comment
+//  * @tag Usage shows that non-param tags in comments explain the typedef instead of using it
+//  * @typedef {{ nope: any }} Nope not here
+//  * @tag comment 2
+//  */
+// function g() { }
+// g()
+// ^
+// | ----------------------------------------------------------------------
+// | function g(): void
+// | ----------------------------------------------------------------------
+// /**
+//  * The whole thing is kept
+//  * @param {Local} keep
+//  * @typedef {{ local: any }} Local kept too
+//  * @returns {void} also kept
+//  */
+// function h(keep) { }
+// h({ nope: 1 })
+// ^
+// | ----------------------------------------------------------------------
+// | function h(keep: Local): void
+// | The whole thing is kept
+// | @param keep
+// | @typedef Local kept too
+// | @returns also kept
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {

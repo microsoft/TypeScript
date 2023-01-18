@@ -1,3 +1,91 @@
+=== /tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts ===
+// function outerFoo() {
+//          ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function outerFoo(): void
+// | ----------------------------------------------------------------------
+//     function foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {
+//              ^^^
+// | ----------------------------------------------------------------------
+// | (local function) foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | ----------------------------------------------------------------------
+//     }
+//     function foowithoverload(a: string): string;
+//              ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowithoverload(a: string): string (+1 overload)
+// | ----------------------------------------------------------------------
+//     function foowithoverload(a: number): number;
+//              ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowithoverload(a: number): number (+1 overload)
+// | ----------------------------------------------------------------------
+//     function foowithoverload(a: any): any {
+//              ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowithoverload(a: string): string (+1 overload)
+// | ----------------------------------------------------------------------
+//         return a;
+//     }
+//     function foowith3overload(a: string): string;
+//              ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowith3overload(a: string): string (+2 overloads)
+// | ----------------------------------------------------------------------
+//     function foowith3overload(a: number): number;
+//              ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowith3overload(a: number): number (+2 overloads)
+// | ----------------------------------------------------------------------
+//     function foowith3overload(a: boolean): boolean;
+//              ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowith3overload(a: boolean): boolean (+2 overloads)
+// | ----------------------------------------------------------------------
+//     function foowith3overload(a: any): any {
+//              ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowith3overload(a: string): string (+2 overloads)
+// | ----------------------------------------------------------------------
+//         return a;
+//     }
+//     foo("hello");
+//     ^^^
+// | ----------------------------------------------------------------------
+// | (local function) foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | ----------------------------------------------------------------------
+//     foowithoverload("hello");
+//     ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowithoverload(a: string): string (+1 overload)
+// | ----------------------------------------------------------------------
+//     foowithoverload(10);
+//     ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowithoverload(a: number): number (+1 overload)
+// | ----------------------------------------------------------------------
+//     foowith3overload("hello");
+//     ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowith3overload(a: string): string (+2 overloads)
+// | ----------------------------------------------------------------------
+//     foowith3overload(10);
+//     ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowith3overload(a: number): number (+2 overloads)
+// | ----------------------------------------------------------------------
+//     foowith3overload(true);
+//     ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local function) foowith3overload(a: boolean): boolean (+2 overloads)
+// | ----------------------------------------------------------------------
+// }
+// outerFoo();
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function outerFoo(): void
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {

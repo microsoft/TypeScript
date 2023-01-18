@@ -1973,10 +1973,45 @@ export class TestState {
             marker: { ...marker, name },
             quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
         }));
-        Harness.Baseline.runBaseline(baselineFile, stringify(result));
+        Harness.Baseline.runBaseline(baselineFile, this.getBaselineContentForQuickinfo(result) + "\n\n" + stringify(result));
     }
 
-    public baselineSignatureHelp() {
+    private getBaselineContentForQuickinfo(quickInfos: { marker: Marker & { name: string }, quickInfo: ts.QuickInfo | undefined }[]) {
+        const bar = "-".repeat(70)
+        const sorted = quickInfos.slice()
+        // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
+        sorted.sort((q1, q2) =>
+            q1.marker.fileName === q1.marker.fileName
+            ? (q1.marker.position > q2.marker.position ? -1 : 1)
+            : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
+        const files: Map<string, string[]> = new Map()
+        for (const { marker, quickInfo } of sorted) {
+            const span = quickInfo?.textSpan ?? { start: marker.position, length: 0 };
+            const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(marker.fileName, span.start);
+            const underline = " ".repeat(startLc.character) + "^".repeat(span.length)
+            let tooltip = [bar]
+            if (quickInfo) {
+                const { displayParts, documentation, tags } = quickInfo;
+                if (displayParts) tooltip.push(...displayParts.map(p => p.text).join("").split('\n'))
+                if (documentation?.length) tooltip.push(...documentation.map(p => p.text).join("").split('\n'))
+                if (tags?.length) {
+                    tooltip.push(...tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split('\n'))
+                }
+            }
+            else {
+                tooltip.push(`No quickinfo is defined at /*${marker.name}*/.`);
+            }
+            tooltip.push(bar)
+            tooltip = tooltip.map(l => "| " + l)
+
+            const lines = files.get(marker.fileName) ?? this.getFileContent(marker.fileName).split(/\r?\n/)
+            lines.splice(startLc.line + 1, 0, underline, ...tooltip)
+            files.set(marker.fileName, lines)
+        }
+        return Array.from(files.entries(), ([fileName, lines]) => `=== ${fileName} ===\n` + lines.map(l => "// " + l).join("\n"))
+            .join("\n\n")
+    }
+    public baselineSignatureHelp() { // TODO: This too
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
@@ -1985,7 +2020,7 @@ export class TestState {
         Harness.Baseline.runBaseline(baselineFile, stringify(result));
     }
 
-    public baselineCompletions(preferences?: ts.UserPreferences) {
+    public baselineCompletions(preferences?: ts.UserPreferences) { // TODO: And this
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
             this.goToMarker(marker);

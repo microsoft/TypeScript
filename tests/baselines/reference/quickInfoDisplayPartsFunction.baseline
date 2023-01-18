@@ -1,3 +1,80 @@
+=== /tests/cases/fourslash/quickInfoDisplayPartsFunction.ts ===
+// function foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | ----------------------------------------------------------------------
+// }
+// function foowithoverload(a: string): string;
+//          ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowithoverload(a: string): string (+1 overload)
+// | ----------------------------------------------------------------------
+// function foowithoverload(a: number): number;
+//          ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowithoverload(a: number): number (+1 overload)
+// | ----------------------------------------------------------------------
+// function foowithoverload(a: any): any {
+//          ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowithoverload(a: string): string (+1 overload)
+// | ----------------------------------------------------------------------
+//     return a;
+// }
+// function foowith3overload(a: string): string;
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowith3overload(a: string): string (+2 overloads)
+// | ----------------------------------------------------------------------
+// function foowith3overload(a: number): number;
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowith3overload(a: number): number (+2 overloads)
+// | ----------------------------------------------------------------------
+// function foowith3overload(a: boolean): boolean;
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowith3overload(a: boolean): boolean (+2 overloads)
+// | ----------------------------------------------------------------------
+// function foowith3overload(a: any): any {
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowith3overload(a: string): string (+2 overloads)
+// | ----------------------------------------------------------------------
+//     return a;
+// }
+// foo("hello");
+// ^^^
+// | ----------------------------------------------------------------------
+// | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | ----------------------------------------------------------------------
+// foowithoverload("hello");
+// ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowithoverload(a: string): string (+1 overload)
+// | ----------------------------------------------------------------------
+// foowithoverload(10);
+// ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowithoverload(a: number): number (+1 overload)
+// | ----------------------------------------------------------------------
+// foowith3overload("hello");
+// ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowith3overload(a: string): string (+2 overloads)
+// | ----------------------------------------------------------------------
+// foowith3overload(10);
+// ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowith3overload(a: number): number (+2 overloads)
+// | ----------------------------------------------------------------------
+// foowith3overload(true);
+// ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function foowith3overload(a: boolean): boolean (+2 overloads)
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {

@@ -1,3 +1,23 @@
+=== /tests/cases/fourslash/quickInfoForObjectBindingElementName05.ts ===
+// interface A {
+//     /**
+//      * A description of a
+//      */
+//     a: number;
+// }
+// interface B {
+//     a: string;
+// }
+// 
+// function f({ a }: A | B) {
+//     a;
+//     ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: string | number
+// | A description of a
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {

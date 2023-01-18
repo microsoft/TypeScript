@@ -1,3 +1,25 @@
+=== /tests/cases/fourslash/quickInfoNestedExportEqualExportDefault.ts ===
+// export = (state, messages) => {
+//    export default {
+//    ^^^^^^
+// | ----------------------------------------------------------------------
+// | class (Anonymous function).default
+// | enum (Anonymous function).default
+// | module (Anonymous function).default
+// | (enum member) (Anonymous function).default
+// | (enum member) (Anonymous function).default: {}
+// | ----------------------------------------------------------------------
+//           ^^^^^^^
+// | ----------------------------------------------------------------------
+// | class (Anonymous function).default
+// | enum (Anonymous function).default
+// | module (Anonymous function).default
+// | (enum member) (Anonymous function).default
+// | (enum member) (Anonymous function).default: {}
+// | ----------------------------------------------------------------------
+//    }
+// }
+
 [
   {
     "marker": {

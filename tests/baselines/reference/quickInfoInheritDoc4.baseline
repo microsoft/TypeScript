@@ -1,3 +1,20 @@
+=== /tests/cases/fourslash/quickInfoInheritDoc4.ts ===
+// var A: any;
+// 
+// class B extends A {
+//     /**
+//      * @inheritdoc
+//      */
+//     static value() {
+//            ^^^^^
+// | ----------------------------------------------------------------------
+// | (method) B.value(): any
+// | @inheritdoc 
+// | ----------------------------------------------------------------------
+//         return undefined;
+//     }
+// }
+
 [
   {
     "marker": {

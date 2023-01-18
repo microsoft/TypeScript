@@ -1,3 +1,46 @@
+=== /tests/cases/fourslash/quickInfoCommentsFunctionDeclaration.ts ===
+// /** This comment should appear for foo*/
+// function foo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | function foo(): void
+// | This comment should appear for foo
+// | ----------------------------------------------------------------------
+// }
+// foo();
+// ^^^
+// | ----------------------------------------------------------------------
+// | function foo(): void
+// | This comment should appear for foo
+// | ----------------------------------------------------------------------
+// /** This is comment for function signature*/
+// function fooWithParameters(/** this is comment about a*/a: string,
+//          ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function fooWithParameters(a: string, b: number): void
+// | This is comment for function signature
+// | ----------------------------------------------------------------------
+//     /** this is comment for b*/
+//     b: number) {
+//     var d = a;
+//         ^
+// | ----------------------------------------------------------------------
+// | (local var) d: string
+// | ----------------------------------------------------------------------
+// }
+// fooWithParameters("a",10);
+// ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function fooWithParameters(a: string, b: number): void
+// | This is comment for function signature
+// | ----------------------------------------------------------------------
+// /**
+// * Does something
+// * @param a a string
+// */
+// declare function fn(a: string);
+// fn("hello");
+
 [
   {
     "marker": {
