@@ -15,7 +15,7 @@ describe("unittests:: services:: utilities", () => {
                 /*setParentNodes*/ true,
             );
             // can't use ts.getTokenAtPosition because it returns back the wrong token
-            const param = ts.forEachChildRecursively(sourceFile, node => node.kind === ts.SyntaxKind.Parameter ? node : undefined)!;
+            const param = ts.forEachChildRecursively(sourceFile, node => node.kind === ts.SyntaxKind.ParameterDeclaration ? node : undefined)!;
             const jsDoc = param.getChildren()[0];
             const token = jsDoc.getLastToken()!;
             const result = ts.findPrecedingMatchingToken(token, ts.SyntaxKind.OpenBraceToken, sourceFile);

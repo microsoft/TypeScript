@@ -590,7 +590,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                 }
                 break;
             }
-            else if (current.kind === SyntaxKind.Parameter) {
+            else if (current.kind === SyntaxKind.ParameterDeclaration) {
                 const ctorOrMethod = getContainingFunction(current)!;
                 if (ctorOrMethod.kind === SyntaxKind.Constructor) {
                     rangeFacts |= RangeFacts.InStaticRegion;
@@ -866,7 +866,7 @@ function collectEnclosingScopes(range: TargetRange): Scope[] {
     while (true) {
         current = current.parent;
         // A function parameter's initializer is actually in the outer scope, not the function declaration
-        if (current.kind === SyntaxKind.Parameter) {
+        if (current.kind === SyntaxKind.ParameterDeclaration) {
             // Skip all the way to the outer scope of the function that declared this parameter
             current = findAncestor(current, parent => isFunctionLikeDeclaration(parent))!.parent;
         }

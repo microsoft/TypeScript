@@ -1172,7 +1172,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
                     forEachChild(node, visit);
                     break;
 
-                case SyntaxKind.Parameter:
+                case SyntaxKind.ParameterDeclaration:
                     // Only consider parameter properties
                     if (!hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                         break;

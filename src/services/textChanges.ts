@@ -969,7 +969,7 @@ export class ChangeTracker {
             case SyntaxKind.ExportKeyword:
                 return { prefix: " " };
 
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return {};
 
             default:
@@ -1671,7 +1671,7 @@ function needSemicolonBetween(a: Node, b: Node): boolean {
 namespace deleteDeclaration {
     export function deleteDeclaration(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: Node): void {
         switch (node.kind) {
-            case SyntaxKind.Parameter: {
+            case SyntaxKind.ParameterDeclaration: {
                 const oldFunction = node.parent;
                 if (
                     isArrowFunction(oldFunction) &&

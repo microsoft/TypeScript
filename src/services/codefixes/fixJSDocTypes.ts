@@ -106,7 +106,7 @@ function isTypeContainer(node: Node): node is TypeContainer {
         case SyntaxKind.MappedType:
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.MethodSignature:
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:
         case SyntaxKind.SetAccessor:

@@ -723,7 +723,7 @@ export function transformDeclarations(context: TransformationContext) {
             // Literal const declarations will have an initializer ensured rather than a type
             return;
         }
-        const shouldAddImplicitUndefined = node.kind === SyntaxKind.Parameter && resolver.requiresAddingImplicitUndefined(node);
+        const shouldAddImplicitUndefined = node.kind === SyntaxKind.ParameterDeclaration && resolver.requiresAddingImplicitUndefined(node);
         if (type && !shouldAddImplicitUndefined) {
             return visitNode(type, visitDeclarationSubtree, isTypeNode);
         }
@@ -736,7 +736,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
         let typeNode;
         switch (node.kind) {
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.BindingElement:
@@ -1940,7 +1940,7 @@ function canHaveLiteralInitializer(node: Node): boolean {
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:
             return !hasEffectiveModifier(node, ModifierFlags.Private);
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.VariableDeclaration:
             return true;
     }

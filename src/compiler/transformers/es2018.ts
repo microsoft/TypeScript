@@ -360,7 +360,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     HierarchyFacts.ArrowFunctionExcludes,
                     HierarchyFacts.ArrowFunctionIncludes,
                 );
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return visitParameter(node as ParameterDeclaration);
             case SyntaxKind.ExpressionStatement:
                 return visitExpressionStatement(node as ExpressionStatement);

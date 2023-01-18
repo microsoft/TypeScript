@@ -1643,7 +1643,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         type?: TypeNode,
         initializer?: Expression,
     ) {
-        const node = createBaseDeclaration<ParameterDeclaration>(SyntaxKind.Parameter);
+        const node = createBaseDeclaration<ParameterDeclaration>(SyntaxKind.ParameterDeclaration);
         node.modifiers = asNodeArray(modifiers);
         node.dotDotDotToken = dotDotDotToken;
         node.name = asName(name);
@@ -7283,7 +7283,7 @@ export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
             return TransformFlags.ArrayLiteralOrCallOrNewExcludes;
         case SyntaxKind.ModuleDeclaration:
             return TransformFlags.ModuleExcludes;
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
             return TransformFlags.ParameterExcludes;
         case SyntaxKind.ArrowFunction:
             return TransformFlags.ArrowFunctionExcludes;
