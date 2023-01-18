@@ -251,6 +251,7 @@ import {
     JSDocPublicTag,
     JSDocReadonlyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
     JSDocTag,
@@ -877,6 +878,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         get updateJSDocDeprecatedTag() { return getJSDocSimpleTagUpdateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag); },
         get createJSDocThrowsTag() { return getJSDocTypeLikeTagCreateFunction<JSDocThrowsTag>(SyntaxKind.JSDocThrowsTag); },
         get updateJSDocThrowsTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocThrowsTag>(SyntaxKind.JSDocThrowsTag); },
+        get createJSDocSatisfiesTag() { return getJSDocTypeLikeTagCreateFunction<JSDocSatisfiesTag>(SyntaxKind.JSDocSatisfiesTag); },
+        get updateJSDocSatisfiesTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocSatisfiesTag>(SyntaxKind.JSDocSatisfiesTag); },
+
         createJSDocEnumTag,
         updateJSDocEnumTag,
         createJSDocUnknownTag,
@@ -5363,6 +5367,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // createJSDocReturnTag
     // createJSDocThisTag
     // createJSDocEnumTag
+    // createJSDocSatisfiesTag
     function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>) {
         const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
         node.typeExpression = typeExpression;
@@ -5374,6 +5379,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // updateJSDocReturnTag
     // updateJSDocThisTag
     // updateJSDocEnumTag
+    // updateJSDocSatisfiesTag
     function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocComment> | undefined) {
         return node.tagName !== tagName
             || node.typeExpression !== typeExpression
@@ -6628,7 +6634,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return { target, thisArg };
     }
 
-    function createAssignmentTargetWrapper(paramName: Identifier, expression: Expression): LeftHandSideExpression {
+    function createAssignmentTargetWrapper(paramName: Identifier, expression: Expression): PropertyAccessExpression {
         return createPropertyAccessExpression(
             // Explicit parens required because of v8 regression (https://bugs.chromium.org/p/v8/issues/detail?id=9560)
             createParenthesizedExpression(
@@ -6824,9 +6830,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param statementOffset The offset at which to begin the copy.
      * @param visitor Optional callback used to visit any custom prologue directives.
      */
-    function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number;
-    function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number | undefined;
-    function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter: (node: Node) => boolean = returnTrue): number | undefined {
+    function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number;
+    function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number | undefined;
+    function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter: (node: Statement) => boolean = returnTrue): number | undefined {
         const numStatements = source.length;
         while (statementOffset !== undefined && statementOffset < numStatements) {
             const statement = source[statementOffset];

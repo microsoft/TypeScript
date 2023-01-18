@@ -2,7 +2,6 @@ import { expect } from "chai";
 
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import * as Utils from "../../_namespaces/Utils";
 import {
     createHasErrorMessageLogger,
     nullLogger,
@@ -53,7 +52,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
             typingsInstaller: undefined!, // TODO: GH#18217
-            byteLength: Utils.byteLength,
+            byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: nullLogger(),
             canUseEvents: true
@@ -352,7 +351,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
         it("is an overrideable handle which sends protocol messages over the wire", () => {
             const msg: ts.server.protocol.Request = { seq: 0, type: "request", command: "" };
             const strmsg = JSON.stringify(msg);
-            const len = 1 + Utils.byteLength(strmsg, "utf8");
+            const len = 1 + Buffer.byteLength(strmsg, "utf8");
             const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
 
             session.send = ts.server.Session.prototype.send;
@@ -475,7 +474,7 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined!, // TODO: GH#18217
-                byteLength: Utils.byteLength,
+                byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: nullLogger(),
                 canUseEvents: true
@@ -522,7 +521,7 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined!, // TODO: GH#18217
-                byteLength: Utils.byteLength,
+                byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: createHasErrorMessageLogger(),
                 canUseEvents: true
@@ -590,7 +589,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined!, // TODO: GH#18217
-                byteLength: Utils.byteLength,
+                byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: createHasErrorMessageLogger(),
                 canUseEvents: true

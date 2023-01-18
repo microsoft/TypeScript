@@ -199,6 +199,8 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 }),
                 "dev/extends.json": JSON.stringify({ extends: 42 }),
                 "dev/extends2.json": JSON.stringify({ extends: "configs/base" }),
+                "dev/extends3.json": JSON.stringify({ extends: "" }),
+                "dev/extends4.json": JSON.stringify({ extends: [""] }),
                 "dev/main.ts": "",
                 "dev/supplemental.ts": "",
                 "dev/tests/unit/spec.ts": "",
@@ -356,6 +358,16 @@ describe("unittests:: config:: configurationExtension", () => {
             testFailure("can error when 'extends' is not a string or Array", "extends.json", [{
                 code: 5024,
                 messageText: `Compiler option 'extends' requires a value of type string or Array.`
+            }]);
+
+            testFailure("can error when 'extends' is given an empty string", "extends3.json", [{
+                code: 18051,
+                messageText: `Compiler option 'extends' cannot be given an empty string.`
+            }]);
+
+            testFailure("can error when 'extends' is given an empty string in an array", "extends4.json", [{
+                code: 18051,
+                messageText: `Compiler option 'extends' cannot be given an empty string.`
             }]);
 
             testSuccess("can overwrite compiler options using extended 'null'", "configs/third.json", {

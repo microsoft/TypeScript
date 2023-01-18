@@ -107,7 +107,7 @@ import {
     isNamedExportBindings,
     isNamedImportBindings,
     isNamespaceExport,
-    isObjectLiteralElement,
+    isObjectLiteralElementLike,
     isParameterPropertyDeclaration,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -116,6 +116,7 @@ import {
     isSimpleInlineableExpression,
     isSourceFile,
     isStatement,
+    isTemplateLiteral,
     JsxOpeningElement,
     JsxSelfClosingElement,
     LeftHandSideExpression,
@@ -315,7 +316,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
+    function saveStateAndInvoke<T, U extends Node>(node: U, f: (node: U) => T): T {
         // Save state
         const savedCurrentScope = currentLexicalScope;
         const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
@@ -377,7 +378,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: Node): VisitResult<Node | undefined> {
         return saveStateAndInvoke(node, visitorWorker);
     }
 
@@ -386,7 +387,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitorWorker(node: Node): VisitResult<Node> {
+    function visitorWorker(node: Node): VisitResult<Node | undefined> {
         if (node.transformFlags & TransformFlags.ContainsTypeScript) {
             return visitTypeScript(node);
         }
@@ -398,7 +399,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function sourceElementVisitor(node: Node): VisitResult<Node> {
+    function sourceElementVisitor(node: Node): VisitResult<Node | undefined> {
         return saveStateAndInvoke(node, sourceElementVisitorWorker);
     }
 
@@ -407,7 +408,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function sourceElementVisitorWorker(node: Node): VisitResult<Node> {
+    function sourceElementVisitorWorker(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
@@ -419,7 +420,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node> {
+    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
         const parsed = getParseTreeNode(node);
         if (parsed !== node) {
             // If the node has been transformed by a `before` transformer, perform no ellision on it
@@ -452,7 +453,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function namespaceElementVisitor(node: Node): VisitResult<Node> {
+    function namespaceElementVisitor(node: Node): VisitResult<Node | undefined> {
         return saveStateAndInvoke(node, namespaceElementVisitorWorker);
     }
 
@@ -461,7 +462,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function namespaceElementVisitorWorker(node: Node): VisitResult<Node> {
+    function namespaceElementVisitorWorker(node: Node): VisitResult<Node | undefined> {
         if (node.kind === SyntaxKind.ExportDeclaration ||
             node.kind === SyntaxKind.ImportDeclaration ||
             node.kind === SyntaxKind.ImportClause ||
@@ -482,7 +483,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param parent The class containing the elements to visit.
      */
-    function getClassElementVisitor(parent: ClassLikeDeclaration): (node: Node) => VisitResult<Node> {
+    function getClassElementVisitor(parent: ClassLikeDeclaration): (node: Node) => VisitResult<Node | undefined> {
         return node => saveStateAndInvoke(node, n => classElementVisitorWorker(n, parent));
     }
 
@@ -491,7 +492,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node> {
+    function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.Constructor:
                 return visitConstructor(node as ConstructorDeclaration);
@@ -529,11 +530,11 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): (node: Node) => VisitResult<Node> {
+    function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): <T extends Node>(node: T) => VisitResult<Node | undefined> {
         return node => saveStateAndInvoke(node, n => objectLiteralElementVisitorWorker(n, parent));
     }
 
-    function objectLiteralElementVisitorWorker(node: Node, parent: ObjectLiteralExpression): VisitResult<Node> {
+    function objectLiteralElementVisitorWorker(node: Node, parent: ObjectLiteralExpression): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
@@ -558,15 +559,15 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function decoratorElidingVisitor(node: Node): VisitResult<Node> {
+    function decoratorElidingVisitor(node: Node): VisitResult<Node | undefined> {
         return isDecorator(node) ? undefined : visitor(node);
     }
 
-    function modifierElidingVisitor(node: Node): VisitResult<Node> {
+    function modifierElidingVisitor(node: Node): VisitResult<Node | undefined> {
         return isModifier(node) ? undefined : visitor(node);
     }
 
-    function modifierVisitor(node: Node): VisitResult<Node> {
+    function modifierVisitor(node: Node): VisitResult<Node | undefined> {
         if (isDecorator(node)) return undefined;
         if (modifierToFlag(node.kind) & ModifierFlags.TypeScriptModifier) {
             return undefined;
@@ -583,7 +584,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitTypeScript(node: Node): VisitResult<Node> {
+    function visitTypeScript(node: Node): VisitResult<Node | undefined> {
         if (isStatement(node) && hasSyntacticModifier(node, ModifierFlags.Ambient)) {
             // TypeScript ambient declarations are elided, but some comments may be preserved.
             // See the implementation of `getLeadingComments` in comments.ts for more details.
@@ -793,7 +794,7 @@ export function transformTypeScript(context: TransformationContext) {
     function visitObjectLiteralExpression(node: ObjectLiteralExpression) {
         return factory.updateObjectLiteralExpression(
             node,
-            visitNodes(node.properties, getObjectLiteralElementVisitor(node), isObjectLiteralElement)
+            visitNodes(node.properties, getObjectLiteralElementVisitor(node), isObjectLiteralElementLike)
         );
     }
 
@@ -1198,6 +1199,7 @@ export function transformTypeScript(context: TransformationContext) {
         //   - the property has a decorator.
         if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)) {
             const expression = visitNode(name.expression, visitor, isExpression);
+            Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
             if (!isSimpleInlineableExpression(innerExpression)) {
                 const generatedName = factory.getGeneratedNameForNode(name);
@@ -1205,7 +1207,7 @@ export function transformTypeScript(context: TransformationContext) {
                 return factory.updateComputedPropertyName(name, factory.createAssignment(generatedName, expression));
             }
         }
-        return visitNode(name, visitor, isPropertyName);
+        return Debug.checkDefined(visitNode(name, visitor, isPropertyName));
     }
 
     /**
@@ -1236,7 +1238,7 @@ export function transformTypeScript(context: TransformationContext) {
     function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): ExpressionWithTypeArguments {
         return factory.updateExpressionWithTypeArguments(
             node,
-            visitNode(node.expression, visitor, isLeftHandSideExpression),
+            Debug.checkDefined(visitNode(node.expression, visitor, isLeftHandSideExpression)),
             /*typeArguments*/ undefined
         );
     }
@@ -1269,7 +1271,7 @@ export function transformTypeScript(context: TransformationContext) {
             return factory.updatePropertyDeclaration(
                 node,
                 concatenate<ModifierLike>(modifiers, factory.createModifiersFromModifierFlags(ModifierFlags.Ambient)),
-                visitNode(node.name, visitor, isPropertyName),
+                Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
                 /*questionOrExclamationToken*/ undefined,
                 /*type*/ undefined,
                 /*initializer*/ undefined
@@ -1282,7 +1284,7 @@ export function transformTypeScript(context: TransformationContext) {
             visitPropertyNameOfClassElement(node),
             /*questionOrExclamationToken*/ undefined,
             /*type*/ undefined,
-            visitNode(node.initializer, visitor)
+            visitNode(node.initializer, visitor, isExpression)
         );
     }
 
@@ -1301,7 +1303,7 @@ export function transformTypeScript(context: TransformationContext) {
 
     function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
         const parametersWithPropertyAssignments = constructor &&
-            filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
+            filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as readonly ParameterPropertyDeclaration[] | undefined;
         if (!some(parametersWithPropertyAssignments)) {
             return visitFunctionBody(body, visitor, context);
         }
@@ -1551,7 +1553,7 @@ export function transformTypeScript(context: TransformationContext) {
             node,
             visitNodes(node.modifiers, node => isDecorator(node) ? visitor(node) : undefined, isModifierLike),
             node.dotDotDotToken,
-            visitNode(node.name, visitor, isBindingName),
+            Debug.checkDefined(visitNode(node.name, visitor, isBindingName)),
             /*questionToken*/ undefined,
             /*type*/ undefined,
             visitNode(node.initializer, visitor, isExpression)
@@ -1605,7 +1607,7 @@ export function transformTypeScript(context: TransformationContext) {
             return setTextRange(
                 factory.createAssignment(
                     getNamespaceMemberNameWithSourceMapsAndWithoutComments(name),
-                    visitNode(node.initializer, visitor, isExpression)
+                    Debug.checkDefined(visitNode(node.initializer, visitor, isExpression))
                 ),
                 /*location*/ node
             );
@@ -1615,7 +1617,7 @@ export function transformTypeScript(context: TransformationContext) {
     function visitVariableDeclaration(node: VariableDeclaration) {
         const updated = factory.updateVariableDeclaration(
             node,
-            visitNode(node.name, visitor, isBindingName),
+            Debug.checkDefined(visitNode(node.name, visitor, isBindingName)),
             /*exclamationToken*/ undefined,
             /*type*/ undefined,
             visitNode(node.initializer, visitor, isExpression));
@@ -1631,6 +1633,7 @@ export function transformTypeScript(context: TransformationContext) {
             // Make sure we consider all nested cast expressions, e.g.:
             // (<any><number><any>-A).x;
             const expression = visitNode(node.expression, visitor, isExpression);
+            Debug.assert(expression);
 
             // We have an expression of the form: (<Type>SubExpr). Emitting this as (SubExpr)
             // is really not desirable. We would like to emit the subexpression as-is. Omitting
@@ -1657,23 +1660,26 @@ export function transformTypeScript(context: TransformationContext) {
 
     function visitAssertionExpression(node: AssertionExpression): Expression {
         const expression = visitNode(node.expression, visitor, isExpression);
+        Debug.assert(expression);
         return factory.createPartiallyEmittedExpression(expression, node);
     }
 
     function visitNonNullExpression(node: NonNullExpression): Expression {
         const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
+        Debug.assert(expression);
         return factory.createPartiallyEmittedExpression(expression, node);
     }
 
     function visitSatisfiesExpression(node: SatisfiesExpression): Expression {
         const expression = visitNode(node.expression, visitor, isExpression);
+        Debug.assert(expression);
         return factory.createPartiallyEmittedExpression(expression, node);
     }
 
     function visitCallExpression(node: CallExpression) {
         return factory.updateCallExpression(
             node,
-            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             /*typeArguments*/ undefined,
             visitNodes(node.arguments, visitor, isExpression));
     }
@@ -1681,7 +1687,7 @@ export function transformTypeScript(context: TransformationContext) {
     function visitNewExpression(node: NewExpression) {
         return factory.updateNewExpression(
             node,
-            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             /*typeArguments*/ undefined,
             visitNodes(node.arguments, visitor, isExpression));
     }
@@ -1689,25 +1695,25 @@ export function transformTypeScript(context: TransformationContext) {
     function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
         return factory.updateTaggedTemplateExpression(
             node,
-            visitNode(node.tag, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.tag, visitor, isExpression)),
             /*typeArguments*/ undefined,
-            visitNode(node.template, visitor, isExpression));
+            Debug.checkDefined(visitNode(node.template, visitor, isTemplateLiteral)));
     }
 
     function visitJsxSelfClosingElement(node: JsxSelfClosingElement) {
         return factory.updateJsxSelfClosingElement(
             node,
-            visitNode(node.tagName, visitor, isJsxTagNameExpression),
+            Debug.checkDefined(visitNode(node.tagName, visitor, isJsxTagNameExpression)),
             /*typeArguments*/ undefined,
-            visitNode(node.attributes, visitor, isJsxAttributes));
+            Debug.checkDefined(visitNode(node.attributes, visitor, isJsxAttributes)));
     }
 
     function visitJsxJsxOpeningElement(node: JsxOpeningElement) {
         return factory.updateJsxOpeningElement(
             node,
-            visitNode(node.tagName, visitor, isJsxTagNameExpression),
+            Debug.checkDefined(visitNode(node.tagName, visitor, isJsxTagNameExpression)),
             /*typeArguments*/ undefined,
-            visitNode(node.attributes, visitor, isJsxAttributes));
+            Debug.checkDefined(visitNode(node.attributes, visitor, isJsxAttributes)));
     }
 
     /**
@@ -1888,7 +1894,7 @@ export function transformTypeScript(context: TransformationContext) {
         else {
             enableSubstitutionForNonQualifiedEnumMembers();
             if (member.initializer) {
-                return visitNode(member.initializer, visitor, isExpression);
+                return Debug.checkDefined(visitNode(member.initializer, visitor, isExpression));
             }
             else {
                 return factory.createVoidZero();
@@ -2136,7 +2142,7 @@ export function transformTypeScript(context: TransformationContext) {
         let blockLocation: TextRange | undefined;
         if (node.body) {
             if (node.body.kind === SyntaxKind.ModuleBlock) {
-                saveStateAndInvoke(node.body, body => addRange(statements, visitNodes((body as ModuleBlock).statements, namespaceElementVisitor, isStatement)));
+                saveStateAndInvoke(node.body, body => addRange(statements, visitNodes(body.statements, namespaceElementVisitor, isStatement)));
                 statementsLocation = node.body.statements;
                 blockLocation = node.body;
             }
@@ -2208,7 +2214,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The import declaration node.
      */
-    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
+    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
         if (!node.importClause) {
             // Do not elide a side-effect only import declaration.
             //  import "foo";
@@ -2238,7 +2244,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The import clause node.
      */
-    function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
+    function visitImportClause(node: ImportClause): VisitResult<ImportClause> | undefined {
         Debug.assert(!node.isTypeOnly);
         // Elide the import clause if we elide both its name and its named bindings.
         const name = shouldEmitAliasDeclaration(node) ? node.name : undefined;
@@ -2251,7 +2257,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The named import bindings node.
      */
-    function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> {
+    function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> | undefined {
         if (node.kind === SyntaxKind.NamespaceImport) {
             // Elide a namespace import if it is not referenced.
             return shouldEmitAliasDeclaration(node) ? node : undefined;
@@ -2271,7 +2277,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The import specifier node.
      */
-    function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> {
+    function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> | undefined {
         return !node.isTypeOnly && shouldEmitAliasDeclaration(node) ? node : undefined;
     }
 
@@ -2281,7 +2287,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The export assignment node.
      */
-    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
+    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
         // Elide the export assignment if it does not reference a value.
         return resolver.isValueAliasDeclaration(node)
             ? visitEachChild(node, visitor, context)
@@ -2293,7 +2299,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The export declaration node.
      */
-    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement | undefined> {
         if (node.isTypeOnly) {
             return undefined;
         }
@@ -2331,17 +2337,17 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The named exports node.
      */
-    function visitNamedExports(node: NamedExports, allowEmpty: boolean): VisitResult<NamedExports> {
+    function visitNamedExports(node: NamedExports, allowEmpty: boolean): VisitResult<NamedExports> | undefined {
         // Elide the named exports if all of its export specifiers were elided.
         const elements = visitNodes(node.elements, visitExportSpecifier, isExportSpecifier);
         return allowEmpty || some(elements) ? factory.updateNamedExports(node, elements) : undefined;
     }
 
     function visitNamespaceExports(node: NamespaceExport): VisitResult<NamespaceExport> {
-        return factory.updateNamespaceExport(node, visitNode(node.name, visitor, isIdentifier));
+        return factory.updateNamespaceExport(node, Debug.checkDefined(visitNode(node.name, visitor, isIdentifier)));
     }
 
-    function visitNamedExportBindings(node: NamedExportBindings, allowEmpty: boolean): VisitResult<NamedExportBindings> {
+    function visitNamedExportBindings(node: NamedExportBindings, allowEmpty: boolean): VisitResult<NamedExportBindings> | undefined {
         return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node, allowEmpty);
     }
 
@@ -2350,7 +2356,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The export specifier node.
      */
-    function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> {
+    function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> | undefined {
         // Elide an export specifier if it does not reference a value.
         return !node.isTypeOnly && resolver.isValueAliasDeclaration(node) ? node : undefined;
     }
@@ -2374,7 +2380,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The import equals declaration node.
      */
-    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
         // Always elide type-only imports
         if (node.isTypeOnly) {
             return undefined;
