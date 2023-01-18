@@ -201,7 +201,7 @@ export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, progr
         isStatic: hasStaticModifier(declaration),
         isReadonly: hasEffectiveReadonlyModifier(declaration),
         type: getDeclarationType(declaration, program),
-        container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
+        container: declaration.kind === SyntaxKind.ParameterDeclaration ? declaration.parent.parent : declaration.parent,
         originalName: (declaration.name as AcceptedNameType).text,
         declaration,
         fieldName,

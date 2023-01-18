@@ -294,7 +294,7 @@ function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean {
 
 const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([
     [SyntaxKind.VariableDeclaration, TokenType.variable],
-    [SyntaxKind.Parameter, TokenType.parameter],
+    [SyntaxKind.ParameterDeclaration, TokenType.parameter],
     [SyntaxKind.PropertyDeclaration, TokenType.property],
     [SyntaxKind.ModuleDeclaration, TokenType.namespace],
     [SyntaxKind.EnumDeclaration, TokenType.enum],

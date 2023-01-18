@@ -230,7 +230,7 @@ export const enum SyntaxKind {
     ComputedPropertyName,
     // Signature elements
     TypeParameter,
-    Parameter,
+    ParameterDeclaration,
     Decorator,
     // TypeMember
     PropertySignature,
@@ -1888,7 +1888,7 @@ export interface VariableDeclarationList extends Node {
 
 // dprint-ignore
 export interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
-    readonly kind: SyntaxKind.Parameter;
+    readonly kind: SyntaxKind.ParameterDeclaration;
     readonly parent: SignatureDeclaration;
     readonly modifiers?: NodeArray<ModifierLike>;
     readonly dotDotDotToken?: DotDotDotToken;    // Present on rest parameter

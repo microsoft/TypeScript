@@ -7671,7 +7671,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getEffectiveParameterDeclaration(parameterSymbol: Symbol): ParameterDeclaration | JSDocParameterTag | undefined {
-            const parameterDeclaration: ParameterDeclaration | JSDocParameterTag | undefined = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
+            const parameterDeclaration: ParameterDeclaration | JSDocParameterTag | undefined = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.ParameterDeclaration);
             if (parameterDeclaration) {
                 return parameterDeclaration;
             }
@@ -10962,7 +10962,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.IndexSignature:
-                case SyntaxKind.Parameter:
+                case SyntaxKind.ParameterDeclaration:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
@@ -12082,7 +12082,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function declarationBelongsToPrivateAmbientMember(declaration: VariableLikeDeclaration) {
         const root = getRootDeclaration(declaration);
-        const memberDeclaration = root.kind === SyntaxKind.Parameter ? root.parent : root;
+        const memberDeclaration = root.kind === SyntaxKind.ParameterDeclaration ? root.parent : root;
         return isPrivateWithinAmbient(memberDeclaration);
     }
 
@@ -12462,7 +12462,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return errorType;
             }
             // Check if variable has initializer that circularly references the variable itself
-            if (noImplicitAny && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
+            if (noImplicitAny && (declaration.kind !== SyntaxKind.ParameterDeclaration || (declaration as HasInitializer).initializer)) {
                 error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer, symbolToString(symbol));
             }
         }
@@ -16278,7 +16278,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // When an 'infer T' declaration is immediately contained in a rest parameter declaration, a rest type
                     // or a named rest tuple element, we infer an 'unknown[]' constraint.
                     else if (
-                        grandParent.kind === SyntaxKind.Parameter && (grandParent as ParameterDeclaration).dotDotDotToken ||
+                        grandParent.kind === SyntaxKind.ParameterDeclaration && (grandParent as ParameterDeclaration).dotDotDotToken ||
                         grandParent.kind === SyntaxKind.RestType ||
                         grandParent.kind === SyntaxKind.NamedTupleMember && (grandParent as NamedTupleMember).dotDotDotToken
                     ) {
@@ -16747,7 +16747,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const parent = node.parent;
             // only consider variance flipped by parameter locations - `keyof` types would usually be considered variance inverting, but
             // often get used in indexed accesses where they behave sortof invariantly, but our checking is lax
-            if (parent.kind === SyntaxKind.Parameter) {
+            if (parent.kind === SyntaxKind.ParameterDeclaration) {
                 covariant = !covariant;
             }
             // Always substitute on type parameters, regardless of variance, since even
@@ -25520,7 +25520,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.PropertySignature:
                 diagnostic = noImplicitAny ? Diagnostics.Member_0_implicitly_has_an_1_type : Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
                 break;
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 const param = declaration as ParameterDeclaration;
                 if (isIdentifier(param.name)) {
                     const originalKeywordKind = identifierToKeywordKind(param.name);
@@ -29796,7 +29796,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
     function removeOptionalityFromDeclaredType(declaredType: Type, declaration: VariableLikeDeclaration): Type {
         const removeUndefined = strictNullChecks &&
-            declaration.kind === SyntaxKind.Parameter &&
+            declaration.kind === SyntaxKind.ParameterDeclaration &&
             declaration.initializer &&
             hasTypeFacts(declaredType, TypeFacts.IsUndefined) &&
             !parameterInitializerContainsUndefined(declaration);
@@ -30148,7 +30148,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveTypeAnnotationNode(node));
                     break;
 
-                case SyntaxKind.Parameter:
+                case SyntaxKind.ParameterDeclaration:
                     markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(node));
                     const containingSignature = node.parent;
                     for (const parameter of containingSignature.parameters) {
@@ -30300,14 +30300,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
                 const parent = declaration.parent.parent;
                 const rootDeclaration = getRootDeclaration(parent);
-                if (rootDeclaration.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlagsCached(rootDeclaration) & NodeFlags.Constant || rootDeclaration.kind === SyntaxKind.Parameter) {
+                if (rootDeclaration.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlagsCached(rootDeclaration) & NodeFlags.Constant || rootDeclaration.kind === SyntaxKind.ParameterDeclaration) {
                     const links = getNodeLinks(parent);
                     if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                         links.flags |= NodeCheckFlags.InCheckIdentifier;
                         const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
                         const parentTypeConstraint = parentType && mapType(parentType, getBaseConstraintOrType);
                         links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                        if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.Parameter && isSomeSymbolAssigned(rootDeclaration))) {
+                        if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.ParameterDeclaration && isSomeSymbolAssigned(rootDeclaration))) {
                             const pattern = declaration.parent;
                             const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
                             if (narrowedType.flags & TypeFlags.Never) {
@@ -30516,7 +30516,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // The declaration container is the innermost function that encloses the declaration of the variable
         // or parameter. The flow container is the innermost function starting with which we analyze the control
         // flow graph to determine the control flow based type.
-        const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
+        const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.ParameterDeclaration;
         const declarationContainer = getControlFlowContainer(declaration);
         let flowContainer = getControlFlowContainer(node);
         const isOuterVariable = flowContainer !== declarationContainer;
@@ -30974,7 +30974,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
-        return !!findAncestor(node, n => isFunctionLikeDeclaration(n) ? "quit" : n.kind === SyntaxKind.Parameter && n.parent === constructorDecl);
+        return !!findAncestor(node, n => isFunctionLikeDeclaration(n) ? "quit" : n.kind === SyntaxKind.ParameterDeclaration && n.parent === constructorDecl);
     }
 
     function checkSuperExpression(node: Node): Type {
@@ -31320,7 +31320,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTypeFromTypeNode(typeNode);
         }
         switch (declaration.kind) {
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return getContextuallyTypedParameterType(declaration);
             case SyntaxKind.BindingElement:
                 return getContextualTypeForBindingElement(declaration, contextFlags);
@@ -32137,7 +32137,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const { parent } = node;
         switch (parent.kind) {
             case SyntaxKind.VariableDeclaration:
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.BindingElement:
@@ -35629,7 +35629,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.SetAccessor:
                 // For decorators with only two parameters we supply only two arguments
                 return signature.parameters.length <= 2 ? 2 : 3;
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return 3;
             default:
                 return Debug.fail();
@@ -36694,7 +36694,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ClassExpression:
                 return Diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression;
 
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return Diagnostics.Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression;
 
             case SyntaxKind.PropertyDeclaration:
@@ -38234,7 +38234,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                     break;
                 }
-                case SyntaxKind.Parameter: {
+                case SyntaxKind.ParameterDeclaration: {
                     const node = parent as ParameterDeclaration;
                     if (
                         !isConstructorDeclaration(node.parent) &&
@@ -43116,7 +43116,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 // falls through
 
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 headMessage = Diagnostics.Decorator_function_return_type_is_0_but_is_expected_to_be_void_or_any;
                 break;
 
@@ -43254,7 +43254,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (legacyDecorators) {
             checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Decorate);
-            if (node.kind === SyntaxKind.Parameter) {
+            if (node.kind === SyntaxKind.ParameterDeclaration) {
                 checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Param);
             }
         }
@@ -44338,8 +44338,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function areDeclarationFlagsIdentical(left: Declaration, right: Declaration) {
         if (
-            (left.kind === SyntaxKind.Parameter && right.kind === SyntaxKind.VariableDeclaration) ||
-            (left.kind === SyntaxKind.VariableDeclaration && right.kind === SyntaxKind.Parameter)
+            (left.kind === SyntaxKind.ParameterDeclaration && right.kind === SyntaxKind.VariableDeclaration) ||
+            (left.kind === SyntaxKind.VariableDeclaration && right.kind === SyntaxKind.ParameterDeclaration)
         ) {
             // Differences in optionality between parameters and variables are allowed.
             return true;
@@ -48087,7 +48087,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (kind) {
             case SyntaxKind.TypeParameter:
                 return checkTypeParameter(node as TypeParameterDeclaration);
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return checkParameter(node as ParameterDeclaration);
             case SyntaxKind.PropertyDeclaration:
                 return checkPropertyDeclaration(node as PropertyDeclaration);
@@ -50237,7 +50237,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return filter(getExportSymbolOfValueSymbolIfExported(symbol).declarations, declaration => {
                         switch (declaration.kind) {
                             case SyntaxKind.VariableDeclaration:
-                            case SyntaxKind.Parameter:
+                            case SyntaxKind.ParameterDeclaration:
                             case SyntaxKind.BindingElement:
                             case SyntaxKind.PropertyDeclaration:
                             case SyntaxKind.PropertyAssignment:
@@ -50318,7 +50318,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (direct) {
             return direct;
         }
-        if (node.kind === SyntaxKind.Parameter && node.parent.kind === SyntaxKind.SetAccessor) {
+        if (node.kind === SyntaxKind.ParameterDeclaration && node.parent.kind === SyntaxKind.SetAccessor) {
             const other = getAllAccessorDeclarationsForDeclaration(node.parent as SetAccessorDeclaration).getAccessor;
             if (other) {
                 return getEffectiveReturnTypeNode(other);
@@ -50870,7 +50870,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, "static");
                         }
-                        else if (node.kind === SyntaxKind.Parameter) {
+                        else if (node.kind === SyntaxKind.ParameterDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
                         }
                         else if (flags & ModifierFlags.Abstract) {
@@ -50904,7 +50904,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "readonly");
                         }
-                        else if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature && node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.Parameter) {
+                        else if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature && node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.ParameterDeclaration) {
                             // If node.kind === SyntaxKind.Parameter, checkParameter reports an error if it's not a parameter property.
                             return grammarErrorOnNode(modifier, Diagnostics.readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature);
                         }
@@ -50942,7 +50942,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         else if (isClassLike(node.parent)) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_class_elements_of_this_kind, "export");
                         }
-                        else if (node.kind === SyntaxKind.Parameter) {
+                        else if (node.kind === SyntaxKind.ParameterDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
                         }
                         else if (blockScopeKind === NodeFlags.Using) {
@@ -50986,7 +50986,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         else if (isClassLike(node.parent) && !isPropertyDeclaration(node)) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_class_elements_of_this_kind, "declare");
                         }
-                        else if (node.kind === SyntaxKind.Parameter) {
+                        else if (node.kind === SyntaxKind.ParameterDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
                         }
                         else if (blockScopeKind === NodeFlags.Using) {
@@ -51060,7 +51060,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         else if (flags & ModifierFlags.Ambient || node.parent.flags & NodeFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                         }
-                        else if (node.kind === SyntaxKind.Parameter) {
+                        else if (node.kind === SyntaxKind.ParameterDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "async");
                         }
                         if (flags & ModifierFlags.Abstract) {
@@ -51106,10 +51106,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && flags & ModifierFlags.Ambient) {
             return grammarErrorOnNode(lastDeclare!, Diagnostics.A_0_modifier_cannot_be_used_with_an_import_declaration, "declare");
         }
-        else if (node.kind === SyntaxKind.Parameter && (flags & ModifierFlags.ParameterPropertyModifier) && isBindingPattern(node.name)) {
+        else if (node.kind === SyntaxKind.ParameterDeclaration && (flags & ModifierFlags.ParameterPropertyModifier) && isBindingPattern(node.name)) {
             return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_declared_using_a_binding_pattern);
         }
-        else if (node.kind === SyntaxKind.Parameter && (flags & ModifierFlags.ParameterPropertyModifier) && node.dotDotDotToken) {
+        else if (node.kind === SyntaxKind.ParameterDeclaration && (flags & ModifierFlags.ParameterPropertyModifier) && node.dotDotDotToken) {
             return grammarErrorOnNode(node, Diagnostics.A_parameter_property_cannot_be_declared_using_a_rest_parameter);
         }
         if (flags & ModifierFlags.Async) {
@@ -51151,7 +51151,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
             case SyntaxKind.TypeParameter:
                 return undefined;
             case SyntaxKind.ClassStaticBlockDeclaration:

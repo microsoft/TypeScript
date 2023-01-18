@@ -541,7 +541,7 @@ function createCallSiteCollector(program: Program, callSites: CallSite[]): (node
                 collect((node as TypeAssertion | AsExpression).expression);
                 return;
             case SyntaxKind.VariableDeclaration:
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 // do not descend into the type of a variable or parameter declaration
                 collect((node as VariableDeclaration | ParameterDeclaration).name);
                 collect((node as VariableDeclaration | ParameterDeclaration).initializer);

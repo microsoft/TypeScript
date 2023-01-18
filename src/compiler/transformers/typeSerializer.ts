@@ -179,7 +179,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
     function serializeTypeOfNode(node: PropertyDeclaration | ParameterDeclaration | AccessorDeclaration | ClassLikeDeclaration | MethodDeclaration, container: ClassLikeDeclaration): SerializedTypeNode {
         switch (node.kind) {
             case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return serializeTypeNode(node.type);
             case SyntaxKind.SetAccessor:
             case SyntaxKind.GetAccessor:

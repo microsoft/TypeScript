@@ -734,7 +734,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 break;
             case SyntaxKind.JSDocFunctionType:
                 return (isJSDocConstructSignature(node) ? InternalSymbolName.New : InternalSymbolName.Call);
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 // Parameters with names are handled at the top of this function.  Parameters
                 // without names can only come from JSDocFunctionTypes.
                 Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType, "Impossible parameter parent kind", () => `parent is: ${Debug.formatSyntaxKind(node.parent.kind)}, expected JSDocFunctionType`);
@@ -1206,7 +1206,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.BindingElement:
                 bindBindingElementFlow(node as BindingElement);
                 break;
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 bindParameterFlow(node as ParameterDeclaration);
                 break;
             case SyntaxKind.ObjectLiteralExpression:
@@ -2940,7 +2940,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 break; // Binding the children will handle everything
             case SyntaxKind.TypeParameter:
                 return bindTypeParameter(node as TypeParameterDeclaration);
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return bindParameter(node as ParameterDeclaration);
             case SyntaxKind.VariableDeclaration:
                 return bindVariableDeclarationOrBindingElement(node as VariableDeclaration);

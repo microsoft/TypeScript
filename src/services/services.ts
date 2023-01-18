@@ -1220,7 +1220,7 @@ class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements Sour
                     forEachChild(node, visit);
                     break;
 
-                case SyntaxKind.Parameter:
+                case SyntaxKind.ParameterDeclaration:
                     // Only consider parameter properties
                     if (!hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                         break;
@@ -2339,7 +2339,7 @@ export function createLanguageService(
                 if (
                     node.flags & NodeFlags.JSDoc && !isInJSFile(node) &&
                     ((node.parent.kind === SyntaxKind.PropertySignature && (node.parent as PropertySignature).name === node) ||
-                        findAncestor(node, n => n.kind === SyntaxKind.Parameter))
+                        findAncestor(node, n => n.kind === SyntaxKind.ParameterDeclaration))
                 ) {
                     // if we'd request type at those locations we'd get `errorType` that displays confusingly as `any`
                     return false;

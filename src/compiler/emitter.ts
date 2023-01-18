@@ -1577,7 +1577,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 // Signature elements
                 case SyntaxKind.TypeParameter:
                     return emitTypeParameter(node as TypeParameterDeclaration);
-                case SyntaxKind.Parameter:
+                case SyntaxKind.ParameterDeclaration:
                     return emitParameter(node as ParameterDeclaration);
                 case SyntaxKind.Decorator:
                     return emitDecorator(node as Decorator);
@@ -5298,7 +5298,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 forEach((node as VariableDeclarationList).declarations, generateNames);
                 break;
             case SyntaxKind.VariableDeclaration:
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
             case SyntaxKind.BindingElement:
             case SyntaxKind.ClassDeclaration:
                 generateNameIfNeeded((node as NamedDeclaration).name);

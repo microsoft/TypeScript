@@ -279,7 +279,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         // The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
         else if (
             node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression || node.kind === SyntaxKind.BinaryExpression || node.kind === SyntaxKind.PropertySignature ||
-            (node.kind === SyntaxKind.Parameter && hasSyntacticModifier(node.parent, ModifierFlags.Private))
+            (node.kind === SyntaxKind.ParameterDeclaration && hasSyntacticModifier(node.parent, ModifierFlags.Private))
         ) {
             // TODO(jfreeman): Deal with computed properties in error reporting.
             if (isStatic(node)) {
@@ -289,7 +289,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
                         Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                     Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
             }
-            else if (node.parent.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.Parameter) {
+            else if (node.parent.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ParameterDeclaration) {
                 return symbolAccessibilityResult.errorModuleName ?
                     symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                         Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -612,7 +612,7 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver): (nod
         [SyntaxKind.SetAccessor]: Diagnostics.Add_a_type_to_parameter_of_the_set_accessor_declaration,
         [SyntaxKind.FunctionDeclaration]: Diagnostics.Add_a_return_type_to_the_function_declaration,
         [SyntaxKind.ConstructSignature]: Diagnostics.Add_a_return_type_to_the_function_declaration,
-        [SyntaxKind.Parameter]: Diagnostics.Add_a_type_annotation_to_the_parameter_0,
+        [SyntaxKind.ParameterDeclaration]: Diagnostics.Add_a_type_annotation_to_the_parameter_0,
         [SyntaxKind.VariableDeclaration]: Diagnostics.Add_a_type_annotation_to_the_variable_0,
         [SyntaxKind.PropertyDeclaration]: Diagnostics.Add_a_type_annotation_to_the_property_0,
         [SyntaxKind.PropertySignature]: Diagnostics.Add_a_type_annotation_to_the_property_0,
@@ -627,7 +627,7 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver): (nod
         [SyntaxKind.ConstructSignature]: Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
         [SyntaxKind.GetAccessor]: Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
         [SyntaxKind.SetAccessor]: Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
-        [SyntaxKind.Parameter]: Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.ParameterDeclaration]: Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
         [SyntaxKind.VariableDeclaration]: Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
         [SyntaxKind.PropertyDeclaration]: Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
         [SyntaxKind.PropertySignature]: Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
@@ -692,7 +692,7 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver): (nod
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.VariableDeclaration:
                 return createVariableOrPropertyError(node);
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return createParameterError(node);
             case SyntaxKind.PropertyAssignment:
                 return createExpressionError(node.initializer);

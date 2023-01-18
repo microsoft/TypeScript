@@ -664,7 +664,7 @@ export namespace SmartIndenter {
             case SyntaxKind.MethodSignature:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.ParenthesizedType:

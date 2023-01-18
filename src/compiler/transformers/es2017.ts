@@ -217,7 +217,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.SetAccessor:
             case SyntaxKind.Constructor:
                 return node;
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
                 break;

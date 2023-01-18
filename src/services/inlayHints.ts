@@ -592,7 +592,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         visitForDisplayParts(node.default);
                     }
                     break;
-                case SyntaxKind.Parameter:
+                case SyntaxKind.ParameterDeclaration:
                     Debug.assertNode(node, isParameterDeclaration);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");

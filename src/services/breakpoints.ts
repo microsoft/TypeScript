@@ -162,7 +162,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                 case SyntaxKind.PropertySignature:
                     return spanInVariableDeclaration(node as VariableDeclaration | PropertyDeclaration | PropertySignature);
 
-                case SyntaxKind.Parameter:
+                case SyntaxKind.ParameterDeclaration:
                     return spanInParameterDeclaration(node as ParameterDeclaration);
 
                 case SyntaxKind.FunctionDeclaration:
@@ -428,7 +428,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                             }
                             break;
                         case SyntaxKind.VariableDeclaration:
-                        case SyntaxKind.Parameter: {
+                        case SyntaxKind.ParameterDeclaration: {
                             // initializer of variable/parameter declaration go to previous node
                             const { initializer, type } = node.parent as VariableDeclaration | ParameterDeclaration;
                             if (initializer === node || type === node || isAssignmentOperator(node.kind)) {
@@ -779,7 +779,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             if (
                 isFunctionLike(node.parent) ||
                 node.parent.kind === SyntaxKind.PropertyAssignment ||
-                node.parent.kind === SyntaxKind.Parameter
+                node.parent.kind === SyntaxKind.ParameterDeclaration
             ) {
                 return spanInPreviousNode(node);
             }

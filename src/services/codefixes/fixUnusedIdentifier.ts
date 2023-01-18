@@ -292,7 +292,7 @@ function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: num
 
 function canPrefix(token: Identifier): boolean {
     switch (token.parent.kind) {
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.TypeParameter:
             return true;
         case SyntaxKind.VariableDeclaration: {

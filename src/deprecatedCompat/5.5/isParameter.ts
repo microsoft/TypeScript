@@ -12,7 +12,7 @@ import { deprecate } from "../deprecate.js";
 //     - error: TBD
 /** @deprecated Use `isParameterDeclaration` instead. */
 export const isParameter: (node: Node) => node is ParameterDeclaration = deprecate(function isParameter(node: Node): node is ParameterDeclaration {
-    return node.kind === SyntaxKind.Parameter;
+    return node.kind === SyntaxKind.ParameterDeclaration;
 }, {
     since: "5.6",
     warnAfter: "5.7",

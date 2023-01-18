@@ -148,7 +148,7 @@ const canHaveTypeAnnotation = new Set<SyntaxKind>([
     SyntaxKind.FunctionExpression,
     SyntaxKind.ArrowFunction,
     SyntaxKind.VariableDeclaration,
-    SyntaxKind.Parameter,
+    SyntaxKind.ParameterDeclaration,
     SyntaxKind.ExportAssignment,
     SyntaxKind.ClassDeclaration,
     SyntaxKind.ObjectBindingPattern,
@@ -527,7 +527,7 @@ function withContext<T>(
         fixedNodes?.add(node);
 
         switch (node.kind) {
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.VariableDeclaration:
                 return addTypeToVariableLike(node as ParameterDeclaration | PropertyDeclaration | VariableDeclaration);

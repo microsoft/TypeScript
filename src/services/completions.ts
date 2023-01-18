@@ -4105,7 +4105,7 @@ function getCompletionData(
                 case SyntaxKind.ColonToken:
                     return parentKind === SyntaxKind.PropertyDeclaration ||
                         parentKind === SyntaxKind.PropertySignature ||
-                        parentKind === SyntaxKind.Parameter ||
+                        parentKind === SyntaxKind.ParameterDeclaration ||
                         parentKind === SyntaxKind.VariableDeclaration ||
                         isFunctionLikeKind(parentKind);
 
@@ -4582,7 +4582,7 @@ function getCompletionData(
             // Also proceed if rootDeclaration is a parameter and if its containing function expression/arrow function is contextually typed -
             // type of parameter will flow in from the contextual type of the function
             let canGetType = hasInitializer(rootDeclaration) || !!getEffectiveTypeAnnotationNode(rootDeclaration) || rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
-            if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
+            if (!canGetType && rootDeclaration.kind === SyntaxKind.ParameterDeclaration) {
                 if (isExpression(rootDeclaration.parent)) {
                     canGetType = !!typeChecker.getContextualType(rootDeclaration.parent as Expression);
                 }
@@ -4945,13 +4945,13 @@ function getCompletionData(
                 return containingNodeKind === SyntaxKind.PropertyDeclaration && !isClassLike(parent.parent);
 
             case SyntaxKind.DotDotDotToken:
-                return containingNodeKind === SyntaxKind.Parameter ||
+                return containingNodeKind === SyntaxKind.ParameterDeclaration ||
                     (!!parent.parent && parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [...z|
 
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
-                return containingNodeKind === SyntaxKind.Parameter && !isConstructorDeclaration(parent.parent);
+                return containingNodeKind === SyntaxKind.ParameterDeclaration && !isConstructorDeclaration(parent.parent);
 
             case SyntaxKind.AsKeyword:
                 return containingNodeKind === SyntaxKind.ImportSpecifier ||

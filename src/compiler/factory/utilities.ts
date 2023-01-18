@@ -984,7 +984,7 @@ export function getTargetOfBindingOrAssignmentElement(bindingElement: BindingOrA
  */
 export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementRestIndicator | undefined {
     switch (bindingElement.kind) {
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.BindingElement:
             // `...` in `let [...a] = ...`
             return bindingElement.dotDotDotToken;

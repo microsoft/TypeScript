@@ -436,7 +436,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.ClassStaticBlockDeclaration:
                 return Debug.fail("Not supported outside of a class. Use 'classElementVisitor' instead.");
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return visitParameterDeclaration(node as ParameterDeclaration);
 
             // Support NamedEvaluation to ensure the correct class name for class expressions.

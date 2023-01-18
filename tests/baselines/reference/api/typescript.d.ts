@@ -3792,7 +3792,7 @@ declare namespace ts {
         QualifiedName = 166,
         ComputedPropertyName = 167,
         TypeParameter = 168,
-        Parameter = 169,
+        ParameterDeclaration = 169,
         Decorator = 170,
         PropertySignature = 171,
         PropertyDeclaration = 172,
@@ -4492,7 +4492,7 @@ declare namespace ts {
         readonly declarations: NodeArray<VariableDeclaration>;
     }
     interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
-        readonly kind: SyntaxKind.Parameter;
+        readonly kind: SyntaxKind.ParameterDeclaration;
         readonly parent: SignatureDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly dotDotDotToken?: DotDotDotToken;

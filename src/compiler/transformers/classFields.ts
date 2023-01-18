@@ -478,7 +478,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return visitVariableStatement(node as VariableStatement);
             case SyntaxKind.VariableDeclaration:
                 return visitVariableDeclaration(node as VariableDeclaration);
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return visitParameterDeclaration(node as ParameterDeclaration);
             case SyntaxKind.BindingElement:
                 return visitBindingElement(node as BindingElement);

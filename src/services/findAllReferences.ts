@@ -942,7 +942,7 @@ function declarationIsWriteAccess(decl: Declaration): boolean {
         case SyntaxKind.NamespaceExportDeclaration:
         case SyntaxKind.NamespaceImport:
         case SyntaxKind.NamespaceExport:
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.ShorthandPropertyAssignment:
         case SyntaxKind.TypeAliasDeclaration:
         case SyntaxKind.TypeParameter:
@@ -2400,7 +2400,7 @@ export namespace Core {
     }
 
     function isParameterName(node: Node) {
-        return node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.Parameter && (node.parent as ParameterDeclaration).name === node;
+        return node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.ParameterDeclaration && (node.parent as ParameterDeclaration).name === node;
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {

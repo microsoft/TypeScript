@@ -143,7 +143,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
                 return visitGetAccessorDeclaration(node as GetAccessorDeclaration);
             case SyntaxKind.PropertyDeclaration:
                 return visitPropertyDeclaration(node as PropertyDeclaration);
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return visitParameterDeclaration(node as ParameterDeclaration);
             default:
                 return visitEachChild(node, visitor, context);

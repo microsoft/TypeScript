@@ -524,7 +524,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.SpreadAssignment]: function forEachChildInSpreadAssignment<T>(node: SpreadAssignment, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     },
-    [SyntaxKind.Parameter]: function forEachChildInParameter<T>(node: ParameterDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.ParameterDeclaration]: function forEachChildInParameter<T>(node: ParameterDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.dotDotDotToken) ||
             visitNode(cbNode, node.name) ||
@@ -3389,7 +3389,7 @@ namespace Parser {
     }
 
     function isReusableParameter(node: Node) {
-        if (node.kind !== SyntaxKind.Parameter) {
+        if (node.kind !== SyntaxKind.ParameterDeclaration) {
             return false;
         }
 

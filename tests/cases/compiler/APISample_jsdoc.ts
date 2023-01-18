@@ -82,7 +82,7 @@ function getAnnotations(this: any, node: ts.Node): Annotations | undefined {
 
 // these examples are artificial and mostly nonsensical
 function parseSpecificTags(node: ts.Node) {
-    if (node.kind === ts.SyntaxKind.Parameter) {
+    if (node.kind === ts.SyntaxKind.ParameterDeclaration) {
         return ts.getJSDocParameterTags(node as ts.ParameterDeclaration);
     }
     if (node.kind === ts.SyntaxKind.FunctionDeclaration) {

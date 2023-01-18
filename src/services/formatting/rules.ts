@@ -529,7 +529,7 @@ function isBinaryOpContext(context: FormattingContext): boolean {
         case SyntaxKind.VariableDeclaration:
         // equal in p = 0
         // falls through
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.EnumMember:
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:
@@ -559,7 +559,7 @@ function isTypeAnnotationContext(context: FormattingContext): boolean {
     const contextKind = context.contextNode.kind;
     return contextKind === SyntaxKind.PropertyDeclaration ||
         contextKind === SyntaxKind.PropertySignature ||
-        contextKind === SyntaxKind.Parameter ||
+        contextKind === SyntaxKind.ParameterDeclaration ||
         contextKind === SyntaxKind.VariableDeclaration ||
         isFunctionLikeKind(contextKind);
 }

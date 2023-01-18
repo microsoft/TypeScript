@@ -647,7 +647,7 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.Parameter]: function visitEachChildOfParameterDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.ParameterDeclaration]: function visitEachChildOfParameterDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateParameterDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),

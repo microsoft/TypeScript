@@ -641,7 +641,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.ClassExpression:
                 return visitClassExpression(node as ClassExpression);
 
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return visitParameter(node as ParameterDeclaration);
 
             case SyntaxKind.FunctionDeclaration:

@@ -1846,7 +1846,7 @@ export function isArrayBindingElement(node: Node): node is ArrayBindingElement {
 export function isDeclarationBindingElement(bindingElement: BindingOrAssignmentElement): bindingElement is VariableDeclaration | ParameterDeclaration | BindingElement {
     switch (bindingElement.kind) {
         case SyntaxKind.VariableDeclaration:
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.BindingElement:
             return true;
     }
@@ -2242,7 +2242,7 @@ export function canHaveSymbol(node: Node): node is Declaration {
         case SyntaxKind.NoSubstitutionTemplateLiteral:
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.ObjectLiteralExpression:
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.PropertyAccessExpression:
         case SyntaxKind.PropertyAssignment:
         case SyntaxKind.PropertyDeclaration:
@@ -2325,7 +2325,7 @@ function isDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.NamespaceExportDeclaration
         || kind === SyntaxKind.NamespaceImport
         || kind === SyntaxKind.NamespaceExport
-        || kind === SyntaxKind.Parameter
+        || kind === SyntaxKind.ParameterDeclaration
         || kind === SyntaxKind.PropertyAssignment
         || kind === SyntaxKind.PropertyDeclaration
         || kind === SyntaxKind.PropertySignature
@@ -2554,7 +2554,7 @@ export function hasInitializer(node: Node): node is HasInitializer {
 export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.BindingElement:
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertyAssignment:
@@ -2624,7 +2624,7 @@ function hasInternalAnnotation(range: CommentRange, sourceFile: SourceFile) {
 export function isInternalDeclaration(node: Node, sourceFile?: SourceFile): boolean {
     sourceFile ??= getSourceFileOfNode(node);
     const parseTreeNode = getParseTreeNode(node);
-    if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
+    if (parseTreeNode && parseTreeNode.kind === SyntaxKind.ParameterDeclaration) {
         const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
         const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
         const text = sourceFile.text;

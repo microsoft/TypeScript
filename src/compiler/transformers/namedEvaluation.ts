@@ -475,7 +475,7 @@ export function transformNamedEvaluation(context: TransformationContext, node: N
             return transformNamedEvaluationOfShorthandAssignmentProperty(context, node, ignoreEmptyStringLiteral, assignedName);
         case SyntaxKind.VariableDeclaration:
             return transformNamedEvaluationOfVariableDeclaration(context, node, ignoreEmptyStringLiteral, assignedName);
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
             return transformNamedEvaluationOfParameterDeclaration(context, node, ignoreEmptyStringLiteral, assignedName);
         case SyntaxKind.BindingElement:
             return transformNamedEvaluationOfBindingElement(context, node, ignoreEmptyStringLiteral, assignedName);
