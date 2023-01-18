@@ -10,6 +10,7 @@ import {
     createLanguageService,
     createTextChangeRange,
     createTextSpan,
+    Debug,
     Diagnostic,
     diagnosticCategoryName,
     DocCommentTemplateOptions,
@@ -546,7 +547,7 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
             return JSON.parse(diagnosticMessagesJson);
         }
         catch (e) {
-            this.log(e.description || "diagnosticMessages.generated.json has invalid JSON format");
+            this.log("diagnosticMessages.generated.json has invalid JSON format");
             return null;
         }
         /* eslint-enable no-null/no-null */
@@ -679,9 +680,9 @@ function forwardCall<T>(logger: Logger, actionDescription: string, returnJson: b
         if (err instanceof OperationCanceledException) {
             return JSON.stringify({ canceled: true });
         }
+        Debug.assert(err instanceof Error);
         logInternalError(logger, err);
-        err.description = actionDescription;
-        return JSON.stringify({ error: err });
+        return JSON.stringify({ error: { ...err, description: actionDescription } });
     }
 }
 
@@ -1399,6 +1400,7 @@ export class TypeScriptServicesFactory implements ShimFactory {
             return new LanguageServiceShimObject(this, host, languageService);
         }
         catch (err) {
+            Debug.assert(err instanceof Error);
             logInternalError(host, err);
             throw err;
         }
@@ -1409,6 +1411,7 @@ export class TypeScriptServicesFactory implements ShimFactory {
             return new ClassifierShimObject(this, logger);
         }
         catch (err) {
+            Debug.assert(err instanceof Error);
             logInternalError(logger, err);
             throw err;
         }
@@ -1420,6 +1423,7 @@ export class TypeScriptServicesFactory implements ShimFactory {
             return new CoreServicesShimObject(this, host as Logger, adapter);
         }
         catch (err) {
+            Debug.assert(err instanceof Error);
             logInternalError(host as Logger, err);
             throw err;
         }

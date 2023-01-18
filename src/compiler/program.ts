@@ -396,7 +396,7 @@ export function createGetSourceFile(
         }
         catch (e) {
             if (onError) {
-                onError(e.message);
+                onError(e instanceof Error ? e.message : `${e}`);
             }
             text = "";
         }
@@ -431,7 +431,7 @@ export function createWriteFileMeasuringIO(
         }
         catch (e) {
             if (onError) {
-                onError(e.message);
+                onError(e instanceof Error ? e.message : `${e}`);
             }
         }
     };

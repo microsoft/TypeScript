@@ -1584,6 +1584,7 @@ describe("unittests:: tsserver:: Projects", () => {
             service.applyChangesInOpenFiles(/*openFiles*/ undefined, /*changedFiles*/ undefined, [commonFile1.path]);
         }
         catch (e) {
+            assert(e instanceof Error);
             assert.isTrue(e.message.indexOf("Debug Failure. False expression: Found script Info still attached to project") === 0);
         }
     });

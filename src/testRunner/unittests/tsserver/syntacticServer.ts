@@ -53,6 +53,7 @@ import { something } from "something";
             session.executeCommandSeq(request);
         }
         catch (e) {
+            assert(e instanceof Error);
             session.logger.info(e.message);
         }
     }
@@ -113,6 +114,7 @@ import { something } from "something";
             project.getLanguageService().getSemanticDiagnostics(file1.path);
         }
         catch (e) {
+            assert(e instanceof Error);
             session.logger.info(e.message);
         }
         baselineTsserverLogs("syntacticServer", "throws on unsupported commands", session);

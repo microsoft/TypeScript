@@ -1199,7 +1199,7 @@ export function createSystemWatchFunctions({
                 // Catch the exception and use polling instead
                 // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
                 // so instead of throwing error, use fs.watchFile
-                hitSystemWatcherLimit ||= e.code === "ENOSPC";
+                hitSystemWatcherLimit ||= (e as { code?: string }).code === "ENOSPC";
                 sysLog(`sysLog:: ${fileOrDirectory}:: Changing to watchFile`);
                 return watchPresentFileSystemEntryWithFsWatchFile();
             }
@@ -1558,7 +1558,7 @@ export let sys: System = (() => {
                         _fs.mkdirSync(directoryName);
                     }
                     catch (e) {
-                        if (e.code !== "EEXIST") {
+                        if (!(e instanceof Error) && (e as { code?: string }).code !== "EEXIST") {
                             // Failed for some other reason (access denied?); still throw
                             throw e;
                         }
@@ -1630,7 +1630,7 @@ export let sys: System = (() => {
                     return { module: require(modulePath), modulePath, error: undefined };
                 }
                 catch (error) {
-                    return { module: undefined, modulePath: undefined, error };
+                    return { module: undefined, modulePath: undefined, error: error as {} };
                 }
             }
         };

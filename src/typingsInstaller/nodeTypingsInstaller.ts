@@ -238,7 +238,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             return false;
         }
         catch (error) {
-            const { stdout, stderr } = error;
+            const { stdout, stderr } = (error as Error & { stdout?: string; stderr?: string });
             this.log.writeLine(`    Failed. stdout:${indent(sys.newLine, stdout)}${sys.newLine}    stderr:${indent(sys.newLine, stderr)}`);
             return true;
         }

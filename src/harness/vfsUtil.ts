@@ -353,7 +353,7 @@ export class FileSystem {
             }
         }
         catch (e) {
-            if (e.code === "ENOENT") return;
+            if ((e as { code?: string }).code === "ENOENT") return;
             throw e;
         }
     }

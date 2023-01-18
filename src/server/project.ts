@@ -416,7 +416,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             result = await host.importPlugin(resolvedPath, moduleName);
         }
         catch (e) {
-            result = { module: undefined, error: e };
+            result = { module: undefined, error: e as {} };
         }
         if (result.error) {
             const err = result.error.stack || result.error.message || JSON.stringify(result.error);
@@ -955,7 +955,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             }
             catch (e) {
                 this.projectService.logger.info(`A plugin threw an exception in getExternalFiles: ${e}`);
-                if (e.stack) {
+                if (e instanceof Error && e.stack) {
                     this.projectService.logger.info(e.stack);
                 }
             }

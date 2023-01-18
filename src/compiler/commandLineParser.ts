@@ -2116,7 +2116,7 @@ export function tryReadFile(fileName: string, readFile: (path: string) => string
         text = readFile(fileName);
     }
     catch (e) {
-        return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message);
+        return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e instanceof Error ? e.message : `${e}`);
     }
     return text === undefined ? createCompilerDiagnostic(Diagnostics.Cannot_read_file_0, fileName) : text;
 }

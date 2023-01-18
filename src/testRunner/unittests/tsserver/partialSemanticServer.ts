@@ -87,6 +87,7 @@ import { something } from "something";
             session.executeCommand(request);
         }
         catch (e) {
+            assert(e instanceof Error);
             session.logger.info(e.message);
         }
 
@@ -95,6 +96,7 @@ import { something } from "something";
             project.getLanguageService().getSemanticDiagnostics(file1.path);
         }
         catch (e) {
+            assert(e instanceof Error);
             session.logger.info(e.message);
         }
         baselineTsserverLogs("partialSemanticServer", "throws unsupported commands", session);

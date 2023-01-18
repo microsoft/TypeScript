@@ -878,6 +878,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             this.timeoutCallbacks.invoke(timeoutId);
         }
         catch (e) {
+            assert(e instanceof Error);
             if (e.message === this.exitMessage) {
                 return;
             }

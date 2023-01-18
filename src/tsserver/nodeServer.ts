@@ -346,7 +346,7 @@ export function initializeNodeSystem(): StartInput {
                 catch (e) {
                     status = false;
                     if (logger.hasLevel(LogLevel.verbose)) {
-                        logger.info(`WatchGuard for path ${path} returned: ${e.message}`);
+                        logger.info(`WatchGuard for path ${path} returned: ${e instanceof Error ? e.message : e}`);
                     }
                 }
                 if (cacheKey) {
@@ -389,7 +389,7 @@ export function initializeNodeSystem(): StartInput {
             return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
         }
         catch (error) {
-            return { module: undefined, error };
+            return { module: undefined, error: error as {} };
         }
     };
 
@@ -497,7 +497,7 @@ export function initializeNodeSystem(): StartInput {
             return originalWatchDirectory(path, callback, recursive, options);
         }
         catch (e) {
-            logger.info(`Exception when creating directory watcher: ${e.message}`);
+            logger.info(`Exception when creating directory watcher: ${e instanceof Error ? e.message : e}`);
             return noopFileWatcher;
         }
     }

@@ -63,7 +63,7 @@ export namespace tracingEnabled {
                 fs = require("fs");
             }
             catch (e) {
-                throw new Error(`tracing requires having fs\n(original error: ${e.message || e})`);
+                throw new Error(`tracing requires having fs\n(original error: ${e instanceof Error ? e.message : e})`);
             }
         }
 

@@ -122,7 +122,7 @@ function makeAssertChangesWithCancellationToken(getProgram: () => ts.Program): (
         }
         catch (e) {
             assert.isFalse(operationWasCancelled);
-            assert(e instanceof ts.OperationCanceledException, e.toString());
+            assert(e instanceof ts.OperationCanceledException, (e as {}).toString());
             operationWasCancelled = true;
         }
         assert.equal(cancel, operationWasCancelled);

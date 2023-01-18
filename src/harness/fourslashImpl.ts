@@ -7,6 +7,7 @@ import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
+import { Debug } from "./_namespaces/ts";
 
 export const enum FourSlashTestType {
     Native,
@@ -4172,6 +4173,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
         f(ts, test, goTo, config, verify, edit, debug, format, cancellation, FourSlashInterface.classification, FourSlashInterface.Completion, verifyOperationIsCancelled, ignoreInterpolations);
     }
     catch (err) {
+        Debug.assert(err instanceof Error);
         // ensure 'source-map-support' is triggered while we still have the handler attached by accessing `error.stack`.
         err.stack?.toString();
         throw err;
@@ -4355,7 +4357,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
         markerValue = JSON.parse("{ " + text + " }");
     }
     catch (e) {
-        reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text " + e.message);
+        reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text " + (e instanceof Error ? e.message : `${e}`));
     }
 
     if (markerValue === undefined) {

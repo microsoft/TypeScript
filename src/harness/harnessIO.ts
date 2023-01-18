@@ -138,7 +138,7 @@ function createNodeIO(): IO {
             fs.mkdirSync(path);
         }
         catch (e) {
-            if (e.code === "ENOENT") {
+            if ((e as { code?: string }).code === "ENOENT") {
                 createDirectory(vpath.dirname(path));
                 createDirectory(path);
             }
@@ -745,6 +745,7 @@ export namespace Compiler {
             checkBaseLines(/*isSymbolBaseLine*/ false);
         }
         catch (e) {
+            ts.Debug.assert(e instanceof Error);
             typesError = e;
         }
 
@@ -752,6 +753,7 @@ export namespace Compiler {
             checkBaseLines(/*isSymbolBaseLine*/ true);
         }
         catch (e) {
+            ts.Debug.assert(e instanceof Error);
             symbolsError = e;
         }
 
@@ -1448,6 +1450,7 @@ export namespace Baseline {
                     writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName);
                 }
                 catch (e) {
+                    ts.Debug.assert(e instanceof Error);
                     errors.push(e);
                 }
                 writtenFiles.set(relativeFileName, true);

@@ -407,7 +407,8 @@ class MultistepOperation implements NextStep {
                 tracing?.instant(tracing.Phase.Session, "stepCanceled", { seq: this.requestId });
             }
             else {
-                tracing?.instant(tracing.Phase.Session, "stepError", { seq: this.requestId, message: (e as Error).message });
+                Debug.assert(e instanceof Error);
+                tracing?.instant(tracing.Phase.Session, "stepError", { seq: this.requestId, message: e.message });
                 this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
             }
         }
@@ -1254,6 +1255,7 @@ export class Session<TMessage = string> implements EventSender {
             this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
         }
         catch (err) {
+            Debug.assert(err instanceof Error);
             this.logError(err, kind);
         }
     }
@@ -2784,6 +2786,7 @@ export class Session<TMessage = string> implements EventSender {
                 && d.code);
             const badCode = args.errorCodes.find(c => !existingDiagCodes.includes(c));
             if (badCode !== undefined) {
+                Debug.assert(e instanceof Error);
                 e.message = `BADCLIENT: Bad error code, ${badCode} not found in range ${startPosition}..${endPosition} (found: ${existingDiagCodes.join(", ")}); could have caused this error:\n${e.message}`;
             }
             throw e;
@@ -3598,9 +3601,10 @@ export class Session<TMessage = string> implements EventSender {
                 return;
             }
 
+            Debug.assert(err instanceof Error);
             this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
             perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
-            tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (err as Error).message });
+            tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: err.message });
 
             this.doOutput(
                 /*info*/ undefined,

@@ -186,7 +186,7 @@ export class SessionClient implements LanguageService {
                 }
             }
             catch (e) {
-                throw new Error("Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error details: " + e.message);
+                throw new Error("Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error details: " + (e instanceof Error ? e.message : `${e}`));
             }
         }
 

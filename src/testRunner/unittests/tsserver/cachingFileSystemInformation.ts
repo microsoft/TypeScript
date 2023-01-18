@@ -122,7 +122,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             logSemanticDiagnostics(projectService, project, imported);
         }
         catch (e) {
-            projectService.logger.info(e.message);
+            projectService.logger.info(e instanceof Error ? e.message : `${e}`);
         }
         logCacheAndClear(projectService.logger);
 

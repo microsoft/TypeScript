@@ -190,6 +190,7 @@ class ProjectTestCase {
             testFileText = Harness.IO.readFile(testCaseFileName);
         }
         catch (e) {
+            assert(e instanceof Error);
             assert(false, "Unable to open testcase file: " + testCaseFileName + ": " + e.message);
         }
 
@@ -197,6 +198,7 @@ class ProjectTestCase {
             testCase = JSON.parse(testFileText!) as ProjectRunnerTestCase & ts.CompilerOptions;
         }
         catch (e) {
+            assert(e instanceof Error);
             throw assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
         }
 
@@ -261,6 +263,7 @@ class ProjectTestCase {
                     Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
                 }
                 catch (e) {
+                    assert(e instanceof Error);
                     errs.push(e);
                 }
             }

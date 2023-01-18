@@ -614,6 +614,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
                 response = this.executeCommand(msg).response as ts.server.protocol.Response;
             }
             catch (e) {
+                assert(e instanceof Error);
                 this.output(undefined, msg.command, msg.seq, e.toString());
                 return;
             }

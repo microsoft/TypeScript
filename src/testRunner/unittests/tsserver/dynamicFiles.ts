@@ -238,6 +238,7 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
                 projectService.openClientFile(file.path, file.content, /*scriptKind*/ undefined, "/user/username/projects/myproject");
             }
             catch (e) {
+                assert(e instanceof Error);
                 assert.strictEqual(
                     e.message.replace(/\r?\n/, "\n"),
                     `Debug Failure. False expression.\nVerbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`
