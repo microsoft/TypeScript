@@ -524,7 +524,7 @@ export class TestState {
     public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, shouldExist: boolean) {
         const startMarker = this.getMarkerByName(startMarkerName);
         const endMarker = this.getMarkerByName(endMarkerName);
-        const predicate = (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) =>
+        const predicate = (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) =>
             ((errorMinChar === startPos) && (errorLimChar === endPos)) ? true : false;
 
         const exists = this.anyErrorInRange(predicate, startMarker, endMarker);
@@ -578,7 +578,7 @@ export class TestState {
 
     public verifyErrorExistsAfterMarker(markerName: string, shouldExist: boolean, after: boolean) {
         const marker: Marker = this.getMarkerByName(markerName);
-        let predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) => boolean;
+        let predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) => boolean;
 
         if (after) {
             predicate = (errorMinChar: number, errorLimChar: number, startPos: number) =>
@@ -867,7 +867,8 @@ export class TestState {
         const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
         assert.equal(hints.length, expected.length, "Number of hints");
 
-        const sortHints = (a: ts.InlayHint, b: ts.InlayHint) => {
+        interface HasPosition { position: number; }
+        const sortHints = (a: HasPosition, b: HasPosition) => {
             return a.position - b.position;
         };
         ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {

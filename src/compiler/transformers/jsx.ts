@@ -193,7 +193,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return visited;
     }
 
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: Node): VisitResult<Node | undefined> {
         if (node.transformFlags & TransformFlags.ContainsJsx) {
             return visitorWorker(node);
         }
@@ -202,7 +202,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         }
     }
 
-    function visitorWorker(node: Node): VisitResult<Node> {
+    function visitorWorker(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.JsxElement:
                 return visitJsxElement(node as JsxElement, /*isChild*/ false);
@@ -428,7 +428,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function transformJsxSpreadAttributeToSpreadAssignment(node: JsxSpreadAttribute) {
-        return factory.createSpreadAssignment(visitNode(node.expression, visitor, isExpression));
+        return factory.createSpreadAssignment(Debug.checkDefined(visitNode(node.expression, visitor, isExpression)));
     }
 
     function transformJsxAttributesToObjectProps(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
@@ -451,8 +451,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         // of JsxSpreadAttribute nodes into expressions.
         const expressions = flatten(
             spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
-                ? map(attrs, transformJsxSpreadAttributeToExpression)
-                : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                ? map(attrs as JsxSpreadAttribute[], transformJsxSpreadAttributeToExpression)
+                : factory.createObjectLiteralExpression(map(attrs as JsxAttribute[], transformJsxAttributeToObjectLiteralElement))
             )
         );
 
@@ -470,7 +470,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function transformJsxSpreadAttributeToExpression(node: JsxSpreadAttribute) {
-        return visitNode(node.expression, visitor, isExpression);
+        return Debug.checkDefined(visitNode(node.expression, visitor, isExpression));
     }
 
     function transformJsxAttributeToObjectLiteralElement(node: JsxAttribute) {
@@ -494,7 +494,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             if (node.expression === undefined) {
                 return factory.createTrue();
             }
-            return visitNode(node.expression, visitor, isExpression);
+            return Debug.checkDefined(visitNode(node.expression, visitor, isExpression));
         }
         if (isJsxElement(node)) {
             return visitJsxElement(node, /*isChild*/ false);

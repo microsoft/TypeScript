@@ -16,12 +16,13 @@
         "noEmitOnError": true,
         "emitDeclarationOnly": true,
 
-        "strictNullChecks": true,
-        "noImplicitAny": true,
-        "noImplicitThis": true,
-        "strictPropertyInitialization": true,
+        "strict": true,
+        "strictBindCallApply": false,
+        "useUnknownInCatchVariables": false,
+
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "allowUnusedLabels": false,
 
         "skipLibCheck": true,
 

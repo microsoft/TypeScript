@@ -155,6 +155,34 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     }
 
     // error
+    if (required1 || b) {
+>required1 || b : () => boolean
+>required1 : () => boolean
+>b : boolean
+    }
+
+    // error
+    if (required1 || required2) {
+>required1 || required2 : () => boolean
+>required1 : () => boolean
+>required2 : () => boolean
+    }
+
+    // error
+    if (required1 ?? b) {
+>required1 ?? b : () => boolean
+>required1 : () => boolean
+>b : boolean
+    }
+
+    // error
+    if (required1 ?? required2) {
+>required1 ?? required2 : () => boolean
+>required1 : () => boolean
+>required2 : () => boolean
+    }
+
+    // error
     if (((required1 && b))) {
 >((required1 && b)) : boolean
 >(required1 && b) : boolean
@@ -175,6 +203,39 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     }
 
     // ok
+    if (required1 || b) {
+>required1 || b : () => boolean
+>required1 : () => boolean
+>b : boolean
+
+        required1();
+>required1() : boolean
+>required1 : () => boolean
+    }
+
+    // ok
+    if (required1 ?? b) {
+>required1 ?? b : () => boolean
+>required1 : () => boolean
+>b : boolean
+
+        required1();
+>required1() : boolean
+>required1 : () => boolean
+    }
+
+    // ok
+    if (b ?? required1) {
+>b ?? required1 : boolean
+>b : boolean
+>required1 : () => boolean
+
+        required1();
+>required1() : boolean
+>required1 : () => boolean
+    }
+
+    // ok
     if (((required1 && b))) {
 >((required1 && b)) : boolean
 >(required1 && b) : boolean
@@ -185,6 +246,52 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
         required1();
 >required1() : boolean
 >required1 : () => boolean
+    }
+
+    // error, extra parens are on purpose here
+    if ((required1)) {
+>(required1) : () => boolean
+>required1 : () => boolean
+    }
+
+    // error
+    if (b && (required1 || required2)) {
+>b && (required1 || required2) : false | (() => boolean)
+>b : boolean
+>(required1 || required2) : () => boolean
+>required1 || required2 : () => boolean
+>required1 : () => boolean
+>required2 : () => boolean
+    }
+
+    // error
+    if ((required1 || required2) && b) {
+>(required1 || required2) && b : boolean
+>(required1 || required2) : () => boolean
+>required1 || required2 : () => boolean
+>required1 : () => boolean
+>required2 : () => boolean
+>b : boolean
+    }
+
+    // error
+    if (b && (required1 ?? required2)) {
+>b && (required1 ?? required2) : false | (() => boolean)
+>b : boolean
+>(required1 ?? required2) : () => boolean
+>required1 ?? required2 : () => boolean
+>required1 : () => boolean
+>required2 : () => boolean
+    }
+
+    // error
+    if ((required1 ?? required2) && b) {
+>(required1 ?? required2) && b : boolean
+>(required1 ?? required2) : () => boolean
+>required1 ?? required2 : () => boolean
+>required1 : () => boolean
+>required2 : () => boolean
+>b : boolean
     }
 }
 
@@ -372,6 +479,106 @@ function checksPropertyAccess() {
 >a : { b: { c: () => void; }; }
 >b : { c: () => void; }
 >c : () => void
+
+    // error, extra parens are on purpose here
+    if ((x1.a.b.c)) {
+>(x1.a.b.c) : () => void
+>x1.a.b.c : () => void
+>x1.a.b : { c: () => void; }
+>x1.a : { b: { c: () => void; }; }
+>x1 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+    }
+
+    // error
+    if (1 && (x1.a.b.c || x2.a.b.c)) {
+>1 && (x1.a.b.c || x2.a.b.c) : () => void
+>1 : 1
+>(x1.a.b.c || x2.a.b.c) : () => void
+>x1.a.b.c || x2.a.b.c : () => void
+>x1.a.b.c : () => void
+>x1.a.b : { c: () => void; }
+>x1.a : { b: { c: () => void; }; }
+>x1 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+>x2.a.b.c : () => void
+>x2.a.b : { c: () => void; }
+>x2.a : { b: { c: () => void; }; }
+>x2 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+    }
+
+    // error
+    if ((x1.a.b.c || x2.a.b.c) && 1) {
+>(x1.a.b.c || x2.a.b.c) && 1 : 1
+>(x1.a.b.c || x2.a.b.c) : () => void
+>x1.a.b.c || x2.a.b.c : () => void
+>x1.a.b.c : () => void
+>x1.a.b : { c: () => void; }
+>x1.a : { b: { c: () => void; }; }
+>x1 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+>x2.a.b.c : () => void
+>x2.a.b : { c: () => void; }
+>x2.a : { b: { c: () => void; }; }
+>x2 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+>1 : 1
+    }
+
+    // error
+    if (1 && (x1.a.b.c ?? x2.a.b.c)) {
+>1 && (x1.a.b.c ?? x2.a.b.c) : () => void
+>1 : 1
+>(x1.a.b.c ?? x2.a.b.c) : () => void
+>x1.a.b.c ?? x2.a.b.c : () => void
+>x1.a.b.c : () => void
+>x1.a.b : { c: () => void; }
+>x1.a : { b: { c: () => void; }; }
+>x1 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+>x2.a.b.c : () => void
+>x2.a.b : { c: () => void; }
+>x2.a : { b: { c: () => void; }; }
+>x2 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+    }
+
+    // error
+    if ((x1.a.b.c ?? x2.a.b.c) && 1) {
+>(x1.a.b.c ?? x2.a.b.c) && 1 : 1
+>(x1.a.b.c ?? x2.a.b.c) : () => void
+>x1.a.b.c ?? x2.a.b.c : () => void
+>x1.a.b.c : () => void
+>x1.a.b : { c: () => void; }
+>x1.a : { b: { c: () => void; }; }
+>x1 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+>x2.a.b.c : () => void
+>x2.a.b : { c: () => void; }
+>x2.a : { b: { c: () => void; }; }
+>x2 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+>1 : 1
+    }
 }
 
 class Foo {

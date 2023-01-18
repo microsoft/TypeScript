@@ -967,14 +967,14 @@ export function forEachAncestorDirectory<T>(directory: Path, callback: (director
 /** @internal */
 export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T | undefined): T | undefined;
 /** @internal */
-export function forEachAncestorDirectory<T>(directory: Path, callback: (directory: Path) => T | undefined): T | undefined {
+export function forEachAncestorDirectory<T, P extends string>(directory: P, callback: (directory: P) => T | undefined): T | undefined {
     while (true) {
         const result = callback(directory);
         if (result !== undefined) {
             return result;
         }
 
-        const parentPath = getDirectoryPath(directory);
+        const parentPath = getDirectoryPath(directory) as P;
         if (parentPath === directory) {
             return undefined;
         }

@@ -1,6 +1,7 @@
 import {
     arrayFrom,
     arrayReverseIterator,
+    BufferEncoding,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
     CallHierarchyOutgoingCall,
@@ -194,7 +195,7 @@ export const nullCancellationToken: ServerCancellationToken = {
     resetRequest: () => void 0
 };
 
-function hrTimeToMilliseconds(time: number[]): number {
+function hrTimeToMilliseconds(time: [number, number]): number {
     const seconds = time[0];
     const nanoseconds = time[1];
     return ((1e9 * seconds) + nanoseconds) / 1000000.0;
@@ -307,7 +308,7 @@ function allEditsBeforePos(edits: readonly TextChange[], pos: number): boolean {
 export type CommandNames = protocol.CommandTypes;
 export const CommandNames = (protocol as any).CommandTypes;
 
-export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
+export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string {
     const verboseLogging = logger.hasLevel(LogLevel.verbose);
 
     const json = JSON.stringify(msg);
@@ -915,8 +916,8 @@ export interface SessionOptions {
     useSingleInferredProject: boolean;
     useInferredProjectPerProjectRoot: boolean;
     typingsInstaller: ITypingsInstaller;
-    byteLength: (buf: string, encoding?: string) => number;
-    hrtime: (start?: number[]) => number[];
+    byteLength: (buf: string, encoding?: BufferEncoding) => number;
+    hrtime: (start?: [number, number]) => [number, number];
     logger: Logger;
     /**
      * If falsy, all events are suppressed.
@@ -950,8 +951,8 @@ export class Session<TMessage = string> implements EventSender {
     protected host: ServerHost;
     private readonly cancellationToken: ServerCancellationToken;
     protected readonly typingsInstaller: ITypingsInstaller;
-    protected byteLength: (buf: string, encoding?: string) => number;
-    private hrtime: (start?: number[]) => number[];
+    protected byteLength: (buf: string, encoding?: BufferEncoding) => number;
+    private hrtime: (start?: [number, number]) => [number, number];
     protected logger: Logger;
 
     protected canUseEvents: boolean;
@@ -3099,7 +3100,7 @@ export class Session<TMessage = string> implements EventSender {
         return { response, responseRequired: true };
     }
 
-    private handlers = new Map(Object.entries<(request: protocol.Request) => HandlerResponse>({
+    private handlers = new Map(Object.entries<(request: any) => HandlerResponse>({ // TODO(jakebailey): correctly type the handlers
         [CommandNames.Status]: () => {
             const response: protocol.StatusResponseBody = { version };
             return this.requiredResponse(response);
@@ -3544,7 +3545,7 @@ export class Session<TMessage = string> implements EventSender {
 
         this.performanceData = undefined;
 
-        let start: number[] | undefined;
+        let start: [number, number] | undefined;
         if (this.logger.hasLevel(LogLevel.requestTime)) {
             start = this.hrtime();
             if (this.logger.hasLevel(LogLevel.verbose)) {

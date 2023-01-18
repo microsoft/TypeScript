@@ -1002,9 +1002,13 @@ function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
 
     // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
     const { parent } = token;
-    return (isJsxOpeningLikeElement(parent) && parent.tagName === token) || isJsxOpeningFragment(parent)
-        ? tryCast(checker.resolveName(checker.getJsxNamespace(parent), isJsxOpeningLikeElement(parent) ? token : parent, SymbolFlags.Value, /*excludeGlobals*/ false), isUMDExportSymbol)
-        : undefined;
+    if ((isJsxOpeningLikeElement(parent) && parent.tagName === token) || isJsxOpeningFragment(parent)) {
+        const parentSymbol = checker.resolveName(checker.getJsxNamespace(parent), isJsxOpeningLikeElement(parent) ? token : parent, SymbolFlags.Value, /*excludeGlobals*/ false);
+        if (isUMDExportSymbol(parentSymbol)) {
+            return parentSymbol;
+        }
+    }
+    return undefined;
 }
 
 /**

@@ -1342,11 +1342,18 @@ export function assignPositionsToNode(node: Node): Node {
     return newNode;
 }
 
-function assignPositionsToNodeArray(nodes: NodeArray<any>, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number) {
+function assignPositionsToNodeArray(
+    nodes: NodeArray<Node> | undefined,
+    visitor: Visitor,
+    test?: (node: Node) => boolean,
+    start?: number,
+    count?: number,
+): NodeArray<Node> | undefined {
     const visited = visitNodes(nodes, visitor, test, start, count);
     if (!visited) {
         return visited;
     }
+    Debug.assert(nodes);
     // clone nodearray if necessary
     const nodeArray = visited === nodes ? factory.createNodeArray(visited.slice(0)) : visited;
     setTextRangePosEnd(nodeArray, getPos(nodes), getEnd(nodes));

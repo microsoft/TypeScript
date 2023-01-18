@@ -546,7 +546,7 @@ export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuil
 
     private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
         super(sys, options, setParentNodes);
-        this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+        this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram as unknown as ts.CreateProgram<ts.BuilderProgram>;
     }
 
     static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {

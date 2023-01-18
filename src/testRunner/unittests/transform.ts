@@ -30,10 +30,10 @@ describe("unittests:: TransformAPI", () => {
             }
             return ts.visitEachChild(node, visitor, context);
         }
-        return (file: ts.SourceFile) => ts.visitNode(file, visitor);
+        return (file: ts.SourceFile) => ts.visitNode(file, visitor, ts.isSourceFile);
     }
 
-    function replaceIdentifiersNamedOldNameWithNewName(context: ts.TransformationContext) {
+    function replaceIdentifiersNamedOldNameWithNewName<T extends ts.SourceFile | ts.Bundle>(context: ts.TransformationContext) {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.enableSubstitution(ts.SyntaxKind.Identifier);
         context.onSubstituteNode = (hint, node) => {
@@ -43,17 +43,17 @@ describe("unittests:: TransformAPI", () => {
             }
             return node;
         };
-        return (file: ts.SourceFile) => file;
+        return (file: T) => file;
     }
 
     function replaceIdentifiersNamedOldNameWithNewName2(context: ts.TransformationContext) {
-        const visitor: ts.Visitor = (node) => {
+        const visitor = (node: ts.Node): ts.Node => {
             if (ts.isIdentifier(node) && node.text === "oldName") {
                 return ts.factory.createIdentifier("newName");
             }
             return ts.visitEachChild(node, visitor, context);
         };
-        return (node: ts.SourceFile) => ts.visitNode(node, visitor);
+        return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
     }
 
     function createTaggedTemplateLiteral(): ts.Transformer<ts.SourceFile> {
@@ -109,7 +109,7 @@ describe("unittests:: TransformAPI", () => {
         return transformSourceFile(`let a: () => void`, [
             context => file => ts.visitNode(file, function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
                 return ts.visitEachChild(node, visitor, context);
-            })
+            }, ts.isSourceFile)
         ]);
     });
 
@@ -120,7 +120,7 @@ describe("unittests:: TransformAPI", () => {
                     return ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword);
                 }
                 return ts.visitEachChild(node, visitor, context);
-            })
+            }, ts.isSourceFile)
         ]);
     });
 
@@ -557,7 +557,7 @@ module MyModule {
         return host.readFile("source.js")!.toString();
 
         function transformSourceFile(context: ts.TransformationContext) {
-            const visitor: ts.Visitor = (node) => {
+            const visitor = (node: ts.Node): ts.Node => {
                 if (ts.isMethodDeclaration(node)) {
                     return ts.factory.updateMethodDeclaration(
                         node,
@@ -573,7 +573,7 @@ module MyModule {
                 }
                 return ts.visitEachChild(node, visitor, context);
             };
-            return (node: ts.SourceFile) => ts.visitNode(node, visitor);
+            return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
         }
 
     });

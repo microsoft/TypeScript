@@ -1163,7 +1163,7 @@ function convertToReusableCompilerOptionValue(option: CommandLineOption | undefi
     if (option) {
         Debug.assert(option.type !== "listOrElement");
         if (option.type === "list") {
-            const values = value as readonly (string | number)[];
+            const values = value as readonly string[];
             if (option.element.isFilePath && values.length) {
                 return values.map(relativeToBuildInfo);
             }
