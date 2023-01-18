@@ -16,11 +16,11 @@
 ////
 ////const a: D_Inter/*d*/
 ////
-////export type E_Type<T> = {}
+////export type E_Type<T> = T
 ////
 ////const b: E_Typ/*e*/
 ////
-////type F_Type<T> = {}
+////type F_Type<T> = T
 ////
 ////const c: F_Typ/*f*/
 
@@ -66,7 +66,7 @@ verify.completions(
         includes: [
             {
                 name: 'E_Type',
-                text: 'type E_Type = {}'
+                text: 'type E_Type = T'
             }
         ]
     },
@@ -75,7 +75,7 @@ verify.completions(
         includes: [
             {
                 name: 'F_Type',
-                text: 'type F_Type<T> = {}'
+                text: 'type F_Type<T> = T'
             }
         ]
     }
