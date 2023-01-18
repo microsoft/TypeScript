@@ -7,7 +7,6 @@ import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
-import { Debug } from "./_namespaces/ts";
 
 export const enum FourSlashTestType {
     Native,
@@ -4173,7 +4172,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
         f(ts, test, goTo, config, verify, edit, debug, format, cancellation, FourSlashInterface.classification, FourSlashInterface.Completion, verifyOperationIsCancelled, ignoreInterpolations);
     }
     catch (err) {
-        Debug.assert(err instanceof Error);
+        ts.Debug.assert(err instanceof Error);
         // ensure 'source-map-support' is triggered while we still have the handler attached by accessing `error.stack`.
         err.stack?.toString();
         throw err;
