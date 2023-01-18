@@ -169,6 +169,7 @@ import {
     getJSDocPublicTagNoCache,
     getJSDocReadonlyTagNoCache,
     getJSDocReturnType,
+    getJSDocSatisfiesTag,
     getJSDocTags,
     getJSDocType,
     getJSDocTypeParameterTags,
@@ -275,6 +276,7 @@ import {
     isJSDocOverloadTag,
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
+    isJSDocSatisfiesTag,
     isJSDocSignature,
     isJSDocTag,
     isJSDocTemplateTag,
@@ -336,6 +338,7 @@ import {
     JSDocMemberName,
     JSDocParameterTag,
     JSDocPropertyLikeTag,
+    JSDocSatisfiesExpression,
     JSDocSignature,
     JSDocTag,
     JSDocTemplateTag,
@@ -359,6 +362,7 @@ import {
     LiteralImportTypeNode,
     LiteralLikeElementAccessExpression,
     LiteralLikeNode,
+    LogicalOperator,
     LogicalOrCoalescingAssignmentOperator,
     map,
     mapDefined,
@@ -3759,11 +3763,11 @@ function filterOwnedJSDocTags(hostNode: Node, jsDoc: JSDoc | JSDocTag) {
 }
 
 /**
- * Determines whether a host node owns a jsDoc tag. A `@type` tag attached to a
+ * Determines whether a host node owns a jsDoc tag. A `@type`/`@satisfies` tag attached to a
  * a ParenthesizedExpression belongs only to the ParenthesizedExpression.
  */
 function ownsJSDocTag(hostNode: Node, tag: JSDocTag) {
-    return !isJSDocTypeTag(tag)
+    return !(isJSDocTypeTag(tag) || isJSDocSatisfiesTag(tag))
         || !tag.parent
         || !isJSDoc(tag.parent)
         || !isParenthesizedExpression(tag.parent.parent)
@@ -6253,11 +6257,13 @@ export function modifierToFlag(token: SyntaxKind): ModifierFlags {
     return ModifierFlags.None;
 }
 
+function isBinaryLogicalOperator(token: SyntaxKind): boolean {
+    return token === SyntaxKind.BarBarToken || token === SyntaxKind.AmpersandAmpersandToken;
+}
+
 /** @internal */
 export function isLogicalOperator(token: SyntaxKind): boolean {
-    return token === SyntaxKind.BarBarToken
-        || token === SyntaxKind.AmpersandAmpersandToken
-        || token === SyntaxKind.ExclamationToken;
+    return isBinaryLogicalOperator(token) || token === SyntaxKind.ExclamationToken;
 }
 
 /** @internal */
@@ -6268,8 +6274,18 @@ export function isLogicalOrCoalescingAssignmentOperator(token: SyntaxKind): toke
 }
 
 /** @internal */
-export function isLogicalOrCoalescingAssignmentExpression(expr: BinaryExpression): expr is AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>> {
-    return isLogicalOrCoalescingAssignmentOperator(expr.operatorToken.kind);
+export function isLogicalOrCoalescingAssignmentExpression(expr: Node): expr is AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>> {
+    return isBinaryExpression(expr) && isLogicalOrCoalescingAssignmentOperator(expr.operatorToken.kind);
+}
+
+/** @internal */
+export function isLogicalOrCoalescingBinaryOperator(token: SyntaxKind): token is LogicalOperator | SyntaxKind.QuestionQuestionToken {
+    return isBinaryLogicalOperator(token) || token === SyntaxKind.QuestionQuestionToken;
+}
+
+/** @internal */
+export function isLogicalOrCoalescingBinaryExpression(expr: Node): expr is BinaryExpression {
+    return isBinaryExpression(expr) && isLogicalOrCoalescingBinaryOperator(expr.operatorToken.kind);
 }
 
 /** @internal */
@@ -9520,4 +9536,20 @@ export function isNonNullAccess(node: Node): node is AccessExpression {
     const kind = node.kind;
     return (kind === SyntaxKind.PropertyAccessExpression
         || kind === SyntaxKind.ElementAccessExpression) && isNonNullExpression((node as AccessExpression).expression);
+}
+
+/** @internal */
+export function isJSDocSatisfiesExpression(node: Node): node is JSDocSatisfiesExpression {
+    return isInJSFile(node) && isParenthesizedExpression(node) && hasJSDocNodes(node) && !!getJSDocSatisfiesTag(node);
+}
+
+/** @internal */
+export function getJSDocSatisfiesExpressionType(node: JSDocSatisfiesExpression) {
+    return Debug.checkDefined(tryGetJSDocSatisfiesTypeNode(node));
+}
+
+/** @internal */
+export function tryGetJSDocSatisfiesTypeNode(node: Node) {
+    const tag = getJSDocSatisfiesTag(node);
+    return tag && tag.typeExpression && tag.typeExpression.type;
 }

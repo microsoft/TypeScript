@@ -237,6 +237,7 @@ import {
     JSDocParameterTag,
     JSDocPropertyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocTag,
     JSDocTagInfo,
     JSDocTemplateTag,
@@ -927,6 +928,7 @@ function completionInfoFromData(
         /*replacementToken*/ undefined,
         contextToken,
         location,
+        position,
         sourceFile,
         host,
         program,
@@ -1048,10 +1050,10 @@ function getExhaustiveCaseSnippets(
             else if (!tracker.hasValue(type.value)) {
                 switch (typeof type.value) {
                     case "object":
-                        elements.push(factory.createBigIntLiteral(type.value));
+                        elements.push(type.value.negative ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createBigIntLiteral({ negative: false, base10Value: type.value.base10Value })) : factory.createBigIntLiteral(type.value));
                         break;
                     case "number":
-                        elements.push(factory.createNumericLiteral(type.value));
+                        elements.push(type.value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-type.value)) : factory.createNumericLiteral(type.value));
                         break;
                     case "string":
                         elements.push(factory.createStringLiteral(type.value, quotePreference === QuotePreference.Single));
@@ -1316,6 +1318,7 @@ function createCompletionEntry(
     replacementToken: Node | undefined,
     contextToken: Node | undefined,
     location: Node,
+    position: number,
     sourceFile: SourceFile,
     host: LanguageServiceHost,
     program: Program,
@@ -1406,7 +1409,8 @@ function createCompletionEntry(
         completionKind === CompletionKind.MemberLike &&
         isClassLikeMemberCompletion(symbol, location, sourceFile)) {
         let importAdder;
-        ({ insertText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
+        ({ insertText, isSnippet, importAdder, replacementSpan } =
+            getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext));
         sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
         if (importAdder?.hasFixes()) {
             hasAction = true;
@@ -1545,6 +1549,7 @@ function getEntryForMemberCompletion(
     name: string,
     symbol: Symbol,
     location: Node,
+    position: number,
     contextToken: Node | undefined,
     formatContext: formatting.FormatContext | undefined,
 ): { insertText: string, isSnippet?: true, importAdder?: codefix.ImportAdder, replacementSpan?: TextSpan } {
@@ -1586,7 +1591,7 @@ function getEntryForMemberCompletion(
     let modifiers = ModifierFlags.None;
     // Whether the suggested member should be abstract.
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
-    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken);
+    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken, sourceFile, position);
     const isAbstract = !!(presentModifiers & ModifierFlags.Abstract);
     const completionNodes: Node[] = [];
     codefix.addNewNodeForMemberSymbol(
@@ -1650,8 +1655,13 @@ function getEntryForMemberCompletion(
     return { insertText, isSnippet, importAdder, replacementSpan };
 }
 
-function getPresentModifiers(contextToken: Node | undefined): { modifiers: ModifierFlags, span?: TextSpan } {
-    if (!contextToken) {
+function getPresentModifiers(
+    contextToken: Node | undefined,
+    sourceFile: SourceFile,
+    position: number): { modifiers: ModifierFlags, span?: TextSpan } {
+    if (!contextToken ||
+        getLineAndCharacterOfPosition(sourceFile, position).line
+            > getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line) {
         return { modifiers: ModifierFlags.None };
     }
     let modifiers = ModifierFlags.None;
@@ -2086,6 +2096,7 @@ export function getCompletionEntriesFromSymbols(
     replacementToken: Node | undefined,
     contextToken: Node | undefined,
     location: Node,
+    position: number,
     sourceFile: SourceFile,
     host: LanguageServiceHost,
     program: Program,
@@ -2132,6 +2143,7 @@ export function getCompletionEntriesFromSymbols(
             replacementToken,
             contextToken,
             location,
+            position,
             sourceFile,
             host,
             program,
@@ -2471,6 +2483,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             name,
             symbol,
             location,
+            position,
             contextToken,
             formatContext);
         if (importAdder) {
@@ -2999,7 +3012,8 @@ function getCompletionData(
         | JSDocTypeTag
         | JSDocTypedefTag
         | JSDocTemplateTag
-        | JSDocThrowsTag;
+        | JSDocThrowsTag
+        | JSDocSatisfiesTag;
 
     function isTagWithTypeExpression(tag: JSDocTag): tag is JSDocTagWithTypeExpression {
         switch (tag.kind) {
@@ -3009,6 +3023,7 @@ function getCompletionData(
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocThrowsTag:
+            case SyntaxKind.JSDocSatisfiesTag:
                 return true;
             case SyntaxKind.JSDocTemplateTag:
                 return !!(tag as JSDocTemplateTag).constraint;
@@ -4829,7 +4844,7 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
                 return cls;
             }
             break;
-       case SyntaxKind.Identifier: {
+        case SyntaxKind.Identifier: {
             const originalKeywordKind = identifierToKeywordKind(location as Identifier);
             if (originalKeywordKind) {
                 return undefined;
@@ -4868,16 +4883,17 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
         case SyntaxKind.CommaToken: // class c {getValue(): number, | }
             return tryCast(contextToken.parent, isObjectTypeDeclaration);
         default:
-            if (!isFromObjectTypeDeclaration(contextToken)) {
-                // class c extends React.Component { a: () => 1\n| }
-                if (getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line && isObjectTypeDeclaration(location)) {
+            if (isObjectTypeDeclaration(location)) {
+                // class C extends React.Component { a: () => 1\n| }
+                // class C { prop = ""\n | }
+                if (getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
                     return location;
                 }
-                return undefined;
+                const isValidKeyword = isClassLike(contextToken.parent.parent) ? isClassMemberCompletionKeyword : isInterfaceOrTypeLiteralCompletionKeyword;
+                return (isValidKeyword(contextToken.kind) || contextToken.kind === SyntaxKind.AsteriskToken || isIdentifier(contextToken) && isValidKeyword(identifierToKeywordKind(contextToken) ?? SyntaxKind.Unknown))
+                    ? contextToken.parent.parent as ObjectTypeDeclaration : undefined;
             }
-            const isValidKeyword = isClassLike(contextToken.parent.parent) ? isClassMemberCompletionKeyword : isInterfaceOrTypeLiteralCompletionKeyword;
-            return (isValidKeyword(contextToken.kind) || contextToken.kind === SyntaxKind.AsteriskToken || isIdentifier(contextToken) && isValidKeyword(identifierToKeywordKind(contextToken) ?? SyntaxKind.Unknown))
-                ? contextToken.parent.parent as ObjectTypeDeclaration : undefined;
+            return undefined;
     }
 }
 
