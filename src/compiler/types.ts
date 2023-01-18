@@ -231,6 +231,8 @@ export const enum SyntaxKind {
     // Signature elements
     TypeParameter,
     ParameterDeclaration,
+    /** @deprecated Use SyntaxKind.ParameterDeclaration */
+    Parameter = ParameterDeclaration,
     Decorator,
     // TypeMember
     PropertySignature,
