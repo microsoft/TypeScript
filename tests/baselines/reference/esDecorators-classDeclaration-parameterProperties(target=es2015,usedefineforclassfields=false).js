@@ -23,7 +23,7 @@ let C = (() => {
         },
         (() => {
             _speak_decorators = [bound];
-            __esDecorate(_a, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false, access: { get() { return this.speak; } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false }, null, _instanceExtraInitializers);
         })(),
         _a;
 })();

@@ -23,9 +23,9 @@ let C = (() => {
     let _member_initializers_1 = [];
     return class C {
         static {
-            __esDecorate(this, null, _field1_decorators, { kind: "accessor", name: "field1", static: false, private: false, access: { get() { return this.field1; }, set(value) { this.field1 = value; } } }, _field1_initializers, _instanceExtraInitializers);
-            __esDecorate(this, null, _member_decorators, { kind: "accessor", name: "field2", static: false, private: false, access: { get() { return this["field2"]; }, set(value) { this["field2"] = value; } } }, _member_initializers, _instanceExtraInitializers);
-            __esDecorate(this, null, _member_decorators_1, { kind: "accessor", name: _a, static: false, private: false, access: { get() { return this[_a]; }, set(value) { this[_a] = value; } } }, _member_initializers_1, _instanceExtraInitializers);
+            __esDecorate(this, null, _field1_decorators, { kind: "accessor", name: "field1", static: false, private: false }, _field1_initializers, _instanceExtraInitializers);
+            __esDecorate(this, null, _member_decorators, { kind: "accessor", name: "field2", static: false, private: false }, _member_initializers, _instanceExtraInitializers);
+            __esDecorate(this, null, _member_decorators_1, { kind: "accessor", name: _a, static: false, private: false }, _member_initializers_1, _instanceExtraInitializers);
         }
         #field1_accessor_storage = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _field1_initializers, 1));
         get field1() { return this.#field1_accessor_storage; }

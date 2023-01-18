@@ -20,7 +20,7 @@ let C = (() => {
         _C_field1 = new WeakMap(),
         (() => {
             _private_field1_decorators = [dec];
-            __esDecorate(null, null, _private_field1_decorators, { kind: "field", name: "#field1", static: false, private: true, access: { get() { return __classPrivateFieldGet(this, _C_field1, "f"); }, set(value) { __classPrivateFieldSet(this, _C_field1, value, "f"); } } }, _private_field1_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _private_field1_decorators, { kind: "field", name: "#field1", static: false, private: true }, _private_field1_initializers, _instanceExtraInitializers);
         })(),
         _a;
 })();

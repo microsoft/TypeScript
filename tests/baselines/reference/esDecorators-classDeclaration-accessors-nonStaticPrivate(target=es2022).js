@@ -18,8 +18,8 @@ let C = (() => {
         static {
             _private_get_method1_decorators = [dec(1)];
             _private_set_method1_decorators = [dec(2)];
-            __esDecorate(this, _private_get_method1_descriptor = { get: __setFunctionName(function () { return 0; }, "#method1", "get") }, _private_get_method1_decorators, { kind: "getter", name: "#method1", static: false, private: true, access: { get() { return this.#method1; } } }, null, _instanceExtraInitializers);
-            __esDecorate(this, _private_set_method1_descriptor = { set: __setFunctionName(function (value) { }, "#method1", "set") }, _private_set_method1_decorators, { kind: "setter", name: "#method1", static: false, private: true, access: { set(value) { this.#method1 = value; } } }, null, _instanceExtraInitializers);
+            __esDecorate(this, _private_get_method1_descriptor = { get: __setFunctionName(function () { return 0; }, "#method1", "get") }, _private_get_method1_decorators, { kind: "getter", name: "#method1", static: false, private: true }, null, _instanceExtraInitializers);
+            __esDecorate(this, _private_set_method1_descriptor = { set: __setFunctionName(function (value) { }, "#method1", "set") }, _private_set_method1_decorators, { kind: "setter", name: "#method1", static: false, private: true }, null, _instanceExtraInitializers);
         }
         get #method1() { return _private_get_method1_descriptor.get.call(this); }
         set #method1(value) { return _private_set_method1_descriptor.set.call(this, value); }

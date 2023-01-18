@@ -26,12 +26,12 @@ let C = (() => {
     let _set_member_decorators_1;
     return class C {
         static {
-            __esDecorate(this, null, _get_method1_decorators, { kind: "getter", name: "method1", static: false, private: false, access: { get() { return this.method1; } } }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _set_method1_decorators, { kind: "setter", name: "method1", static: false, private: false, access: { set(value) { this.method1 = value; } } }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _get_member_decorators, { kind: "getter", name: "method2", static: false, private: false, access: { get() { return this["method2"]; } } }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _set_member_decorators, { kind: "setter", name: "method2", static: false, private: false, access: { set(value) { this["method2"] = value; } } }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _get_member_decorators_1, { kind: "getter", name: _a, static: false, private: false, access: { get() { return this[_a]; } } }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _set_member_decorators_1, { kind: "setter", name: _b, static: false, private: false, access: { set(value) { this[_b] = value; } } }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _get_method1_decorators, { kind: "getter", name: "method1", static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _set_method1_decorators, { kind: "setter", name: "method1", static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _get_member_decorators, { kind: "getter", name: "method2", static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _set_member_decorators, { kind: "setter", name: "method2", static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _get_member_decorators_1, { kind: "getter", name: _a, static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _set_member_decorators_1, { kind: "setter", name: _b, static: false, private: false }, null, _instanceExtraInitializers);
         }
         get method1() { return 0; }
         set method1(value) { }

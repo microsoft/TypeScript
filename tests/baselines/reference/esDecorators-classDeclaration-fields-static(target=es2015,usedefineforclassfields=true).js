@@ -29,9 +29,9 @@ let C = (() => {
         _static_member_decorators_1 = [dec(3)],
         _b = __propKey(field3),
         (() => {
-            __esDecorate(null, null, _static_field1_decorators, { kind: "field", name: "field1", static: true, private: false, access: { get() { return this.field1; }, set(value) { this.field1 = value; } } }, _static_field1_initializers, _staticExtraInitializers);
-            __esDecorate(null, null, _static_member_decorators, { kind: "field", name: "field2", static: true, private: false, access: { get() { return this["field2"]; }, set(value) { this["field2"] = value; } } }, _static_member_initializers, _staticExtraInitializers);
-            __esDecorate(null, null, _static_member_decorators_1, { kind: "field", name: _b, static: true, private: false, access: { get() { return this[_b]; }, set(value) { this[_b] = value; } } }, _static_member_initializers_1, _staticExtraInitializers);
+            __esDecorate(null, null, _static_field1_decorators, { kind: "field", name: "field1", static: true, private: false }, _static_field1_initializers, _staticExtraInitializers);
+            __esDecorate(null, null, _static_member_decorators, { kind: "field", name: "field2", static: true, private: false }, _static_member_initializers, _staticExtraInitializers);
+            __esDecorate(null, null, _static_member_decorators_1, { kind: "field", name: _b, static: true, private: false }, _static_member_initializers_1, _staticExtraInitializers);
             __runInitializers(_a, _staticExtraInitializers);
         })(),
         Object.defineProperty(_a, "field1", {

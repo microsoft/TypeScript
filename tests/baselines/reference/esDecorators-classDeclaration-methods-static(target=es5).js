@@ -29,9 +29,9 @@ var C = function () {
             return C;
         }()),
         (function () {
-            __esDecorate(_a, null, _static_method1_decorators, { kind: "method", name: "method1", static: true, private: false, access: { get: function () { return this.method1; } } }, null, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_member_decorators, { kind: "method", name: "method2", static: true, private: false, access: { get: function () { return this["method2"]; } } }, null, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_member_decorators_1, { kind: "method", name: _b, static: true, private: false, access: { get: function () { return this[_b]; } } }, null, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_method1_decorators, { kind: "method", name: "method1", static: true, private: false }, null, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_member_decorators, { kind: "method", name: "method2", static: true, private: false }, null, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_member_decorators_1, { kind: "method", name: _b, static: true, private: false }, null, _staticExtraInitializers);
             __runInitializers(_a, _staticExtraInitializers);
         })(),
         _a;

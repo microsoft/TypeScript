@@ -45,7 +45,7 @@ export default ((() => {
         static {
             __setFunctionName(this, "default");
             _y_decorators = [dec];
-            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { get() { return this.y; }, set(value) { this.y = value; } } }, _y_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false }, _y_initializers, _instanceExtraInitializers);
         }
         y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
     };

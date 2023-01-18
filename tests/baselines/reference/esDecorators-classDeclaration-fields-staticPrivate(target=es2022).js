@@ -23,7 +23,7 @@ let C = (() => {
     return class C {
         static {
             _static_private_field1_decorators = [dec];
-            __esDecorate(null, null, _static_private_field1_decorators, { kind: "field", name: "#field1", static: true, private: true, access: { get() { return this.#field1; }, set(value) { this.#field1 = value; } } }, _static_private_field1_initializers, _staticExtraInitializers);
+            __esDecorate(null, null, _static_private_field1_decorators, { kind: "field", name: "#field1", static: true, private: true }, _static_private_field1_initializers, _staticExtraInitializers);
             __runInitializers(this, _staticExtraInitializers);
         }
         static #field1 = __runInitializers(this, _static_private_field1_initializers, 0);

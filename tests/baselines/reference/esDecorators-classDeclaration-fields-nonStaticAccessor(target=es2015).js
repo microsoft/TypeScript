@@ -36,9 +36,9 @@ let C = (() => {
             set [_b](value) { __classPrivateFieldSet(this, _C__b_accessor_storage, value, "f"); }
         },
         (() => {
-            __esDecorate(_a, null, _field1_decorators, { kind: "accessor", name: "field1", static: false, private: false, access: { get() { return this.field1; }, set(value) { this.field1 = value; } } }, _field1_initializers, _instanceExtraInitializers);
-            __esDecorate(_a, null, _member_decorators, { kind: "accessor", name: "field2", static: false, private: false, access: { get() { return this["field2"]; }, set(value) { this["field2"] = value; } } }, _member_initializers, _instanceExtraInitializers);
-            __esDecorate(_a, null, _member_decorators_1, { kind: "accessor", name: _b, static: false, private: false, access: { get() { return this[_b]; }, set(value) { this[_b] = value; } } }, _member_initializers_1, _instanceExtraInitializers);
+            __esDecorate(_a, null, _field1_decorators, { kind: "accessor", name: "field1", static: false, private: false }, _field1_initializers, _instanceExtraInitializers);
+            __esDecorate(_a, null, _member_decorators, { kind: "accessor", name: "field2", static: false, private: false }, _member_initializers, _instanceExtraInitializers);
+            __esDecorate(_a, null, _member_decorators_1, { kind: "accessor", name: _b, static: false, private: false }, _member_initializers_1, _instanceExtraInitializers);
         })(),
         _a;
 })();

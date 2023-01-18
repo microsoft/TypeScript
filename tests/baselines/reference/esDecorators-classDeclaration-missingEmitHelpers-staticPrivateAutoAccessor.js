@@ -27,7 +27,7 @@ let C = (() => {
     return class C {
         static {
             _static_private_x_decorators = [dec];
-            tslib_1.__esDecorate(this, _static_private_x_descriptor = { get: tslib_1.__setFunctionName(function () { return this.#x_accessor_storage; }, "#x", "get"), set: tslib_1.__setFunctionName(function (value) { this.#x_accessor_storage = value; }, "#x", "set") }, _static_private_x_decorators, { kind: "accessor", name: "#x", static: true, private: true, access: { get() { return this.#x; }, set(value) { this.#x = value; } } }, _static_private_x_initializers, _staticExtraInitializers);
+            tslib_1.__esDecorate(this, _static_private_x_descriptor = { get: tslib_1.__setFunctionName(function () { return this.#x_accessor_storage; }, "#x", "get"), set: tslib_1.__setFunctionName(function (value) { this.#x_accessor_storage = value; }, "#x", "set") }, _static_private_x_decorators, { kind: "accessor", name: "#x", static: true, private: true }, _static_private_x_initializers, _staticExtraInitializers);
             tslib_1.__runInitializers(this, _staticExtraInitializers);
         }
         static #x_accessor_storage = tslib_1.__runInitializers(this, _static_private_x_initializers, void 0);

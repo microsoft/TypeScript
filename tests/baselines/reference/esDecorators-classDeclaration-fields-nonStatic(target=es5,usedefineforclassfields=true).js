@@ -50,9 +50,9 @@ var C = function () {
         _member_decorators_1 = [dec(3)],
         _b = __propKey(field3),
         (function () {
-            __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false, access: { get: function () { return this.field1; }, set: function (value) { this.field1 = value; } } }, _field1_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false, access: { get: function () { return this["field2"]; }, set: function (value) { this["field2"] = value; } } }, _member_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _b, static: false, private: false, access: { get: function () { return this[_b]; }, set: function (value) { this[_b] = value; } } }, _member_initializers_1, _instanceExtraInitializers);
+            __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false }, _field1_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false }, _member_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _b, static: false, private: false }, _member_initializers_1, _instanceExtraInitializers);
         })(),
         _a;
 }();

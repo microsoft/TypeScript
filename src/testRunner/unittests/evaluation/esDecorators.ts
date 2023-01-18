@@ -703,7 +703,8 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 });
             });
         });
-        describe(".access", () => {
+        // Disabled pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
+        describe.skip(".access", () => {
             describe("for: class", () => {
                 it("is not set", () => {
                     const { context } = exec`
@@ -2222,7 +2223,8 @@ describe("unittests:: evaluation:: esDecorators", () => {
             });
 
             // see https://github.com/tc39/proposal-decorators#access-and-metadata-sidechanneling
-            it(`dependency injection (${targetName})`, () => {
+            // Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
+            it.skip(`dependency injection (${targetName})`, () => {
                 const { result } = exec`
                     const INJECTIONS = new WeakMap<object, { injectionKey: string, set: (this: any, value: any) => void }[]>();
 

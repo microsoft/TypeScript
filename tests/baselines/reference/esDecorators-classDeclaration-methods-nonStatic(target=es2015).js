@@ -28,9 +28,9 @@ let C = (() => {
             }
         },
         (() => {
-            __esDecorate(_a, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false, access: { get() { return this.method1; } } }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _member_decorators, { kind: "method", name: "method2", static: false, private: false, access: { get() { return this["method2"]; } } }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _member_decorators_1, { kind: "method", name: _b, static: false, private: false, access: { get() { return this[_b]; } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _member_decorators, { kind: "method", name: "method2", static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _member_decorators_1, { kind: "method", name: _b, static: false, private: false }, null, _instanceExtraInitializers);
         })(),
         _a;
 })();

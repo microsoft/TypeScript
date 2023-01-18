@@ -294,7 +294,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 2 >                                            ^^^
 3 >                                               ^^
 4 >                                                 ^^^
-5 >                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >    static #y = 1;
   >
@@ -308,14 +308,15 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(89, 50) Source(43, 6) + SourceIndex(0)
 4 >Emitted(89, 53) Source(43, 9) + SourceIndex(0)
 ---
->>>            __esDecorate(this, _static_private_method_descriptor = { value: __setFunctionName(function () { }, "#method") }, _static_private_method_decorators, { kind: "method", name: "#method", static: true, private: true, access: { get() { return __classPrivateFieldGet(this, _classThis, "a", _method_get); } } }, null, _staticExtraInitializers);
+>>>            __esDecorate(this, _static_private_method_descriptor = { value: __setFunctionName(function () { }, "#method") }, _static_private_method_decorators, { kind: "method", name: "#method", static: true, private: true }, null, _staticExtraInitializers);
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                                                                              ^^^^^^^^^^^^^^
 5 >                                                                                                            ^
 6 >                                                                                                             ^^^^^^^^^^^^
-7 >                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+7 >                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                                                                                                                                                                                                                  ^^^^->
 1->
 2 >            
 3 >                                                                     
@@ -329,10 +330,10 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 4 >Emitted(90, 109) Source(28, 23) + SourceIndex(0)
 5 >Emitted(90, 110) Source(28, 24) + SourceIndex(0)
 6 >Emitted(90, 122) Source(28, 24) + SourceIndex(0)
-7 >Emitted(90, 349) Source(28, 24) + SourceIndex(0)
+7 >Emitted(90, 259) Source(28, 24) + SourceIndex(0)
 ---
->>>            __esDecorate(this, _static_private_get_x_descriptor = { get: __setFunctionName(function () { return 1; }, "#x", "get") }, _static_private_get_x_decorators, { kind: "getter", name: "#x", static: true, private: true, access: { get() { return __classPrivateFieldGet(this, _classThis, "a", _x_get); } } }, null, _staticExtraInitializers);
-1 >^^^^^^^^^^^^
+>>>            __esDecorate(this, _static_private_get_x_descriptor = { get: __setFunctionName(function () { return 1; }, "#x", "get") }, _static_private_get_x_decorators, { kind: "getter", name: "#x", static: true, private: true }, null, _staticExtraInitializers);
+1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                                                                           ^^^^^^^^^^^^^^
@@ -342,9 +343,8 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 8 >                                                                                                                  ^
 9 >                                                                                                                   ^
 10>                                                                                                                    ^^^^^^^^^^^^^^
-11>                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-12>                                                                                                                                                                                                                                                                                                                                                          ^->
-1 >
+11>                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
   >
   >    @dec
   >    @dec
@@ -359,7 +359,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 9 >                                                                                                                   }
 10>                                                                                                                    
 11>                                                                                                                                  
-1 >Emitted(91, 13) Source(32, 5) + SourceIndex(0)
+1->Emitted(91, 13) Source(32, 5) + SourceIndex(0)
 2 >Emitted(91, 69) Source(32, 5) + SourceIndex(0)
 3 >Emitted(91, 92) Source(32, 5) + SourceIndex(0)
 4 >Emitted(91, 106) Source(32, 23) + SourceIndex(0)
@@ -369,10 +369,10 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 8 >Emitted(91, 116) Source(32, 33) + SourceIndex(0)
 9 >Emitted(91, 117) Source(32, 34) + SourceIndex(0)
 10>Emitted(91, 131) Source(32, 34) + SourceIndex(0)
-11>Emitted(91, 347) Source(32, 34) + SourceIndex(0)
+11>Emitted(91, 262) Source(32, 34) + SourceIndex(0)
 ---
->>>            __esDecorate(this, _static_private_set_x_descriptor = { set: __setFunctionName(function (value) { }, "#x", "set") }, _static_private_set_x_decorators, { kind: "setter", name: "#x", static: true, private: true, access: { set(value) { __classPrivateFieldSet(this, _classThis, value, "a", _x_set); } } }, null, _staticExtraInitializers);
-1->^^^^^^^^^^^^
+>>>            __esDecorate(this, _static_private_set_x_descriptor = { set: __setFunctionName(function (value) { }, "#x", "set") }, _static_private_set_x_decorators, { kind: "setter", name: "#x", static: true, private: true }, null, _staticExtraInitializers);
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                                                                           ^^^^^^^^^^
@@ -380,9 +380,9 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 6 >                                                                                                          ^^^^
 7 >                                                                                                              ^
 8 >                                                                                                               ^^^^^^^^^^^^^^
-9 >                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-10>                                                                                                                                                                                                                                                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+9 >                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10>                                                                                                                                                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
   >
   >    @dec
   >    @dec
@@ -395,7 +395,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 7 >                                                                                                              }
 8 >                                                                                                               
 9 >                                                                                                                             
-1->Emitted(92, 13) Source(36, 5) + SourceIndex(0)
+1 >Emitted(92, 13) Source(36, 5) + SourceIndex(0)
 2 >Emitted(92, 69) Source(36, 5) + SourceIndex(0)
 3 >Emitted(92, 92) Source(36, 5) + SourceIndex(0)
 4 >Emitted(92, 102) Source(36, 19) + SourceIndex(0)
@@ -403,9 +403,9 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 6 >Emitted(92, 111) Source(36, 36) + SourceIndex(0)
 7 >Emitted(92, 112) Source(36, 37) + SourceIndex(0)
 8 >Emitted(92, 126) Source(36, 37) + SourceIndex(0)
-9 >Emitted(92, 347) Source(36, 37) + SourceIndex(0)
+9 >Emitted(92, 257) Source(36, 37) + SourceIndex(0)
 ---
->>>            __esDecorate(this, _static_private_z_descriptor = { get: __setFunctionName(function () { return __classPrivateFieldGet(this, _classThis, "f", _z_accessor_storage); }, "#z", "get"), set: __setFunctionName(function (value) { __classPrivateFieldSet(this, _classThis, value, "f", _z_accessor_storage); }, "#z", "set") }, _static_private_z_decorators, { kind: "accessor", name: "#z", static: true, private: true, access: { get() { return __classPrivateFieldGet(this, _classThis, "a", _z_get); }, set(value) { __classPrivateFieldSet(this, _classThis, value, "a", _z_set); } } }, _static_private_z_initializers, _staticExtraInitializers);
+>>>            __esDecorate(this, _static_private_z_descriptor = { get: __setFunctionName(function () { return __classPrivateFieldGet(this, _classThis, "f", _z_accessor_storage); }, "#z", "get"), set: __setFunctionName(function (value) { __classPrivateFieldSet(this, _classThis, value, "f", _z_accessor_storage); }, "#z", "set") }, _static_private_z_decorators, { kind: "accessor", name: "#z", static: true, private: true }, _static_private_z_initializers, _staticExtraInitializers);
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                ^^^^^^^^^^^^^^^^^^^^^^^
@@ -415,7 +415,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 7 >                                                                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^
 8 >                                                                                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 9 >                                                                                                                                                                                                                                                                                                                       ^^^^^^^^^^^^^^
-10>                                                                                                                                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10>                                                                                                                                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
   >    @dec
@@ -443,68 +443,46 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 7 >Emitted(93, 217) Source(44, 5) + SourceIndex(0)
 8 >Emitted(93, 312) Source(44, 28) + SourceIndex(0)
 9 >Emitted(93, 326) Source(44, 28) + SourceIndex(0)
-10>Emitted(93, 644) Source(44, 28) + SourceIndex(0)
+10>Emitted(93, 481) Source(44, 28) + SourceIndex(0)
 ---
->>>            __esDecorate(this, null, _method_decorators, { kind: "method", name: "method", static: false, private: false, access: { get() { return this.method; } } }, null, _instanceExtraInitializers);
+>>>            __esDecorate(this, null, _method_decorators, { kind: "method", name: "method", static: false, private: false }, null, _instanceExtraInitializers);
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >            method() {}
+1 >Emitted(94, 13) Source(8, 5) + SourceIndex(0)
+2 >Emitted(94, 159) Source(8, 16) + SourceIndex(0)
+---
+>>>            __esDecorate(this, null, _get_x_decorators, { kind: "getter", name: "x", static: false, private: false }, null, _instanceExtraInitializers);
 1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                                                                                                        ^^^^^^
-4 >                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1 >
-2 >            
-3 >                                                                                                                                                        method
-4 >                                                                                                                                                              () {}
-1 >Emitted(94, 13) Source(8, 5) + SourceIndex(0)
-2 >Emitted(94, 153) Source(8, 5) + SourceIndex(0)
-3 >Emitted(94, 159) Source(8, 11) + SourceIndex(0)
-4 >Emitted(94, 202) Source(8, 16) + SourceIndex(0)
----
->>>            __esDecorate(this, null, _get_x_decorators, { kind: "getter", name: "x", static: false, private: false, access: { get() { return this.x; } } }, null, _instanceExtraInitializers);
-1 >^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                                                                                                  ^
-4 >                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                                                                                                                              ^^^^^^^->
+3 >                                                                                                                                                        ^->
 1 >
   >
   >    @dec
   >    @dec
   >    
-2 >            get 
-3 >                                                                                                                                                  x
-4 >                                                                                                                                                   () { return 1; }
+2 >            get x() { return 1; }
 1 >Emitted(95, 13) Source(12, 5) + SourceIndex(0)
-2 >Emitted(95, 147) Source(12, 9) + SourceIndex(0)
-3 >Emitted(95, 148) Source(12, 10) + SourceIndex(0)
-4 >Emitted(95, 191) Source(12, 26) + SourceIndex(0)
+2 >Emitted(95, 153) Source(12, 26) + SourceIndex(0)
 ---
->>>            __esDecorate(this, null, _set_x_decorators, { kind: "setter", name: "x", static: false, private: false, access: { set(value) { this.x = value; } } }, null, _instanceExtraInitializers);
+>>>            __esDecorate(this, null, _set_x_decorators, { kind: "setter", name: "x", static: false, private: false }, null, _instanceExtraInitializers);
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                                                                                                ^
-4 >                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                                                                                                        ^^^^^^^^^^->
 1->
   >
   >    @dec
   >    @dec
   >    
-2 >            set 
-3 >                                                                                                                                                x
-4 >                                                                                                                                                 (value: number) { }
+2 >            set x(value: number) { }
 1->Emitted(96, 13) Source(16, 5) + SourceIndex(0)
-2 >Emitted(96, 145) Source(16, 9) + SourceIndex(0)
-3 >Emitted(96, 146) Source(16, 10) + SourceIndex(0)
-4 >Emitted(96, 197) Source(16, 29) + SourceIndex(0)
+2 >Emitted(96, 153) Source(16, 29) + SourceIndex(0)
 ---
->>>            __esDecorate(this, null, _z_decorators, { kind: "accessor", name: "z", static: false, private: false, access: { get() { return this.z; }, set(value) { this.z = value; } } }, _z_initializers, _instanceExtraInitializers);
+>>>            __esDecorate(this, null, _z_decorators, { kind: "accessor", name: "z", static: false, private: false }, _z_initializers, _instanceExtraInitializers);
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                                                                                                ^
-4 >                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                                                                                                        ^
-6 >                                                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                                                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >    @dec
@@ -514,21 +492,13 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
   >    @dec
   >    @dec
   >    
-2 >            accessor 
-3 >                                                                                                                                                z
-4 >                                                                                                                                                 
-5 >                                                                                                                                                                        z
-6 >                                                                                                                                                                          = 1;
+2 >            accessor z = 1;
 1->Emitted(97, 13) Source(24, 5) + SourceIndex(0)
-2 >Emitted(97, 145) Source(24, 14) + SourceIndex(0)
-3 >Emitted(97, 146) Source(24, 15) + SourceIndex(0)
-4 >Emitted(97, 169) Source(24, 14) + SourceIndex(0)
-5 >Emitted(97, 170) Source(24, 15) + SourceIndex(0)
-6 >Emitted(97, 232) Source(24, 20) + SourceIndex(0)
+2 >Emitted(97, 162) Source(24, 20) + SourceIndex(0)
 ---
->>>            __esDecorate(null, null, _static_private_y_decorators, { kind: "field", name: "#y", static: true, private: true, access: { get() { return __classPrivateFieldGet(this, _classThis, "f", _y); }, set(value) { __classPrivateFieldSet(this, _classThis, value, "f", _y); } } }, _static_private_y_initializers, _staticExtraInitializers);
+>>>            __esDecorate(null, null, _static_private_y_decorators, { kind: "field", name: "#y", static: true, private: true }, _static_private_y_initializers, _staticExtraInitializers);
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
   >    @dec
@@ -548,27 +518,15 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
   >    
 2 >            static #y = 1;
 1->Emitted(98, 13) Source(40, 5) + SourceIndex(0)
-2 >Emitted(98, 341) Source(40, 19) + SourceIndex(0)
+2 >Emitted(98, 186) Source(40, 19) + SourceIndex(0)
 ---
->>>            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { get() { return this.y; }, set(value) { this.y = value; } } }, _y_initializers, _instanceExtraInitializers);
+>>>            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false }, _y_initializers, _instanceExtraInitializers);
 1 >^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                                                                                             ^
-4 >                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                                                                                                     ^
-6 >                                                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >            
-3 >                                                                                                                                             y
-4 >                                                                                                                                              
-5 >                                                                                                                                                                     y
-6 >                                                                                                                                                                       = 1;
+2 >            y = 1;
 1 >Emitted(99, 13) Source(20, 5) + SourceIndex(0)
-2 >Emitted(99, 142) Source(20, 5) + SourceIndex(0)
-3 >Emitted(99, 143) Source(20, 6) + SourceIndex(0)
-4 >Emitted(99, 166) Source(20, 5) + SourceIndex(0)
-5 >Emitted(99, 167) Source(20, 6) + SourceIndex(0)
-6 >Emitted(99, 229) Source(20, 11) + SourceIndex(0)
+2 >Emitted(99, 159) Source(20, 11) + SourceIndex(0)
 ---
 >>>            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
 1 >^^^^^^^^^^^^

@@ -72,16 +72,17 @@ interface ClassMethodDecoratorContext<
     /** A value indicating whether the class member has a private name. */
     readonly private: boolean;
 
-    /** An object that can be used to access the current value of the class member at runtime. */
-    readonly access: {
-        /**
-         * Gets the current value of the method from the provided receiver.
-         *
-         * @example
-         * let fn = context.access.get.call(instance);
-         */
-        get(this: This): Value;
-    };
+    // NOTE: Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
+    // /** An object that can be used to access the current value of the class member at runtime. */
+    // readonly access: {
+    //     /**
+    //      * Gets the current value of the method from the provided receiver.
+    //      *
+    //      * @example
+    //      * let fn = context.access.get.call(instance);
+    //      */
+    //     get(this: This): Value;
+    // };
 
     /**
      * Adds a callback to be invoked either before static initializers are run (when
@@ -132,16 +133,17 @@ interface ClassGetterDecoratorContext<
     /** A value indicating whether the class member has a private name. */
     readonly private: boolean;
 
-    /** An object that can be used to access the current value of the class member at runtime. */
-    readonly access: {
-        /**
-         * Invokes the getter on the provided receiver.
-         *
-         * @example
-         * let value = context.access.get.call(instance);
-         */
-        get(this: This): Value;
-    };
+    // NOTE: Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
+    // /** An object that can be used to access the current value of the class member at runtime. */
+    // readonly access: {
+    //     /**
+    //      * Invokes the getter on the provided receiver.
+    //      *
+    //      * @example
+    //      * let value = context.access.get.call(instance);
+    //      */
+    //     get(this: This): Value;
+    // };
 
     /**
      * Adds a callback to be invoked either before static initializers are run (when
@@ -173,16 +175,17 @@ interface ClassSetterDecoratorContext<
     /** A value indicating whether the class member has a private name. */
     readonly private: boolean;
 
+    // NOTE: Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
     /** An object that can be used to access the current value of the class member at runtime. */
-    readonly access: {
-        /**
-         * Invokes the setter on the provided receiver.
-         *
-         * @example
-         * context.access.set.call(instance, value);
-         */
-        set(this: This, value: Value): void;
-    };
+    // readonly access: {
+    //     /**
+    //      * Invokes the setter on the provided receiver.
+    //      *
+    //      * @example
+    //      * context.access.set.call(instance, value);
+    //      */
+    //     set(this: This, value: Value): void;
+    // };
 
     /**
      * Adds a callback to be invoked either before static initializers are run (when
@@ -214,24 +217,25 @@ interface ClassAccessorDecoratorContext<
     /** A value indicating whether the class member has a private name. */
     readonly private: boolean;
 
-    /** An object that can be used to access the current value of the class member at runtime. */
-    readonly access: {
-        /**
-         * Invokes the getter on the provided receiver.
-         *
-         * @example
-         * let value = context.access.get.call(instance);
-         */
-        get(this: This): Value;
+    // NOTE: Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
+    // /** An object that can be used to access the current value of the class member at runtime. */
+    // readonly access: {
+    //     /**
+    //      * Invokes the getter on the provided receiver.
+    //      *
+    //      * @example
+    //      * let value = context.access.get.call(instance);
+    //      */
+    //     get(this: This): Value;
 
-        /**
-         * Invokes the setter on the provided receiver.
-         *
-         * @example
-         * context.access.set.call(instance, value);
-         */
-        set(this: This, value: Value): void;
-    };
+    //     /**
+    //      * Invokes the setter on the provided receiver.
+    //      *
+    //      * @example
+    //      * context.access.set.call(instance, value);
+    //      */
+    //     set(this: This, value: Value): void;
+    // };
 
     /**
      * Adds a callback to be invoked either before static initializers are run (when
@@ -310,18 +314,19 @@ interface ClassFieldDecoratorContext<
     /** A value indicating whether the class member has a private name. */
     readonly private: boolean;
 
-    /** An object that can be used to access the current value of the class member at runtime. */
-    readonly access: {
-        /**
-         * Gets the value of the field on the provided receiver.
-         */
-        get(this: This): Value;
+    // NOTE: Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
+    // /** An object that can be used to access the current value of the class member at runtime. */
+    // readonly access: {
+    //     /**
+    //      * Gets the value of the field on the provided receiver.
+    //      */
+    //     get(this: This): Value;
 
-        /**
-         * Sets the value of the field on the provided receiver.
-         */
-        set(this: This, value: Value): void;
-    };
+    //     /**
+    //      * Sets the value of the field on the provided receiver.
+    //      */
+    //     set(this: This, value: Value): void;
+    // };
 
     /**
      * Adds a callback to be invoked either before static initializers are run (when

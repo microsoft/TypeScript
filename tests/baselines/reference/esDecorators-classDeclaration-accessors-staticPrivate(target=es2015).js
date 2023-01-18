@@ -32,8 +32,8 @@ let C = (() => {
         (() => {
             _static_private_get_method1_decorators = [dec(1)];
             _static_private_set_method1_decorators = [dec(2)];
-            __esDecorate(_a, _static_private_get_method1_descriptor = { get: __setFunctionName(function () { return 0; }, "#method1", "get") }, _static_private_get_method1_decorators, { kind: "getter", name: "#method1", static: true, private: true, access: { get() { return __classPrivateFieldGet(this, _a, "a", _C_method1_get); } } }, null, _staticExtraInitializers);
-            __esDecorate(_a, _static_private_set_method1_descriptor = { set: __setFunctionName(function (value) { }, "#method1", "set") }, _static_private_set_method1_decorators, { kind: "setter", name: "#method1", static: true, private: true, access: { set(value) { __classPrivateFieldSet(this, _a, value, "a", _C_method1_set); } } }, null, _staticExtraInitializers);
+            __esDecorate(_a, _static_private_get_method1_descriptor = { get: __setFunctionName(function () { return 0; }, "#method1", "get") }, _static_private_get_method1_decorators, { kind: "getter", name: "#method1", static: true, private: true }, null, _staticExtraInitializers);
+            __esDecorate(_a, _static_private_set_method1_descriptor = { set: __setFunctionName(function (value) { }, "#method1", "set") }, _static_private_set_method1_decorators, { kind: "setter", name: "#method1", static: true, private: true }, null, _staticExtraInitializers);
             __runInitializers(_a, _staticExtraInitializers);
         })(),
         _a;

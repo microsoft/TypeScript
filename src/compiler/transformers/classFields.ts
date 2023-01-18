@@ -1052,16 +1052,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
             return undefined;
         }
 
-        factory.updatePropertyDeclaration(
+        return factory.updatePropertyDeclaration(
             node,
             visitNodes(node.modifiers, modifierVisitor, isModifier),
             visitNode(node.name, propertyNameVisitor, isPropertyName),
             /*questionOrExclamationToken*/ undefined,
             /*type*/ undefined,
             visitNode(node.initializer, visitor, isExpression)
-        )
-
-        return visitEachChild(node, classElementVisitor, context);
+        );
     }
 
     function transformFieldInitializer(node: PropertyDeclaration) {

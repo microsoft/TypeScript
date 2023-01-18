@@ -29,9 +29,9 @@ let C = (() => {
         }
         static { _field1_decorators = [dec(1)], _member_decorators = [dec(2)], _member_decorators_1 = [dec(3)], _a = __propKey(field3); }
         static {
-            __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false, access: { get() { return this.field1; }, set(value) { this.field1 = value; } } }, _field1_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false, access: { get() { return this["field2"]; }, set(value) { this["field2"] = value; } } }, _member_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _a, static: false, private: false, access: { get() { return this[_a]; }, set(value) { this[_a] = value; } } }, _member_initializers_1, _instanceExtraInitializers);
+            __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false }, _field1_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false }, _member_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _a, static: false, private: false }, _member_initializers_1, _instanceExtraInitializers);
         }
     };
 })();
