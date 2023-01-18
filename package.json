@@ -77,8 +77,11 @@
         "ms": "^2.1.3",
         "node-fetch": "^3.2.10",
         "source-map-support": "latest",
-        "typescript": "^4.8.4",
+        "typescript": "5.0.0-dev.20230112",
         "which": "^2.0.2"
+    },
+    "overrides": {
+        "typescript@*": "$typescript"
     },
     "scripts": {
         "test": "hereby runtests-parallel --light=false",

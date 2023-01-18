@@ -72,3 +72,13 @@ declare let obj: Obj;
 declare let value: "123";
 
 set(obj, ['a', 'b', 'c'], value);
+
+// Repro from #52007
+
+declare function inners<const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]): T;
+
+const test = inners(1,2,3,4,5);
+
+declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
+
+const test2 = inners2([1,2,3,4,5]);
