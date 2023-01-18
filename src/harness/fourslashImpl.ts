@@ -1986,7 +1986,7 @@ export class TestState {
             : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
         const files: Map<string, string[]> = new Map()
         for (const { marker, quickInfo } of sorted) {
-            const span = quickInfo?.textSpan ?? { start: marker.position, length: 0 };
+            const span = quickInfo?.textSpan ?? { start: marker.position, length: 1 };
             const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(marker.fileName, span.start);
             const underline = " ".repeat(startLc.character) + "^".repeat(span.length)
             let tooltip = [bar]
@@ -2011,15 +2011,75 @@ export class TestState {
         return Array.from(files.entries(), ([fileName, lines]) => `=== ${fileName} ===\n` + lines.map(l => "// " + l).join("\n"))
             .join("\n\n")
     }
+
     public baselineSignatureHelp() { // TODO: This too
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
             signatureHelp: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
         }));
-        Harness.Baseline.runBaseline(baselineFile, stringify(result));
+        Harness.Baseline.runBaseline(baselineFile, this.getBaselineContentForSignatureHelp(result) + "\n\n" + stringify(result));
     }
 
+    private getBaselineContentForSignatureHelp(signatureItems: { marker: Marker & { name: string }, signatureHelp: ts.SignatureHelpItems | undefined }[]) {
+        const bar = "-".repeat(70)
+        const sorted = signatureItems.slice()
+        // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
+        sorted.sort((q1, q2) =>
+            q1.marker.fileName === q1.marker.fileName
+            ? (q1.marker.position > q2.marker.position ? -1 : 1)
+            : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
+        const files: Map<string, string[]> = new Map()
+        let previous: ts.SignatureHelpItems | undefined
+        for (const { marker, signatureHelp } of sorted) {
+            const span = { start: marker.position, length: 1 };
+            const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(marker.fileName, span.start);
+            const underline = " ".repeat(startLc.character) + "^".repeat(span.length)
+            let tooltip = [bar]
+            if (signatureHelp) {
+                const { documentation, tags, prefixDisplayParts, suffixDisplayParts, separatorDisplayParts, parameters } = signatureHelp.items[signatureHelp.selectedItemIndex]
+                let output = ""
+                if (prefixDisplayParts.length) output += prefixDisplayParts.map(p => p.text).join("")
+                const separator = separatorDisplayParts.map(p => p.text).join("")
+                let i = 0
+                let first = true
+                for (const { displayParts } of parameters) {
+                    if (first) {
+                        first = false
+                    }
+                    else {
+                        output += separator
+                    }
+                    const highlight = i === signatureHelp.argumentIndex;
+                    if (highlight) output += "**"
+                    output += displayParts.map(p => p.text).join("")
+                    if (highlight) output += "**"
+                    i++
+                }
+                if (suffixDisplayParts.length) output += suffixDisplayParts.map(p => p.text).join("")
+                tooltip.push(output)
+                // only display signature line for last argument
+                if (previous?.applicableSpan.start !== signatureHelp.applicableSpan.start) {
+                    if (documentation?.length) tooltip.push(...documentation.map(p => p.text).join("").split('\n'))
+                    if (tags?.length) {
+                        tooltip.push(...tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split('\n'))
+                    }
+                }
+            }
+            else {
+                tooltip.push(`No signature help is defined at /*${marker.name}*/.`);
+            }
+            tooltip.push(bar)
+            tooltip = tooltip.map(l => "| " + l)
+
+            const lines = files.get(marker.fileName) ?? this.getFileContent(marker.fileName).split(/\r?\n/)
+            lines.splice(startLc.line + 1, 0, underline, ...tooltip)
+            files.set(marker.fileName, lines)
+            previous = signatureHelp
+        }
+        return Array.from(files.entries(), ([fileName, lines]) => `=== ${fileName} ===\n` + lines.map(l => "// " + l).join("\n"))
+            .join("\n\n")
+    }
     public baselineCompletions(preferences?: ts.UserPreferences) { // TODO: And this
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {

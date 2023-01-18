@@ -1,3 +1,446 @@
+=== /tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts ===
+// /// This is simple /// comments
+// function simple() {
+// }
+// 
+// simple( );
+//         ^
+// | ----------------------------------------------------------------------
+// | simple(): void
+// | ----------------------------------------------------------------------
+// 
+// /// multiLine /// Comments
+// /// This is example of multiline /// comments
+// /// Another multiLine
+// function multiLine() {
+// }
+// multiLine( );
+//            ^
+// | ----------------------------------------------------------------------
+// | multiLine(): void
+// | ----------------------------------------------------------------------
+// 
+// /** this is eg of single line jsdoc style comment */
+// function jsDocSingleLine() {
+// }
+// jsDocSingleLine();
+//                 ^
+// | ----------------------------------------------------------------------
+// | jsDocSingleLine(): void
+// | this is eg of single line jsdoc style comment
+// | ----------------------------------------------------------------------
+// 
+// 
+// /** this is multiple line jsdoc stule comment
+// *New line1
+// *New Line2*/
+// function jsDocMultiLine() {
+// }
+// jsDocMultiLine();
+//                ^
+// | ----------------------------------------------------------------------
+// | jsDocMultiLine(): void
+// | this is multiple line jsdoc stule comment
+// | New line1
+// | New Line2
+// | ----------------------------------------------------------------------
+// 
+// /** multiple line jsdoc comments no longer merge
+// *New line1
+// *New Line2*/
+// /** Shoul mege this line as well
+// * and this too*/ /** Another this one too*/
+// function jsDocMultiLineMerge() {
+// }
+// jsDocMultiLineMerge();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMultiLineMerge(): void
+// | Another this one too
+// | ----------------------------------------------------------------------
+// 
+// 
+// /// Triple slash comment
+// /** jsdoc comment */
+// function jsDocMixedComments1() {
+// }
+// jsDocMixedComments1();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments1(): void
+// | jsdoc comment
+// | ----------------------------------------------------------------------
+// 
+// /// Triple slash comment
+// /** jsdoc comment */ /** another jsDocComment*/
+// function jsDocMixedComments2() {
+// }
+// jsDocMixedComments2();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments2(): void
+// | another jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /** jsdoc comment */ /*** triplestar jsDocComment*/
+// /// Triple slash comment
+// function jsDocMixedComments3() {
+// }
+// jsDocMixedComments3();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments3(): void
+// | * triplestar jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /** jsdoc comment */ /** another jsDocComment*/
+// /// Triple slash comment
+// /// Triple slash comment 2
+// function jsDocMixedComments4() {
+// }
+// jsDocMixedComments4();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments4(): void
+// | another jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /// Triple slash comment 1
+// /** jsdoc comment */ /** another jsDocComment*/
+// /// Triple slash comment
+// /// Triple slash comment 2
+// function jsDocMixedComments5() {
+// }
+// jsDocMixedComments5();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments5(): void
+// | another jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /** another jsDocComment*/
+// /// Triple slash comment 1
+// /// Triple slash comment
+// /// Triple slash comment 2
+// /** jsdoc comment */
+// function jsDocMixedComments6() {
+// }
+// jsDocMixedComments6();
+//                     ^
+// | ----------------------------------------------------------------------
+// | jsDocMixedComments6(): void
+// | jsdoc comment
+// | ----------------------------------------------------------------------
+// 
+// // This shoulnot be help comment
+// function noHelpComment1() {
+// }
+// noHelpComment1();
+//                ^
+// | ----------------------------------------------------------------------
+// | noHelpComment1(): void
+// | ----------------------------------------------------------------------
+// 
+// /* This shoulnot be help comment */
+// function noHelpComment2() {
+// }
+// noHelpComment2();
+//                ^
+// | ----------------------------------------------------------------------
+// | noHelpComment2(): void
+// | ----------------------------------------------------------------------
+// 
+// function noHelpComment3() {
+// }
+// noHelpComment3();
+//                ^
+// | ----------------------------------------------------------------------
+// | noHelpComment3(): void
+// | ----------------------------------------------------------------------
+// /** Adds two integers and returns the result
+//   * @param {number} a first number
+//   * @param b second number
+//   */
+// function sum(a: number, b: number) {
+//     return a + b;
+// }
+// sum(10, 20);
+//     ^
+// | ----------------------------------------------------------------------
+// | sum(**a: number**, b: number): number
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | sum(a: number, **b: number**): number
+// | Adds two integers and returns the result
+// | @param a first number
+// | @param b second number
+// | ----------------------------------------------------------------------
+// /** This is multiplication function
+//  * @param 
+//  * @param a first number
+//  * @param b
+//  * @param c {
+//  @param d @anotherTag
+//  * @param e LastParam @anotherTag*/
+// function multiply(a: number, b: number, c?: number, d?, e?) {
+// }
+// multiply(10, 20, 30, 40, 50);
+//          ^
+// | ----------------------------------------------------------------------
+// | multiply(**a: number**, b: number, c?: number, d?: any, e?: any): void
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | multiply(a: number, **b: number**, c?: number, d?: any, e?: any): void
+// | ----------------------------------------------------------------------
+//                 ^
+// | ----------------------------------------------------------------------
+// | multiply(a: number, b: number, **c?: number**, d?: any, e?: any): void
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | multiply(a: number, b: number, c?: number, **d?: any**, e?: any): void
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | multiply(a: number, b: number, c?: number, d?: any, **e?: any**): void
+// | This is multiplication function
+// | @param 
+// | @param a first number
+// | @param b
+// | @param c
+// | @param d
+// | @anotherTag 
+// | @param e LastParam
+// | @anotherTag 
+// | ----------------------------------------------------------------------
+// /** fn f1 with number
+// * @param { string} b about b
+// */
+// function f1(a: number);
+// function f1(b: string);
+// /**@param opt optional parameter*/
+// function f1(aOrb, opt?) {
+//     return aOrb;
+// }
+// f1(10);
+//    ^
+// | ----------------------------------------------------------------------
+// | f1(**a: number**): any
+// | fn f1 with number
+// | @param b about b
+// | ----------------------------------------------------------------------
+// f1("hello");
+//    ^
+// | ----------------------------------------------------------------------
+// | f1(**b: string**): any
+// | ----------------------------------------------------------------------
+// 
+// /** This is subtract function
+// @param { a
+// *@param { number | } b this is about b
+// @param { { () => string; } } c this is optional param c
+// @param { { () => string; } d this is optional param d
+// @param { { () => string; } } e this is optional param e
+// @param { { { () => string; } } f this is optional param f
+// */
+// function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string) {
+// }
+// subtract(10,  20,  null,  null,  null, null);
+//          ^
+// | ----------------------------------------------------------------------
+// | subtract(**a: number**, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | subtract(a: number, **b: number**, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
+// | ----------------------------------------------------------------------
+//                   ^
+// | ----------------------------------------------------------------------
+// | subtract(a: number, b: number, **c?: () => string**, d?: () => string, e?: () => string, f?: () => string): void
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | subtract(a: number, b: number, c?: () => string, **d?: () => string**, e?: () => string, f?: () => string): void
+// | ----------------------------------------------------------------------
+//                                 ^
+// | ----------------------------------------------------------------------
+// | subtract(a: number, b: number, c?: () => string, d?: () => string, **e?: () => string**, f?: () => string): void
+// | ----------------------------------------------------------------------
+//                                        ^
+// | ----------------------------------------------------------------------
+// | subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, **f?: () => string**): void
+// | This is subtract function
+// | @param 
+// | @param b this is about b
+// | @param c this is optional param c
+// | @param d this is optional param d
+// | @param e this is optional param e
+// | @param  { () => string; } } f this is optional param f
+// | ----------------------------------------------------------------------
+// /** this is square function
+// @paramTag { number } a this is input number of paramTag
+// @param { number } a this is input number
+// @returnType { number } it is return type
+// */
+// function square(a: number) {
+//     return a * a;
+// }
+// square(10);
+//        ^
+// | ----------------------------------------------------------------------
+// | square(**a: number**): number
+// | this is square function
+// | @paramTag { number } a this is input number of paramTag
+// | @param a this is input number
+// | @returnType { number } it is return type
+// | ----------------------------------------------------------------------
+// /** this is divide function
+// @param { number} a this is a
+// @paramTag { number } g this is optional param g
+// @param { number} b this is b
+// */
+// function divide(a: number, b: number) {
+// }
+// divide(10, 20);
+//        ^
+// | ----------------------------------------------------------------------
+// | divide(**a: number**, b: number): void
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | divide(a: number, **b: number**): void
+// | this is divide function
+// | @param a this is a
+// | @paramTag { number } g this is optional param g
+// | @param b this is b
+// | ----------------------------------------------------------------------
+// /**
+// Function returns string concat of foo and bar
+// @param			{string}		foo		is string
+// @param		    {string}		bar		is second string
+// */
+// function fooBar(foo: string, bar: string) {
+//     return foo + bar;
+// }
+// fooBar("foo","bar");
+//        ^
+// | ----------------------------------------------------------------------
+// | fooBar(**foo: string**, bar: string): string
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | fooBar(foo: string, **bar: string**): string
+// | Function returns string concat of foo and bar
+// | @param foo is string
+// | @param bar is second string
+// | ----------------------------------------------------------------------
+// /** This is a comment */
+// var x;
+// /**
+//   * This is a comment
+//   */
+// var y;
+// /** this is jsdoc style function with param tag as well as inline parameter help
+// *@param a it is first parameter
+// *@param c it is third parameter
+// */
+// function jsDocParamTest(/** this is inline comment for a */a: number, /** this is inline comment for b*/ b: number, c: number, d: number) {
+//     return a + b + c + d;
+//            ^
+// | ----------------------------------------------------------------------
+// | No signature help is defined at /*39*/.
+// | ----------------------------------------------------------------------
+// }
+// jsDocParamTest(30, 40, 50, 60);
+//                ^
+// | ----------------------------------------------------------------------
+// | jsDocParamTest(**a: number**, b: number, c: number, d: number): number
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | jsDocParamTest(a: number, **b: number**, c: number, d: number): number
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | jsDocParamTest(a: number, b: number, **c: number**, d: number): number
+// | ----------------------------------------------------------------------
+//                            ^
+// | ----------------------------------------------------------------------
+// | jsDocParamTest(a: number, b: number, c: number, **d: number**): number
+// | this is jsdoc style function with param tag as well as inline parameter help
+// | @param a it is first parameter
+// | @param c it is third parameter
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   * And properly aligned comment
+//   */
+// function jsDocCommentAlignmentTest1() {
+// }
+// jsDocCommentAlignmentTest1();
+//                            ^
+// | ----------------------------------------------------------------------
+// | jsDocCommentAlignmentTest1(): void
+// | This is function comment
+// | And properly aligned comment
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   *     And aligned with 4 space char margin
+//   */
+// function jsDocCommentAlignmentTest2() {
+// }
+// jsDocCommentAlignmentTest2();
+//                            ^
+// | ----------------------------------------------------------------------
+// | jsDocCommentAlignmentTest2(): void
+// | This is function comment
+// |     And aligned with 4 space char margin
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   *     And aligned with 4 space char margin
+//   * @param {string} a this is info about a
+//   *                   spanning on two lines and aligned perfectly
+//   * @param b          this is info about b
+//   *                   spanning on two lines and aligned perfectly
+//   *                   spanning one more line alined perfectly
+//   *                       spanning another line with more margin
+//   * @param c          this is info about b
+//   *  not aligned text about parameter will eat only one space
+//   */
+// function jsDocCommentAlignmentTest3(a: string, b, c) {
+// }
+// jsDocCommentAlignmentTest3("hello",1, 2);
+//                            ^
+// | ----------------------------------------------------------------------
+// | jsDocCommentAlignmentTest3(**a: string**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | jsDocCommentAlignmentTest3(a: string, **b: any**, c: any): void
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | jsDocCommentAlignmentTest3(a: string, b: any, **c: any**): void
+// | This is function comment
+// |     And aligned with 4 space char margin
+// | @param a this is info about a
+// | spanning on two lines and aligned perfectly
+// | @param b this is info about b
+// | spanning on two lines and aligned perfectly
+// | spanning one more line alined perfectly
+// |     spanning another line with more margin
+// | @param c this is info about b
+// | not aligned text about parameter will eat only one space
+// | ----------------------------------------------------------------------
+// 
+// ^
+// | ----------------------------------------------------------------------
+// | No signature help is defined at /**/.
+// | ----------------------------------------------------------------------
+// class NoQuickInfoClass {
+// }
+
 [
   {
     "marker": {
