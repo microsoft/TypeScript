@@ -9139,7 +9139,7 @@ declare namespace ts {
     function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken;
     const isQuestionOrExclamationToken: (node: Node) => node is QuestionToken | ExclamationToken;
     const isIdentifierOrThisTypeNode: (node: Node) => node is Identifier | ThisTypeNode;
-    const isReadonlyKeywordOrPlusOrMinusToken: (node: Node) => node is ReadonlyKeyword | PlusToken | MinusToken;
+    const isReadonlyKeywordOrPlusOrMinusToken: (node: Node) => node is PlusToken | MinusToken | ReadonlyKeyword;
     const isQuestionOrPlusOrMinusToken: (node: Node) => node is QuestionToken | PlusToken | MinusToken;
     const isModuleName: (node: Node) => node is ModuleName;
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
