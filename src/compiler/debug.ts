@@ -391,7 +391,7 @@ function createAssertionCacheEntry<T extends AnyFunction>(original: T, set: (fn:
     let currentLevel: AssertionLevel | undefined;
     return {
         disable(level) {
-            set(noop as T);
+            set(noop as AnyFunction as T);
             currentLevel = level;
         },
         enable(level) {
