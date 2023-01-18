@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     cast,
     createMultiMap,
@@ -15,7 +16,6 @@ import {
     singleOrUndefined,
     tryCast,
 } from "../../compiler/core";
-import { Debug } from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { setEmitFlags } from "../../compiler/factory/emitNode";
 import { factory } from "../../compiler/factory/nodeFactory";

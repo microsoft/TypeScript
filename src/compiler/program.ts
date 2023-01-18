@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import { BuilderProgram } from "./builderPublic";
 import { createTypeChecker } from "./checker";
 import {
@@ -60,7 +61,6 @@ import {
     SortedReadonlyArray,
     versionMajorMinor,
 } from "./corePublic";
-import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
     emitFiles,

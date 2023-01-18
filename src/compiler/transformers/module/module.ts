@@ -1,3 +1,4 @@
+import * as Debug from "../../debug";
 import { getNodeId } from "../../checkerUtilities";
 import {
     addRange,
@@ -9,7 +10,6 @@ import {
     reduceLeft,
     singleOrMany,
 } from "../../core";
-import { Debug } from "../../debug";
 import {
     addEmitFlags,
     addEmitHelper,

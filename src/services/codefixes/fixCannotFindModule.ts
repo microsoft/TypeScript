@@ -1,5 +1,5 @@
+import * as Debug from "../../compiler/debug";
 import { tryCast } from "../../compiler/core";
-import { Debug } from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { isStringLiteral } from "../../compiler/factory/nodeTests";
 import {

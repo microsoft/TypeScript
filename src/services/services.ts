@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import { getFileEmitOutput } from "../compiler/builderState";
 import {
     ParseConfigFileHost,
@@ -35,7 +36,6 @@ import {
     Push,
     SortedArray,
 } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import {
     isComputedPropertyName,
     isIdentifier,

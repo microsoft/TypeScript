@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     compact,
     contains,
@@ -7,7 +8,6 @@ import {
     or,
     singleOrUndefined,
 } from "../compiler/core";
-import { Debug } from "../compiler/debug";
 import {
     isBindingElement,
     isBlock,

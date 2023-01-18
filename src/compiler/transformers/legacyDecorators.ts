@@ -1,3 +1,4 @@
+import * as Debug from "../debug";
 import {
     addRange,
     append,
@@ -7,7 +8,6 @@ import {
     singleOrMany,
     some,
 } from "../core";
-import { Debug } from "../debug";
 import {
     addEmitHelpers,
     setCommentRange,

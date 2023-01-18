@@ -1,3 +1,4 @@
+import * as Debug from "../debug";
 import {
     append,
     arrayFrom,
@@ -22,7 +23,6 @@ import {
     toFileNameLowerCase,
     tryCast,
 } from "../core";
-import { Debug } from "../debug";
 import { Diagnostics } from "../diagnosticInformationMap.generated";
 import { getOutputPathsFor } from "../emitter";
 import {

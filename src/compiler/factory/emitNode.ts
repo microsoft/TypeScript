@@ -1,10 +1,10 @@
+import * as Debug from "../debug";
 import {
     append,
     appendIfUnique,
     orderedRemoveItem,
     some,
 } from "../core";
-import { Debug } from "../debug";
 import {
     AccessExpression,
     AutoGenerateInfo,

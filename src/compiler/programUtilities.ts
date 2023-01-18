@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
@@ -5,7 +6,6 @@ import {
     optionsAffectingProgramStructure,
     semanticDiagnosticsOptionDeclarations,
 } from "./commandLineParser";
-import { Debug } from "./debug";
 import {
     createModeAwareCache,
     ModeAwareCache,

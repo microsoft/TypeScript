@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     compareStringsCaseSensitiveUI,
     compareValues,
@@ -9,7 +10,6 @@ import {
     map,
     mapDefined,
 } from "../compiler/core";
-import { Debug } from "../compiler/debug";
 import { factory } from "../compiler/factory/nodeFactory";
 import {
     isArrowFunction,

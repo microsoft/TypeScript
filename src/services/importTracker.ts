@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import { getSymbolId } from "../compiler/checkerUtilities";
 import {
     cast,
@@ -5,7 +6,6 @@ import {
     some,
     tryCast,
 } from "../compiler/core";
-import { Debug } from "../compiler/debug";
 import {
     isBinaryExpression,
     isBindingElement,

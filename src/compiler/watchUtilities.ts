@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import { BuilderProgram } from "./builderPublic";
 import {
     ExtendedConfigCacheEntry,
@@ -22,7 +23,6 @@ import {
     SortedArray,
     SortedReadonlyArray,
 } from "./corePublic";
-import { Debug } from "./debug";
 import {
     emptyFileSystemEntries,
     FileSystemEntries,

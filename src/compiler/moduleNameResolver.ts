@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import { DiagnosticReporter, moduleResolutionOptionDeclarations } from "./commandLineParser";
 import { readJson } from "./commandLineParserUtilities";
 import {
@@ -39,7 +40,6 @@ import {
     version,
     versionMajorMinor,
 } from "./corePublic";
-import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import { getCommonSourceDirectory } from "./emitter";
 import { isDeclarationFileName } from "./parser";

@@ -1,4 +1,4 @@
-import { Debug } from "../compiler/debug";
+import * as Debug from "../compiler/debug";
 import { nodeModulesPathPart } from "../compiler/moduleNameResolver";
 import {
     FileWatcher,

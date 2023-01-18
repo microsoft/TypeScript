@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     BuilderProgram,
     EmitAndSemanticDiagnosticsBuilderProgram,
@@ -32,7 +33,6 @@ import {
     stringContains,
 } from "../compiler/core";
 import { version } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import { Diagnostics } from "../compiler/diagnosticInformationMap.generated";
 import {
     combinePaths,

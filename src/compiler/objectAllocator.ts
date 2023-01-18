@@ -1,5 +1,5 @@
 import { forEach } from "./core";
-import { Debug } from "./debug";
+import { isDebugging } from "./debug";
 import { tracing } from "./tracing";
 import {
     __String,
@@ -68,14 +68,14 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
 
 function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
     this.flags = flags;
-    if (Debug.isDebugging || tracing) {
+    if (isDebugging || tracing) {
         this.checker = checker;
     }
 }
 
 function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
     this.flags = flags;
-    if (Debug.isDebugging) {
+    if (isDebugging) {
         this.checker = checker;
     }
 }

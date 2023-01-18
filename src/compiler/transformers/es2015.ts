@@ -1,3 +1,4 @@
+import * as Debug from "../debug";
 import {
     addRange,
     append,
@@ -20,7 +21,6 @@ import {
     takeWhile,
     tryCast,
 } from "../core";
-import { Debug } from "../debug";
 import { isCallToHelper } from "../factory/emitHelpers";
 import {
     addEmitHelpers,

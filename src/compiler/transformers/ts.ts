@@ -1,3 +1,4 @@
+import * as Debug from "../debug";
 import { isInstantiatedModule } from "../checker";
 import {
     addRange,
@@ -13,7 +14,6 @@ import {
     singleOrMany,
     some,
 } from "../core";
-import { Debug } from "../debug";
 import {
     addEmitFlags,
     addEmitHelpers,

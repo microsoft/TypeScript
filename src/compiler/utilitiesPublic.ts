@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     contains,
     emptyArray,
@@ -18,7 +19,6 @@ import {
     Push,
     SortedReadonlyArray,
 } from "./corePublic";
-import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
     isArrowFunction,

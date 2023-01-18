@@ -1,10 +1,10 @@
+import * as Debug from "../compiler/debug";
 import {
     startsWith,
     trimString,
     trimStringStart,
 } from "../compiler/core";
 import { Push } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import {
     isArrayLiteralExpression,
     isBinaryExpression,

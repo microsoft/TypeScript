@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import { EmitOutput } from "../compiler/builderStatePublic";
 import {
     arrayFrom,
@@ -32,7 +33,6 @@ import {
     toFileNameLowerCase,
 } from "../compiler/core";
 import { version } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import { isIdentifier } from "../compiler/factory/nodeTests";
 import {
     getEntrypointsFromPackageJsonInfo,

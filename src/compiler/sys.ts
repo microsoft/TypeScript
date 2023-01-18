@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import { matchesExclude } from "./commandLineParser";
 import {
     contains,
@@ -20,7 +21,6 @@ import {
     unorderedRemoveItem,
 } from "./core";
 import { Comparison } from "./corePublic";
-import { AssertionLevel, Debug } from "./debug";
 import {
     emptyFileSystemEntries,
     FileSystemEntries,
@@ -1886,10 +1886,9 @@ export function setSys(s: System) {
 
 if (sys && sys.getEnvironmentVariable) {
     setCustomPollingValues(sys);
-    Debug.setAssertionLevel(/^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
-        ? AssertionLevel.Normal
-        : AssertionLevel.None);
+    Debug.setAssertionLevel(/^development$/i.test(sys.getEnvironmentVariable("NODE_ENV")) ? Debug.AssertionLevel.Normal : Debug.AssertionLevel.None);
 }
+
 if (sys && sys.debugMode) {
-    Debug.isDebugging = true;
+    Debug.setIsDebugging(true);
 }

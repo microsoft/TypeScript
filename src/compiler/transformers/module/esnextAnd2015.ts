@@ -1,10 +1,10 @@
+import * as Debug from "../../debug";
 import {
     addRange,
     append,
     singleOrMany,
     some,
 } from "../../core";
-import { Debug } from "../../debug";
 import {
     isIdentifier,
     isNamespaceExport,

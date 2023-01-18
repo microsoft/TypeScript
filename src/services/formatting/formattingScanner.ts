@@ -1,8 +1,8 @@
+import * as Debug from "../../compiler/debug";
 import {
     append,
     last,
 } from "../../compiler/core";
-import { Debug } from "../../compiler/debug";
 import {
     isJsxAttribute,
     isJsxElement,

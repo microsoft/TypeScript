@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     canJsonReportNoInputFiles,
     convertCompilerOptionsForTelemetry,
@@ -42,7 +43,6 @@ import {
     ReadonlyCollection,
     version,
 } from "../compiler/corePublic";
-import { AssertionLevel, Debug } from "../compiler/debug";
 import { parsePackageName } from "../compiler/moduleNameResolver";
 import { parseJsonText } from "../compiler/parser";
 import {
@@ -1678,7 +1678,7 @@ export class ProjectService {
         project.print(/*writeProjectFileNames*/ true);
 
         project.close();
-        if (Debug.shouldAssert(AssertionLevel.Normal)) {
+        if (Debug.shouldAssert(Debug.AssertionLevel.Normal)) {
             this.filenameToScriptInfo.forEach(info => Debug.assert(
                 !info.isAttached(project),
                 "Found script Info still attached to project",

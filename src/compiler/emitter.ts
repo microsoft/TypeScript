@@ -1,4 +1,8 @@
-import * as ts from "./_namespaces/ts";
+/* eslint-disable */
+import * as types from "./types";
+/* eslint-enable */
+
+import * as Debug from "./debug";
 import {
     computeSignature,
     ProgramBuildInfo,
@@ -35,8 +39,7 @@ import {
     stringContains,
     tryCast,
 } from "./core";
-import { Comparison } from "./corePublic";
-import { Debug } from "./debug";
+import { Comparison, version } from "./corePublic";
 import {
     createBinaryExpressionTrampoline,
 } from "./factory/binaryExpressionStateMachine";
@@ -1135,7 +1138,6 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
 
 /** @internal */
 export function createBuildInfo(program: ProgramBuildInfo | undefined, bundle: BundleBuildInfo | undefined): BuildInfo {
-    const version = ts.version; // Extracted into a const so the form is stable between namespace and module
     return { bundle, program, version };
 }
 
@@ -1145,7 +1147,7 @@ export function getBuildInfoText(buildInfo: BuildInfo) {
 }
 
 /** @internal */
-export function getBuildInfo(buildInfoFile: string, buildInfoText: string) {
+export function getBuildInfo(buildInfoFile: string, buildInfoText: string): BuildInfo | undefined {
     return readJsonOrUndefined(buildInfoFile, buildInfoText) as BuildInfo | undefined;
 }
 
@@ -6019,7 +6021,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 );
         }
 
-        return Debug.fail(`Unsupported GeneratedIdentifierKind: ${Debug.formatEnum(autoGenerate.flags & GeneratedIdentifierFlags.KindMask, (ts as any).GeneratedIdentifierFlags, /*isFlags*/ true)}.`);
+        return Debug.fail(`Unsupported GeneratedIdentifierKind: ${Debug.formatEnum(autoGenerate.flags & GeneratedIdentifierFlags.KindMask, (types as any).GeneratedIdentifierFlags, /*isFlags*/ true)}.`);
     }
 
     // Comments

@@ -1,3 +1,4 @@
+import * as Debug from "../debug";
 import {
     compareStringsCaseSensitive,
     first,
@@ -6,7 +7,6 @@ import {
     pushIfUnique,
     some,
 } from "../core";
-import { Debug } from "../debug";
 import { parseNodeFactory } from "../parser";
 import { setParent } from "../parserUtilities";
 import { isIdentifierText } from "../scanner";

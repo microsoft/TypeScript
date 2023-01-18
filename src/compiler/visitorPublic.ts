@@ -1,9 +1,9 @@
+import * as Debug from "./debug";
 import {
     isArray,
     singleOrUndefined,
     some,
 } from "./core";
-import { Debug } from "./debug";
 import { setEmitFlags } from "./factory/emitNode";
 import { factory } from "./factory/nodeFactory";
 import {

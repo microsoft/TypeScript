@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     arrayFrom,
     binarySearchKey,
@@ -12,7 +13,6 @@ import {
     trimStringEnd,
 } from "./core";
 import { SortedReadonlyArray } from "./corePublic";
-import { Debug } from "./debug";
 import {
     combinePaths,
     getDirectoryPath,

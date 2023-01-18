@@ -2,7 +2,6 @@
 
 export * from "../corePublic";
 export * from "../core";
-export * from "../debug";
 export * from "../semver";
 export * from "../performanceCore";
 export * from "../perfLogger";
@@ -77,6 +76,8 @@ export * from "../watchPublic";
 export * from "../tsbuild";
 export * from "../tsbuildPublic";
 export * from "../fileMatcher";
+import * as Debug from "../debug";
+export { Debug };
 import * as moduleSpecifiers from "./ts.moduleSpecifiers";
 export { moduleSpecifiers };
 import * as performance from "./ts.performance";

@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     addRange,
     append,
@@ -9,7 +10,6 @@ import {
     returnUndefined,
     some,
 } from "./core";
-import { Debug } from "./debug";
 import { createEmitHelperFactory } from "./factory/emitHelpers";
 import {
     disposeEmitNodes,

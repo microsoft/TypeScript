@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     assign,
     clear,
@@ -8,7 +9,6 @@ import {
     stringContains,
     unorderedRemoveItem,
 } from "../compiler/core";
-import { Debug } from "../compiler/debug";
 import {
     directorySeparator,
     getBaseFileName,

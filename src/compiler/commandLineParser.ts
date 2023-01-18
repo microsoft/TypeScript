@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     append,
     arrayFrom,
@@ -34,7 +35,6 @@ import {
     MapLike,
     Push,
 } from "./corePublic";
-import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
     isArrayLiteralExpression,

@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     compareStringsCaseInsensitive,
     compareStringsCaseSensitive,
@@ -14,7 +15,6 @@ import {
     stringContains,
 } from "./core";
 import { Comparison } from "./corePublic";
-import { Debug } from "./debug";
 import {
     CharacterCodes,
     Path,

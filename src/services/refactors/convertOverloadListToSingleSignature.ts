@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     emptyArray,
     every,
@@ -6,7 +7,6 @@ import {
     mapDefined,
     some,
 } from "../../compiler/core";
-import { Debug } from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import {
     getSyntheticLeadingComments,

@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     sourceFileAffectingCompilerOptions,
 } from "../compiler/commandLineParser";
@@ -8,14 +9,16 @@ import {
     getOrUpdate,
     identity,
 } from "../compiler/core";
-import { Debug } from "../compiler/debug";
 import { getKeyForCompilerOptions } from "../compiler/moduleNameResolver";
 import {
     CreateSourceFileOptions,
     isDeclarationFileName,
 } from "../compiler/parser";
 import { toPath } from "../compiler/path";
-import { getImpliedNodeFormatForFile, getSetExternalModuleIndicator } from "../compiler/program";
+import {
+    getImpliedNodeFormatForFile,
+    getSetExternalModuleIndicator,
+} from "../compiler/program";
 import { tracing } from "../compiler/tracing";
 import {
     CompilerOptions,

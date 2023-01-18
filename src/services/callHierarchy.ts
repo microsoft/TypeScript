@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import { getNodeId } from "../compiler/checkerUtilities";
 import {
     append,
@@ -10,7 +11,6 @@ import {
     isArray,
     map,
 } from "../compiler/core";
-import { Debug } from "../compiler/debug";
 import { createPrinter } from "../compiler/emitter";
 import {
     isArrowFunction,

@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     append,
     arrayFrom,
@@ -25,7 +26,6 @@ import {
     Comparison,
     MapLike,
 } from "./corePublic";
-import { Debug } from "./debug";
 import {
     isModuleBlock,
     isModuleDeclaration,

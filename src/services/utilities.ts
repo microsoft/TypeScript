@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     getModuleInstanceState,
     ModuleInstanceState,
@@ -40,7 +41,6 @@ import {
     tryCast,
 } from "../compiler/core";
 import { Comparison } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import { createPrinter } from "../compiler/emitter";
 import {
     addEmitFlags,

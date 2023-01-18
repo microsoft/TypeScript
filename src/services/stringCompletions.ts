@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import { readJson } from "../compiler/commandLineParserUtilities";
 import {
     arrayFrom,
@@ -32,7 +33,6 @@ import {
     Comparison,
     MapLike,
 } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import {
     isCallExpression,
     isIdentifier,

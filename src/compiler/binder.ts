@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import { getNodeId } from "./checkerUtilities";
 import {
     append,
@@ -15,7 +16,6 @@ import {
     some,
     tryCast,
 } from "./core";
-import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import { createBinaryExpressionTrampoline } from "./factory/binaryExpressionStateMachine";
 import {

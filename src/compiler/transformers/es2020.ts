@@ -1,5 +1,5 @@
+import * as Debug from "../debug";
 import { cast } from "../core";
-import { Debug } from "../debug";
 import { addEmitFlags } from "../factory/emitNode";
 import {
     isIdentifier,

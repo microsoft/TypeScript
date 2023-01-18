@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     getModuleInstanceState,
     ModuleInstanceState,
@@ -9,7 +10,6 @@ import {
     some,
 } from "../compiler/core";
 import { Push } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import {
     isIdentifier,
     isJSDoc,

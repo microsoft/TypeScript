@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     AffectedFileResult,
     BuilderProgram,
@@ -36,7 +37,6 @@ import {
     tryAddToSet,
 } from "./core";
 import { ReadonlyCollection } from "./corePublic";
-import { Debug } from "./debug";
 import {
     createBuildInfo,
     getTsBuildInfoEmitOutputFilePath,

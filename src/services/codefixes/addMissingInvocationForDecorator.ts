@@ -1,4 +1,4 @@
-import { Debug } from "../../compiler/debug";
+import * as Debug from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { factory } from "../../compiler/factory/nodeFactory";
 import { isDecorator } from "../../compiler/factory/nodeTests";

@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     arrayFrom,
     cast,
@@ -8,7 +9,6 @@ import {
     map,
 } from "../compiler/core";
 import { Push } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import {
     Diagnostic,
     DiagnosticWithLocation,

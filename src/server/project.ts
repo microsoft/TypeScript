@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import { BuilderState } from "../compiler/builderState";
 import { updateErrorForNoInputFiles } from "../compiler/commandLineParser";
 import {
@@ -28,7 +29,6 @@ import {
     startsWith,
 } from "../compiler/core";
 import { SortedReadonlyArray } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import {
     getAutomaticTypeDirectiveNames,
     getEffectiveTypeRoots,

@@ -1,3 +1,4 @@
+import * as Debug from "../debug";
 import { getNodeId } from "../checkerUtilities";
 import {
     concatenate,
@@ -5,7 +6,6 @@ import {
     map,
     some,
 } from "../core";
-import { Debug } from "../debug";
 import {
     advancedAsyncSuperHelper,
     asyncSuperHelper,

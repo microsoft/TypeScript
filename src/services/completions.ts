@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import { getSymbolId } from "../compiler/checkerUtilities";
 import {
     append,
@@ -34,7 +35,6 @@ import {
     Comparison,
     SortedArray,
 } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import { Diagnostics } from "../compiler/diagnosticInformationMap.generated";
 import { createPrinter } from "../compiler/emitter";
 import { setSnippetElement } from "../compiler/factory/emitNode";

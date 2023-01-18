@@ -1,4 +1,4 @@
-import { Debug } from "../../debug";
+import * as Debug from "../../debug";
 import { Diagnostics } from "../../diagnosticInformationMap.generated";
 import {
     isBindingElement,

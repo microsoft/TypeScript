@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     getBuildInfoFileVersionMap,
     getPendingEmitKind,
@@ -41,7 +42,6 @@ import {
     unorderedRemoveItem,
 } from "./core";
 import { version } from "./corePublic";
-import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
     emitUsingBuildInfo,

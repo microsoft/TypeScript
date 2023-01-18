@@ -1,4 +1,4 @@
-import { Debug } from "../debug";
+import * as Debug from "../debug";
 import { factory } from "../factory/nodeFactory";
 import {
     isBinaryExpression,

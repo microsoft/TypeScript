@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     createCompilerDiagnosticForInvalidCustomType,
     optionDeclarations,
@@ -11,7 +12,6 @@ import {
     isString,
 } from "../compiler/core";
 import { MapLike } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import { createSourceFile } from "../compiler/parser";
 import {
     fileExtensionIs,

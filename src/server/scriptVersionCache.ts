@@ -1,4 +1,4 @@
-import { Debug } from "../compiler/debug";
+import * as Debug from "../compiler/debug";
 import { computeLineStarts } from "../compiler/scanner";
 import {
     TextChangeRange,

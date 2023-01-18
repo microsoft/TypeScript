@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import { readConfigFile } from "../compiler/commandLineParser";
 import {
     compareStringsCaseSensitive,
@@ -16,7 +17,6 @@ import {
     MapLike,
     versionMajorMinor,
 } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import {
     combinePaths,
     fileExtensionIs,

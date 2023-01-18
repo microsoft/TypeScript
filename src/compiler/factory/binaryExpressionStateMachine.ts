@@ -1,4 +1,4 @@
-import { AssertionLevel, Debug } from "../debug";
+import * as Debug from "../debug";
 import {
     BinaryExpression,
     BinaryOperatorToken,
@@ -130,7 +130,7 @@ function pushStack<TState>(stackIndex: number, stateStack: BinaryExpressionState
 }
 
 function checkCircularity(stackIndex: number, nodeStack: BinaryExpression[], node: BinaryExpression) {
-    if (Debug.shouldAssert(AssertionLevel.Aggressive)) {
+    if (Debug.shouldAssert(Debug.AssertionLevel.Aggressive)) {
         while (stackIndex >= 0) {
             Debug.assert(nodeStack[stackIndex] !== node, "Circular traversal detected.");
             stackIndex--;

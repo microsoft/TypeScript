@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     bindSourceFile,
     getModuleInstanceState,
@@ -80,7 +81,6 @@ import {
     tryCast,
 } from "./core";
 import { Comparison } from "./corePublic";
-import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import { createPrinter } from "./emitter";
 import {

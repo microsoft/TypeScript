@@ -1,3 +1,4 @@
+import * as Debug from "./debug";
 import {
     arrayToMap,
     createMultiMap,
@@ -12,7 +13,6 @@ import {
     startsWith,
     stringContains,
 } from "./core";
-import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
     createModeAwareCache,

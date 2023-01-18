@@ -1,3 +1,4 @@
+import * as Debug from "../debug";
 import {
     arrayFrom,
     emptyArray,
@@ -12,8 +13,10 @@ import {
     singleOrUndefined,
     spanMap,
 } from "../core";
-import { Debug } from "../debug";
-import { addEmitHelpers, setIdentifierGeneratedImportReference } from "../factory/emitNode";
+import {
+    addEmitHelpers,
+    setIdentifierGeneratedImportReference,
+} from "../factory/emitNode";
 import {
     isIdentifier,
     isJsxAttribute,

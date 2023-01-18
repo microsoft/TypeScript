@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     getNodeId,
     getSymbolId,
@@ -24,7 +25,6 @@ import {
     tryCast,
 } from "../compiler/core";
 import { Push } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
 import {
     isBinaryExpression,
     isBindingElement,
