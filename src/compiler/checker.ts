@@ -10886,7 +10886,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             members.set("exports" as __String, result);
             return createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
         }
-        // Handle catch clause variables
         Debug.assertIsDefined(symbol.valueDeclaration);
         const declaration = symbol.valueDeclaration;
         // Handle export default expressions
