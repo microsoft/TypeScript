@@ -61,7 +61,6 @@ import {
     version,
 } from "./corePublic";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
-import { getSnippetElement } from "./factory/emitNode";
 import {
     isArrayLiteralExpression,
     isArrowFunction,
@@ -400,7 +399,6 @@ import {
     SignatureDeclaration,
     SignatureFlags,
     SignatureKind,
-    SnippetKind,
     SourceFile,
     SourceFileLike,
     SourceFileMayBeEmittedHost,
@@ -8216,11 +8214,6 @@ export function canUsePropertyAccess(name: string, languageVersion: ScriptTarget
     return firstChar === CharacterCodes.hash ?
         name.length > 1 && isIdentifierStart(name.charCodeAt(1), languageVersion) :
         isIdentifierStart(firstChar, languageVersion);
-}
-
-/** @internal */
-export function hasTabstop(node: Node): boolean {
-    return getSnippetElement(node)?.kind === SnippetKind.TabStop;
 }
 
 /** @internal */

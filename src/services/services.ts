@@ -53,6 +53,7 @@ import {
     isPrivateIdentifier,
     isPropertyAccessExpression,
 } from "../compiler/factory/nodeTests";
+import { getSnippetElement } from "../compiler/factory/emitNode";
 import { ModeAwareCache } from "../compiler/moduleNameResolver";
 import {
     ObjectAllocator,
@@ -153,6 +154,7 @@ import {
     SignatureDeclaration,
     SignatureFlags,
     SignatureKind,
+    SnippetKind,
     SourceFile,
     SourceFileLike,
     SourceMapSource,
@@ -193,7 +195,6 @@ import {
     getTokenPosOfNode,
     hasStaticModifier,
     hasSyntacticModifier,
-    hasTabstop,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
     isDeclarationName,
@@ -555,6 +556,10 @@ function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: 
             break;
         }
     }
+}
+
+function hasTabstop(node: Node): boolean {
+    return getSnippetElement(node)?.kind === SnippetKind.TabStop;
 }
 
 function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
