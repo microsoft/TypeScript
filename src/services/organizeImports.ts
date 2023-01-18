@@ -96,7 +96,7 @@ export function organizeImports(
     const processImportsOfSameModuleSpecifier = (importGroup: readonly ImportDeclaration[]) => {
         if (shouldRemove) importGroup = removeUnusedImports(importGroup, sourceFile, program);
         if (shouldCombine) importGroup = coalesceImportsWorker(importGroup, comparer, sourceFile);
-        if (shouldSort) importGroup = stableSort(importGroup, (s1, s2) => compareImportsOrRequireStatements(s1, s2));
+        if (shouldSort) importGroup = stableSort(importGroup, (s1, s2) => compareImportsOrRequireStatements(s1, s2, comparer));
         return importGroup;
     };
 
@@ -143,7 +143,7 @@ export function organizeImports(
             ? group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier)!)
             : [oldImportDecls];
         const sortedImportGroups = shouldSort
-            ? stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier))
+            ? stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiersWorker(group1[0].moduleSpecifier, group2[0].moduleSpecifier, comparer))
             : oldImportGroups;
         const newImportDecls = flatMap(sortedImportGroups, importGroup =>
             getExternalModuleName(importGroup[0].moduleSpecifier)
@@ -308,10 +308,11 @@ function getExternalModuleName(specifier: Expression | undefined) {
 /**
  * @param importGroup a list of ImportDeclarations, all with the same module name.
  *
+ * @deprecated Only used for testing
  * @internal
  */
-export function coalesceImports(importGroup: readonly ImportDeclaration[], ignoreCase?: boolean, sourceFile?: SourceFile): readonly ImportDeclaration[] {
-    const comparer = getOrganizeImportsOrdinalStringComparer(!!ignoreCase);
+export function coalesceImports(importGroup: readonly ImportDeclaration[], ignoreCase: boolean, sourceFile?: SourceFile): readonly ImportDeclaration[] {
+    const comparer = getOrganizeImportsOrdinalStringComparer(ignoreCase);
     return coalesceImportsWorker(importGroup, comparer, sourceFile);
 }
 
@@ -482,6 +483,7 @@ function getCategorizedImports(importGroup: readonly ImportDeclaration[]) {
 /**
  * @param exportGroup a list of ExportDeclarations, all with the same module name.
  *
+ * @deprecated Only used for testing
  * @internal
  */
 export function coalesceExports(exportGroup: readonly ExportDeclaration[], ignoreCase: boolean) {
@@ -574,31 +576,32 @@ function updateImportDeclarationAndClause(
 }
 
 function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[], comparer: Comparer<string>) {
-    return stableSort(specifiers, (s1, s2) => compareImportOrExportSpecifiersWorker(s1, s2, comparer));
+    return stableSort(specifiers, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer));
 }
 
 /** @internal */
-export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T, ignoreCase?: boolean): Comparison {
-    return compareImportOrExportSpecifiersWorker(s1, s2, getOrganizeImportsOrdinalStringComparer(!!ignoreCase));
-}
-
-function compareImportOrExportSpecifiersWorker<T extends ImportOrExportSpecifier>(s1: T, s2: T, comparer: Comparer<string>): Comparison {
+export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T, comparer: Comparer<string>): Comparison {
     return compareBooleans(s1.isTypeOnly, s2.isTypeOnly) || comparer(s1.name.text, s2.name.text);
 }
 
 /**
  * Exported for testing
  *
+ * @deprecated Only used for testing
  * @internal
  */
 export function compareModuleSpecifiers(m1: Expression | undefined, m2: Expression | undefined, ignoreCase?: boolean) {
+    const comparer = getOrganizeImportsOrdinalStringComparer(!!ignoreCase);
+    return compareModuleSpecifiersWorker(m1, m2, comparer);
+}
+
+function compareModuleSpecifiersWorker(m1: Expression | undefined, m2: Expression | undefined, comparer: Comparer<string>) {
     const name1 = m1 === undefined ? undefined : getExternalModuleName(m1);
     const name2 = m2 === undefined ? undefined : getExternalModuleName(m2);
-    const compareStrings = ignoreCase ? compareStringsCaseInsensitiveEslintCompatible : compareStringsCaseSensitive;
     return compareBooleans(name1 === undefined, name2 === undefined) ||
         compareBooleans(isExternalModuleNameRelative(name1!), isExternalModuleNameRelative(name2!)) ||
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-        compareStrings(name1!, name2!); // I don't know why eslint is wrong but this one is necessary
+        comparer(name1!, name2!); // I don't know why eslint is wrong but this one is necessary
 }
 
 function getModuleSpecifierExpression(declaration: AnyImportOrRequireStatement): Expression | undefined {
@@ -620,11 +623,17 @@ export function detectSorting(sourceFile: SourceFile, preferences: UserPreferenc
 }
 
 function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: UserPreferences): SortKind {
+    const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
+    const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
     let sortState = SortKind.Both;
     for (const importGroup of importGroups) {
         // Check module specifiers
         if (importGroup.length > 1) {
-            sortState &= detectSortCaseSensitivity(importGroup, i => tryCast(i.moduleSpecifier, isStringLiteral)?.text ?? "", compareStringsCaseSensitive, compareStringsCaseInsensitiveEslintCompatible);
+            sortState &= detectSortCaseSensitivity(
+                importGroup,
+                i => tryCast(i.moduleSpecifier, isStringLiteral)?.text ?? "",
+                collateCaseSensitive,
+                collateCaseInsensitive);
             if (!sortState) {
                 return sortState;
             }
@@ -652,12 +661,14 @@ function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: U
 }
 
 /** @internal */
-export function detectImportDeclarationSorting(imports: readonly AnyImportOrRequireStatement[]): SortKind {
+export function detectImportDeclarationSorting(imports: readonly AnyImportOrRequireStatement[], preferences: UserPreferences): SortKind {
+    const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
+    const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
     return detectSortCaseSensitivity(
         imports,
         s => getExternalModuleName(getModuleSpecifierExpression(s)) || "",
-        compareStringsCaseInsensitiveEslintCompatible,
-        compareStringsCaseSensitive
+        collateCaseSensitive,
+        collateCaseInsensitive
     );
 }
 
@@ -696,20 +707,20 @@ export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly 
 }, new ImportSpecifierSortingCache());
 
 /** @internal */
-export function getImportDeclarationInsertionIndex(sortedImports: readonly AnyImportOrRequireStatement[], newImport: AnyImportOrRequireStatement, ignoreCase?: boolean) {
-    const index = binarySearch(sortedImports, newImport, identity, (a, b) => compareImportsOrRequireStatements(a, b, ignoreCase));
+export function getImportDeclarationInsertionIndex(sortedImports: readonly AnyImportOrRequireStatement[], newImport: AnyImportOrRequireStatement, comparer: Comparer<string>) {
+    const index = binarySearch(sortedImports, newImport, identity, (a, b) => compareImportsOrRequireStatements(a, b, comparer));
     return index < 0 ? ~index : index;
 }
 
 /** @internal */
 export function getImportSpecifierInsertionIndex(sortedImports: readonly ImportSpecifier[], newImport: ImportSpecifier, comparer: Comparer<string>) {
-    const index = binarySearch(sortedImports, newImport, identity, (s1, s2) => compareImportOrExportSpecifiersWorker(s1, s2, comparer));
+    const index = binarySearch(sortedImports, newImport, identity, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer));
     return index < 0 ? ~index : index;
 }
 
 /** @internal */
-export function compareImportsOrRequireStatements(s1: AnyImportOrRequireStatement, s2: AnyImportOrRequireStatement, ignoreCase?: boolean) {
-    return compareModuleSpecifiers(getModuleSpecifierExpression(s1), getModuleSpecifierExpression(s2), ignoreCase) || compareImportKind(s1, s2);
+export function compareImportsOrRequireStatements(s1: AnyImportOrRequireStatement, s2: AnyImportOrRequireStatement, comparer: Comparer<string>) {
+    return compareModuleSpecifiersWorker(getModuleSpecifierExpression(s1), getModuleSpecifierExpression(s2), comparer) || compareImportKind(s1, s2);
 }
 
 function compareImportKind(s1: AnyImportOrRequireStatement, s2: AnyImportOrRequireStatement) {

@@ -375,7 +375,7 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
             newDeclarations = combine(newDeclarations, declarations);
         });
         if (newDeclarations) {
-            insertImports(changeTracker, sourceFile, newDeclarations, /*blankLineBetween*/ true);
+            insertImports(changeTracker, sourceFile, newDeclarations, /*blankLineBetween*/ true, preferences);
         }
     }
 
@@ -1215,7 +1215,7 @@ function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: 
             const defaultImport: Import | undefined = importKind === ImportKind.Default ? { name: symbolName, addAsTypeOnly } : undefined;
             const namedImports: Import[] | undefined = importKind === ImportKind.Named ? [{ name: symbolName, addAsTypeOnly }] : undefined;
             const namespaceLikeImport = importKind === ImportKind.Namespace || importKind === ImportKind.CommonJS ? { importKind, name: symbolName, addAsTypeOnly } : undefined;
-            insertImports(changes, sourceFile, getDeclarations(moduleSpecifier, quotePreference, defaultImport, namedImports, namespaceLikeImport), /*blankLineBetween*/ true);
+            insertImports(changes, sourceFile, getDeclarations(moduleSpecifier, quotePreference, defaultImport, namedImports, namespaceLikeImport), /*blankLineBetween*/ true, preferences);
             return includeSymbolNameInDescription
                 ? [Diagnostics.Import_0_from_1, symbolName, moduleSpecifier]
                 : [Diagnostics.Add_import_from_0, moduleSpecifier];
@@ -1352,12 +1352,13 @@ function doAddExistingFix(
             ignoreCaseForSorting = OrganizeImports.detectSorting(sourceFile, preferences) === SortKind.CaseInsensitive;
         }
 
+        const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, ignoreCaseForSorting);
         const newSpecifiers = stableSort(
             namedImports.map(namedImport => factory.createImportSpecifier(
                 (!clause.isTypeOnly || promoteFromTypeOnly) && needsTypeOnly(namedImport),
                 /*propertyName*/ undefined,
                 factory.createIdentifier(namedImport.name))),
-            (s1, s2) => OrganizeImports.compareImportOrExportSpecifiers(s1, s2, ignoreCaseForSorting));
+            (s1, s2) => OrganizeImports.compareImportOrExportSpecifiers(s1, s2, comparer));
 
         // The sorting preference computed earlier may or may not have validated that these particular
         // import specifiers are sorted. If they aren't, `getImportSpecifierInsertionIndex` will return
@@ -1366,7 +1367,6 @@ function doAddExistingFix(
         // to do a sorted insertion.
         const specifierSort = existingSpecifiers?.length && OrganizeImports.detectImportSpecifierSorting(existingSpecifiers, preferences);
         if (specifierSort && !(ignoreCaseForSorting && specifierSort === SortKind.CaseSensitive)) {
-            const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, ignoreCaseForSorting);
             for (const spec of newSpecifiers) {
                 // Organize imports puts type-only import specifiers last, so if we're
                 // adding a non-type-only specifier and converting all the other ones to
