@@ -56,12 +56,12 @@ export function start() {
             this.pending = false;
             this.delayed = false;
         }
-        addSuite(suite: RemoteSuite) {
+        override addSuite(suite: RemoteSuite) {
             super.addSuite(suite);
             this.suiteMap.set(suite.title, suite);
             return this;
         }
-        addTest(test: RemoteTest) {
+        override addTest(test: RemoteTest) {
             return super.addTest(test);
         }
     }

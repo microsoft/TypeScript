@@ -403,7 +403,7 @@ export class TestSession extends ts.server.Session {
     private seq = 0;
     public events: ts.server.protocol.Event[] = [];
     public testhost: TestSessionAndServiceHost;
-    public logger: Logger;
+    public override logger: Logger;
 
     constructor(opts: TestSessionOptions) {
         super(opts);
@@ -426,7 +426,7 @@ export class TestSession extends ts.server.Session {
         return this.seq + 1;
     }
 
-    public executeCommand(request: ts.server.protocol.Request) {
+    public override executeCommand(request: ts.server.protocol.Request) {
         return this.baseline("response", super.executeCommand(this.baseline("request", request)));
     }
 
@@ -438,7 +438,7 @@ export class TestSession extends ts.server.Session {
         return this.executeCommand(request);
     }
 
-    public event<T extends object>(body: T, eventName: string) {
+    public override event<T extends object>(body: T, eventName: string) {
         this.events.push(ts.server.toEvent(eventName, body));
         super.event(body, eventName);
     }
@@ -522,7 +522,7 @@ export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptio
 
 export class TestProjectService extends ts.server.ProjectService {
     public testhost: TestSessionAndServiceHost;
-    constructor(host: TestServerHost, public logger: Logger, cancellationToken: ts.HostCancellationToken, useSingleInferredProject: boolean,
+    constructor(host: TestServerHost, public override logger: Logger, cancellationToken: ts.HostCancellationToken, useSingleInferredProject: boolean,
         typingsInstaller: ts.server.ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
         super({
             host,

@@ -743,7 +743,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * Ensure (almost) deterministic release of internal Javascript resources when
      * some external native objects holds onto us (e.g. Com/Interop).
      */
-    public dispose(dummy: {}): void {
+    public override dispose(dummy: {}): void {
         this.logger.log("dispose()");
         this.languageService.dispose();
         this.languageService = null!; // eslint-disable-line no-null/no-null

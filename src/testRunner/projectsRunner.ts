@@ -89,11 +89,11 @@ class ProjectCompilerHost extends fakes.CompilerHost {
         this._testCase = testCase;
     }
 
-    public get parseConfigHost(): fakes.ParseConfigHost {
+    public override get parseConfigHost(): fakes.ParseConfigHost {
         return this._projectParseConfigHost || (this._projectParseConfigHost = new ProjectParseConfigHost(this.sys, this._testCase));
     }
 
-    public getDefaultLibFileName(_options: ts.CompilerOptions) {
+    public override getDefaultLibFileName(_options: ts.CompilerOptions) {
         return vpath.resolve(this.getDefaultLibLocation(), "lib.es5.d.ts");
     }
 }
@@ -106,7 +106,7 @@ class ProjectParseConfigHost extends fakes.ParseConfigHost {
         this._testCase = testCase;
     }
 
-    public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
+    public override readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
         const result = super.readDirectory(path, extensions, excludes, includes, depth);
         const projectRoot = vpath.resolve(vfs.srcFolder, this._testCase.projectRoot);
         return result.map(item => vpath.relative(

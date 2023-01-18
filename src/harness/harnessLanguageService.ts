@@ -295,11 +295,11 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return script ? script.version.toString() : undefined!; // TODO: GH#18217
     }
 
-    directoryExists(dirName: string): boolean {
+    override directoryExists(dirName: string): boolean {
         return this.sys.directoryExists(dirName);
     }
 
-    fileExists(fileName: string): boolean {
+    override fileExists(fileName: string): boolean {
         return this.sys.fileExists(fileName);
     }
 
@@ -307,11 +307,11 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return this.sys.readDirectory(path, extensions, exclude, include, depth);
     }
 
-    readFile(path: string): string | undefined {
+    override readFile(path: string): string | undefined {
         return this.sys.readFile(path);
     }
 
-    realpath(path: string): string {
+    override realpath(path: string): string {
         return this.sys.realpath(path);
     }
 
@@ -389,11 +389,11 @@ class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.L
         }
     }
 
-    getFilenames(): string[] { return this.nativeHost.getFilenames(); }
-    getScriptInfo(fileName: string): ScriptInfo | undefined { return this.nativeHost.getScriptInfo(fileName); }
-    addScript(fileName: string, content: string, isRootFile: boolean): void { this.nativeHost.addScript(fileName, content, isRootFile); }
-    editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
-    positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
+    override getFilenames(): string[] { return this.nativeHost.getFilenames(); }
+    override getScriptInfo(fileName: string): ScriptInfo | undefined { return this.nativeHost.getScriptInfo(fileName); }
+    override addScript(fileName: string, content: string, isRootFile: boolean): void { this.nativeHost.addScript(fileName, content, isRootFile); }
+    override editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
+    override positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
 
     getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
     getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
@@ -412,15 +412,15 @@ class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.L
     readDirectory = ts.notImplemented;
     readDirectoryNames = ts.notImplemented;
     readFileNames = ts.notImplemented;
-    fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
-    readFile(fileName: string) {
+    override fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
+    override readFile(fileName: string) {
         const snapshot = this.nativeHost.getScriptSnapshot(fileName);
         return snapshot && ts.getSnapshotText(snapshot);
     }
     log(s: string): void { this.nativeHost.log(s); }
     trace(s: string): void { this.nativeHost.trace(s); }
     error(s: string): void { this.nativeHost.error(s); }
-    directoryExists(): boolean {
+    override directoryExists(): boolean {
         // for tests pessimistically assume that directory always exists
         return true;
     }
@@ -746,12 +746,12 @@ class SessionClientHost extends NativeLanguageServiceHost implements ts.server.S
         this.client = client;
     }
 
-    openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
+    override openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
         super.openFile(fileName, content, scriptKindName);
         this.client.openFile(fileName, content, scriptKindName);
     }
 
-    editScript(fileName: string, start: number, end: number, newText: string) {
+    override editScript(fileName: string, start: number, end: number, newText: string) {
         const changeArgs = this.client.createChangeFileRequestArgs(fileName, start, end, newText);
         super.editScript(fileName, start, end, newText);
         this.client.changeFile(fileName, changeArgs);

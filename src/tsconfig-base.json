@@ -19,6 +19,7 @@
         "strict": true,
         "strictBindCallApply": false,
         "useUnknownInCatchVariables": false,
+        "noImplicitOverride": true,
 
         "noUnusedLocals": true,
         "noUnusedParameters": true,
