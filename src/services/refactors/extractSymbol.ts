@@ -1595,7 +1595,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
     const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))]);
     // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
     if (hasWritesOrVariableDeclarations || substitutions.size) {
-        const rewrittenStatements = visitNodes(statements, visitor).slice();
+        const rewrittenStatements = visitNodes(statements, visitor, isStatement).slice();
         if (hasWritesOrVariableDeclarations && !hasReturn && isStatement(body)) {
             // add return at the end to propagate writes back in case if control flow falls out of the function body
             // it is ok to know that range has at least one return since it we only allow unconditional returns
@@ -1620,7 +1620,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
                 if (!returnValueProperty) {
                     returnValueProperty = "__return";
                 }
-                assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor)));
+                assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor, isExpression)));
             }
             if (assignments.length === 1) {
                 return factory.createReturnStatement(assignments[0].name as Expression);

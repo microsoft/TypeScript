@@ -3069,10 +3069,10 @@ export function getSynthesizedDeepCloneWithReplacements<T extends Node>(
 }
 
 function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
-    const nodeClone: (n: T) => T = replaceNode
+    const nodeClone: <T extends Node>(n: T) => T = replaceNode
         ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
         : getSynthesizedDeepClone;
-    const nodesClone: (ns: NodeArray<T>) => NodeArray<T> = replaceNode
+    const nodesClone: <T extends Node>(ns: NodeArray<T> | undefined) => NodeArray<T> | undefined = replaceNode
         ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
         : ns => ns && getSynthesizedDeepClones(ns);
     const visited =
@@ -3964,7 +3964,7 @@ export function isNonGlobalDeclaration(declaration: Declaration) {
         return false;
     }
     // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
-    return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
+    return isInJSFile(declaration) || !findAncestor(declaration, d => isModuleDeclaration(d) && isGlobalScopeAugmentation(d));
 }
 
 /** @internal */
