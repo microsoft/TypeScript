@@ -1,5 +1,6 @@
 import * as Debug from "./debug";
 import { matchesExclude } from "./commandLineParser";
+import { isNodeLikeSystem } from "./platform";
 import {
     contains,
     createGetCanonicalFileName,
@@ -9,7 +10,6 @@ import {
     enumerateInsertsAndDeletes,
     getStringComparer,
     isArray,
-    isNodeLikeSystem,
     isString,
     mapDefined,
     memoize,
