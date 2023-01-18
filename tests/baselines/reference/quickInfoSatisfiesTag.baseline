@@ -1,0 +1,63 @@
+[
+  {
+    "marker": {
+      "fileName": "/a.js",
+      "position": 41,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 41,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "satisfies",
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "comment",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -147,7 +147,7 @@ class CommonJsLoader extends Loader<CommonJSModule> {
         return this.resolveIndex(dir);
     }
 
-    protected resolve(id: string, base: string) {
+    protected override resolve(id: string, base: string) {
         const file = vpath.resolve(base, id);
         const resolved = this.resolveAsFile(file) || this.resolveAsDirectory(file);
         if (!resolved) throw new Error(`Module '${id}' could not be found.`);
