@@ -106,7 +106,6 @@ import {
     clearMap,
     forEachEntry,
     forEachKey,
-    hasTSFileExtension,
     isJsonEqual,
     removeFileExtension,
 } from "../compiler/utilities";
@@ -220,6 +219,7 @@ import {
     ProjectOptions,
     toNormalizedPath,
 } from "./utilitiesPublic";
+import { hasTSFileExtension } from "../compiler/extension";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 /** @internal */

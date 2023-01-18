@@ -107,10 +107,7 @@ import {
     getEmitModuleResolutionKind,
     getPathsBasePath,
     getSourceFileOfModule,
-    getSupportedExtensions,
     getTextOfIdentifierOrLiteral,
-    hasJSFileExtension,
-    hasTSFileExtension,
     hostGetCanonicalFileName,
     isAmbientModule,
     isExternalModuleAugmentation,
@@ -123,6 +120,11 @@ import {
     tryParsePatterns,
 } from "./utilities";
 import { isExternalModuleNameRelative } from "./utilitiesPublic";
+import {
+    getSupportedExtensions,
+    hasJSFileExtension,
+    hasTSFileExtension,
+} from "./extension";
 
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 

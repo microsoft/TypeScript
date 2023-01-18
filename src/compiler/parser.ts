@@ -393,7 +393,6 @@ import {
     setTextRangePos,
     setTextRangePosEnd,
     setTextRangePosWidth,
-    supportedDeclarationExtensions,
 } from "./utilities";
 import {
     createTextChangeRange,
@@ -409,6 +408,7 @@ import {
     textChangeRangeNewSpan,
     textSpanEnd,
 } from "./utilitiesPublic";
+import { supportedDeclarationExtensions } from "./extension";
 
 const enum SignatureFlags {
     None = 0,

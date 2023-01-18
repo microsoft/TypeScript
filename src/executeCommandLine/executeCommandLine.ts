@@ -89,8 +89,6 @@ import {
     formatMessage,
     isIncrementalCompilation,
     isWatchSet,
-    supportedJSExtensionsFlat,
-    supportedTSExtensionsFlat,
 } from "../compiler/utilities";
 import { validateLocaleAndSetLanguage } from "../compiler/utilitiesPublic";
 import {
@@ -109,6 +107,10 @@ import {
     createWatchProgram,
     WatchCompilerHost,
 } from "../compiler/watchPublic";
+import {
+    supportedJSExtensionsFlat,
+    supportedTSExtensionsFlat,
+} from "../compiler/extension";
 
 interface Statistic {
     name: string;

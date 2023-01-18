@@ -1,4 +1,5 @@
 import * as Debug from "./debug";
+import * as performance from "./performance";
 import {
     arrayFrom,
     binarySearchKey,
@@ -19,7 +20,6 @@ import {
     getNormalizedAbsolutePath,
     getRelativePathToDirectoryOrUrl,
 } from "./path";
-import * as performance from "./performance";
 import { getPositionOfLineAndCharacter } from "./scanner";
 import {
     CharacterCodes,
@@ -41,7 +41,7 @@ export interface SourceMapGeneratorOptions {
 export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
     const { enter, exit } = generatorOptions.extendedDiagnostics
         ? performance.createTimer("Source Map", "beforeSourcemap", "afterSourcemap")
-        : performance.nullTimer;
+        : performance.createNullTimer();
 
     // Current source map file and its index in the sources list
     const rawSources: string[] = [];

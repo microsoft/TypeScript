@@ -34,10 +34,8 @@ import {
     Path,
     TypeAcquisition,
 } from "../compiler/types";
-import {
-    hasJSFileExtension,
-    removeFileExtension,
-} from "../compiler/utilities";
+import { removeFileExtension } from "../compiler/utilities";
+import { hasJSFileExtension } from "../compiler/extension";
 
 /** @internal */
 export interface TypingResolutionHost {

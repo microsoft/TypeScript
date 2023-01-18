@@ -32,10 +32,7 @@ import {
     SourceFileLike,
     TextSpan,
 } from "../compiler/types";
-import {
-    getScriptKindFromFileName,
-    hasTSFileExtension,
-} from "../compiler/utilities";
+import { getScriptKindFromFileName } from "../compiler/utilities";
 import { createTextSpanFromBounds } from "../compiler/utilitiesPublic";
 import { closeFileWatcherOf } from "../compiler/watchUtilities";
 import {
@@ -70,6 +67,7 @@ import {
     Errors,
     NormalizedPath,
 } from "./utilitiesPublic";
+import { hasTSFileExtension } from "../compiler/extension";
 
 export interface ScriptInfoVersion {
     svc: number;

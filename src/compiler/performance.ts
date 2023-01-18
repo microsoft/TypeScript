@@ -23,7 +23,7 @@ export interface Timer {
 
 /** @internal */
 export function createTimerIf(condition: boolean, measureName: string, startMarkName: string, endMarkName: string) {
-    return condition ? createTimer(measureName, startMarkName, endMarkName) : nullTimer;
+    return condition ? createTimer(measureName, startMarkName, endMarkName) : createNullTimer();
 }
 
 /** @internal */
@@ -52,7 +52,7 @@ export function createTimer(measureName: string, startMarkName: string, endMarkN
 }
 
 /** @internal */
-export const nullTimer: Timer = { enter: noop, exit: noop };
+export const createNullTimer = (): Timer => ({ enter: noop, exit: noop });
 
 let enabled = false;
 let timeorigin = timestamp();

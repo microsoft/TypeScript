@@ -2,6 +2,7 @@
 
 export * from "../corePublic";
 export * from "../core";
+export * from "../extension";
 export * from "../semver";
 export * from "../performanceCore";
 export * from "../perfLogger";

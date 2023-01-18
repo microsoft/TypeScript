@@ -61,13 +61,12 @@ import {
 } from "./types";
 import {
     closeFileWatcher,
-    isSupportedSourceFileName,
     mutateMap,
     outFile,
     removeFileExtension,
-    supportedJSExtensionsFlat,
 } from "./utilities";
 import { returnNoopFileWatcher } from "./watch";
+import { isSupportedSourceFileName, supportedJSExtensionsFlat } from "./extension";
 
 /**
  * Partial interface of the System thats needed to support the caching of directory structure

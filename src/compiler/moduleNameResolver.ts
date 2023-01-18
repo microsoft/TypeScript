@@ -110,15 +110,17 @@ import {
     packageIdToString,
     removeExtension,
     removeFileExtension,
-    supportedDeclarationExtensions,
-    supportedTSImplementationExtensions,
-    tryExtractTSExtension,
     tryGetExtensionFromPath,
     tryParsePatterns,
 } from "./utilities";
 import {
     isExternalModuleNameRelative,
 } from "./utilitiesPublic";
+import {
+    supportedDeclarationExtensions,
+    supportedTSImplementationExtensions,
+    tryExtractTSExtension,
+} from "./extension";
 
 /** @internal */
 export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;

@@ -123,8 +123,6 @@ import {
     createDiagnosticForNodeInSourceFile,
     forEachEntry,
     getLocaleSpecificMessage,
-    getSupportedExtensions,
-    getSupportedExtensionsWithJsonIfResolveJsonModule,
     getTextOfPropertyName,
     getTsConfigPropArray,
     getTsConfigPropArrayElementValue,
@@ -132,6 +130,10 @@ import {
     isStringDoubleQuoted,
 } from "./utilities";
 import { unescapeLeadingUnderscores } from "./utilitiesPublic";
+import {
+    getSupportedExtensions,
+    getSupportedExtensionsWithJsonIfResolveJsonModule,
+} from "./extension";
 
 /** @internal */
 export const compileOnSaveCommandLineOption: CommandLineOption = {

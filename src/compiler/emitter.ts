@@ -456,7 +456,6 @@ import {
     removeFileExtension,
     setTextRangePosEnd,
     setTextRangePosWidth,
-    supportedJSExtensionsFlat,
     writeCommentRange,
     writeFile,
 } from "./utilities";
@@ -487,6 +486,7 @@ import { getNewLineCharacter } from "./sysUtilities";
 import { getSourceFilesToEmit } from "./emitterUtilities";
 import { setEachParent, setParent } from "./parserUtilities";
 import { readJsonOrUndefined } from "./commandLineParserUtilities";
+import { supportedJSExtensionsFlat } from "./extension";
 
 const brackets = createBracketsMap();
 

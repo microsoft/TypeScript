@@ -3,6 +3,11 @@ import {
     concatenate,
     emptyArray,
 } from "./core";
+import {
+    hasJSFileExtension,
+    hasTSFileExtension,
+    usesExtensionsOnImports,
+} from "./extension";
 import { isExpressionStatement } from "./factory/nodeTests";
 import {
     nodeModulesPathPart,
@@ -18,13 +23,10 @@ import {
     UserPreferences,
 } from "./types";
 import {
-    hasJSFileExtension,
-    hasTSFileExtension,
     isRequireCall,
     isRequireVariableStatement,
     isSourceFileJS,
     ModuleSpecifierEnding,
-    usesExtensionsOnImports,
 } from "./utilities";
 
 /** @internal */

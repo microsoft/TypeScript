@@ -305,13 +305,10 @@ import {
     getResolvedModule,
     getResolveJsonModule,
     getStrictOptionValue,
-    getSupportedExtensions,
-    getSupportedExtensionsWithJsonIfResolveJsonModule,
     getTextOfIdentifierOrLiteral,
     getTsConfigObjectLiteralExpression,
     getTsConfigPropArray,
     getTsConfigPropArrayElementValue,
-    hasJSFileExtension,
     hasJsonModuleEmitEnabled,
     hasSyntacticModifier,
     hasZeroOrOneAsteriskCharacter,
@@ -337,7 +334,6 @@ import {
     resolutionExtensionIsTSOrJson,
     skipTypeChecking,
     sourceFileMayBeEmitted,
-    supportedJSExtensionsFlat,
     typeDirectiveIsEqualTo,
     walkUpParenthesizedExpressions,
     writeFileEnsuringDirectories,
@@ -359,6 +355,12 @@ import {
 } from "./watch";
 import { ProgramHost } from "./watchPublic";
 import { DirectoryStructureHost } from "./watchUtilities";
+import {
+    getSupportedExtensions,
+    getSupportedExtensionsWithJsonIfResolveJsonModule,
+    hasJSFileExtension,
+    supportedJSExtensionsFlat,
+} from "./extension";
 
 export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
     return forEachAncestorDirectory(searchPath, ancestor => {

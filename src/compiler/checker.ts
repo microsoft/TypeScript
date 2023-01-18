@@ -982,7 +982,6 @@ import {
     skipParentheses,
     skipTypeChecking,
     stripQuotes,
-    tryExtractTSExtension,
     tryGetClassImplementingOrExtendingExpressionWithTypeArguments,
     tryGetExtensionFromPath,
     tryGetJSDocSatisfiesTypeNode,
@@ -1094,6 +1093,7 @@ import {
     visitNode,
     visitNodes,
 } from "./visitorPublic";
+import { tryExtractTSExtension } from "./extension";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;

@@ -14,6 +14,7 @@ import {
     mapDefined,
     startsWith,
 } from "../compiler/core";
+import { hasJSFileExtension } from "../compiler/extension";
 import {
     isArrowFunction,
     isBlock,
@@ -67,7 +68,6 @@ import {
     forEachAncestor,
     getAssignmentDeclarationKind,
     getJSDocCommentsAndTags,
-    hasJSFileExtension,
 } from "../compiler/utilities";
 import {
     findAncestor,

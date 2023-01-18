@@ -114,8 +114,6 @@ import {
     changeExtension,
     getEmitModuleResolutionKind,
     getResolvePackageJsonExports,
-    getSupportedExtensions,
-    getSupportedExtensionsWithJsonIfResolveJsonModule,
     hostGetCanonicalFileName,
     isImportCall,
     ModuleSpecifierEnding,
@@ -123,7 +121,6 @@ import {
     signatureHasRestParameter,
     skipParentheses,
     stripQuotes,
-    supportedTSImplementationExtensions,
     tryGetExtensionFromPath,
     tryParsePattern,
     tryRemoveDirectoryPrefix,
@@ -178,6 +175,11 @@ import {
     tryGetDirectories,
     tryReadDirectory,
 } from "./utilities";
+import {
+    getSupportedExtensions,
+    getSupportedExtensionsWithJsonIfResolveJsonModule,
+    supportedTSImplementationExtensions,
+} from "../compiler/extension";
 
 interface NameAndKindSet {
     add(value: NameAndKind): void;
