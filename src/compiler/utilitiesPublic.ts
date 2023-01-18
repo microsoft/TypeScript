@@ -1793,7 +1793,6 @@ export function isDeclarationBindingElement(bindingElement: BindingOrAssignmentE
     return false;
 }
 
-/** @internal */
 export function isBindingOrAssignmentElement(node: Node): node is BindingOrAssignmentElement {
     return isVariableDeclaration(node)
         || isParameter(node)
@@ -1909,7 +1908,6 @@ export function isTemplateLiteral(node: Node): node is TemplateLiteral {
         || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
 }
 
-/** @internal */
 export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
     return isLeftHandSideExpressionKind(skipPartiallyEmittedExpressions(node).kind);
 }

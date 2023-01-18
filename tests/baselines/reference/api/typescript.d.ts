@@ -4862,10 +4862,12 @@ declare namespace ts {
     function isTypeNode(node: Node): node is TypeNode;
     function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode;
     function isArrayBindingElement(node: Node): node is ArrayBindingElement;
+    function isBindingOrAssignmentElement(node: Node): node is BindingOrAssignmentElement;
     function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName;
     function isCallLikeExpression(node: Node): node is CallLikeExpression;
     function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
     function isTemplateLiteral(node: Node): node is TemplateLiteral;
+    function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression;
     function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
     /**
      * Determines whether a node is an expression based only on its kind.
