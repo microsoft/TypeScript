@@ -3755,6 +3755,8 @@ declare namespace ts {
         ComputedPropertyName = 167,
         TypeParameter = 168,
         ParameterDeclaration = 169,
+        /** @deprecated Use SyntaxKind.ParameterDeclaration */
+        Parameter = 169,
         Decorator = 170,
         PropertySignature = 171,
         PropertyDeclaration = 172,
