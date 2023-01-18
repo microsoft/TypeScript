@@ -7,6 +7,7 @@ import {
     singleOrMany,
     some,
 } from "../core";
+import { Debug } from "../debug";
 import {
     addEmitHelpers,
     setCommentRange,
@@ -19,6 +20,7 @@ import {
     isDecorator,
     isHeritageClause,
     isIdentifier,
+    isParameter,
     isPrivateIdentifier,
     isPropertyDeclaration,
 } from "../factory/nodeTests";
@@ -68,7 +70,6 @@ import {
     hasAccessorModifier,
     hasDecorators,
     hasSyntacticModifier,
-    isParameterDeclaration,
     isStatic,
     moveRangePastModifiers,
     nodeOrChildIsDecorated,
@@ -127,11 +128,11 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         return visited;
     }
 
-    function modifierVisitor(node: Node): VisitResult<Node> {
+    function modifierVisitor(node: Node): VisitResult<Node | undefined> {
         return isDecorator(node) ? undefined : node;
     }
 
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: Node): VisitResult<Node | undefined> {
         if (!(node.transformFlags & TransformFlags.ContainsDecorators)) {
             return node;
         }
@@ -399,7 +400,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         return factory.updateConstructorDeclaration(
             node,
             visitNodes(node.modifiers, modifierVisitor, isModifier),
-            visitNodes(node.parameters, visitor, isParameterDeclaration),
+            visitNodes(node.parameters, visitor, isParameter),
             visitNode(node.body, visitor, isBlock));
     }
 
@@ -418,10 +419,10 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
             node,
             visitNodes(node.modifiers, modifierVisitor, isModifier),
             node.asteriskToken,
-            visitNode(node.name, visitor, isPropertyName),
+            Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
             /*questionToken*/ undefined,
             /*typeParameters*/ undefined,
-            visitNodes(node.parameters, visitor, isParameterDeclaration),
+            visitNodes(node.parameters, visitor, isParameter),
             /*type*/ undefined,
             visitNode(node.body, visitor, isBlock)
         ), node);
@@ -431,8 +432,8 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         return finishClassElement(factory.updateGetAccessorDeclaration(
             node,
             visitNodes(node.modifiers, modifierVisitor, isModifier),
-            visitNode(node.name, visitor, isPropertyName),
-            visitNodes(node.parameters, visitor, isParameterDeclaration),
+            Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
+            visitNodes(node.parameters, visitor, isParameter),
             /*type*/ undefined,
             visitNode(node.body, visitor, isBlock)
         ), node);
@@ -442,8 +443,8 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         return finishClassElement(factory.updateSetAccessorDeclaration(
             node,
             visitNodes(node.modifiers, modifierVisitor, isModifier),
-            visitNode(node.name, visitor, isPropertyName),
-            visitNodes(node.parameters, visitor, isParameterDeclaration),
+            Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
+            visitNodes(node.parameters, visitor, isParameter),
             visitNode(node.body, visitor, isBlock)
         ), node);
     }
@@ -456,7 +457,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         return finishClassElement(factory.updatePropertyDeclaration(
             node,
             visitNodes(node.modifiers, modifierVisitor, isModifier),
-            visitNode(node.name, visitor, isPropertyName),
+            Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
             /*questionOrExclamationToken*/ undefined,
             /*type*/ undefined,
             visitNode(node.initializer, visitor, isExpression)
@@ -468,7 +469,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
             node,
             elideNodes(factory, node.modifiers),
             node.dotDotDotToken,
-            visitNode(node.name, visitor, isBindingName),
+            Debug.checkDefined(visitNode(node.name, visitor, isBindingName)),
             /*questionToken*/ undefined,
             /*type*/ undefined,
             visitNode(node.initializer, visitor, isExpression)
@@ -665,7 +666,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * @param decorator The decorator node.
      */
     function transformDecorator(decorator: Decorator) {
-        return visitNode(decorator.expression, visitor, isExpression);
+        return Debug.checkDefined(visitNode(decorator.expression, visitor, isExpression));
     }
 
     /**
@@ -674,7 +675,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * @param decorators The decorators for the parameter at the provided offset.
      * @param parameterOffset The offset of the parameter.
      */
-    function transformDecoratorsOfParameter(decorators: Decorator[], parameterOffset: number) {
+    function transformDecoratorsOfParameter(decorators: readonly Decorator[] | undefined, parameterOffset: number) {
         let expressions: Expression[] | undefined;
         if (decorators) {
             expressions = [];
@@ -803,3 +804,4 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         return undefined;
     }
 }
+

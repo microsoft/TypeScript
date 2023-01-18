@@ -96,11 +96,13 @@ import {
     getNameOfDeclaration,
     idText,
     isAutoAccessorPropertyDeclaration,
+    isTypeNode,
     textSpanEnd,
 } from "../../compiler/utilitiesPublic";
 import {
     visitEachChild,
     visitNode,
+    visitNodes,
 } from "../../compiler/visitorPublic";
 import { ChangeTracker } from "../textChanges";
 import {
@@ -866,12 +868,11 @@ export function findJsonProperty(obj: ObjectLiteralExpression, name: string): Pr
  */
 export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget) {
     let symbols: Symbol[] | undefined;
-    const typeNode = visitNode(importTypeNode, visit);
+    const typeNode = visitNode(importTypeNode, visit, isTypeNode);
     if (symbols && typeNode) {
         return { typeNode, symbols };
     }
 
-    function visit(node: TypeNode): TypeNode;
     function visit(node: Node): Node {
         if (isLiteralImportTypeNode(node) && node.qualifier) {
             // Symbol for the left-most thing after the dot
@@ -882,7 +883,7 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
                 : node.qualifier;
 
             symbols = append(symbols, firstIdentifier.symbol);
-            const typeArguments = node.typeArguments?.map(visit);
+            const typeArguments = visitNodes(node.typeArguments, visit, isTypeNode);
             return factory.createTypeReferenceNode(qualifier, typeArguments);
         }
         return visitEachChild(node, visit, nullTransformationContext);

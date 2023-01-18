@@ -22,6 +22,7 @@ import {
     isIdentifier,
     isParameter,
     isPropertyAccessExpression,
+    isQuestionToken,
     isVariableDeclarationList,
 } from "../factory/nodeTests";
 import {
@@ -80,7 +81,6 @@ import {
     SyntaxKind,
     TaggedTemplateExpression,
     TextRange,
-    Token,
     TransformationContext,
     TransformFlags,
     VariableDeclaration,
@@ -111,7 +111,6 @@ import {
     isObjectLiteralElementLike,
     isPropertyName,
     isStatement,
-    isToken,
 } from "../utilitiesPublic";
 import {
     visitEachChild,
@@ -261,7 +260,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         return visitorWorker(node, /*expressionResultIsUnused*/ true);
     }
 
-    function visitorNoAsyncModifier(node: Node): VisitResult<Node> {
+    function visitorNoAsyncModifier(node: Node): VisitResult<Node | undefined> {
         if (node.kind === SyntaxKind.AsyncKeyword) {
             return undefined;
         }
@@ -1062,7 +1061,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 ? undefined
                 : node.asteriskToken,
             visitNode(node.name, visitor, isPropertyName),
-            visitNode<Token<SyntaxKind.QuestionToken>>(/*questionToken*/ undefined, visitor, isToken),
+            visitNode(/*questionToken*/ undefined, visitor, isQuestionToken),
             /*typeParameters*/ undefined,
             visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,

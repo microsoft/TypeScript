@@ -2578,7 +2578,7 @@ export class ConfiguredProject extends Project {
      *
      * @internal
      */
-    potentialProjectReferences: Set<string> | undefined;
+    potentialProjectReferences: Set<NormalizedPath> | undefined;
 
     /** @internal */
     projectOptions?: ProjectOptions | true;

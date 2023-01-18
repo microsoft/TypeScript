@@ -258,7 +258,10 @@ import {
     isJSDocConstructSignature,
     isJSDocTypeAlias,
     isJsonSourceFile,
+    isLogicalOrCoalescingAssignmentExpression,
     isLogicalOrCoalescingAssignmentOperator,
+    isLogicalOrCoalescingBinaryExpression,
+    isLogicalOrCoalescingBinaryOperator,
     isModuleAugmentationExternal,
     isModuleExportsAccessExpression,
     isObjectLiteralMethod,
@@ -1389,17 +1392,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 node = (node as PrefixUnaryExpression).operand;
             }
             else {
-                return node.kind === SyntaxKind.BinaryExpression && (
-                    (node as BinaryExpression).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken ||
-                    (node as BinaryExpression).operatorToken.kind === SyntaxKind.BarBarToken ||
-                    (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken);
+                return isLogicalOrCoalescingBinaryExpression(node);
             }
         }
     }
 
     function isLogicalAssignmentExpression(node: Node) {
-        node = skipParentheses(node);
-        return isBinaryExpression(node) && isLogicalOrCoalescingAssignmentOperator(node.operatorToken.kind);
+        return isLogicalOrCoalescingAssignmentExpression(skipParentheses(node));
     }
 
     function isTopLevelLogicalExpression(node: Node): boolean {
@@ -1871,10 +1870,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
             // For now, though, since the common cases are chained `+`, leaving it recursive is fine
             const operator = node.operatorToken.kind;
-            if (operator === SyntaxKind.AmpersandAmpersandToken ||
-                operator === SyntaxKind.BarBarToken ||
-                operator === SyntaxKind.QuestionQuestionToken ||
-                isLogicalOrCoalescingAssignmentOperator(operator)) {
+            if (isLogicalOrCoalescingBinaryOperator(operator) || isLogicalOrCoalescingAssignmentOperator(operator)) {
                 if (isTopLevelLogicalExpression(node)) {
                     const postExpressionLabel = createBranchLabel();
                     bindLogicalLikeExpression(node, postExpressionLabel, postExpressionLabel);

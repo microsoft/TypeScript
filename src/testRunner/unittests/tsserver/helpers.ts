@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import * as Utils from "../../_namespaces/Utils";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
@@ -473,7 +472,7 @@ export function createSession(host: ts.server.ServerHost, opts: Partial<TestSess
         useSingleInferredProject: false,
         useInferredProjectPerProjectRoot: false,
         typingsInstaller: undefined!, // TODO: GH#18217
-        byteLength: Utils.byteLength,
+        byteLength: Buffer.byteLength,
         hrtime: process.hrtime,
         logger: opts.logger || createHasErrorMessageLogger(),
         canUseEvents: false

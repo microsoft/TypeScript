@@ -23,15 +23,13 @@ import {
     TypeFlags,
 } from "./types";
 
-const objectAllocatorPatchers: ((objectAllocator: ObjectAllocator) => void)[] = [];
-
 /** @internal */
 export interface ObjectAllocator {
-    getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
-    getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos?: number, end?: number) => Identifier;
-    getPrivateIdentifierConstructor(): new (kind: SyntaxKind.PrivateIdentifier, pos?: number, end?: number) => PrivateIdentifier;
-    getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
+    getNodeConstructor(): new (kind: SyntaxKind, pos: number, end: number) => Node;
+    getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos: number, end: number) => Token<TKind>;
+    getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
+    getPrivateIdentifierConstructor(): new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
+    getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
     getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
     getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
     getSignatureConstructor(): new (checker: TypeChecker, flags: SignatureFlags) => Signature;
@@ -50,21 +48,6 @@ export const objectAllocator: ObjectAllocator = {
     getSignatureConstructor: () => Signature as any,
     getSourceMapSourceConstructor: () => SourceMapSource as any,
 };
-
-/**
- * Used by `deprecatedCompat` to patch the object allocator to apply deprecations.
- * @internal
- */
-export function addObjectAllocatorPatcher(fn: (objectAllocator: ObjectAllocator) => void) {
-    objectAllocatorPatchers.push(fn);
-    fn(objectAllocator);
-}
-
-/** @internal */
-export function setObjectAllocator(alloc: ObjectAllocator) {
-    Object.assign(objectAllocator, alloc);
-    forEach(objectAllocatorPatchers, fn => fn(objectAllocator));
-}
 
 function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
     this.flags = flags;
@@ -137,4 +120,21 @@ function SourceMapSource(this: SourceMapSource, fileName: string, text: string, 
     this.fileName = fileName;
     this.text = text;
     this.skipTrivia = skipTrivia || (pos => pos);
+}
+
+const objectAllocatorPatchers: ((objectAllocator: ObjectAllocator) => void)[] = [];
+
+/**
+ * Used by `deprecatedCompat` to patch the object allocator to apply deprecations.
+ * @internal
+ */
+export function addObjectAllocatorPatcher(fn: (objectAllocator: ObjectAllocator) => void) {
+    objectAllocatorPatchers.push(fn);
+    fn(objectAllocator);
+}
+
+/** @internal */
+export function setObjectAllocator(alloc: ObjectAllocator) {
+    Object.assign(objectAllocator, alloc);
+    forEach(objectAllocatorPatchers, fn => fn(objectAllocator));
 }

@@ -23,6 +23,7 @@ import {
     isClassExpression,
     isExportDeclaration,
     isFunctionExpression,
+    isHeritageClause,
     isIdentifier,
     isImportClause,
     isImportEqualsDeclaration,
@@ -30,6 +31,7 @@ import {
     isNamedExports,
     isObjectLiteralExpression,
     isOmittedExpression,
+    isParameter,
     isPrefixUnaryExpression,
     isShorthandPropertyAssignment,
     isSpreadElement,
@@ -120,12 +122,14 @@ import {
     isExternalModule,
     isExternalModuleImportEqualsDeclaration,
     isImportCall,
+    isInitializedVariable,
     isJsonSourceFile,
     outFile,
 } from "../../utilities";
 import {
     idText,
     isBindingPattern,
+    isClassElement,
     isExpression,
     isForInitializer,
     isGeneratedIdentifier,
@@ -624,7 +628,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      */
     function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
         if (currentModuleInfo.exportEquals) {
-            const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, visitor);
+            const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, visitor, isExpression);
             if (expressionResult) {
                 if (emitAsReturn) {
                     const statement = factory.createReturnStatement(expressionResult);
@@ -660,7 +664,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function topLevelVisitor(node: Node): VisitResult<Node> {
+    function topLevelVisitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
                 return visitImportDeclaration(node as ImportDeclaration);
@@ -865,7 +869,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
     function visitImportCallExpression(node: ImportCall): Expression {
         const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
-        const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor);
+        const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
         const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
         const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
@@ -1077,7 +1081,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
+    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         const namespaceDeclaration = getNamespaceDeclarationNode(node);
         if (moduleKind !== ModuleKind.AMD) {
@@ -1197,7 +1201,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
         Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
         let statements: Statement[] | undefined;
@@ -1273,7 +1277,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param The node to visit.
      */
-    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement | undefined> {
         if (!node.moduleSpecifier) {
             // Elide export declarations with no module specifier as they are handled
             // elsewhere.
@@ -1383,7 +1387,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
+    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
         if (node.isExportEquals) {
             return undefined;
         }
@@ -1393,10 +1397,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (original && hasAssociatedEndOfDeclarationMarker(original)) {
             // Defer exports until we encounter an EndOfDeclarationMarker node
             const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportStatement(deferredExports[id], factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
+            deferredExports[id] = appendExportStatement(deferredExports[id], factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
         }
         else {
-            statements = appendExportStatement(statements, factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
+            statements = appendExportStatement(statements, factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
         }
 
         return singleOrMany(statements);
@@ -1407,7 +1411,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
+    function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
             statements = append(statements,
@@ -1418,7 +1422,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             node.asteriskToken,
                             factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                             /*typeParameters*/ undefined,
-                            visitNodes(node.parameters, visitor),
+                            visitNodes(node.parameters, visitor, isParameter),
                             /*type*/ undefined,
                             visitEachChild(node.body, visitor, context)
                         ),
@@ -1449,7 +1453,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
+    function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
             statements = append(statements,
@@ -1459,8 +1463,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                             factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                             /*typeParameters*/ undefined,
-                            visitNodes(node.heritageClauses, visitor),
-                            visitNodes(node.members, visitor)
+                            visitNodes(node.heritageClauses, visitor, isHeritageClause),
+                            visitNodes(node.members, visitor, isClassElement)
                         ),
                         node
                     ),
@@ -1489,7 +1493,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
+    function visitVariableStatement(node: VariableStatement): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         let variables: VariableDeclaration[] | undefined;
         let expressions: Expression[] | undefined;
@@ -1523,7 +1527,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             variable.name,
                             variable.exclamationToken,
                             variable.type,
-                            visitNode(variable.initializer, visitor)
+                            visitNode(variable.initializer, visitor, isExpression)
                         );
 
                         variables = append(variables, updatedVariable);
@@ -1588,8 +1592,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function transformInitializedVariable(node: InitializedVariableDeclaration): Expression {
         if (isBindingPattern(node.name)) {
             return flattenDestructuringAssignment(
-                visitNode(node, visitor),
-                /*visitor*/ undefined,
+                visitNode(node, visitor, isInitializedVariable),
+                visitor,
                 context,
                 FlattenLevel.All,
                 /*needsValue*/ false,
@@ -1605,7 +1609,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     ),
                     /*location*/ node.name
                 ),
-                node.initializer ? visitNode(node.initializer, visitor) : factory.createVoidZero()
+                node.initializer ? visitNode(node.initializer, visitor, isExpression) : factory.createVoidZero()
             );
         }
     }
@@ -1929,7 +1933,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function modifierVisitor(node: Node): VisitResult<Node> {
+    function modifierVisitor(node: Node): VisitResult<Node | undefined> {
         // Elide module-specific modifiers.
         switch (node.kind) {
             case SyntaxKind.ExportKeyword:

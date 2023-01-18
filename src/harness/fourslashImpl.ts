@@ -526,7 +526,7 @@ export class TestState {
     public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, shouldExist: boolean) {
         const startMarker = this.getMarkerByName(startMarkerName);
         const endMarker = this.getMarkerByName(endMarkerName);
-        const predicate = (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) =>
+        const predicate = (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) =>
             ((errorMinChar === startPos) && (errorLimChar === endPos)) ? true : false;
 
         const exists = this.anyErrorInRange(predicate, startMarker, endMarker);
@@ -580,7 +580,7 @@ export class TestState {
 
     public verifyErrorExistsAfterMarker(markerName: string, shouldExist: boolean, after: boolean) {
         const marker: Marker = this.getMarkerByName(markerName);
-        let predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) => boolean;
+        let predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) => boolean;
 
         if (after) {
             predicate = (errorMinChar: number, errorLimChar: number, startPos: number) =>
@@ -869,7 +869,8 @@ export class TestState {
         const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
         assert.equal(hints.length, expected.length, "Number of hints");
 
-        const sortHints = (a: ts.InlayHint, b: ts.InlayHint) => {
+        interface HasPosition { position: number; }
+        const sortHints = (a: HasPosition, b: HasPosition) => {
             return a.position - b.position;
         };
         ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {
@@ -986,14 +987,18 @@ export class TestState {
         if (actual.insertText !== expected.insertText) {
             this.raiseError(`At entry ${actual.name}: Completion insert text did not match: ${showTextDiff(expected.insertText || "", actual.insertText || "")}`);
         }
+
         const convertedReplacementSpan = expected.replacementSpan && ts.createTextSpanFromRange(expected.replacementSpan);
-        if (convertedReplacementSpan?.length) {
+        if (convertedReplacementSpan) {
             try {
                 assert.deepEqual(actual.replacementSpan, convertedReplacementSpan);
             }
             catch {
                 this.raiseError(`At entry ${actual.name}: Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`);
             }
+        }
+        else if (ts.hasProperty(expected, "replacementSpan")) { // Expected `replacementSpan` is explicitly set as `undefined`.
+            assert.equal(actual.replacementSpan, undefined, `At entry ${actual.name}: Expected 'replacementSpan' properties to match`);
         }
 
         if (expected.kind !== undefined || expected.kindModifiers !== undefined) {

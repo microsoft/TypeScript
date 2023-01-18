@@ -204,7 +204,7 @@ export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
     const machine = new BinaryExpressionStateMachine(onEnter, onLeft, onOperator, onRight, onExit, foldState);
     return trampoline;
 
-    function trampoline(node: BinaryExpression, outerState?: TOuterState) {
+    function trampoline(node: BinaryExpression, outerState: TOuterState) {
         const resultHolder: { value: TResult } = { value: undefined! };
         const stateStack: BinaryExpressionState[] = [enter];
         const nodeStack: BinaryExpression[] = [node];

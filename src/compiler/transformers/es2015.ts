@@ -9,7 +9,6 @@ import {
     filter,
     first,
     firstOrUndefined,
-    flatMap,
     flatten,
     last,
     lastOrUndefined,
@@ -58,6 +57,7 @@ import {
     isSpreadElement,
     isSwitchStatement,
     isTryStatement,
+    isVariableDeclaration,
     isVariableDeclarationList,
     isVariableStatement,
     isWithStatement,
@@ -374,7 +374,7 @@ interface ConvertedLoopState {
     loopOutParameters: LoopOutParameter[];
 }
 
-type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
+type LoopConverter<T extends IterationStatement> = (node: T, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
 
 // Facts we track as we traverse the tree
 const enum HierarchyFacts {
@@ -604,15 +604,15 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
     }
 
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: Node): VisitResult<Node | undefined> {
         return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ false) : node;
     }
 
-    function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node> {
+    function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node | undefined> {
         return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ true) : node;
     }
 
-    function classWrapperStatementVisitor(node: Node): VisitResult<Node> {
+    function classWrapperStatementVisitor(node: Node): VisitResult<Node | undefined> {
         if (shouldVisitNode(node)) {
             const original = getOriginalNode(node);
             if (isPropertyDeclaration(original) && hasStaticModifier(original)) {
@@ -629,14 +629,14 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return node;
     }
 
-    function callExpressionVisitor(node: Node): VisitResult<Node> {
+    function callExpressionVisitor(node: Node): VisitResult<Node | undefined> {
         if (node.kind === SyntaxKind.SuperKeyword) {
             return visitSuperKeyword(/*isExpressionOfCall*/ true);
         }
         return visitor(node);
     }
 
-    function visitorWorker(node: Node, expressionResultIsUnused: boolean): VisitResult<Node> {
+    function visitorWorker(node: Node, expressionResultIsUnused: boolean): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.StaticKeyword:
                 return undefined; // elide static keyword
@@ -840,7 +840,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                         factory.createPropertyAssignment(
                             factory.createIdentifier("value"),
                             node.expression
-                                ? visitNode(node.expression, visitor, isExpression)
+                                ? Debug.checkDefined(visitNode(node.expression, visitor, isExpression))
                                 : factory.createVoidZero()
                         )
                     ]
@@ -1079,7 +1079,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 outer,
                 /*typeArguments*/ undefined,
                 extendsClauseElement
-                    ? [visitNode(extendsClauseElement.expression, visitor, isExpression)]
+                    ? [Debug.checkDefined(visitNode(extendsClauseElement.expression, visitor, isExpression))]
                     : []
             )
         );
@@ -1589,7 +1589,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                     factory.createExpressionStatement(
                         factory.createAssignment(
                             factory.getGeneratedNameForNode(parameter),
-                            visitNode(initializer, visitor, isExpression)
+                            Debug.checkDefined(visitNode(initializer, visitor, isExpression))
                         )
                     ),
                     EmitFlags.CustomPrologue
@@ -1609,7 +1609,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param initializer The initializer for the parameter.
      */
     function insertDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
-        initializer = visitNode(initializer, visitor, isExpression);
+        initializer = Debug.checkDefined(visitNode(initializer, visitor, isExpression));
         const statement = factory.createIfStatement(
             factory.createTypeCheck(factory.cloneNode(name), "undefined"),
             setEmitFlags(
@@ -1950,6 +1950,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         const sourceMapRange = getSourceMapRange(member);
         const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined, container);
         const propertyName = visitNode(member.name, visitor, isPropertyName);
+        Debug.assert(propertyName);
         let e: Expression;
         if (!isPrivateIdentifier(propertyName) && getUseDefineForClassFields(context.getCompilerOptions())) {
             const name = isComputedPropertyName(propertyName) ? propertyName.expression
@@ -2006,6 +2007,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         setSourceMapRange(target, firstAccessor.name);
 
         const visitedAccessorName = visitNode(firstAccessor.name, visitor, isPropertyName);
+        Debug.assert(visitedAccessorName);
         if (isPrivateIdentifier(visitedAccessorName)) {
             return Debug.failBadSyntaxKind(visitedAccessorName, "Encountered unhandled private identifier while transforming ES2015.");
         }
@@ -2338,9 +2340,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         if (node.operatorToken.kind === SyntaxKind.CommaToken) {
             return factory.updateBinaryExpression(
                 node,
-                visitNode(node.left, visitorWithUnusedExpressionResult, isExpression),
+                Debug.checkDefined(visitNode(node.left, visitorWithUnusedExpressionResult, isExpression)),
                 node.operatorToken,
-                visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression)
+                Debug.checkDefined(visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression))
             );
         }
         return visitEachChild(node, visitor, context);
@@ -2360,6 +2362,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             const visited = visitNode(element, i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor, isExpression);
             if (result || visited !== element) {
                 result ||= node.elements.slice(0, i);
+                Debug.assert(visited);
                 result.push(visited);
             }
         }
@@ -2392,7 +2395,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                         );
                     }
                     else {
-                        assignment = factory.createBinaryExpression(decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
+                        assignment = factory.createBinaryExpression(decl.name, SyntaxKind.EqualsToken, Debug.checkDefined(visitNode(decl.initializer, visitor, isExpression)));
                         setTextRange(assignment, decl);
                     }
 
@@ -2426,9 +2429,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 enableSubstitutionsForBlockScopedBindings();
             }
 
-            const declarations = flatMap(node.declarations, node.flags & NodeFlags.Let
+            const declarations = visitNodes(node.declarations, node.flags & NodeFlags.Let
                 ? visitVariableDeclarationInLetDeclarationList
-                : visitVariableDeclaration);
+                : visitVariableDeclaration, isVariableDeclaration);
 
             const declarationList = factory.createVariableDeclarationList(declarations);
             setOriginalNode(declarationList, node);
@@ -2580,14 +2583,14 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         convertedLoopState!.labels!.set(idText(node.label), false);
     }
 
-    function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
+    function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement | undefined> {
         if (convertedLoopState && !convertedLoopState.labels) {
             convertedLoopState.labels = new Map<string, boolean>();
         }
         const statement = unwrapInnermostStatementOfLabel(node, convertedLoopState && recordLabel);
         return isIterationStatement(statement, /*lookInLabeledStatements*/ false)
             ? visitIterationStatement(statement, /*outermostLabeledStatement*/ node)
-            : factory.restoreEnclosingLabel(visitNode(statement, visitor, isStatement, factory.liftToBlock), node, convertedLoopState && resetLabel);
+            : factory.restoreEnclosingLabel(Debug.checkDefined(visitNode(statement, visitor, isStatement, factory.liftToBlock)), node, convertedLoopState && resetLabel);
     }
 
     function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {
@@ -2604,7 +2607,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
     }
 
-    function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter) {
+    function visitIterationStatementWithFacts<T extends IterationStatement>(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: T, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter<T>) {
         const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
         const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, ancestorFacts, convert);
         exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
@@ -2633,7 +2636,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             visitNode(node.initializer, visitorWithUnusedExpressionResult, isForInitializer),
             visitNode(node.condition, visitor, isExpression),
             visitNode(node.incrementor, visitorWithUnusedExpressionResult, isExpression),
-            visitNode(node.statement, visitor, isStatement, factory.liftToBlock)
+            Debug.checkDefined(visitNode(node.statement, visitor, isStatement, factory.liftToBlock))
         );
     }
 
@@ -2654,7 +2657,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             compilerOptions.downlevelIteration ? convertForOfStatementForIterable : convertForOfStatementForArray);
     }
 
-    function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
+    function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[] | undefined) {
         const statements: Statement[] = [];
         const initializer = node.initializer;
         if (isVariableDeclarationList(initializer)) {
@@ -2724,7 +2727,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             }
             else {
                 setTextRangeEnd(assignment, initializer.end);
-                statements.push(setTextRange(factory.createExpressionStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(initializer, -1)));
+                statements.push(setTextRange(factory.createExpressionStatement(Debug.checkDefined(visitNode(assignment, visitor, isExpression))), moveRangeEnd(initializer, -1)));
             }
         }
 
@@ -2733,6 +2736,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
         else {
             const statement = visitNode(node.statement, visitor, isStatement, factory.liftToBlock);
+            Debug.assert(statement);
             if (isBlock(statement)) {
                 return factory.updateBlock(statement, setTextRange(factory.createNodeArray(concatenate(statements, statement.statements)), statement.statements));
             }
@@ -2753,7 +2757,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         );
     }
 
-    function convertForOfStatementForArray(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
+    function convertForOfStatementForArray(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined): Statement {
         // The following ES6 code:
         //
         //    for (let v of expr) { }
@@ -2776,6 +2780,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         // for-of bodies are always emitted as blocks.
 
         const expression = visitNode(node.expression, visitor, isExpression);
+        Debug.assert(expression);
 
         // In the case where the user wrote an identifier as the RHS, like this:
         //
@@ -2823,8 +2828,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return factory.restoreEnclosingLabel(forStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
     }
 
-    function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[], ancestorFacts: HierarchyFacts): Statement {
+    function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts): Statement {
         const expression = visitNode(node.expression, visitor, isExpression);
+        Debug.assert(expression);
         const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
         const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
         const errorRecord = factory.createUniqueName("e");
@@ -3051,7 +3057,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
     }
 
-    function convertIterationStatementBodyIfNecessary(node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convert?: LoopConverter): VisitResult<Statement> {
+    function convertIterationStatementBodyIfNecessary<T extends IterationStatement>(node: T, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convert?: LoopConverter<T>): VisitResult<Statement> {
         if (!shouldConvertIterationStatement(node)) {
             let saveAllowedNonLabeledJumps: Jump | undefined;
             if (convertedLoopState) {
@@ -3105,7 +3111,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             }
         }
         else {
-            const clone = convertIterationStatementCore(node, initializerFunction, visitNode(node.statement, visitor, isStatement, factory.liftToBlock));
+            const clone = convertIterationStatementCore(node, initializerFunction, Debug.checkDefined(visitNode(node.statement, visitor, isStatement, factory.liftToBlock)));
             loop = factory.restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
         }
 
@@ -3140,16 +3146,16 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return factory.updateForOfStatement(
             node,
             /*awaitModifier*/ undefined,
-            visitNode(node.initializer, visitor, isForInitializer),
-            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             convertedLoopBody);
     }
 
     function convertForInStatement(node: ForInStatement, convertedLoopBody: Statement) {
         return factory.updateForInStatement(
             node,
-            visitNode(node.initializer, visitor, isForInitializer),
-            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             convertedLoopBody);
     }
 
@@ -3157,13 +3163,13 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return factory.updateDoStatement(
             node,
             convertedLoopBody,
-            visitNode(node.expression, visitor, isExpression));
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)));
     }
 
     function convertWhileStatement(node: WhileStatement, convertedLoopBody: Statement) {
         return factory.updateWhileStatement(
             node,
-            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             convertedLoopBody);
     }
 
@@ -3369,11 +3375,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                                 /*typeParameters*/ undefined,
                                 /*parameters*/ undefined,
                                 /*type*/ undefined,
-                                visitNode(
+                                Debug.checkDefined(visitNode(
                                     factory.createBlock(statements, /*multiLine*/ true),
                                     visitor,
                                     isBlock
-                                )
+                                ))
                             ),
                             emitFlags
                         )
@@ -3443,7 +3449,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             if (node.incrementor) {
                 statements.push(factory.createIfStatement(
                     currentState.conditionVariable,
-                    factory.createExpressionStatement(visitNode(node.incrementor, visitor, isExpression)),
+                    factory.createExpressionStatement(Debug.checkDefined(visitNode(node.incrementor, visitor, isExpression))),
                     factory.createExpressionStatement(factory.createAssignment(currentState.conditionVariable, factory.createTrue()))
                 ));
             }
@@ -3456,12 +3462,13 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
             if (shouldConvertConditionOfForStatement(node)) {
                 statements.push(factory.createIfStatement(
-                    factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, visitNode(node.condition, visitor, isExpression)),
-                    visitNode(factory.createBreakStatement(), visitor, isStatement)
+                    factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, Debug.checkDefined(visitNode(node.condition, visitor, isExpression))),
+                    Debug.checkDefined(visitNode(factory.createBreakStatement(), visitor, isStatement))
                 ));
             }
         }
 
+        Debug.assert(statement);
         if (isBlock(statement)) {
             addRange(statements, statement.statements);
         }
@@ -3754,9 +3761,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             createMemberAccessForPropertyName(
                 factory,
                 receiver,
-                visitNode(property.name, visitor, isPropertyName)
+                Debug.checkDefined(visitNode(property.name, visitor, isPropertyName))
             ),
-            visitNode(property.initializer, visitor, isExpression)
+            Debug.checkDefined(visitNode(property.initializer, visitor, isExpression))
         );
         setTextRange(expression, property);
         if (startsOnNewLine) {
@@ -3777,7 +3784,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             createMemberAccessForPropertyName(
                 factory,
                 receiver,
-                visitNode(property.name, visitor, isPropertyName)
+                Debug.checkDefined(visitNode(property.name, visitor, isPropertyName))
             ),
             factory.cloneNode(property.name)
         );
@@ -3800,7 +3807,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             createMemberAccessForPropertyName(
                 factory,
                 receiver,
-                visitNode(method.name, visitor, isPropertyName)
+                Debug.checkDefined(visitNode(method.name, visitor, isPropertyName))
             ),
             transformFunctionLikeToExpression(method, /*location*/ method, /*name*/ undefined, container)
         );
@@ -3951,7 +3958,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
         return factory.updateCallExpression(
             node,
-            visitNode(node.expression, callExpressionVisitor, isExpression),
+            Debug.checkDefined(visitNode(node.expression, callExpressionVisitor, isExpression)),
             /*typeArguments*/ undefined,
             visitNodes(node.arguments, visitor, isExpression)
         );
@@ -4149,8 +4156,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 //      _super.prototype.m.apply(this, a.concat([b]))
 
                 resultingCall = factory.createFunctionApplyCall(
-                    visitNode(target, callExpressionVisitor, isExpression),
-                    node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : visitNode(thisArg, visitor, isExpression),
+                    Debug.checkDefined(visitNode(target, callExpressionVisitor, isExpression)),
+                    node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : Debug.checkDefined(visitNode(thisArg, visitor, isExpression)),
                     transformAndSpreadElements(node.arguments, /*isArgumentList*/ true, /*multiLine*/ false, /*hasTrailingComma*/ false)
                 );
             }
@@ -4166,8 +4173,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 //      _super.prototype.m.call(this, a)
                 resultingCall = setTextRange(
                     factory.createFunctionCallCall(
-                        visitNode(target, callExpressionVisitor, isExpression),
-                        node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : visitNode(thisArg, visitor, isExpression),
+                        Debug.checkDefined(visitNode(target, callExpressionVisitor, isExpression)),
+                        node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : Debug.checkDefined(visitNode(thisArg, visitor, isExpression)),
                         visitNodes(node.arguments, visitor, isExpression)
                     ),
                     node
@@ -4207,7 +4214,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             const { target, thisArg } = factory.createCallBinding(factory.createPropertyAccessExpression(node.expression, "bind"), hoistVariableDeclaration);
             return factory.createNewExpression(
                 factory.createFunctionApplyCall(
-                    visitNode(target, visitor, isExpression),
+                    Debug.checkDefined(visitNode(target, visitor, isExpression)),
                     thisArg,
                     transformAndSpreadElements(factory.createNodeArray([factory.createVoidZero(), ...node.arguments!]), /*isArgumentList*/ true, /*multiLine*/ false, /*hasTrailingComma*/ false)
                 ),
@@ -4310,8 +4317,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return map(chunk, visitExpressionOfSpread);
     }
 
-    function visitExpressionOfSpread(node: SpreadElement): SpreadSegment {
+    function visitExpressionOfSpread(node: Expression): SpreadSegment {
+        Debug.assertNode(node, isSpreadElement);
         let expression = visitNode(node.expression, visitor, isExpression);
+        Debug.assert(expression);
 
         // We don't need to pack already packed array literals, or existing calls to the `__read` helper.
         const isCallToReadHelper = isCallToHelper(expression, "___read" as __String);
@@ -4398,7 +4407,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     function visitTemplateExpression(node: TemplateExpression): Expression {
         let expression: Expression = factory.createStringLiteral(node.head.text);
         for (const span of node.templateSpans) {
-            const args = [visitNode(span.expression, visitor, isExpression)];
+            const args = [Debug.checkDefined(visitNode(span.expression, visitor, isExpression))];
 
             if (span.literal.text.length > 0) {
                 args.push(factory.createStringLiteral(span.literal.text));

@@ -1103,7 +1103,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "allowImportingTsExtensions",
         type: "boolean",
-        affectsModuleResolution: true,
+        affectsSemanticDiagnostics: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_bundler_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
         defaultValueDescription: false,
@@ -2892,7 +2892,7 @@ export function convertToOptionsWithAbsolutePaths(options: CompilerOptions, toAb
 function convertToOptionValueWithAbsolutePaths(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
     if (option && !isNullOrUndefined(value)) {
         if (option.type === "list") {
-            const values = value as readonly (string | number)[];
+            const values = value as readonly string[];
             if (option.element.isFilePath && values.length) {
                 return values.map(toAbsolutePath);
             }
@@ -3291,7 +3291,7 @@ function parseOwnConfigOfJson(
     json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
     let extendedConfigPath: string | string[] | undefined;
 
-    if (json.extends) {
+    if (json.extends || json.extends === "") {
         if (!isCompilerOptionsValue(extendsOptionDeclaration, json.extends)) {
             errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration)));
         }
@@ -3305,7 +3305,7 @@ function parseOwnConfigOfJson(
                 for (const fileName of json.extends as unknown[]) {
                     if (isString(fileName)) {
                         extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(fileName, host, newBase, errors, createCompilerDiagnostic));
-                }
+                    }
                     else {
                         errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration.element)));
                     }
@@ -3440,7 +3440,12 @@ function getExtendsConfigPath(
     if (resolved.resolvedModule) {
         return resolved.resolvedModule.resolvedFileName;
     }
-    errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
+    if (extendedConfig === "") {
+        errors.push(createDiagnostic(Diagnostics.Compiler_option_0_cannot_be_given_an_empty_string, "extends"));
+    }
+    else {
+        errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
+    }
     return undefined;
 }
 
@@ -3853,7 +3858,8 @@ function validateSpecs(specs: readonly string[], errors: Push<Diagnostic>, disal
     }
 }
 
-function specToDiagnostic(spec: string, disallowTrailingRecursion?: boolean): [DiagnosticMessage, string] | undefined {
+function specToDiagnostic(spec: CompilerOptionsValue, disallowTrailingRecursion?: boolean): [DiagnosticMessage, string] | undefined {
+    Debug.assert(typeof spec === "string");
     if (disallowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
         return [Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
     }
