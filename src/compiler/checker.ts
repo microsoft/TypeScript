@@ -19709,7 +19709,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>, errorReporter?: ErrorReporter) {
         const s = source.flags;
         const t = target.flags;
-        if (t & TypeFlags.AnyOrUnknown || s & TypeFlags.Never || source === wildcardType) return true;
+        if (t & TypeFlags.Any || s & TypeFlags.Never || source === wildcardType) return true;
+        if (t & TypeFlags.Unknown && !(relation === strictSubtypeRelation && s & TypeFlags.Any)) return true;
         if (t & TypeFlags.Never) return false;
         if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
         if (s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
@@ -21324,9 +21325,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return Ternary.False;
                     }
                 }
-                // Consider a fresh empty object literal type "closed" under the subtype relationship - this way `{} <- {[idx: string]: any} <- fresh({})`
-                // and not `{} <- fresh({}) <- {[idx: string]: any}`
-                else if ((relation === subtypeRelation || relation === strictSubtypeRelation) && isEmptyObjectType(target) && getObjectFlags(target) & ObjectFlags.FreshLiteral && !isEmptyObjectType(source)) {
+                // A fresh empty object type is never a subtype of a non-empty object type and an empty object type is never a subtype of
+                // a non-empty object type. This ensures fresh({}) <: { [x: string]: xxx } and { [x: string: xxx] } <: {}. Without these
+                // rules, those types would be mutual subtypes.
+                else if ((relation === subtypeRelation || relation === strictSubtypeRelation) && isEmptyObjectType(target) && getObjectFlags(target) & ObjectFlags.FreshLiteral && !isEmptyObjectType(source) ||
+                    (relation === strictSubtypeRelation && target.flags & TypeFlags.Object && !isEmptyObjectType(target) && isEmptyObjectType(source) && !(getObjectFlags(source) & ObjectFlags.FreshLiteral))) {
                     return Ternary.False;
                 }
                 // Even if relationship doesn't hold for unions, intersections, or generic type references,
@@ -26903,21 +26906,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getNarrowedType(type, targetType, assumeTrue, /*checkDerived*/ true);
         }
 
-        function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
+        function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean): Type {
             const key = type.flags & TypeFlags.Union ? `N${getTypeId(type)},${getTypeId(candidate)},${(assumeTrue ? 1 : 0) | (checkDerived ? 2 : 0)}` : undefined;
             return getCachedType(key) ?? setCachedType(key, getNarrowedTypeWorker(type, candidate, assumeTrue, checkDerived));
         }
 
         function getNarrowedTypeWorker(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
-            const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
             if (!assumeTrue) {
-                return filterType(type, t => !isRelated(t, candidate));
+                const trueType = getNarrowedType(type, candidate, /*assumeTrue*/ true, checkDerived);
+                return filterType(type, t => !isTypeSubsetOf(t, trueType));
             }
             if (type.flags & TypeFlags.AnyOrUnknown) {
                 return candidate;
             }
             // We first attempt to filter the current type, narrowing constituents as appropriate and removing
             // constituents that are unrelated to the candidate.
+            const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
             const keyPropertyName = type.flags & TypeFlags.Union ? getKeyPropertyName(type as UnionType) : undefined;
             const narrowedType = mapType(candidate, c => {
                 // If a discriminant property is available, use that to reduce the type.
@@ -26929,7 +26933,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // prototype object types.
                 const directlyRelated = mapType(matching || type, checkDerived ?
                     t => isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType :
-                    t => isTypeSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : neverType);
+                    t => isTypeSubtypeOf(c, t) && !isTypeIdenticalTo(c, t) ? c : isTypeSubtypeOf(t, c) ? t : neverType);
                 // If no constituents are directly related, create intersections for any generic constituents that
                 // are related by constraint.
                 return directlyRelated.flags & TypeFlags.Never ?
