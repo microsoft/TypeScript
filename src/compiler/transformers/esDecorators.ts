@@ -104,7 +104,7 @@ import {
     isObjectLiteralElementLike,
     isObjectLiteralExpression,
     isOmittedExpression,
-    isParameter,
+    isParameterDeclaration,
     isParenthesizedExpression,
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
@@ -1195,7 +1195,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     function visitConstructorDeclaration(node: ConstructorDeclaration) {
         enterClassElement(node);
         const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
-        const parameters = visitNodes(node.parameters, visitor, isParameter);
+        const parameters = visitNodes(node.parameters, visitor, isParameterDeclaration);
         let body: Block | undefined;
         if (node.body && classInfo) {
             // If there are instance extra initializers we need to add them to the body along with any
@@ -1415,7 +1415,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             return finishClassElement(createMethodDescriptorForwarder(modifiers, name, descriptorName), node);
         }
         else {
-            const parameters = visitNodes(node.parameters, visitor, isParameter);
+            const parameters = visitNodes(node.parameters, visitor, isParameterDeclaration);
             const body = visitNode(node.body, visitor, isBlock);
             exitClassElement();
             return finishClassElement(factory.updateMethodDeclaration(node, modifiers, node.asteriskToken, name, /*questionToken*/ undefined, /*typeParameters*/ undefined, parameters, /*type*/ undefined, body), node);
@@ -1430,7 +1430,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             return finishClassElement(createGetAccessorDescriptorForwarder(modifiers, name, descriptorName), node);
         }
         else {
-            const parameters = visitNodes(node.parameters, visitor, isParameter);
+            const parameters = visitNodes(node.parameters, visitor, isParameterDeclaration);
             const body = visitNode(node.body, visitor, isBlock);
             exitClassElement();
             return finishClassElement(factory.updateGetAccessorDeclaration(node, modifiers, name, parameters, /*type*/ undefined, body), node);
@@ -1445,7 +1445,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             return finishClassElement(createSetAccessorDescriptorForwarder(modifiers, name, descriptorName), node);
         }
         else {
-            const parameters = visitNodes(node.parameters, visitor, isParameter);
+            const parameters = visitNodes(node.parameters, visitor, isParameterDeclaration);
             const body = visitNode(node.body, visitor, isBlock);
             exitClassElement();
             return finishClassElement(factory.updateSetAccessorDeclaration(node, modifiers, name, parameters, body), node);
@@ -2308,7 +2308,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 modifiers,
                 node.asteriskToken,
                 "value",
-                visitNodes(node.parameters, visitor, isParameter),
+                visitNodes(node.parameters, visitor, isParameterDeclaration),
                 visitNode(node.body, visitor, isBlock),
             ),
         ]);
@@ -2342,7 +2342,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 modifiers,
                 /*asteriskToken*/ undefined,
                 "set",
-                visitNodes(node.parameters, visitor, isParameter),
+                visitNodes(node.parameters, visitor, isParameterDeclaration),
                 visitNode(node.body, visitor, isBlock),
             ),
         ]);

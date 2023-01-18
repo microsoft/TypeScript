@@ -220,7 +220,7 @@ import {
     isObjectLiteralExpression,
     isOptionalChain,
     isOptionalChainRoot,
-    isParameter,
+    isParameterDeclaration,
     isPartOfTypeNode,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -2759,7 +2759,7 @@ export function getMappedContextSpan(documentSpan: DocumentSpan, sourceMapper: S
 /** @internal */
 export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
     const declaration = symbol.declarations ? firstOrUndefined(symbol.declarations) : undefined;
-    return !!findAncestor(declaration, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
+    return !!findAncestor(declaration, n => isParameterDeclaration(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
 }
 
 const displayPartWriter = getDisplayPartWriter();

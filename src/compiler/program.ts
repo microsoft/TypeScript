@@ -196,7 +196,7 @@ import {
     isModifier,
     isModuleDeclaration,
     isObjectLiteralExpression,
-    isParameter,
+    isParameterDeclaration,
     isPlainJsFile,
     isRequireCall,
     isRootedDiskPath,
@@ -3092,7 +3092,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 else if (canHaveDecorators(parent) && parent.modifiers) {
                     const decoratorIndex = findIndex(parent.modifiers, isDecorator);
                     if (decoratorIndex >= 0) {
-                        if (isParameter(parent) && !options.experimentalDecorators) {
+                        if (isParameterDeclaration(parent) && !options.experimentalDecorators) {
                             // report illegall decorator on parameter
                             diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
                         }

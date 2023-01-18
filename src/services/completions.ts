@@ -216,7 +216,7 @@ import {
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isObjectTypeDeclaration,
-    isParameter,
+    isParameterDeclaration,
     isParameterPropertyModifier,
     isPartOfTypeNode,
     isPossiblyTypeArgumentPosition,
@@ -2656,11 +2656,11 @@ export function getCompletionEntriesFromSymbols(
             if (
                 variableOrParameterDeclaration && symbolDeclaration && (
                     (isTypeParameterDeclaration(variableOrParameterDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) ||
-                    (isParameter(variableOrParameterDeclaration) && isParameter(symbolDeclaration))
+                    (isParameterDeclaration(variableOrParameterDeclaration) && isParameterDeclaration(symbolDeclaration))
                 )
             ) {
                 const symbolDeclarationPos = symbolDeclaration.pos;
-                const parameters = isParameter(variableOrParameterDeclaration) ? variableOrParameterDeclaration.parent.parameters :
+                const parameters = isParameterDeclaration(variableOrParameterDeclaration) ? variableOrParameterDeclaration.parent.parameters :
                     isInferTypeNode(variableOrParameterDeclaration.parent) ? undefined :
                     variableOrParameterDeclaration.parent.typeParameters;
                 if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && parameters && symbolDeclarationPos < parameters.end) {
@@ -4600,7 +4600,7 @@ function getCompletionData(
     }
 
     function isConstructorParameterCompletion(node: Node): boolean {
-        return !!node.parent && isParameter(node.parent) && isConstructorDeclaration(node.parent.parent)
+        return !!node.parent && isParameterDeclaration(node.parent) && isConstructorDeclaration(node.parent.parent)
             && (isParameterPropertyModifier(node.kind) || isDeclarationName(node));
     }
 
@@ -5820,7 +5820,7 @@ function getVariableOrParameterDeclaration(contextToken: Node | undefined, locat
     const possiblyParameterDeclaration = findAncestor(contextToken, node =>
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
-            : ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
+            : ((isParameterDeclaration(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
 
     const possiblyVariableDeclaration = findAncestor(location, node =>
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)

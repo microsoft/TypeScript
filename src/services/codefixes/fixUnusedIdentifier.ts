@@ -36,7 +36,7 @@ import {
     isMethodSignature,
     isModifier,
     isObjectBindingPattern,
-    isParameter,
+    isParameterDeclaration,
     isPostfixUnaryExpression,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
@@ -108,7 +108,7 @@ registerCodeFix({
         }
 
         if (isObjectBindingPattern(token.parent) || isArrayBindingPattern(token.parent)) {
-            if (isParameter(token.parent.parent)) {
+            if (isParameterDeclaration(token.parent.parent)) {
                 const elements = token.parent.elements;
                 const diagnostic: [DiagnosticMessage, string] = [
                     elements.length > 1 ? Diagnostics.Remove_unused_declarations_for_Colon_0 : Diagnostics.Remove_unused_declaration_for_Colon_0,
@@ -185,7 +185,7 @@ registerCodeFix({
                         if (token.parent.parent.initializer) {
                             break;
                         }
-                        else if (!isParameter(token.parent.parent) || isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
+                        else if (!isParameterDeclaration(token.parent.parent) || isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
                             changes.delete(sourceFile, token.parent.parent);
                         }
                     }
@@ -275,7 +275,7 @@ function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: num
     }
     if (isIdentifier(token) && canPrefix(token)) {
         changes.replaceNode(sourceFile, token, factory.createIdentifier(`_${token.text}`));
-        if (isParameter(token.parent)) {
+        if (isParameterDeclaration(token.parent)) {
             getJSDocParameterTags(token.parent).forEach(tag => {
                 if (isIdentifier(tag.name)) {
                     changes.replaceNode(sourceFile, tag.name, factory.createIdentifier(`_${tag.name.text}`));
@@ -316,7 +316,7 @@ function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: text
 
 function tryDeleteDeclarationWorker(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean): void {
     const { parent } = token;
-    if (isParameter(parent)) {
+    if (isParameterDeclaration(parent)) {
         tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, program, cancellationToken, isFixAll);
     }
     else if (!(isFixAll && isIdentifier(token) && FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {

@@ -69,7 +69,7 @@ import {
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isOptionalTypeNode,
-    isParameter,
+    isParameterDeclaration,
     isParenthesizedTypeNode,
     isPartOfParameterDeclaration,
     isPrefixUnaryExpression,
@@ -452,7 +452,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function getParameterDeclarationTypeHints(symbol: Symbol) {
         const valueDeclaration = symbol.valueDeclaration;
-        if (!valueDeclaration || !isParameter(valueDeclaration)) {
+        if (!valueDeclaration || !isParameterDeclaration(valueDeclaration)) {
             return undefined;
         }
 
@@ -557,7 +557,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     }
                     break;
                 case SyntaxKind.Parameter:
-                    Debug.assertNode(node, isParameter);
+                    Debug.assertNode(node, isParameterDeclaration);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");
                     }

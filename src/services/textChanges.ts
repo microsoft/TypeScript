@@ -94,7 +94,7 @@ import {
     isLineBreak,
     isNamedImports,
     isObjectLiteralExpression,
-    isParameter,
+    isParameterDeclaration,
     isPinnedComment,
     isPrologueDirective,
     isPropertyDeclaration,
@@ -791,8 +791,8 @@ export class ChangeTracker {
         else if (isVariableDeclaration(before)) { // insert `x = 1, ` into `const x = 1, y = 2;
             return { suffix: ", " };
         }
-        else if (isParameter(before)) {
-            return isParameter(inserted) ? { suffix: ", " } : {};
+        else if (isParameterDeclaration(before)) {
+            return isParameterDeclaration(inserted) ? { suffix: ", " } : {};
         }
         else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
             return { suffix: ", " };
