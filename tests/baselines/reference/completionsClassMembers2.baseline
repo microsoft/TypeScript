@@ -173,10 +173,6 @@
           "kindModifiers": "",
           "sortText": "17",
           "insertText": "method(): void {\r\n}",
-          "replacementSpan": {
-            "start": 71,
-            "length": 16
-          },
           "displayParts": [
             {
               "text": "(",

@@ -434,6 +434,7 @@ export const enum SyntaxKind {
     JSDocSeeTag,
     JSDocPropertyTag,
     JSDocThrowsTag,
+    JSDocSatisfiesTag,
 
     // Synthesized list
     SyntaxList,
@@ -478,9 +479,9 @@ export const enum SyntaxKind {
     LastStatement = DebuggerStatement,
     FirstNode = QualifiedName,
     FirstJSDocNode = JSDocTypeExpression,
-    LastJSDocNode = JSDocThrowsTag,
+    LastJSDocNode = JSDocSatisfiesTag,
     FirstJSDocTagNode = JSDocTag,
-    LastJSDocTagNode = JSDocThrowsTag,
+    LastJSDocTagNode = JSDocSatisfiesTag,
     /** @internal */ FirstContextualKeyword = AbstractKeyword,
     /** @internal */ LastContextualKeyword = OfKeyword,
 }
@@ -1010,6 +1011,7 @@ export type ForEachChildNodes =
     | JSDocDeprecatedTag
     | JSDocThrowsTag
     | JSDocOverrideTag
+    | JSDocSatisfiesTag
     | JSDocOverloadTag
     ;
 
@@ -4103,6 +4105,16 @@ export interface JSDocTypeLiteral extends JSDocType, Declaration {
     readonly jsDocPropertyTags?: readonly JSDocPropertyLikeTag[];
     /** If true, then this type literal represents an *array* of its type. */
     readonly isArrayType: boolean;
+}
+
+export interface JSDocSatisfiesTag extends JSDocTag {
+    readonly kind: SyntaxKind.JSDocSatisfiesTag;
+    readonly typeExpression: JSDocTypeExpression;
+}
+
+/** @internal */
+export interface JSDocSatisfiesExpression extends ParenthesizedExpression {
+    readonly _jsDocSatisfiesExpressionBrand: never;
 }
 
 // NOTE: Ensure this is up-to-date with src/debug/debug.ts
@@ -8574,12 +8586,14 @@ export interface NodeFactory {
     updateJSDocReadonlyTag(node: JSDocReadonlyTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocReadonlyTag;
     createJSDocUnknownTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocUnknownTag;
     updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined): JSDocUnknownTag;
-    createJSDocDeprecatedTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
-    updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
-    createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
-    updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+    createJSDocDeprecatedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
+    updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
+    createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+    updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
     updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
+    createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
+    updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
     createJSDocText(text: string): JSDocText;
     updateJSDocText(node: JSDocText, text: string): JSDocText;
     createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -8857,7 +8871,7 @@ export interface NodeFactory {
      *
      * @internal
      */
-    copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number;
+    copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node | undefined>): number;
     /**
      * Copies only the standard (string-expression) prologue-directives into the target statement-array.
      * @param source origin statements array
@@ -8877,8 +8891,8 @@ export interface NodeFactory {
      *
      * @internal
      */
-    copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number;
-    /** @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number | undefined;
+    copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number;
+    /** @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number | undefined;
     /** @internal */ ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement>;
     /** @internal */ liftToBlock(nodes: readonly Node[]): Statement;
     /**
@@ -9054,19 +9068,64 @@ export type Transformer<T extends Node> = (node: T) => T;
 /**
  * A function that accepts and possibly transforms a node.
  */
-export type Visitor = (node: Node) => VisitResult<Node>;
+export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn | undefined> = (node: TIn) => VisitResult<TOut>;
 
+/**
+ * A function that walks a node using the given visitor, lifting node arrays into single nodes,
+ * returning an node which satisfies the test.
+ *
+ * - If the input node is undefined, then the output is undefined.
+ * - If the visitor returns undefined, then the output is undefined.
+ * - If the output node is not undefined, then it will satisfy the test function.
+ * - In order to obtain a return type that is more specific than `Node`, a test
+ *   function _must_ be provided, and that function must be a type predicate.
+ *
+ * For the canonical implementation of this type, @see {visitNode}.
+ */
 export interface NodeVisitor {
-    <T extends Node>(nodes: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T;
-    <T extends Node>(nodes: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined;
+    <TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(
+        node: TIn,
+        visitor: Visitor<NonNullable<TIn>, TVisited>,
+        test: (node: Node) => node is TOut,
+        lift?: (node: readonly Node[]) => Node,
+    ): TOut | (TIn & undefined) | (TVisited & undefined);
+    <TIn extends Node | undefined, TVisited extends Node | undefined>(
+        node: TIn,
+        visitor: Visitor<NonNullable<TIn>, TVisited>,
+        test?: (node: Node) => boolean,
+        lift?: (node: readonly Node[]) => Node,
+    ): Node | (TIn & undefined) | (TVisited & undefined);
 }
 
+/**
+ * A function that walks a node array using the given visitor, returning an array whose contents satisfy the test.
+ *
+ * - If the input node array is undefined, the output is undefined.
+ * - If the visitor can return undefined, the node it visits in the array will be reused.
+ * - If the output node array is not undefined, then its contents will satisfy the test.
+ * - In order to obtain a return type that is more specific than `NodeArray<Node>`, a test
+ *   function _must_ be provided, and that function must be a type predicate.
+ *
+ * For the canonical implementation of this type, @see {visitNodes}.
+ */
 export interface NodesVisitor {
-    <T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
-    <T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
+    <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(
+        nodes: TInArray,
+        visitor: Visitor<TIn, Node | undefined>,
+        test: (node: Node) => node is TOut,
+        start?: number,
+        count?: number,
+    ): NodeArray<TOut> | (TInArray & undefined);
+    <TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(
+        nodes: TInArray,
+        visitor: Visitor<TIn, Node | undefined>,
+        test?: (node: Node) => boolean,
+        start?: number,
+        count?: number,
+    ): NodeArray<Node> | (TInArray & undefined);
 }
 
-export type VisitResult<T extends Node> = T | readonly T[] | undefined;
+export type VisitResult<T extends Node | undefined> = T | readonly Node[];
 
 export interface Printer {
     /**
