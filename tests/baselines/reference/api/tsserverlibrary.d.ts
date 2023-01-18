@@ -8808,7 +8808,6 @@ declare namespace ts {
     function isTemplateLiteral(node: Node): node is TemplateLiteral;
     /**
      * Determines whether a node is an expression based only on its kind.
-     * Use `isExpressionNode` if not in transforms.
      */
     function isExpression(node: Node): node is Expression;
     function isAssertionExpression(node: Node): node is AssertionExpression;
@@ -8832,7 +8831,6 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
-    function isExpressionNode(node: Node): boolean;
     function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
