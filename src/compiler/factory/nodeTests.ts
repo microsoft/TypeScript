@@ -404,8 +404,7 @@ export function isTypeParameterDeclaration(node: Node): node is TypeParameterDec
     return node.kind === SyntaxKind.TypeParameter;
 }
 
-// TODO(rbuckton): Rename to 'isParameterDeclaration'
-export function isParameter(node: Node): node is ParameterDeclaration {
+export function isParameterDeclaration(node: Node): node is ParameterDeclaration {
     return node.kind === SyntaxKind.Parameter;
 }
 

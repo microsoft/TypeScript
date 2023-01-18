@@ -21,7 +21,7 @@ import {
     isIdentifier,
     isJSDocIndexSignature,
     isOptionalJSDocPropertyLikeTag,
-    isParameter,
+    isParameterDeclaration,
     isTypeNode,
     JSDocFunctionType,
     JSDocNonNullableType,
@@ -68,7 +68,7 @@ registerCodeFix({
 function getDeclaration(file: SourceFile, pos: number): DeclarationWithType | undefined {
     const name = getTokenAtPosition(file, pos);
     // For an arrow function with no name, 'name' lands on the first parameter.
-    return tryCast(isParameter(name.parent) ? name.parent.parent : name.parent, parameterShouldGetTypeFromJSDoc);
+    return tryCast(isParameterDeclaration(name.parent) ? name.parent.parent : name.parent, parameterShouldGetTypeFromJSDoc);
 }
 
 /** @internal */

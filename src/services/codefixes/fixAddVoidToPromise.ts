@@ -14,7 +14,7 @@ import {
     isIdentifier,
     isInJSFile,
     isNewExpression,
-    isParameter,
+    isParameterDeclaration,
     isParenthesizedExpression,
     isParenthesizedTypeNode,
     isTypeReferenceNode,
@@ -60,7 +60,7 @@ function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, 
 
     // decl should be `new Promise((<decl>) => {})`
     const decl = symbol?.valueDeclaration;
-    if (!decl || !isParameter(decl) || !isNewExpression(decl.parent.parent)) return;
+    if (!decl || !isParameterDeclaration(decl) || !isNewExpression(decl.parent.parent)) return;
 
     // no need to make this change if we have already seen this parameter.
     if (seen?.has(decl)) return;

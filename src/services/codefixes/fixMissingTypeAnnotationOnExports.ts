@@ -69,7 +69,7 @@ import {
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isOmittedExpression,
-    isParameter,
+    isParameterDeclaration,
     isPropertyAssignment,
     isPropertyDeclaration,
     isShorthandPropertyAssignment,
@@ -916,7 +916,7 @@ function withContext<T>(
         }
 
         const enclosingDeclaration = findAncestor(node, isDeclaration) ?? sourceFile;
-        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node, enclosingDeclaration)) {
+        if (isParameterDeclaration(node) && typeChecker.requiresAddingImplicitUndefined(node, enclosingDeclaration)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }
         return {
@@ -1052,7 +1052,7 @@ function withContext<T>(
     }
 
     function relativeType(node: Node): InferenceResult {
-        if (isParameter(node)) {
+        if (isParameterDeclaration(node)) {
             return emptyInferenceResult;
         }
         if (isShorthandPropertyAssignment(node)) {

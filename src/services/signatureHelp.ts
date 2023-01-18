@@ -45,7 +45,7 @@ import {
     isMethodDeclaration,
     isNoSubstitutionTemplateLiteral,
     isObjectBindingPattern,
-    isParameter,
+    isParameterDeclaration,
     isPropertyAccessExpression,
     isSourceFile,
     isSourceFileJS,
@@ -435,7 +435,7 @@ function getAdjustedNode(node: Node) {
         case SyntaxKind.CommaToken:
             return node;
         default:
-            return findAncestor(node.parent, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
+            return findAncestor(node.parent, n => isParameterDeclaration(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
     }
 }
 

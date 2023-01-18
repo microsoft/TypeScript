@@ -66,7 +66,7 @@ import {
     isNamedImportBindings,
     isObjectLiteralElementLike,
     isOptionalChain,
-    isParameter,
+    isParameterDeclaration,
     isPropertyAccessChain,
     isPropertyName,
     isQuestionDotToken,
@@ -397,7 +397,7 @@ export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | unde
     context.startLexicalEnvironment();
     if (nodes) {
         context.setLexicalEnvironmentFlags(LexicalEnvironmentFlags.InParameters, true);
-        updated = nodesVisitor(nodes, visitor, isParameter);
+        updated = nodesVisitor(nodes, visitor, isParameterDeclaration);
 
         // As of ES2015, any runtime execution of that occurs in for a parameter (such as evaluating an
         // initializer or a binding pattern), occurs in its own lexical scope. As a result, any expression
@@ -696,7 +696,7 @@ const visitEachChildTable: VisitEachChildTable = {
             Debug.checkDefined(nodeVisitor(node.name, visitor, isPropertyName)),
             tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken) : node.questionToken,
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-            nodesVisitor(node.parameters, visitor, isParameter),
+            nodesVisitor(node.parameters, visitor, isParameterDeclaration),
             nodeVisitor(node.type, visitor, isTypeNode),
         );
     },
@@ -758,7 +758,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateCallSignature(
             node,
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-            nodesVisitor(node.parameters, visitor, isParameter),
+            nodesVisitor(node.parameters, visitor, isParameterDeclaration),
             nodeVisitor(node.type, visitor, isTypeNode),
         );
     },
@@ -767,7 +767,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateConstructSignature(
             node,
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-            nodesVisitor(node.parameters, visitor, isParameter),
+            nodesVisitor(node.parameters, visitor, isParameterDeclaration),
             nodeVisitor(node.type, visitor, isTypeNode),
         );
     },
@@ -776,7 +776,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateIndexSignature(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
-            nodesVisitor(node.parameters, visitor, isParameter),
+            nodesVisitor(node.parameters, visitor, isParameterDeclaration),
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
         );
     },
@@ -803,7 +803,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateFunctionTypeNode(
             node,
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-            nodesVisitor(node.parameters, visitor, isParameter),
+            nodesVisitor(node.parameters, visitor, isParameterDeclaration),
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
         );
     },
@@ -813,7 +813,7 @@ const visitEachChildTable: VisitEachChildTable = {
             node,
             nodesVisitor(node.modifiers, visitor, isModifier),
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-            nodesVisitor(node.parameters, visitor, isParameter),
+            nodesVisitor(node.parameters, visitor, isParameterDeclaration),
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
         );
     },

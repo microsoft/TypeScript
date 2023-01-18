@@ -74,7 +74,7 @@ import {
     isMethodSignature,
     isModuleDeclaration,
     isObjectLiteralExpression,
-    isParameter,
+    isParameterDeclaration,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyDeclaration,
@@ -313,7 +313,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         if (!(signature && signature.declaration && signature.parameters[argIndex])) return undefined;
 
         const param = signature.parameters[argIndex].valueDeclaration;
-        if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
+        if (!(param && isParameterDeclaration(param) && isIdentifier(param.name))) return undefined;
 
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;

@@ -20,7 +20,7 @@ import {
     isJSDocTypeExpression,
     isJSDocTypeLiteral,
     isMappedTypeNode,
-    isParameter,
+    isParameterDeclaration,
     isPropertySignature,
     isSourceFile,
     isStringLiteral,
@@ -261,7 +261,7 @@ function getSelectionChildren(node: Node): readonly Node[] {
     }
 
     // Group the parameter name with its `...`, then that group with its `?`, then pivot on `=`.
-    if (isParameter(node)) {
+    if (isParameterDeclaration(node)) {
         const groupedDotDotDotAndName = groupChildren(node.getChildren(), child => child === node.dotDotDotToken || child === node.name);
         const groupedWithQuestionToken = groupChildren(groupedDotDotDotAndName, child => child === groupedDotDotDotAndName[0] || child === node.questionToken);
         return splitChildren(groupedWithQuestionToken, ({ kind }) => kind === SyntaxKind.EqualsToken);

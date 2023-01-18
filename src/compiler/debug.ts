@@ -42,7 +42,7 @@ import {
     isNamedTupleMember,
     isNumericLiteral,
     isOptionalTypeNode,
-    isParameter,
+    isParameterDeclaration,
     isParenthesizedTypeNode,
     isParseTreeNode,
     isPrivateIdentifier,
@@ -722,7 +722,7 @@ export namespace Debug {
                                 isNumericLiteral(this) ? `NumericLiteral ${this.text}` :
                                 isBigIntLiteral(this) ? `BigIntLiteral ${this.text}n` :
                                 isTypeParameterDeclaration(this) ? "TypeParameterDeclaration" :
-                                isParameter(this) ? "ParameterDeclaration" :
+                                isParameterDeclaration(this) ? "ParameterDeclaration" :
                                 isConstructorDeclaration(this) ? "ConstructorDeclaration" :
                                 isGetAccessorDeclaration(this) ? "GetAccessorDeclaration" :
                                 isSetAccessorDeclaration(this) ? "SetAccessorDeclaration" :

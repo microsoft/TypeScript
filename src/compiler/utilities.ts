@@ -340,7 +340,7 @@ import {
     isObjectLiteralExpression,
     isOmittedExpression,
     isOptionalChain,
-    isParameter,
+    isParameterDeclaration,
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
     isParenthesizedTypeNode,
@@ -7111,7 +7111,7 @@ export function getSyntacticModifierFlags(node: Node): ModifierFlags {
 
 function getRawJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = ModifierFlags.None;
-    if (!!node.parent && !isParameter(node)) {
+    if (!!node.parent && !isParameterDeclaration(node)) {
         if (isInJSFile(node)) {
             if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
             if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
@@ -11345,7 +11345,7 @@ export function createNameResolver({
                                     !!(lastLocation.flags & NodeFlags.Synthesized) || // Synthetic fake scopes are added for signatures so parameters are accessible from them
                                     (
                                         lastLocation === (location as FunctionLikeDeclaration).type &&
-                                        !!findAncestor(result.valueDeclaration, isParameter)
+                                        !!findAncestor(result.valueDeclaration, isParameterDeclaration)
                                     );
                             }
                         }
@@ -11677,7 +11677,7 @@ export function createNameResolver({
         const target = getEmitScriptTarget(compilerOptions);
         const functionLocation = location as FunctionLikeDeclaration;
         if (
-            isParameter(lastLocation)
+            isParameterDeclaration(lastLocation)
             && functionLocation.body
             && result.valueDeclaration
             && result.valueDeclaration.pos >= functionLocation.body.pos

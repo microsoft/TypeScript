@@ -160,7 +160,7 @@ import {
     isModuleBlock,
     isNonNullExpression,
     isOmittedExpression,
-    isParameter,
+    isParameterDeclaration,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyAssignment,
@@ -604,7 +604,7 @@ export function getTypeParameterOwner(d: Declaration): Declaration | undefined {
 export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration; name: Identifier; };
 
 export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
-    return isParameter(node) && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
+    return isParameterDeclaration(node) && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
 }
 
 export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {
@@ -1214,7 +1214,7 @@ export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
  */
 export function getJSDocType(node: Node): TypeNode | undefined {
     let tag: JSDocTypeTag | JSDocParameterTag | undefined = getFirstJSDocTag(node, isJSDocTypeTag);
-    if (!tag && isParameter(node)) {
+    if (!tag && isParameterDeclaration(node)) {
         tag = find(getJSDocParameterTags(node), tag => !!tag.typeExpression);
     }
 
@@ -1857,7 +1857,7 @@ export function isDeclarationBindingElement(bindingElement: BindingOrAssignmentE
 /** @internal */
 export function isBindingOrAssignmentElement(node: Node): node is BindingOrAssignmentElement {
     return isVariableDeclaration(node)
-        || isParameter(node)
+        || isParameterDeclaration(node)
         || isObjectBindingOrAssignmentElement(node)
         || isArrayBindingOrAssignmentElement(node);
 }

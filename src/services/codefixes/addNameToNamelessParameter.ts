@@ -13,7 +13,7 @@ import {
     Identifier,
     isArrayBindingPattern,
     isArrayTypeNode,
-    isParameter,
+    isParameterDeclaration,
     ParameterDeclaration,
     SourceFile,
     SyntaxKind,
@@ -36,7 +36,7 @@ registerCodeFix({
 function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, start: number) {
     const token = getTokenAtPosition(sourceFile, start);
     const param = token.parent;
-    if (!isParameter(param)) {
+    if (!isParameterDeclaration(param)) {
         return Debug.fail("Tried to add a parameter name to a non-parameter: " + Debug.formatSyntaxKind(token.kind));
     }
 
@@ -68,7 +68,7 @@ function tryGetNextParam(sourceFile: SourceFile, param: ParameterDeclaration) {
     const nextToken = findNextToken(param.name, param.parent, sourceFile);
     if (
         nextToken && nextToken.kind === SyntaxKind.OpenBracketToken
-        && isArrayBindingPattern(nextToken.parent) && isParameter(nextToken.parent.parent)
+        && isArrayBindingPattern(nextToken.parent) && isParameterDeclaration(nextToken.parent.parent)
     ) {
         return nextToken.parent.parent;
     }

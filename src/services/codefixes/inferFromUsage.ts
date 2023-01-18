@@ -53,7 +53,7 @@ import {
     isGetAccessorDeclaration,
     isIdentifier,
     isInJSFile,
-    isParameter,
+    isParameterDeclaration,
     isParameterPropertyModifier,
     isPropertyAccessExpression,
     isPropertyDeclaration,
@@ -277,7 +277,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, to
             // falls through
         case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
             if (markSeen(containingFunction)) {
-                const param = cast(parent, isParameter);
+                const param = cast(parent, isParameterDeclaration);
                 annotateParameters(changes, importAdder, sourceFile, param, containingFunction, program, host, cancellationToken);
                 declaration = param;
             }

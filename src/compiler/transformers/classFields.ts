@@ -120,7 +120,7 @@ import {
     isObjectLiteralElementLike,
     isObjectLiteralExpression,
     isOmittedExpression,
-    isParameter,
+    isParameterDeclaration,
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
     isPrefixUnaryExpression,
@@ -2460,7 +2460,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         setCommentRange(statement, property);
 
         const propertyOriginalNode = getOriginalNode(property);
-        if (isParameter(propertyOriginalNode)) {
+        if (isParameterDeclaration(propertyOriginalNode)) {
             // replicate comment and source map behavior from the ts transform for parameter properties.
             setSourceMapRange(statement, propertyOriginalNode);
             removeAllComments(statement);

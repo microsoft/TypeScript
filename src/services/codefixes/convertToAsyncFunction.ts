@@ -53,7 +53,7 @@ import {
     isInJSFile,
     isObjectBindingPattern,
     isOmittedExpression,
-    isParameter,
+    isParameterDeclaration,
     isPropertyAccessExpression,
     isReturnStatement,
     isReturnStatementWithFixablePromiseHandler,
@@ -309,10 +309,10 @@ function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker:
             // will eventually become
             //   const response = await fetch('...')
             // so we push an entry for 'response'.
-            if (lastCallSignature && !isParameter(node.parent) && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
+            if (lastCallSignature && !isParameterDeclaration(node.parent) && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
                 const firstParameter = firstOrUndefined(lastCallSignature.parameters);
                 const ident = firstParameter?.valueDeclaration
-                        && isParameter(firstParameter.valueDeclaration)
+                        && isParameterDeclaration(firstParameter.valueDeclaration)
                         && tryCast(firstParameter.valueDeclaration.name, isIdentifier)
                     || factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
                 const synthName = getNewNameIfConflict(ident, collidingSymbolMap);
@@ -320,7 +320,7 @@ function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker:
                 collidingSymbolMap.add(ident.text, symbol);
             }
             // We only care about identifiers that are parameters, variable declarations, or binding elements
-            else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent) || isBindingElement(node.parent))) {
+            else if (node.parent && (isParameterDeclaration(node.parent) || isVariableDeclaration(node.parent) || isBindingElement(node.parent))) {
                 const originalName = node.text;
                 const collidingSymbols = collidingSymbolMap.get(originalName);
 

@@ -222,7 +222,7 @@ import {
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isObjectTypeDeclaration,
-    isParameter,
+    isParameterDeclaration,
     isParameterPropertyModifier,
     isPartOfTypeNode,
     isPossiblyTypeArgumentPosition,
@@ -2754,7 +2754,7 @@ export function getCompletionEntriesFromSymbols(
             // `function f<T = /* no 'T' and 'T2' here */>(a: T, b: T2) { }`
             const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
             if (closestSymbolDeclaration && symbolDeclaration) {
-                if (isParameter(closestSymbolDeclaration) && isParameter(symbolDeclaration)) {
+                if (isParameterDeclaration(closestSymbolDeclaration) && isParameterDeclaration(symbolDeclaration)) {
                     const parameters = closestSymbolDeclaration.parent.parameters;
                     if (symbolDeclaration.pos >= closestSymbolDeclaration.pos && symbolDeclaration.pos < parameters.end) {
                         return false;
@@ -4779,7 +4779,7 @@ function getCompletionData(
     }
 
     function isConstructorParameterCompletion(node: Node): boolean {
-        return !!node.parent && isParameter(node.parent) && isConstructorDeclaration(node.parent.parent)
+        return !!node.parent && isParameterDeclaration(node.parent) && isConstructorDeclaration(node.parent.parent)
             && (isParameterPropertyModifier(node.kind) || isDeclarationName(node));
     }
 
@@ -6014,7 +6014,7 @@ function getClosestSymbolDeclaration(contextToken: Node | undefined, location: N
     let closestDeclaration = findAncestor(contextToken, node =>
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
-            : ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
+            : ((isParameterDeclaration(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
 
     if (!closestDeclaration) {
         closestDeclaration = findAncestor(location, node =>

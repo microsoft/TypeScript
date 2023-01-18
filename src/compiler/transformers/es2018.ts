@@ -59,7 +59,7 @@ import {
     isModifier,
     isModifierLike,
     isObjectLiteralElementLike,
-    isParameter,
+    isParameterDeclaration,
     isPropertyAccessExpression,
     isPropertyName,
     isQuestionToken,
@@ -939,7 +939,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     }
 
     function parameterVisitor(node: Node) {
-        Debug.assertNode(node, isParameter);
+        Debug.assertNode(node, isParameterDeclaration);
         return visitParameter(node);
     }
 
