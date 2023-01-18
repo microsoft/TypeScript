@@ -2006,8 +2006,6 @@ export function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanL
 /**
  * Determines whether a node is an expression based only on its kind.
  * Use `isExpressionNode` if not in transforms.
- *
- * @internal
  */
 export function isExpression(node: Node): node is Expression {
     return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);

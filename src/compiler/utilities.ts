@@ -2788,7 +2788,6 @@ export function isJSXTagName(node: Node) {
     return false;
 }
 
-/** @internal */
 export function isExpressionNode(node: Node): boolean {
     switch (node.kind) {
         case SyntaxKind.SuperKeyword:
