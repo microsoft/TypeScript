@@ -446,15 +446,19 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         writeTypeParametersOfSymbol(symbol, sourceFile);
     }
     if ((symbolFlags & SymbolFlags.TypeAlias) && (semanticMeaning & SemanticMeaning.Type)) {
+
+        const exportSymbol = typeChecker.getExportSymbolOfSymbol(symbol);
+
         prefixNextMeaning();
         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
         displayParts.push(spacePart());
         addFullSymbolName(symbol);
-        writeTypeParametersOfSymbol(symbol, sourceFile);
+        writeTypeParametersOfSymbol(exportSymbol, sourceFile);
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
-        addRange(displayParts, typeToDisplayParts(typeChecker, isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(typeChecker.getExportSymbolOfSymbol(symbol)), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
+
+        addRange(displayParts, typeToDisplayParts(typeChecker, isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(exportSymbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();

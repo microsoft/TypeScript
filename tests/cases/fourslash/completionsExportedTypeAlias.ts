@@ -66,7 +66,7 @@ verify.completions(
         includes: [
             {
                 name: 'E_Type',
-                text: 'type E_Type = T'
+                text: 'type E_Type<T> = T'
             }
         ]
     },
