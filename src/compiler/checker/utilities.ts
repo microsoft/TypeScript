@@ -2,7 +2,7 @@ import {
     Node,
     Symbol,
     SymbolId,
-} from "./types";
+} from "../types";
 
 let nextSymbolId = 1;
 let nextNodeId = 1;

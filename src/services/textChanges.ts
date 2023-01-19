@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { getNodeId } from "../compiler/checkerUtilities";
+import { getNodeId } from "../compiler/checker/utilities";
 import {
     concatenate,
     contains,
@@ -26,7 +26,7 @@ import {
     singleOrUndefined,
     stableSort,
 } from "../compiler/core";
-import { createPrinter } from "../compiler/emitter";
+import { createPrinter } from "../compiler/emitter/emitter";
 import {
     createNodeFactory,
     factory,
@@ -51,7 +51,7 @@ import {
     isStringLiteral,
     isVariableDeclaration,
 } from "../compiler/factory/nodeTests";
-import { createSourceFile } from "../compiler/parser";
+import { createSourceFile } from "../compiler/parser/parser";
 import {
     getLeadingCommentRanges,
     getLineAndCharacterOfPosition,
@@ -59,7 +59,7 @@ import {
     getTrailingCommentRanges,
     skipTrivia,
     tokenToString,
-} from "../compiler/scanner";
+} from "../compiler/scanner/scanner";
 import { nullTransformationContext } from "../compiler/transformer";
 import {
     ArrowFunction,

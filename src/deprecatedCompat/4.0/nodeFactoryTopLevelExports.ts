@@ -1,8 +1,8 @@
 import * as Debug from "../../compiler/debug";
 import { factory } from "../../compiler/factory/nodeFactory";
 import { setTextRange } from "../../compiler/factory/utilitiesPublic";
-import { parseBaseNodeFactory } from "../../compiler/parser";
-import { setParent } from "../../compiler/parserUtilities";
+import { parseBaseNodeFactory } from "../../compiler/parser/parser";
+import { setParent } from "../../compiler/parser/utilities";
 import {
     ArrowFunction,
     AsteriskToken,

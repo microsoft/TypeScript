@@ -1,4 +1,4 @@
-import { getSymbolId } from "../../compiler/checkerUtilities";
+import { getSymbolId } from "../../compiler/checker/utilities";
 import { tryCast } from "../../compiler/core";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { factory } from "../../compiler/factory/nodeFactory";

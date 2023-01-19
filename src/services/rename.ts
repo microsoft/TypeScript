@@ -8,6 +8,7 @@ import {
 } from "../compiler/core";
 import { Comparison } from "../compiler/corePublic";
 import { Diagnostics } from "../compiler/diagnosticInformationMap.generated";
+import { removeFileExtension } from "../compiler/extension";
 import {
     isIdentifier,
     isImportSpecifier,
@@ -40,7 +41,6 @@ import {
     getTextOfIdentifierOrLiteral,
     getTextOfNode,
     isStringOrNumericLiteralLike,
-    removeFileExtension,
     stripQuotes,
     tryGetImportFromModuleSpecifier,
 } from "../compiler/utilities";

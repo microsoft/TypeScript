@@ -30,7 +30,7 @@ import {
     isVariableDeclaration,
 } from "../compiler/factory/nodeTests";
 import { setTextRange } from "../compiler/factory/utilitiesPublic";
-import { forEachChild } from "../compiler/parser";
+import { forEachChild } from "../compiler/parser/parser";
 import {
     getBaseFileName,
     normalizePath,
@@ -97,7 +97,6 @@ import {
     isJSDocTypeAlias,
     isPropertyNameLiteral,
     isStatic,
-    removeFileExtension,
 } from "../compiler/utilities";
 import {
     getNameOfDeclaration,
@@ -123,6 +122,7 @@ import {
     getNodeKind,
     getNodeModifiers,
 } from "./utilities";
+import { removeFileExtension } from "../compiler/extension";
 
 /**
  * Matches all whitespace characters in a string. Eg:

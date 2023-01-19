@@ -1,4 +1,4 @@
-import { getSymbolId } from "../../compiler/checkerUtilities";
+import { getSymbolId } from "../../compiler/checker/utilities";
 import {
     compact,
     contains,

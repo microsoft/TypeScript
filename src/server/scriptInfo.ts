@@ -17,7 +17,7 @@ import {
     computeLineAndCharacterOfPosition,
     computeLineStarts,
     computePositionOfLineAndCharacter,
-} from "../compiler/scanner";
+} from "../compiler/scanner/scanner";
 import {
     getLineInfo,
     LineInfo,

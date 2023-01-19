@@ -17,7 +17,7 @@ import {
     normalizeSlashes,
     toPath,
 } from "../compiler/path";
-import { sys } from "../compiler/sys";
+import { sys } from "../compiler/sys/sys";
 import {
     ActionPackageInstalled,
     Arguments,

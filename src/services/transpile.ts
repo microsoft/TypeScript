@@ -4,7 +4,7 @@ import {
     optionDeclarations,
     parseCustomTypeOption,
     transpileOptionValueCompilerOptions,
-} from "../compiler/commandLineParser";
+} from "../compiler/commandLineParser/commandLineParser";
 import {
     addRange,
     filter,
@@ -12,7 +12,7 @@ import {
     isString,
 } from "../compiler/core";
 import { MapLike } from "../compiler/corePublic";
-import { createSourceFile } from "../compiler/parser";
+import { createSourceFile } from "../compiler/parser/parser";
 import {
     fileExtensionIs,
     normalizePath,
@@ -22,8 +22,8 @@ import {
     createProgram,
     getImpliedNodeFormatForFile,
     getSetExternalModuleIndicator,
-} from "../compiler/program";
-import { getNewLineCharacter } from "../compiler/sysUtilities";
+} from "../compiler/program/program";
+import { getNewLineCharacter } from "../compiler/sys/utilities";
 import {
     CommandLineOptionOfCustomType,
     CompilerHost,

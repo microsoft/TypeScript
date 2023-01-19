@@ -14,7 +14,7 @@ import {
     some,
 } from "./core";
 import { isStringLiteral } from "./factory/nodeTests";
-import { isDeclarationFileName } from "./parser";
+import { isDeclarationFileName } from "./parser/parser";
 import {
     getDirectoryPath,
     toPath,

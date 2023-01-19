@@ -1,7 +1,7 @@
 import { cast } from "../../compiler/core";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { isLabeledStatement } from "../../compiler/factory/nodeTests";
-import { skipTrivia } from "../../compiler/scanner";
+import { skipTrivia } from "../../compiler/scanner/scanner";
 import {
     SourceFile,
     SyntaxKind,

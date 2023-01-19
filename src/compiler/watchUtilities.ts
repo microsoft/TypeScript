@@ -4,7 +4,7 @@ import {
     ExtendedConfigCacheEntry,
     isExcludedFile,
     matchesExclude,
-} from "./commandLineParser";
+} from "./commandLineParser/commandLineParser";
 import {
     arrayToMap,
     binarySearch,
@@ -29,7 +29,7 @@ import {
     FileSystemEntries,
     matchFiles,
 } from "./fileMatcher";
-import { isDeclarationFileName } from "./parser";
+import { isDeclarationFileName } from "./parser/parser";
 import {
     ensureTrailingDirectorySeparator,
     fileExtensionIs,
@@ -46,7 +46,7 @@ import { removeIgnoredPath } from "./resolutionCache";
 import {
     PollingInterval,
     setSysLog,
-} from "./sys";
+} from "./sys/sys";
 import {
     CompilerOptions,
     DirectoryWatcherCallback,
@@ -65,12 +65,12 @@ import {
     closeFileWatcher,
     mutateMap,
     outFile,
-    removeFileExtension,
 } from "./utilities";
 import { returnNoopFileWatcher } from "./watch";
 import {
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
+    removeFileExtension,
     supportedJSExtensionsFlat,
 } from "./extension";
 

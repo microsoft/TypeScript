@@ -6,7 +6,7 @@ import {
     startsWith,
 } from "../compiler/core";
 import { Comparison } from "../compiler/corePublic";
-import { isUnicodeIdentifierStart } from "../compiler/scanner";
+import { isUnicodeIdentifierStart } from "../compiler/scanner/scanner";
 import {
     CharacterCodes,
     ScriptTarget,

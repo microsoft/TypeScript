@@ -1,13 +1,13 @@
 /* eslint-disable */
 import * as types from "./types";
-import * as checkerTypes from "./checkerUtilities";
+import * as checkerTypes from "./checker/utilities";
 /* eslint-enable */
 
 import {
     CheckMode,
     SignatureCheckMode,
     TypeFacts,
-} from "./checkerUtilities";
+} from "./checker/utilities";
 import {
     compareValues,
     every,

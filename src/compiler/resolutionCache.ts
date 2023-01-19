@@ -28,7 +28,7 @@ import {
     resolveModuleName,
     trace,
     updateResolutionField,
-} from "./moduleNameResolver";
+} from "./moduleNameResolver/moduleNameResolver";
 import {
     directorySeparator,
     fileExtensionIs,
@@ -44,8 +44,8 @@ import {
 import {
     createTypeReferenceResolutionLoader,
     inferredTypesContainingFile, moduleResolutionNameAndModeGetter, ResolutionLoader,
-} from "./program";
-import { ignoredPaths } from "./sysUtilities";
+} from "./program/program";
+import { ignoredPaths } from "./sys/utilities";
 import {
     CharacterCodes,
     CompilerOptions,
@@ -70,11 +70,9 @@ import {
 import {
     clearMap,
     closeFileWatcher,
-    extensionIsTS,
     isExternalOrCommonJsModule,
     mutateMap,
     packageIdToString,
-    resolutionExtensionIsTSOrJson,
 } from "./utilities";
 import {
     isExternalModuleNameRelative,
@@ -85,6 +83,10 @@ import {
     closeFileWatcherOf,
     isEmittedFileOfProgram,
 } from "./watchUtilities";
+import {
+    extensionIsTS,
+    resolutionExtensionIsTSOrJson,
+} from "./extension";
 
 /**
  * This is the cache of module/typedirectives resolution that can be retained across program

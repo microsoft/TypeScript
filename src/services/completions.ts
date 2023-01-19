@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { getSymbolId } from "../compiler/checkerUtilities";
+import { getSymbolId } from "../compiler/checker/utilities";
 import {
     append,
     cast,
@@ -36,7 +36,7 @@ import {
     SortedArray,
 } from "../compiler/corePublic";
 import { Diagnostics } from "../compiler/diagnosticInformationMap.generated";
-import { createPrinter } from "../compiler/emitter";
+import { createPrinter } from "../compiler/emitter/emitter";
 import { setSnippetElement } from "../compiler/factory/emitNode";
 import { factory } from "../compiler/factory/nodeFactory";
 import {
@@ -101,8 +101,8 @@ import {
     isIdentifierText,
     stringToToken,
     tokenToString,
-} from "../compiler/scanner";
-import { getNewLineCharacter } from "../compiler/sysUtilities";
+} from "../compiler/scanner/scanner";
+import { getNewLineCharacter } from "../compiler/sys/utilities";
 import { isInitializedProperty } from "../compiler/transformers/utilities";
 import {
     __String,

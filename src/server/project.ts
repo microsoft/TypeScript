@@ -1,6 +1,6 @@
 import * as Debug from "../compiler/debug";
 import { BuilderState } from "../compiler/builderState";
-import { updateErrorForNoInputFiles } from "../compiler/commandLineParser";
+import { updateErrorForNoInputFiles } from "../compiler/commandLineParser/commandLineParser";
 import {
     addRange,
     append,
@@ -37,8 +37,8 @@ import {
     PackageJsonInfo,
     parsePackageName,
     resolvePackageNameToPackageJson,
-} from "../compiler/moduleNameResolver";
-import { isDeclarationFileName } from "../compiler/parser";
+} from "../compiler/moduleNameResolver/moduleNameResolver";
+import { isDeclarationFileName } from "../compiler/parser/parser";
 import {
     combinePaths,
     fileExtensionIs,
@@ -50,7 +50,7 @@ import {
 } from "../compiler/path";
 import { perfLogger } from "../compiler/perfLogger";
 import { timestamp } from "../compiler/performanceCore";
-import { inferredTypesContainingFile } from "../compiler/program";
+import { inferredTypesContainingFile } from "../compiler/program/program";
 import {
     createResolutionCache,
     ResolutionCache,
@@ -58,7 +58,7 @@ import {
 import {
     generateDjb2Hash,
     PollingInterval,
-} from "../compiler/sys";
+} from "../compiler/sys/sys";
 import { tracing } from "../compiler/tracing";
 import {
     CompilerHost,
@@ -95,11 +95,8 @@ import {
     forEachEntry,
     forEachKey,
     getAllowJSCompilerOption,
-    getDeclarationEmitOutputFilePathWorker,
     getEmitDeclarations,
     outFile,
-    removeFileExtension,
-    resolutionExtensionIsTSOrJson,
     stripQuotes,
 } from "../compiler/utilities";
 import {
@@ -177,7 +174,9 @@ import {
     createSymlinkCache,
     SymlinkCache,
 } from "../compiler/symlinkCache";
-import { changesAffectModuleResolution } from "../compiler/programUtilities";
+import { changesAffectModuleResolution } from "../compiler/program/utilities";
+import { removeFileExtension, resolutionExtensionIsTSOrJson } from "./_namespaces/ts";
+import { getDeclarationEmitOutputFilePathWorker } from "../compiler/emitter/utilities";
 
 export enum ProjectKind {
     Inferred,

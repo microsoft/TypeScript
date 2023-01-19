@@ -2,7 +2,7 @@ import * as Debug from "../../compiler/debug";
 import {
     getNodeId,
     getSymbolId,
-} from "../../compiler/checkerUtilities";
+} from "../../compiler/checker/utilities";
 import {
     concatenate,
     createMultiMap,
@@ -30,9 +30,9 @@ import {
     isReturnStatement,
     isVariableDeclaration,
 } from "../../compiler/factory/nodeTests";
-import { forEachChild } from "../../compiler/parser";
-import { forEachReturnStatement } from "../../compiler/parserUtilities";
-import { skipTrivia } from "../../compiler/scanner";
+import { forEachChild } from "../../compiler/parser/parser";
+import { forEachReturnStatement } from "../../compiler/parser/utilities";
+import { skipTrivia } from "../../compiler/scanner/scanner";
 import {
     ArrowFunction,
     AwaitExpression,

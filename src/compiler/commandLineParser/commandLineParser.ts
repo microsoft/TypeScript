@@ -1,4 +1,4 @@
-import * as Debug from "./debug";
+import * as Debug from "../debug";
 import {
     append,
     arrayFrom,
@@ -30,26 +30,26 @@ import {
     stringContains,
     toFileNameLowerCase,
     trimString,
-} from "./core";
+} from "../core";
 import {
     MapLike,
     Push,
-} from "./corePublic";
-import { Diagnostics } from "./diagnosticInformationMap.generated";
+} from "../corePublic";
+import { Diagnostics } from "../diagnosticInformationMap.generated";
 import {
     isArrayLiteralExpression,
     isObjectLiteralExpression,
     isStringLiteral,
-} from "./factory/nodeTests";
+} from "../factory/nodeTests";
 import {
     getFileMatcherPatterns,
     getRegexFromPattern,
     getRegularExpressionForWildcard,
     getRegularExpressionsForWildcards,
     isImplicitGlob,
-} from "./fileMatcher";
-import { nodeNextJsonConfigResolver } from "./moduleNameResolver";
-import { parseJsonText } from "./parser";
+} from "../fileMatcher";
+import { nodeNextJsonConfigResolver } from "../moduleNameResolver/moduleNameResolver";
+import { parseJsonText } from "../parser/parser";
 import {
     combinePaths,
     containsPath,
@@ -68,10 +68,10 @@ import {
     normalizeSlashes,
     removeTrailingDirectorySeparator,
     toPath,
-} from "./path";
-import { sys } from "./sys";
-import { tracing } from "./tracing";
-import { BuildOptions } from "./tsbuildPublic";
+} from "../path";
+import { sys } from "../sys/sys";
+import { tracing } from "../tracing";
+import { BuildOptions } from "../tsbuildPublic";
 import {
     AlternateModeDiagnostics,
     ArrayLiteralExpression,
@@ -116,9 +116,8 @@ import {
     WatchDirectoryKind,
     WatchFileKind,
     WatchOptions,
-} from "./types";
+} from "../types";
 import {
-    changeExtension,
     createCompilerDiagnostic,
     createDiagnosticForNodeInSourceFile,
     forEachEntry,
@@ -128,12 +127,13 @@ import {
     getTsConfigPropArrayElementValue,
     isComputedNonLiteralName,
     isStringDoubleQuoted,
-} from "./utilities";
-import { unescapeLeadingUnderscores } from "./utilitiesPublic";
+} from "../utilities";
+import { unescapeLeadingUnderscores } from "../utilitiesPublic";
 import {
+    changeExtension,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
-} from "./extension";
+} from "../extension";
 
 /** @internal */
 export const compileOnSaveCommandLineOption: CommandLineOption = {

@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { getOptionFromName } from "../compiler/commandLineParser";
+import { getOptionFromName } from "../compiler/commandLineParser/commandLineParser";
 import {
     createGetCanonicalFileName,
     emptyArray,
@@ -22,8 +22,8 @@ import {
     getFileMatcherPatterns,
     getRegexFromPattern,
 } from "../compiler/fileMatcher";
-import { resolveModuleName } from "../compiler/moduleNameResolver";
-import { updateModuleSpecifier } from "../compiler/moduleSpecifiers";
+import { resolveModuleName } from "../compiler/moduleNameResolver/moduleNameResolver";
+import { updateModuleSpecifier } from "../compiler/moduleSpecifiers/moduleSpecifiers";
 import {
     combinePaths,
     ensurePathIsNonModuleName,
@@ -33,7 +33,7 @@ import {
     normalizePath,
     pathIsRelative,
 } from "../compiler/path";
-import { getModeForUsageLocation } from "../compiler/program";
+import { getModeForUsageLocation } from "../compiler/program/program";
 import {
     Expression,
     ModuleResolutionHost,

@@ -1,16 +1,22 @@
+import * as Debug from "./debug";
 import {
+    endsWith,
     find,
     flatten,
     mapDefined,
     some,
+    startsWith,
 } from "./core";
 import {
+    changeAnyExtension,
     fileExtensionIs,
+    fileExtensionIsOneOf,
 } from "./path";
 import {
     CompilerOptions,
     Extension,
     FileExtensionInfo,
+    Path,
     ScriptKind,
 } from "./types";
 import {
@@ -55,6 +61,8 @@ export const supportedDeclarationExtensions: readonly Extension[] = [Extension.D
 
 /** @internal */
 export const supportedTSImplementationExtensions: readonly Extension[] = [Extension.Ts, Extension.Cts, Extension.Mts, Extension.Tsx];
+
+const extensionsToRemove = [Extension.Dts, Extension.Dmts, Extension.Dcts, Extension.Mjs, Extension.Mts, Extension.Cjs, Extension.Cts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx, Extension.Json];
 
 /**
  * Return ".ts", ".d.ts", or ".tsx", if that is the extension.
@@ -107,4 +115,85 @@ export function hasJSFileExtension(fileName: string): boolean {
 /** @internal */
 export function hasTSFileExtension(fileName: string): boolean {
     return some(supportedTSExtensionsFlat, extension => fileExtensionIs(fileName, extension));
+}
+
+/** @internal */
+export function getDeclarationEmitExtensionForPath(path: string) {
+    return fileExtensionIsOneOf(path, [Extension.Mjs, Extension.Mts]) ? Extension.Dmts :
+        fileExtensionIsOneOf(path, [Extension.Cjs, Extension.Cts]) ? Extension.Dcts :
+        fileExtensionIsOneOf(path, [Extension.Json]) ? `.d.json.ts` : // Drive-by redefinition of json declaration file output name so if it's ever enabled, it behaves well
+        Extension.Dts;
+}
+
+/**
+ * This function is an inverse of `getDeclarationEmitExtensionForPath`.
+ *
+ * @internal
+ */
+export function getPossibleOriginalInputExtensionForExtension(path: string) {
+    return fileExtensionIsOneOf(path, [Extension.Dmts, Extension.Mjs, Extension.Mts]) ? [Extension.Mts, Extension.Mjs] :
+        fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs]:
+        fileExtensionIsOneOf(path, [`.d.json.ts`]) ? [Extension.Json] :
+        [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
+}
+
+/** @internal */
+export function removeFileExtension(path: string): string {
+    for (const ext of extensionsToRemove) {
+        const extensionless = tryRemoveExtension(path, ext);
+        if (extensionless !== undefined) {
+            return extensionless;
+        }
+    }
+    return path;
+}
+
+/** @internal */
+export function tryRemoveExtension(path: string, extension: string): string | undefined {
+    return fileExtensionIs(path, extension) ? removeExtension(path, extension) : undefined;
+}
+
+/** @internal */
+export function removeExtension(path: string, extension: string): string {
+    return path.substring(0, path.length - extension.length);
+}
+
+/** @internal */
+export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {
+    return changeAnyExtension(path, newExtension, extensionsToRemove, /*ignoreCase*/ false) as T;
+}
+
+/**
+ * True if an extension is one of the supported TypeScript extensions.
+ *
+ * @internal
+ */
+export function extensionIsTS(ext: string): boolean {
+    return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts || ext === Extension.Dcts || (startsWith(ext, ".d.") && endsWith(ext, ".ts"));
+}
+
+/** @internal */
+export function resolutionExtensionIsTSOrJson(ext: string) {
+    return extensionIsTS(ext) || ext === Extension.Json;
+}
+
+/**
+ * Gets the extension from a path.
+ * Path must have a valid extension.
+ *
+ * @internal
+ */
+export function extensionFromPath(path: string): Extension {
+    const ext = tryGetExtensionFromPath(path);
+    return ext !== undefined ? ext : Debug.fail(`File ${path} has unknown extension.`);
+}
+
+/** @internal */
+export function isAnySupportedFileExtension(path: string): boolean {
+    return tryGetExtensionFromPath(path) !== undefined;
+}
+
+/** @internal */
+export function tryGetExtensionFromPath(path: string): Extension | undefined {
+    return find(extensionsToRemove, e => fileExtensionIs(path, e));
 }

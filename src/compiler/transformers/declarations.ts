@@ -24,7 +24,7 @@ import {
     tryCast,
 } from "../core";
 import { Diagnostics } from "../diagnosticInformationMap.generated";
-import { getOutputPathsFor } from "../emitter";
+import { getOutputPathsFor } from "../emitter/emitter";
 import {
     getCommentRange,
     removeAllComments,
@@ -73,10 +73,10 @@ import {
     setOriginalNode,
     setTextRange,
 } from "../factory/utilitiesPublic";
-import { pathContainsNodeModules } from "../moduleNameResolver";
-import { getModuleSpecifier } from "../moduleSpecifiers";
-import { parseNodeFactory } from "../parser";
-import { setParent } from "../parserUtilities";
+import { pathContainsNodeModules } from "../moduleNameResolver/moduleNameResolver";
+import { getModuleSpecifier } from "../moduleSpecifiers/moduleSpecifiers";
+import { parseNodeFactory } from "../parser/parser";
+import { setParent } from "../parser/utilities";
 import {
     getDirectoryPath,
     getRelativePathToDirectoryOrUrl,
@@ -85,13 +85,13 @@ import {
     pathIsRelative,
     toPath,
 } from "../path";
-import { getResolutionModeOverrideForClause } from "../program";
+import { getResolutionModeOverrideForClause } from "../program/program";
 import {
     getLeadingCommentRanges,
     getLineAndCharacterOfPosition,
     getTrailingCommentRanges,
     skipTrivia,
-} from "../scanner";
+} from "../scanner/scanner";
 import { transformNodes } from "../transformer";
 import {
     AccessorDeclaration,
@@ -183,10 +183,8 @@ import {
     getEffectiveBaseTypeNode,
     getEffectiveModifierFlags,
     getExternalModuleImportEqualsDeclarationExpression,
-    getExternalModuleNameFromDeclaration,
     getFirstConstructorWithBody,
     getLeadingCommentRangesOfNode,
-    getResolvedExternalModuleName,
     getSetAccessorValueParameter,
     getSourceFileOfNode,
     getTextOfNode,
@@ -241,6 +239,10 @@ import {
     GetSymbolAccessibilityDiagnostic,
 } from "./declarations/diagnostics";
 import { getOriginalNodeId } from "./utilities";
+import {
+    getExternalModuleNameFromDeclaration,
+    getResolvedExternalModuleName,
+} from "../moduleNameResolver/utilities";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {

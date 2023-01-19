@@ -25,7 +25,7 @@ import {
     isJSDoc,
     isJSDocParameterTag,
 } from "../compiler/factory/nodeTests";
-import { forEachReturnStatement } from "../compiler/parserUtilities";
+import { forEachReturnStatement } from "../compiler/parser/utilities";
 import {
     ArrowFunction,
     AssignmentDeclarationKind,

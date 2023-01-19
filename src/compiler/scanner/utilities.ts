@@ -1,4 +1,4 @@
-import { CharacterCodes } from "./types";
+import { CharacterCodes } from "../types";
 
 /** @internal */
 export function positionIsSynthesized(pos: number): boolean {

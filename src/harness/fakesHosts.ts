@@ -5,7 +5,7 @@ import * as vpath from "./_namespaces/vpath";
 import * as documents from "./_namespaces/documents";
 import * as collections from "./_namespaces/collections";
 import * as Harness from "./_namespaces/Harness";
-import { getNewLineCharacter } from "../compiler/sysUtilities";
+import { getNewLineCharacter } from "../compiler/sys/utilities";
 import { FileSystemEntries, matchFiles } from "../compiler/fileMatcher";
 
 /**

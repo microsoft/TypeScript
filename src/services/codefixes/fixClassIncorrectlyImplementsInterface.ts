@@ -1,5 +1,5 @@
 import * as Debug from "../../compiler/debug";
-import { getNodeId } from "../../compiler/checkerUtilities";
+import { getNodeId } from "../../compiler/checker/utilities";
 import {
     and,
     find,

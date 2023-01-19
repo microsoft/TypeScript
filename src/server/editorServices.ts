@@ -11,7 +11,7 @@ import {
     parseJsonSourceFileConfigFileContent,
     tryReadFile,
     typeAcquisitionDeclarations,
-} from "../compiler/commandLineParser";
+} from "../compiler/commandLineParser/commandLineParser";
 import {
     arrayFrom,
     arrayToMap,
@@ -43,8 +43,8 @@ import {
     ReadonlyCollection,
     version,
 } from "../compiler/corePublic";
-import { parsePackageName } from "../compiler/moduleNameResolver";
-import { parseJsonText } from "../compiler/parser";
+import { parsePackageName } from "../compiler/moduleNameResolver/moduleNameResolver";
+import { parseJsonText } from "../compiler/parser/parser";
 import {
     combinePaths,
     containsPath,
@@ -66,7 +66,7 @@ import {
 import {
     forEachResolvedProjectReference,
     resolveProjectReferencePath,
-} from "../compiler/program";
+} from "../compiler/program/program";
 import {
     canWatchDirectoryOrFile,
     removeIgnoredPath,
@@ -75,7 +75,7 @@ import {
     getFileWatcherEventKind,
     missingFileModifiedTime,
     PollingInterval,
-} from "../compiler/sys";
+} from "../compiler/sys/sys";
 import { tracing } from "../compiler/tracing";
 import {
     CommandLineOption,
@@ -107,7 +107,6 @@ import {
     forEachEntry,
     forEachKey,
     isJsonEqual,
-    removeFileExtension,
 } from "../compiler/utilities";
 import {
     returnNoopFileWatcher,
@@ -219,7 +218,10 @@ import {
     ProjectOptions,
     toNormalizedPath,
 } from "./utilitiesPublic";
-import { hasTSFileExtension } from "../compiler/extension";
+import {
+    hasTSFileExtension,
+    removeFileExtension,
+} from "../compiler/extension";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 /** @internal */

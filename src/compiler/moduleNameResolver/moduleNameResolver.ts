@@ -1,6 +1,9 @@
-import * as Debug from "./debug";
-import { DiagnosticReporter, moduleResolutionOptionDeclarations } from "./commandLineParser";
-import { readJson } from "./commandLineParserUtilities";
+import * as Debug from "../debug";
+import {
+    DiagnosticReporter,
+    moduleResolutionOptionDeclarations,
+} from "../commandLineParser/commandLineParser";
+import { readJson } from "../commandLineParser/utilities";
 import {
     append,
     appendIfUnique,
@@ -32,17 +35,17 @@ import {
     sort,
     startsWith,
     stringContains,
-} from "./core";
+} from "../core";
 import {
     Comparison,
     MapLike,
     Push,
     version,
     versionMajorMinor,
-} from "./corePublic";
-import { Diagnostics } from "./diagnosticInformationMap.generated";
-import { getCommonSourceDirectory } from "./emitter";
-import { isDeclarationFileName } from "./parser";
+} from "../corePublic";
+import { Diagnostics } from "../diagnosticInformationMap.generated";
+import { getCommonSourceDirectory } from "../emitter/emitter";
+import { isDeclarationFileName } from "../parser/parser";
 import {
     changeAnyExtension,
     combinePaths,
@@ -66,12 +69,12 @@ import {
     normalizeSlashes,
     pathIsRelative,
     toPath,
-} from "./path";
-import { perfLogger } from "./perfLogger";
+} from "../path";
+import { perfLogger } from "../perfLogger";
 import {
     Version,
     VersionRange,
-} from "./semver";
+} from "../semver";
 import {
     CharacterCodes,
     CommandLineOption,
@@ -93,34 +96,34 @@ import {
     ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     SourceFile,
-} from "./types";
+} from "../types";
 import {
     createCompilerDiagnostic,
     directoryProbablyExists,
-    extensionIsTS,
     formatMessage,
     getCompilerOptionValue,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
     getPathsBasePath,
-    getPossibleOriginalInputExtensionForExtension,
     getResolveJsonModule,
     hostGetCanonicalFileName,
     matchPatternOrExact,
     packageIdToString,
-    removeExtension,
-    removeFileExtension,
-    tryGetExtensionFromPath,
     tryParsePatterns,
-} from "./utilities";
+} from "../utilities";
 import {
     isExternalModuleNameRelative,
-} from "./utilitiesPublic";
+} from "../utilitiesPublic";
 import {
+    extensionIsTS,
+    getPossibleOriginalInputExtensionForExtension,
+    removeExtension,
+    removeFileExtension,
     supportedDeclarationExtensions,
     supportedTSImplementationExtensions,
     tryExtractTSExtension,
-} from "./extension";
+    tryGetExtensionFromPath,
+} from "../extension";
 
 /** @internal */
 export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;

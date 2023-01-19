@@ -1,4 +1,4 @@
-import { getNodeId } from "../../compiler/checkerUtilities";
+import { getNodeId } from "../../compiler/checker/utilities";
 import {
     cast,
     first,

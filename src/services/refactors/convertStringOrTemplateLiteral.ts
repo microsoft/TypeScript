@@ -14,7 +14,7 @@ import {
     isTemplateHead,
     isTemplateMiddle,
 } from "../../compiler/factory/nodeTests";
-import { getTrailingCommentRanges } from "../../compiler/scanner";
+import { getTrailingCommentRanges } from "../../compiler/scanner/scanner";
 import {
     BinaryExpression,
     BinaryOperator,

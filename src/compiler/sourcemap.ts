@@ -20,7 +20,7 @@ import {
     getNormalizedAbsolutePath,
     getRelativePathToDirectoryOrUrl,
 } from "./path";
-import { getPositionOfLineAndCharacter } from "./scanner";
+import { getPositionOfLineAndCharacter } from "./scanner/scanner";
 import {
     CharacterCodes,
     DocumentPosition,

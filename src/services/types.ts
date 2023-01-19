@@ -1,5 +1,5 @@
 import { EmitOutput } from "../compiler/builderStatePublic";
-import { ModuleResolutionCache } from "../compiler/moduleNameResolver";
+import { ModuleResolutionCache } from "../compiler/moduleNameResolver/moduleNameResolver";
 import { SymlinkCache } from "../compiler/symlinkCache";
 import {
     __String,

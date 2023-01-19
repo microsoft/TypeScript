@@ -6,8 +6,8 @@ import {
 import {
     getNodeId,
     getSymbolId,
-} from "../compiler/checkerUtilities";
-import { setConfigFileInOptions } from "../compiler/commandLineParser";
+} from "../compiler/checker/utilities";
+import { setConfigFileInOptions } from "../compiler/commandLineParser/commandLineParser";
 import {
     assertType,
     binarySearchKey,
@@ -41,7 +41,7 @@ import {
     tryCast,
 } from "../compiler/core";
 import { Comparison } from "../compiler/corePublic";
-import { createPrinter } from "../compiler/emitter";
+import { createPrinter } from "../compiler/emitter/emitter";
 import {
     addEmitFlags,
     addSyntheticLeadingComment,
@@ -131,10 +131,10 @@ import {
 import {
     getPackageNameFromTypesPackageName,
     getTypesPackageName,
-} from "../compiler/moduleNameResolver";
-import { getNodeModulesPackageName } from "../compiler/moduleSpecifiers";
-import { forEachChild } from "../compiler/parser";
-import { getLastChild } from "../compiler/parserUtilities";
+} from "../compiler/moduleNameResolver/moduleNameResolver";
+import { getNodeModulesPackageName } from "../compiler/moduleSpecifiers/moduleSpecifiers";
+import { forEachChild } from "../compiler/parser/parser";
+import { getLastChild } from "../compiler/parser/utilities";
 import {
     combinePaths,
     forEachAncestorDirectory,
@@ -144,7 +144,7 @@ import {
     normalizePath,
     pathIsRelative,
 } from "../compiler/path";
-import { findConfigFile } from "../compiler/program";
+import { findConfigFile } from "../compiler/program/program";
 import {
     createScanner,
     forEachLeadingCommentRange,
@@ -155,7 +155,7 @@ import {
     Scanner,
     stringToToken,
     tokenToString,
-} from "../compiler/scanner";
+} from "../compiler/scanner/scanner";
 import { nullTransformationContext } from "../compiler/transformer";
 import {
     __String,

@@ -1,4 +1,4 @@
-import { getSymbolId } from "./checkerUtilities";
+import { getSymbolId } from "./checker/utilities";
 import {
     clear,
     forEach,

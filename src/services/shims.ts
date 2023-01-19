@@ -1,7 +1,7 @@
 import { EmitOutput } from "../compiler/builderStatePublic";
 import {
     parseJsonSourceFileConfigFileContent,
-} from "../compiler/commandLineParser";
+} from "../compiler/commandLineParser/commandLineParser";
 import {
     clear,
     createGetCanonicalFileName,
@@ -12,20 +12,21 @@ import {
     toFileNameLowerCase,
 } from "../compiler/core";
 import { MapLike } from "../compiler/corePublic";
+import { extensionFromPath } from "../compiler/extension";
 import { getFileMatcherPatterns } from "../compiler/fileMatcher";
 import {
     getAutomaticTypeDirectiveNames,
     resolveModuleName,
     resolveTypeReferenceDirective,
-} from "../compiler/moduleNameResolver";
-import { parseJsonText } from "../compiler/parser";
+} from "../compiler/moduleNameResolver/moduleNameResolver";
+import { parseJsonText } from "../compiler/parser/parser";
 import {
     getDirectoryPath,
     normalizeSlashes,
     toPath,
 } from "../compiler/path";
 import { timestamp } from "../compiler/performanceCore";
-import { flattenDiagnosticMessageText } from "../compiler/program";
+import { flattenDiagnosticMessageText } from "../compiler/program/program";
 import {
     CompilerOptions,
     Diagnostic,
@@ -44,7 +45,6 @@ import {
     TypeAcquisition,
     UserPreferences,
 } from "../compiler/types";
-import { extensionFromPath } from "../compiler/utilities";
 import {
     createTextChangeRange,
     createTextSpan,

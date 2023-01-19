@@ -35,7 +35,7 @@ import {
 import {
     createScanner,
     Scanner,
-} from "../compiler/scanner";
+} from "../compiler/scanner/scanner";
 import {
     AnyImportOrRequireStatement,
     EmitFlags,

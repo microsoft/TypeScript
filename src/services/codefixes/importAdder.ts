@@ -2,7 +2,7 @@ import * as Debug from "../../compiler/debug";
 import {
     getNodeId,
     getSymbolId,
-} from "../../compiler/checkerUtilities";
+} from "../../compiler/checker/utilities";
 import {
     arrayFrom,
     cast,
@@ -42,11 +42,11 @@ import {
     isNamespaceImport,
     isStringLiteral,
 } from "../../compiler/factory/nodeTests";
-import { pathContainsNodeModules } from "../../compiler/moduleNameResolver";
+import { pathContainsNodeModules } from "../../compiler/moduleNameResolver/moduleNameResolver";
 import {
     getModuleSpecifiersWithCacheInfo,
     tryGetModuleSpecifiersFromCache,
-} from "../../compiler/moduleSpecifiers";
+} from "../../compiler/moduleSpecifiers/moduleSpecifiers";
 import {
     getBaseFileName,
     getDirectoryPath,
@@ -56,7 +56,7 @@ import {
 import {
     isIdentifierPart,
     isIdentifierStart,
-} from "../../compiler/scanner";
+} from "../../compiler/scanner/scanner";
 import {
     AnyImportOrRequire,
     AnyImportOrRequireStatement,
@@ -109,7 +109,6 @@ import {
     isValidTypeOnlyAliasUseSite,
     isVariableDeclarationInitializedToRequire,
     nodeIsMissing,
-    removeFileExtension,
     skipAlias,
     stripQuotes,
     tryGetModuleSpecifierFromDeclaration,
@@ -167,6 +166,7 @@ import {
     SemanticMeaning,
     shouldUseUriStyleNodeCoreModules,
 } from "../utilities";
+import { removeFileExtension } from "../../compiler/extension";
 
 /** @internal */
 export const fixName = "import";

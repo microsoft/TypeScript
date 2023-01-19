@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { readConfigFile } from "../compiler/commandLineParser";
+import { readConfigFile } from "../compiler/commandLineParser/commandLineParser";
 import {
     compareStringsCaseSensitive,
     deduplicate,
@@ -34,8 +34,10 @@ import {
     Path,
     TypeAcquisition,
 } from "../compiler/types";
-import { removeFileExtension } from "../compiler/utilities";
-import { hasJSFileExtension } from "../compiler/extension";
+import {
+    hasJSFileExtension,
+    removeFileExtension,
+} from "../compiler/extension";
 
 /** @internal */
 export interface TypingResolutionHost {

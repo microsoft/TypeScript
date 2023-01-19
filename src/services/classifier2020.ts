@@ -16,7 +16,7 @@ import {
     isSourceFile,
     isVariableDeclaration,
 } from "../compiler/factory/nodeTests";
-import { forEachChild } from "../compiler/parser";
+import { forEachChild } from "../compiler/parser/parser";
 import {
     BindingElement,
     CancellationToken,

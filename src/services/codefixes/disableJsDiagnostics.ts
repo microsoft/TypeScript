@@ -3,7 +3,7 @@ import {
     tryAddToSet,
 } from "../../compiler/core";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
-import { getLineAndCharacterOfPosition } from "../../compiler/scanner";
+import { getLineAndCharacterOfPosition } from "../../compiler/scanner/scanner";
 import {
     DiagnosticCategory,
     SourceFile,

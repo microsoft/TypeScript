@@ -34,11 +34,11 @@ import {
     startOnNewLine,
 } from "../factory/utilities";
 import { setTextRange } from "../factory/utilitiesPublic";
-import { setParentRecursive } from "../parserUtilities";
+import { setParentRecursive } from "../parser/utilities";
 import {
     getLineAndCharacterOfPosition,
     utf16EncodeAsString,
-} from "../scanner";
+} from "../scanner/scanner";
 import {
     Bundle,
     Expression,

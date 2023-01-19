@@ -1,6 +1,6 @@
-import { some, stringContains } from "./core";
+import { some, stringContains } from "../core";
 import { sys } from "./sys";
-import { CompilerOptions, NewLineKind, PrinterOptions } from "./types";
+import { CompilerOptions, NewLineKind, PrinterOptions } from "../types";
 
 /** @internal */
 export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];

@@ -1,5 +1,5 @@
 import * as Debug from "./debug";
-import { getSymbolId } from "./checkerUtilities";
+import { getSymbolId } from "./checker/utilities";
 import {
     addRange,
     arrayFrom,
@@ -11,7 +11,6 @@ import {
     contains,
     createGetCanonicalFileName,
     emptyArray,
-    endsWith,
     equalOwnProperties,
     equateValues,
     every,
@@ -139,22 +138,12 @@ import {
     canHaveModifiers,
 } from "./factory/utilitiesPublic";
 import {
-    changeAnyExtension,
-    combinePaths,
-    ensurePathIsNonModuleName,
-    ensureTrailingDirectorySeparator,
-    fileExtensionIs,
-    fileExtensionIsOneOf,
     forEachAncestorDirectory,
     getBaseFileName,
     getDirectoryPath,
-    getNormalizedAbsolutePath,
-    getRelativePathToDirectoryOrUrl,
     getRootLength,
     isAnyDirectorySeparator,
     normalizePath,
-    pathIsRelative,
-    toPath,
 } from "./path";
 import {
     computeLineAndCharacterOfPosition,
@@ -170,11 +159,11 @@ import {
     skipTrivia,
     stringToToken,
     tokenToString,
-} from "./scanner";
+} from "./scanner/scanner";
 import {
     parsePseudoBigInt,
     positionIsSynthesized,
-} from "./scannerUtilities";
+} from "./scanner/utilities";
 import {
     __String,
     AccessExpression,
@@ -246,8 +235,6 @@ import {
     DynamicNamedDeclaration,
     ElementAccessExpression,
     EmitFlags,
-    EmitHost,
-    EmitResolver,
     EmitTextWriter,
     EntityName,
     EntityNameExpression,
@@ -363,7 +350,6 @@ import {
     ParenthesizedExpression,
     ParenthesizedTypeNode,
     PartiallyEmittedExpression,
-    Path,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrintHandlers,
@@ -5178,101 +5164,6 @@ export function hostGetCanonicalFileName(host: { useCaseSensitiveFileNames?(): b
 }
 
 /** @internal */
-export interface ResolveModuleNameResolutionHost {
-    getCanonicalFileName(p: string): string;
-    getCommonSourceDirectory(): string;
-    getCurrentDirectory(): string;
-}
-
-/** @internal */
-export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
-    return file.moduleName || getExternalModuleNameFromPath(host, file.fileName, referenceFile && referenceFile.fileName);
-}
-
-function getCanonicalAbsolutePath(host: ResolveModuleNameResolutionHost, path: string) {
-    return host.getCanonicalFileName(getNormalizedAbsolutePath(path, host.getCurrentDirectory()));
-}
-
-/** @internal */
-export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameResolutionHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
-    const file = resolver.getExternalModuleFileFromDeclaration(declaration);
-    if (!file || file.isDeclarationFile) {
-        return undefined;
-    }
-    // If the declaration already uses a non-relative name, and is outside the common source directory, continue to use it
-    const specifier = getExternalModuleName(declaration);
-    if (specifier && isStringLiteralLike(specifier) && !pathIsRelative(specifier.text) &&
-        getCanonicalAbsolutePath(host, file.path).indexOf(getCanonicalAbsolutePath(host, ensureTrailingDirectorySeparator(host.getCommonSourceDirectory()))) === -1) {
-        return undefined;
-    }
-    return getResolvedExternalModuleName(host, file);
-}
-
-/**
- * Resolves a local path to a path which is absolute to the base of the emit
- *
- * @internal
- */
-export function getExternalModuleNameFromPath(host: ResolveModuleNameResolutionHost, fileName: string, referencePath?: string): string {
-    const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
-    const dir = toPath(referencePath ? getDirectoryPath(referencePath) : host.getCommonSourceDirectory(), host.getCurrentDirectory(), getCanonicalFileName);
-    const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
-    const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-    const extensionless = removeFileExtension(relativePath);
-    return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
-}
-
-/** @internal */
-export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
-    const compilerOptions = host.getCompilerOptions();
-    let emitOutputFilePathWithoutExtension: string;
-    if (compilerOptions.outDir) {
-        emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(fileName, host, compilerOptions.outDir));
-    }
-    else {
-        emitOutputFilePathWithoutExtension = removeFileExtension(fileName);
-    }
-
-    return emitOutputFilePathWithoutExtension + extension;
-}
-
-/** @internal */
-export function getDeclarationEmitOutputFilePath(fileName: string, host: EmitHost) {
-    return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
-}
-
-/** @internal */
-export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
-    const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
-
-    const path = outputDir
-        ? getSourceFilePathInNewDirWorker(fileName, outputDir, currentDirectory, commonSourceDirectory, getCanonicalFileName)
-        : fileName;
-    const declarationExtension = getDeclarationEmitExtensionForPath(path);
-    return removeFileExtension(path) + declarationExtension;
-}
-
-/** @internal */
-export function getDeclarationEmitExtensionForPath(path: string) {
-    return fileExtensionIsOneOf(path, [Extension.Mjs, Extension.Mts]) ? Extension.Dmts :
-        fileExtensionIsOneOf(path, [Extension.Cjs, Extension.Cts]) ? Extension.Dcts :
-        fileExtensionIsOneOf(path, [Extension.Json]) ? `.d.json.ts` : // Drive-by redefinition of json declaration file output name so if it's ever enabled, it behaves well
-        Extension.Dts;
-}
-
-/**
- * This function is an inverse of `getDeclarationEmitExtensionForPath`.
- *
- * @internal
- */
-export function getPossibleOriginalInputExtensionForExtension(path: string) {
-    return fileExtensionIsOneOf(path, [Extension.Dmts, Extension.Mjs, Extension.Mts]) ? [Extension.Mts, Extension.Mjs] :
-        fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs]:
-        fileExtensionIsOneOf(path, [`.d.json.ts`]) ? [Extension.Json] :
-        [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
-}
-
-/** @internal */
 export function outFile(options: CompilerOptions) {
     return options.outFile || options.out;
 }
@@ -5310,19 +5201,6 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
             !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
             !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)
         ));
-}
-
-/** @internal */
-export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newDirPath: string): string {
-    return getSourceFilePathInNewDirWorker(fileName, newDirPath, host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
-}
-
-/** @internal */
-export function getSourceFilePathInNewDirWorker(fileName: string, newDirPath: string, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
-    let sourceFilePath = getNormalizedAbsolutePath(fileName, currentDirectory);
-    const isSourceFileInCommonSourceDirectory = getCanonicalFileName(sourceFilePath).indexOf(getCanonicalFileName(commonSourceDirectory)) === 0;
-    sourceFilePath = isSourceFileInCommonSourceDirectory ? sourceFilePath.substring(commonSourceDirectory.length) : sourceFilePath;
-    return combinePaths(newDirPath, sourceFilePath);
 }
 
 /** @internal */
@@ -7524,33 +7402,6 @@ export function compareNumberOfDirectorySeparators(path1: string, path2: string)
     );
 }
 
-const extensionsToRemove = [Extension.Dts, Extension.Dmts, Extension.Dcts, Extension.Mjs, Extension.Mts, Extension.Cjs, Extension.Cts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx, Extension.Json];
-/** @internal */
-export function removeFileExtension(path: string): string {
-    for (const ext of extensionsToRemove) {
-        const extensionless = tryRemoveExtension(path, ext);
-        if (extensionless !== undefined) {
-            return extensionless;
-        }
-    }
-    return path;
-}
-
-/** @internal */
-export function tryRemoveExtension(path: string, extension: string): string | undefined {
-    return fileExtensionIs(path, extension) ? removeExtension(path, extension) : undefined;
-}
-
-/** @internal */
-export function removeExtension(path: string, extension: string): string {
-    return path.substring(0, path.length - extension.length);
-}
-
-/** @internal */
-export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {
-    return changeAnyExtension(path, newExtension, extensionsToRemove, /*ignoreCase*/ false) as T;
-}
-
 /**
  * Returns the input if there are no stars, a pattern if there is exactly one,
  * and undefined if there are more.
@@ -7573,41 +7424,6 @@ export function tryParsePattern(pattern: string): string | Pattern | undefined {
 /** @internal */
 export function tryParsePatterns(paths: MapLike<string[]>): (string | Pattern)[] {
     return mapDefined(getOwnKeys(paths), path => tryParsePattern(path));
-}
-
-/**
- * True if an extension is one of the supported TypeScript extensions.
- *
- * @internal
- */
-export function extensionIsTS(ext: string): boolean {
-    return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts || ext === Extension.Dcts || (startsWith(ext, ".d.") && endsWith(ext, ".ts"));
-}
-
-/** @internal */
-export function resolutionExtensionIsTSOrJson(ext: string) {
-    return extensionIsTS(ext) || ext === Extension.Json;
-}
-
-/**
- * Gets the extension from a path.
- * Path must have a valid extension.
- *
- * @internal
- */
-export function extensionFromPath(path: string): Extension {
-    const ext = tryGetExtensionFromPath(path);
-    return ext !== undefined ? ext : Debug.fail(`File ${path} has unknown extension.`);
-}
-
-/** @internal */
-export function isAnySupportedFileExtension(path: string): boolean {
-    return tryGetExtensionFromPath(path) !== undefined;
-}
-
-/** @internal */
-export function tryGetExtensionFromPath(path: string): Extension | undefined {
-    return find(extensionsToRemove, e => fileExtensionIs(path, e));
 }
 
 /** @internal */

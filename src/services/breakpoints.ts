@@ -13,7 +13,7 @@ import {
     isVariableDeclarationList,
 } from "../compiler/factory/nodeTests";
 import { canHaveDecorators } from "../compiler/factory/utilitiesPublic";
-import { skipTrivia } from "../compiler/scanner";
+import { skipTrivia } from "../compiler/scanner/scanner";
 import {
     ArrayLiteralExpression,
     BinaryExpression,

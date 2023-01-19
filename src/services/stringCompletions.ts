@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { readJson } from "../compiler/commandLineParserUtilities";
+import { readJson } from "../compiler/commandLineParser/utilities";
 import {
     arrayFrom,
     compareStringsCaseSensitive,
@@ -48,9 +48,9 @@ import {
     getPackageJsonTypesVersionsPaths,
     isApplicableVersionedTypesKey,
     unmangleScopedPackageName,
-} from "../compiler/moduleNameResolver";
-import { tryGetJSExtensionForFile, tryGetRealFileNameForNonJsDeclarationFileName } from "../compiler/moduleSpecifiers";
-import { getModuleSpecifierEndingPreference } from "../compiler/moduleSpecifiersUtilities";
+} from "../compiler/moduleNameResolver/moduleNameResolver";
+import { tryGetJSExtensionForFile, tryGetRealFileNameForNonJsDeclarationFileName } from "../compiler/moduleSpecifiers/moduleSpecifiers";
+import { getModuleSpecifierEndingPreference } from "../compiler/moduleSpecifiers/utilities";
 import {
     altDirectorySeparator,
     combinePaths,
@@ -71,11 +71,11 @@ import {
     removeTrailingDirectorySeparator,
     resolvePath,
 } from "../compiler/path";
-import { getModeForUsageLocation } from "../compiler/program";
+import { getModeForUsageLocation } from "../compiler/program/program";
 import {
     getLeadingCommentRanges,
     isIdentifierText,
-} from "../compiler/scanner";
+} from "../compiler/scanner/scanner";
 import {
     CallLikeExpression,
     CancellationToken,
@@ -111,17 +111,14 @@ import {
 } from "../compiler/types";
 import {
     addToSeen,
-    changeExtension,
     getEmitModuleResolutionKind,
     getResolvePackageJsonExports,
     hostGetCanonicalFileName,
     isImportCall,
     ModuleSpecifierEnding,
-    removeFileExtension,
     signatureHasRestParameter,
     skipParentheses,
     stripQuotes,
-    tryGetExtensionFromPath,
     tryParsePattern,
     tryRemoveDirectoryPrefix,
     walkUpParenthesizedExpressions,
@@ -176,9 +173,12 @@ import {
     tryReadDirectory,
 } from "./utilities";
 import {
+    changeExtension,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
+    removeFileExtension,
     supportedTSImplementationExtensions,
+    tryGetExtensionFromPath,
 } from "../compiler/extension";
 
 interface NameAndKindSet {

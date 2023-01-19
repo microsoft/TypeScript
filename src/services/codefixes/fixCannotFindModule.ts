@@ -5,7 +5,7 @@ import { isStringLiteral } from "../../compiler/factory/nodeTests";
 import {
     getTypesPackageName,
     parsePackageName,
-} from "../../compiler/moduleNameResolver";
+} from "../../compiler/moduleNameResolver/moduleNameResolver";
 import { SourceFile } from "../../compiler/types";
 import { isExternalModuleNameRelative } from "../../compiler/utilitiesPublic";
 import { nodeCoreModules } from "../../jsTyping/jsTyping";

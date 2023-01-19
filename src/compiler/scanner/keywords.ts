@@ -1,8 +1,8 @@
-import { MapLike } from "./corePublic";
+import { MapLike } from "../corePublic";
 import {
     KeywordSyntaxKind,
     SyntaxKind,
-} from "./types";
+} from "../types";
 
 export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     abstract: SyntaxKind.AbstractKeyword,

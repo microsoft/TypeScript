@@ -16,7 +16,7 @@ import {
     isVariableDeclarationList,
     isVariableStatement,
 } from "../../compiler/factory/nodeTests";
-import { forEachChild } from "../../compiler/parser";
+import { forEachChild } from "../../compiler/parser/parser";
 import {
     ArrowFunction,
     Block,

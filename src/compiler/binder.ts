@@ -1,5 +1,5 @@
 import * as Debug from "./debug";
-import { getNodeId } from "./checkerUtilities";
+import { getNodeId } from "./checker/utilities";
 import {
     append,
     appendIfUnique,
@@ -51,14 +51,14 @@ import {
     isVariableStatement,
 } from "./factory/nodeTests";
 import { objectAllocator } from "./objectAllocator";
-import { forEachChild } from "./parser";
+import { forEachChild } from "./parser/parser";
 import {
     setParent,
     setParentRecursive,
-} from "./parserUtilities";
+} from "./parser/utilities";
 import { perfLogger } from "./perfLogger";
 import * as performance from "./performance";
-import { tokenToString } from "./scanner";
+import { tokenToString } from "./scanner/scanner";
 import {
     tracing,
     TracingNode,
@@ -282,7 +282,6 @@ import {
     isVariableDeclarationInitializedToBareOrAccessedRequire,
     nodeIsMissing,
     nodeIsPresent,
-    removeFileExtension,
     setValueDeclaration,
     shouldPreserveConstEnums,
     skipParentheses,
@@ -327,6 +326,7 @@ import {
     symbolName,
     unescapeLeadingUnderscores,
 } from "./utilitiesPublic";
+import { removeFileExtension } from "./extension";
 
 /** @internal */
 export const enum ModuleInstanceState {

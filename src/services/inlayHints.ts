@@ -3,7 +3,7 @@ import {
     equateStringsCaseInsensitive,
     some,
 } from "../compiler/core";
-import { createPrinter } from "../compiler/emitter";
+import { createPrinter } from "../compiler/emitter/emitter";
 import {
     isArrowFunction,
     isCallExpression,
@@ -21,11 +21,11 @@ import {
     isPropertyDeclaration,
     isVariableDeclaration,
 } from "../compiler/factory/nodeTests";
-import { forEachChild } from "../compiler/parser";
+import { forEachChild } from "../compiler/parser/parser";
 import {
     getLeadingCommentRanges,
     isIdentifierText,
-} from "../compiler/scanner";
+} from "../compiler/scanner/scanner";
 import {
     __String,
     ArrowFunction,

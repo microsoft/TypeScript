@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { getSymbolId } from "../compiler/checkerUtilities";
+import { getSymbolId } from "../compiler/checker/utilities";
 import {
     cast,
     forEach,

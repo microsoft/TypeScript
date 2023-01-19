@@ -1,6 +1,6 @@
-import * as Debug from "./debug";
-import { BuilderProgram } from "./builderPublic";
-import { createTypeChecker } from "./checker";
+import * as Debug from "../debug";
+import { BuilderProgram } from "../builderPublic";
+import { createTypeChecker } from "../checker/checker";
 import {
     DiagnosticReporter,
     inverseJsxOptionMap,
@@ -10,7 +10,7 @@ import {
     parseJsonSourceFileConfigFileContent,
     sourceFileAffectingCompilerOptions,
     targetOptionDeclaration,
-} from "./commandLineParser";
+} from "../commandLineParser/commandLineParser";
 import {
     addRange,
     append,
@@ -55,13 +55,13 @@ import {
     stringContains,
     toFileNameLowerCase,
     trimStringEnd,
-} from "./core";
+} from "../core";
 import {
     Comparison,
     SortedReadonlyArray,
     versionMajorMinor,
-} from "./corePublic";
-import { Diagnostics } from "./diagnosticInformationMap.generated";
+} from "../corePublic";
+import { Diagnostics } from "../diagnosticInformationMap.generated";
 import {
     emitFiles,
     forEachEmittedFile,
@@ -72,12 +72,12 @@ import {
     getTsBuildInfoEmitOutputFilePath,
     isBuildInfoFile,
     notImplementedResolver,
-} from "./emitter";
-import { addEmitFlags } from "./factory/emitNode";
+} from "../emitter/emitter";
+import { addEmitFlags } from "../factory/emitNode";
 import {
     createInputFilesWithFilePaths,
     factory,
-} from "./factory/nodeFactory";
+} from "../factory/nodeFactory";
 import {
     isArrayLiteralExpression,
     isDecorator,
@@ -90,8 +90,8 @@ import {
     isModuleDeclaration,
     isObjectLiteralExpression,
     isStringLiteral,
-} from "./factory/nodeTests";
-import { canHaveModifiers } from "./factory/utilitiesPublic";
+} from "../factory/nodeTests";
+import { canHaveModifiers } from "../factory/utilitiesPublic";
 import {
     createModeAwareCache,
     createModeAwareCacheKey,
@@ -111,7 +111,7 @@ import {
     trace,
     TypeReferenceDirectiveResolutionCache,
     zipToModeAwareCache,
-} from "./moduleNameResolver";
+} from "../moduleNameResolver/moduleNameResolver";
 import {
     createSourceFile,
     CreateSourceFileOptions,
@@ -121,8 +121,11 @@ import {
     isFileProbablyExternalModule,
     parseIsolatedEntityName,
     parseNodeFactory,
-} from "./parser";
-import { setParent, setParentRecursive } from "./parserUtilities";
+} from "../parser/parser";
+import {
+    setParent,
+    setParentRecursive,
+} from "../parser/utilities";
 import {
     combinePaths,
     comparePaths,
@@ -146,15 +149,15 @@ import {
     pathIsAbsolute,
     pathIsRelative,
     toPath,
-} from "./path";
-import * as performance from "./performance";
+} from "../path";
+import * as performance from "../performance";
 import {
     changesAffectingProgramStructure,
     changesAffectModuleResolution,
     hasChangesInResolutions,
     setResolvedModule,
     setResolvedTypeReferenceDirective,
-} from "./programUtilities";
+} from "./utilities";
 import {
     computeLineAndCharacterOfPosition,
     getLineAndCharacterOfPosition,
@@ -163,23 +166,23 @@ import {
     isIdentifierText,
     skipTrivia,
     tokenToString,
-} from "./scanner";
+} from "../scanner/scanner";
 import {
     createSymlinkCache,
     SymlinkCache,
-} from "./symlinkCache";
-import { sys } from "./sys";
+} from "../symlinkCache";
+import { sys } from "../sys/sys";
 import {
     containsIgnoredPath,
     getNewLineCharacter,
-} from "./sysUtilities";
-import { tracing } from "./tracing";
+} from "../sys/utilities";
+import { tracing } from "../tracing";
 import {
     getTransformers,
     noTransformers,
-} from "./transformer";
-import { getDeclarationDiagnostics } from "./transformers/declarations";
-import { resolveConfigFileProjectName } from "./tsbuild";
+} from "../transformer";
+import { getDeclarationDiagnostics } from "../transformers/declarations";
+import { resolveConfigFileProjectName } from "../tsbuild";
 import {
     __String,
     AsExpression,
@@ -273,10 +276,9 @@ import {
     VariableStatement,
     WriteFileCallback,
     WriteFileCallbackData,
-} from "./types";
+} from "../types";
 import {
     chainDiagnosticMessages,
-    changeExtension,
     compareDataObjects,
     createCommentDirectivesMap,
     createCompilerDiagnostic,
@@ -286,7 +288,6 @@ import {
     createDiagnosticForRange,
     createFileDiagnostic,
     createFileDiagnosticFromMessageChain,
-    extensionFromPath,
     externalHelpersModuleNameText,
     forEachEntry,
     forEachKey,
@@ -330,14 +331,12 @@ import {
     packageIdToPackageName,
     packageIdToString,
     projectReferenceIsEqualTo,
-    removeFileExtension,
-    resolutionExtensionIsTSOrJson,
     skipTypeChecking,
     sourceFileMayBeEmitted,
     typeDirectiveIsEqualTo,
     walkUpParenthesizedExpressions,
     writeFileEnsuringDirectories,
-} from "./utilities";
+} from "../utilities";
 import {
     getDefaultLibFileName,
     hasJSDocNodes,
@@ -346,21 +345,25 @@ import {
     isModifier,
     isStringLiteralLike,
     sortAndDeduplicateDiagnostics,
-} from "./utilitiesPublic";
+} from "../utilitiesPublic";
 import {
     explainIfFileIsRedirectAndImpliedFormat,
     fileIncludeReasonToDiagnostics,
     getMatchedFileSpec,
     getMatchedIncludeSpec,
-} from "./watch";
-import { ProgramHost } from "./watchPublic";
-import { DirectoryStructureHost } from "./watchUtilities";
+} from "../watch";
+import { ProgramHost } from "../watchPublic";
+import { DirectoryStructureHost } from "../watchUtilities";
 import {
+    changeExtension,
+    extensionFromPath,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
     hasJSFileExtension,
+    removeFileExtension,
+    resolutionExtensionIsTSOrJson,
     supportedJSExtensionsFlat,
-} from "./extension";
+} from "../extension";
 
 export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
     return forEachAncestorDirectory(searchPath, ancestor => {

@@ -13,7 +13,7 @@ import {
     map,
     tryCast,
 } from "../compiler/core";
-import { createPrinter } from "../compiler/emitter";
+import { createPrinter } from "../compiler/emitter/emitter";
 import { factory } from "../compiler/factory/nodeFactory";
 import {
     isBinaryExpression,
@@ -29,7 +29,7 @@ import {
     isTemplateSpan,
     isTemplateTail,
 } from "../compiler/factory/nodeTests";
-import { skipTrivia } from "../compiler/scanner";
+import { skipTrivia } from "../compiler/scanner/scanner";
 import {
     ArrowFunction,
     BinaryExpression,

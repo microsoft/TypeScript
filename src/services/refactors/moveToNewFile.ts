@@ -1,5 +1,5 @@
 import * as Debug from "../../compiler/debug";
-import { getSymbolId } from "../../compiler/checkerUtilities";
+import { getSymbolId } from "../../compiler/checker/utilities";
 import {
     append,
     cast,
@@ -44,7 +44,7 @@ import {
     canHaveDecorators,
     canHaveModifiers,
 } from "../../compiler/factory/utilitiesPublic";
-import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
+import { getModuleSpecifier } from "../../compiler/moduleSpecifiers/moduleSpecifiers";
 import {
     combinePaths,
     getBaseFileName,
@@ -102,7 +102,6 @@ import {
 } from "../../compiler/types";
 import {
     copyEntries,
-    extensionFromPath,
     forEachEntry,
     getAssignmentDeclarationKind,
     getLocaleSpecificMessage,
@@ -146,6 +145,7 @@ import {
     rangeContainsRange,
     symbolNameNoDefault,
 } from "../utilities";
+import { extensionFromPath } from "../../compiler/extension";
 
 const refactorName = "Move to a new file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);

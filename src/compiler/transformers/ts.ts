@@ -1,5 +1,5 @@
 import * as Debug from "../debug";
-import { isInstantiatedModule } from "../checker";
+import { isInstantiatedModule } from "../checker/checker";
 import {
     addRange,
     append,
@@ -55,8 +55,8 @@ import {
     setOriginalNode,
     setTextRange,
 } from "../factory/utilitiesPublic";
-import { setParent } from "../parserUtilities";
-import { skipTrivia } from "../scanner";
+import { setParent } from "../parser/utilities";
+import { skipTrivia } from "../scanner/scanner";
 import {
     __String,
     AccessorDeclaration,

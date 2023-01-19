@@ -17,7 +17,7 @@ import {
     optionsForWatch,
     parseBuildCommand,
     parseCommandLine,
-} from "../compiler/commandLineParser";
+} from "../compiler/commandLineParser/commandLineParser";
 import {
     arrayFrom,
     compareStringsCaseInsensitive,
@@ -49,9 +49,9 @@ import {
     createProgram,
     findConfigFile,
     getConfigFileParsingDiagnostics,
-} from "../compiler/program";
-import { getLineStarts } from "../compiler/scanner";
-import { sys } from "../compiler/sys";
+} from "../compiler/program/program";
+import { getLineStarts } from "../compiler/scanner/scanner";
+import { sys } from "../compiler/sys/sys";
 import {
     dumpTracingLegend,
     startTracing,

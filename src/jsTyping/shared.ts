@@ -1,5 +1,5 @@
 import { padLeft } from "../compiler/core";
-import { sys } from "../compiler/sys";
+import { sys } from "../compiler/sys/sys";
 
 export type ActionSet = "action::set";
 export type ActionInvalidate = "action::invalidate";

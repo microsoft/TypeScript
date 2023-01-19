@@ -26,13 +26,13 @@ import {
     isStaticModifier,
     isVariableDeclaration,
 } from "../compiler/factory/nodeTests";
-import { isDeclarationFileName } from "../compiler/parser";
+import { isDeclarationFileName } from "../compiler/parser/parser";
 import {
     getDirectoryPath,
     resolvePath,
 } from "../compiler/path";
-import { getModeForUsageLocation } from "../compiler/program";
-import { skipTrivia } from "../compiler/scanner";
+import { getModeForUsageLocation } from "../compiler/program/program";
+import { skipTrivia } from "../compiler/scanner/scanner";
 import {
     AssignmentDeclarationKind,
     AssignmentExpression,

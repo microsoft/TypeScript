@@ -2,7 +2,9 @@ import {
     createGetCanonicalFileName,
     isString,
 } from "../compiler/core";
-import { isDeclarationFileName } from "../compiler/parser";
+import { getDeclarationEmitOutputFilePathWorker } from "../compiler/emitter/utilities";
+import { removeFileExtension } from "../compiler/extension";
+import { isDeclarationFileName } from "../compiler/parser/parser";
 import {
     getDirectoryPath,
     getNormalizedAbsolutePath,
@@ -11,7 +13,7 @@ import {
 import {
     computeLineAndCharacterOfPosition,
     getLineStarts,
-} from "../compiler/scanner";
+} from "../compiler/scanner/scanner";
 import {
     createDocumentPositionMapper,
     getLineInfo,
@@ -20,7 +22,7 @@ import {
     tryGetSourceMappingURL,
     tryParseRawSourceMap,
 } from "../compiler/sourcemap";
-import { sys } from "../compiler/sys";
+import { sys } from "../compiler/sys/sys";
 import {
     DocumentPosition,
     DocumentPositionMapper,
@@ -32,9 +34,7 @@ import {
 } from "../compiler/types";
 import {
     base64decode,
-    getDeclarationEmitOutputFilePathWorker,
     outFile,
-    removeFileExtension,
 } from "../compiler/utilities";
 
 const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;

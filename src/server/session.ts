@@ -41,20 +41,20 @@ import {
     getTemporaryModuleResolutionState,
     nodeModulesPathPart,
     unmangleScopedPackageName,
-} from "../compiler/moduleNameResolver";
-import { getNodeModulePathParts } from "../compiler/moduleSpecifiersUtilities";
-import { isDeclarationFileName } from "../compiler/parser";
+} from "../compiler/moduleNameResolver/moduleNameResolver";
+import { getNodeModulePathParts } from "../compiler/moduleSpecifiers/utilities";
+import { isDeclarationFileName } from "../compiler/parser/parser";
 import {
     getNormalizedAbsolutePath,
     normalizePath,
 } from "../compiler/path";
 import { perfLogger } from "../compiler/perfLogger";
-import { flattenDiagnosticMessageText } from "../compiler/program";
+import { flattenDiagnosticMessageText } from "../compiler/program/program";
 import {
     computeLineAndCharacterOfPosition,
     computeLineStarts,
     getLineAndCharacterOfPosition,
-} from "../compiler/scanner";
+} from "../compiler/scanner/scanner";
 import { tracing } from "../compiler/tracing";
 import {
     BufferEncoding,
@@ -84,7 +84,6 @@ import {
     getTextOfIdentifierOrLiteral,
     isAccessExpression,
     outFile,
-    removeFileExtension,
 } from "../compiler/utilities";
 import {
     createTextSpan,
@@ -203,6 +202,7 @@ import {
     NormalizedPath,
     toNormalizedPath,
 } from "./utilitiesPublic";
+import { removeFileExtension } from "../compiler/extension";
 
 interface StackTraceError extends Error {
     stack?: string;

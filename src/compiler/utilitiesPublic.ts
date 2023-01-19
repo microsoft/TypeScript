@@ -84,7 +84,7 @@ import {
     normalizePath,
     pathIsRelative,
 } from "./path";
-import { stringToToken } from "./scanner";
+import { stringToToken } from "./scanner/scanner";
 import {
     __String,
     AccessExpression,

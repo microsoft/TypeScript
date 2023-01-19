@@ -21,7 +21,7 @@ import {
     isTupleTypeNode,
     isVariableStatement,
 } from "../compiler/factory/nodeTests";
-import { getLeadingCommentRanges } from "../compiler/scanner";
+import { getLeadingCommentRanges } from "../compiler/scanner/scanner";
 import {
     ArrowFunction,
     AssertClause,

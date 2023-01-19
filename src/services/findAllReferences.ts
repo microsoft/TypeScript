@@ -2,7 +2,7 @@ import * as Debug from "../compiler/debug";
 import {
     getNodeId,
     getSymbolId,
-} from "../compiler/checkerUtilities";
+} from "../compiler/checker/utilities";
 import {
     append,
     cast,
@@ -63,18 +63,18 @@ import {
     isUnionTypeNode,
     isVoidExpression,
 } from "../compiler/factory/nodeTests";
-import { forEachChild } from "../compiler/parser";
-import { forEachReturnStatement } from "../compiler/parserUtilities";
+import { forEachChild } from "../compiler/parser/parser";
+import { forEachReturnStatement } from "../compiler/parser/utilities";
 import {
     getModeForUsageLocation,
     getReferencedFileLocation,
     isReferencedFile,
     isReferenceFileLocation,
-} from "../compiler/program";
+} from "../compiler/program/program";
 import {
     isIdentifierPart,
     tokenToString,
-} from "../compiler/scanner";
+} from "../compiler/scanner/scanner";
 import {
     __String,
     AssignmentDeclarationKind,

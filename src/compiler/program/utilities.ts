@@ -1,15 +1,15 @@
-import * as Debug from "./debug";
+import * as Debug from "../debug";
 import {
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
     moduleResolutionOptionDeclarations,
     optionsAffectingProgramStructure,
     semanticDiagnosticsOptionDeclarations,
-} from "./commandLineParser";
+} from "../commandLineParser/commandLineParser";
 import {
     createModeAwareCache,
     ModeAwareCache,
-} from "./moduleNameResolver";
+} from "../moduleNameResolver/moduleNameResolver";
 import {
     CompilerOptions,
     ResolutionMode,
@@ -17,8 +17,8 @@ import {
     ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     SourceFile,
-} from "./types";
-import { optionsHaveChanges } from "./utilities";
+} from "../types";
+import { optionsHaveChanges } from "../utilities";
 
 /** @internal */
 export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleWithFailedLookupLocations, mode: ResolutionMode): void {

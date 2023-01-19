@@ -1,5 +1,5 @@
 import * as Debug from "../../debug";
-import { getNodeId } from "../../checkerUtilities";
+import { getNodeId } from "../../checker/utilities";
 import {
     addRange,
     append,

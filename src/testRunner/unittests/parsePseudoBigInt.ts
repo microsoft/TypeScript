@@ -1,4 +1,4 @@
-import { parsePseudoBigInt } from "../../compiler/scannerUtilities";
+import { parsePseudoBigInt } from "../../compiler/scanner/utilities";
 
 describe("unittests:: BigInt literal base conversions", () => {
     describe("parsePseudoBigInt", () => {

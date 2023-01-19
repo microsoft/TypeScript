@@ -1,4 +1,4 @@
-import * as Debug from "./debug";
+import * as Debug from "../debug";
 import {
     append,
     arraysEqual,
@@ -9,13 +9,13 @@ import {
     isWhiteSpaceLike,
     isWhiteSpaceSingleLine,
     trimStringStart,
-} from "./core";
-import { Diagnostics } from "./diagnosticInformationMap.generated";
-import { textToKeyword, textToToken } from "./scannerKeywords";
+} from "../core";
+import { Diagnostics } from "../diagnosticInformationMap.generated";
+import { textToKeyword, textToToken } from "./keywords";
 import {
     parsePseudoBigInt,
     positionIsSynthesized,
-} from "./scannerUtilities";
+} from "./utilities";
 import {
     CharacterCodes,
     CommentDirective,
@@ -32,7 +32,7 @@ import {
     SourceFileLike,
     SyntaxKind,
     TokenFlags,
-} from "./types";
+} from "../types";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 

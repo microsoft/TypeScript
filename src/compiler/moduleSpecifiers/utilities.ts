@@ -4,17 +4,17 @@ import {
     emptyArray,
     firstDefined,
     or,
-} from "./core";
+} from "../core";
 import {
     hasJSFileExtension,
     hasTSFileExtension,
-} from "./extension";
-import { isExpressionStatement } from "./factory/nodeTests";
+} from "../extension";
+import { isExpressionStatement } from "../factory/nodeTests";
 import {
     nodeModulesPathPart,
     shouldAllowImportingTsExtension,
-} from "./moduleNameResolver";
-import { pathIsRelative } from "./path";
+} from "../moduleNameResolver/moduleNameResolver";
+import { pathIsRelative } from "../path";
 import {
     CompilerOptions,
     ModuleKind,
@@ -22,13 +22,13 @@ import {
     ResolutionMode,
     SourceFile,
     UserPreferences,
-} from "./types";
+} from "../types";
 import {
     isRequireCall,
     isRequireVariableStatement,
     isSourceFileJS,
     ModuleSpecifierEnding,
-} from "./utilities";
+} from "../utilities";
 
 /** @internal */
 export interface NodeModulePathParts {

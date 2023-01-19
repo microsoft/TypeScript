@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { computeLineStarts } from "../compiler/scanner";
+import { computeLineStarts } from "../compiler/scanner/scanner";
 import {
     TextChangeRange,
     TextSpan,

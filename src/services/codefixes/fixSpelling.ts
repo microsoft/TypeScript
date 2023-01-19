@@ -11,8 +11,8 @@ import {
     isPropertyAccessExpression,
     isQualifiedName,
 } from "../../compiler/factory/nodeTests";
-import { getModeForUsageLocation } from "../../compiler/program";
-import { isIdentifierText } from "../../compiler/scanner";
+import { getModeForUsageLocation } from "../../compiler/program/program";
+import { isIdentifierText } from "../../compiler/scanner/scanner";
 import {
     ImportDeclaration,
     ModifierFlags,
