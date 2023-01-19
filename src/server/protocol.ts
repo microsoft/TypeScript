@@ -3545,7 +3545,7 @@ export interface UserPreferences {
      *
      * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
      *
-     * Default: `true`
+     * Default: `false`
      */
     readonly organizeImportsNumericCollation?: boolean;
     /**
@@ -3562,7 +3562,10 @@ export interface UserPreferences {
      * Indicates whether upper case or lower case should sort first. When `false`, the default order for the locale
      * specified in {@link organizeImportsCollationLocale} is used.
      *
-     * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
+     * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`. This preference is also
+     * ignored if we are using case-insensitive sorting, which occurs when {@link organizeImportsIgnoreCase} is `true`,
+     * or if {@link organizeImportsIgnoreCase} is `"auto"` and the auto-detected case sensitivity is determined to be
+     * case-insensitive.
      *
      * Default: `false`
      */
