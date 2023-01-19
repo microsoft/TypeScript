@@ -7,6 +7,7 @@ import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
+import { displayPartsToString } from "./_namespaces/ts";
 
 export const enum FourSlashTestType {
     Native,
@@ -2002,24 +2003,13 @@ export class TestState {
                 let signature = "";
                 if (prefixDisplayParts.length) signature += prefixDisplayParts.map(p => p.text).join("");
                 const separator = separatorDisplayParts.map(p => p.text).join("");
-                let i = 0;
-                let first = true;
-                for (const { displayParts } of parameters) {
-                    if (first) {
-                        first = false;
-                    }
-                    else {
-                        signature += separator;
-                    }
-                    const highlight = i === item.argumentIndex;
-                    if (highlight) signature += "**";
-                    signature += displayParts.map(p => p.text).join("");
-                    if (highlight) signature += "**";
-                    i++;
-                }
+                signature += parameters.map((p, i) => {
+                    const text = p.displayParts.map(dp => dp.text).join("")
+                    return i === item.argumentIndex ? "**" + text + "**" : text
+                }).join(separator)
                 if (suffixDisplayParts.length) signature += suffixDisplayParts.map(p => p.text).join("");
                 tooltip.push(signature);
-                // only display documentation for last argument when multiple arguments are marked
+                // only display signature documentation on the last argument when multiple arguments are marked
                 if (previous?.applicableSpan.start !== item.applicableSpan.start) {
                     if (documentation?.length) tooltip.push(...documentation.map(p => p.text).join("").split("\n"));
                     if (tags?.length) {

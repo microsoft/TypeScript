@@ -5,7 +5,6 @@
 // 
 // export class C implements I {
 //     property = "foo" + "foo"
-// 
 //     
 //     ^
 // | ----------------------------------------------------------------------
@@ -30,7 +29,7 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsClassMembers3.ts",
-      "position": 101,
+      "position": 100,
       "name": ""
     },
     "item": {
