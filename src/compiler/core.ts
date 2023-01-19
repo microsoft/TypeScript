@@ -865,32 +865,25 @@ export const enum SortKind {
 }
 
 /** @internal */
-export function detectSortCaseSensitivity(array: readonly string[], useEslintOrdering?: boolean): SortKind;
-/** @internal */
-export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString: (element: T) => string): SortKind;
-/** @internal */
-export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering?: boolean, getString?: (element: T) => string): SortKind {
+export function detectSortCaseSensitivity<T>(
+    array: readonly T[],
+    getString: (element: T) => string,
+    compareStringsCaseSensitive: Comparer<string>,
+    compareStringsCaseInsensitive: Comparer<string>,
+): SortKind {
     let kind = SortKind.Both;
     if (array.length < 2) return kind;
-    const caseSensitiveComparer = getString
-        ? (a: T, b: T) => compareStringsCaseSensitive(getString(a), getString(b))
-        : compareStringsCaseSensitive as (a: T | undefined, b: T | undefined) => Comparison;
-    const compareCaseInsensitive = useEslintOrdering ? compareStringsCaseInsensitiveEslintCompatible : compareStringsCaseInsensitive;
-    const caseInsensitiveComparer = getString
-        ? (a: T, b: T) => compareCaseInsensitive(getString(a), getString(b))
-        : compareCaseInsensitive as (a: T | undefined, b: T | undefined) => Comparison;
-    for (let i = 1, len = array.length; i < len; i++) {
-        const prevElement = array[i - 1];
-        const element = array[i];
-        if (kind & SortKind.CaseSensitive && caseSensitiveComparer(prevElement, element) === Comparison.GreaterThan) {
+
+    let prevElement = getString(array[0]);
+    for (let i = 1, len = array.length; i < len && kind !== SortKind.None; i++) {
+        const element = getString(array[i]);
+        if (kind & SortKind.CaseSensitive && compareStringsCaseSensitive(prevElement, element) > 0) {
             kind &= ~SortKind.CaseSensitive;
         }
-        if (kind & SortKind.CaseInsensitive && caseInsensitiveComparer(prevElement, element) === Comparison.GreaterThan) {
+        if (kind & SortKind.CaseInsensitive && compareStringsCaseInsensitive(prevElement, element) > 0) {
             kind &= ~SortKind.CaseInsensitive;
         }
-        if (kind === SortKind.None) {
-            return kind;
-        }
+        prevElement = element;
     }
     return kind;
 }
@@ -2048,6 +2041,64 @@ export function memoizeWeak<A extends object, T>(callback: (arg: A) => T): (arg:
     };
 }
 
+/** @internal */
+export interface MemoizeCache<A extends any[], T> {
+    has(args: A): boolean;
+    get(args: A): T | undefined;
+    set(args: A, value: T): void;
+}
+
+/**
+ * A version of `memoize` that supports multiple arguments, backed by a provided cache.
+ *
+ * @internal
+ */
+export function memoizeCached<A extends any[], T>(callback: (...args: A) => T, cache: MemoizeCache<A, T>): (...args: A) => T {
+    return (...args: A) => {
+        let value = cache.get(args);
+        if (value === undefined && !cache.has(args)) {
+            value = callback(...args);
+            cache.set(args, value);
+        }
+        return value!;
+    };
+}
+
+/**
+ * High-order function, composes functions. Note that functions are composed inside-out;
+ * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
+ *
+ * @param args The functions to compose.
+ *
+ * @internal
+ */
+export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
+/** @internal */
+export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
+    if (!!e) {
+        const args: ((t: T) => T)[] = [];
+        for (let i = 0; i < arguments.length; i++) {
+            args[i] = arguments[i];
+        }
+
+        return t => reduceLeft(args, (u, f) => f(u), t);
+    }
+    else if (d) {
+        return t => d(c(b(a(t))));
+    }
+    else if (c) {
+        return t => c(b(a(t)));
+    }
+    else if (b) {
+        return t => b(a(t));
+    }
+    else if (a) {
+        return t => a(t);
+    }
+    else {
+        return t => t;
+    }
+}
 /** @internal */
 export const enum AssertionLevel {
     None = 0,
