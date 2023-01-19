@@ -36,8 +36,8 @@ interface ClassDecoratorContext<
      * @example
      * ```ts
      * function customElement(name: string): ClassDecoratorFunction {
-     *   return (target, { addInitializer }) => {
-     *     addInitializer(function () {
+     *   return (target, context) => {
+     *     context.addInitializer(function () {
      *       customElements.define(name, this);
      *     });
      *   }
@@ -91,10 +91,10 @@ interface ClassMethodDecoratorContext<
      *
      * @example
      * ```ts
-     * const bound: ClassMethodDecoratorFunction = (value, { name, private: isPrivate, addInitializer }) {
-     *   if (isPrivate) throw new TypeError("Not supported on private methods.");
-     *   addInitializer(function () {
-     *     this[name] = this[name].bind(this);
+     * const bound: ClassMethodDecoratorFunction = (value, context) {
+     *   if (context.private) throw new TypeError("Not supported on private methods.");
+     *   context.addInitializer(function () {
+     *     this[context.name] = this[context.name].bind(this);
      *   });
      * }
      *
