@@ -2812,16 +2812,14 @@ declare namespace ts {
                  * [Unicode Collation Algorithm](https://unicode.org/reports/tr10/#Scope)) using rules associated with the locale
                  * specified in {@link organizeImportsCollationLocale}.
                  *
-                 * NOTE: When comparing paths `"ordinal"` collation is always used.
-                 *
                  * Default: `"ordinal"`.
                  */
                 readonly organizeImportsCollation?: "ordinal" | "unicode";
                 /**
-                 * Indicates the locale to use for "natural" collation. If not specified, the locale `"en"` is used as an invariant
+                 * Indicates the locale to use for "unicode" collation. If not specified, the locale `"en"` is used as an invariant
                  * for the sake of consistent sorting. Use `"auto"` to use the detected UI locale.
                  *
-                 * This preference is ignored if {@link organizeImportsCollation} is not `"natural"`.
+                 * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
                  *
                  * Default: `"en"`
                  */
@@ -2830,7 +2828,7 @@ declare namespace ts {
                  * Indicates whether numeric collation should be used for digit sequences in strings. When `true`, will collate
                  * strings such that `a1z < a2z < a100z`. When `false`, will collate strings such that `a1z < a100z < a2z`.
                  *
-                 * This preference is ignored if {@link organizeImportsCollation} is not `"natural"`.
+                 * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
                  *
                  * Default: `true`
                  */
@@ -2840,7 +2838,7 @@ declare namespace ts {
                  * `true`, characters with accents and other diacritics will be collated in the order defined by the locale specified
                  * in {@link organizeImportsCollationLocale}.
                  *
-                 * This preference is ignored if {@link organizeImportsCollation} is not `"natural"`.
+                 * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
                  *
                  * Default: `true`
                  */
@@ -2849,7 +2847,7 @@ declare namespace ts {
                  * Indicates whether upper case or lower case should sort first. When `false`, the default order for the locale
                  * specified in {@link organizeImportsCollationLocale} is used.
                  *
-                 * This preference is ignored if {@link organizeImportsCollation} is not `"natural"`.
+                 * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
                  *
                  * Default: `false`
                  */
