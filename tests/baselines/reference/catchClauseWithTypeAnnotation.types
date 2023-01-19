@@ -126,7 +126,7 @@ function fn(x: boolean) {
 >x : any
 >foo : any
 
-    try { } catch ({ x }: unknown) { console.log(x); } // should be OK
+    try { } catch ({ x }: unknown) { console.log(x); } // error in the destructure
 >x : any
 >console.log(x) : void
 >console.log : (...data: any[]) => void
@@ -134,7 +134,7 @@ function fn(x: boolean) {
 >log : (...data: any[]) => void
 >x : any
 
-    try { } catch ({ x }: unknown1) { console.log(x); } // should be OK
+    try { } catch ({ x }: unknown1) { console.log(x); } // error in the destructure
 >x : any
 >console.log(x) : void
 >console.log : (...data: any[]) => void
