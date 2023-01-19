@@ -9,3 +9,4 @@ export * from "../4.2/abstractConstructorTypes";
 export * from "../4.6/importTypeAssertions";
 export * from "../4.7/typeParameterModifiers";
 export * from "../4.8/mergeDecoratorsAndModifiers";
+export * from "../5.0/identifierProperties";

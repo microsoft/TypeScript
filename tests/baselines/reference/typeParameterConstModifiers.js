@@ -72,6 +72,16 @@ declare let value: "123";
 
 set(obj, ['a', 'b', 'c'], value);
 
+// Repro from #52007
+
+declare function inners<const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]): T;
+
+const test = inners(1,2,3,4,5);
+
+declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
+
+const test2 = inners2([1,2,3,4,5]);
+
 
 //// [typeParameterConstModifiers.js]
 "use strict";
@@ -105,3 +115,5 @@ var fx1 = function (x) { return x; };
 var fx2 = function (x) { return x; };
 function set(obj, path, value) { }
 set(obj, ['a', 'b', 'c'], value);
+var test = inners(1, 2, 3, 4, 5);
+var test2 = inners2([1, 2, 3, 4, 5]);

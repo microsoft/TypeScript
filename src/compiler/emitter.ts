@@ -148,6 +148,7 @@ import {
     getEmitModuleKind,
     getExternalHelpersModuleName,
     getExternalModuleName,
+    getIdentifierTypeArguments,
     getLeadingCommentRanges,
     getLineAndCharacterOfPosition,
     getLinesBetweenPositionAndNextNonWhitespaceCharacter,
@@ -264,11 +265,13 @@ import {
     JSDocOverloadTag,
     JSDocPropertyLikeTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
     JSDocTag,
     JSDocTemplateTag,
     JSDocThisTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
@@ -276,6 +279,7 @@ import {
     JSDocVariadicType,
     JsxAttribute,
     JsxAttributes,
+    JsxAttributeValue,
     JsxClosingElement,
     JsxClosingFragment,
     JsxElement,
@@ -1365,8 +1369,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     let privateNameTempFlags: TempFlags; // TempFlags for the current name generation scope.
     let tempFlagsStack: TempFlags[]; // Stack of enclosing name generation scopes.
     let tempFlags: TempFlags; // TempFlags for the current name generation scope.
-    let reservedNamesStack: Set<string>[]; // Stack of TempFlags reserved in enclosing name generation scopes.
-    let reservedNames: Set<string>; // TempFlags to reserve in nested name generation scopes.
+    let reservedNamesStack: (Set<string> | undefined)[]; // Stack of reserved names in enclosing name generation scopes.
+    let reservedNames: Set<string> | undefined; // Names reserved in nested name generation scopes.
+    let reservedPrivateNamesStack: (Set<string> | undefined)[]; // Stack of reserved member names in enclosing name generation scopes.
+    let reservedPrivateNames: Set<string> | undefined; // Member names reserved in nested name generation scopes.
     let preserveSourceNewlines = printerOptions.preserveSourceNewlines; // Can be overridden inside nodes with the `IgnoreSourceNewlines` emit flag.
     let nextListElementPos: number | undefined; // See comment in `getLeadingLineTerminatorCount`.
 
@@ -1397,10 +1403,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     let hasWrittenComment = false;
     let commentsDisabled = !!printerOptions.removeComments;
     let lastSubstitution: Node | undefined;
-    let currentParenthesizerRule: ((node: Node) => Node) | undefined;
+    let currentParenthesizerRule: ParenthesizerRule<any> | undefined;
     const { enter: enterComment, exit: exitComment } = performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
     const parenthesizer = factory.parenthesizer;
-    const typeArgumentParenthesizerRuleSelector: OrdinalParentheizerRuleSelector<Node> = {
+    const typeArgumentParenthesizerRuleSelector: OrdinalParentheizerRuleSelector<TypeNode> = {
         select: index => index === 0 ? parenthesizer.parenthesizeLeadingTypeArgument : undefined
     };
     const emitBinaryExpression = createEmitBinaryExpression();
@@ -1658,6 +1664,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         tempFlagsStack = [];
         tempFlags = TempFlags.Auto;
         reservedNamesStack = [];
+        reservedNames = undefined;
+        reservedPrivateNamesStack = [];
+        reservedPrivateNames = undefined;
         currentSourceFile = undefined;
         currentLineMap = undefined;
         detachedCommentsInfo = undefined;
@@ -1668,9 +1677,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return currentLineMap || (currentLineMap = getLineStarts(Debug.checkDefined(currentSourceFile)));
     }
 
-    function emit(node: Node, parenthesizerRule?: (node: Node) => Node): void;
-    function emit(node: Node | undefined, parenthesizerRule?: (node: Node) => Node): void;
-    function emit(node: Node | undefined, parenthesizerRule?: (node: Node) => Node) {
+    function emit<T extends Node>(node: T, parenthesizerRule?: (node: T) => T): void;
+    function emit<T extends Node>(node: T | undefined, parenthesizerRule?: (node: T) => T): void;
+    function emit<T extends Node>(node: T | undefined, parenthesizerRule?: (node: T) => T) {
         if (node === undefined) return;
         const prevSourceFileTextKind = recordBundleFileInternalSectionStart(node);
         pipelineEmit(EmitHint.Unspecified, node, parenthesizerRule);
@@ -1684,14 +1693,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         pipelineEmit(EmitHint.IdentifierName, node, /*parenthesizerRule*/ undefined);
     }
 
-    function emitExpression(node: Expression, parenthesizerRule?: (node: Expression) => Expression): void;
-    function emitExpression(node: Expression | undefined, parenthesizerRule?: (node: Expression) => Expression): void;
-    function emitExpression(node: Expression | undefined, parenthesizerRule?: (node: Expression) => Expression) {
+    function emitExpression<T extends Expression>(node: T, parenthesizerRule?: (node: T) => T): void;
+    function emitExpression<T extends Expression>(node: T | undefined, parenthesizerRule?: (node: T) => T): void;
+    function emitExpression<T extends Expression>(node: T | undefined, parenthesizerRule?: (node: T) => T) {
         if (node === undefined) return;
         pipelineEmit(EmitHint.Expression, node, parenthesizerRule);
     }
 
-    function emitJsxAttributeValue(node: StringLiteral | JsxExpression): void {
+    function emitJsxAttributeValue(node: JsxAttributeValue): void {
         pipelineEmit(isStringLiteral(node) ? EmitHint.JsxAttributeValue : EmitHint.Unspecified, node);
     }
 
@@ -1705,7 +1714,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         preserveSourceNewlines = savedPreserveSourceNewlines;
     }
 
-    function pipelineEmit(emitHint: EmitHint, node: Node, parenthesizerRule?: (node: Node) => Node) {
+    function pipelineEmit<T extends Node>(emitHint: EmitHint, node: T, parenthesizerRule?: (node: T) => T) {
         currentParenthesizerRule = parenthesizerRule;
         const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, emitHint, node);
         pipelinePhase(emitHint, node);
@@ -2129,7 +2138,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 case SyntaxKind.JSDocThisTag:
                 case SyntaxKind.JSDocTypeTag:
                 case SyntaxKind.JSDocThrowsTag:
-                    return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
+                case SyntaxKind.JSDocSatisfiesTag:
+                    return emitJSDocSimpleTypedTag(node as JSDocTypeTag | JSDocReturnTag | JSDocThisTag | JSDocTypeTag | JSDocThrowsTag | JSDocSatisfiesTag);
                 case SyntaxKind.JSDocTemplateTag:
                     return emitJSDocTemplateTag(node as JSDocTemplateTag);
                 case SyntaxKind.JSDocTypedefTag:
@@ -2473,7 +2483,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function emitIdentifier(node: Identifier) {
         const writeText = node.symbol ? writeSymbol : write;
         writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
-        emitList(node, node.typeArguments, ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
+        emitList(node, getIdentifierTypeArguments(node), ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
     }
 
     //
@@ -2501,9 +2511,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitComputedPropertyName(node: ComputedPropertyName) {
+        const savedPrivateNameTempFlags = privateNameTempFlags;
+        const savedReservedMemberNames = reservedPrivateNames;
+        popPrivateNameGenerationScope();
         writePunctuation("[");
         emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfComputedPropertyName);
         writePunctuation("]");
+        pushPrivateNameGenerationScope(savedPrivateNameTempFlags, savedReservedMemberNames);
     }
 
     //
@@ -2723,10 +2737,16 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitTypeLiteral(node: TypeLiteralNode) {
+        // Type literals don't have private names, but we need to push a new scope so that
+        // we can step out of it when emitting a computed property.
+        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+
         writePunctuation("{");
         const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers;
         emitList(node, node.members, flags | ListFormat.NoSpaceIfEmpty);
         writePunctuation("}");
+
+        popPrivateNameGenerationScope();
     }
 
     function emitArrayType(node: ArrayTypeNode) {
@@ -2943,6 +2963,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitObjectLiteralExpression(node: ObjectLiteralExpression) {
+        // Object literals don't have private names, but we need to push a new scope so that
+        // we can step out of it when emitting a computed property.
+        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
         forEach(node.properties, generateMemberNames);
 
         const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
@@ -2957,6 +2980,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (indentedFlag) {
             decreaseIndent();
         }
+
+        popPrivateNameGenerationScope();
     }
 
     function emitPropertyAccessExpression(node: PropertyAccessExpression) {
@@ -3644,7 +3669,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitSignatureAndBody(node, emitSignatureHead);
     }
 
-    function emitSignatureAndBody(node: FunctionLikeDeclaration, emitSignatureHead: (node: SignatureDeclaration) => void) {
+    function emitSignatureAndBody<T extends FunctionLikeDeclaration>(node: T, emitSignatureHead: (node: T) => void) {
         const body = node.body;
         if (body) {
             if (isBlock(body)) {
@@ -3678,7 +3703,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     }
 
-    function emitSignatureHead(node: FunctionDeclaration | FunctionExpression | MethodDeclaration | AccessorDeclaration | ConstructorDeclaration) {
+    function emitSignatureHead(node: SignatureDeclaration) {
         emitTypeParameters(node, node.typeParameters);
         emitParameters(node, node.parameters);
         emitTypeAnnotation(node.type);
@@ -3763,6 +3788,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitClassDeclarationOrExpression(node: ClassDeclaration | ClassExpression) {
+        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+
         forEach(node.members, generateMemberNames);
 
         emitDecoratorsAndModifiers(node, node.modifiers);
@@ -3788,9 +3815,15 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (indentedFlag) {
             decreaseIndent();
         }
+
+        popPrivateNameGenerationScope();
     }
 
     function emitInterfaceDeclaration(node: InterfaceDeclaration) {
+        // Interfaces don't have private names, but we need to push a new scope so that
+        // we can step out of it when emitting a computed property.
+        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+
         emitModifiers(node, node.modifiers);
         writeKeyword("interface");
         writeSpace();
@@ -3801,6 +3834,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writePunctuation("{");
         emitList(node, node.members, ListFormat.InterfaceMembers);
         writePunctuation("}");
+
+        popPrivateNameGenerationScope();
     }
 
     function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
@@ -4305,7 +4340,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         write("*/");
     }
 
-    function emitJSDocSimpleTypedTag(tag: JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocReturnTag) {
+    function emitJSDocSimpleTypedTag(tag: JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocReturnTag | JSDocThrowsTag | JSDocSatisfiesTag) {
         emitJSDocTagName(tag.tagName);
         emitJSDocTypeExpression(tag.typeExpression);
         emitJSDocComment(tag.comment);
@@ -4872,7 +4907,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
-    function emitList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Node>, start?: number, count?: number) {
+    function emitList<Child extends Node, Children extends NodeArray<Child>>(parentNode: Node | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Child>, start?: number, count?: number) {
         emitNodeList(
             emit,
             parentNode,
@@ -4883,11 +4918,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             count);
     }
 
-    function emitExpressionList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Expression>, start?: number, count?: number) {
+    function emitExpressionList<Child extends Node, Children extends NodeArray<Child>>(parentNode: Node | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Child>, start?: number, count?: number) {
         emitNodeList(emitExpression, parentNode, children, format, parenthesizerRule, start, count);
     }
 
-    function emitNodeList(emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Node> | undefined, start = 0, count = children ? children.length - start : 0) {
+    function emitNodeList<Child extends Node, Children extends NodeArray<Child>>(emit: EmitFunction, parentNode: Node | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined, start = 0, count = children ? children.length - start : 0) {
         const isUndefined = children === undefined;
         if (isUndefined && format & ListFormat.OptionalIfUndefined) {
             return;
@@ -4937,7 +4972,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      *
      * NOTE: You probably don't want to call this directly and should be using `emitList` or `emitExpressionList` instead.
      */
-    function emitNodeListItems(emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parentNode: Node | undefined, children: readonly Node[], format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Node> | undefined, start: number, count: number, hasTrailingComma: boolean, childrenTextRange: TextRange | undefined) {
+    function emitNodeListItems<Child extends Node>(emit: EmitFunction, parentNode: Node | undefined, children: readonly Child[], format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined, start: number, count: number, hasTrailingComma: boolean, childrenTextRange: TextRange | undefined) {
         // Write the opening line terminator or leading whitespace.
         const mayEmitInterveningComments = (format & ListFormat.NoInterveningComments) === 0;
         let shouldEmitInterveningComments = mayEmitInterveningComments;
@@ -5486,8 +5521,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
         tempFlagsStack.push(tempFlags);
         tempFlags = TempFlags.Auto;
-        privateNameTempFlagsStack.push(privateNameTempFlags);
-        privateNameTempFlags = TempFlags.Auto;
         formattedNameTempFlagsStack.push(formattedNameTempFlags);
         formattedNameTempFlags = undefined;
         reservedNamesStack.push(reservedNames);
@@ -5501,9 +5534,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             return;
         }
         tempFlags = tempFlagsStack.pop()!;
-        privateNameTempFlags = privateNameTempFlagsStack.pop()!;
         formattedNameTempFlags = formattedNameTempFlagsStack.pop();
-        reservedNames = reservedNamesStack.pop()!;
+        reservedNames = reservedNamesStack.pop();
     }
 
     function reserveNameInNestedScopes(name: string) {
@@ -5511,6 +5543,31 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             reservedNames = new Set();
         }
         reservedNames.add(name);
+    }
+
+    /**
+     * Push a new member name generation scope.
+     */
+    function pushPrivateNameGenerationScope(newPrivateNameTempFlags: TempFlags, newReservedMemberNames: Set<string> | undefined) {
+        privateNameTempFlagsStack.push(privateNameTempFlags);
+        privateNameTempFlags = newPrivateNameTempFlags;
+        reservedPrivateNamesStack.push(reservedNames);
+        reservedPrivateNames = newReservedMemberNames;
+    }
+
+    /**
+     * Pop the current member name generation scope.
+     */
+    function popPrivateNameGenerationScope() {
+        privateNameTempFlags = privateNameTempFlagsStack.pop()!;
+        reservedPrivateNames = reservedPrivateNamesStack.pop();
+    }
+
+    function reservePrivateNameInNestedScopes(name: string) {
+        if (!reservedPrivateNames || reservedPrivateNames === lastOrUndefined(reservedPrivateNamesStack)) {
+            reservedPrivateNames = new Set();
+        }
+        reservedPrivateNames.add(name);
     }
 
     function generateNames(node: Node | undefined) {
@@ -5628,15 +5685,16 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Generate the text for a generated identifier.
      */
     function generateName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
-        if ((name.autoGenerate.flags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
+        const autoGenerate = name.emitNode.autoGenerate;
+        if ((autoGenerate.flags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
             // Node names generate unique names based on their original node
             // and are cached based on that node's id.
-            return generateNameCached(getNodeForGeneratedName(name), isPrivateIdentifier(name), name.autoGenerate.flags, name.autoGenerate.prefix, name.autoGenerate.suffix);
+            return generateNameCached(getNodeForGeneratedName(name), isPrivateIdentifier(name), autoGenerate.flags, autoGenerate.prefix, autoGenerate.suffix);
         }
         else {
             // Auto, Loop, and Unique names are cached based on their unique
             // autoGenerateId.
-            const autoGenerateId = name.autoGenerate.id;
+            const autoGenerateId = autoGenerate.id;
             return autoGeneratedIdToGeneratedName[autoGenerateId] || (autoGeneratedIdToGeneratedName[autoGenerateId] = makeName(name));
         }
     }
@@ -5650,16 +5708,23 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Returns a value indicating whether a name is unique globally, within the current file,
      * or within the NameGenerator.
      */
-    function isUniqueName(name: string): boolean {
-        return isFileLevelUniqueName(name)
-            && !generatedNames.has(name)
-            && !(reservedNames && reservedNames.has(name));
+    function isUniqueName(name: string, privateName: boolean): boolean {
+        return isFileLevelUniqueName(name, privateName)
+            && !isReservedName(name, privateName)
+            && !generatedNames.has(name);
+    }
+
+    function isReservedName(name: string, privateName: boolean): boolean {
+        return privateName ? !!reservedPrivateNames?.has(name) : !!reservedNames?.has(name);
     }
 
     /**
      * Returns a value indicating whether a name is unique globally or within the current file.
+     *
+     * @param _isPrivate (unused) this parameter exists to avoid an unnecessary adaptor frame in v8
+     * when `isfileLevelUniqueName` is passed as a callback to `makeUniqueName`.
      */
-    function isFileLevelUniqueName(name: string) {
+    function isFileLevelUniqueName(name: string, _isPrivate: boolean) {
         return currentSourceFile ? ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
     }
 
@@ -5722,9 +5787,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (flags && !(tempFlags & flags)) {
             const name = flags === TempFlags._i ? "_i" : "_n";
             const fullName = formatGeneratedName(privateName, prefix, name, suffix);
-            if (isUniqueName(fullName)) {
+            if (isUniqueName(fullName, privateName)) {
                 tempFlags |= flags;
-                if (reservedInNestedScopes) {
+                if (privateName) {
+                    reservePrivateNameInNestedScopes(fullName);
+                }
+                else if (reservedInNestedScopes) {
                     reserveNameInNestedScopes(fullName);
                 }
                 setTempFlags(key, tempFlags);
@@ -5741,8 +5809,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     ? "_" + String.fromCharCode(CharacterCodes.a + count)
                     : "_" + (count - 26);
                 const fullName = formatGeneratedName(privateName, prefix, name, suffix);
-                if (isUniqueName(fullName)) {
-                    if (reservedInNestedScopes) {
+                if (isUniqueName(fullName, privateName)) {
+                    if (privateName) {
+                        reservePrivateNameInNestedScopes(fullName);
+                    }
+                    else if (reservedInNestedScopes) {
                         reserveNameInNestedScopes(fullName);
                     }
                     setTempFlags(key, tempFlags);
@@ -5759,7 +5830,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * makeUniqueName are guaranteed to never conflict.
      * If `optimistic` is set, the first instance will use 'baseName' verbatim instead of 'baseName_1'
      */
-    function makeUniqueName(baseName: string, checkFn: (name: string) => boolean = isUniqueName, optimistic: boolean, scoped: boolean, privateName: boolean, prefix: string, suffix: string): string {
+    function makeUniqueName(baseName: string, checkFn: (name: string, privateName: boolean) => boolean = isUniqueName, optimistic: boolean, scoped: boolean, privateName: boolean, prefix: string, suffix: string): string {
         if (baseName.length > 0 && baseName.charCodeAt(0) === CharacterCodes.hash) {
             baseName = baseName.slice(1);
         }
@@ -5768,8 +5839,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
         if (optimistic) {
             const fullName = formatGeneratedName(privateName, prefix, baseName, suffix);
-            if (checkFn(fullName)) {
-                if (scoped) {
+            if (checkFn(fullName, privateName)) {
+                if (privateName) {
+                    reservePrivateNameInNestedScopes(fullName);
+                }
+                else if (scoped) {
                     reserveNameInNestedScopes(fullName);
                 }
                 else {
@@ -5785,8 +5859,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         let i = 1;
         while (true) {
             const fullName = formatGeneratedName(privateName, prefix, baseName + i, suffix);
-            if (checkFn(fullName)) {
-                if (scoped) {
+            if (checkFn(fullName, privateName)) {
+                if (privateName) {
+                    reservePrivateNameInNestedScopes(fullName);
+                }
+                else if (scoped) {
                     reserveNameInNestedScopes(fullName);
                 }
                 else {
@@ -5889,27 +5966,28 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Generates a unique identifier for a node.
      */
     function makeName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
-        const prefix = formatGeneratedNamePart(name.autoGenerate.prefix, generateName);
-        const suffix = formatGeneratedNamePart (name.autoGenerate.suffix);
-        switch (name.autoGenerate.flags & GeneratedIdentifierFlags.KindMask) {
+        const autoGenerate = name.emitNode.autoGenerate;
+        const prefix = formatGeneratedNamePart(autoGenerate.prefix, generateName);
+        const suffix = formatGeneratedNamePart(autoGenerate.suffix);
+        switch (autoGenerate.flags & GeneratedIdentifierFlags.KindMask) {
             case GeneratedIdentifierFlags.Auto:
-                return makeTempVariableName(TempFlags.Auto, !!(name.autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes), isPrivateIdentifier(name), prefix, suffix);
+                return makeTempVariableName(TempFlags.Auto, !!(autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes), isPrivateIdentifier(name), prefix, suffix);
             case GeneratedIdentifierFlags.Loop:
                 Debug.assertNode(name, isIdentifier);
-                return makeTempVariableName(TempFlags._i, !!(name.autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes), /*privateName*/ false, prefix, suffix);
+                return makeTempVariableName(TempFlags._i, !!(autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes), /*privateName*/ false, prefix, suffix);
             case GeneratedIdentifierFlags.Unique:
                 return makeUniqueName(
                     idText(name),
-                    (name.autoGenerate.flags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName : isUniqueName,
-                    !!(name.autoGenerate.flags & GeneratedIdentifierFlags.Optimistic),
-                    !!(name.autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes),
+                    (autoGenerate.flags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName : isUniqueName,
+                    !!(autoGenerate.flags & GeneratedIdentifierFlags.Optimistic),
+                    !!(autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes),
                     isPrivateIdentifier(name),
                     prefix,
                     suffix
                 );
         }
 
-        return Debug.fail(`Unsupported GeneratedIdentifierKind: ${Debug.formatEnum(name.autoGenerate.flags & GeneratedIdentifierFlags.KindMask, (ts as any).GeneratedIdentifierFlags, /*isFlags*/ true)}.`);
+        return Debug.fail(`Unsupported GeneratedIdentifierKind: ${Debug.formatEnum(autoGenerate.flags & GeneratedIdentifierFlags.KindMask, (ts as any).GeneratedIdentifierFlags, /*isFlags*/ true)}.`);
     }
 
     // Comments
@@ -6041,7 +6119,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             : `//${comment.text}`;
     }
 
-    function emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void) {
+    function emitBodyWithDetachedComments<T extends Node>(node: T, detachedRange: TextRange, emitCallback: (node: T) => void) {
         enterComment();
         const { pos, end } = detachedRange;
         const emitFlags = getEmitFlags(node);
@@ -6274,7 +6352,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
-    function emitComment(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
+    function emitComment(text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
         if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
         emitPos(commentPos);
         writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
@@ -6500,20 +6578,23 @@ type ParenthesizerRule<T extends Node> = (node: T) => T;
 
 type ParenthesizerRuleOrSelector<T extends Node> = OrdinalParentheizerRuleSelector<T> | ParenthesizerRule<T>;
 
-function emitListItemNoParenthesizer(node: Node, emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, _parenthesizerRule: ParenthesizerRuleOrSelector<Node> | undefined, _index: number) {
+type EmitFunction = <T extends Node>(node: T, parenthesizerRule?: ParenthesizerRule<T>) => void;
+type EmitListItemFunction<T extends Node> = (node: Node, emit: EmitFunction, parenthesizerRule: ParenthesizerRuleOrSelector<T> | undefined, index: number) => void;
+
+function emitListItemNoParenthesizer(node: Node, emit: EmitFunction, _parenthesizerRule: ParenthesizerRuleOrSelector<Node> | undefined, _index: number) {
     emit(node);
 }
 
-function emitListItemWithParenthesizerRuleSelector(node: Node, emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parenthesizerRuleSelector: OrdinalParentheizerRuleSelector<Node>, index: number) {
-    emit(node, parenthesizerRuleSelector.select(index));
+function emitListItemWithParenthesizerRuleSelector(node: Node, emit: EmitFunction, parenthesizerRuleSelector: OrdinalParentheizerRuleSelector<Node> | undefined, index: number) {
+    emit(node, parenthesizerRuleSelector!.select(index));
 }
 
-function emitListItemWithParenthesizerRule(node: Node, emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parenthesizerRule: ParenthesizerRule<Node> | undefined, _index: number) {
+function emitListItemWithParenthesizerRule(node: Node, emit: EmitFunction, parenthesizerRule: ParenthesizerRule<Node> | undefined, _index: number) {
     emit(node, parenthesizerRule);
 }
 
-function getEmitListItem<T extends Node, R extends ParenthesizerRuleOrSelector<T> | undefined>(emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parenthesizerRule: R): (node: Node, emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parenthesizerRule: R, index: number) => void {
-    return emit.length === 1 ? emitListItemNoParenthesizer :
-        typeof parenthesizerRule === "object" ? emitListItemWithParenthesizerRuleSelector :
-        emitListItemWithParenthesizerRule;
+function getEmitListItem<T extends Node>(emit: EmitFunction, parenthesizerRule: ParenthesizerRuleOrSelector<T> | undefined): EmitListItemFunction<T> {
+    return emit.length === 1 ? emitListItemNoParenthesizer as EmitListItemFunction<T> :
+        typeof parenthesizerRule === "object" ? emitListItemWithParenthesizerRuleSelector as EmitListItemFunction<T> :
+        emitListItemWithParenthesizerRule as EmitListItemFunction<T>;
 }

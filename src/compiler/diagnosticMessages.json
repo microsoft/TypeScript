@@ -3864,6 +3864,10 @@
         "category": "Error",
         "code": 4084
     },
+    "Extends clause for inferred type '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4085
+    },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Error",
         "code": 4090
@@ -4229,7 +4233,7 @@
         "category": "Error",
         "code": 5095
     },
-    "Option 'allowImportingTsExtensions' can only be used when 'moduleResolution' is set to 'bundler' and either 'noEmit' or 'emitDeclarationOnly' is set.": {
+    "Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.": {
         "category": "Error",
         "code": 5096
     },
@@ -5190,6 +5194,18 @@
         "category": "Message",
         "code": 6261
     },
+    "File name '{0}' has a '{1}' extension - looking up '{2}' instead.": {
+        "category": "Message",
+        "code": 6262
+    },
+    "Module '{0}' was resolved to '{1}', but '--allowArbitraryExtensions' is not set.": {
+        "category": "Error",
+        "code": 6263
+    },
+    "Enable importing files with any extension, provided a declaration file is present.": {
+        "category": "Message",
+        "code": 6264
+    },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
         "category": "Message",
@@ -5218,6 +5234,14 @@
     "Export specifier '{0}' does not exist in package.json scope at path '{1}'.": {
         "category": "Message",
         "code": 6276
+    },
+    "Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.": {
+        "category": "Message",
+        "code": 6277
+    },
+    "There are types at '{0}', but this result could not be resolved when respecting package.json \"exports\". The '{1}' library may need to update its package.json or typings.": {
+        "category": "Message",
+        "code": 6278
     },
 
     "Enable project compilation": {
@@ -7612,5 +7636,9 @@
     "The value '{0}' cannot be used here.": {
         "category": "Error",
         "code": 18050
+    },
+    "Compiler option '{0}' cannot be given an empty string.": {
+        "category": "Error",
+        "code": 18051
     }
 }

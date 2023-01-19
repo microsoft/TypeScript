@@ -6,7 +6,6 @@ import {
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
     AssignmentDeclarationKind,
-    AutoGenerateInfo,
     BaseType,
     BinaryExpression,
     BreakpointResolver,
@@ -722,7 +721,7 @@ class SymbolObject implements Symbol {
 }
 
 class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
-    public kind: TKind;
+    public override kind: TKind;
 
     constructor(kind: TKind, pos: number, end: number) {
         super(pos, end);
@@ -731,9 +730,8 @@ class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject impl
 }
 
 class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
-    public kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
+    public override kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
     public escapedText!: __String;
-    public autoGenerate: AutoGenerateInfo | undefined;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
@@ -754,9 +752,8 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
 }
 IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
-    public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
+    public override kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
-    public autoGenerate: AutoGenerateInfo | undefined;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
@@ -994,7 +991,7 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
 }
 
 class SourceFileObject extends NodeObject implements SourceFile {
-    public kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
+    public override kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
     public fileName!: string;

@@ -114,6 +114,7 @@ import {
     HasLocals,
     hasSyntacticModifier,
     Identifier,
+    identifierToKeywordKind,
     idText,
     IfStatement,
     ImportClause,
@@ -171,7 +172,10 @@ import {
     isJSDocTypeAlias,
     isJsonSourceFile,
     isLeftHandSideExpression,
+    isLogicalOrCoalescingAssignmentExpression,
     isLogicalOrCoalescingAssignmentOperator,
+    isLogicalOrCoalescingBinaryExpression,
+    isLogicalOrCoalescingBinaryOperator,
     isModuleAugmentationExternal,
     isModuleBlock,
     isModuleDeclaration,
@@ -413,7 +417,7 @@ function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleIns
         case SyntaxKind.Identifier:
             // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
             // be considered the same as type alias
-            if ((node as Identifier).isInJSDocNamespace) {
+            if (node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
                 return ModuleInstanceState.NonInstantiated;
             }
     }
@@ -1030,6 +1034,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         else if (containerFlags & ContainerFlags.IsInterface) {
             seenThisKeyword = false;
             bindChildren(node);
+            Debug.assertNotNode(node, isIdentifier); // ContainsThis cannot overlap with HasExtendedUnicodeEscape on Identifier
             node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
         }
         else {
@@ -1375,17 +1380,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 node = (node as PrefixUnaryExpression).operand;
             }
             else {
-                return node.kind === SyntaxKind.BinaryExpression && (
-                    (node as BinaryExpression).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken ||
-                    (node as BinaryExpression).operatorToken.kind === SyntaxKind.BarBarToken ||
-                    (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken);
+                return isLogicalOrCoalescingBinaryExpression(node);
             }
         }
     }
 
     function isLogicalAssignmentExpression(node: Node) {
-        node = skipParentheses(node);
-        return isBinaryExpression(node) && isLogicalOrCoalescingAssignmentOperator(node.operatorToken.kind);
+        return isLogicalOrCoalescingAssignmentExpression(skipParentheses(node));
     }
 
     function isTopLevelLogicalExpression(node: Node): boolean {
@@ -1857,10 +1858,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
             // For now, though, since the common cases are chained `+`, leaving it recursive is fine
             const operator = node.operatorToken.kind;
-            if (operator === SyntaxKind.AmpersandAmpersandToken ||
-                operator === SyntaxKind.BarBarToken ||
-                operator === SyntaxKind.QuestionQuestionToken ||
-                isLogicalOrCoalescingAssignmentOperator(operator)) {
+            if (isLogicalOrCoalescingBinaryOperator(operator) || isLogicalOrCoalescingAssignmentOperator(operator)) {
                 if (isTopLevelLogicalExpression(node)) {
                     const postExpressionLabel = createBranchLabel();
                     bindLogicalLikeExpression(node, postExpressionLabel, postExpressionLabel);
@@ -2420,13 +2418,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             !isIdentifierName(node)) {
 
             // strict mode identifiers
+            const originalKeywordKind = identifierToKeywordKind(node);
             if (inStrictMode &&
-                node.originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
-                node.originalKeywordKind! <= SyntaxKind.LastFutureReservedWord) {
+                originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
+                originalKeywordKind! <= SyntaxKind.LastFutureReservedWord) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node,
                     getStrictModeIdentifierMessage(node), declarationNameToString(node)));
             }
-            else if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
+            else if (originalKeywordKind === SyntaxKind.AwaitKeyword) {
                 if (isExternalModule(file) && isInTopLevelContext(node)) {
                     file.bindDiagnostics.push(createDiagnosticForNode(node,
                         Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module,
@@ -2438,7 +2437,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         declarationNameToString(node)));
                 }
             }
-            else if (node.originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
+            else if (originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node,
                     Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here,
                     declarationNameToString(node)));
@@ -2731,7 +2730,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // for typedef type names with namespaces, bind the new jsdoc type symbol here
                 // because it requires all containing namespaces to be in effect, namely the
                 // current "blockScopeContainer" needs to be set to its immediate namespace parent.
-                if ((node as Identifier).isInJSDocNamespace) {
+                if (node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
                     let parentNode = node.parent;
                     while (parentNode && !isJSDocTypeAlias(parentNode)) {
                         parentNode = parentNode.parent;

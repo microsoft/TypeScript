@@ -3,6 +3,7 @@ import {
     AccessExpression,
     AccessorDeclaration,
     ArrayBindingElement,
+    ArrayBindingOrAssignmentElement,
     ArrayBindingOrAssignmentPattern,
     AssertionExpression,
     AssertionKey,
@@ -78,8 +79,8 @@ import {
     getJSDocRoot,
     getJSDocTypeParameterDeclarations,
     hasAccessorModifier,
-    hasDecorators,
     HasDecorators,
+    hasDecorators,
     HasExpressionInitializer,
     HasInitializer,
     HasJSDoc,
@@ -98,6 +99,7 @@ import {
     isAmbientModule,
     isAnyImportOrReExport,
     isArrowFunction,
+    isAssignmentExpression,
     isBinaryExpression,
     isBindableStaticElementAccessExpression,
     isBindingElement,
@@ -132,12 +134,14 @@ import {
     isJSDocPublicTag,
     isJSDocReadonlyTag,
     isJSDocReturnTag,
+    isJSDocSatisfiesTag,
     isJSDocSignature,
     isJSDocTemplateTag,
     isJSDocThisTag,
     isJSDocTypeAlias,
     isJSDocTypeLiteral,
     isJSDocTypeTag,
+    isKeyword,
     isModuleBlock,
     isNonNullExpression,
     isNotEmittedStatement,
@@ -178,6 +182,7 @@ import {
     JSDocPublicTag,
     JSDocReadonlyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocSignature,
     JSDocTag,
     JSDocTemplateTag,
@@ -189,6 +194,7 @@ import {
     JsxExpression,
     JsxOpeningLikeElement,
     JsxTagNameExpression,
+    KeywordSyntaxKind,
     LabeledStatement,
     lastOrUndefined,
     LeftHandSideExpression,
@@ -216,6 +222,7 @@ import {
     NonNullChain,
     normalizePath,
     NotEmittedStatement,
+    NullLiteral,
     ObjectBindingOrAssignmentElement,
     ObjectBindingOrAssignmentPattern,
     ObjectLiteralElement,
@@ -248,6 +255,7 @@ import {
     Statement,
     StringLiteral,
     StringLiteralLike,
+    stringToToken,
     Symbol,
     SyntaxKind,
     TemplateLiteral,
@@ -257,6 +265,7 @@ import {
     TextChangeRange,
     TextRange,
     TextSpan,
+    tryCast,
     TypeElement,
     TypeNode,
     TypeOnlyAliasDeclaration,
@@ -538,7 +547,10 @@ export function isEmptyBindingPattern(node: BindingName): node is BindingPattern
     return false;
 }
 
-export function isEmptyBindingElement(node: BindingElement): boolean {
+// TODO(jakebailey): It is very weird that we have BindingElement and ArrayBindingElement;
+// we should have ObjectBindingElement and ArrayBindingElement, which are both BindingElement,
+// just like BindingPattern is a ObjectBindingPattern or a ArrayBindingPattern.
+export function isEmptyBindingElement(node: BindingElement | ArrayBindingElement): boolean {
     if (isOmittedExpression(node)) {
         return true;
     }
@@ -669,15 +681,19 @@ export function validateLocaleAndSetLanguage(
 export function getOriginalNode(node: Node): Node;
 export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
 export function getOriginalNode(node: Node | undefined): Node | undefined;
-export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node | undefined) => node is T): T | undefined;
-export function getOriginalNode(node: Node | undefined, nodeTest?: (node: Node | undefined) => boolean): Node | undefined {
+export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node) => node is T): T | undefined;
+export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest?: (node: Node) => node is T): T | undefined {
     if (node) {
         while (node.original !== undefined) {
             node = node.original;
         }
     }
 
-    return !nodeTest || nodeTest(node) ? node : undefined;
+    if (!node || !nodeTest) {
+        return node as T | undefined;
+    }
+
+    return nodeTest(node) ? node : undefined;
 }
 
 /**
@@ -688,7 +704,7 @@ export function getOriginalNode(node: Node | undefined, nodeTest?: (node: Node |
  */
 export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
 export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
-export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node | undefined {
+export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined {
     while (node) {
         const result = callback(node);
         if (result === "quit") {
@@ -760,6 +776,16 @@ export function unescapeLeadingUnderscores(identifier: __String): string {
 export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string {
     return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
 }
+
+/**
+ * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
+ * SyntaxKind for the matching keyword.
+ */
+export function identifierToKeywordKind(node: Identifier): KeywordSyntaxKind | undefined {
+    const token = stringToToken(node.escapedText as string);
+    return token ? tryCast(token, isKeyword) : undefined;
+}
+
 export function symbolName(symbol: Symbol): string {
     if (symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return idText(symbol.valueDeclaration.name);
@@ -1090,6 +1116,10 @@ export function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined {
     return getFirstJSDocTag(node, isJSDocTemplateTag);
 }
 
+export function getJSDocSatisfiesTag(node: Node): JSDocSatisfiesTag | undefined {
+    return getFirstJSDocTag(node, isJSDocSatisfiesTag);
+}
+
 /** Gets the JSDoc type tag for the node if present and valid */
 export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
     // We should have already issued an error if there were multiple type jsdocs, so just use the first one.
@@ -1146,14 +1176,15 @@ export function getJSDocReturnType(node: Node): TypeNode | undefined {
 
 function getJSDocTagsWorker(node: Node, noCache?: boolean): readonly JSDocTag[] {
     if (!canHaveJSDoc(node)) return emptyArray;
-    let tags = node.jsDocCache;
+    let tags = node.jsDoc?.jsDocCache;
     // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
     if (tags === undefined || noCache) {
         const comments = getJSDocCommentsAndTags(node, noCache);
         Debug.assert(comments.length < 2 || comments[0] !== comments[1]);
         tags = flatMap(comments, j => isJSDoc(j) ? j.tags : j);
         if (!noCache) {
-            node.jsDocCache = tags;
+            node.jsDoc ??= [];
+            node.jsDoc.jsDocCache = tags;
         }
     }
     return tags;
@@ -1474,12 +1505,12 @@ export function isStringTextContainingNode(node: Node): node is StringLiteral | 
 
 /** @internal */
 export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
-    return isIdentifier(node) && node.autoGenerate !== undefined;
+    return isIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
 }
 
 /** @internal */
 export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
-    return isPrivateIdentifier(node) && node.autoGenerate !== undefined;
+    return isPrivateIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
 }
 
 // Private Identifiers
@@ -1762,6 +1793,14 @@ export function isDeclarationBindingElement(bindingElement: BindingOrAssignmentE
     return false;
 }
 
+/** @internal */
+export function isBindingOrAssignmentElement(node: Node): node is BindingOrAssignmentElement {
+    return isVariableDeclaration(node)
+        || isParameter(node)
+        || isObjectBindingOrAssignmentElement(node)
+        || isArrayBindingOrAssignmentElement(node);
+}
+
 /**
  * Determines whether a node is a BindingOrAssignmentPattern
  *
@@ -1812,6 +1851,22 @@ export function isArrayBindingOrAssignmentPattern(node: BindingOrAssignmentEleme
     }
 
     return false;
+}
+
+/** @internal */
+export function isArrayBindingOrAssignmentElement(node: Node): node is ArrayBindingOrAssignmentElement {
+    switch (node.kind) {
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.OmittedExpression: // Elision
+        case SyntaxKind.SpreadElement: // AssignmentRestElement
+        case SyntaxKind.ArrayLiteralExpression: // ArrayAssignmentPattern
+        case SyntaxKind.ObjectLiteralExpression: // ObjectAssignmentPattern
+        case SyntaxKind.Identifier: // DestructuringAssignmentTarget
+        case SyntaxKind.PropertyAccessExpression: // DestructuringAssignmentTarget
+        case SyntaxKind.ElementAccessExpression: // DestructuringAssignmentTarget
+            return true;
+    }
+    return isAssignmentExpression(node, /*excludeCompoundAssignment*/ true); // AssignmentElement
 }
 
 /** @internal */
@@ -1927,6 +1982,23 @@ export function isUnaryExpressionWithWrite(expr: Node): expr is PrefixUnaryExpre
                 (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken;
         default:
             return false;
+    }
+}
+
+/**
+ * See isExpression; not for use in transforms.
+ * @internal
+ */
+export function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
+    node = skipPartiallyEmittedExpressions(node);
+    switch (skipPartiallyEmittedExpressions(node).kind) {
+        case SyntaxKind.NullKeyword:
+        case SyntaxKind.TrueKeyword:
+        case SyntaxKind.FalseKeyword:
+        case SyntaxKind.PrefixUnaryExpression:
+            return true;
+        default:
+            return isLiteralExpression(node);
     }
 }
 

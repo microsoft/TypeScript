@@ -240,11 +240,12 @@ export function getAllRules(): RuleSpec[] {
         rule("NoSpaceBetweenCloseParenAndAngularBracket", SyntaxKind.CloseParenToken, SyntaxKind.LessThanToken, [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext], RuleAction.DeleteSpace),
         rule("NoSpaceAfterOpenAngularBracket", SyntaxKind.LessThanToken, anyToken, [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext], RuleAction.DeleteSpace),
         rule("NoSpaceBeforeCloseAngularBracket", anyToken, SyntaxKind.GreaterThanToken, [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext], RuleAction.DeleteSpace),
-        rule("NoSpaceAfterCloseAngularBracket",
-            SyntaxKind.GreaterThanToken,
-            [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken],
-            [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext, isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/],
-            RuleAction.DeleteSpace),
+        rule("NoSpaceAfterCloseAngularBracket", SyntaxKind.GreaterThanToken, [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken], [
+            isNonJsxSameLineTokenContext,
+            isTypeArgumentOrParameterOrAssertionContext,
+            isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/,
+            isNonTypeAssertionContext
+        ], RuleAction.DeleteSpace),
 
         // decorators
         rule("SpaceBeforeAt", [SyntaxKind.CloseParenToken, SyntaxKind.Identifier], SyntaxKind.AtToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
@@ -833,6 +834,10 @@ function isTypeArgumentOrParameterOrAssertionContext(context: FormattingContext)
 
 function isTypeAssertionContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.TypeAssertionExpression;
+}
+
+function isNonTypeAssertionContext(context: FormattingContext): boolean {
+    return !isTypeAssertionContext(context);
 }
 
 function isVoidOpContext(context: FormattingContext): boolean {
