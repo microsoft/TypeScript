@@ -4,6 +4,7 @@ import * as evaluator from "../_namespaces/evaluator";
 import * as vfs from "../_namespaces/vfs";
 import * as documents from "../_namespaces/documents";
 import * as fakes from "../_namespaces/fakes";
+import { NewLineKind, ScriptTarget, transpileModule } from "../_namespaces/ts";
 
 describe("unittests:: TransformAPI", () => {
     function replaceUndefinedWithVoid0(context: ts.TransformationContext) {
@@ -328,13 +329,14 @@ describe("unittests:: TransformAPI", () => {
 
     // https://github.com/Microsoft/TypeScript/issues/17384
     testBaseline("transformAddDecoratedNode", () => {
-        return ts.transpileModule("", {
+        return transpileModule("", {
             transformers: {
                 before: [transformAddDecoratedNode],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES5,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES5,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
 
@@ -366,13 +368,14 @@ describe("unittests:: TransformAPI", () => {
 
     // https://github.com/microsoft/TypeScript/issues/33295
     testBaseline("transformParameterProperty", () => {
-        return ts.transpileModule("", {
+        return transpileModule("", {
             transformers: {
                 before: [transformAddParameterProperty],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES5,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES5,
+                newLine: NewLineKind.CarriageReturnLineFeed,
+                experimentalDecorators: true,
             }
         }).outputText;
 
@@ -643,8 +646,9 @@ class MyClass {
                 before: [addStaticFieldWithComment],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES2015,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
@@ -658,8 +662,9 @@ const MyClass = class {
                 before: [addStaticFieldWithComment],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES2015,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });

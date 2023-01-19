@@ -627,9 +627,11 @@ function notFirst(a: number, this: C): number { return this.n; }
 ///// parse errors /////
 function modifiers(async this: C): number { return this.n; }
 >modifiers : Symbol(modifiers, Decl(thisTypeInFunctionsNegative.ts, 164, 64))
-> : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 167, 19))
->this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 167, 24))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 167, 19))
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+>this.n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 167, 19))
+>n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
 
 function restParam(...this: C): number { return this.n; }
 >restParam : Symbol(restParam, Decl(thisTypeInFunctionsNegative.ts, 167, 60))

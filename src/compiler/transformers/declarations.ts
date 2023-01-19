@@ -857,13 +857,13 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function updateParamsList(node: Node, params: NodeArray<ParameterDeclaration>, modifierMask?: ModifierFlags) {
+    function updateParamsList(node: Node, params: NodeArray<ParameterDeclaration>, modifierMask?: ModifierFlags): NodeArray<ParameterDeclaration> {
         if (hasEffectiveModifier(node, ModifierFlags.Private)) {
-            return undefined!; // TODO: GH#18217
+            return factory.createNodeArray();
         }
         const newParams = map(params, p => ensureParameter(p, modifierMask));
         if (!newParams) {
-            return undefined!; // TODO: GH#18217
+            return factory.createNodeArray();
         }
         return factory.createNodeArray(newParams, params.hasTrailingComma);
     }
