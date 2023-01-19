@@ -2003,9 +2003,9 @@ export class TestState {
                 if (prefixDisplayParts.length) signature += prefixDisplayParts.map(p => p.text).join("");
                 const separator = separatorDisplayParts.map(p => p.text).join("");
                 signature += parameters.map((p, i) => {
-                    const text = p.displayParts.map(dp => dp.text).join("")
-                    return i === item.argumentIndex ? "**" + text + "**" : text
-                }).join(separator)
+                    const text = p.displayParts.map(dp => dp.text).join("");
+                    return i === item.argumentIndex ? "**" + text + "**" : text;
+                }).join(separator);
                 if (suffixDisplayParts.length) signature += suffixDisplayParts.map(p => p.text).join("");
                 tooltip.push(signature);
                 // only display signature documentation on the last argument when multiple arguments are marked
