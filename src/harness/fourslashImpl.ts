@@ -1974,7 +1974,16 @@ export class TestState {
             marker: { ...marker, name },
             item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
         }));
-        Harness.Baseline.runBaseline(baselineFile, this.getBaselineContentForQuickinfo(result) + "\n\n" + stringify(result));
+        const annotations = this.annotateContentWithTooltips(
+            result,
+            "quickinfo",
+            item => item.textSpan,
+            ({ displayParts, documentation, tags }) => [
+                ...(displayParts ? displayParts.map(p => p.text).join("").split("\n") : []),
+                ...(documentation?.length ? documentation.map(p => p.text).join("").split("\n") : []),
+                ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : [])
+            ]);
+        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
 
     public baselineSignatureHelp() {
@@ -1983,7 +1992,44 @@ export class TestState {
             marker: { ...marker, name },
             item: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
         }));
-        Harness.Baseline.runBaseline(baselineFile, this.getBaselineContentForSignatureHelp(result) + "\n\n" + stringify(result));
+        const annotations = this.annotateContentWithTooltips(
+            result,
+            "signature help",
+            () => undefined, // use default: marker.position
+            (item, previous) => {
+                const { documentation, tags, prefixDisplayParts, suffixDisplayParts, separatorDisplayParts, parameters } = item.items[item.selectedItemIndex];
+                const tooltip = [];
+                let signature = "";
+                if (prefixDisplayParts.length) signature += prefixDisplayParts.map(p => p.text).join("");
+                const separator = separatorDisplayParts.map(p => p.text).join("");
+                let i = 0;
+                let first = true;
+                for (const { displayParts } of parameters) {
+                    if (first) {
+                        first = false;
+                    }
+                    else {
+                        signature += separator;
+                    }
+                    const highlight = i === item.argumentIndex;
+                    if (highlight) signature += "**";
+                    signature += displayParts.map(p => p.text).join("");
+                    if (highlight) signature += "**";
+                    i++;
+                }
+                if (suffixDisplayParts.length) signature += suffixDisplayParts.map(p => p.text).join("");
+                tooltip.push(signature);
+                // only display documentation for last argument when multiple arguments are marked
+                if (previous?.applicableSpan.start !== item.applicableSpan.start) {
+                    if (documentation?.length) tooltip.push(...documentation.map(p => p.text).join("").split("\n"));
+                    if (tags?.length) {
+                        tooltip.push(...tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n"));
+                    }
+                }
+                return tooltip;
+            }
+        );
+        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
 
     public baselineCompletions(preferences?: ts.UserPreferences) {
@@ -2002,19 +2048,19 @@ export class TestState {
                 }
             };
         });
-        const annotations = this.skeleton(
+        const annotations = this.annotateContentWithTooltips(
             result,
             "completions",
             item => item.optionalReplacementSpan,
             item => item.entries?.flatMap(
                 entry => entry.displayParts
-                    ? entry.displayParts.map(p => p.text).join("").split('\n')
+                    ? entry.displayParts.map(p => p.text).join("").split("\n")
                     : [`(${entry.kindModifiers}${entry.kind}) ${entry.name}`])
-        )
+        );
         Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
 
-    private skeleton<T extends {
+    private annotateContentWithTooltips<T extends ts.QuickInfo | ts.SignatureHelpItems | {
             optionalReplacementSpan?: ts.TextSpan,
             entries?: {
                 name: string,
@@ -2022,136 +2068,40 @@ export class TestState {
                 kindModifiers?: string,
                 displayParts?: unknown,
             }[]
-    } | ts.QuickInfo | ts.SignatureHelpItems>(
+    }>(
         items: ({
             marker: Marker & { name: string },
             item: T | undefined
         })[],
-        opName: string,
+        opName: "completions" | "quickinfo" | "signature help",
         getSpan: (t: T) => ts.TextSpan | undefined,
         getToolTipContents: (t: T, prev: T | undefined) => string[] | undefined): string {
-        const bar = "-".repeat(70)
-        const sorted = items.slice()
+        const bar = "-".repeat(70);
+        const sorted = items.slice();
         // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
         sorted.sort((q1, q2) =>
             q1.marker.fileName === q1.marker.fileName
             ? (q1.marker.position > q2.marker.position ? -1 : 1)
             : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
-        const files: Map<string, string[]> = new Map()
-        let previous: T | undefined
+        const files: Map<string, string[]> = new Map();
+        let previous: T | undefined;
         for (const { marker, item } of sorted) {
             const span = (item ? getSpan(item) : undefined) ?? { start: marker.position, length: 1 };
             const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(marker.fileName, span.start);
-            const underline = " ".repeat(startLc.character) + "^".repeat(span.length)
+            const underline = " ".repeat(startLc.character) + "^".repeat(span.length);
             let tooltip = [
                 bar,
-                ...(item ? getToolTipContents(item, previous) : undefined) ?? [`No ${opName} at /*${marker.name}*/`],
+                ...(item ? getToolTipContents(item, previous) : undefined) ?? [`No ${opName} at /*${marker.name}*/.`],
                 bar,
-            ]
-            tooltip = tooltip.map(l => "| " + l)
-            const lines = files.get(marker.fileName) ?? this.getFileContent(marker.fileName).split(/\r?\n/)
-            lines.splice(startLc.line + 1, 0, underline, ...tooltip)
-            files.set(marker.fileName, lines)
-            previous = item
+            ];
+            tooltip = tooltip.map(l => "| " + l);
+            const lines = files.get(marker.fileName) ?? this.getFileContent(marker.fileName).split(/\r?\n/);
+            lines.splice(startLc.line + 1, 0, underline, ...tooltip);
+            files.set(marker.fileName, lines);
+            previous = item;
         }
         return Array.from(files.entries(), ([fileName, lines]) => `=== ${fileName} ===\n` + lines.map(l => "// " + l).join("\n"))
-            .join("\n\n")
-    }
-
-    private getBaselineContentForQuickinfo(quickInfos: { marker: Marker & { name: string }, item: ts.QuickInfo | undefined }[]) {
-        const bar = "-".repeat(70)
-        const sorted = quickInfos.slice()
-        // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
-        sorted.sort((q1, q2) =>
-            q1.marker.fileName === q1.marker.fileName
-            ? (q1.marker.position > q2.marker.position ? -1 : 1)
-            : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
-        const files: Map<string, string[]> = new Map()
-        for (const { marker, item } of sorted) {
-            const span = item?.textSpan ?? { start: marker.position, length: 1 };
-            const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(marker.fileName, span.start);
-            const underline = " ".repeat(startLc.character) + "^".repeat(span.length)
-            let tooltip = [bar]
-            if (item) {
-                const { displayParts, documentation, tags } = item;
-                if (displayParts) tooltip.push(...displayParts.map(p => p.text).join("").split('\n'))
-                if (documentation?.length) tooltip.push(...documentation.map(p => p.text).join("").split('\n'))
-                if (tags?.length) {
-                    tooltip.push(...tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split('\n'))
-                }
-            }
-            else {
-                tooltip.push(`No quickinfo at /*${marker.name}*/.`);
-            }
-            tooltip.push(bar)
-            tooltip = tooltip.map(l => "| " + l)
-
-            const lines = files.get(marker.fileName) ?? this.getFileContent(marker.fileName).split(/\r?\n/)
-            lines.splice(startLc.line + 1, 0, underline, ...tooltip)
-            files.set(marker.fileName, lines)
-        }
-        return Array.from(files.entries(), ([fileName, lines]) => `=== ${fileName} ===\n` + lines.map(l => "// " + l).join("\n"))
-            .join("\n\n")
-    }
-
-    private getBaselineContentForSignatureHelp(signatureItems: { marker: Marker & { name: string }, item: ts.SignatureHelpItems | undefined }[]) {
-        const bar = "-".repeat(70)
-        const sorted = signatureItems.slice()
-        // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
-        sorted.sort((q1, q2) =>
-            q1.marker.fileName === q1.marker.fileName
-            ? (q1.marker.position > q2.marker.position ? -1 : 1)
-            : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
-        const files: Map<string, string[]> = new Map()
-        let previous: ts.SignatureHelpItems | undefined
-        for (const { marker, item } of sorted) {
-            const span = { start: marker.position, length: 1 };
-            const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(marker.fileName, span.start);
-            const underline = " ".repeat(startLc.character) + "^".repeat(span.length)
-            let tooltip = [bar]
-            if (item) {
-                const { documentation, tags, prefixDisplayParts, suffixDisplayParts, separatorDisplayParts, parameters } = item.items[item.selectedItemIndex]
-                let output = ""
-                if (prefixDisplayParts.length) output += prefixDisplayParts.map(p => p.text).join("")
-                const separator = separatorDisplayParts.map(p => p.text).join("")
-                let i = 0
-                let first = true
-                for (const { displayParts } of parameters) {
-                    if (first) {
-                        first = false
-                    }
-                    else {
-                        output += separator
-                    }
-                    const highlight = i === item.argumentIndex;
-                    if (highlight) output += "**"
-                    output += displayParts.map(p => p.text).join("")
-                    if (highlight) output += "**"
-                    i++
-                }
-                if (suffixDisplayParts.length) output += suffixDisplayParts.map(p => p.text).join("")
-                tooltip.push(output)
-                // only display signature line for last argument
-                if (previous?.applicableSpan.start !== item.applicableSpan.start) {
-                    if (documentation?.length) tooltip.push(...documentation.map(p => p.text).join("").split('\n'))
-                    if (tags?.length) {
-                        tooltip.push(...tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split('\n'))
-                    }
-                }
-            }
-            else {
-                tooltip.push(`No signature help at /*${marker.name}*/.`);
-            }
-            tooltip.push(bar)
-            tooltip = tooltip.map(l => "| " + l)
-
-            const lines = files.get(marker.fileName) ?? this.getFileContent(marker.fileName).split(/\r?\n/)
-            lines.splice(startLc.line + 1, 0, underline, ...tooltip)
-            files.set(marker.fileName, lines)
-            previous = item
-        }
-        return Array.from(files.entries(), ([fileName, lines]) => `=== ${fileName} ===\n` + lines.map(l => "// " + l).join("\n"))
-            .join("\n\n")
+            .join("\n\n");
     }
 
     public baselineSmartSelection() {
