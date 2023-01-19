@@ -135,7 +135,7 @@ export class DockerfileRunner extends ExternalCompileRunnerBase {
     kind(): TestRunnerKind {
         return "docker";
     }
-    initializeTests(): void {
+    override initializeTests(): void {
         // Read in and evaluate the test list
         const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
@@ -289,7 +289,7 @@ function compareErrorStrings(a: string[], b: string[]) {
 
 export class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
     readonly testDir = "../DefinitelyTyped/types/";
-    workingDirectory = this.testDir;
+    override workingDirectory = this.testDir;
     kind(): TestRunnerKind {
         return "dt";
     }

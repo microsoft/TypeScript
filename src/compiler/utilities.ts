@@ -169,6 +169,7 @@ import {
     getJSDocPublicTagNoCache,
     getJSDocReadonlyTagNoCache,
     getJSDocReturnType,
+    getJSDocSatisfiesTag,
     getJSDocTags,
     getJSDocType,
     getJSDocTypeParameterTags,
@@ -204,6 +205,7 @@ import {
     HasTypeArguments,
     HeritageClause,
     Identifier,
+    identifierToKeywordKind,
     IdentifierTypePredicate,
     identity,
     idText,
@@ -274,6 +276,7 @@ import {
     isJSDocOverloadTag,
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
+    isJSDocSatisfiesTag,
     isJSDocSignature,
     isJSDocTag,
     isJSDocTemplateTag,
@@ -335,6 +338,7 @@ import {
     JSDocMemberName,
     JSDocParameterTag,
     JSDocPropertyLikeTag,
+    JSDocSatisfiesExpression,
     JSDocSignature,
     JSDocTag,
     JSDocTemplateTag,
@@ -358,6 +362,7 @@ import {
     LiteralImportTypeNode,
     LiteralLikeElementAccessExpression,
     LiteralLikeNode,
+    LogicalOperator,
     LogicalOrCoalescingAssignmentOperator,
     map,
     mapDefined,
@@ -843,7 +848,7 @@ export function getSourceFileOfNode(node: Node): SourceFile;
 /** @internal */
 export function getSourceFileOfNode(node: Node | undefined): SourceFile | undefined;
 /** @internal */
-export function getSourceFileOfNode(node: Node): SourceFile {
+export function getSourceFileOfNode(node: Node | undefined): SourceFile | undefined {
     while (node && node.kind !== SyntaxKind.SourceFile) {
         node = node.parent;
     }
@@ -1523,9 +1528,8 @@ export function isBlockScope(node: Node, parentNode: Node | undefined): boolean 
 }
 
 /** @internal */
-export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters;
-/** @internal */
-export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
+export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters {
+    Debug.type<DeclarationWithTypeParameters>(node);
     switch (node.kind) {
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocTypedefTag:
@@ -1538,9 +1542,8 @@ export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParamet
 }
 
 /** @internal */
-export function isDeclarationWithTypeParameterChildren(node: Node): node is DeclarationWithTypeParameterChildren;
-/** @internal */
-export function isDeclarationWithTypeParameterChildren(node: DeclarationWithTypeParameterChildren): node is DeclarationWithTypeParameterChildren {
+export function isDeclarationWithTypeParameterChildren(node: Node): node is DeclarationWithTypeParameterChildren {
+    Debug.type<DeclarationWithTypeParameterChildren>(node);
     switch (node.kind) {
         case SyntaxKind.CallSignature:
         case SyntaxKind.ConstructSignature:
@@ -1651,7 +1654,7 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
-            return name.autoGenerate ? undefined : name.escapedText;
+            return name.emitNode?.autoGenerate ? undefined : name.escapedText;
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -1783,6 +1786,13 @@ export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): T
     scanner.scan();
     const start = scanner.getTokenPos();
     return createTextSpanFromBounds(start, scanner.getTextPos());
+}
+
+/** @internal */
+export function scanTokenAtPosition(sourceFile: SourceFile, pos: number) {
+    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
+    scanner.scan();
+    return scanner.getToken();
 }
 
 function getErrorSpanForArrowFunction(sourceFile: SourceFile, node: ArrowFunction): TextSpan {
@@ -3753,11 +3763,11 @@ function filterOwnedJSDocTags(hostNode: Node, jsDoc: JSDoc | JSDocTag) {
 }
 
 /**
- * Determines whether a host node owns a jsDoc tag. A `@type` tag attached to a
+ * Determines whether a host node owns a jsDoc tag. A `@type`/`@satisfies` tag attached to a
  * a ParenthesizedExpression belongs only to the ParenthesizedExpression.
  */
 function ownsJSDocTag(hostNode: Node, tag: JSDocTag) {
-    return !isJSDocTypeTag(tag)
+    return !(isJSDocTypeTag(tag) || isJSDocSatisfiesTag(tag))
         || !tag.parent
         || !isJSDoc(tag.parent)
         || !isParenthesizedExpression(tag.parent.parent)
@@ -4341,7 +4351,8 @@ export function isStringAKeyword(name: string) {
 }
 
 /** @internal */
-export function isIdentifierANonContextualKeyword({ originalKeywordKind }: Identifier): boolean {
+export function isIdentifierANonContextualKeyword(node: Identifier): boolean {
+    const originalKeywordKind = identifierToKeywordKind(node);
     return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
 }
 
@@ -4520,8 +4531,20 @@ export function isPushOrUnshiftIdentifier(node: Identifier) {
     return node.escapedText === "push" || node.escapedText === "unshift";
 }
 
-/** @internal */
-export function isParameterDeclaration(node: VariableLikeDeclaration): boolean {
+// TODO(jakebailey): this function should not be named this. While it does technically
+// return true if the argument is a ParameterDeclaration, it also returns true for nodes
+// that are children of ParameterDeclarations inside binding elements.
+// Probably, this should be called `rootDeclarationIsParameter`.
+/**
+ * This function returns true if the this node's root declaration is a parameter.
+ * For example, passing a `ParameterDeclaration` will return true, as will passing a
+ * binding element that is a child of a `ParameterDeclaration`.
+ *
+ * If you are looking to test that a `Node` is a `ParameterDeclaration`, use `isParameter`.
+ *
+ * @internal
+ */
+export function isParameterDeclaration(node: Declaration): boolean {
     const root = getRootDeclaration(node);
     return root.kind === SyntaxKind.Parameter;
 }
@@ -5709,7 +5732,7 @@ export function isThisInTypeQuery(node: Node): boolean {
 
 /** @internal */
 export function identifierIsThisKeyword(id: Identifier): boolean {
-    return id.originalKeywordKind === SyntaxKind.ThisKeyword;
+    return id.escapedText === "this";
 }
 
 /** @internal */
@@ -6194,7 +6217,7 @@ export function getEffectiveModifierFlagsNoCache(node: Node): ModifierFlags {
  */
 export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = canHaveModifiers(node) ? modifiersToFlags(node.modifiers) : ModifierFlags.None;
-    if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (node as Identifier).isInJSDocNamespace)) {
+    if (node.flags & NodeFlags.NestedNamespace || node.kind === SyntaxKind.Identifier && node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
         flags |= ModifierFlags.Export;
     }
     return flags;
@@ -6234,11 +6257,13 @@ export function modifierToFlag(token: SyntaxKind): ModifierFlags {
     return ModifierFlags.None;
 }
 
+function isBinaryLogicalOperator(token: SyntaxKind): boolean {
+    return token === SyntaxKind.BarBarToken || token === SyntaxKind.AmpersandAmpersandToken;
+}
+
 /** @internal */
 export function isLogicalOperator(token: SyntaxKind): boolean {
-    return token === SyntaxKind.BarBarToken
-        || token === SyntaxKind.AmpersandAmpersandToken
-        || token === SyntaxKind.ExclamationToken;
+    return isBinaryLogicalOperator(token) || token === SyntaxKind.ExclamationToken;
 }
 
 /** @internal */
@@ -6249,8 +6274,18 @@ export function isLogicalOrCoalescingAssignmentOperator(token: SyntaxKind): toke
 }
 
 /** @internal */
-export function isLogicalOrCoalescingAssignmentExpression(expr: BinaryExpression): expr is AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>> {
-    return isLogicalOrCoalescingAssignmentOperator(expr.operatorToken.kind);
+export function isLogicalOrCoalescingAssignmentExpression(expr: Node): expr is AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>> {
+    return isBinaryExpression(expr) && isLogicalOrCoalescingAssignmentOperator(expr.operatorToken.kind);
+}
+
+/** @internal */
+export function isLogicalOrCoalescingBinaryOperator(token: SyntaxKind): token is LogicalOperator | SyntaxKind.QuestionQuestionToken {
+    return isBinaryLogicalOperator(token) || token === SyntaxKind.QuestionQuestionToken;
+}
+
+/** @internal */
+export function isLogicalOrCoalescingBinaryExpression(expr: Node): expr is BinaryExpression {
+    return isBinaryExpression(expr) && isLogicalOrCoalescingBinaryOperator(expr.operatorToken.kind);
 }
 
 /** @internal */
@@ -6808,8 +6843,9 @@ export function getInitializedVariables(node: VariableDeclarationList) {
     return filter(node.declarations, isInitializedVariable);
 }
 
-function isInitializedVariable(node: VariableDeclaration): node is InitializedVariableDeclaration {
-    return node.initializer !== undefined;
+/** @internal */
+export function isInitializedVariable(node: Node): node is InitializedVariableDeclaration {
+    return isVariableDeclaration(node) && node.initializer !== undefined;
 }
 
 /** @internal */
@@ -7122,6 +7158,7 @@ export function isTypeNodeKind(kind: SyntaxKind): kind is TypeNodeSyntaxKind {
         || kind === SyntaxKind.VoidKeyword
         || kind === SyntaxKind.UndefinedKeyword
         || kind === SyntaxKind.NeverKeyword
+        || kind === SyntaxKind.IntrinsicKeyword
         || kind === SyntaxKind.ExpressionWithTypeArguments
         || kind === SyntaxKind.JSDocAllType
         || kind === SyntaxKind.JSDocUnknownType
@@ -7251,11 +7288,11 @@ export function getLeftmostExpression(node: Expression, stopAtCallExpressions: b
 
 /** @internal */
 export interface ObjectAllocator {
-    getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
-    getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos?: number, end?: number) => Identifier;
-    getPrivateIdentifierConstructor(): new (kind: SyntaxKind.PrivateIdentifier, pos?: number, end?: number) => PrivateIdentifier;
-    getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
+    getNodeConstructor(): new (kind: SyntaxKind, pos: number, end: number) => Node;
+    getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos: number, end: number) => Token<TKind>;
+    getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
+    getPrivateIdentifierConstructor(): new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
+    getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
     getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
     getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
     getSignatureConstructor(): new (checker: TypeChecker, flags: SignatureFlags) => Signature;
@@ -7327,7 +7364,6 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
     this.parent = undefined!;
     this.original = undefined;
     this.emitNode = undefined;
-    (this as Identifier).flowNode = undefined;
 }
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
@@ -7350,9 +7386,21 @@ export const objectAllocator: ObjectAllocator = {
     getSourceMapSourceConstructor: () => SourceMapSource as any,
 };
 
+const objectAllocatorPatchers: ((objectAllocator: ObjectAllocator) => void)[] = [];
+
+/**
+ * Used by `deprecatedCompat` to patch the object allocator to apply deprecations.
+ * @internal
+ */
+export function addObjectAllocatorPatcher(fn: (objectAllocator: ObjectAllocator) => void) {
+    objectAllocatorPatchers.push(fn);
+    fn(objectAllocator);
+}
+
 /** @internal */
 export function setObjectAllocator(alloc: ObjectAllocator) {
     Object.assign(objectAllocator, alloc);
+    forEach(objectAllocatorPatchers, fn => fn(objectAllocator));
 }
 
 /** @internal */
@@ -8699,7 +8747,7 @@ export function isAnySupportedFileExtension(path: string): boolean {
 
 /** @internal */
 export function tryGetExtensionFromPath(path: string): Extension | undefined {
-    return find<Extension>(extensionsToRemove, e => fileExtensionIs(path, e));
+    return find(extensionsToRemove, e => fileExtensionIs(path, e));
 }
 
 /** @internal */
@@ -9488,4 +9536,20 @@ export function isNonNullAccess(node: Node): node is AccessExpression {
     const kind = node.kind;
     return (kind === SyntaxKind.PropertyAccessExpression
         || kind === SyntaxKind.ElementAccessExpression) && isNonNullExpression((node as AccessExpression).expression);
+}
+
+/** @internal */
+export function isJSDocSatisfiesExpression(node: Node): node is JSDocSatisfiesExpression {
+    return isInJSFile(node) && isParenthesizedExpression(node) && hasJSDocNodes(node) && !!getJSDocSatisfiesTag(node);
+}
+
+/** @internal */
+export function getJSDocSatisfiesExpressionType(node: JSDocSatisfiesExpression) {
+    return Debug.checkDefined(tryGetJSDocSatisfiesTypeNode(node));
+}
+
+/** @internal */
+export function tryGetJSDocSatisfiesTypeNode(node: Node) {
+    const tag = getJSDocSatisfiesTag(node);
+    return tag && tag.typeExpression && tag.typeExpression.type;
 }

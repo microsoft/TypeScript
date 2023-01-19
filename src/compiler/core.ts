@@ -142,6 +142,11 @@ export function intersperse<T>(input: T[], element: T): T[] {
  *
  * @internal
  */
+export function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
+/** @internal */
+export function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
+/** @internal */
+export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
 export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean {
     if (array) {
         for (let i = 0; i < array.length; i++) {
@@ -478,7 +483,7 @@ export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | reado
 /** @internal */
 export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[];
 /** @internal */
-export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | T[]): T[] {
+export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[] {
     let result: T[] | undefined;
     if (array) {
         for (let i = 0; i < array.length; i++) {
@@ -703,11 +708,19 @@ export function concatenate<T>(array1: T[], array2: T[]): T[];
 /** @internal */
 export function concatenate<T>(array1: readonly T[], array2: readonly T[]): readonly T[];
 /** @internal */
-export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined): T[];
+export function concatenate<T>(array1: T[], array2: T[] | undefined): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */
-export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[];
+export function concatenate<T>(array1: T[] | undefined, array2: T[]): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */
-export function concatenate<T>(array1: T[], array2: T[]): T[] {
+export function concatenate<T>(array1: readonly T[], array2: readonly T[] | undefined): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */
+export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[]): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */
+export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined): T[] | undefined;
+/** @internal */
+export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined;
+/** @internal */
+export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined {
     if (!some(array2)) return array1;
     if (!some(array1)) return array2;
     return [...array1, ...array2];
@@ -856,7 +869,7 @@ export function detectSortCaseSensitivity(array: readonly string[], useEslintOrd
 /** @internal */
 export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString: (element: T) => string): SortKind;
 /** @internal */
-export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString?: (element: T) => string): SortKind {
+export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering?: boolean, getString?: (element: T) => string): SortKind {
     let kind = SortKind.Both;
     if (array.length < 2) return kind;
     const caseSensitiveComparer = getString
@@ -915,7 +928,7 @@ export function compact<T>(array: T[]): T[]; // eslint-disable-line @typescript-
 /** @internal */
 export function compact<T>(array: readonly T[]): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */
-export function compact<T>(array: T[]): T[] {
+export function compact<T>(array: readonly T[]): readonly T[] {
     let result: T[] | undefined;
     if (array) {
         for (let i = 0; i < array.length; i++) {
@@ -998,11 +1011,12 @@ export function append<T>(to: T[] | undefined, value: T | undefined): T[] | unde
 /** @internal */
 export function append<T>(to: Push<T>, value: T | undefined): void;
 /** @internal */
-export function append<T>(to: T[], value: T | undefined): T[] | undefined {
-    if (value === undefined) return to;
+export function append<T>(to: Push<T> | T[] | undefined, value: T | undefined): T[] | undefined {
+        // If to is Push<T>, return value is void, so safe to cast to T[].
+    if (value === undefined) return to as T[];
     if (to === undefined) return [value];
     to.push(value);
-    return to;
+    return to as T[];
 }
 
 /**
@@ -1315,7 +1329,7 @@ export function reduceLeft<T, U>(array: readonly T[] | undefined, f: (memo: U, v
 /** @internal */
 export function reduceLeft<T>(array: readonly T[], f: (memo: T, value: T, i: number) => T): T | undefined;
 /** @internal */
-export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T | undefined {
+export function reduceLeft<T>(array: readonly T[] | undefined, f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T | undefined {
     if (array && array.length > 0) {
         const size = array.length;
         if (size > 0) {
@@ -1867,11 +1881,7 @@ export function isNumber(x: unknown): x is number {
 }
 
 /** @internal */
-export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
-/** @internal */
-export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
-/** @internal */
-export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined {
+export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {
     return value !== undefined && test(value) ? value : undefined;
 }
 

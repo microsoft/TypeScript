@@ -10,6 +10,7 @@
         "es2020",
         "es2021",
         "es2022",
+        "es2023",
         "esnext",
         // Host only
         "dom.generated",
@@ -63,6 +64,7 @@
         "es2022.sharedmemory",
         "es2022.string",
         "es2022.regexp",
+        "es2023.array",
         "esnext.intl",
         // Default libraries
         "es5.full",
@@ -74,6 +76,7 @@
         "es2020.full",
         "es2021.full",
         "es2022.full",
+        "es2023.full",
         "esnext.full"
     ],
     "paths": {
