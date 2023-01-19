@@ -7,7 +7,6 @@ import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
-import { displayPartsToString } from "./_namespaces/ts";
 
 export const enum FourSlashTestType {
     Native,
