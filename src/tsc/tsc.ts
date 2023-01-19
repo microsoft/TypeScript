@@ -1,24 +1,27 @@
-import * as ts from "./_namespaces/ts";
+import * as Debug from "../compiler/debug";
+import { noop } from "../compiler/core";
+import { sys } from "../compiler/sys/sys";
+import { executeCommandLine } from "../executeCommandLine/executeCommandLine";
 
 // This file actually uses arguments passed on commandline and executes it
 
 // enable deprecation logging
-ts.Debug.setLoggingHost({
+Debug.setLoggingHost({
     log(_level, s) {
-        ts.sys.write(`${s || ""}${ts.sys.newLine}`);
+        sys.write(`${s || ""}${sys.newLine}`);
     }
 });
 
-if (ts.Debug.isDebugging) {
-    ts.Debug.enableDebugInfo();
+if (Debug.isDebugging) {
+    Debug.enableDebugInfo();
 }
 
-if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
-    ts.sys.tryEnableSourceMapsForHost();
+if (sys.tryEnableSourceMapsForHost && /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))) {
+    sys.tryEnableSourceMapsForHost();
 }
 
-if (ts.sys.setBlocking) {
-    ts.sys.setBlocking();
+if (sys.setBlocking) {
+    sys.setBlocking();
 }
 
-ts.executeCommandLine(ts.sys, ts.noop, ts.sys.args);
+executeCommandLine(sys, noop, sys.args);

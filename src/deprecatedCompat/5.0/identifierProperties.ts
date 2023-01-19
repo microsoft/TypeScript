@@ -1,10 +1,7 @@
-import {
-    addObjectAllocatorPatcher,
-    hasProperty,
-    Identifier,
-    identifierToKeywordKind,
-    NodeFlags,
-} from "../_namespaces/ts";
+import { hasProperty } from "../../compiler/core";
+import { addObjectAllocatorPatcher } from "../../compiler/objectAllocator";
+import { Identifier, NodeFlags } from "../../compiler/types";
+import { identifierToKeywordKind } from "../../compiler/utilitiesPublic";
 import { deprecate } from "../deprecate";
 
 declare module "../../compiler/types" {
