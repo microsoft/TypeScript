@@ -42535,6 +42535,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithClass;
                     }
                 }
+                if (compilerOptions.verbatimModuleSyntax && node.parent.kind === SyntaxKind.SourceFile) {
+                    const exportModifier = node.modifiers?.find(m => m.kind === SyntaxKind.ExportKeyword);
+                    if (exportModifier) {
+                        error(exportModifier, Diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+                    }
+                }
             }
 
             if (isAmbientExternalModule) {
@@ -43134,6 +43140,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkTypeAssignableTo(checkExpressionCached(node.expression), getTypeFromTypeNode(typeAnnotationNode), node.expression);
         }
 
+        const isIllegalExportDefaultInCJS = !node.isExportEquals &&
+            compilerOptions.verbatimModuleSyntax &&
+            (moduleKind === ModuleKind.CommonJS || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS);
+
         if (node.expression.kind === SyntaxKind.Identifier) {
             const id = node.expression as Identifier;
             const sym = resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node);
@@ -43143,12 +43153,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (getAllSymbolFlags(sym) & SymbolFlags.Value) {
                     // However if it is a value, we need to check it's being used correctly
                     checkExpressionCached(id);
-                    if (compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
-                        error(id, Diagnostics.An_export_declaration_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration, idText(id));
+                    if (!isIllegalExportDefaultInCJS && compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
+                        error(id,
+                            node.isExportEquals
+                                ? Diagnostics.An_export_declaration_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration
+                                : Diagnostics.An_export_default_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration,
+                            idText(id));
                     }
                 }
-                else if (compilerOptions.verbatimModuleSyntax) {
-                    error(id, Diagnostics.An_export_declaration_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type, idText(id));
+                else if (!isIllegalExportDefaultInCJS && compilerOptions.verbatimModuleSyntax) {
+                    error(id,
+                        node.isExportEquals
+                            ? Diagnostics.An_export_declaration_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type
+                            : Diagnostics.An_export_default_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type,
+                        idText(id));
                 }
             }
             else {
@@ -43161,6 +43179,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else {
             checkExpressionCached(node.expression);
+        }
+
+        if (isIllegalExportDefaultInCJS) {
+            error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
         }
 
         checkExternalModuleExports(container);
@@ -45784,10 +45806,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         !(node.flags & NodeFlags.Ambient) &&
                         node.kind !== SyntaxKind.TypeAliasDeclaration &&
                         node.kind !== SyntaxKind.InterfaceDeclaration &&
+                        // ModuleDeclaration needs to be checked that it is uninstantiated later
+                        node.kind !== SyntaxKind.ModuleDeclaration &&
                         node.parent.kind === SyntaxKind.SourceFile &&
                         (moduleKind === ModuleKind.CommonJS || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)
                     ) {
-                        return grammarErrorOnNode(modifier, Diagnostics.A_top_level_export_modifier_can_only_be_used_on_type_aliases_and_interfaces_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+                        return grammarErrorOnNode(modifier, Diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
                     }
 
                     if (flags & ModifierFlags.Export) {

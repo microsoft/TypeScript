@@ -19,6 +19,20 @@ export type { AClass } from "./a";
 //// [c.ts]
 import { AClass } from "./b";
 
+//// [main4.ts]
+export default 1; // ok
+
+//// [main5.ts]
+export default class C {} // ok
+
+//// [main6.ts]
+interface I {}
+export default I; // error
+
+//// [main7.ts]
+import type C from "./main5";
+export default C; // error
+
 
 //// [a.js]
 export var a = 0;
@@ -36,3 +50,16 @@ export { A as A2 } from "./a";
 export {} from "./a";
 //// [c.js]
 import { AClass } from "./b";
+//// [main4.js]
+export default 1; // ok
+//// [main5.js]
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}()); // ok
+export default C;
+//// [main6.js]
+export default I; // error
+//// [main7.js]
+export default C; // error

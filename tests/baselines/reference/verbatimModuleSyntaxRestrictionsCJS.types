@@ -38,6 +38,19 @@ export interface I {} // ok
 export type { T }; // ok
 >T : typeof import("/decl")
 
+export namespace JustTypes {
+    export type T = number;
+>T : number
+}
+export namespace Values { // error
+>Values : typeof Values
+
+    export const x = 1;
+>x : 1
+>1 : 1
+}
+export default interface Default {} // sketchy, but ok
+
 === /main2.ts ===
 export interface I {}
 export = { x: 1 };
@@ -57,4 +70,24 @@ namespace ns {
 }
 export = ns;
 >ns : typeof ns
+
+=== /main4.ts ===
+
+export default 1; // error
+
+=== /main5.ts ===
+export default class C {} // error
+>C : C
+
+=== /main6.ts ===
+interface I {}
+export default I; // error
+>I : I
+
+=== /main7.ts ===
+import type esmy from "./decl";
+>esmy : any
+
+export default esmy; // error
+>esmy : () => void
 

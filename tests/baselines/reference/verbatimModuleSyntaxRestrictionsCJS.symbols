@@ -38,6 +38,21 @@ export interface I {} // ok
 export type { T }; // ok
 >T : Symbol(T, Decl(main.ts, 9, 13))
 
+export namespace JustTypes {
+>JustTypes : Symbol(JustTypes, Decl(main.ts, 9, 18))
+
+    export type T = number;
+>T : Symbol(T, Decl(main.ts, 10, 28))
+}
+export namespace Values { // error
+>Values : Symbol(Values, Decl(main.ts, 12, 1))
+
+    export const x = 1;
+>x : Symbol(x, Decl(main.ts, 14, 16))
+}
+export default interface Default {} // sketchy, but ok
+>Default : Symbol(Default, Decl(main.ts, 15, 1))
+
 === /main2.ts ===
 export interface I {}
 >I : Symbol(I, Decl(main2.ts, 0, 0))
@@ -57,4 +72,26 @@ namespace ns {
 }
 export = ns;
 >ns : Symbol(ns, Decl(main3.ts, 0, 0))
+
+=== /main4.ts ===
+
+export default 1; // error
+
+=== /main5.ts ===
+export default class C {} // error
+>C : Symbol(C, Decl(main5.ts, 0, 0))
+
+=== /main6.ts ===
+interface I {}
+>I : Symbol(I, Decl(main6.ts, 0, 0))
+
+export default I; // error
+>I : Symbol(I, Decl(main6.ts, 0, 0))
+
+=== /main7.ts ===
+import type esmy from "./decl";
+>esmy : Symbol(esmy, Decl(main7.ts, 0, 6))
+
+export default esmy; // error
+>esmy : Symbol(esmy, Decl(main7.ts, 0, 6))
 

@@ -923,17 +923,25 @@
         "category": "Error",
         "code": 1281
     },
-    "ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+    "An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but '{0}' only refers to a type.": {
         "category": "Error",
         "code": 1282
     },
-    "A top-level 'export' modifier can only be used on type aliases and interfaces in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+    "An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but '{0}' resolves to a type-only declaration.": {
         "category": "Error",
         "code": 1283
     },
-    "An import alias cannot resolve to a type or type-only declaration when 'verbatimModuleSyntax' is enabled.": {
+    "ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
         "category": "Error",
         "code": 1284
+    },
+    "A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1285
+    },
+    "An import alias cannot resolve to a type or type-only declaration when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1286
     },
 
     "'with' statements are not allowed in an async function block.": {

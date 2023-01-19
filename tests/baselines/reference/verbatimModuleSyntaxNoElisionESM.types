@@ -48,3 +48,23 @@ export type { AClass } from "./a";
 import { AClass } from "./b";
 >AClass : typeof AClass
 
+=== /main4.ts ===
+
+export default 1; // ok
+
+=== /main5.ts ===
+export default class C {} // ok
+>C : C
+
+=== /main6.ts ===
+interface I {}
+export default I; // error
+>I : I
+
+=== /main7.ts ===
+import type C from "./main5";
+>C : C
+
+export default C; // error
+>C : C
+

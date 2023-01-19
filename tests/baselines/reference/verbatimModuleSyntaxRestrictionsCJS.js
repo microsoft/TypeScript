@@ -16,6 +16,13 @@ export {}; // error
 export const x = 1; // error
 export interface I {} // ok
 export type { T }; // ok
+export namespace JustTypes {
+    export type T = number;
+}
+export namespace Values { // error
+    export const x = 1;
+}
+export default interface Default {} // sketchy, but ok
 
 //// [main2.ts]
 export interface I {}
@@ -27,6 +34,21 @@ namespace ns {
     export interface I {}
 }
 export = ns;
+
+//// [main4.ts]
+export default 1; // error
+
+//// [main5.ts]
+export default class C {} // error
+
+//// [main6.ts]
+interface I {}
+export default I; // error
+
+//// [main7.ts]
+import type esmy from "./decl";
+export default esmy; // error
+
 
 //// [main.js]
 "use strict";
@@ -57,12 +79,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
+exports.Values = exports.x = void 0;
 const decl_1 = __importDefault(require("./decl")); // error
 const esmy2 = __importStar(require("./decl")); // error
 const decl_2 = require("./decl"); // error
 Promise.resolve().then(() => __importStar(require("./decl"))); // error
 exports.x = 1; // error
+var Values;
+(function (Values) {
+    Values.x = 1;
+})(Values = exports.Values || (exports.Values = {}));
 //// [main2.js]
 "use strict";
 module.exports = { x: 1 };
@@ -73,3 +99,21 @@ var ns;
     ns.x = 1;
 })(ns || (ns = {}));
 module.exports = ns;
+//// [main4.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 1; // error
+//// [main5.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class C {
+} // error
+exports.default = C;
+//// [main6.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = I; // error
+//// [main7.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = esmy; // error

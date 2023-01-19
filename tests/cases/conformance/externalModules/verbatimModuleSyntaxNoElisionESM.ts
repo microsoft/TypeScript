@@ -20,3 +20,17 @@ export type { AClass } from "./a";
 
 // @Filename: /c.ts
 import { AClass } from "./b";
+
+// @Filename: /main4.ts
+export default 1; // ok
+
+// @Filename: /main5.ts
+export default class C {} // ok
+
+// @Filename: /main6.ts
+interface I {}
+export default I; // error
+
+// @Filename: /main7.ts
+import type C from "./main5";
+export default C; // error

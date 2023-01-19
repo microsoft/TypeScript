@@ -47,3 +47,25 @@ export type { AClass } from "./a";
 import { AClass } from "./b";
 >AClass : Symbol(AClass, Decl(c.ts, 0, 8))
 
+=== /main4.ts ===
+
+export default 1; // ok
+
+=== /main5.ts ===
+export default class C {} // ok
+>C : Symbol(C, Decl(main5.ts, 0, 0))
+
+=== /main6.ts ===
+interface I {}
+>I : Symbol(I, Decl(main6.ts, 0, 0))
+
+export default I; // error
+>I : Symbol(I, Decl(main6.ts, 0, 0))
+
+=== /main7.ts ===
+import type C from "./main5";
+>C : Symbol(C, Decl(main7.ts, 0, 6))
+
+export default C; // error
+>C : Symbol(C, Decl(main7.ts, 0, 6))
+

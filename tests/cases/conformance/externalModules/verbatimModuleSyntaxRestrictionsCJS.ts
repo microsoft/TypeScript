@@ -20,6 +20,13 @@ export {}; // error
 export const x = 1; // error
 export interface I {} // ok
 export type { T }; // ok
+export namespace JustTypes {
+    export type T = number;
+}
+export namespace Values { // error
+    export const x = 1;
+}
+export default interface Default {} // sketchy, but ok
 
 // @Filename: /main2.ts
 export interface I {}
@@ -31,3 +38,17 @@ namespace ns {
     export interface I {}
 }
 export = ns;
+
+// @Filename: /main4.ts
+export default 1; // error
+
+// @Filename: /main5.ts
+export default class C {} // error
+
+// @Filename: /main6.ts
+interface I {}
+export default I; // error
+
+// @Filename: /main7.ts
+import type esmy from "./decl";
+export default esmy; // error
