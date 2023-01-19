@@ -9196,12 +9196,12 @@ declare namespace ts {
     function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
     function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
     function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
+    function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken;
+    function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode;
+    function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken;
+    function isQuestionOrPlusOrMinusToken(node: Node): node is QuestionToken | PlusToken | MinusToken;
+    function isModuleName(node: Node): node is ModuleName;
     function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken;
-    const isQuestionOrExclamationToken: (node: Node) => node is ExclamationToken | QuestionToken;
-    const isIdentifierOrThisTypeNode: (node: Node) => node is Identifier | ThisTypeNode;
-    const isReadonlyKeywordOrPlusOrMinusToken: (node: Node) => node is ReadonlyKeyword | PlusToken | MinusToken;
-    const isQuestionOrPlusOrMinusToken: (node: Node) => node is QuestionToken | PlusToken | MinusToken;
-    const isModuleName: (node: Node) => node is ModuleName;
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
     function canHaveModifiers(node: Node): node is HasModifiers;
     function canHaveDecorators(node: Node): node is HasDecorators;
