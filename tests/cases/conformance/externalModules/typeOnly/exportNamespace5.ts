@@ -1,3 +1,5 @@
+// @declaration: true
+
 // @Filename: /a.ts
 export class A {}
 export class B {}

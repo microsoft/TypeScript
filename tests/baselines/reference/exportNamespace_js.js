@@ -1,21 +1,14 @@
-//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace4.ts] ////
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace_js.ts] ////
 
-//// [a.ts]
+//// [a.js]
 export class A {}
 
-//// [b.ts]
+//// [b.js]
 export type * from './a';
 
-//// [c.ts]
-export type * as ns from './a';
-
-//// [d.ts]
+//// [c.js]
 import { A } from './b';
 A;
-
-//// [e.ts]
-import { ns } from './c';
-ns.A;
 
 
 //// [a.js]
@@ -34,24 +27,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//// [d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+var b_1 = require("./b");
 A;
-//// [e.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-ns.A;
 
 
 //// [a.d.ts]
-export declare class A {
+export class A {
 }
 //// [b.d.ts]
-export type * from './a';
+export * from "./a";
 //// [c.d.ts]
-export type * as ns from './a';
-//// [d.d.ts]
-export {};
-//// [e.d.ts]
 export {};
