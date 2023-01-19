@@ -778,7 +778,7 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
                         validateEnding({ ending, value })
                     ) {
                         const matchedStar = value.substring(prefix.length, value.length - suffix.length);
-                        return key.replace("*", matchedStar);
+                        return key.replace(/\*/g, matchedStar);
                     }
                 }
             }
@@ -831,11 +831,11 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
                 const trailingSlice = pathOrPattern.slice(starPos + 1);
                 if (startsWith(targetFilePath, leadingSlice) && endsWith(targetFilePath, trailingSlice)) {
                     const starReplacement = targetFilePath.slice(leadingSlice.length, targetFilePath.length - trailingSlice.length);
-                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
+                    return { moduleFileToTry: packageName.replace(/\*/g, starReplacement) };
                 }
                 if (extensionSwappedTarget && startsWith(extensionSwappedTarget, leadingSlice) && endsWith(extensionSwappedTarget, trailingSlice)) {
                     const starReplacement = extensionSwappedTarget.slice(leadingSlice.length, extensionSwappedTarget.length - trailingSlice.length);
-                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
+                    return { moduleFileToTry: packageName.replace(/\*/g, starReplacement) };
                 }
                 break;
         }
