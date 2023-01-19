@@ -90,7 +90,7 @@ function annotation() {
 function annotation1() {
     return function (target) { };
 }
-var ClassA = /** @class */ (function () {
+var ClassA = exports.ClassA = /** @class */ (function () {
     function ClassA() {
         var init = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -116,4 +116,3 @@ var ClassA = /** @class */ (function () {
     ], ClassA);
     return ClassA;
 }());
-exports.ClassA = ClassA;

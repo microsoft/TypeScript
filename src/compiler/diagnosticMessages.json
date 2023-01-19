@@ -683,10 +683,6 @@
         "category": "Error",
         "code": 1218
     },
-    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.": {
-        "category": "Error",
-        "code": 1219
-    },
     "Generators are not allowed in an ambient context.": {
         "category": "Error",
         "code": 1221
@@ -907,41 +903,49 @@
         "category": "Error",
         "code": 1277
     },
-    "Namespaces are not allowed in global script files when '{0}' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.": {
+    "The runtime will invoke the decorator with {1} arguments, but the decorator expects {0}.": {
         "category": "Error",
         "code": 1278
     },
-    "Cannot access '{0}' from another file without qualification when '{1}' is enabled. Use '{2}' instead.": {
+    "The runtime will invoke the decorator with {1} arguments, but the decorator expects at least {0}.": {
         "category": "Error",
         "code": 1279
     },
-    "An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but '{0}' only refers to a type.": {
+    "Namespaces are not allowed in global script files when '{0}' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.": {
         "category": "Error",
         "code": 1280
     },
-    "An 'export =' declaration must reference a real value when 'verbatimModuleSyntax' is enabled, but '{0}' resolves to a type-only declaration.": {
+    "Cannot access '{0}' from another file without qualification when '{1}' is enabled. Use '{2}' instead.": {
         "category": "Error",
         "code": 1281
     },
-    "An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but '{0}' only refers to a type.": {
+    "An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but '{0}' only refers to a type.": {
         "category": "Error",
         "code": 1282
     },
-    "An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but '{0}' resolves to a type-only declaration.": {
+    "An 'export =' declaration must reference a real value when 'verbatimModuleSyntax' is enabled, but '{0}' resolves to a type-only declaration.": {
         "category": "Error",
         "code": 1283
     },
-    "ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+    "An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but '{0}' only refers to a type.": {
         "category": "Error",
         "code": 1284
     },
-    "A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+    "An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but '{0}' resolves to a type-only declaration.": {
         "category": "Error",
         "code": 1285
     },
-    "An import alias cannot resolve to a type or type-only declaration when 'verbatimModuleSyntax' is enabled.": {
+    "ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
         "category": "Error",
         "code": 1286
+    },
+    "A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1287
+    },
+    "An import alias cannot resolve to a type or type-only declaration when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1288
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1420,7 +1424,7 @@
         "category": "Error",
         "code": 1432
     },
-    "Decorators may not be applied to 'this' parameters.": {
+    "Neither decorators nor modifiers may be applied to 'this' parameters.": {
         "category": "Error",
         "code": 1433
     },
@@ -4273,7 +4277,7 @@
         "category": "Error",
         "code": 5095
     },
-    "Option 'allowImportingTsExtensions' can only be used when 'moduleResolution' is set to 'bundler' and either 'noEmit' or 'emitDeclarationOnly' is set.": {
+    "Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.": {
         "category": "Error",
         "code": 5096
     },
@@ -5287,6 +5291,14 @@
         "category": "Message",
         "code": 6276
     },
+    "Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.": {
+        "category": "Message",
+        "code": 6277
+    },
+    "There are types at '{0}', but this result could not be resolved when respecting package.json \"exports\". The '{1}' library may need to update its package.json or typings.": {
+        "category": "Message",
+        "code": 6278
+    },
 
     "Enable project compilation": {
         "category": "Message",
@@ -5699,7 +5711,7 @@
         "category": "Message",
         "code": 6629
     },
-    "Enable experimental support for TC39 stage 2 draft decorators.": {
+    "Enable experimental support for legacy experimental decorators.": {
         "category": "Message",
         "code": 6630
     },
@@ -6535,6 +6547,10 @@
     "Type satisfaction expressions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8037
+    },
+    "Decorators must come after 'export' or 'export default' in JavaScript files.": {
+        "category": "Error",
+        "code": 8038
     },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
@@ -7684,5 +7700,9 @@
     "The value '{0}' cannot be used here.": {
         "category": "Error",
         "code": 18050
+    },
+    "Compiler option '{0}' cannot be given an empty string.": {
+        "category": "Error",
+        "code": 18051
     }
 }

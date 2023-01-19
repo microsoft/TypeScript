@@ -1,7 +1,7 @@
 import * as ts from "./_namespaces/ts";
 import {
     __String,
-    addEmitFlags,
+    addInternalEmitFlags,
     addRange,
     append,
     arrayFrom,
@@ -10,7 +10,8 @@ import {
     AssertClause,
     BuilderProgram,
     CancellationToken,
-    canHaveModifiers,
+    canHaveDecorators,
+    canHaveIllegalDecorators,
     chainDiagnosticMessages,
     changeExtension,
     changesAffectingProgramStructure,
@@ -66,7 +67,6 @@ import {
     directorySeparator,
     DirectoryStructureHost,
     emitFiles,
-    EmitFlags,
     EmitHost,
     EmitOnly,
     EmitResult,
@@ -91,6 +91,7 @@ import {
     FileReference,
     filter,
     find,
+    findIndex,
     firstDefined,
     firstDefinedIterator,
     flatMap,
@@ -165,6 +166,7 @@ import {
     ImportDeclaration,
     ImportOrExportSpecifier,
     InputFiles,
+    InternalEmitFlags,
     inverseJsxOptionMap,
     isAmbientModule,
     isAnyImportOrReExport,
@@ -172,9 +174,12 @@ import {
     isArrayLiteralExpression,
     isBuildInfoFile,
     isCheckJsEnabledForFile,
+    isClassDeclaration,
     isDeclarationFileName,
     isDecorator,
+    isDefaultModifier,
     isExportDeclaration,
+    isExportModifier,
     isExternalModule,
     isExternalModuleNameRelative,
     isIdentifierText,
@@ -189,6 +194,7 @@ import {
     isModifier,
     isModuleDeclaration,
     isObjectLiteralExpression,
+    isParameter,
     isPlainJsFile,
     isRequireCall,
     isRootedDiskPath,
@@ -1541,7 +1547,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     let actualResolveTypeReferenceDirectiveNamesWorker: <T extends FileReference | string>(
-        typeDirectiveNames: T[],
+        typeDirectiveNames: readonly T[],
         containingFile: string,
         redirectedReference: ResolvedProjectReference | undefined,
         options: CompilerOptions,
@@ -1880,7 +1886,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return result;
     }
 
-    function resolveTypeReferenceDirectiveNamesWorker<T extends FileReference | string>(typeDirectiveNames: T[], containingFile: string | SourceFile, reusedNames: readonly T[] | undefined): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
+    function resolveTypeReferenceDirectiveNamesWorker<T extends FileReference | string>(typeDirectiveNames: readonly T[], containingFile: string | SourceFile, reusedNames: readonly T[] | undefined): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
         if (!typeDirectiveNames.length) return [];
         const containingSourceFile = !isString(containingFile) ? containingFile : undefined;
         const containingFileName = !isString(containingFile) ? getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory) : containingFile;
@@ -2114,7 +2120,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: readonly FileReference[], containingFile: SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: string[], containingFile: string): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
-    function resolveTypeReferenceDirectiveNamesReusingOldState<T extends string | FileReference>(typeDirectiveNames: T[], containingFile: string | SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
+    function resolveTypeReferenceDirectiveNamesReusingOldState<T extends string | FileReference>(typeDirectiveNames: readonly T[], containingFile: string | SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
         if (structureIsReused === StructureIsReused.Not) {
             // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
             // the best we can do is fallback to the default logic.
@@ -2936,8 +2942,33 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
 
             function walkArray(nodes: NodeArray<Node>, parent: Node) {
-                if (canHaveModifiers(parent) && parent.modifiers === nodes && some(nodes, isDecorator) && !options.experimentalDecorators) {
-                    diagnostics.push(createDiagnosticForNode(parent, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning));
+                if (canHaveIllegalDecorators(parent)) {
+                    const decorator = find(parent.modifiers, isDecorator);
+                    if (decorator) {
+                        // report illegal decorator
+                        diagnostics.push(createDiagnosticForNode(decorator, Diagnostics.Decorators_are_not_valid_here));
+                    }
+                }
+                else if (canHaveDecorators(parent) && parent.modifiers) {
+                    const decoratorIndex = findIndex(parent.modifiers, isDecorator);
+                    if (decoratorIndex >= 0) {
+                        if (isParameter(parent) && !options.experimentalDecorators) {
+                            // report illegall decorator on parameter
+                            diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
+                        }
+                        else if (isClassDeclaration(parent)) {
+                            const exportIndex = findIndex(parent.modifiers, isExportModifier);
+                            const defaultIndex = findIndex(parent.modifiers, isDefaultModifier);
+                            if (exportIndex >= 0 && decoratorIndex < exportIndex) {
+                                // report illegal decorator before `export default`
+                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_must_come_after_export_or_export_default_in_JavaScript_files));
+                            }
+                            else if (defaultIndex >= 0 && decoratorIndex < defaultIndex) {
+                                // report illegal decorator before `export default`
+                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
+                            }
+                        }
+                    }
                 }
 
                 switch (parent.kind) {
@@ -3078,7 +3109,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return result;
     }
 
-    function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
+    function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
         return sourceFile.isDeclarationFile ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
     }
 
@@ -3123,7 +3154,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function createSyntheticImport(text: string, file: SourceFile) {
         const externalHelpersModuleReference = factory.createStringLiteral(text);
         const importDecl = factory.createImportDeclaration(/*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference, /*assertClause*/ undefined);
-        addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
+        addInternalEmitFlags(importDecl, InternalEmitFlags.NeverApplyImportHelper);
         setParent(externalHelpersModuleReference, importDecl);
         setParent(importDecl, file);
         // explicitly unset the synthesized flag on these declarations so the checker API will answer questions about them
@@ -4222,7 +4253,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.allowImportingTsExtensions && !(options.noEmit || options.emitDeclarationOnly)) {
-            createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_moduleResolution_is_set_to_bundler_and_either_noEmit_or_emitDeclarationOnly_is_set);
+            createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_either_noEmit_or_emitDeclarationOnly_is_set);
         }
 
         const moduleResolution = getEmitModuleResolutionKind(options);

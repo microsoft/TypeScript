@@ -1,14 +1,14 @@
-/a.ts(2,10): error TS1280: An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
+/a.ts(2,10): error TS1282: An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
 /b.ts(1,1): error TS1484: 'I' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
-/d.ts(3,10): error TS1281: An 'export =' declaration must reference a real value when 'verbatimModuleSyntax' is enabled, but 'J' resolves to a type-only declaration.
-/e.d.ts(2,10): error TS1280: An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
+/d.ts(3,10): error TS1283: An 'export =' declaration must reference a real value when 'verbatimModuleSyntax' is enabled, but 'J' resolves to a type-only declaration.
+/e.d.ts(2,10): error TS1282: An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
 
 
 ==== /a.ts (1 errors) ====
     interface I {}
     export = I;
              ~
-!!! error TS1280: An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
+!!! error TS1282: An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
     
 ==== /b.ts (1 errors) ====
     import I = require("./a");
@@ -27,13 +27,13 @@
     import type J = require("./c");
     export = J;
              ~
-!!! error TS1281: An 'export =' declaration must reference a real value when 'verbatimModuleSyntax' is enabled, but 'J' resolves to a type-only declaration.
+!!! error TS1283: An 'export =' declaration must reference a real value when 'verbatimModuleSyntax' is enabled, but 'J' resolves to a type-only declaration.
     
 ==== /e.d.ts (1 errors) ====
     interface I {}
     export = I;
              ~
-!!! error TS1280: An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
+!!! error TS1282: An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
     
 ==== /f.ts (0 errors) ====
     import type I = require("./e");

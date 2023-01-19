@@ -2,8 +2,8 @@
 /b.ts(5,10): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
 /b.ts(6,10): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
 /c.ts(1,10): error TS1485: 'AClass' resolves to a type-only declaration and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
-/main6.ts(2,16): error TS1282: An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
-/main7.ts(2,16): error TS1283: An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but 'C' resolves to a type-only declaration.
+/main6.ts(2,16): error TS1284: An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
+/main7.ts(2,16): error TS1285: An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but 'C' resolves to a type-only declaration.
 
 
 ==== /a.ts (0 errors) ====
@@ -44,11 +44,11 @@
     interface I {}
     export default I; // error
                    ~
-!!! error TS1282: An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
+!!! error TS1284: An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but 'I' only refers to a type.
     
 ==== /main7.ts (1 errors) ====
     import type C from "./main5";
     export default C; // error
                    ~
-!!! error TS1283: An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but 'C' resolves to a type-only declaration.
+!!! error TS1285: An 'export default' must reference a real value when 'verbatimModuleSyntax' is enabled, but 'C' resolves to a type-only declaration.
     

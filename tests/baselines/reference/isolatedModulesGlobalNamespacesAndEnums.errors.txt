@@ -1,12 +1,12 @@
-tests/cases/compiler/enum2.ts(3,9): error TS1279: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.
-tests/cases/compiler/enum2.ts(4,9): error TS1279: Cannot access 'X' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.X' instead.
-tests/cases/compiler/script-namespaces.ts(1,11): error TS1278: Namespaces are not allowed in global script files when 'isolatedModules' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.
+tests/cases/compiler/enum2.ts(3,9): error TS1281: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.
+tests/cases/compiler/enum2.ts(4,9): error TS1281: Cannot access 'X' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.X' instead.
+tests/cases/compiler/script-namespaces.ts(1,11): error TS1280: Namespaces are not allowed in global script files when 'isolatedModules' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.
 
 
 ==== tests/cases/compiler/script-namespaces.ts (1 errors) ====
     namespace Instantiated {
               ~~~~~~~~~~~~
-!!! error TS1278: Namespaces are not allowed in global script files when 'isolatedModules' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.
+!!! error TS1280: Namespaces are not allowed in global script files when 'isolatedModules' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.
         export const x = 1;
     }
     namespace Uninstantiated {
@@ -31,10 +31,10 @@ tests/cases/compiler/script-namespaces.ts(1,11): error TS1278: Namespaces are no
         D = d,
         E = A, // error
             ~
-!!! error TS1279: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.
+!!! error TS1281: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.
         Y = X, // error
             ~
-!!! error TS1279: Cannot access 'X' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.X' instead.
+!!! error TS1281: Cannot access 'X' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.X' instead.
         Z = Enum.A
     }
     
