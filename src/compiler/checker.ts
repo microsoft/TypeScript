@@ -26920,7 +26920,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function getNarrowedTypeWorker(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
             if (!assumeTrue) {
-                const trueType = getNarrowedType(type, candidate, /*assumeTrue*/ true, checkDerived);
+                if (checkDerived) {
+                    return filterType(type, t => !isTypeDerivedFrom(t, candidate));
+                }
+                const trueType = getNarrowedType(type, candidate, /*assumeTrue*/ true, /*checkDerived*/ false);
                 return filterType(type, t => !isTypeSubsetOf(t, trueType));
             }
             if (type.flags & TypeFlags.AnyOrUnknown) {
