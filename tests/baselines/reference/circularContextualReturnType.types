@@ -2,20 +2,20 @@
 // Repro from #17711
 
 Object.freeze({
->Object.freeze({    foo() {        return Object.freeze('a');    },}) : Readonly<{ foo(): string; }>
->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze({    foo() {        return Object.freeze('a');    },}) : Readonly<{ readonly foo: () => "a"; }>
+>Object.freeze : { <T extends Function>(f: T): T; <const T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <const T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
->{    foo() {        return Object.freeze('a');    },} : { foo(): string; }
+>freeze : { <T extends Function>(f: T): T; <const T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <const T>(o: T): Readonly<T>; }
+>{    foo() {        return Object.freeze('a');    },} : { foo(): "a"; }
 
     foo() {
->foo : () => string
+>foo : () => "a"
 
         return Object.freeze('a');
->Object.freeze('a') : string
->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze('a') : "a"
+>Object.freeze : { <T extends Function>(f: T): T; <const T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <const T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T extends Function>(f: T): T; <const T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <const T>(o: T): Readonly<T>; }
 >'a' : "a"
 
     },

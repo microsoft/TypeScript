@@ -1,6 +1,6 @@
 === tests/cases/compiler/usage.js ===
 const { Thing, useThing, cbThing } = require("./index");
->Thing : Readonly<{ a: "thing"; b: "chill"; }>
+>Thing : Readonly<{ readonly a: "thing"; readonly b: "chill"; }>
 >useThing : (x: string) => void
 >cbThing : (x: (x: string) => void) => void
 >require("./index") : typeof import("tests/cases/compiler/index")
@@ -11,7 +11,7 @@ useThing(Thing.a);
 >useThing(Thing.a) : void
 >useThing : (x: string) => void
 >Thing.a : "thing"
->Thing : Readonly<{ a: "thing"; b: "chill"; }>
+>Thing : Readonly<{ readonly a: "thing"; readonly b: "chill"; }>
 >a : "thing"
 
 /**
@@ -47,11 +47,11 @@ cbThing(type => {
 === tests/cases/compiler/index.js ===
 /** @enum {string} */
 const Thing = Object.freeze({
->Thing : Readonly<{ a: "thing"; b: "chill"; }>
->Object.freeze({    a: "thing",    b: "chill"}) : Readonly<{ a: "thing"; b: "chill"; }>
->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Thing : Readonly<{ readonly a: "thing"; readonly b: "chill"; }>
+>Object.freeze({    a: "thing",    b: "chill"}) : Readonly<{ readonly a: "thing"; readonly b: "chill"; }>
+>Object.freeze : { <T extends Function>(f: T): T; <const T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <const T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T extends Function>(f: T): T; <const T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <const T>(o: T): Readonly<T>; }
 >{    a: "thing",    b: "chill"} : { a: "thing"; b: "chill"; }
 
     a: "thing",
@@ -65,11 +65,11 @@ const Thing = Object.freeze({
 });
 
 exports.Thing = Thing;
->exports.Thing = Thing : Readonly<{ a: "thing"; b: "chill"; }>
->exports.Thing : Readonly<{ a: "thing"; b: "chill"; }>
+>exports.Thing = Thing : Readonly<{ readonly a: "thing"; readonly b: "chill"; }>
+>exports.Thing : Readonly<{ readonly a: "thing"; readonly b: "chill"; }>
 >exports : typeof import("tests/cases/compiler/index")
->Thing : Readonly<{ a: "thing"; b: "chill"; }>
->Thing : Readonly<{ a: "thing"; b: "chill"; }>
+>Thing : Readonly<{ readonly a: "thing"; readonly b: "chill"; }>
+>Thing : Readonly<{ readonly a: "thing"; readonly b: "chill"; }>
 
 /**
  * @param {Thing} x

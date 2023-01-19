@@ -33,8 +33,10 @@ const a = Object.freeze([1, 2, 3]);
 
 a[0] = a[2].toString();
 >a : Symbol(a, Decl(objectFreeze.ts, 7, 5))
+>0 : Symbol(0)
 >a[2].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(objectFreeze.ts, 7, 5))
+>2 : Symbol(2)
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 const o = Object.freeze({ a: 1, b: "string", c: true });
