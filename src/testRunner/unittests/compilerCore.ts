@@ -22,7 +22,7 @@ describe("unittests:: compilerCore", () => {
             assert.isFalse(ts.equalOwnProperties({}, { a: 0 }, trythyTest), "missing left falsey property");
             assert.isFalse(ts.equalOwnProperties({ a: 1 }, {}, trythyTest), "missing right truthy property");
             assert.isFalse(ts.equalOwnProperties({ a: 0 }, {}, trythyTest), "missing right falsey property");
-            assert.isTrue(ts.equalOwnProperties({ a: 1 }, { a: "foo" }, trythyTest), "valid equality");
+            assert.isTrue(ts.equalOwnProperties({ a: 1 }, { a: "foo" as any }, trythyTest), "valid equality");
         });
         it("all equal", () => {
             assert.isFalse(ts.equalOwnProperties({}, { a: 1 }, () => true), "missing left property");

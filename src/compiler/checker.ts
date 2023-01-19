@@ -2174,7 +2174,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (jsxFragmentPragma) {
                         const chosenPragma = isArray(jsxFragmentPragma) ? jsxFragmentPragma[0] : jsxFragmentPragma;
                         file.localJsxFragmentFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
-                        visitNode(file.localJsxFragmentFactory, markAsSynthetic);
+                        visitNode(file.localJsxFragmentFactory, markAsSynthetic, isEntityName);
                         if (file.localJsxFragmentFactory) {
                             return file.localJsxFragmentNamespace = getFirstIdentifier(file.localJsxFragmentFactory).escapedText;
                         }
@@ -2220,14 +2220,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (jsxPragma) {
             const chosenPragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
             file.localJsxFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
-            visitNode(file.localJsxFactory, markAsSynthetic);
+            visitNode(file.localJsxFactory, markAsSynthetic, isEntityName);
             if (file.localJsxFactory) {
                 return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
             }
         }
     }
 
-    function markAsSynthetic(node: Node): VisitResult<Node> {
+    function markAsSynthetic<T extends Node>(node: T): VisitResult<T> {
         setTextRangePosEnd(node, -1, -1);
         return visitEachChild(node, markAsSynthetic, nullTransformationContext);
     }
@@ -4026,7 +4026,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return valueSymbol;
         }
         const result = createSymbol(valueSymbol.flags | typeSymbol.flags, valueSymbol.escapedName);
-        result.declarations = deduplicate(concatenate(valueSymbol.declarations, typeSymbol.declarations), equateValues);
+        Debug.assert(valueSymbol.declarations || typeSymbol.declarations);
+        result.declarations = deduplicate(concatenate(valueSymbol.declarations!, typeSymbol.declarations), equateValues);
         result.parent = valueSymbol.parent || typeSymbol.parent;
         if (valueSymbol.valueDeclaration) result.valueDeclaration = valueSymbol.valueDeclaration;
         if (typeSymbol.members) result.members = new Map(typeSymbol.members);
@@ -4980,7 +4981,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol;
     function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
-    function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol | undefined {
+    function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined {
         if (moduleSymbol?.exports) {
             const exportEquals = resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias);
             const exported = getCommonJsExportEquals(getMergedSymbol(exportEquals), getMergedSymbol(moduleSymbol));
@@ -6330,7 +6331,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (objectFlags & ObjectFlags.Reference) {
                 Debug.assert(!!(type.flags & TypeFlags.Object));
-                return (type as TypeReference).node ? visitAndTransformType(type, typeReferenceToTypeNode) : typeReferenceToTypeNode(type as TypeReference);
+                return (type as TypeReference).node ? visitAndTransformType(type as TypeReference, typeReferenceToTypeNode) : typeReferenceToTypeNode(type as TypeReference);
             }
             if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                 if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
@@ -6584,11 +6585,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            function visitAndTransformType<T extends TypeNode>(type: Type, transform: (type: Type) => T) {
+            function visitAndTransformType<T extends Type>(type: T, transform: (type: T) => TypeNode) {
                 const typeId = type.id;
                 const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
-                const id = getObjectFlags(type) & ObjectFlags.Reference && (type as TypeReference).node ? "N" + getNodeId((type as TypeReference).node!) :
-                    type.flags & TypeFlags.Conditional ? "N" + getNodeId((type as ConditionalType).root.node) :
+                const id = getObjectFlags(type) & ObjectFlags.Reference && (type as TypeReference & T).node ? "N" + getNodeId((type as TypeReference & T).node!) :
+                    type.flags & TypeFlags.Conditional ? "N" + getNodeId((type as ConditionalType & T).root.node) :
                     type.symbol ? (isConstructorObject ? "+" : "") + getSymbolId(type.symbol) :
                     undefined;
                 // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
@@ -6611,7 +6612,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         context.truncating = true;
                     }
                     context.approximateLength += cachedResult.addedLength;
-                    return deepCloneOrReuseNode(cachedResult.node) as T;
+                    return deepCloneOrReuseNode(cachedResult.node);
                 }
 
                 let depth: number | undefined;
@@ -6635,20 +6636,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return result;
 
-                function deepCloneOrReuseNode(node: Node): Node {
+                function deepCloneOrReuseNode<T extends Node>(node: T): T {
                     if (!nodeIsSynthesized(node) && getParseTreeNode(node) === node) {
                         return node;
                     }
                     return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext, deepCloneOrReuseNodes)), node);
                 }
 
-                function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
-                function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
-                function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined {
+                function deepCloneOrReuseNodes(
+                    nodes: NodeArray<Node> | undefined,
+                    visitor: Visitor,
+                    test?: (node: Node) => boolean,
+                    start?: number,
+                    count?: number,
+                ): NodeArray<Node> | undefined {
                     if (nodes && nodes.length === 0) {
                         // Ensure we explicitly make a copy of an empty array; visitNodes will not do this unless the array has elements,
                         // which can lead to us reusing the same empty NodeArray more than once within the same AST during type noding.
-                        return setTextRange(factory.createNodeArray<T>(/*nodes*/ undefined, nodes.hasTrailingComma), nodes);
+                        return setTextRange(factory.createNodeArray(/*nodes*/ undefined, nodes.hasTrailingComma), nodes);
                     }
                     return visitNodes(nodes, visitor, test, start, count);
                 }
@@ -7956,13 +7961,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             let hadError = false;
             const file = getSourceFileOfNode(existing);
-            const transformed = visitNode(existing, visitExistingNodeTreeSymbols);
+            const transformed = visitNode(existing, visitExistingNodeTreeSymbols, isTypeNode);
             if (hadError) {
                 return undefined;
             }
             return transformed === existing ? setTextRange(factory.cloneNode(existing), existing) : transformed;
 
-            function visitExistingNodeTreeSymbols<T extends Node>(node: T): Node {
+            function visitExistingNodeTreeSymbols(node: Node): Node {
                 // We don't _actually_ support jsdoc namepath types, emit `any` instead
                 if (isJSDocAllType(node) || node.kind === SyntaxKind.JSDocNamepathType) {
                     return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -7971,16 +7976,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
                 }
                 if (isJSDocNullableType(node)) {
-                    return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols), factory.createLiteralTypeNode(factory.createNull())]);
+                    return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode), factory.createLiteralTypeNode(factory.createNull())]);
                 }
                 if (isJSDocOptionalType(node)) {
-                    return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols), factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
+                    return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode), factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
                 }
                 if (isJSDocNonNullableType(node)) {
                     return visitNode(node.type, visitExistingNodeTreeSymbols);
                 }
                 if (isJSDocVariadicType(node)) {
-                    return factory.createArrayTypeNode(visitNode((node as JSDocVariadicType).type, visitExistingNodeTreeSymbols));
+                    return factory.createArrayTypeNode(visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode));
                 }
                 if (isJSDocTypeLiteral(node)) {
                     return factory.createTypeLiteralNode(map(node.jsDocPropertyTags, t => {
@@ -7992,7 +7997,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             /*modifiers*/ undefined,
                             name,
                             t.isBracketed || t.typeExpression && isJSDocOptionalType(t.typeExpression.type) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                            overrideTypeNode || (t.typeExpression && visitNode(t.typeExpression.type, visitExistingNodeTreeSymbols)) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                            overrideTypeNode || (t.typeExpression && visitNode(t.typeExpression.type, visitExistingNodeTreeSymbols, isTypeNode)) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                         );
                     }));
                 }
@@ -8007,9 +8012,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             /*dotdotdotToken*/ undefined,
                             "x",
                             /*questionToken*/ undefined,
-                            visitNode(node.typeArguments![0], visitExistingNodeTreeSymbols)
+                            visitNode(node.typeArguments![0], visitExistingNodeTreeSymbols, isTypeNode)
                         )],
-                        visitNode(node.typeArguments![1], visitExistingNodeTreeSymbols)
+                        visitNode(node.typeArguments![1], visitExistingNodeTreeSymbols, isTypeNode)
                     )]);
                 }
                 if (isJSDocFunctionType(node)) {
@@ -8017,30 +8022,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         let newTypeNode: TypeNode | undefined;
                         return factory.createConstructorTypeNode(
                             /*modifiers*/ undefined,
-                            visitNodes(node.typeParameters, visitExistingNodeTreeSymbols),
+                            visitNodes(node.typeParameters, visitExistingNodeTreeSymbols, isTypeParameterDeclaration),
                             mapDefined(node.parameters, (p, i) => p.name && isIdentifier(p.name) && p.name.escapedText === "new" ? (newTypeNode = p.type, undefined) : factory.createParameterDeclaration(
                                 /*modifiers*/ undefined,
                                 getEffectiveDotDotDotForParameter(p),
                                 getNameForJSDocFunctionParameter(p, i),
                                 p.questionToken,
-                                visitNode(p.type, visitExistingNodeTreeSymbols),
+                                visitNode(p.type, visitExistingNodeTreeSymbols, isTypeNode),
                                 /*initializer*/ undefined
                             )),
-                            visitNode(newTypeNode || node.type, visitExistingNodeTreeSymbols) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                            visitNode(newTypeNode || node.type, visitExistingNodeTreeSymbols, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                         );
                     }
                     else {
                         return factory.createFunctionTypeNode(
-                            visitNodes(node.typeParameters, visitExistingNodeTreeSymbols),
+                            visitNodes(node.typeParameters, visitExistingNodeTreeSymbols, isTypeParameterDeclaration),
                             map(node.parameters, (p, i) => factory.createParameterDeclaration(
                                 /*modifiers*/ undefined,
                                 getEffectiveDotDotDotForParameter(p),
                                 getNameForJSDocFunctionParameter(p, i),
                                 p.questionToken,
-                                visitNode(p.type, visitExistingNodeTreeSymbols),
+                                visitNode(p.type, visitExistingNodeTreeSymbols, isTypeNode),
                                 /*initializer*/ undefined
                             )),
-                            visitNode(node.type, visitExistingNodeTreeSymbols) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                            visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                         );
                     }
                 }
@@ -8797,7 +8802,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         /*isTypeOnly*/ false,
                         factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, d.expression, factory.createIdentifier(InternalSymbolName.Default))])
                     ) : d);
-                    const exportModifierStripped = every(defaultReplaced, d => hasSyntacticModifier(d, ModifierFlags.Export)) ? map(defaultReplaced, removeExportModifier) : defaultReplaced;
+                    const exportModifierStripped = every(defaultReplaced, d => hasSyntacticModifier(d, ModifierFlags.Export)) ? map(defaultReplaced as Extract<HasModifiers, Statement>[], removeExportModifier) : defaultReplaced;
                     fakespace = factory.updateModuleDeclaration(
                         fakespace,
                         fakespace.modifiers,
@@ -9015,7 +9020,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.ImportEqualsDeclaration:
                         // This _specifically_ only exists to handle json declarations - where we make aliases, but since
                         // we emit no declarations for the json document, must not refer to it in the declarations
-                        if (target.escapedName === InternalSymbolName.ExportEquals && some(target.declarations, isJsonSourceFile)) {
+                        if (target.escapedName === InternalSymbolName.ExportEquals && some(target.declarations, d => isSourceFile(d) && isJsonSourceFile(d))) {
                             serializeMaybeAliasAssignment(symbol);
                             break;
                         }
@@ -20155,7 +20160,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
 
-        function isRelatedToWorker(source: Type, target: Type, reportErrors: boolean) {
+        function isRelatedToWorker(source: Type, target: Type, reportErrors?: boolean) {
             return isRelatedTo(source, target, RecursionFlags.Both, reportErrors);
         }
 
@@ -22658,7 +22663,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getCombinedTypeFlags(types: Type[]): TypeFlags {
-        return reduceLeft(types, (flags, t) => flags | (t.flags & TypeFlags.Union ? getCombinedTypeFlags((t as UnionType).types) : t.flags), 0);
+        return reduceLeft(types, (flags, t) => flags | (t.flags & TypeFlags.Union ? getCombinedTypeFlags((t as UnionType).types) : t.flags), 0 as TypeFlags);
     }
 
     function getCommonSupertype(types: Type[]): Type {
@@ -24014,7 +24019,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 inferWithPriority(getSubstitutionIntersection(source as SubstitutionType), target, InferencePriority.SubstituteSource); // Make substitute inference at a lower priority
             }
             else if (target.flags & TypeFlags.Conditional) {
-                invokeOnce(source, target, inferToConditionalType);
+                invokeOnce(source, (target as ConditionalType), inferToConditionalType);
             }
             else if (target.flags & TypeFlags.UnionOrIntersection) {
                 inferToMultipleTypes(source, (target as UnionOrIntersectionType).types, target.flags);
@@ -24076,7 +24081,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             priority = savePriority;
         }
 
-        function invokeOnce(source: Type, target: Type, action: (source: Type, target: Type) => void) {
+        function invokeOnce<Source extends Type, Target extends Type>(source: Source, target: Target, action: (source: Source, target: Target) => void) {
             const key = source.id + "," + target.id;
             const status = visited && visited.get(key);
             if (status !== undefined) {
@@ -24438,7 +24443,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         else {
                             const middleLength = targetArity - startLength - endLength;
                             if (middleLength === 2) {
-                                if (elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                if (elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic) {
                                     // Middle of target is [...T, ...U] and source is tuple type
                                     const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
                                     if (targetInfo && targetInfo.impliedArity !== undefined) {
@@ -24458,7 +24463,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength + impliedArity, endLength)!, elementTypes[startLength + 1]);
                                     }
                                 }
-                                else if (elementFlags[startLength] & ElementFlags.Rest && elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                else if (elementFlags[startLength] & ElementFlags.Rest && elementFlags[startLength + 1] & ElementFlags.Variadic) {
                                     // Middle of target is [...rest, ...T] and source is tuple type
                                     // if T is constrained by a fixed-size tuple we might be able to use its arity to infer T
                                     const param = getInferenceInfoForType(elementTypes[startLength + 1])?.typeParameter;
@@ -24479,12 +24484,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 // Middle of target is exactly one variadic element. Infer the slice between the fixed parts in the source.
                                 // If target ends in optional element(s), make a lower priority a speculative inference.
                                 const endsInOptional = target.target.elementFlags[targetArity - 1] & ElementFlags.Optional;
-                                const sourceSlice = isTupleType(source) ? sliceTupleType(source, startLength, endLength) : createArrayType(getTypeArguments(source)[0]);
+                                const sourceSlice = sliceTupleType(source, startLength, endLength);
                                 inferWithPriority(sourceSlice, elementTypes[startLength], endsInOptional ? InferencePriority.SpeculativeTuple : 0);
                             }
                             else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Rest) {
                                 // Middle of target is exactly one rest element. If middle of source is not empty, infer union of middle element types.
-                                const restType = isTupleType(source) ? getElementTypeOfSliceOfTupleType(source, startLength, endLength) : getTypeArguments(source)[0];
+                                const restType = getElementTypeOfSliceOfTupleType(source, startLength, endLength);
                                 if (restType) {
                                     inferFromTypes(restType, elementTypes[startLength]);
                                 }
@@ -29108,9 +29113,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getStrictOptionValue(compilerOptions, "noImplicitAny")
             ? reduceLeft(
                 signatures,
-                (left, right) =>
+                (left: Signature | undefined, right) =>
                     left === right || !left ? left
-                    : compareTypeParametersIdentical(left.typeParameters, right.typeParameters) ? combineSignaturesOfIntersectionMembers(left, right)
+                    : compareTypeParametersIdentical(left.typeParameters, right!.typeParameters) ? combineSignaturesOfIntersectionMembers(left, right!)
                     : undefined)
             : undefined;
     }

@@ -406,11 +406,11 @@ const enum SpeculationKind {
     Reparse
 }
 
-let NodeConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Node;
+let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => Node;
+let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => Node;
 
 /**
  * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/deprecatedCompat/deprecations.ts`.
@@ -1426,9 +1426,9 @@ namespace Parser {
     // capture constructors in 'initializeState' to avoid null checks
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
+    let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
+    let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
 
     function countNode(node: Node) {
         nodeCount++;
@@ -2543,9 +2543,9 @@ namespace Parser {
 
     function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: false, diagnosticMessage?: DiagnosticMessage, arg0?: any): T;
     function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T;
-    function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T {
+    function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage?: DiagnosticMessage, arg0?: any): T {
         if (reportAtCurrentPosition) {
-            parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
+            parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage!, arg0);
         }
         else if (diagnosticMessage) {
             parseErrorAtCurrentToken(diagnosticMessage, arg0);
@@ -9639,7 +9639,9 @@ namespace IncrementalParser {
         }
     }
 
-    function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+    function moveElementEntirelyPastChangeRange(element: IncrementalNode, isArray: false, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+    function moveElementEntirelyPastChangeRange(element: IncrementalNodeArray, isArray: true, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+    function moveElementEntirelyPastChangeRange(element: IncrementalNode | IncrementalNodeArray, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
         if (isArray) {
             visitArray(element as IncrementalNodeArray);
         }
@@ -9666,7 +9668,7 @@ namespace IncrementalParser {
                 Debug.assert(text === newText.substring(node.pos, node.end));
             }
 
-            forEachChild(node, visitNode, visitArray);
+            forEachChild(node, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
             if (hasJSDocNodes(node)) {
                 for (const jsDocComment of node.jsDoc!) {
                     visitNode(jsDocComment as Node as IncrementalNode);
@@ -9819,7 +9821,7 @@ namespace IncrementalParser {
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                forEachChild(child, visitNode, visitArray);
+                forEachChild(child, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
                 if (hasJSDocNodes(child)) {
                     for (const jsDocComment of child.jsDoc!) {
                         visitNode(jsDocComment as Node as IncrementalNode);
