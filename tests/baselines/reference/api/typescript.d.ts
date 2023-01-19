@@ -400,14 +400,15 @@ declare namespace ts {
         JSDocSeeTag = 350,
         JSDocPropertyTag = 351,
         JSDocThrowsTag = 352,
-        SyntaxList = 353,
-        NotEmittedStatement = 354,
-        PartiallyEmittedExpression = 355,
-        CommaListExpression = 356,
-        MergeDeclarationMarker = 357,
-        EndOfDeclarationMarker = 358,
-        SyntheticReferenceExpression = 359,
-        Count = 360,
+        JSDocSatisfiesTag = 353,
+        SyntaxList = 354,
+        NotEmittedStatement = 355,
+        PartiallyEmittedExpression = 356,
+        CommaListExpression = 357,
+        MergeDeclarationMarker = 358,
+        EndOfDeclarationMarker = 359,
+        SyntheticReferenceExpression = 360,
+        Count = 361,
         FirstAssignment = 63,
         LastAssignment = 78,
         FirstCompoundAssignment = 64,
@@ -436,9 +437,9 @@ declare namespace ts {
         LastStatement = 256,
         FirstNode = 163,
         FirstJSDocNode = 312,
-        LastJSDocNode = 352,
+        LastJSDocNode = 353,
         FirstJSDocTagNode = 330,
-        LastJSDocTagNode = 352
+        LastJSDocTagNode = 353
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -2035,6 +2036,10 @@ declare namespace ts {
         readonly jsDocPropertyTags?: readonly JSDocPropertyLikeTag[];
         /** If true, then this type literal represents an *array* of its type. */
         readonly isArrayType: boolean;
+    }
+    interface JSDocSatisfiesTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocSatisfiesTag;
+        readonly typeExpression: JSDocTypeExpression;
     }
     enum FlowFlags {
         Unreachable = 1,
@@ -3882,12 +3887,14 @@ declare namespace ts {
         updateJSDocReadonlyTag(node: JSDocReadonlyTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocReadonlyTag;
         createJSDocUnknownTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocUnknownTag;
         updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined): JSDocUnknownTag;
-        createJSDocDeprecatedTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
-        updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
-        createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
-        updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+        createJSDocDeprecatedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
+        updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
+        createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+        updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
         createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
         updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
+        createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
+        updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -4250,16 +4257,39 @@ declare namespace ts {
     /**
      * A function that accepts and possibly transforms a node.
      */
-    type Visitor = (node: Node) => VisitResult<Node>;
+    type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn | undefined> = (node: TIn) => VisitResult<TOut>;
+    /**
+     * A function that walks a node using the given visitor, lifting node arrays into single nodes,
+     * returning an node which satisfies the test.
+     *
+     * - If the input node is undefined, then the output is undefined.
+     * - If the visitor returns undefined, then the output is undefined.
+     * - If the output node is not undefined, then it will satisfy the test function.
+     * - In order to obtain a return type that is more specific than `Node`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
+     *
+     * For the canonical implementation of this type, @see {visitNode}.
+     */
     interface NodeVisitor {
-        <T extends Node>(nodes: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T;
-        <T extends Node>(nodes: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined;
+        <TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited>, test: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | (TIn & undefined) | (TVisited & undefined);
+        <TIn extends Node | undefined, TVisited extends Node | undefined>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited>, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => Node): Node | (TIn & undefined) | (TVisited & undefined);
     }
+    /**
+     * A function that walks a node array using the given visitor, returning an array whose contents satisfy the test.
+     *
+     * - If the input node array is undefined, the output is undefined.
+     * - If the visitor can return undefined, the node it visits in the array will be reused.
+     * - If the output node array is not undefined, then its contents will satisfy the test.
+     * - In order to obtain a return type that is more specific than `NodeArray<Node>`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
+     *
+     * For the canonical implementation of this type, @see {visitNodes}.
+     */
     interface NodesVisitor {
-        <T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
-        <T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
+        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined>, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
+        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined>, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
     }
-    type VisitResult<T extends Node> = T | readonly T[] | undefined;
+    type VisitResult<T extends Node | undefined> = T | readonly Node[];
     interface Printer {
         /**
          * Print a node and its subtree as-is, without any emit transformations.
@@ -4473,6 +4503,7 @@ declare namespace ts {
     }
     type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
     type DirectoryWatcherCallback = (fileName: string) => void;
+    type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
     interface System {
         args: string[];
         newLine: string;
@@ -4531,8 +4562,8 @@ declare namespace ts {
     function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
     function forEachTrailingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
     function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
-    function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U | undefined;
-    function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U | undefined;
+    function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U): U | undefined;
+    function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U): U | undefined;
     function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
     /** Optionally, get the shebang */
@@ -4611,7 +4642,7 @@ declare namespace ts {
     function getTypeParameterOwner(d: Declaration): Declaration | undefined;
     function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration;
     function isEmptyBindingPattern(node: BindingName): node is BindingPattern;
-    function isEmptyBindingElement(node: BindingElement): boolean;
+    function isEmptyBindingElement(node: BindingElement | ArrayBindingElement): boolean;
     function walkUpBindingElementsAndPatterns(binding: BindingElement): VariableDeclaration | ParameterDeclaration;
     function getCombinedModifierFlags(node: Declaration): ModifierFlags;
     function getCombinedNodeFlags(node: Node): NodeFlags;
@@ -4628,7 +4659,7 @@ declare namespace ts {
     function getOriginalNode(node: Node): Node;
     function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
     function getOriginalNode(node: Node | undefined): Node | undefined;
-    function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node | undefined) => node is T): T | undefined;
+    function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node) => node is T): T | undefined;
     /**
      * Iterates through the parent chain of a node and performs the callback on each parent until the callback
      * returns a truthy value, then returns that value.
@@ -4734,6 +4765,7 @@ declare namespace ts {
     function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined;
     /** Gets the JSDoc template tag for the node if present */
     function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined;
+    function getJSDocSatisfiesTag(node: Node): JSDocSatisfiesTag | undefined;
     /** Gets the JSDoc type tag for the node if present and valid */
     function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined;
     /**
@@ -5136,6 +5168,7 @@ declare namespace ts {
     function isJSDocUnknownTag(node: Node): node is JSDocUnknownTag;
     function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag;
     function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
+    function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
     function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
     function canHaveModifiers(node: Node): node is HasModifiers;
@@ -5344,23 +5377,41 @@ declare namespace ts {
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
+     * - If the input node is undefined, then the output is undefined.
+     * - If the visitor returns undefined, then the output is undefined.
+     * - If the output node is not undefined, then it will satisfy the test function.
+     * - In order to obtain a return type that is more specific than `Node`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
+     *
      * @param node The Node to visit.
      * @param visitor The callback used to visit the Node.
      * @param test A callback to execute to verify the Node is valid.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    function visitNode<T extends Node>(node: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T;
+    function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited>, test: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | (TIn & undefined) | (TVisited & undefined);
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
+     * - If the input node is undefined, then the output is undefined.
+     * - If the visitor returns undefined, then the output is undefined.
+     * - If the output node is not undefined, then it will satisfy the test function.
+     * - In order to obtain a return type that is more specific than `Node`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
+     *
      * @param node The Node to visit.
      * @param visitor The callback used to visit the Node.
      * @param test A callback to execute to verify the Node is valid.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined;
+    function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited>, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => Node): Node | (TIn & undefined) | (TVisited & undefined);
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     *
+     * - If the input node array is undefined, the output is undefined.
+     * - If the visitor can return undefined, the node it visits in the array will be reused.
+     * - If the output node array is not undefined, then its contents will satisfy the test.
+     * - In order to obtain a return type that is more specific than `NodeArray<Node>`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
      *
      * @param nodes The NodeArray to visit.
      * @param visitor The callback used to visit a Node.
@@ -5368,9 +5419,15 @@ declare namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
+    function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined>, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     *
+     * - If the input node array is undefined, the output is undefined.
+     * - If the visitor can return undefined, the node it visits in the array will be reused.
+     * - If the output node array is not undefined, then its contents will satisfy the test.
+     * - In order to obtain a return type that is more specific than `NodeArray<Node>`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
      *
      * @param nodes The NodeArray to visit.
      * @param visitor The callback used to visit a Node.
@@ -5378,7 +5435,7 @@ declare namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
+    function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined>, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
     /**
      * Starts a new lexical environment and visits a statement list, ending the lexical environment
      * and merging hoisted declarations upon completion.

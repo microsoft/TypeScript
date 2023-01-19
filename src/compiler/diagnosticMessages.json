@@ -4233,7 +4233,7 @@
         "category": "Error",
         "code": 5095
     },
-    "Option 'allowImportingTsExtensions' can only be used when 'moduleResolution' is set to 'bundler' and either 'noEmit' or 'emitDeclarationOnly' is set.": {
+    "Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.": {
         "category": "Error",
         "code": 5096
     },
@@ -7636,5 +7636,9 @@
     "The value '{0}' cannot be used here.": {
         "category": "Error",
         "code": 18050
+    },
+    "Compiler option '{0}' cannot be given an empty string.": {
+        "category": "Error",
+        "code": 18051
     }
 }

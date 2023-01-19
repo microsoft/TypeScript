@@ -177,6 +177,10 @@ describe("unittests:: JSDocParsing", () => {
   * @type {number}
   */`);
 
+            parsesCorrectly("satisfiesTag",
+                `/**
+  * @satisfies {number}
+  */`);
 
             parsesCorrectly("returnTag1",
                 `/**

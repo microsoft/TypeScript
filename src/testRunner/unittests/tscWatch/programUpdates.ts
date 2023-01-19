@@ -1957,4 +1957,42 @@ import { x } from "../b";`),
             },
         ]
     });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "when changing `allowImportingTsExtensions` of config file",
+        commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+        sys: () => {
+            const module1: File = {
+                path: `/user/username/projects/myproject/a.ts`,
+                content: ``
+            };
+            const module2: File = {
+                path: `/user/username/projects/myproject/b.ts`,
+                content: `import "./a.ts";`
+            };
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        noEmit: true,
+                        allowImportingTsExtensions: false
+                    }
+                }),
+            };
+            return createWatchedSystem([module1, module2, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Change allowImportingTsExtensions to true",
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
+                    compilerOptions: {
+                        noEmit: true,
+                        allowImportingTsExtensions: true
+                    }
+                })),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+            },
+        ]
+    });
 });
