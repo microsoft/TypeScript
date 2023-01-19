@@ -481,7 +481,7 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
             });
             this.addProtocolHandler(command, this.exceptionRaisingHandler);
         }
-        send(msg: ts.server.protocol.Message) {
+        override send(msg: ts.server.protocol.Message) {
             this.lastSent = msg;
         }
     }
@@ -530,7 +530,7 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
                 return { response: undefined, responseRequired: true };
             });
         }
-        send(msg: ts.server.protocol.Message) {
+        override send(msg: ts.server.protocol.Message) {
             this.lastSent = msg;
         }
     }
@@ -600,7 +600,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
             }));
         }
 
-        send(msg: ts.server.protocol.Message) {
+        override send(msg: ts.server.protocol.Message) {
             this.client.handle(msg);
         }
 

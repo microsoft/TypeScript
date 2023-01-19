@@ -89,6 +89,7 @@ import {
     fileExtensionIs,
     fileExtensionIsOneOf,
     findIndex,
+    firstOrUndefined,
     forEach,
     ForEachChildNodes,
     ForInOrOfStatement,
@@ -246,7 +247,6 @@ import {
     Modifier,
     ModifierFlags,
     ModifierLike,
-    ModifiersArray,
     modifiersToFlags,
     ModuleBlock,
     ModuleDeclaration,
@@ -503,8 +503,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.expression);
     },
     [SyntaxKind.ShorthandPropertyAssignment]: function forEachChildInShorthandPropertyAssignment<T>(node: ShorthandPropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.questionToken) ||
             visitNode(cbNode, node.exclamationToken) ||
@@ -538,8 +537,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.PropertyAssignment]: function forEachChildInPropertyAssignment<T>(node: PropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.questionToken) ||
             visitNode(cbNode, node.exclamationToken) ||
@@ -558,8 +556,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.IndexSignature]: function forEachChildInIndexSignature<T>(node: IndexSignatureDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
             visitNode(cbNode, node.type);
@@ -598,8 +595,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.type);
     },
     [SyntaxKind.Constructor]: function forEachChildInConstructor<T>(node: ConstructorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
@@ -623,8 +619,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.body);
     },
     [SyntaxKind.FunctionDeclaration]: function forEachChildInFunctionDeclaration<T>(node: FunctionDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.asteriskToken) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
@@ -650,8 +645,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.body);
     },
     [SyntaxKind.ClassStaticBlockDeclaration]: function forEachChildInClassStaticBlockDeclaration<T>(node: ClassStaticBlockDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.body);
     },
     [SyntaxKind.TypeReference]: function forEachChildInTypeReference<T>(node: TypeReferenceNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -809,8 +803,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.endOfFileToken);
     },
     [SyntaxKind.VariableStatement]: function forEachChildInVariableStatement<T>(node: VariableStatement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.declarationList);
     },
     [SyntaxKind.VariableDeclarationList]: function forEachChildInVariableDeclarationList<T>(node: VariableDeclarationList, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -894,23 +887,20 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.ClassDeclaration]: forEachChildInClassDeclarationOrExpression,
     [SyntaxKind.ClassExpression]: forEachChildInClassDeclarationOrExpression,
     [SyntaxKind.InterfaceDeclaration]: function forEachChildInInterfaceDeclaration<T>(node: InterfaceDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.heritageClauses) ||
             visitNodes(cbNode, cbNodes, node.members);
     },
     [SyntaxKind.TypeAliasDeclaration]: function forEachChildInTypeAliasDeclaration<T>(node: TypeAliasDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNode(cbNode, node.type);
     },
     [SyntaxKind.EnumDeclaration]: function forEachChildInEnumDeclaration<T>(node: EnumDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.members);
     },
@@ -919,20 +909,17 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.ModuleDeclaration]: function forEachChildInModuleDeclaration<T>(node: ModuleDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.body);
     },
     [SyntaxKind.ImportEqualsDeclaration]: function forEachChildInImportEqualsDeclaration<T>(node: ImportEqualsDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.moduleReference);
     },
     [SyntaxKind.ImportDeclaration]: function forEachChildInImportDeclaration<T>(node: ImportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.importClause) ||
             visitNode(cbNode, node.moduleSpecifier) ||
             visitNode(cbNode, node.assertClause);
@@ -949,7 +936,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.value);
     },
     [SyntaxKind.NamespaceExportDeclaration]: function forEachChildInNamespaceExportDeclaration<T>(node: NamespaceExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name);
     },
     [SyntaxKind.NamespaceImport]: function forEachChildInNamespaceImport<T>(node: NamespaceImport, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -961,8 +948,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.NamedImports]: forEachChildInNamedImportsOrExports,
     [SyntaxKind.NamedExports]: forEachChildInNamedImportsOrExports,
     [SyntaxKind.ExportDeclaration]: function forEachChildInExportDeclaration<T>(node: ExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.exportClause) ||
             visitNode(cbNode, node.moduleSpecifier) ||
             visitNode(cbNode, node.assertClause);
@@ -970,8 +956,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.ImportSpecifier]: forEachChildInImportOrExportSpecifier,
     [SyntaxKind.ExportSpecifier]: forEachChildInImportOrExportSpecifier,
     [SyntaxKind.ExportAssignment]: function forEachChildInExportAssignment<T>(node: ExportAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers) ||
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.expression);
     },
     [SyntaxKind.TemplateExpression]: function forEachChildInTemplateExpression<T>(node: TemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -1004,8 +989,7 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.expression);
     },
     [SyntaxKind.MissingDeclaration]: function forEachChildInMissingDeclaration<T>(node: MissingDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
-            visitNodes(cbNode, cbNodes, node.modifiers);
+        return visitNodes(cbNode, cbNodes, node.modifiers);
     },
     [SyntaxKind.CommaListExpression]: function forEachChildInCommaListExpression<T>(node: CommaListExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
@@ -2712,7 +2696,8 @@ namespace Parser {
     }
 
     function canFollowExportModifier(): boolean {
-        return token() !== SyntaxKind.AsteriskToken
+        return token() === SyntaxKind.AtToken
+            || token() !== SyntaxKind.AsteriskToken
             && token() !== SyntaxKind.AsKeyword
             && token() !== SyntaxKind.OpenBraceToken
             && canFollowModifier();
@@ -2737,10 +2722,12 @@ namespace Parser {
 
     function nextTokenCanFollowDefaultKeyword(): boolean {
         nextToken();
-        return token() === SyntaxKind.ClassKeyword || token() === SyntaxKind.FunctionKeyword ||
-            token() === SyntaxKind.InterfaceKeyword ||
-            (token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsClassKeywordOnSameLine)) ||
-            (token() === SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsFunctionKeywordOnSameLine));
+        return token() === SyntaxKind.ClassKeyword
+            || token() === SyntaxKind.FunctionKeyword
+            || token() === SyntaxKind.InterfaceKeyword
+            || token() === SyntaxKind.AtToken
+            || (token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsClassKeywordOnSameLine))
+            || (token() === SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsFunctionKeywordOnSameLine));
     }
 
     // True if positioned at the start of a list element
@@ -3819,7 +3806,7 @@ namespace Parser {
 
     function parseTypeParameter(): TypeParameterDeclaration {
         const pos = getNodePos();
-        const modifiers = parseModifiers(/*permitConstAsModifier*/ true);
+        const modifiers = parseModifiers(/*allowDecorators*/ false, /*permitConstAsModifier*/ true);
         const name = parseIdentifier();
         let constraint: TypeNode | undefined;
         let expression: Expression | undefined;
@@ -3906,11 +3893,13 @@ namespace Parser {
         //      BindingElement[?Yield,?Await]
 
         // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
-        const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : doOutsideOfAwaitContext(parseDecorators);
+        const modifiers = inOuterAwaitContext ?
+            doInAwaitContext(() => parseModifiers(/*allowDecorators*/ true)) :
+            doOutsideOfAwaitContext(() => parseModifiers(/*allowDecorators*/ true));
 
         if (token() === SyntaxKind.ThisKeyword) {
             const node = factory.createParameterDeclaration(
-                decorators,
+                modifiers,
                 /*dotDotDotToken*/ undefined,
                 createIdentifier(/*isIdentifier*/ true),
                 /*questionToken*/ undefined,
@@ -3918,8 +3907,9 @@ namespace Parser {
                 /*initializer*/ undefined
             );
 
-            if (decorators) {
-                parseErrorAtRange(decorators[0], Diagnostics.Decorators_may_not_be_applied_to_this_parameters);
+            const modifier = firstOrUndefined(modifiers);
+            if (modifier) {
+                parseErrorAtRange(modifier, Diagnostics.Neither_decorators_nor_modifiers_may_be_applied_to_this_parameters);
             }
 
             return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -3928,7 +3918,6 @@ namespace Parser {
         const savedTopLevel = topLevel;
         topLevel = false;
 
-        const modifiers = combineDecoratorsAndModifiers(decorators, parseModifiers());
         const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
         if (!allowAmbiguity && !isParameterNameStart()) {
@@ -4120,12 +4109,11 @@ namespace Parser {
         return token() === SyntaxKind.ColonToken || token() === SyntaxKind.CommaToken || token() === SyntaxKind.CloseBracketToken;
     }
 
-    function parseIndexSignatureDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): IndexSignatureDeclaration {
+    function parseIndexSignatureDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): IndexSignatureDeclaration {
         const parameters = parseBracketedList<ParameterDeclaration>(ParsingContext.Parameters, () => parseParameter(/*inOuterAwaitContext*/ false), SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
         const type = parseTypeAnnotation();
         parseTypeMemberSemicolon();
         const node = factory.createIndexSignature(modifiers, parameters, type);
-        (node as Mutable<IndexSignatureDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -4198,17 +4186,17 @@ namespace Parser {
         }
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        const modifiers = parseModifiers();
+        const modifiers = parseModifiers(/*allowDecorators*/ false);
         if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.GetAccessor, SignatureFlags.Type);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.GetAccessor, SignatureFlags.Type);
         }
 
         if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.SetAccessor, SignatureFlags.Type);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.SetAccessor, SignatureFlags.Type);
         }
 
         if (isIndexSignature()) {
-            return parseIndexSignatureDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers);
+            return parseIndexSignatureDeclaration(pos, hasJSDoc, modifiers);
         }
         return parsePropertyOrMethodSignature(pos, hasJSDoc, modifiers);
     }
@@ -4727,7 +4715,7 @@ namespace Parser {
     function skipParameterStart(): boolean {
         if (isModifierKind(token())) {
             // Skip modifiers
-            parseModifiers();
+            parseModifiers(/*allowDecorators*/ false);
         }
         if (isIdentifier() || token() === SyntaxKind.ThisKeyword) {
             nextToken();
@@ -4873,6 +4861,7 @@ namespace Parser {
             case SyntaxKind.AwaitKeyword:
             case SyntaxKind.YieldKeyword:
             case SyntaxKind.PrivateIdentifier:
+            case SyntaxKind.AtToken:
                 // Yield/await always starts an expression.  Either it is an identifier (in which case
                 // it is definitely an expression).  Or it's a keyword (either because we're in
                 // a generator or async function, or in strict mode (or both)) and it started a yield or await expression.
@@ -6436,6 +6425,8 @@ namespace Parser {
                 }
 
                 return parseFunctionExpression();
+            case SyntaxKind.AtToken:
+                return parseDecoratedExpression();
             case SyntaxKind.ClassKeyword:
                 return parseClassExpression();
             case SyntaxKind.FunctionKeyword:
@@ -6502,14 +6493,12 @@ namespace Parser {
             return withJSDoc(finishNode(factory.createSpreadAssignment(expression), pos), hasJSDoc);
         }
 
-        const decorators = parseDecorators();
-        const modifiers = parseModifiers();
-
+        const modifiers = parseModifiers(/*allowDecorators*/ true);
         if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
         }
         if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
         }
 
         const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -6521,7 +6510,7 @@ namespace Parser {
         const exclamationToken = parseOptionalToken(SyntaxKind.ExclamationToken);
 
         if (asteriskToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
-            return parseMethodDeclaration(pos, hasJSDoc, decorators, modifiers, asteriskToken, name, questionToken, exclamationToken);
+            return parseMethodDeclaration(pos, hasJSDoc, modifiers, asteriskToken, name, questionToken, exclamationToken);
         }
 
         // check if it is short-hand property assignment or normal property assignment
@@ -6545,7 +6534,6 @@ namespace Parser {
             node = factory.createPropertyAssignment(name, initializer);
         }
         // Decorators, Modifiers, questionToken, and exclamationToken are not supported by property assignments and are reported in the grammar checker
-        node.illegalDecorators = decorators;
         node.modifiers = modifiers;
         node.questionToken = questionToken;
         node.exclamationToken = exclamationToken;
@@ -6573,7 +6561,7 @@ namespace Parser {
 
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        const modifiers = parseModifiers();
+        const modifiers = parseModifiers(/*allowDecorators*/ false);
         parseExpected(SyntaxKind.FunctionKeyword);
         const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
         const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
@@ -7028,7 +7016,7 @@ namespace Parser {
                     }
                     if (currentToken === SyntaxKind.EqualsToken || currentToken === SyntaxKind.AsteriskToken ||
                         currentToken === SyntaxKind.OpenBraceToken || currentToken === SyntaxKind.DefaultKeyword ||
-                        currentToken === SyntaxKind.AsKeyword) {
+                        currentToken === SyntaxKind.AsKeyword || currentToken === SyntaxKind.AtToken) {
                         return true;
                     }
                     continue;
@@ -7125,16 +7113,16 @@ namespace Parser {
             case SyntaxKind.OpenBraceToken:
                 return parseBlock(/*ignoreMissingOpenBrace*/ false);
             case SyntaxKind.VarKeyword:
-                return parseVariableStatement(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                return parseVariableStatement(getNodePos(), hasPrecedingJSDocComment(), /*modifiers*/ undefined);
             case SyntaxKind.LetKeyword:
                 if (isLetDeclaration()) {
-                    return parseVariableStatement(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                    return parseVariableStatement(getNodePos(), hasPrecedingJSDocComment(), /*modifiers*/ undefined);
                 }
                 break;
             case SyntaxKind.FunctionKeyword:
-                return parseFunctionDeclaration(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                return parseFunctionDeclaration(getNodePos(), hasPrecedingJSDocComment(), /*modifiers*/ undefined);
             case SyntaxKind.ClassKeyword:
-                return parseClassDeclaration(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                return parseClassDeclaration(getNodePos(), hasPrecedingJSDocComment(), /*modifiers*/ undefined);
             case SyntaxKind.IfKeyword:
                 return parseIfStatement();
             case SyntaxKind.DoKeyword:
@@ -7191,7 +7179,7 @@ namespace Parser {
         return parseExpressionOrLabeledStatement();
     }
 
-    function isDeclareModifier(modifier: Modifier) {
+    function isDeclareModifier(modifier: ModifierLike) {
         return modifier.kind === SyntaxKind.DeclareKeyword;
     }
 
@@ -7201,8 +7189,7 @@ namespace Parser {
         // not reusable in that context.
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        const decorators = parseDecorators();
-        const modifiers = parseModifiers();
+        const modifiers = parseModifiers(/*allowDecorators*/ true);
         const isAmbient = some(modifiers, isDeclareModifier);
         if (isAmbient) {
             const node = tryReuseAmbientDeclaration(pos);
@@ -7213,10 +7200,10 @@ namespace Parser {
             for (const m of modifiers!) {
                 (m as Mutable<Node>).flags |= NodeFlags.Ambient;
             }
-            return doInsideOfContext(NodeFlags.Ambient, () => parseDeclarationWorker(pos, hasJSDoc, decorators, modifiers));
+            return doInsideOfContext(NodeFlags.Ambient, () => parseDeclarationWorker(pos, hasJSDoc, modifiers));
         }
         else {
-            return parseDeclarationWorker(pos, hasJSDoc, decorators, modifiers);
+            return parseDeclarationWorker(pos, hasJSDoc, modifiers);
         }
     }
 
@@ -7229,47 +7216,46 @@ namespace Parser {
         });
     }
 
-    function parseDeclarationWorker(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): Statement {
+    function parseDeclarationWorker(pos: number, hasJSDoc: boolean, modifiersIn: NodeArray<ModifierLike> | undefined): Statement {
         switch (token()) {
             case SyntaxKind.VarKeyword:
             case SyntaxKind.LetKeyword:
             case SyntaxKind.ConstKeyword:
-                return parseVariableStatement(pos, hasJSDoc, decorators, modifiers);
+                return parseVariableStatement(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.FunctionKeyword:
-                return parseFunctionDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseFunctionDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.ClassKeyword:
-                return parseClassDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseClassDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.InterfaceKeyword:
-                return parseInterfaceDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseInterfaceDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.TypeKeyword:
-                return parseTypeAliasDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseTypeAliasDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.EnumKeyword:
-                return parseEnumDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseEnumDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.GlobalKeyword:
             case SyntaxKind.ModuleKeyword:
             case SyntaxKind.NamespaceKeyword:
-                return parseModuleDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseModuleDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.ImportKeyword:
-                return parseImportDeclarationOrImportEqualsDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseImportDeclarationOrImportEqualsDeclaration(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.ExportKeyword:
                 nextToken();
                 switch (token()) {
                     case SyntaxKind.DefaultKeyword:
                     case SyntaxKind.EqualsToken:
-                        return parseExportAssignment(pos, hasJSDoc, decorators, modifiers);
+                        return parseExportAssignment(pos, hasJSDoc, modifiersIn);
                     case SyntaxKind.AsKeyword:
-                        return parseNamespaceExportDeclaration(pos, hasJSDoc, decorators, modifiers);
+                        return parseNamespaceExportDeclaration(pos, hasJSDoc, modifiersIn);
                     default:
-                        return parseExportDeclaration(pos, hasJSDoc, decorators, modifiers);
+                        return parseExportDeclaration(pos, hasJSDoc, modifiersIn);
                 }
             default:
-                if (decorators || modifiers) {
+                if (modifiersIn) {
                     // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
                     // would follow. For recovery and error reporting purposes, return an incomplete declaration.
                     const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                     setTextRangePos(missing, pos);
-                    missing.illegalDecorators = decorators;
-                    missing.modifiers = modifiers;
+                    (missing as Mutable<MissingDeclaration>).modifiers = modifiersIn;
                     return missing;
                 }
                 return undefined!; // TODO: GH#18217
@@ -7427,18 +7413,15 @@ namespace Parser {
         return nextTokenIsIdentifier() && nextToken() === SyntaxKind.CloseParenToken;
     }
 
-    function parseVariableStatement(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): VariableStatement {
+    function parseVariableStatement(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): VariableStatement {
         const declarationList = parseVariableDeclarationList(/*inForStatementInitializer*/ false);
         parseSemicolon();
         const node = factory.createVariableStatement(modifiers, declarationList);
-        // Decorators are not allowed on a variable statement, so we keep track of them to report them in the grammar checker.
-        node.illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseFunctionDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): FunctionDeclaration {
+    function parseFunctionDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): FunctionDeclaration {
         const savedAwaitContext = inAwaitContext();
-
         const modifierFlags = modifiersToFlags(modifiers);
         parseExpected(SyntaxKind.FunctionKeyword);
         const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -7453,7 +7436,6 @@ namespace Parser {
         const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
         setAwaitContext(savedAwaitContext);
         const node = factory.createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
-        (node as Mutable<FunctionDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7469,7 +7451,7 @@ namespace Parser {
         }
     }
 
-    function tryParseConstructorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ConstructorDeclaration | undefined {
+    function tryParseConstructorDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ConstructorDeclaration | undefined {
         return tryParse(() => {
             if (parseConstructorName()) {
                 const typeParameters = parseTypeParameters();
@@ -7479,7 +7461,6 @@ namespace Parser {
                 const node = factory.createConstructorDeclaration(modifiers, parameters, body);
 
                 // Attach invalid nodes if they exist so that we can report them in the grammar checker.
-                (node as Mutable<ConstructorDeclaration>).illegalDecorators = decorators;
                 (node as Mutable<ConstructorDeclaration>).typeParameters = typeParameters;
                 (node as Mutable<ConstructorDeclaration>).type = type;
                 return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -7490,8 +7471,7 @@ namespace Parser {
     function parseMethodDeclaration(
         pos: number,
         hasJSDoc: boolean,
-        decorators: NodeArray<Decorator> | undefined,
-        modifiers: NodeArray<Modifier> | undefined,
+        modifiers: NodeArray<ModifierLike> | undefined,
         asteriskToken: AsteriskToken | undefined,
         name: PropertyName,
         questionToken: QuestionToken | undefined,
@@ -7505,7 +7485,7 @@ namespace Parser {
         const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
         const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, diagnosticMessage);
         const node = factory.createMethodDeclaration(
-            combineDecoratorsAndModifiers(decorators, modifiers),
+            modifiers,
             asteriskToken,
             name,
             questionToken,
@@ -7523,8 +7503,7 @@ namespace Parser {
     function parsePropertyDeclaration(
         pos: number,
         hasJSDoc: boolean,
-        decorators: NodeArray<Decorator> | undefined,
-        modifiers: NodeArray<Modifier> | undefined,
+        modifiers: NodeArray<ModifierLike> | undefined,
         name: PropertyName,
         questionToken: QuestionToken | undefined
     ): PropertyDeclaration {
@@ -7533,7 +7512,7 @@ namespace Parser {
         const initializer = doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext | NodeFlags.DisallowInContext, parseInitializer);
         parseSemicolonAfterPropertyName(name, type, initializer);
         const node = factory.createPropertyDeclaration(
-            combineDecoratorsAndModifiers(decorators, modifiers),
+            modifiers,
             name,
             questionToken || exclamationToken,
             type,
@@ -7544,8 +7523,7 @@ namespace Parser {
     function parsePropertyOrMethodDeclaration(
         pos: number,
         hasJSDoc: boolean,
-        decorators: NodeArray<Decorator> | undefined,
-        modifiers: NodeArray<Modifier> | undefined
+        modifiers: NodeArray<ModifierLike> | undefined
     ): PropertyDeclaration | MethodDeclaration {
         const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
         const name = parsePropertyName();
@@ -7553,20 +7531,20 @@ namespace Parser {
         // report an error in the grammar checker.
         const questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
         if (asteriskToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
-            return parseMethodDeclaration(pos, hasJSDoc, decorators, modifiers, asteriskToken, name, questionToken, /*exclamationToken*/ undefined, Diagnostics.or_expected);
+            return parseMethodDeclaration(pos, hasJSDoc, modifiers, asteriskToken, name, questionToken, /*exclamationToken*/ undefined, Diagnostics.or_expected);
         }
-        return parsePropertyDeclaration(pos, hasJSDoc, decorators, modifiers, name, questionToken);
+        return parsePropertyDeclaration(pos, hasJSDoc, modifiers, name, questionToken);
     }
 
-    function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: AccessorDeclaration["kind"], flags: SignatureFlags): AccessorDeclaration {
+    function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, kind: AccessorDeclaration["kind"], flags: SignatureFlags): AccessorDeclaration {
         const name = parsePropertyName();
         const typeParameters = parseTypeParameters();
         const parameters = parseParameters(SignatureFlags.None);
         const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
         const body = parseFunctionBlockOrSemicolon(flags);
         const node = kind === SyntaxKind.GetAccessor
-            ? factory.createGetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, type, body)
-            : factory.createSetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, body);
+            ? factory.createGetAccessorDeclaration(modifiers, name, parameters, type, body)
+            : factory.createSetAccessorDeclaration(modifiers, name, parameters, body);
         // Keep track of `typeParameters` (for both) and `type` (for setters) if they were parsed those indicate grammar errors
         (node as Mutable<AccessorDeclaration>).typeParameters = typeParameters;
         if (isSetAccessorDeclaration(node)) (node as Mutable<SetAccessorDeclaration>).type = type;
@@ -7642,11 +7620,10 @@ namespace Parser {
         return false;
     }
 
-    function parseClassStaticBlockDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: ModifiersArray | undefined): ClassStaticBlockDeclaration {
+    function parseClassStaticBlockDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ClassStaticBlockDeclaration {
         parseExpectedToken(SyntaxKind.StaticKeyword);
         const body = parseClassStaticBlockBody();
         const node = withJSDoc(finishNode(factory.createClassStaticBlockDeclaration(body), pos), hasJSDoc);
-        (node as Mutable<ClassStaticBlockDeclaration>).illegalDecorators = decorators;
         (node as Mutable<ClassStaticBlockDeclaration>).modifiers = modifiers;
         return node;
     }
@@ -7688,16 +7665,7 @@ namespace Parser {
         return finishNode(factory.createDecorator(expression), pos);
     }
 
-    function parseDecorators(): NodeArray<Decorator> | undefined {
-        const pos = getNodePos();
-        let list, decorator;
-        while (decorator = tryParseDecorator()) {
-            list = append(list, decorator);
-        }
-        return list && createNodeArray(list, pos);
-    }
-
-    function tryParseModifier(permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean, hasSeenStaticModifier?: boolean): Modifier | undefined {
+    function tryParseModifier(hasSeenStaticModifier: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): Modifier | undefined {
         const pos = getNodePos();
         const kind = token();
 
@@ -7723,28 +7691,38 @@ namespace Parser {
         return finishNode(factory.createToken(kind as Modifier["kind"]), pos);
     }
 
-    function combineDecoratorsAndModifiers(decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): NodeArray<ModifierLike> | undefined {
-        if (!decorators) return modifiers;
-        if (!modifiers) return decorators;
-        const decoratorsAndModifiers = factory.createNodeArray(concatenate<ModifierLike>(decorators, modifiers));
-        setTextRangePosEnd(decoratorsAndModifiers, decorators.pos, modifiers.end);
-        return decoratorsAndModifiers;
-    }
-
     /*
-     * There are situations in which a modifier like 'const' will appear unexpectedly, such as on a class member.
-     * In those situations, if we are entirely sure that 'const' is not valid on its own (such as when ASI takes effect
-     * and turns it into a standalone declaration), then it is better to parse it and report an error later.
-     *
-     * In such situations, 'permitConstAsModifier' should be set to true.
-     */
-    function parseModifiers(permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined {
+        * There are situations in which a modifier like 'const' will appear unexpectedly, such as on a class member.
+        * In those situations, if we are entirely sure that 'const' is not valid on its own (such as when ASI takes effect
+        * and turns it into a standalone declaration), then it is better to parse it and report an error later.
+        *
+        * In such situations, 'permitConstAsModifier' should be set to true.
+        */
+    function parseModifiers(allowDecorators: false, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined;
+    function parseModifiers(allowDecorators: true, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined;
+    function parseModifiers(allowDecorators: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined {
         const pos = getNodePos();
-        let list, modifier, hasSeenStatic = false;
-        while (modifier = tryParseModifier(permitConstAsModifier, stopOnStartOfClassStaticBlock, hasSeenStatic)) {
-            if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStatic = true;
+        let list: ModifierLike[] | undefined;
+        let modifier, hasSeenStaticModifier = false;
+        while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
+            if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
             list = append(list, modifier);
         }
+
+        // Decorators should be contiguous in a list of modifiers (i.e., `[...leadingModifiers, ...decorators, ...trailingModifiers]`).
+        // The leading modifiers *should* only contain `export` and `default` when decorators are present, but we'll handle errors for any other leading modifiers in the checker.
+        if (allowDecorators && token() === SyntaxKind.AtToken) {
+            let decorator;
+            while (decorator = tryParseDecorator()) {
+                list = append(list, decorator);
+            }
+
+            while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
+                if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
+                list = append(list, modifier);
+            }
+        }
+
         return list && createNodeArray(list, pos);
     }
 
@@ -7767,29 +7745,28 @@ namespace Parser {
         }
 
         const hasJSDoc = hasPrecedingJSDocComment();
-        const decorators = parseDecorators();
-        const modifiers = parseModifiers(/*permitConstAsModifier*/ true, /*stopOnStartOfClassStaticBlock*/ true);
+        const modifiers = parseModifiers(/*allowDecorators*/ true, /*permitConstAsModifier*/ true, /*stopOnStartOfClassStaticBlock*/ true);
         if (token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
-            return parseClassStaticBlockDeclaration(pos, hasJSDoc, decorators, modifiers);
+            return parseClassStaticBlockDeclaration(pos, hasJSDoc, modifiers);
         }
 
         if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
         }
 
         if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-            return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
+            return parseAccessorDeclaration(pos, hasJSDoc, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
         }
 
         if (token() === SyntaxKind.ConstructorKeyword || token() === SyntaxKind.StringLiteral) {
-            const constructorDeclaration = tryParseConstructorDeclaration(pos, hasJSDoc, decorators, modifiers);
+            const constructorDeclaration = tryParseConstructorDeclaration(pos, hasJSDoc, modifiers);
             if (constructorDeclaration) {
                 return constructorDeclaration;
             }
         }
 
         if (isIndexSignature()) {
-            return parseIndexSignatureDeclaration(pos, hasJSDoc, decorators, modifiers);
+            return parseIndexSignatureDeclaration(pos, hasJSDoc, modifiers);
         }
 
         // It is very important that we check this *after* checking indexers because
@@ -7804,32 +7781,46 @@ namespace Parser {
                 for (const m of modifiers!) {
                     (m as Mutable<Node>).flags |= NodeFlags.Ambient;
                 }
-                return doInsideOfContext(NodeFlags.Ambient, () => parsePropertyOrMethodDeclaration(pos, hasJSDoc, decorators, modifiers));
+                return doInsideOfContext(NodeFlags.Ambient, () => parsePropertyOrMethodDeclaration(pos, hasJSDoc, modifiers));
             }
             else {
-                return parsePropertyOrMethodDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parsePropertyOrMethodDeclaration(pos, hasJSDoc, modifiers);
             }
         }
 
-        if (decorators || modifiers) {
+        if (modifiers) {
             // treat this as a property declaration with a missing name.
             const name = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
-            return parsePropertyDeclaration(pos, hasJSDoc, decorators, modifiers, name, /*questionToken*/ undefined);
+            return parsePropertyDeclaration(pos, hasJSDoc, modifiers, name, /*questionToken*/ undefined);
         }
 
         // 'isClassMemberStart' should have hinted not to attempt parsing.
         return Debug.fail("Should not have attempted to parse class member declaration.");
     }
 
+    function parseDecoratedExpression(): PrimaryExpression {
+        const pos = getNodePos();
+        const hasJSDoc = hasPrecedingJSDocComment();
+        const modifiers = parseModifiers(/*allowDecorators*/ true);
+        if (token() === SyntaxKind.ClassKeyword) {
+            return parseClassDeclarationOrExpression(pos, hasJSDoc, modifiers, SyntaxKind.ClassExpression) as ClassExpression;
+        }
+
+        const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Expression_expected);
+        setTextRangePos(missing, pos);
+        (missing as Mutable<MissingDeclaration>).modifiers = modifiers;
+        return missing;
+    }
+
     function parseClassExpression(): ClassExpression {
-        return parseClassDeclarationOrExpression(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined, SyntaxKind.ClassExpression) as ClassExpression;
+        return parseClassDeclarationOrExpression(getNodePos(), hasPrecedingJSDocComment(), /*modifiers*/ undefined, SyntaxKind.ClassExpression) as ClassExpression;
     }
 
-    function parseClassDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ClassDeclaration {
-        return parseClassDeclarationOrExpression(pos, hasJSDoc, decorators, modifiers, SyntaxKind.ClassDeclaration) as ClassDeclaration;
+    function parseClassDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ClassDeclaration {
+        return parseClassDeclarationOrExpression(pos, hasJSDoc, modifiers, SyntaxKind.ClassDeclaration) as ClassDeclaration;
     }
 
-    function parseClassDeclarationOrExpression(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
+    function parseClassDeclarationOrExpression(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
         const savedAwaitContext = inAwaitContext();
         parseExpected(SyntaxKind.ClassKeyword);
 
@@ -7851,8 +7842,8 @@ namespace Parser {
         }
         setAwaitContext(savedAwaitContext);
         const node = kind === SyntaxKind.ClassDeclaration
-            ? factory.createClassDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, typeParameters, heritageClauses, members)
-            : factory.createClassExpression(combineDecoratorsAndModifiers(decorators, modifiers), name, typeParameters, heritageClauses, members);
+            ? factory.createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members)
+            : factory.createClassExpression(modifiers, name, typeParameters, heritageClauses, members);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7914,18 +7905,17 @@ namespace Parser {
         return parseList(ParsingContext.ClassMembers, parseClassElement);
     }
 
-    function parseInterfaceDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): InterfaceDeclaration {
+    function parseInterfaceDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): InterfaceDeclaration {
         parseExpected(SyntaxKind.InterfaceKeyword);
         const name = parseIdentifier();
         const typeParameters = parseTypeParameters();
         const heritageClauses = parseHeritageClauses();
         const members = parseObjectTypeMembers();
         const node = factory.createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members);
-        (node as Mutable<InterfaceDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseTypeAliasDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): TypeAliasDeclaration {
+    function parseTypeAliasDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): TypeAliasDeclaration {
         parseExpected(SyntaxKind.TypeKeyword);
         const name = parseIdentifier();
         const typeParameters = parseTypeParameters();
@@ -7933,7 +7923,6 @@ namespace Parser {
         const type = token() === SyntaxKind.IntrinsicKeyword && tryParse(parseKeywordAndNoDot) || parseType();
         parseSemicolon();
         const node = factory.createTypeAliasDeclaration(modifiers, name, typeParameters, type);
-        (node as Mutable<TypeAliasDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7949,7 +7938,7 @@ namespace Parser {
         return withJSDoc(finishNode(factory.createEnumMember(name, initializer), pos), hasJSDoc);
     }
 
-    function parseEnumDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): EnumDeclaration {
+    function parseEnumDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): EnumDeclaration {
         parseExpected(SyntaxKind.EnumKeyword);
         const name = parseIdentifier();
         let members;
@@ -7961,7 +7950,6 @@ namespace Parser {
             members = createMissingList<EnumMember>();
         }
         const node = factory.createEnumDeclaration(modifiers, name, members);
-        (node as Mutable<EnumDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7978,20 +7966,19 @@ namespace Parser {
         return finishNode(factory.createModuleBlock(statements), pos);
     }
 
-    function parseModuleOrNamespaceDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, flags: NodeFlags): ModuleDeclaration {
+    function parseModuleOrNamespaceDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, flags: NodeFlags): ModuleDeclaration {
         // If we are parsing a dotted namespace name, we want to
         // propagate the 'Namespace' flag across the names if set.
         const namespaceFlag = flags & NodeFlags.Namespace;
         const name = parseIdentifier();
         const body = parseOptional(SyntaxKind.DotToken)
-            ? parseModuleOrNamespaceDeclaration(getNodePos(), /*hasJSDoc*/ false, /*decorators*/ undefined, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag) as NamespaceDeclaration
+            ? parseModuleOrNamespaceDeclaration(getNodePos(), /*hasJSDoc*/ false, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag) as NamespaceDeclaration
             : parseModuleBlock();
         const node = factory.createModuleDeclaration(modifiers, name, body, flags);
-        (node as Mutable<ModuleDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseAmbientExternalModuleDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ModuleDeclaration {
+    function parseAmbientExternalModuleDeclaration(pos: number, hasJSDoc: boolean, modifiersIn: NodeArray<ModifierLike> | undefined): ModuleDeclaration {
         let flags: NodeFlags = 0;
         let name;
         if (token() === SyntaxKind.GlobalKeyword) {
@@ -8010,16 +7997,15 @@ namespace Parser {
         else {
             parseSemicolon();
         }
-        const node = factory.createModuleDeclaration(modifiers, name, body, flags);
-        (node as Mutable<ModuleDeclaration>).illegalDecorators = decorators;
+        const node = factory.createModuleDeclaration(modifiersIn, name, body, flags);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseModuleDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ModuleDeclaration {
+    function parseModuleDeclaration(pos: number, hasJSDoc: boolean, modifiersIn: NodeArray<ModifierLike> | undefined): ModuleDeclaration {
         let flags: NodeFlags = 0;
         if (token() === SyntaxKind.GlobalKeyword) {
             // global augmentation
-            return parseAmbientExternalModuleDeclaration(pos, hasJSDoc, decorators, modifiers);
+            return parseAmbientExternalModuleDeclaration(pos, hasJSDoc, modifiersIn);
         }
         else if (parseOptional(SyntaxKind.NamespaceKeyword)) {
             flags |= NodeFlags.Namespace;
@@ -8027,10 +8013,10 @@ namespace Parser {
         else {
             parseExpected(SyntaxKind.ModuleKeyword);
             if (token() === SyntaxKind.StringLiteral) {
-                return parseAmbientExternalModuleDeclaration(pos, hasJSDoc, decorators, modifiers);
+                return parseAmbientExternalModuleDeclaration(pos, hasJSDoc, modifiersIn);
             }
         }
-        return parseModuleOrNamespaceDeclaration(pos, hasJSDoc, decorators, modifiers, flags);
+        return parseModuleOrNamespaceDeclaration(pos, hasJSDoc, modifiersIn, flags);
     }
 
     function isExternalModuleReference() {
@@ -8050,19 +8036,18 @@ namespace Parser {
         return nextToken() === SyntaxKind.SlashToken;
     }
 
-    function parseNamespaceExportDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): NamespaceExportDeclaration {
+    function parseNamespaceExportDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): NamespaceExportDeclaration {
         parseExpected(SyntaxKind.AsKeyword);
         parseExpected(SyntaxKind.NamespaceKeyword);
         const name = parseIdentifier();
         parseSemicolon();
         const node = factory.createNamespaceExportDeclaration(name);
         // NamespaceExportDeclaration nodes cannot have decorators or modifiers, so we attach them here so we can report them in the grammar checker
-        (node as Mutable<NamespaceExportDeclaration>).illegalDecorators = decorators;
         (node as Mutable<NamespaceExportDeclaration>).modifiers = modifiers;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseImportDeclarationOrImportEqualsDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ImportEqualsDeclaration | ImportDeclaration {
+    function parseImportDeclarationOrImportEqualsDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ImportEqualsDeclaration | ImportDeclaration {
         parseExpected(SyntaxKind.ImportKeyword);
 
         const afterImportPos = scanner.getStartPos();
@@ -8083,7 +8068,7 @@ namespace Parser {
         }
 
         if (identifier && !tokenAfterImportedIdentifierDefinitelyProducesImportDeclaration()) {
-            return parseImportEqualsDeclaration(pos, hasJSDoc, decorators, modifiers, identifier, isTypeOnly);
+            return parseImportEqualsDeclaration(pos, hasJSDoc, modifiers, identifier, isTypeOnly);
         }
 
         // ImportDeclaration:
@@ -8106,7 +8091,6 @@ namespace Parser {
 
         parseSemicolon();
         const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause);
-        (node as Mutable<ImportDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -8154,12 +8138,11 @@ namespace Parser {
         return token() === SyntaxKind.CommaToken || token() === SyntaxKind.FromKeyword;
     }
 
-    function parseImportEqualsDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, identifier: Identifier, isTypeOnly: boolean): ImportEqualsDeclaration {
+    function parseImportEqualsDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, identifier: Identifier, isTypeOnly: boolean): ImportEqualsDeclaration {
         parseExpected(SyntaxKind.EqualsToken);
         const moduleReference = parseModuleReference();
         parseSemicolon();
         const node = factory.createImportEqualsDeclaration(modifiers, isTypeOnly, identifier, moduleReference);
-        (node as Mutable<ImportEqualsDeclaration>).illegalDecorators = decorators;
         const finished = withJSDoc(finishNode(node, pos), hasJSDoc);
         return finished;
     }
@@ -8337,7 +8320,7 @@ namespace Parser {
         return finishNode(factory.createNamespaceExport(parseIdentifierName()), pos);
     }
 
-    function parseExportDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ExportDeclaration {
+    function parseExportDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ExportDeclaration {
         const savedAwaitContext = inAwaitContext();
         setAwaitContext(/*value*/ true);
         let exportClause: NamedExportBindings | undefined;
@@ -8368,11 +8351,10 @@ namespace Parser {
         parseSemicolon();
         setAwaitContext(savedAwaitContext);
         const node = factory.createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause);
-        (node as Mutable<ExportDeclaration>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseExportAssignment(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ExportAssignment {
+    function parseExportAssignment(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ExportAssignment {
         const savedAwaitContext = inAwaitContext();
         setAwaitContext(/*value*/ true);
         let isExportEquals: boolean | undefined;
@@ -8386,7 +8368,6 @@ namespace Parser {
         parseSemicolon();
         setAwaitContext(savedAwaitContext);
         const node = factory.createExportAssignment(modifiers, isExportEquals, expression);
-        (node as Mutable<ExportAssignment>).illegalDecorators = decorators;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 

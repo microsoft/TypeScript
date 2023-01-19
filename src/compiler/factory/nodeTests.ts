@@ -40,6 +40,7 @@ import {
     DebuggerStatement,
     Decorator,
     DefaultClause,
+    DefaultKeyword,
     DeleteExpression,
     DoStatement,
     DotDotDotToken,
@@ -326,6 +327,11 @@ export function isPrivateIdentifier(node: Node): node is PrivateIdentifier {
 /** @internal */
 export function isExportModifier(node: Node): node is ExportKeyword {
     return node.kind === SyntaxKind.ExportKeyword;
+}
+
+/** @internal */
+export function isDefaultModifier(node: Node): node is DefaultKeyword {
+    return node.kind === SyntaxKind.DefaultKeyword;
 }
 
 /** @internal */
