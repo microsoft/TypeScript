@@ -1,0 +1,293 @@
+// === /packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts ===
+// declare var [|debug|]: [|debug|].Debug & { debug: [|debug|].Debug; default: [|debug|].Debug };
+// [|export|] = [|debug|];
+// export as namespace debug;
+// declare namespace [|debug|] {
+//     interface Debug {
+//        coerce: (val: any) => any;
+//     }
+// }
+
+// === /packages/playwright-core/src/index.ts ===
+// export const debug: typeof import('[|../bundles/utils/node_modules//*FIND ALL REFS*/@types/debug|]') = require('./utilsBundleImpl').debug;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts",
+      "kind": "module",
+      "name": "module \"/packages/playwright-core/bundles/utils/node_modules/@types/debug/index\"",
+      "textSpan": {
+        "start": 0,
+        "length": 211
+      },
+      "displayParts": [
+        {
+          "text": "module",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"/packages/playwright-core/bundles/utils/node_modules/@types/debug/index\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 79,
+          "length": 6
+        },
+        "fileName": "/packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts",
+        "contextSpan": {
+          "start": 79,
+          "length": 15
+        },
+        "isWriteAccess": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts",
+      "kind": "var",
+      "name": "namespace debug\nvar debug: debug.Debug & {\n    debug: debug.Debug;\n    default: debug.Debug;\n}",
+      "textSpan": {
+        "start": 12,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "namespace",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "debug",
+          "kind": "localName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "debug",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "debug",
+          "kind": "localName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Debug",
+          "kind": "interfaceName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "&",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "debug",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "debug",
+          "kind": "localName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Debug",
+          "kind": "text"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "debug",
+          "kind": "localName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Debug",
+          "kind": "text"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 78
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 5
+        },
+        "fileName": "/packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 78
+        },
+        "isWriteAccess": true
+      },
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 5
+        },
+        "fileName": "/packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts",
+        "isWriteAccess": false
+      },
+      {
+        "textSpan": {
+          "start": 42,
+          "length": 5
+        },
+        "fileName": "/packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts",
+        "isWriteAccess": false
+      },
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 5
+        },
+        "fileName": "/packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts",
+        "isWriteAccess": false
+      },
+      {
+        "textSpan": {
+          "start": 88,
+          "length": 5
+        },
+        "fileName": "/packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts",
+        "contextSpan": {
+          "start": 79,
+          "length": 15
+        },
+        "isWriteAccess": false
+      },
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 42
+        },
+        "fileName": "/packages/playwright-core/src/index.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 117
+        },
+        "isWriteAccess": false
+      },
+      {
+        "textSpan": {
+          "start": 140,
+          "length": 5
+        },
+        "fileName": "/packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts",
+        "contextSpan": {
+          "start": 122,
+          "length": 89
+        },
+        "isWriteAccess": true
+      }
+    ]
+  }
+]

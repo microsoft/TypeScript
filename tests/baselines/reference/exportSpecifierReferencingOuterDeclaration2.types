@@ -1,7 +1,8 @@
 === tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_A.ts ===
+
 declare module X { export interface bar { } }
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts ===
+
+=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts ===
 export { X };
 >X : any
 
