@@ -111,8 +111,6 @@ import {
     isSpreadElement,
     isStringLiteral,
     isThisTypeNode,
-    isTypeNode,
-    isTypeParameterDeclaration,
     isVariableDeclarationList,
     JSDocNamespaceBody,
     JSDocTypeAssertion,
@@ -177,8 +175,6 @@ import {
     TextRange,
     ThisTypeNode,
     Token,
-    TypeNode,
-    TypeParameterDeclaration,
 } from "../_namespaces/ts";
 
 // Compound nodes

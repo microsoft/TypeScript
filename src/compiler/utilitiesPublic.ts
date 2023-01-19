@@ -1794,6 +1794,7 @@ export function isDeclarationBindingElement(bindingElement: BindingOrAssignmentE
     return false;
 }
 
+/** @internal */
 export function isBindingOrAssignmentElement(node: Node): node is BindingOrAssignmentElement {
     return isVariableDeclaration(node)
         || isParameter(node)

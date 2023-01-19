@@ -4870,7 +4870,6 @@ declare namespace ts {
     function isTypeNode(node: Node): node is TypeNode;
     function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode;
     function isArrayBindingElement(node: Node): node is ArrayBindingElement;
-    function isBindingOrAssignmentElement(node: Node): node is BindingOrAssignmentElement;
     function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName;
     function isCallLikeExpression(node: Node): node is CallLikeExpression;
     function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
@@ -5205,7 +5204,7 @@ declare namespace ts {
     function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
     function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
     function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken;
-    const isQuestionOrExclamationToken: (node: Node) => node is QuestionToken | ExclamationToken;
+    const isQuestionOrExclamationToken: (node: Node) => node is ExclamationToken | QuestionToken;
     const isIdentifierOrThisTypeNode: (node: Node) => node is Identifier | ThisTypeNode;
     const isReadonlyKeywordOrPlusOrMinusToken: (node: Node) => node is ReadonlyKeyword | PlusToken | MinusToken;
     const isQuestionOrPlusOrMinusToken: (node: Node) => node is QuestionToken | PlusToken | MinusToken;
