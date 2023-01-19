@@ -7,6 +7,7 @@ import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
+import { TypeOfExpression } from "./_namespaces/ts";
 
 export const enum FourSlashTestType {
     Native,
@@ -2012,7 +2013,7 @@ export class TestState {
             .join("\n\n")
     }
 
-    public baselineSignatureHelp() { // TODO: This too
+    public baselineSignatureHelp() {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
@@ -2080,7 +2081,7 @@ export class TestState {
         return Array.from(files.entries(), ([fileName, lines]) => `=== ${fileName} ===\n` + lines.map(l => "// " + l).join("\n"))
             .join("\n\n")
     }
-    public baselineCompletions(preferences?: ts.UserPreferences) { // TODO: And this
+    public baselineCompletions(preferences?: ts.UserPreferences) {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
             this.goToMarker(marker);
@@ -2096,7 +2097,42 @@ export class TestState {
                 }
             };
         });
-        Harness.Baseline.runBaseline(baselineFile, stringify(result));
+        const bar = "-".repeat(70)
+        const sorted = result.slice()
+        // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
+        sorted.sort((q1, q2) =>
+            q1.marker.fileName === q1.marker.fileName
+            ? (q1.marker.position > q2.marker.position ? -1 : 1)
+            : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
+        const files: Map<string, string[]> = new Map()
+        for (const { marker, completionList } of sorted) {
+            const span = completionList?.optionalReplacementSpan ?? { start: marker.position, length: 1 };
+            const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(marker.fileName, span.start);
+            const underline = " ".repeat(startLc.character) + "^".repeat(span.length)
+            let tooltip = [bar]
+            if (completionList?.entries) {
+                for (const entry of completionList.entries) {
+                    if (entry.displayParts) {
+                        tooltip.push(...entry.displayParts.map(p => p.text).join("").split('\n'))
+                    }
+                    else {
+                        tooltip.push(`(${entry.kindModifiers}${entry.kind}) ${entry.name}`)
+                    }
+                }
+            }
+            else {
+                tooltip.push(`No completions were returned at /*${marker.name}*/.`);
+            }
+            tooltip.push(bar)
+            tooltip = tooltip.map(l => "| " + l)
+
+            const lines = files.get(marker.fileName) ?? this.getFileContent(marker.fileName).split(/\r?\n/)
+            lines.splice(startLc.line + 1, 0, underline, ...tooltip)
+            files.set(marker.fileName, lines)
+        }
+        const annotations = Array.from(files.entries(), ([fileName, lines]) => `=== ${fileName} ===\n` + lines.map(l => "// " + l).join("\n"))
+            .join("\n\n")
+        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
 
     public baselineSmartSelection() {

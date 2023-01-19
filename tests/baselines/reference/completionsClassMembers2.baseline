@@ -1,3 +1,31 @@
+=== /tests/cases/fourslash/completionsClassMembers2.ts ===
+// interface I {
+//     method(): void;
+// }
+// 
+// export class C implements I {
+//     property = "foo"
+// 
+//     
+//     ^
+// | ----------------------------------------------------------------------
+// | abstract
+// | accessor
+// | async
+// | constructor
+// | declare
+// | get
+// | override
+// | private
+// | protected
+// | public
+// | readonly
+// | set
+// | static
+// | (method) I.method(): void
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
