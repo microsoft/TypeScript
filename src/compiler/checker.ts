@@ -1235,12 +1235,13 @@ export const enum CheckMode {
 
 /** @internal */
 export const enum SignatureCheckMode {
-    None              = 0,
+    None = 0,
     BivariantCallback = 1 << 0,
-    StrictCallback    = 1 << 1,
+    StrictCallback = 1 << 1,
     IgnoreReturnTypes = 1 << 2,
-    StrictArity       = 1 << 3,
-    Callback          = BivariantCallback | StrictCallback,
+    StrictArity = 1 << 3,
+    StrictAnySignature = 1 << 4,
+    Callback = BivariantCallback | StrictCallback,
 }
 
 const enum IntersectionState {
@@ -19454,6 +19455,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isAnySignature(target)) {
             return Ternary.True;
         }
+        if (checkMode & SignatureCheckMode.StrictAnySignature && isAnySignature(source)) {
+            return Ternary.False;
+        }
 
         const targetCount = getParameterCount(target);
         const sourceHasMoreParameters = !hasEffectiveRestParameter(target) &&
@@ -21983,8 +21987,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * See signatureAssignableTo, compareSignaturesIdentical
          */
         function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: (source: Type, target: Type) => void): Ternary {
+            const checkMode = relation === subtypeRelation ? SignatureCheckMode.StrictAnySignature :
+                relation === strictSubtypeRelation ? SignatureCheckMode.StrictAnySignature | SignatureCheckMode.StrictArity :
+                SignatureCheckMode.None;
             return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
-                relation === strictSubtypeRelation ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, isRelatedToWorker, reportUnreliableMapper);
+                checkMode, reportErrors, reportError, incompatibleReporter, isRelatedToWorker, reportUnreliableMapper);
         }
 
         function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
