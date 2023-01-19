@@ -4888,6 +4888,7 @@ declare namespace ts {
     function isForInitializer(node: Node): node is ForInitializer;
     function isModuleBody(node: Node): node is ModuleBody;
     function isNamedImportBindings(node: Node): node is NamedImportBindings;
+    function isDeclaration(node: Node): node is NamedDeclaration;
     function isStatement(node: Node): node is Statement;
     function isModuleReference(node: Node): node is ModuleReference;
     function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression;
@@ -5206,7 +5207,7 @@ declare namespace ts {
     function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken;
     const isQuestionOrExclamationToken: (node: Node) => node is QuestionToken | ExclamationToken;
     const isIdentifierOrThisTypeNode: (node: Node) => node is Identifier | ThisTypeNode;
-    const isReadonlyKeywordOrPlusOrMinusToken: (node: Node) => node is PlusToken | MinusToken | ReadonlyKeyword;
+    const isReadonlyKeywordOrPlusOrMinusToken: (node: Node) => node is ReadonlyKeyword | PlusToken | MinusToken;
     const isQuestionOrPlusOrMinusToken: (node: Node) => node is QuestionToken | PlusToken | MinusToken;
     const isModuleName: (node: Node) => node is ModuleName;
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;

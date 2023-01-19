@@ -2320,7 +2320,6 @@ function isStatementKindButNotDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.MergeDeclarationMarker;
 }
 
-/** @internal */
 export function isDeclaration(node: Node): node is NamedDeclaration {
     if (node.kind === SyntaxKind.TypeParameter) {
         return (node.parent && node.parent.kind !== SyntaxKind.JSDocTemplateTag) || isInJSFile(node);
