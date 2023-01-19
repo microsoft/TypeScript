@@ -101,7 +101,7 @@
       "position": 6,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -143,7 +143,7 @@
       "position": 41,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -185,7 +185,7 @@
       "position": 45,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -227,7 +227,7 @@
       "position": 75,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -269,7 +269,7 @@
       "position": 113,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -311,7 +311,7 @@
       "position": 138,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "export",
       "textSpan": {
@@ -361,7 +361,7 @@
       "position": 173,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -403,7 +403,7 @@
       "position": 195,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -465,7 +465,7 @@
       "position": 229,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -527,7 +527,7 @@
       "position": 233,
       "name": "10"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -589,7 +589,7 @@
       "position": 236,
       "name": "11"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -651,7 +651,7 @@
       "position": 247,
       "name": "12"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -797,7 +797,7 @@
       "position": 312,
       "name": "13"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -943,7 +943,7 @@
       "position": 316,
       "name": "14"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -1089,7 +1089,7 @@
       "position": 319,
       "name": "15"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
@@ -1195,7 +1195,7 @@
       "position": 326,
       "name": "16"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {

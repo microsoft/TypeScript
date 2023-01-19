@@ -41,7 +41,7 @@
       "position": 170,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -102,7 +102,7 @@
       "position": 175,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -171,7 +171,7 @@
       "position": 180,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

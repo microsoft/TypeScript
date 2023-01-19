@@ -35,7 +35,7 @@
       "position": 296,
       "name": "1"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -230,7 +230,7 @@
       "position": 332,
       "name": "2"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -333,7 +333,7 @@
       "position": 339,
       "name": "3"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

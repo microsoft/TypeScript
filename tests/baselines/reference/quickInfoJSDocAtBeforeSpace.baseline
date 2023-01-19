@@ -36,7 +36,7 @@
       "position": 39,
       "name": "f"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -97,7 +97,7 @@
       "position": 87,
       "name": "g"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -158,7 +158,7 @@
       "position": 148,
       "name": "h"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

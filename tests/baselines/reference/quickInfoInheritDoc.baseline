@@ -92,7 +92,7 @@
       "position": 817,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "public,static",
       "textSpan": {
@@ -278,7 +278,7 @@
       "position": 1143,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "public,static",
       "textSpan": {
@@ -422,7 +422,7 @@
       "position": 1282,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "public,static",
       "textSpan": {

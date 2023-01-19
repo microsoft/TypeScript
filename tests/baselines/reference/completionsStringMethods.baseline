@@ -32,7 +32,7 @@
       "position": 14,
       "name": "1"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,

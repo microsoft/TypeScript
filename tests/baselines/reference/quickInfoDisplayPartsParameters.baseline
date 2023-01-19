@@ -51,7 +51,7 @@
       "position": 33,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -220,7 +220,7 @@
       "position": 37,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -270,7 +270,7 @@
       "position": 52,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -320,7 +320,7 @@
       "position": 76,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -370,7 +370,7 @@
       "position": 111,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -428,7 +428,7 @@
       "position": 138,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -478,7 +478,7 @@
       "position": 159,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -528,7 +528,7 @@
       "position": 188,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -578,7 +578,7 @@
       "position": 224,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {

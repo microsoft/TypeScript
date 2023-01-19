@@ -22,7 +22,7 @@
       "position": 258,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "deprecated",
       "textSpan": {

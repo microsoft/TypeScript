@@ -19,7 +19,7 @@
       "position": 210,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "deprecated",
       "textSpan": {

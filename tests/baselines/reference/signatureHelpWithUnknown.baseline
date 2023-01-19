@@ -14,7 +14,7 @@
       "position": 6,
       "name": "1"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

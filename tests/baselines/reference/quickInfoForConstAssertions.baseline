@@ -29,7 +29,7 @@
       "position": 22,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {
@@ -119,7 +119,7 @@
       "position": 44,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {
@@ -165,7 +165,7 @@
       "position": 68,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {
@@ -211,7 +211,7 @@
       "position": 95,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {

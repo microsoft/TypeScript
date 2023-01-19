@@ -73,9 +73,9 @@
 // | @deprecated 
 // | ----------------------------------------------------------------------
 //         fn();
-//             
+//             ^
 // | ----------------------------------------------------------------------
-// | No quickinfo is defined at /*5*/.
+// | No quickinfo at /*5*/.
 // | ----------------------------------------------------------------------
 // 
 //         return 1;
@@ -134,7 +134,7 @@
       "position": 416,
       "name": "0"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "deprecated",
       "textSpan": {
@@ -202,7 +202,7 @@
       "position": 437,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "deprecated",
       "textSpan": {
@@ -270,7 +270,7 @@
       "position": 453,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "deprecated",
       "textSpan": {
@@ -346,7 +346,7 @@
       "position": 466,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "deprecated",
       "textSpan": {
@@ -398,7 +398,7 @@
       "position": 477,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "deprecated",
       "textSpan": {
@@ -445,7 +445,7 @@
       "position": 565,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "deprecated",
       "textSpan": {
@@ -513,7 +513,7 @@
       "position": 586,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "deprecated",
       "textSpan": {
@@ -581,7 +581,7 @@
       "position": 602,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "deprecated",
       "textSpan": {
@@ -657,7 +657,7 @@
       "position": 615,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "deprecated",
       "textSpan": {
@@ -709,7 +709,7 @@
       "position": 626,
       "name": "10"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "deprecated",
       "textSpan": {
@@ -749,7 +749,7 @@
       "position": 638,
       "name": "11"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "deprecated",
       "textSpan": {

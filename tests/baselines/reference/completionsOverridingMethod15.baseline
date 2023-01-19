@@ -31,7 +31,7 @@
       "position": 89,
       "name": ""
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,

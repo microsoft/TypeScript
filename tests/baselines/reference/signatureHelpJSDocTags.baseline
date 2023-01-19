@@ -87,7 +87,7 @@
       "position": 981,
       "name": "10"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -189,7 +189,7 @@
       "position": 997,
       "name": "11"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -266,7 +266,7 @@
       "position": 1012,
       "name": "12"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -332,7 +332,7 @@
       "position": 1027,
       "name": "13"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

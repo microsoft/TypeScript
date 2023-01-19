@@ -33,7 +33,7 @@
       "position": 44,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "export",
       "textSpan": {
@@ -99,7 +99,7 @@
       "position": 9,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "export",
       "textSpan": {
@@ -165,7 +165,7 @@
       "position": 20,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "export",
       "textSpan": {

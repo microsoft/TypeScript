@@ -22,7 +22,7 @@
       "position": 4,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "let",
       "kindModifiers": "",
       "textSpan": {
@@ -64,7 +64,7 @@
       "position": 44,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "let",
       "kindModifiers": "",
       "textSpan": {
@@ -106,7 +106,7 @@
       "position": 74,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "let",
       "kindModifiers": "",
       "textSpan": {

@@ -603,7 +603,7 @@
       "position": 123,
       "name": "2"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -4463,7 +4463,7 @@
       "position": 249,
       "name": "4"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
@@ -9198,7 +9198,7 @@
       "position": 841,
       "name": "15"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
@@ -12889,7 +12889,7 @@
       "position": 861,
       "name": "17"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,

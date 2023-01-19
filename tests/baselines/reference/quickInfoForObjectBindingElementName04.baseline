@@ -35,7 +35,7 @@
       "position": 193,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -126,7 +126,7 @@
       "position": 200,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {

@@ -93,7 +93,7 @@
       "position": 9,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -143,7 +143,7 @@
       "position": 35,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -309,7 +309,7 @@
       "position": 155,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -411,7 +411,7 @@
       "position": 204,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -513,7 +513,7 @@
       "position": 253,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -615,7 +615,7 @@
       "position": 321,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -717,7 +717,7 @@
       "position": 371,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -819,7 +819,7 @@
       "position": 421,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -921,7 +921,7 @@
       "position": 473,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -1023,7 +1023,7 @@
       "position": 533,
       "name": "10"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -1189,7 +1189,7 @@
       "position": 551,
       "name": "11"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -1291,7 +1291,7 @@
       "position": 581,
       "name": "12"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -1393,7 +1393,7 @@
       "position": 606,
       "name": "13"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -1495,7 +1495,7 @@
       "position": 637,
       "name": "14"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -1597,7 +1597,7 @@
       "position": 663,
       "name": "15"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local function",
       "kindModifiers": "",
       "textSpan": {
@@ -1699,7 +1699,7 @@
       "position": 689,
       "name": "16"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

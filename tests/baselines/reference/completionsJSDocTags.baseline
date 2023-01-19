@@ -75,7 +75,7 @@
       "position": 1100,
       "name": "14"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,

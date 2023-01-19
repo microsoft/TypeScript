@@ -182,7 +182,7 @@
       "position": 50,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -217,7 +217,7 @@
       "position": 61,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -259,7 +259,7 @@
       "position": 70,
       "name": "28"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -314,7 +314,7 @@
       "position": 81,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -364,7 +364,7 @@
       "position": 87,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -399,7 +399,7 @@
       "position": 97,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -429,7 +429,7 @@
       "position": 164,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -471,7 +471,7 @@
       "position": 173,
       "name": "29"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -526,7 +526,7 @@
       "position": 184,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -576,7 +576,7 @@
       "position": 190,
       "name": "10"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -606,7 +606,7 @@
       "position": 220,
       "name": "11"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -641,7 +641,7 @@
       "position": 287,
       "name": "12"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -683,7 +683,7 @@
       "position": 296,
       "name": "30"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -738,7 +738,7 @@
       "position": 307,
       "name": "14"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -788,7 +788,7 @@
       "position": 313,
       "name": "15"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -823,7 +823,7 @@
       "position": 348,
       "name": "16"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -858,7 +858,7 @@
       "position": 382,
       "name": "17"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -900,7 +900,7 @@
       "position": 391,
       "name": "31"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -955,7 +955,7 @@
       "position": 403,
       "name": "19"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -1005,7 +1005,7 @@
       "position": 408,
       "name": "20"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -1040,7 +1040,7 @@
       "position": 459,
       "name": "21"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -1075,7 +1075,7 @@
       "position": 570,
       "name": "22"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -1117,7 +1117,7 @@
       "position": 579,
       "name": "32"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -1172,7 +1172,7 @@
       "position": 590,
       "name": "24"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -1222,7 +1222,7 @@
       "position": 596,
       "name": "25"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -1257,7 +1257,7 @@
       "position": 935,
       "name": "33"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "export",
       "textSpan": {

@@ -44,7 +44,7 @@
       "position": 480,
       "name": "4"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -226,7 +226,7 @@
       "position": 485,
       "name": "5"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -408,7 +408,7 @@
       "position": 489,
       "name": "6"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

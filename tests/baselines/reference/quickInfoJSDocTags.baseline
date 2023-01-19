@@ -55,9 +55,9 @@
 // | This is the constructor.
 // | @myjsdoctag this is a comment
 // | ----------------------------------------------------------------------
-//                   
+//                   ^
 // | ----------------------------------------------------------------------
-// | No quickinfo is defined at /*10*/.
+// | No quickinfo at /*10*/.
 // | ----------------------------------------------------------------------
 // Foo.method1();
 // ^^^
@@ -72,9 +72,9 @@
 // | method1 documentation
 // | @mytag comment1 comment2
 // | ----------------------------------------------------------------------
-//             
+//             ^
 // | ----------------------------------------------------------------------
-// | No quickinfo is defined at /*11*/.
+// | No quickinfo at /*11*/.
 // | ----------------------------------------------------------------------
 // foo.method2();
 //     ^^^^^^^
@@ -82,9 +82,9 @@
 // | (method) Foo.method2(): void
 // | @mytag 
 // | ----------------------------------------------------------------------
-//             
+//             ^
 // | ----------------------------------------------------------------------
-// | No quickinfo is defined at /*12*/.
+// | No quickinfo at /*12*/.
 // | ----------------------------------------------------------------------
 // foo.method3();
 //     ^^^^^^^
@@ -92,9 +92,9 @@
 // | (method) Foo.method3(): number
 // | @returns a value
 // | ----------------------------------------------------------------------
-//             
+//             ^
 // | ----------------------------------------------------------------------
-// | No quickinfo is defined at /*13*/.
+// | No quickinfo at /*13*/.
 // | ----------------------------------------------------------------------
 // foo.method4();
 //     ^^^^^^^
@@ -139,7 +139,7 @@
       "position": 977,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -228,7 +228,7 @@
       "position": 985,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -274,7 +274,7 @@
       "position": 989,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "static",
       "textSpan": {
@@ -363,7 +363,7 @@
       "position": 1004,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -441,7 +441,7 @@
       "position": 1019,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -525,7 +525,7 @@
       "position": 1034,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -638,7 +638,7 @@
       "position": 1049,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -707,7 +707,7 @@
       "position": 1064,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -791,7 +791,7 @@
       "position": 1079,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -862,7 +862,7 @@
       "position": 1100,
       "name": "14"
     },
-    "quickInfo": {
+    "item": {
       "kind": "",
       "kindModifiers": "",
       "textSpan": {

@@ -22,7 +22,7 @@
       "position": 77,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "",
       "kindModifiers": "",
       "textSpan": {
@@ -39,7 +39,7 @@
       "position": 84,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "interface",
       "kindModifiers": "declare",
       "textSpan": {

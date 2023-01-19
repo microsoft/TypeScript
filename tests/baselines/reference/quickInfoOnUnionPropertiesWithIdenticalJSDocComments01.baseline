@@ -37,7 +37,7 @@
       "position": 746,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "optional",
       "textSpan": {

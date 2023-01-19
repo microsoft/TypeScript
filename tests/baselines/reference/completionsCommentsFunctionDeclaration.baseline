@@ -429,7 +429,7 @@
       "position": 63,
       "name": "3"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
@@ -4764,7 +4764,7 @@
       "position": 240,
       "name": "7"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -8265,7 +8265,7 @@
       "position": 262,
       "name": "9"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,

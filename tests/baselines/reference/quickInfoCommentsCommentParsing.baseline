@@ -523,9 +523,9 @@
 // | not aligned text about parameter will eat only one space
 // | ----------------------------------------------------------------------
 // 
-// 
+// ^
 // | ----------------------------------------------------------------------
-// | No quickinfo is defined at /**/.
+// | No quickinfo at /**/.
 // | ----------------------------------------------------------------------
 // class NoQuickInfoClass {
 //       ^^^^^^^^^^^^^^^^
@@ -541,7 +541,7 @@
       "position": 58,
       "name": "1q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -591,7 +591,7 @@
       "position": 190,
       "name": "2q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -641,7 +641,7 @@
       "position": 291,
       "name": "3q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -696,7 +696,7 @@
       "position": 413,
       "name": "4q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -751,7 +751,7 @@
       "position": 618,
       "name": "5q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -806,7 +806,7 @@
       "position": 725,
       "name": "6q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -861,7 +861,7 @@
       "position": 856,
       "name": "7q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -916,7 +916,7 @@
       "position": 994,
       "name": "8q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -971,7 +971,7 @@
       "position": 1154,
       "name": "9q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1026,7 +1026,7 @@
       "position": 1336,
       "name": "10q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1081,7 +1081,7 @@
       "position": 1524,
       "name": "11q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1136,7 +1136,7 @@
       "position": 1608,
       "name": "12q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1186,7 +1186,7 @@
       "position": 1695,
       "name": "13q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1236,7 +1236,7 @@
       "position": 1744,
       "name": "14q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1286,7 +1286,7 @@
       "position": 1880,
       "name": "16aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1360,7 +1360,7 @@
       "position": 1891,
       "name": "17aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1434,7 +1434,7 @@
       "position": 1925,
       "name": "16q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1565,7 +1565,7 @@
       "position": 2111,
       "name": "19aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1639,7 +1639,7 @@
       "position": 2122,
       "name": "20aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1700,7 +1700,7 @@
       "position": 2133,
       "name": "21aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1761,7 +1761,7 @@
       "position": 2145,
       "name": "22aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1822,7 +1822,7 @@
       "position": 2149,
       "name": "23aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1896,7 +1896,7 @@
       "position": 2161,
       "name": "19q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -2153,7 +2153,7 @@
       "position": 2253,
       "name": "25aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2203,7 +2203,7 @@
       "position": 2277,
       "name": "26aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2253,7 +2253,7 @@
       "position": 2370,
       "name": "25q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -2371,7 +2371,7 @@
       "position": 2378,
       "name": "26q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -2489,7 +2489,7 @@
       "position": 2716,
       "name": "28aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2539,7 +2539,7 @@
       "position": 2727,
       "name": "29aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2613,7 +2613,7 @@
       "position": 2738,
       "name": "30aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2707,7 +2707,7 @@
       "position": 2756,
       "name": "31aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2801,7 +2801,7 @@
       "position": 2774,
       "name": "32aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2895,7 +2895,7 @@
       "position": 2792,
       "name": "33aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2965,7 +2965,7 @@
       "position": 2818,
       "name": "28q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -3348,7 +3348,7 @@
       "position": 3045,
       "name": "34aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3422,7 +3422,7 @@
       "position": 3081,
       "name": "34q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -3530,7 +3530,7 @@
       "position": 3243,
       "name": "35aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3604,7 +3604,7 @@
       "position": 3254,
       "name": "36aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3678,7 +3678,7 @@
       "position": 3272,
       "name": "35q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -3818,7 +3818,7 @@
       "position": 3432,
       "name": "37aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3892,7 +3892,7 @@
       "position": 3445,
       "name": "38aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3966,7 +3966,7 @@
       "position": 3486,
       "name": "37q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -4097,7 +4097,7 @@
       "position": 3782,
       "name": "40aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -4179,7 +4179,7 @@
       "position": 3828,
       "name": "41aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -4234,7 +4234,7 @@
       "position": 3839,
       "name": "42aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -4308,7 +4308,7 @@
       "position": 3850,
       "name": "43aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -4358,7 +4358,7 @@
       "position": 3894,
       "name": "40q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -4537,7 +4537,7 @@
       "position": 4040,
       "name": "45q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -4592,7 +4592,7 @@
       "position": 4193,
       "name": "46q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -4647,7 +4647,7 @@
       "position": 4778,
       "name": "47aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -4721,7 +4721,7 @@
       "position": 4789,
       "name": "48aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -4795,7 +4795,7 @@
       "position": 4792,
       "name": "49aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -4869,7 +4869,7 @@
       "position": 4809,
       "name": "47q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -5048,7 +5048,7 @@
       "position": 4854,
       "name": "50q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {

@@ -114,7 +114,7 @@
       "position": 75,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "getter",
       "kindModifiers": "",
       "textSpan": {
@@ -188,7 +188,7 @@
       "position": 205,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "setter",
       "kindModifiers": "",
       "textSpan": {
@@ -279,7 +279,7 @@
       "position": 340,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "getter",
       "kindModifiers": "",
       "textSpan": {
@@ -353,7 +353,7 @@
       "position": 445,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "setter",
       "kindModifiers": "",
       "textSpan": {
@@ -435,7 +435,7 @@
       "position": 607,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "setter",
       "kindModifiers": "",
       "textSpan": {
@@ -517,7 +517,7 @@
       "position": 636,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -625,7 +625,7 @@
       "position": 653,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -724,7 +724,7 @@
       "position": 670,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -832,7 +832,7 @@
       "position": 687,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {

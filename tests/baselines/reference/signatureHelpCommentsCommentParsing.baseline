@@ -350,7 +350,7 @@
 //     return a + b + c + d;
 //            ^
 // | ----------------------------------------------------------------------
-// | No signature help is defined at /*39*/.
+// | No signature help at /*39*/.
 // | ----------------------------------------------------------------------
 // }
 // jsDocParamTest(30, 40, 50, 60);
@@ -436,7 +436,7 @@
 // 
 // ^
 // | ----------------------------------------------------------------------
-// | No signature help is defined at /**/.
+// | No signature help at /**/.
 // | ----------------------------------------------------------------------
 // class NoQuickInfoClass {
 // }
@@ -448,7 +448,7 @@
       "position": 63,
       "name": "1"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -510,7 +510,7 @@
       "position": 198,
       "name": "2"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -572,7 +572,7 @@
       "position": 302,
       "name": "3"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -639,7 +639,7 @@
       "position": 422,
       "name": "4"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -706,7 +706,7 @@
       "position": 631,
       "name": "5"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -773,7 +773,7 @@
       "position": 737,
       "name": "6"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -840,7 +840,7 @@
       "position": 869,
       "name": "7"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -907,7 +907,7 @@
       "position": 1005,
       "name": "8"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -974,7 +974,7 @@
       "position": 1164,
       "name": "9"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -1041,7 +1041,7 @@
       "position": 1350,
       "name": "10"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -1108,7 +1108,7 @@
       "position": 1536,
       "name": "11"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -1175,7 +1175,7 @@
       "position": 1618,
       "name": "12"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -1237,7 +1237,7 @@
       "position": 1703,
       "name": "13"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -1299,7 +1299,7 @@
       "position": 1752,
       "name": "14"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -1361,7 +1361,7 @@
       "position": 1928,
       "name": "16"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -1522,7 +1522,7 @@
       "position": 1932,
       "name": "17"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -1683,7 +1683,7 @@
       "position": 2166,
       "name": "19"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -1970,7 +1970,7 @@
       "position": 2169,
       "name": "20"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -2257,7 +2257,7 @@
       "position": 2173,
       "name": "21"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -2544,7 +2544,7 @@
       "position": 2178,
       "name": "22"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -2831,7 +2831,7 @@
       "position": 2182,
       "name": "23"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -3118,7 +3118,7 @@
       "position": 2372,
       "name": "25"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -3297,7 +3297,7 @@
       "position": 2380,
       "name": "26"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -3476,7 +3476,7 @@
       "position": 2823,
       "name": "28"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -3899,7 +3899,7 @@
       "position": 2827,
       "name": "29"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -4322,7 +4322,7 @@
       "position": 2832,
       "name": "30"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -4745,7 +4745,7 @@
       "position": 2839,
       "name": "31"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -5168,7 +5168,7 @@
       "position": 2846,
       "name": "32"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -5591,7 +5591,7 @@
       "position": 2853,
       "name": "33"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -6014,7 +6014,7 @@
       "position": 3085,
       "name": "34"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -6147,7 +6147,7 @@
       "position": 3276,
       "name": "35"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -6317,7 +6317,7 @@
       "position": 3280,
       "name": "36"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -6487,7 +6487,7 @@
       "position": 3491,
       "name": "37"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -6648,7 +6648,7 @@
       "position": 3497,
       "name": "38"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -6816,7 +6816,7 @@
       "position": 3906,
       "name": "40"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -7038,7 +7038,7 @@
       "position": 3910,
       "name": "41"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -7260,7 +7260,7 @@
       "position": 3914,
       "name": "42"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -7482,7 +7482,7 @@
       "position": 3918,
       "name": "43"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -7704,7 +7704,7 @@
       "position": 4059,
       "name": "45"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -7771,7 +7771,7 @@
       "position": 4210,
       "name": "46"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -7838,7 +7838,7 @@
       "position": 4826,
       "name": "47"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -8045,7 +8045,7 @@
       "position": 4834,
       "name": "48"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -8252,7 +8252,7 @@
       "position": 4837,
       "name": "49"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

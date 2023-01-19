@@ -48,7 +48,7 @@
       "position": 51,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -103,7 +103,7 @@
       "position": 61,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -158,7 +158,7 @@
       "position": 123,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -253,7 +253,7 @@
       "position": 236,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local var",
       "kindModifiers": "",
       "textSpan": {
@@ -303,7 +303,7 @@
       "position": 257,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

@@ -59,7 +59,7 @@
       "position": 205,
       "name": "f0"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -352,7 +352,7 @@
       "position": 217,
       "name": "f1"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -645,7 +645,7 @@
       "position": 237,
       "name": "f2"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -938,7 +938,7 @@
       "position": 266,
       "name": "f3"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

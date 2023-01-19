@@ -221,7 +221,7 @@
       "position": 599,
       "name": "26"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,

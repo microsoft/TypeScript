@@ -22,7 +22,7 @@
       "position": 179,
       "name": ""
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

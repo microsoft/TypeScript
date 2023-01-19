@@ -27,7 +27,7 @@
       "position": 41,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "enum member",
       "kindModifiers": "export",
       "textSpan": {
@@ -193,7 +193,7 @@
       "position": 49,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "enum member",
       "kindModifiers": "export",
       "textSpan": {
