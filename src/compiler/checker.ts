@@ -21329,11 +21329,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return Ternary.False;
                     }
                 }
-                // A fresh empty object type is never a subtype of a non-empty object type and an empty object type is never a subtype of
-                // a non-empty object type. This ensures fresh({}) <: { [x: string]: xxx } and { [x: string: xxx] } <: {}. Without these
-                // rules, those types would be mutual subtypes.
-                else if ((relation === subtypeRelation || relation === strictSubtypeRelation) && isEmptyObjectType(target) && getObjectFlags(target) & ObjectFlags.FreshLiteral && !isEmptyObjectType(source) ||
-                    (relation === strictSubtypeRelation && target.flags & TypeFlags.Object && !isEmptyObjectType(target) && isEmptyObjectType(source) && !(getObjectFlags(source) & ObjectFlags.FreshLiteral))) {
+                // A fresh empty object type is never a subtype of a non-empty object type. This ensures fresh({}) <: { [x: string]: xxx }
+                // but not vice-versa. Without this rule, those types would be mutual subtypes.
+                else if ((relation === subtypeRelation || relation === strictSubtypeRelation) && isEmptyObjectType(target) && getObjectFlags(target) & ObjectFlags.FreshLiteral && !isEmptyObjectType(source)) {
                     return Ternary.False;
                 }
                 // Even if relationship doesn't hold for unions, intersections, or generic type references,
@@ -22084,8 +22082,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (sourceInfo) {
                 return indexInfoRelatedTo(sourceInfo, targetInfo, reportErrors);
             }
-            if (!(intersectionState & IntersectionState.Source) && isObjectTypeWithInferableIndex(source)) {
-                // Intersection constituents are never considered to have an inferred index signature
+            // Intersection constituents are never considered to have an inferred index signature. Also, in the strict subtype relation,
+            // only fresh object literals are considered to have inferred index signatures. This ensures { [x: string]: xxx } <: {} but
+            // not vice-versa. Without this rule, those types would be mutual strict subtypes.
+            if (!(intersectionState & IntersectionState.Source) && (relation !== strictSubtypeRelation || getObjectFlags(source) & ObjectFlags.FreshLiteral) && isObjectTypeWithInferableIndex(source)) {
                 return membersRelatedToIndexInfo(source, targetInfo, reportErrors, intersectionState);
             }
             if (reportErrors) {
