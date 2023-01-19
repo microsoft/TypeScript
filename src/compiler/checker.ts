@@ -24443,7 +24443,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         else {
                             const middleLength = targetArity - startLength - endLength;
                             if (middleLength === 2) {
-                                if (elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                if (elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic) {
                                     // Middle of target is [...T, ...U] and source is tuple type
                                     const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
                                     if (targetInfo && targetInfo.impliedArity !== undefined) {
@@ -24463,7 +24463,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength + impliedArity, endLength)!, elementTypes[startLength + 1]);
                                     }
                                 }
-                                else if (elementFlags[startLength] & ElementFlags.Rest && elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                else if (elementFlags[startLength] & ElementFlags.Rest && elementFlags[startLength + 1] & ElementFlags.Variadic) {
                                     // Middle of target is [...rest, ...T] and source is tuple type
                                     // if T is constrained by a fixed-size tuple we might be able to use its arity to infer T
                                     const param = getInferenceInfoForType(elementTypes[startLength + 1])?.typeParameter;
@@ -24484,12 +24484,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 // Middle of target is exactly one variadic element. Infer the slice between the fixed parts in the source.
                                 // If target ends in optional element(s), make a lower priority a speculative inference.
                                 const endsInOptional = target.target.elementFlags[targetArity - 1] & ElementFlags.Optional;
-                                const sourceSlice = isTupleType(source) ? sliceTupleType(source, startLength, endLength) : createArrayType(getTypeArguments(source)[0]);
+                                const sourceSlice = sliceTupleType(source, startLength, endLength);
                                 inferWithPriority(sourceSlice, elementTypes[startLength], endsInOptional ? InferencePriority.SpeculativeTuple : 0);
                             }
                             else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Rest) {
                                 // Middle of target is exactly one rest element. If middle of source is not empty, infer union of middle element types.
-                                const restType = isTupleType(source) ? getElementTypeOfSliceOfTupleType(source, startLength, endLength) : getTypeArguments(source)[0];
+                                const restType = getElementTypeOfSliceOfTupleType(source, startLength, endLength);
                                 if (restType) {
                                     inferFromTypes(restType, elementTypes[startLength]);
                                 }
