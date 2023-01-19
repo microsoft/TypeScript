@@ -80,7 +80,7 @@ exports.multiply = multiply;
 
 
 //// [/src/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5112841898-export function multiply(a: number, b: number) { return a * b; }\r\n","signature":"-7111849992-export declare function multiply(a: number, b: number): number;\r\n"}],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5112841898-export function multiply(a: number, b: number) { return a * b; }\r\n","signature":"-8675294677-export declare function multiply(a: number, b: number): number;\n"}],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -102,10 +102,10 @@ exports.multiply = multiply;
       "./index.ts": {
         "original": {
           "version": "5112841898-export function multiply(a: number, b: number) { return a * b; }\r\n",
-          "signature": "-7111849992-export declare function multiply(a: number, b: number): number;\r\n"
+          "signature": "-8675294677-export declare function multiply(a: number, b: number): number;\n"
         },
         "version": "5112841898-export function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-7111849992-export declare function multiply(a: number, b: number): number;\r\n"
+        "signature": "-8675294677-export declare function multiply(a: number, b: number): number;\n"
       }
     },
     "options": {
@@ -123,6 +123,6 @@ exports.multiply = multiply;
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 981
+  "size": 979
 }
 

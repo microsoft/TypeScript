@@ -243,7 +243,7 @@ export class CompilerHost implements ts.CompilerHost {
         if (sys instanceof vfs.FileSystem) sys = new System(sys);
         this.sys = sys;
         this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
-        this._newLine = ts.getNewLineCharacter(options, () => this.sys.newLine);
+        this._newLine = ts.getNewLineCharacter(options);
         this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
         this._setParentNodes = setParentNodes;
         this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
