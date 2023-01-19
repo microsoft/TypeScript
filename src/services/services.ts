@@ -1643,7 +1643,7 @@ export function createLanguageService(
             getCancellationToken: () => cancellationToken,
             getCanonicalFileName,
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-            getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
+            getNewLine: () => getNewLineCharacter(newSettings),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
             writeFile: noop,
             getCurrentDirectory: () => currentDirectory,

@@ -262,7 +262,6 @@ import {
     LiteralTypeNode,
     map,
     mapDefined,
-    maybeBind,
     MemberOverrideStatus,
     memoize,
     memoizeOne,
@@ -1066,7 +1065,7 @@ function getExhaustiveCaseSnippets(
         }
 
         const newClauses = map(elements, element => factory.createCaseClause(element, []));
-        const newLineChar = getNewLineCharacter(options, maybeBind(host, host.getNewLine));
+        const newLineChar = getNewLineCharacter(options);
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
@@ -1569,7 +1568,7 @@ function getEntryForMemberCompletion(
         module: options.module,
         target: options.target,
         omitTrailingSemicolon: false,
-        newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+        newLine: getNewLineKind(getNewLineCharacter(options)),
     });
     const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
@@ -1735,7 +1734,7 @@ function getEntryForObjectLiteralMethodCompletion(
         module: options.module,
         target: options.target,
         omitTrailingSemicolon: false,
-        newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+        newLine: getNewLineKind(getNewLineCharacter(options)),
     });
     if (formatContext) {
         insertText = printer.printAndFormatSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile, formatContext);

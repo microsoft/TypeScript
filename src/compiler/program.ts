@@ -456,7 +456,7 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
         return getDirectoryPath(normalizePath(system.getExecutingFilePath()));
     }
 
-    const newLine = getNewLineCharacter(options, () => system.newLine);
+    const newLine = getNewLineCharacter(options);
     const realpath = system.realpath && ((path: string) => system.realpath!(path));
     const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes),
@@ -3418,7 +3418,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             addFileIncludeReason(file || undefined, reason);
             // try to check if we've already seen this file but with a different casing in path
             // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
-            if (file && options.forceConsistentCasingInFileNames) {
+            if (file && options.forceConsistentCasingInFileNames !== false) {
                 const checkedName = file.fileName;
                 const isRedirect = toPath(checkedName) !== toPath(fileName);
                 if (isRedirect) {

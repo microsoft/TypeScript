@@ -482,7 +482,6 @@ import {
     SymbolTable,
     SyntaxKind,
     SyntaxList,
-    sys,
     TaggedTemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
@@ -6651,14 +6650,14 @@ export function directoryProbablyExists(directoryName: string, host: { directory
 const carriageReturnLineFeed = "\r\n";
 const lineFeed = "\n";
 /** @internal */
-export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
+export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
     switch (options.newLine) {
         case NewLineKind.CarriageReturnLineFeed:
             return carriageReturnLineFeed;
         case NewLineKind.LineFeed:
-            return lineFeed;
+        case undefined:
+                return lineFeed;
     }
-    return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
 }
 
 /**
