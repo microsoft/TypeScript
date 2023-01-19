@@ -10219,6 +10219,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Use type from type annotation if one is present
         const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
+        if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
+            if (declaredType) {
+                // If the catch clause is explicitly annotated with any or unknown, accept it, otherwise error.
+                return isTypeAny(declaredType) || declaredType === unknownType ? declaredType : errorType;
+            }
+            // If the catch clause is not explicitly annotated, treat it as though it were explicitly
+            // annotated with unknown or any, depending on useUnknownInCatchVariables.
+            return useUnknownInCatchVariables ? unknownType : anyType;
+        }
         if (declaredType) {
             return addOptionality(declaredType, isProperty, isOptional);
         }
@@ -10877,18 +10886,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             members.set("exports" as __String, result);
             return createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
         }
-        // Handle catch clause variables
         Debug.assertIsDefined(symbol.valueDeclaration);
         const declaration = symbol.valueDeclaration;
-        if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
-            const typeNode = getEffectiveTypeAnnotationNode(declaration);
-            if (typeNode === undefined) {
-                return useUnknownInCatchVariables ? unknownType : anyType;
-            }
-            const type = getTypeOfNode(typeNode);
-            // an errorType will make `checkTryStatement` issue an error
-            return isTypeAny(type) || type === unknownType ? type : errorType;
-        }
         // Handle export default expressions
         if (isSourceFile(declaration) && isJsonSourceFile(declaration)) {
             if (!declaration.statements.length) {
@@ -27079,6 +27078,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isFunctionLike(node) && !getImmediatelyInvokedFunctionExpression(node) ||
             node.kind === SyntaxKind.ModuleBlock ||
             node.kind === SyntaxKind.SourceFile ||
+            node.kind === SyntaxKind.CatchClause ||
             node.kind === SyntaxKind.PropertyDeclaration)!;
     }
 
@@ -27451,6 +27451,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
         const declarationContainer = getControlFlowContainer(declaration);
         let flowContainer = getControlFlowContainer(node);
+        const isCatch = flowContainer.kind === SyntaxKind.CatchClause;
         const isOuterVariable = flowContainer !== declarationContainer;
         const isSpreadDestructuringAssignmentTarget = node.parent && node.parent.parent && isSpreadAssignment(node.parent) && isDestructuringAssignmentTarget(node.parent.parent);
         const isModuleExports = symbol.flags & SymbolFlags.ModuleExports;
@@ -27465,7 +27466,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
         // the entire control flow graph from the variable's declaration (i.e. when the flow container and
         // declaration container are the same).
-        const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
+        const assumeInitialized = isParameter || isCatch || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
             type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
             isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
             node.parent.kind === SyntaxKind.NonNullExpression ||
@@ -41230,9 +41231,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Grammar checking
             if (catchClause.variableDeclaration) {
                 const declaration = catchClause.variableDeclaration;
-                const typeNode = getEffectiveTypeAnnotationNode(getRootDeclaration(declaration));
+                checkVariableLikeDeclaration(declaration);
+                const typeNode = getEffectiveTypeAnnotationNode(declaration);
                 if (typeNode) {
-                    const type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ false, CheckMode.Normal);
+                    const type = getTypeFromTypeNode(typeNode);
                     if (type && !(type.flags & TypeFlags.AnyOrUnknown)) {
                         grammarErrorOnFirstToken(typeNode, Diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified);
                     }
