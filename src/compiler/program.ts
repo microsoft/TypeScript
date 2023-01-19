@@ -4302,15 +4302,38 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (options.out) {
             createDeprecatedDiagnosticForOption(version, "out");
         }
+
+        forEachProjectReference(projectReferences, resolvedProjectReferences, (_resolvedRef, parent, index) => {
+            const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
+            if (ref.prepend) {
+                createDeprecatedOptionForVersionDiagnostic(
+                    version,
+                    (message, arg0, arg1, arg2) => createDiagnosticForReference(parent?.sourceFile as JsonSourceFile | undefined, index, message, arg0, arg1, arg2),
+                    "prepend",
+                );
+            }
+        });
     }
 
     function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string) {
+        return createDeprecatedOptionForVersionDiagnostic(
+            version,
+            (message, arg0, arg1, arg2) => createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, message, arg0, arg1, arg2),
+            name,
+            value,
+        );
+    }
+
+    function createDeprecatedOptionForVersionDiagnostic(
+        version: string,
+        createDiagnostic: (message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string) => void,
+        name: string,
+        value?: string) {
         if (version === DeprecationVersion.v6_0) {
-            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
+            createDiagnostic(Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
         }
         else {
-            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
-                Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
+            createDiagnostic(Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
         }
     }
 
@@ -4548,14 +4571,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0, arg1);
     }
 
-    function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {
+    function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
         const referencesSyntax = firstDefined(getTsConfigPropArray(sourceFile || options.configFile, "references"),
             property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
         if (referencesSyntax && referencesSyntax.elements.length > index) {
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, arg0, arg1));
+            programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, arg0, arg1, arg2));
         }
         else {
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
         }
     }
 
