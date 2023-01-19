@@ -875,7 +875,7 @@ export function detectSortCaseSensitivity<T>(
     if (array.length < 2) return kind;
 
     let prevElement = getString(array[0]);
-    for (let i = 1, len = array.length; i < len; i++) {
+    for (let i = 1, len = array.length; i < len && kind !== SortKind.None; i++) {
         const element = getString(array[i]);
         if (kind & SortKind.CaseSensitive && compareStringsCaseSensitive(prevElement, element) > 0) {
             kind &= ~SortKind.CaseSensitive;
