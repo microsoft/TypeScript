@@ -2,11 +2,12 @@ import {
     append,
     concatenate,
     emptyArray,
+    firstDefined,
+    or,
 } from "./core";
 import {
     hasJSFileExtension,
     hasTSFileExtension,
-    usesExtensionsOnImports,
 } from "./extension";
 import { isExpressionStatement } from "./factory/nodeTests";
 import {
@@ -164,4 +165,8 @@ function getRequiresAtTopOfFile(sourceFile: SourceFile): readonly RequireOrImpor
         }
     }
     return requires || emptyArray;
+}
+
+function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (text: string) => boolean = or(hasJSFileExtension, hasTSFileExtension)): boolean {
+    return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasExtension(text) : undefined) || false;
 }

@@ -1,21 +1,17 @@
 import {
     find,
-    firstDefined,
     flatten,
     mapDefined,
-    or,
     some,
 } from "./core";
 import {
     fileExtensionIs,
-    pathIsRelative,
 } from "./path";
 import {
     CompilerOptions,
     Extension,
     FileExtensionInfo,
     ScriptKind,
-    SourceFile,
 } from "./types";
 import {
     getAllowJSCompilerOption,
@@ -111,22 +107,4 @@ export function hasJSFileExtension(fileName: string): boolean {
 /** @internal */
 export function hasTSFileExtension(fileName: string): boolean {
     return some(supportedTSExtensionsFlat, extension => fileExtensionIs(fileName, extension));
-}
-
-/** @internal */
-export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (text: string) => boolean = or(hasJSFileExtension, hasTSFileExtension)): boolean {
-    return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasExtension(text) : undefined) || false;
-}
-
-/** @internal */
-export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]) {
-    if (!fileName) return false;
-
-    const supportedExtensions = getSupportedExtensions(compilerOptions, extraFileExtensions);
-    for (const extension of flatten(getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions))) {
-        if (fileExtensionIs(fileName, extension)) {
-            return true;
-        }
-    }
-    return false;
 }

@@ -12,6 +12,7 @@ import {
     createGetCanonicalFileName,
     emptyArray,
     find,
+    flatten,
     identity,
     insertSorted,
     isArray,
@@ -31,6 +32,7 @@ import {
 import { isDeclarationFileName } from "./parser";
 import {
     ensureTrailingDirectorySeparator,
+    fileExtensionIs,
     fileExtensionIsOneOf,
     getBaseFileName,
     getDirectoryPath,
@@ -66,7 +68,11 @@ import {
     removeFileExtension,
 } from "./utilities";
 import { returnNoopFileWatcher } from "./watch";
-import { isSupportedSourceFileName, supportedJSExtensionsFlat } from "./extension";
+import {
+    getSupportedExtensions,
+    getSupportedExtensionsWithJsonIfResolveJsonModule,
+    supportedJSExtensionsFlat,
+} from "./extension";
 
 /**
  * Partial interface of the System thats needed to support the caching of directory structure
@@ -817,4 +823,16 @@ export function getFallbackOptions(options: WatchOptions | undefined): WatchOpti
 /** @internal */
 export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
     objWithWatcher.watcher.close();
+}
+
+function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]) {
+    if (!fileName) return false;
+
+    const supportedExtensions = getSupportedExtensions(compilerOptions, extraFileExtensions);
+    for (const extension of flatten(getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions))) {
+        if (fileExtensionIs(fileName, extension)) {
+            return true;
+        }
+    }
+    return false;
 }
