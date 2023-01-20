@@ -6,6 +6,6 @@ tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpre
     (1) /notregexp/a.foo();
          ~~~~~~~~~
 !!! error TS2552: Cannot find name 'notregexp'. Did you mean 'RegExp'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1050:13: 'RegExp' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1053:13: 'RegExp' is declared here.
                    ~
 !!! error TS2304: Cannot find name 'a'.

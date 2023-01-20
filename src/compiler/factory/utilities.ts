@@ -2,6 +2,7 @@ import * as Debug from "../debug";
 import {
     compareStringsCaseSensitive,
     first,
+    last,
     map,
     or,
     pushIfUnique,
@@ -14,6 +15,7 @@ import {
     AccessorDeclaration,
     AdditiveOperator,
     AdditiveOperatorOrHigher,
+    AssignmentExpression,
     AssignmentOperatorOrHigher,
     BinaryExpression,
     BinaryOperator,
@@ -29,7 +31,9 @@ import {
     CharacterCodes,
     CommaListExpression,
     CompilerOptions,
+    ComputedPropertyName,
     Declaration,
+    DefaultKeyword,
     EmitFlags,
     EmitHelperFactory,
     EmitHost,
@@ -37,9 +41,11 @@ import {
     EntityName,
     EqualityOperator,
     EqualityOperatorOrHigher,
+    EqualsToken,
     ExclamationToken,
     ExponentiationOperator,
     ExportDeclaration,
+    ExportKeyword,
     Expression,
     ForInitializer,
     GeneratedIdentifier,
@@ -53,6 +59,7 @@ import {
     ImportCall,
     ImportDeclaration,
     ImportEqualsDeclaration,
+    InternalEmitFlags,
     JSDocNamespaceBody,
     JSDocTypeAssertion,
     JsxOpeningFragment,
@@ -64,6 +71,7 @@ import {
     MemberExpression,
     MethodDeclaration,
     MinusToken,
+    Modifier,
     ModifiersArray,
     ModuleKind,
     ModuleName,
@@ -78,6 +86,7 @@ import {
     NumericLiteral,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
+    ParenthesizedExpression,
     PlusToken,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
@@ -120,7 +129,9 @@ import {
     isExportNamespaceAsDefaultDeclaration,
     isFileLevelUniqueName,
     isNumericLiteralName,
+    nodeIsSynthesized,
     outFile,
+    skipOuterExpressions,
 } from "../utilities";
 import {
     getJSDocType,
@@ -133,22 +144,26 @@ import {
     isGeneratedPrivateIdentifier,
     isLiteralExpression,
     isMemberName,
+    isModifierKind,
     isObjectLiteralElementLike,
     isPropertyName,
     isTypeNode,
 } from "../utilitiesPublic";
 import {
     addEmitFlags,
+    addInternalEmitFlags,
     getEmitHelpers,
     getOrCreateEmitNode,
     setStartsOnNewLine,
 } from "./emitNode";
 import {
     isBlock,
+    isCommaListExpression,
     isComputedPropertyName,
     isExclamationToken,
     isIdentifier,
     isMinusToken,
+    isParenthesizedExpression,
     isPlusToken,
     isPostfixUnaryExpression,
     isPrefixUnaryExpression,
@@ -191,7 +206,7 @@ export function createMemberAccessForPropertyName(factory: NodeFactory, target: 
                 : factory.createElementAccessExpression(target, memberName),
             memberName
         );
-        getOrCreateEmitNode(expression).flags |= EmitFlags.NoNestedSourceMaps;
+        addEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
         return expression;
     }
 }
@@ -576,9 +591,13 @@ export function isExportName(node: Identifier) {
 }
 
 /** @internal */
+export function isCommaExpression(node: Expression): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken> } {
+    return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken;
+}
+
+/** @internal */
 export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
-    return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken ||
-        node.kind === SyntaxKind.CommaListExpression;
+    return isCommaExpression(node) || isCommaListExpression(node);
 }
 
 /** @internal */
@@ -655,7 +674,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
                 nodeFactory.createStringLiteral(externalHelpersModuleNameText),
                  /*assertClause*/ undefined
             );
-            addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
+            addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
             return externalHelpersImportDeclaration;
         }
     }
@@ -1154,6 +1173,22 @@ export function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken {
     return isBinaryOperator(node.kind);
 }
 
+function isExportOrDefaultKeywordKind(kind: SyntaxKind): kind is SyntaxKind.ExportKeyword | SyntaxKind.DefaultKeyword {
+    return kind === SyntaxKind.ExportKeyword || kind === SyntaxKind.DefaultKeyword;
+}
+
+/** @internal */
+export function isExportOrDefaultModifier(node: Node): node is ExportKeyword | DefaultKeyword {
+    const kind = node.kind;
+    return isExportOrDefaultKeywordKind(kind);
+}
+
+/** @internal */
+export function isNonExportDefaultModifier(node: Node): node is Exclude<Modifier, ExportKeyword | DefaultKeyword> {
+    const kind = node.kind;
+    return isModifierKind(kind) && !isExportOrDefaultKeywordKind(kind);
+}
+
 /**
  * If `nodes` is not undefined, creates an empty `NodeArray` that preserves the `pos` and `end` of `nodes`.
  * @internal
@@ -1258,7 +1293,6 @@ export function formatGeneratedName(privateName: boolean, prefix: string | Gener
     return `${privateName ? "#" : ""}${prefix}${baseName}${suffix}`;
 }
 
-
 /**
  * Creates a private backing field for an `accessor` {@link PropertyDeclaration}.
  *
@@ -1330,4 +1364,61 @@ export function createPropertyNameNodeForIdentifierOrLiteral(factory: NodeFactor
     return isIdentifierText(name, target) ? factory.createIdentifier(name) :
         !stringNamed && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
         factory.createStringLiteral(name, !!singleQuote);
+}
+
+/** @internal */
+export function findComputedPropertyNameCacheAssignment(name: ComputedPropertyName) {
+    let node = name.expression;
+    while (true) {
+        node = skipOuterExpressions(node);
+        if (isCommaListExpression(node)) {
+            node = last(node.elements);
+            continue;
+        }
+
+        if (isCommaExpression(node)) {
+            node = node.right;
+            continue;
+        }
+
+        if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true) && isGeneratedIdentifier(node.left)) {
+            return node as AssignmentExpression<EqualsToken> & { readonly left: GeneratedIdentifier };
+        }
+
+        break;
+    }
+}
+
+function isSyntheticParenthesizedExpression(node: Expression): node is ParenthesizedExpression {
+    return isParenthesizedExpression(node) && nodeIsSynthesized(node) && !node.emitNode;
+}
+
+function flattenCommaListWorker(node: Expression, expressions: Expression[]) {
+    if (isSyntheticParenthesizedExpression(node)) {
+        flattenCommaListWorker(node.expression, expressions);
+    }
+    else if (isCommaExpression(node)) {
+        flattenCommaListWorker(node.left, expressions);
+        flattenCommaListWorker(node.right, expressions);
+    }
+    else if (isCommaListExpression(node)) {
+        for (const child of node.elements) {
+            flattenCommaListWorker(child, expressions);
+        }
+    }
+    else {
+        expressions.push(node);
+    }
+}
+
+/**
+ * Flatten a CommaExpression or CommaListExpression into an array of one or more expressions, unwrapping any nested
+ * comma expressions and synthetic parens.
+ *
+ * @internal
+ */
+export function flattenCommaList(node: Expression) {
+    const expressions: Expression[] = [];
+    flattenCommaListWorker(node, expressions);
+    return expressions;
 }

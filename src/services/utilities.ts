@@ -35,6 +35,7 @@ import {
     or,
     singleOrUndefined,
     some,
+    SortKind,
     stableSort,
     startsWith,
     stringContains,
@@ -371,6 +372,7 @@ import {
     compareImportsOrRequireStatements,
     detectImportDeclarationSorting,
     getImportDeclarationInsertionIndex,
+    getOrganizeImportsComparer,
 } from "./organizeImports";
 import { DisplayPartsSymbolWriter } from "./services";
 import { SourceMapper } from "./sourcemaps";
@@ -2584,17 +2586,20 @@ export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | und
 }
 
 /** @internal */
-export function insertImports(changes: ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean): void {
+export function insertImports(changes: ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean, preferences: UserPreferences): void {
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
-    const sortedNewImports = isArray(imports) ? stableSort(imports, compareImportsOrRequireStatements) : [imports];
+    let sortKind = isArray(imports) ? detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
+    const comparer = getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
+    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => compareImportsOrRequireStatements(a, b, comparer)) : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && detectImportDeclarationSorting(existingImportStatements)) {
+    else if (existingImportStatements && (sortKind = detectImportDeclarationSorting(existingImportStatements, preferences))) {
+        const comparer = getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
         for (const newImport of sortedNewImports) {
-            const insertionIndex = getImportDeclarationInsertionIndex(existingImportStatements, newImport);
+            const insertionIndex = getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
             if (insertionIndex === 0) {
                 // If the first import is top-of-file, insert after the leading comment which is likely the header.
                 const options = existingImportStatements[0] === sourceFile.statements[0] ?

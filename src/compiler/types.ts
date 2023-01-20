@@ -553,8 +553,11 @@ export type PunctuationSyntaxKind =
     | SyntaxKind.ExclamationToken
     | SyntaxKind.TildeToken
     | SyntaxKind.AmpersandAmpersandToken
+    | SyntaxKind.AmpersandAmpersandEqualsToken
     | SyntaxKind.BarBarToken
+    | SyntaxKind.BarBarEqualsToken
     | SyntaxKind.QuestionQuestionToken
+    | SyntaxKind.QuestionQuestionEqualsToken
     | SyntaxKind.QuestionToken
     | SyntaxKind.ColonToken
     | SyntaxKind.AtToken
@@ -1579,6 +1582,9 @@ export type QuestionToken = PunctuationToken<SyntaxKind.QuestionToken>;
 export type ExclamationToken = PunctuationToken<SyntaxKind.ExclamationToken>;
 export type ColonToken = PunctuationToken<SyntaxKind.ColonToken>;
 export type EqualsToken = PunctuationToken<SyntaxKind.EqualsToken>;
+export type AmpersandAmpersandEqualsToken = PunctuationToken<SyntaxKind.AmpersandAmpersandEqualsToken>;
+export type BarBarEqualsToken = PunctuationToken<SyntaxKind.BarBarEqualsToken>;
+export type QuestionQuestionEqualsToken = PunctuationToken<SyntaxKind.QuestionQuestionEqualsToken>;
 export type AsteriskToken = PunctuationToken<SyntaxKind.AsteriskToken>;
 export type EqualsGreaterThanToken = PunctuationToken<SyntaxKind.EqualsGreaterThanToken>;
 export type PlusToken = PunctuationToken<SyntaxKind.PlusToken>;
@@ -1967,8 +1973,7 @@ export interface PropertyAssignment extends ObjectLiteralElement, JSDocContainer
     readonly initializer: Expression;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // property assignment cannot have decorators
-    /** @internal */ readonly modifiers?: NodeArray<Modifier> | undefined; // property assignment cannot have modifiers
+    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined; // property assignment cannot have decorators or modifiers
     /** @internal */ readonly questionToken?: QuestionToken | undefined; // property assignment cannot have a question token
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // property assignment cannot have an exclamation token
 }
@@ -1983,8 +1988,7 @@ export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDoc
     readonly objectAssignmentInitializer?: Expression;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // shorthand property assignment cannot have decorators
-    /** @internal */ readonly modifiers?: NodeArray<Modifier> | undefined; // shorthand property assignment cannot have modifiers
+    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined; // shorthand property assignment cannot have decorators or modifiers
     /** @internal */ readonly questionToken?: QuestionToken | undefined; // shorthand property assignment cannot have a question token
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // shorthand property assignment cannot have an exclamation token
 }
@@ -2056,12 +2060,9 @@ export type FunctionLike = SignatureDeclaration;
 
 export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement, LocalsContainer {
     readonly kind: SyntaxKind.FunctionDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name?: Identifier;
     readonly body?: FunctionBody;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // functions cannot have decorators
 }
 
 export interface MethodSignature extends SignatureDeclarationBase, TypeElement, LocalsContainer {
@@ -2094,11 +2095,10 @@ export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassEle
 export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.Constructor;
     readonly parent: ClassLikeDeclaration;
-    readonly modifiers?: NodeArray<Modifier> | undefined;
+    readonly modifiers?: NodeArray<ModifierLike> | undefined;
     readonly body?: FunctionBody | undefined;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // A constructor cannot have decorators
     /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration>; // A constructor cannot have type parameters
     /** @internal */ readonly type?: TypeNode; // A constructor cannot have a return type annotation
 }
@@ -2141,11 +2141,8 @@ export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaratio
 export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement, LocalsContainer {
     readonly kind: SyntaxKind.IndexSignature;
     readonly parent: ObjectTypeDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly type: TypeNode;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
 export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer, LocalsContainer {
@@ -2157,8 +2154,7 @@ export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContaine
     /** @internal */ returnFlowNode?: FlowNode;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
-    /** @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
+    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface TypeNode extends Node {
@@ -2680,11 +2676,12 @@ export type BindingOrAssignmentElement =
 export type ObjectBindingOrAssignmentElement =
     | BindingElement
     | PropertyAssignment // AssignmentProperty
- // AssignmentProperty
     | ShorthandPropertyAssignment // AssignmentProperty
- // AssignmentProperty
     | SpreadAssignment // AssignmentRestProperty
     ;
+
+/** @internal */
+export type ObjectAssignmentElement = Exclude<ObjectBindingOrAssignmentElement, BindingElement>;
 
 export type ArrayBindingOrAssignmentElement =
     | BindingElement
@@ -2694,10 +2691,12 @@ export type ArrayBindingOrAssignmentElement =
     | ObjectLiteralExpression // ObjectAssignmentPattern
     | AssignmentExpression<EqualsToken> // AssignmentElement
     | Identifier // DestructuringAssignmentTarget
- // DestructuringAssignmentTarget
     | PropertyAccessExpression // DestructuringAssignmentTarget
     | ElementAccessExpression // DestructuringAssignmentTarget
     ;
+
+/** @internal */
+export type ArrayAssignmentElement = Exclude<ArrayBindingOrAssignmentElement, BindingElement>;
 
 export type BindingOrAssignmentElementRestIndicator =
     | DotDotDotToken // from BindingElement
@@ -2711,6 +2710,9 @@ export type BindingOrAssignmentElementTarget =
     | PropertyAccessExpression
     | ElementAccessExpression
     | OmittedExpression;
+
+/** @internal */
+export type AssignmentElementTarget = Exclude<BindingOrAssignmentElementTarget, BindingPattern>;
 
 export type ObjectBindingOrAssignmentPattern =
     | ObjectBindingPattern
@@ -3317,13 +3319,12 @@ export interface DebuggerStatement extends Statement, FlowContainer {
     readonly kind: SyntaxKind.DebuggerStatement;
 }
 
-export interface MissingDeclaration extends DeclarationStatement {
+export interface MissingDeclaration extends DeclarationStatement, PrimaryExpression {
     readonly kind: SyntaxKind.MissingDeclaration;
     readonly name?: Identifier;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ illegalDecorators?: NodeArray<Decorator> | undefined;
-    /** @internal */ modifiers?: NodeArray<Modifier> | undefined;
+    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export type BlockLike =
@@ -3341,11 +3342,8 @@ export interface Block extends Statement, LocalsContainer {
 
 export interface VariableStatement extends Statement, FlowContainer {
     readonly kind: SyntaxKind.VariableStatement;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly declarationList: VariableDeclarationList;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
 export interface ExpressionStatement extends Statement, FlowContainer {
@@ -3552,14 +3550,11 @@ export interface TypeElement extends NamedDeclaration {
 
 export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
     readonly kind: SyntaxKind.InterfaceDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: Identifier;
     readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
     readonly heritageClauses?: NodeArray<HeritageClause>;
     readonly members: NodeArray<TypeElement>;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
 export interface HeritageClause extends Node {
@@ -3571,13 +3566,10 @@ export interface HeritageClause extends Node {
 
 export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.TypeAliasDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: Identifier;
     readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
     readonly type: TypeNode;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
 export interface EnumMember extends NamedDeclaration, JSDocContainer {
@@ -3591,12 +3583,9 @@ export interface EnumMember extends NamedDeclaration, JSDocContainer {
 
 export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
     readonly kind: SyntaxKind.EnumDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: Identifier;
     readonly members: NodeArray<EnumMember>;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
 export type ModuleName =
@@ -3617,12 +3606,9 @@ export interface AmbientModuleDeclaration extends ModuleDeclaration {
 export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.ModuleDeclaration;
     readonly parent: ModuleBody | SourceFile;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: ModuleName;
     readonly body?: ModuleBody | JSDocNamespaceDeclaration;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
 export type NamespaceBody =
@@ -3664,16 +3650,13 @@ export type ModuleReference =
 export interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
     readonly kind: SyntaxKind.ImportEqualsDeclaration;
     readonly parent: SourceFile | ModuleBlock;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: Identifier;
     readonly isTypeOnly: boolean;
 
     // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
     // module reference.
     readonly moduleReference: ModuleReference;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
 export interface ExternalModuleReference extends Node {
@@ -3689,14 +3672,11 @@ export interface ExternalModuleReference extends Node {
 export interface ImportDeclaration extends Statement {
     readonly kind: SyntaxKind.ImportDeclaration;
     readonly parent: SourceFile | ModuleBlock;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly importClause?: ImportClause;
     /** If this is not a StringLiteral it will be a grammar error. */
     readonly moduleSpecifier: Expression;
     readonly assertClause?: AssertClause;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
 export type NamedImportBindings =
@@ -3756,23 +3736,19 @@ export interface NamespaceExportDeclaration extends DeclarationStatement, JSDocC
     readonly name: Identifier;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
-    /** @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
+    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
     readonly kind: SyntaxKind.ExportDeclaration;
     readonly parent: SourceFile | ModuleBlock;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly isTypeOnly: boolean;
     /** Will not be assigned in the case of `export * from "foo";` */
     readonly exportClause?: NamedExportBindings;
     /** If this is not a StringLiteral it will be a grammar error. */
     readonly moduleSpecifier?: Expression;
     readonly assertClause?: AssertClause;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
 export interface NamedImports extends Node {
@@ -3832,12 +3808,9 @@ export type TypeOnlyAliasDeclaration =
 export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
     readonly kind: SyntaxKind.ExportAssignment;
     readonly parent: SourceFile;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly isExportEquals?: boolean;
     readonly expression: Expression;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
 export interface FileReference extends TextRange {
@@ -5484,6 +5457,21 @@ export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitialize
 export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
 
 /** @internal */
+export type AliasDeclarationNode =
+    | ImportEqualsDeclaration
+    | VariableDeclarationInitializedTo<RequireOrImportCall
+    | AccessExpression>
+    | ImportClause
+    | NamespaceImport
+    | ImportSpecifier
+    | ExportSpecifier
+    | NamespaceExport
+    | BindingElementOfBareOrAccessedRequire;
+
+/** @internal */
+export type BindingElementOfBareOrAccessedRequire = BindingElement & { parent: { parent: VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression> } };
+
+/** @internal */
 export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
 
 /** @internal */
@@ -5993,6 +5981,7 @@ export interface NodeLinks {
     skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
+    decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
 }
 
 /** @internal */
@@ -7116,6 +7105,7 @@ export interface CompilerOptions {
     types?: string[];
     /** Paths used to compute primary types search locations */
     typeRoots?: string[];
+    verbatimModuleSyntax?: boolean;
     /** @internal */ version?: boolean;
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;
@@ -7831,6 +7821,7 @@ export interface SourceMapSource {
 export interface EmitNode {
     annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
     flags: EmitFlags;                        // Flags that customize emit
+    internalFlags: InternalEmitFlags;        // Internal flags that customize emit
     leadingComments?: SynthesizedComment[];  // Synthesized leading comments
     trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
     commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
@@ -7843,6 +7834,7 @@ export interface EmitNode {
     startsOnNewLine?: boolean;               // If the node should begin on a new line
     snippetElement?: SnippetElement;         // Snippet element of the node
     typeNode?: TypeNode;                     // VariableDeclaration type
+    classThis?: Identifier;                  // Identifier that points to the final class constructor after decorators are applied
     identifierTypeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized identifiers. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
     autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers and private identifiers.
     generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
@@ -7903,11 +7895,17 @@ export const enum EmitFlags {
     HasEndOfDeclarationMarker = 1 << 23,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
     Iterator = 1 << 24,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
     NoAsciiEscaping = 1 << 25,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
-    /** @internal */ TypeScriptClassWrapper = 1 << 26, // The node is an IIFE class wrapper created by the ts transform.
-    /** @internal */ NeverApplyImportHelper = 1 << 27, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
-    /** @internal */ IgnoreSourceNewlines = 1 << 28,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
-    /** @internal */ Immutable = 1 << 29,      // Indicates a node is a singleton intended to be reused in multiple locations. Any attempt to make further changes to the node will result in an error.
-    /** @internal */ IndirectCall = 1 << 30,   // Emit CallExpression as an indirect call: `(0, f)()`
+}
+
+/** @internal */
+export const enum InternalEmitFlags {
+    None = 0,
+    TypeScriptClassWrapper = 1 << 0, // The node is an IIFE class wrapper created by the ts transform.
+    NeverApplyImportHelper = 1 << 1, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
+    IgnoreSourceNewlines = 1 << 2,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
+    Immutable = 1 << 3,              // Indicates a node is a singleton intended to be reused in multiple locations. Any attempt to make further changes to the node will result in an error.
+    IndirectCall = 1 << 4,           // Emit CallExpression as an indirect call: `(0, f)()`
+    TransformPrivateStaticElements = 1 << 5, // Indicates static private elements in a file or class should be transformed regardless of --target (used by esDecorators transform)
 }
 
 export interface EmitHelperBase {
@@ -7947,6 +7945,7 @@ export const enum ExternalEmitHelpers {
     Assign = 1 << 1,                // __assign (used by Jsx and ESNext object spread transformations)
     Rest = 1 << 2,                  // __rest (used by ESNext object rest transformation)
     Decorate = 1 << 3,              // __decorate (used by TypeScript decorators transformation)
+    ESDecorateAndRunInitializers = Decorate, // __esDecorate and __runInitializers (used by ECMAScript decorators transformation)
     Metadata = 1 << 4,              // __metadata (used by TypeScript decorators transformation)
     Param = 1 << 5,                 // __param (used by TypeScript decorators transformation)
     Awaiter = 1 << 6,               // __awaiter (used by ES2017 async functions transformation)
@@ -7966,8 +7965,11 @@ export const enum ExternalEmitHelpers {
     ClassPrivateFieldSet = 1 << 20, // __classPrivateFieldSet (used by the class private field transformation)
     ClassPrivateFieldIn = 1 << 21,  // __classPrivateFieldIn (used by the class private field transformation)
     CreateBinding = 1 << 22,        // __createBinding (use by the module transform for (re)exports and namespace imports)
+    SetFunctionName = 1 << 23,      // __setFunctionName (used by class fields and ECMAScript decorators)
+    PropKey = 1 << 24,              // __propKey (used by class fields and ECMAScript decorators)
+
     FirstEmitHelper = Extends,
-    LastEmitHelper = CreateBinding,
+    LastEmitHelper = PropKey,
 
     // Helpers included by ES2015 for..of
     ForOfIncludes = Values,
@@ -8056,6 +8058,12 @@ export type OuterExpression =
     | AsExpression
     | NonNullExpression
     | PartiallyEmittedExpression;
+
+/** @internal */
+export type WrappedExpression<T extends Expression> =
+    | OuterExpression & { readonly expression: WrappedExpression<T> }
+    | T
+    ;
 
 export type TypeOfTag = "undefined" | "number" | "bigint" | "boolean" | "string" | "symbol" | "object" | "function";
 
@@ -8246,8 +8254,8 @@ export interface NodeFactory {
     updateMethodSignature(node: MethodSignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): MethodSignature;
     createMethodDeclaration(modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
     updateMethodDeclaration(node: MethodDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
-    createConstructorDeclaration(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
-    updateConstructorDeclaration(node: ConstructorDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+    createConstructorDeclaration(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+    updateConstructorDeclaration(node: ConstructorDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
     createGetAccessorDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
     updateGetAccessorDeclaration(node: GetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
     createSetAccessorDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
@@ -8256,9 +8264,9 @@ export interface NodeFactory {
     updateCallSignature(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): CallSignatureDeclaration;
     createConstructSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): ConstructSignatureDeclaration;
     updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
-    createIndexSignature(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
-    /** @internal */ createIndexSignature(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
-    updateIndexSignature(node: IndexSignatureDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+    createIndexSignature(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+    /** @internal */ createIndexSignature(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
+    updateIndexSignature(node: IndexSignatureDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
     createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
     updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
     createClassStaticBlockDeclaration(body: Block): ClassStaticBlockDeclaration;
@@ -8422,8 +8430,8 @@ export interface NodeFactory {
 
     createBlock(statements: readonly Statement[], multiLine?: boolean): Block;
     updateBlock(node: Block, statements: readonly Statement[]): Block;
-    createVariableStatement(modifiers: readonly Modifier[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]): VariableStatement;
-    updateVariableStatement(node: VariableStatement, modifiers: readonly Modifier[] | undefined, declarationList: VariableDeclarationList): VariableStatement;
+    createVariableStatement(modifiers: readonly ModifierLike[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]): VariableStatement;
+    updateVariableStatement(node: VariableStatement, modifiers: readonly ModifierLike[] | undefined, declarationList: VariableDeclarationList): VariableStatement;
     createEmptyStatement(): EmptyStatement;
     createExpressionStatement(expression: Expression): ExpressionStatement;
     updateExpressionStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement;
@@ -8464,24 +8472,24 @@ export interface NodeFactory {
     updateFunctionDeclaration(node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
     createClassDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
     updateClassDeclaration(node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
-    createInterfaceDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
-    updateInterfaceDeclaration(node: InterfaceDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
-    createTypeAliasDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-    updateTypeAliasDeclaration(node: TypeAliasDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-    createEnumDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
-    updateEnumDeclaration(node: EnumDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
-    createModuleDeclaration(modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
-    updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
+    createInterfaceDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+    updateInterfaceDeclaration(node: InterfaceDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+    createTypeAliasDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+    updateTypeAliasDeclaration(node: TypeAliasDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+    createEnumDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
+    updateEnumDeclaration(node: EnumDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+    createModuleDeclaration(modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
+    updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
     createModuleBlock(statements: readonly Statement[]): ModuleBlock;
     updateModuleBlock(node: ModuleBlock, statements: readonly Statement[]): ModuleBlock;
     createCaseBlock(clauses: readonly CaseOrDefaultClause[]): CaseBlock;
     updateCaseBlock(node: CaseBlock, clauses: readonly CaseOrDefaultClause[]): CaseBlock;
     createNamespaceExportDeclaration(name: string | Identifier): NamespaceExportDeclaration;
     updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
-    createImportEqualsDeclaration(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-    updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-    createImportDeclaration(modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
-    updateImportDeclaration(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+    createImportEqualsDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
+    updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
     createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
     updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
     createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
@@ -8498,10 +8506,10 @@ export interface NodeFactory {
     updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports;
     createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
     updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
-    createExportAssignment(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
-    updateExportAssignment(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
-    createExportDeclaration(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
-    updateExportDeclaration(node: ExportDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
+    createExportAssignment(modifiers: readonly ModifierLike[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
+    updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment;
+    createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
+    updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
     createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
     updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
     createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
@@ -8757,6 +8765,7 @@ export interface NodeFactory {
     /** @internal */ createFunctionCallCall(target: Expression, thisArg: Expression, argumentsList: readonly Expression[]): CallExpression;
     /** @internal */ createFunctionApplyCall(target: Expression, thisArg: Expression, argumentsExpression: Expression): CallExpression;
     /** @internal */ createObjectDefinePropertyCall(target: Expression, propertyName: string | Expression, attributes: Expression): CallExpression;
+    /** @internal */ createObjectGetOwnPropertyDescriptorCall(target: Expression, propertyName: string | Expression): CallExpression;
     /** @internal */ createReflectGetCall(target: Expression, propertyKey: Expression, receiver?: Expression): CallExpression;
     /** @internal */ createReflectSetCall(target: Expression, propertyKey: Expression, value: Expression, receiver?: Expression): CallExpression;
     /** @internal */ createPropertyDescriptor(attributes: PropertyDescriptorAttributes, singleLine?: boolean): ObjectLiteralExpression;
@@ -8780,7 +8789,7 @@ export interface NodeFactory {
      *
      * @internal
      */
-    createAssignmentTargetWrapper(paramName: Identifier, expression: Expression): LeftHandSideExpression;
+    createAssignmentTargetWrapper(paramName: Identifier, expression: Expression): PropertyAccessExpression;
     /** @internal */ inlineExpressions(expressions: readonly Expression[]): Expression;
     /**
      * Gets the internal name of a declaration. This is primarily used for declarations that can be
@@ -9835,6 +9844,11 @@ export interface UserPreferences {
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
     readonly organizeImportsIgnoreCase?: "auto" | boolean;
+    readonly organizeImportsCollation?: "ordinal" | "unicode";
+    readonly organizeImportsLocale?: string;
+    readonly organizeImportsNumericCollation?: boolean;
+    readonly organizeImportsAccentCollation?: boolean;
+    readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
 }
 
 /** Represents a bigint literal value without requiring bigint support */
@@ -9850,6 +9864,57 @@ export interface Queue<T> {
     isEmpty(): boolean;
 }
 
+/**
+ * Describes the decorator context object passed to a native ECMAScript decorator for a class.
+ *
+ * @internal
+ */
+export interface ESDecorateClassContext {
+    /**
+     * The kind of the decorated element.
+     */
+    kind: "class";
+
+    /**
+     * The name of the decorated element.
+     */
+    name: Expression;
+}
+
+/**
+ * Describes the decorator context object passed to a native ECMAScript decorator for a class element.
+ *
+ * @internal
+ */
+export interface ESDecorateClassElementContext {
+    /**
+     * The kind of the decorated element.
+     */
+    kind: "method" | "getter" | "setter" | "accessor" | "field";
+    name: ESDecorateName;
+    static: boolean;
+    private: boolean;
+    access: ESDecorateClassElementAccess;
+}
+
+/** @internal */
+export interface ESDecorateClassElementAccess {
+    get?: boolean;
+    set?: boolean;
+}
+
+/** @internal */
+export type ESDecorateName =
+    | { computed: true, name: Expression }
+    | { computed: false, name: Identifier | PrivateIdentifier }
+    ;
+
+/** @internal */
+export type ESDecorateContext =
+    | ESDecorateClassContext
+    | ESDecorateClassElementContext
+    ;
+
 /** @internal */
 export interface EmitHelperFactory {
     getUnscopedHelperName(name: string): Identifier;
@@ -9857,6 +9922,9 @@ export interface EmitHelperFactory {
     createDecorateHelper(decoratorExpressions: readonly Expression[], target: Expression, memberName?: Expression, descriptor?: Expression): Expression;
     createMetadataHelper(metadataKey: string, metadataValue: Expression): Expression;
     createParamHelper(expression: Expression, parameterOffset: number): Expression;
+    // ES Decorators Helpers
+    createESDecorateHelper(ctor: Expression, descriptorIn: Expression, decorators: Expression, contextIn: ESDecorateContext, initializers: Expression, extraInitializers: Expression): Expression;
+    createRunInitializersHelper(thisArg: Expression, initializers: Expression, value?: Expression): Expression;
     // ES2018 Helpers
     createAssignHelper(attributesSegments: readonly Expression[]): Expression;
     createAwaitHelper(expression: Expression): Expression;
@@ -9871,6 +9939,8 @@ export interface EmitHelperFactory {
     createExtendsHelper(name: Identifier): Expression;
     createTemplateObjectHelper(cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression): Expression;
     createSpreadArrayHelper(to: Expression, from: Expression, packFrom: boolean): Expression;
+    createPropKeyHelper(expr: Expression): Expression;
+    createSetFunctionNameHelper(f: Expression, name: Expression, prefix?: string): Expression;
     // ES2015 Destructuring Helpers
     createValuesHelper(expression: Expression): Expression;
     createReadHelper(iteratorRecord: Expression, count: number | undefined): Expression;

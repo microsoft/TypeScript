@@ -1,4 +1,5 @@
 import * as Debug from "../compiler/debug";
+import * as protocol from "./protocol";
 import {
     assign,
     clear,
@@ -57,7 +58,6 @@ import {
     Project,
     ProjectKind,
 } from "./project";
-import * as protocol from "./protocol";
 import {
     AbsolutePositionAndLineText,
     ScriptVersionCache,

@@ -11,9 +11,9 @@ import {
     singleOrMany,
 } from "../../core";
 import {
-    addEmitFlags,
     addEmitHelper,
     addEmitHelpers,
+    addInternalEmitFlags,
     removeAllComments,
     setEmitFlags,
 } from "../../factory/emitNode";
@@ -76,6 +76,7 @@ import {
     ImportDeclaration,
     ImportEqualsDeclaration,
     InitializedVariableDeclaration,
+    InternalEmitFlags,
     MergeDeclarationMarker,
     Modifier,
     ModifierFlags,
@@ -107,6 +108,7 @@ import {
     getEmitModuleKind,
     getEmitScriptTarget,
     getESModuleInterop,
+    getInternalEmitFlags,
     getNamespaceDeclarationNode,
     getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
@@ -1054,7 +1056,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
-        if (!getESModuleInterop(compilerOptions) || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+        if (!getESModuleInterop(compilerOptions) || getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) {
             return innerExpr;
         }
         if (getExportNeedsImportStarHelper(node)) {
@@ -1064,7 +1066,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
-        if (!getESModuleInterop(compilerOptions) || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+        if (!getESModuleInterop(compilerOptions) || getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) {
             return innerExpr;
         }
         if (getImportNeedsImportStarHelper(node)) {
@@ -1325,7 +1327,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 else {
                     const exportNeedsImportDefault =
                         !!getESModuleInterop(compilerOptions) &&
-                        !(getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) &&
+                        !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
                         idText(specifier.propertyName || specifier.name) === "default";
                     const exportedValue = factory.createPropertyAccessExpression(
                         exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
@@ -1505,11 +1507,30 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             // If we're exporting these variables, then these just become assignments to 'exports.x'.
             for (const variable of node.declarationList.declarations) {
                 if (isIdentifier(variable.name) && isLocalName(variable.name)) {
+                    // A "local name" generally means a variable declaration that *shouldn't* be
+                    // converted to `exports.x = ...`, even if the declaration is exported. This
+                    // usually indicates a class or function declaration that was converted into
+                    // a variable declaration, as most references to the declaration will remain
+                    // untransformed (i.e., `new C` rather than `new exports.C`). In these cases,
+                    // an `export { x }` declaration will follow.
                     if (!modifiers) {
                         modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
                     }
 
-                    variables = append(variables, variable);
+                    if (variable.initializer) {
+                        const updatedVariable = factory.updateVariableDeclaration(
+                            variable,
+                            variable.name,
+                            /*exclamationToken*/ undefined,
+                            /*type*/ undefined,
+                            createExportExpression(
+                                variable.name,
+                                visitNode(variable.initializer, visitor, isExpression)));
+                        variables = append(variables, updatedVariable);
+                    }
+                    else {
+                        variables = append(variables, variable);
+                    }
                 }
                 else if (variable.initializer) {
                     if (!isBindingPattern(variable.name) && (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer) || isClassExpression(variable.initializer))) {
@@ -2042,13 +2063,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             const expression = substituteExpressionIdentifier(node.expression);
             noSubstitution[getNodeId(expression)] = true;
             if (!isIdentifier(expression) && !(getEmitFlags(node.expression) & EmitFlags.HelperName)) {
-                return addEmitFlags(
+                return addInternalEmitFlags(
                     factory.updateCallExpression(node,
                         expression,
                         /*typeArguments*/ undefined,
                         node.arguments
                     ),
-                    EmitFlags.IndirectCall
+                    InternalEmitFlags.IndirectCall
                 );
 
             }
@@ -2061,13 +2082,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             const tag = substituteExpressionIdentifier(node.tag);
             noSubstitution[getNodeId(tag)] = true;
             if (!isIdentifier(tag) && !(getEmitFlags(node.tag) & EmitFlags.HelperName)) {
-                return addEmitFlags(
+                return addInternalEmitFlags(
                     factory.updateTaggedTemplateExpression(node,
                         tag,
                         /*typeArguments*/ undefined,
                         node.template
                     ),
-                    EmitFlags.IndirectCall
+                    InternalEmitFlags.IndirectCall
                 );
             }
         }

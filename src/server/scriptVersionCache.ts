@@ -1,4 +1,5 @@
 import * as Debug from "../compiler/debug";
+import * as protocol from "./protocol";
 import { computeLineStarts } from "../compiler/scanner/scanner";
 import {
     TextChangeRange,
@@ -11,7 +12,6 @@ import {
     unchangedTextChangeRange,
 } from "../compiler/utilitiesPublic";
 import { IScriptSnapshot } from "../services/types";
-import * as protocol from "./protocol";
 import { emptyArray } from "./utilitiesPublic";
 
 const lineCollectionCapacity = 4;

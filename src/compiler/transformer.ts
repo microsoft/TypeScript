@@ -79,8 +79,10 @@ import {
     getEmitScriptTarget,
     getJSXTransformEnabled,
     getSourceFileOfNode,
+    getUseDefineForClassFields,
 } from "./utilities";
 import { getParseTreeNode } from "./utilitiesPublic";
+import { transformESDecorators } from "./transformers/esDecorators";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {
@@ -127,12 +129,20 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
 
     const languageVersion = getEmitScriptTarget(compilerOptions);
     const moduleKind = getEmitModuleKind(compilerOptions);
+    const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
     const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
 
     addRange(transformers, customTransformers && map(customTransformers.before, wrapScriptTransformerFactory));
 
     transformers.push(transformTypeScript);
-    transformers.push(transformLegacyDecorators);
+
+    if (compilerOptions.experimentalDecorators) {
+        transformers.push(transformLegacyDecorators);
+    }
+    else if (languageVersion < ScriptTarget.ESNext || !useDefineForClassFields) {
+        transformers.push(transformESDecorators);
+    }
+
     transformers.push(transformClassFields);
 
     if (getJSXTransformEnabled(compilerOptions)) {

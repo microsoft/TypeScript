@@ -26,6 +26,7 @@ import {
     equateStringsCaseSensitive,
     filter,
     find,
+    findIndex,
     firstDefined,
     firstDefinedIterator,
     flatMap,
@@ -73,15 +74,18 @@ import {
     isBuildInfoFile,
     notImplementedResolver,
 } from "../emitter/emitter";
-import { addEmitFlags } from "../factory/emitNode";
+import { addInternalEmitFlags } from "../factory/emitNode";
 import {
     createInputFilesWithFilePaths,
     factory,
 } from "../factory/nodeFactory";
 import {
     isArrayLiteralExpression,
+    isClassDeclaration,
     isDecorator,
+    isDefaultModifier,
     isExportDeclaration,
+    isExportModifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isImportSpecifier,
@@ -89,9 +93,10 @@ import {
     isJsxFragment,
     isModuleDeclaration,
     isObjectLiteralExpression,
+    isParameter,
     isStringLiteral,
 } from "../factory/nodeTests";
-import { canHaveModifiers } from "../factory/utilitiesPublic";
+import { canHaveDecorators } from "../factory/utilitiesPublic";
 import {
     createModeAwareCache,
     createModeAwareCacheKey,
@@ -202,7 +207,6 @@ import {
     DiagnosticMessage,
     DiagnosticMessageChain,
     DiagnosticWithLocation,
-    EmitFlags,
     EmitHost,
     EmitOnly,
     EmitResult,
@@ -223,6 +227,7 @@ import {
     ImportDeclaration,
     ImportOrExportSpecifier,
     InputFiles,
+    InternalEmitFlags,
     JsonSourceFile,
     JsxEmit,
     MethodDeclaration,
@@ -278,12 +283,14 @@ import {
     WriteFileCallbackData,
 } from "../types";
 import {
+    canHaveIllegalDecorators,
     chainDiagnosticMessages,
     compareDataObjects,
     createCommentDirectivesMap,
     createCompilerDiagnostic,
     createCompilerDiagnosticFromMessageChain,
     createDiagnosticCollection,
+    createDiagnosticForNodeFromMessageChain,
     createDiagnosticForNodeInSourceFile,
     createDiagnosticForRange,
     createFileDiagnostic,
@@ -2984,8 +2991,33 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
 
             function walkArray(nodes: NodeArray<Node>, parent: Node) {
-                if (canHaveModifiers(parent) && parent.modifiers === nodes && some(nodes, isDecorator) && !options.experimentalDecorators) {
-                    diagnostics.push(createDiagnosticForNode(parent, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning));
+                if (canHaveIllegalDecorators(parent)) {
+                    const decorator = find(parent.modifiers, isDecorator);
+                    if (decorator) {
+                        // report illegal decorator
+                        diagnostics.push(createDiagnosticForNode(decorator, Diagnostics.Decorators_are_not_valid_here));
+                    }
+                }
+                else if (canHaveDecorators(parent) && parent.modifiers) {
+                    const decoratorIndex = findIndex(parent.modifiers, isDecorator);
+                    if (decoratorIndex >= 0) {
+                        if (isParameter(parent) && !options.experimentalDecorators) {
+                            // report illegall decorator on parameter
+                            diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
+                        }
+                        else if (isClassDeclaration(parent)) {
+                            const exportIndex = findIndex(parent.modifiers, isExportModifier);
+                            const defaultIndex = findIndex(parent.modifiers, isDefaultModifier);
+                            if (exportIndex >= 0 && decoratorIndex < exportIndex) {
+                                // report illegal decorator before `export default`
+                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_must_come_after_export_or_export_default_in_JavaScript_files));
+                            }
+                            else if (defaultIndex >= 0 && decoratorIndex < defaultIndex) {
+                                // report illegal decorator before `export default`
+                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
+                            }
+                        }
+                    }
                 }
 
                 switch (parent.kind) {
@@ -3171,7 +3203,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function createSyntheticImport(text: string, file: SourceFile) {
         const externalHelpersModuleReference = factory.createStringLiteral(text);
         const importDecl = factory.createImportDeclaration(/*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference, /*assertClause*/ undefined);
-        addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
+        addInternalEmitFlags(importDecl, InternalEmitFlags.NeverApplyImportHelper);
         setParent(externalHelpersModuleReference, importDecl);
         setParent(importDecl, file);
         // explicitly unset the synthesized flag on these declarations so the checker API will answer questions about them
@@ -4135,21 +4167,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const languageVersion = getEmitScriptTarget(options);
 
         const firstNonAmbientExternalModuleSourceFile = find(files, f => isExternalModule(f) && !f.isDeclarationFile);
-        if (options.isolatedModules) {
-            if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015) {
+        if (options.isolatedModules || options.verbatimModuleSyntax) {
+            if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015 && options.isolatedModules) {
                 createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target");
             }
 
             if (options.preserveConstEnums === false) {
-                createDiagnosticForOptionName(Diagnostics.Option_preserveConstEnums_cannot_be_disabled_when_isolatedModules_is_enabled, "preserveConstEnums", "isolatedModules");
-            }
-
-            for (const file of files) {
-                if (!isExternalModule(file) && !isSourceFileJS(file) && !file.isDeclarationFile && file.scriptKind !== ScriptKind.JSON) {
-                    const span = getErrorSpanForNode(file, file);
-                    programDiagnostics.add(createFileDiagnostic(file, span.start, span.length,
-                        Diagnostics._0_cannot_be_compiled_under_isolatedModules_because_it_is_considered_a_global_script_file_Add_an_import_export_or_an_empty_export_statement_to_make_it_a_module, getBaseFileName(file.fileName)));
-                }
+                createDiagnosticForOptionName(Diagnostics.Option_preserveConstEnums_cannot_be_disabled_when_0_is_enabled, options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules", "preserveConstEnums");
             }
         }
         else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {
@@ -4258,7 +4282,23 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.preserveValueImports && getEmitModuleKind(options) < ModuleKind.ES2015) {
-            createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later);
+            createDiagnosticForOptionName(Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later, "preserveValueImports");
+        }
+
+        if (options.verbatimModuleSyntax) {
+            const moduleKind = getEmitModuleKind(options);
+            if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
+                createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
+            }
+            if (options.isolatedModules) {
+                createRedundantOptionDiagnostic("isolatedModules", "verbatimModuleSyntax");
+            }
+            if (options.preserveValueImports) {
+                createRedundantOptionDiagnostic("preserveValueImports", "verbatimModuleSyntax");
+            }
+            if (options.importsNotUsedAsValues) {
+                createRedundantOptionDiagnostic("importsNotUsedAsValues", "verbatimModuleSyntax");
+            }
         }
 
         if (options.allowImportingTsExtensions && !(options.noEmit || options.emitDeclarationOnly)) {
@@ -4351,15 +4391,35 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (options.out) {
             createDeprecatedDiagnosticForOption(version, "out");
         }
+        if (options.importsNotUsedAsValues) {
+            createDeprecatedDiagnosticForOption(version, "importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
+        }
+        if (options.preserveValueImports) {
+            createDeprecatedDiagnosticForOption(version, "preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
+        }
     }
 
-    function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string) {
+    function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string, useInstead?: string) {
         if (version === DeprecationVersion.v6_0) {
-            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
+            if (useInstead) {
+                const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
+                const chain = chainDiagnosticMessages(details, Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
+            }
+            else {
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
+            }
         }
         else {
-            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
-                Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
+            if (useInstead) {
+                const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
+                const chain = chainDiagnosticMessages(details, Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
+            }
+            else {
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
+                    Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
+            }
         }
     }
 
@@ -4608,13 +4668,21 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
+    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessageChain): void;
+    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): void;
+    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): void {
         const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
         const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
             !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2);
 
         if (needCompilerDiagnostic) {
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+            // eslint-disable-next-line local/no-in-operator
+            if ("messageText" in message) {
+                programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
+            }
+            else {
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+            }
         }
     }
 
@@ -4634,12 +4702,41 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return _compilerOptionsObjectLiteralSyntax || undefined;
     }
 
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean {
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, messageChain: DiagnosticMessageChain): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean {
         const props = getPropertyAssignment(objectLiteral, key1, key2);
         for (const prop of props) {
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
+            // eslint-disable-next-line local/no-in-operator
+            if ("messageText" in message) {
+                programDiagnostics.add(createDiagnosticForNodeFromMessageChain(options.configFile!, onKey ? prop.name : prop.initializer, message));
+            }
+            else {
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
+            }
         }
         return !!props.length;
+    }
+
+    /**
+     * Only creates a diagnostic on the option key specified by `errorOnOption`.
+     * If both options are specified in the program in separate config files via `extends`,
+     * a diagnostic is only created if `errorOnOption` is specified in the leaf config file.
+     * Useful if `redundantWithOption` represents a superset of the functionality of `errorOnOption`:
+     * if a user inherits `errorOnOption` from a base config file, it's still valid and useful to
+     * override it in the leaf config file.
+     */
+    function createRedundantOptionDiagnostic(errorOnOption: string, redundantWithOption: string) {
+        const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
+        if (compilerOptionsObjectLiteralSyntax) {
+            // This is a no-op if `errorOnOption` isn't present in the leaf config file.
+            createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, /*onKey*/ true, errorOnOption, /*key2*/ undefined, Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, errorOnOption, redundantWithOption);
+        }
+        else {
+            // There was no config file, so both options were specified on the command line.
+            createDiagnosticForOptionName(Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, errorOnOption, redundantWithOption);
+        }
     }
 
     function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {

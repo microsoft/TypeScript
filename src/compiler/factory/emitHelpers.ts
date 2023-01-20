@@ -16,10 +16,14 @@ import {
     EmitHelperUniqueNameCallback,
     EmitNode,
     EntityName,
+    ESDecorateClassContext,
+    ESDecorateClassElementContext,
+    ESDecorateContext,
     Expression,
     FunctionExpression,
     GeneratedIdentifierFlags,
     Identifier,
+    InternalEmitFlags,
     PrivateIdentifierKind,
     ScriptTarget,
     SyntaxKind,
@@ -31,7 +35,10 @@ import {
     getEmitFlags,
     getEmitScriptTarget,
 } from "../utilities";
-import { setEmitFlags } from "./emitNode";
+import {
+    setEmitFlags,
+    setInternalEmitFlags,
+} from "./emitNode";
 import {
     isCallExpression,
     isComputedPropertyName,
@@ -46,8 +53,8 @@ import { setTextRange } from "./utilitiesPublic";
 /** @internal */
 export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
     const factory = context.factory;
-    const immutableTrue = memoize(() => setEmitFlags(factory.createTrue(), EmitFlags.Immutable));
-    const immutableFalse = memoize(() => setEmitFlags(factory.createFalse(), EmitFlags.Immutable));
+    const immutableTrue = memoize(() => setInternalEmitFlags(factory.createTrue(), InternalEmitFlags.Immutable));
+    const immutableFalse = memoize(() => setInternalEmitFlags(factory.createFalse(), InternalEmitFlags.Immutable));
 
     return {
         getUnscopedHelperName,
@@ -55,6 +62,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         createDecorateHelper,
         createMetadataHelper,
         createParamHelper,
+        // ES Decorators Helpers
+        createESDecorateHelper,
+        createRunInitializersHelper,
         // ES2018 Helpers
         createAssignHelper,
         createAwaitHelper,
@@ -69,6 +79,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         createExtendsHelper,
         createTemplateObjectHelper,
         createSpreadArrayHelper,
+        createPropKeyHelper,
+        createSetFunctionNameHelper,
         // ES2015 Destructuring Helpers
         createValuesHelper,
         createReadHelper,
@@ -139,6 +151,206 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 ]
             ),
             location
+        );
+    }
+
+    // ES Decorators Helpers
+
+    function createESDecorateClassContextObject(contextIn: ESDecorateClassContext) {
+        return factory.createObjectLiteralExpression([
+            factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral("class")),
+            factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name)
+        ]);
+    }
+
+    // Per https://github.com/tc39/proposal-decorators/issues/494, we may need to change the emit for the `access` object
+    // so that it does not need to be used via `.call`. The following two sections represent the options presented in
+    // tc39/proposal-decorators#494
+    //
+    // === Current approach (`access.get.call(obj)`, `access.set.call(obj, value)`) ===
+    //
+    // function createESDecorateClassElementAccessGetMethod(elementName: ESDecorateName) {
+    //     const accessor = elementName.computed ?
+    //         factory.createElementAccessExpression(factory.createThis(), elementName.name) :
+    //         factory.createPropertyAccessExpression(factory.createThis(), elementName.name);
+    //
+    //     return factory.createMethodDeclaration(
+    //         /*modifiers*/ undefined,
+    //         /*asteriskToken*/ undefined,
+    //         "get",
+    //         /*questionToken*/ undefined,
+    //         /*typeParameters*/ undefined,
+    //         [],
+    //         /*type*/ undefined,
+    //         factory.createBlock([factory.createReturnStatement(accessor)])
+    //     );
+    // }
+    //
+    // function createESDecorateClassElementAccessSetMethod(elementName: ESDecorateName) {
+    //     const accessor = elementName.computed ?
+    //         factory.createElementAccessExpression(factory.createThis(), elementName.name) :
+    //         factory.createPropertyAccessExpression(factory.createThis(), elementName.name);
+    //
+    //     return factory.createMethodDeclaration(
+    //         /*modifiers*/ undefined,
+    //         /*asteriskToken*/ undefined,
+    //         "set",
+    //         /*questionToken*/ undefined,
+    //         /*typeParameters*/ undefined,
+    //         [factory.createParameterDeclaration(
+    //             /*modifiers*/ undefined,
+    //             /*dotDotDotToken*/ undefined,
+    //             factory.createIdentifier("value")
+    //         )],
+    //         /*type*/ undefined,
+    //         factory.createBlock([
+    //             factory.createExpressionStatement(
+    //                 factory.createAssignment(
+    //                     accessor,
+    //                     factory.createIdentifier("value")
+    //                 )
+    //             )
+    //         ])
+    //     );
+    // }
+    //
+    // function createESDecorateClassElementAccessObject(name: ESDecorateName, access: ESDecorateClassElementAccess) {
+    //     const properties: ObjectLiteralElementLike[] = [];
+    //     if (access.get) properties.push(createESDecorateClassElementAccessGetMethod(name));
+    //     if (access.set) properties.push(createESDecorateClassElementAccessSetMethod(name));
+    //     return factory.createObjectLiteralExpression(properties);
+    // }
+    //
+    // === Suggested approach (`access.get(obj)`, `access.set(obj, value)`, `access.has(obj)`) ===
+    //
+    // function createESDecorateClassElementAccessGetMethod(elementName: ESDecorateName) {
+    //     const accessor = elementName.computed ?
+    //         factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name) :
+    //         factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
+    //
+    //     return factory.createMethodDeclaration(
+    //         /*modifiers*/ undefined,
+    //         /*asteriskToken*/ undefined,
+    //         "get",
+    //         /*questionToken*/ undefined,
+    //         /*typeParameters*/ undefined,
+    //         [factory.createParameterDeclaration(
+    //             /*modifiers*/ undefined,
+    //             /*dotDotDotToken*/ undefined,
+    //             factory.createIdentifier("obj")
+    //         )],
+    //         /*type*/ undefined,
+    //         factory.createBlock([factory.createReturnStatement(accessor)])
+    //     );
+    // }
+    //
+    // function createESDecorateClassElementAccessSetMethod(elementName: ESDecorateName) {
+    //     const accessor = elementName.computed ?
+    //         factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name) :
+    //         factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
+    //
+    //     return factory.createMethodDeclaration(
+    //         /*modifiers*/ undefined,
+    //         /*asteriskToken*/ undefined,
+    //         "set",
+    //         /*questionToken*/ undefined,
+    //         /*typeParameters*/ undefined,
+    //         [factory.createParameterDeclaration(
+    //             /*modifiers*/ undefined,
+    //             /*dotDotDotToken*/ undefined,
+    //             factory.createIdentifier("obj")
+    //         ),
+    //         factory.createParameterDeclaration(
+    //             /*modifiers*/ undefined,
+    //             /*dotDotDotToken*/ undefined,
+    //             factory.createIdentifier("value")
+    //         )],
+    //         /*type*/ undefined,
+    //         factory.createBlock([
+    //             factory.createExpressionStatement(
+    //                 factory.createAssignment(
+    //                     accessor,
+    //                     factory.createIdentifier("value")
+    //                 )
+    //             )
+    //         ])
+    //     );
+    // }
+    //
+    // function createESDecorateClassElementAccessHasMethod(elementName: ESDecorateName) {
+    //     const propertyName =
+    //         elementName.computed ? elementName.name :
+    //         isIdentifier(elementName.name) ? factory.createStringLiteralFromNode(elementName.name) :
+    //         elementName.name;
+    //
+    //     return factory.createMethodDeclaration(
+    //         /*modifiers*/ undefined,
+    //         /*asteriskToken*/ undefined,
+    //         "has",
+    //         /*questionToken*/ undefined,
+    //         /*typeParameters*/ undefined,
+    //         [factory.createParameterDeclaration(
+    //             /*modifiers*/ undefined,
+    //             /*dotDotDotToken*/ undefined,
+    //             factory.createIdentifier("obj")
+    //         )],
+    //         /*type*/ undefined,
+    //         factory.createBlock([factory.createReturnStatement(
+    //             factory.createBinaryExpression(
+    //                 propertyName,
+    //                 SyntaxKind.InKeyword,
+    //                 factory.createIdentifier("obj")
+    //             )
+    //         )])
+    //     );
+    // }
+    //
+    // function createESDecorateClassElementAccessObject(name: ESDecorateName, access: ESDecorateClassElementAccess) {
+    //     const properties: ObjectLiteralElementLike[] = [];
+    //     if (access.get) properties.push(createESDecorateClassElementAccessGetMethod(name));
+    //     if (access.set) properties.push(createESDecorateClassElementAccessSetMethod(name));
+    //     property.push(createESDecorateClassElementAccessHasMethod(name));
+    //     return factory.createObjectLiteralExpression(properties);
+    // }
+
+    function createESDecorateClassElementContextObject(contextIn: ESDecorateClassElementContext) {
+        return factory.createObjectLiteralExpression([
+            factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral(contextIn.kind)),
+            factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name.computed ? contextIn.name.name : factory.createStringLiteralFromNode(contextIn.name.name)),
+            factory.createPropertyAssignment(factory.createIdentifier("static"), contextIn.static ? factory.createTrue() : factory.createFalse()),
+            factory.createPropertyAssignment(factory.createIdentifier("private"), contextIn.private ? factory.createTrue() : factory.createFalse()),
+
+            // Disabled, pending resolution of https://github.com/tc39/proposal-decorators/issues/494
+            // factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access))
+        ]);
+    }
+
+    function createESDecorateContextObject(contextIn: ESDecorateContext) {
+        return contextIn.kind === "class" ? createESDecorateClassContextObject(contextIn) :
+            createESDecorateClassElementContextObject(contextIn);
+    }
+
+    function createESDecorateHelper(ctor: Expression, descriptorIn: Expression, decorators: Expression, contextIn: ESDecorateContext, initializers: Expression, extraInitializers: Expression) {
+        context.requestEmitHelper(esDecorateHelper);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__esDecorate"),
+            /*typeArguments*/ undefined,
+            [
+                ctor ?? factory.createNull(),
+                descriptorIn ?? factory.createNull(),
+                decorators,
+                createESDecorateContextObject(contextIn),
+                initializers,
+                extraInitializers
+            ]);
+    }
+
+    function createRunInitializersHelper(thisArg: Expression, initializers: Expression, value?: Expression) {
+        context.requestEmitHelper(runInitializersHelper);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__runInitializers"),
+            /*typeArguments*/ undefined,
+            value ? [thisArg, initializers, value] : [thisArg, initializers]
         );
     }
 
@@ -300,6 +512,24 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             getUnscopedHelperName("__spreadArray"),
             /*typeArguments*/ undefined,
             [to, from, packFrom ? immutableTrue() : immutableFalse()]
+        );
+    }
+
+    function createPropKeyHelper(expr: Expression) {
+        context.requestEmitHelper(propKeyHelper);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__propKey"),
+            /*typeArguments*/ undefined,
+            [expr]
+        );
+    }
+
+    function createSetFunctionNameHelper(f: Expression, name: Expression, prefix?: string): Expression {
+        context.requestEmitHelper(setFunctionNameHelper);
+        return context.factory.createCallExpression(
+            getUnscopedHelperName("__setFunctionName"),
+            /*typeArguments*/ undefined,
+            prefix ? [f, name, context.factory.createStringLiteral(prefix)] : [f, name]
         );
     }
 
@@ -476,6 +706,59 @@ export const paramHelper: UnscopedEmitHelper = {
             var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return function (target, key) { decorator(target, key, paramIndex); }
             };`
+};
+
+// ES Decorators Helpers
+/** @internal */
+export const esDecorateHelper: UnscopedEmitHelper = {
+    name: "typescript:esDecorate",
+    importName: "__esDecorate",
+    scoped: false,
+    priority: 2,
+    text: `
+        var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
+            function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
+            var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
+            var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
+            var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
+            var _, done = false;
+            for (var i = decorators.length - 1; i >= 0; i--) {
+                var context = {};
+                for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
+                for (var p in contextIn.access) context.access[p] = contextIn.access[p];
+                context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
+                var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
+                if (kind === "accessor") {
+                    if (result === void 0) continue;
+                    if (result === null || typeof result !== "object") throw new TypeError("Object expected");
+                    if (_ = accept(result.get)) descriptor.get = _;
+                    if (_ = accept(result.set)) descriptor.set = _;
+                    if (_ = accept(result.init)) initializers.push(_);
+                }
+                else if (_ = accept(result)) {
+                    if (kind === "field") initializers.push(_);
+                    else descriptor[key] = _;
+                }
+            }
+            if (target) Object.defineProperty(target, contextIn.name, descriptor);
+            done = true;
+        };`
+};
+
+/** @internal */
+export const runInitializersHelper: UnscopedEmitHelper = {
+    name: "typescript:runInitializers",
+    importName: "__runInitializers",
+    scoped: false,
+    priority: 2,
+    text: `
+        var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+            var useValue = arguments.length > 2;
+            for (var i = 0; i < initializers.length; i++) {
+                value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+            }
+            return useValue ? value : void 0;
+        };`
 };
 
 // ES2018 Helpers
@@ -678,6 +961,30 @@ export const spreadArrayHelper: UnscopedEmitHelper = {
                 }
                 return to.concat(ar || Array.prototype.slice.call(from));
             };`
+};
+
+/** @internal */
+export const propKeyHelper: UnscopedEmitHelper = {
+    name: "typescript:propKey",
+    importName: "__propKey",
+    scoped: false,
+    text: `
+        var __propKey = (this && this.__propKey) || function (x) {
+            return typeof x === "symbol" ? x : "".concat(x);
+        };`
+};
+
+// https://tc39.es/ecma262/#sec-setfunctionname
+/** @internal */
+export const setFunctionNameHelper: UnscopedEmitHelper = {
+    name: "typescript:setFunctionName",
+    importName: "__setFunctionName",
+    scoped: false,
+    text: `
+        var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+            if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+            return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+        };`
 };
 
 // ES2015 Destructuring Helpers
@@ -1040,6 +1347,8 @@ export function getAllUnscopedEmitHelpers() {
         decorateHelper,
         metadataHelper,
         paramHelper,
+        esDecorateHelper,
+        runInitializersHelper,
         assignHelper,
         awaitHelper,
         asyncGeneratorHelper,
@@ -1052,6 +1361,8 @@ export function getAllUnscopedEmitHelpers() {
         spreadArrayHelper,
         valuesHelper,
         readHelper,
+        propKeyHelper,
+        setFunctionNameHelper,
         generatorHelper,
         importStarHelper,
         importDefaultHelper,

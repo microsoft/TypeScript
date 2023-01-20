@@ -114,6 +114,7 @@ import {
     GeneratedIdentifierFlags,
     Identifier,
     IfStatement,
+    InternalEmitFlags,
     IterationStatement,
     LabeledStatement,
     LeftHandSideExpression,
@@ -165,6 +166,7 @@ import {
     getEmitFlags,
     getEnclosingBlockScopeContainer,
     getFirstConstructorWithBody,
+    getInternalEmitFlags,
     getUseDefineForClassFields,
     hasStaticModifier,
     hasSyntacticModifier,
@@ -601,7 +603,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             || convertedLoopState !== undefined
             || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && isOrMayContainReturnCompletion(node))
             || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatement(node))
-            || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
+            || (getInternalEmitFlags(node) & InternalEmitFlags.TypeScriptClassWrapper) !== 0;
     }
 
     function visitor(node: Node): VisitResult<Node | undefined> {
@@ -2373,7 +2375,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     function isVariableStatementOfTypeScriptClassWrapper(node: VariableStatement) {
         return node.declarationList.declarations.length === 1
             && !!node.declarationList.declarations[0].initializer
-            && !!(getEmitFlags(node.declarationList.declarations[0].initializer) & EmitFlags.TypeScriptClassWrapper);
+            && !!(getInternalEmitFlags(node.declarationList.declarations[0].initializer) & InternalEmitFlags.TypeScriptClassWrapper);
     }
 
     function visitVariableStatement(node: VariableStatement): Statement | undefined {
@@ -3945,7 +3947,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param node a CallExpression.
      */
     function visitCallExpression(node: CallExpression) {
-        if (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) {
+        if (getInternalEmitFlags(node) & InternalEmitFlags.TypeScriptClassWrapper) {
             return visitTypeScriptClassWrapper(node);
         }
 
@@ -4087,8 +4089,21 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             addRange(statements, funcStatements, classBodyEnd + 1);
         }
 
-        // Add the remaining statements of the outer wrapper.
-        addRange(statements, remainingStatements);
+        // TODO(rbuckton): We should consider either improving the inlining here, or remove it entirely, since
+        //                 the new esDecorators emit doesn't inline.
+
+        // Add the remaining statements of the outer wrapper. Use the 'return' statement
+        // of the inner wrapper if its expression is not trivially an Identifier.
+        const returnStatement = tryCast(elementAt(funcStatements, classBodyEnd), isReturnStatement);
+        for (const statement of remainingStatements) {
+            if (isReturnStatement(statement) && returnStatement?.expression &&
+                !isIdentifier(returnStatement.expression)) {
+                statements.push(returnStatement);
+            }
+            else {
+                statements.push(statement);
+            }
+        }
 
         // The 'es2015' class transform may add an end-of-declaration marker. If so we will add it
         // after the remaining statements from the 'ts' transformer.

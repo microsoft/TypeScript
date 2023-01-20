@@ -12,13 +12,17 @@ import {
 } from "../../compiler/factory/nodeTests";
 import {
     __String,
+    HasJSDoc,
     Identifier,
     JSDocParameterTag,
     JSDocTag,
     SignatureDeclaration,
     SourceFile,
 } from "../../compiler/types";
-import { getHostSignatureFromJSDoc } from "../../compiler/utilities";
+import {
+    getHostSignatureFromJSDoc,
+    getJSDocHost,
+} from "../../compiler/utilities";
 import { getJSDocTags } from "../../compiler/utilitiesPublic";
 import {
     createCodeFixAction,
@@ -75,9 +79,9 @@ registerCodeFix({
     }
 });
 
-function getDeleteAction(context: CodeFixContext, { name, signature, jsDocParameterTag }: Info) {
+function getDeleteAction(context: CodeFixContext, { name, jsDocHost, jsDocParameterTag }: Info) {
     const changes = ChangeTracker.with(context, changeTracker =>
-        changeTracker.filterJSDocTags(context.sourceFile, signature, t => t !== jsDocParameterTag));
+        changeTracker.filterJSDocTags(context.sourceFile, jsDocHost, t => t !== jsDocParameterTag));
     return createCodeFixAction(
         deleteUnmatchedParameter,
         changes,
@@ -119,6 +123,7 @@ function getRenameAction(context: CodeFixContext, { name, signature, jsDocParame
 }
 
 interface Info {
+    readonly jsDocHost: HasJSDoc;
     readonly signature: SignatureDeclaration;
     readonly jsDocParameterTag: JSDocParameterTag;
     readonly name: Identifier;
@@ -128,9 +133,10 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     if (token.parent && isJSDocParameterTag(token.parent) && isIdentifier(token.parent.name)) {
         const jsDocParameterTag = token.parent;
+        const jsDocHost = getJSDocHost(jsDocParameterTag);
         const signature = getHostSignatureFromJSDoc(jsDocParameterTag);
-        if (signature) {
-            return { signature, name: token.parent.name, jsDocParameterTag };
+        if (jsDocHost && signature) {
+            return { jsDocHost, signature, name: token.parent.name, jsDocParameterTag };
         }
     }
     return undefined;
