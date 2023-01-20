@@ -81,7 +81,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
     describe("executeCommand", () => {
         it("should throw when commands are executed with invalid arguments", () => {
             const req: ts.server.protocol.FileRequest = {
-                command: ts.server.CommandNames.Open,
+                command: ts.server.protocol.CommandTypes.Open,
                 seq: 0,
                 type: "request",
                 arguments: {
@@ -101,7 +101,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             session.executeCommand(req);
 
             const expected: ts.server.protocol.Response = {
-                command: ts.server.CommandNames.Unknown,
+                command: ts.server.protocol.CommandTypes.Unknown,
                 type: "response",
                 seq: 0,
                 message: "Unrecognized JSON command: foobar",
@@ -113,7 +113,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
         });
         it("should return a tuple containing the response and if a response is required on success", () => {
             const req: ts.server.protocol.ConfigureRequest = {
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 seq: 0,
                 type: "request",
                 arguments: {
@@ -128,7 +128,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                 responseRequired: false
             });
             expect(lastSent).to.deep.equal({
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 type: "response",
                 success: true,
                 request_seq: 0,
@@ -139,7 +139,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
         });
         it("should handle literal types in request", () => {
             const configureRequest: ts.server.protocol.ConfigureRequest = {
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 seq: 0,
                 type: "request",
                 arguments: {
@@ -154,7 +154,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             assert.equal(session.getProjectService().getFormatCodeOptions("" as ts.server.NormalizedPath).indentStyle, ts.IndentStyle.Block);
 
             const setOptionsRequest: ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest = {
-                command: ts.server.CommandNames.CompilerOptionsForInferredProjects,
+                command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
                 seq: 1,
                 type: "request",
                 arguments: {
@@ -182,7 +182,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
 
         it("Status request gives ts.version", () => {
             const req: ts.server.protocol.StatusRequest = {
-                command: ts.server.CommandNames.Status,
+                command: ts.server.protocol.CommandTypes.Status,
                 seq: 0,
                 type: "request"
             };
@@ -195,96 +195,97 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
     });
 
     describe("onMessage", () => {
-        const allCommandNames: ts.server.CommandNames[] = [
-            ts.server.CommandNames.Brace,
-            ts.server.CommandNames.BraceFull,
-            ts.server.CommandNames.BraceCompletion,
-            ts.server.CommandNames.Change,
-            ts.server.CommandNames.Close,
-            ts.server.CommandNames.Completions,
-            ts.server.CommandNames.CompletionsFull,
-            ts.server.CommandNames.CompletionDetails,
-            ts.server.CommandNames.CompileOnSaveAffectedFileList,
-            ts.server.CommandNames.Configure,
-            ts.server.CommandNames.Definition,
-            ts.server.CommandNames.DefinitionFull,
-            ts.server.CommandNames.DefinitionAndBoundSpan,
-            ts.server.CommandNames.DefinitionAndBoundSpanFull,
-            ts.server.CommandNames.Implementation,
-            ts.server.CommandNames.ImplementationFull,
-            ts.server.CommandNames.Exit,
-            ts.server.CommandNames.FileReferences,
-            ts.server.CommandNames.FileReferencesFull,
-            ts.server.CommandNames.Format,
-            ts.server.CommandNames.Formatonkey,
-            ts.server.CommandNames.FormatFull,
-            ts.server.CommandNames.FormatonkeyFull,
-            ts.server.CommandNames.FormatRangeFull,
-            ts.server.CommandNames.Geterr,
-            ts.server.CommandNames.GeterrForProject,
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            ts.server.CommandNames.SyntacticDiagnosticsSync,
-            ts.server.CommandNames.SuggestionDiagnosticsSync,
-            ts.server.CommandNames.NavBar,
-            ts.server.CommandNames.NavBarFull,
-            ts.server.CommandNames.Navto,
-            ts.server.CommandNames.NavtoFull,
-            ts.server.CommandNames.NavTree,
-            ts.server.CommandNames.NavTreeFull,
-            ts.server.CommandNames.Occurrences,
-            ts.server.CommandNames.DocumentHighlights,
-            ts.server.CommandNames.DocumentHighlightsFull,
-            ts.server.CommandNames.JsxClosingTag,
-            ts.server.CommandNames.Open,
-            ts.server.CommandNames.Quickinfo,
-            ts.server.CommandNames.QuickinfoFull,
-            ts.server.CommandNames.References,
-            ts.server.CommandNames.ReferencesFull,
-            ts.server.CommandNames.Reload,
-            ts.server.CommandNames.Rename,
-            ts.server.CommandNames.RenameInfoFull,
-            ts.server.CommandNames.RenameLocationsFull,
-            ts.server.CommandNames.Saveto,
-            ts.server.CommandNames.SignatureHelp,
-            ts.server.CommandNames.SignatureHelpFull,
-            ts.server.CommandNames.Status,
-            ts.server.CommandNames.TypeDefinition,
-            ts.server.CommandNames.ProjectInfo,
-            ts.server.CommandNames.ReloadProjects,
-            ts.server.CommandNames.Unknown,
-            ts.server.CommandNames.OpenExternalProject,
-            ts.server.CommandNames.CloseExternalProject,
-            ts.server.CommandNames.SynchronizeProjectList,
-            ts.server.CommandNames.ApplyChangedToOpenFiles,
-            ts.server.CommandNames.EncodedSemanticClassificationsFull,
-            ts.server.CommandNames.Cleanup,
-            ts.server.CommandNames.OutliningSpans,
-            ts.server.CommandNames.TodoComments,
-            ts.server.CommandNames.Indentation,
-            ts.server.CommandNames.DocCommentTemplate,
-            ts.server.CommandNames.CompilerOptionsDiagnosticsFull,
-            ts.server.CommandNames.NameOrDottedNameSpan,
-            ts.server.CommandNames.BreakpointStatement,
-            ts.server.CommandNames.CompilerOptionsForInferredProjects,
-            ts.server.CommandNames.GetCodeFixes,
-            ts.server.CommandNames.GetCodeFixesFull,
-            ts.server.CommandNames.GetSupportedCodeFixes,
-            ts.server.CommandNames.GetApplicableRefactors,
-            ts.server.CommandNames.GetEditsForRefactor,
-            ts.server.CommandNames.GetEditsForRefactorFull,
-            ts.server.CommandNames.OrganizeImports,
-            ts.server.CommandNames.OrganizeImportsFull,
-            ts.server.CommandNames.GetEditsForFileRename,
-            ts.server.CommandNames.GetEditsForFileRenameFull,
-            ts.server.CommandNames.SelectionRange,
-            ts.server.CommandNames.PrepareCallHierarchy,
-            ts.server.CommandNames.ProvideCallHierarchyIncomingCalls,
-            ts.server.CommandNames.ProvideCallHierarchyOutgoingCalls,
-            ts.server.CommandNames.ToggleLineComment,
-            ts.server.CommandNames.ToggleMultilineComment,
-            ts.server.CommandNames.CommentSelection,
-            ts.server.CommandNames.UncommentSelection,
-            ts.server.CommandNames.ProvideInlayHints
+        const allCommandNames: ts.server.protocol.CommandTypes[] = [
+            ts.server.protocol.CommandTypes.Brace,
+            ts.server.protocol.CommandTypes.BraceFull,
+            ts.server.protocol.CommandTypes.BraceCompletion,
+            ts.server.protocol.CommandTypes.Change,
+            ts.server.protocol.CommandTypes.Close,
+            ts.server.protocol.CommandTypes.Completions,
+            ts.server.protocol.CommandTypes.CompletionsFull,
+            ts.server.protocol.CommandTypes.CompletionDetails,
+            ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
+            ts.server.protocol.CommandTypes.Configure,
+            ts.server.protocol.CommandTypes.Definition,
+            ts.server.protocol.CommandTypes.DefinitionFull,
+            ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
+            ts.server.protocol.CommandTypes.DefinitionAndBoundSpanFull,
+            ts.server.protocol.CommandTypes.Implementation,
+            ts.server.protocol.CommandTypes.ImplementationFull,
+            ts.server.protocol.CommandTypes.Exit,
+            ts.server.protocol.CommandTypes.FileReferences,
+            ts.server.protocol.CommandTypes.FileReferencesFull,
+            ts.server.protocol.CommandTypes.Format,
+            ts.server.protocol.CommandTypes.Formatonkey,
+            ts.server.protocol.CommandTypes.FormatFull,
+            ts.server.protocol.CommandTypes.FormatonkeyFull,
+            ts.server.protocol.CommandTypes.FormatRangeFull,
+            ts.server.protocol.CommandTypes.Geterr,
+            ts.server.protocol.CommandTypes.GeterrForProject,
+            ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
+            ts.server.protocol.CommandTypes.SyntacticDiagnosticsSync,
+            ts.server.protocol.CommandTypes.SuggestionDiagnosticsSync,
+            ts.server.protocol.CommandTypes.NavBar,
+            ts.server.protocol.CommandTypes.NavBarFull,
+            ts.server.protocol.CommandTypes.Navto,
+            ts.server.protocol.CommandTypes.NavtoFull,
+            ts.server.protocol.CommandTypes.NavTree,
+            ts.server.protocol.CommandTypes.NavTreeFull,
+            ts.server.protocol.CommandTypes.Occurrences,
+            ts.server.protocol.CommandTypes.DocumentHighlights,
+            ts.server.protocol.CommandTypes.DocumentHighlightsFull,
+            ts.server.protocol.CommandTypes.JsxClosingTag,
+            ts.server.protocol.CommandTypes.Open,
+            ts.server.protocol.CommandTypes.Quickinfo,
+            ts.server.protocol.CommandTypes.QuickinfoFull,
+            ts.server.protocol.CommandTypes.References,
+            ts.server.protocol.CommandTypes.ReferencesFull,
+            ts.server.protocol.CommandTypes.Reload,
+            ts.server.protocol.CommandTypes.Rename,
+            ts.server.protocol.CommandTypes.RenameInfoFull,
+            ts.server.protocol.CommandTypes.RenameLocationsFull,
+            ts.server.protocol.CommandTypes.Saveto,
+            ts.server.protocol.CommandTypes.SignatureHelp,
+            ts.server.protocol.CommandTypes.SignatureHelpFull,
+            ts.server.protocol.CommandTypes.Status,
+            ts.server.protocol.CommandTypes.TypeDefinition,
+            ts.server.protocol.CommandTypes.ProjectInfo,
+            ts.server.protocol.CommandTypes.ReloadProjects,
+            ts.server.protocol.CommandTypes.Unknown,
+            ts.server.protocol.CommandTypes.OpenExternalProject,
+            ts.server.protocol.CommandTypes.CloseExternalProject,
+            ts.server.protocol.CommandTypes.SynchronizeProjectList,
+            ts.server.protocol.CommandTypes.ApplyChangedToOpenFiles,
+            ts.server.protocol.CommandTypes.EncodedSemanticClassificationsFull,
+            ts.server.protocol.CommandTypes.Cleanup,
+            ts.server.protocol.CommandTypes.GetOutliningSpans,
+            ts.server.protocol.CommandTypes.GetOutliningSpansFull,
+            ts.server.protocol.CommandTypes.TodoComments,
+            ts.server.protocol.CommandTypes.Indentation,
+            ts.server.protocol.CommandTypes.DocCommentTemplate,
+            ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
+            ts.server.protocol.CommandTypes.NameOrDottedNameSpan,
+            ts.server.protocol.CommandTypes.BreakpointStatement,
+            ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
+            ts.server.protocol.CommandTypes.GetCodeFixes,
+            ts.server.protocol.CommandTypes.GetCodeFixesFull,
+            ts.server.protocol.CommandTypes.GetSupportedCodeFixes,
+            ts.server.protocol.CommandTypes.GetApplicableRefactors,
+            ts.server.protocol.CommandTypes.GetEditsForRefactor,
+            ts.server.protocol.CommandTypes.GetEditsForRefactorFull,
+            ts.server.protocol.CommandTypes.OrganizeImports,
+            ts.server.protocol.CommandTypes.OrganizeImportsFull,
+            ts.server.protocol.CommandTypes.GetEditsForFileRename,
+            ts.server.protocol.CommandTypes.GetEditsForFileRenameFull,
+            ts.server.protocol.CommandTypes.SelectionRange,
+            ts.server.protocol.CommandTypes.PrepareCallHierarchy,
+            ts.server.protocol.CommandTypes.ProvideCallHierarchyIncomingCalls,
+            ts.server.protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls,
+            ts.server.protocol.CommandTypes.ToggleLineComment,
+            ts.server.protocol.CommandTypes.ToggleMultilineComment,
+            ts.server.protocol.CommandTypes.CommentSelection,
+            ts.server.protocol.CommandTypes.UncommentSelection,
+            ts.server.protocol.CommandTypes.ProvideInlayHints
         ];
 
         it("should not throw when commands are executed with invalid arguments", () => {
@@ -322,7 +323,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
         });
         it("should output the response for a correctly handled message", () => {
             const req: ts.server.protocol.ConfigureRequest = {
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 seq: 0,
                 type: "request",
                 arguments: {
@@ -336,7 +337,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             session.onMessage(JSON.stringify(req));
 
             expect(lastSent).to.deep.equal({
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 type: "response",
                 success: true,
                 request_seq: 0,
