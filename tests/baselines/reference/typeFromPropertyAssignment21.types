@@ -4,7 +4,7 @@ Event.prototype.removeChildren = function () {
 >Event.prototype.removeChildren = function () {    this.textContent = 'nope, not going to happen'} : () => void
 >Event.prototype.removeChildren : any
 >Event.prototype : Event
->Event : { new (type: string, eventInitDict?: EventInit): Event; prototype: Event; readonly AT_TARGET: number; readonly BUBBLING_PHASE: number; readonly CAPTURING_PHASE: number; readonly NONE: number; }
+>Event : { new (type: string, eventInitDict?: EventInit): Event; prototype: Event; readonly NONE: 0; readonly CAPTURING_PHASE: 1; readonly AT_TARGET: 2; readonly BUBBLING_PHASE: 3; }
 >prototype : Event
 >removeChildren : any
 >function () {    this.textContent = 'nope, not going to happen'} : () => void
