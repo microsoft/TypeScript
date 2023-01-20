@@ -55,6 +55,7 @@ import {
     EnumDeclaration,
     every,
     ExportAssignment,
+    ExportDeclaration,
     ExportSpecifier,
     Expression,
     FileReference,
@@ -92,7 +93,6 @@ import {
     Identifier,
     ImportClause,
     ImportEqualsDeclaration,
-    ImportOrExportSpecifier,
     ImportSpecifier,
     ImportTypeNode,
     isAccessExpression,
@@ -214,6 +214,7 @@ import {
     NamedExportBindings,
     NamedImportBindings,
     NamespaceBody,
+    NamespaceExport,
     NamespaceImport,
     NewExpression,
     Node,
@@ -270,6 +271,8 @@ import {
     TypeElement,
     TypeNode,
     TypeOnlyAliasDeclaration,
+    TypeOnlyExportDeclaration,
+    TypeOnlyImportDeclaration,
     TypeParameterDeclaration,
     TypeReferenceType,
     UnaryExpression,
@@ -1480,19 +1483,33 @@ export function isImportOrExportSpecifier(node: Node): node is ImportSpecifier |
     return isImportSpecifier(node) || isExportSpecifier(node);
 }
 
-export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration {
+export function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration {
     switch (node.kind) {
         case SyntaxKind.ImportSpecifier:
-        case SyntaxKind.ExportSpecifier:
-            return (node as ImportOrExportSpecifier).isTypeOnly || (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
+            return (node as ImportSpecifier).isTypeOnly || (node as ImportSpecifier).parent.parent.isTypeOnly;
         case SyntaxKind.NamespaceImport:
             return (node as NamespaceImport).parent.isTypeOnly;
         case SyntaxKind.ImportClause:
         case SyntaxKind.ImportEqualsDeclaration:
             return (node as ImportClause | ImportEqualsDeclaration).isTypeOnly;
-        default:
-            return false;
     }
+    return false;
+}
+
+export function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration {
+    switch (node.kind) {
+        case SyntaxKind.ExportSpecifier:
+            return (node as ExportSpecifier).isTypeOnly || (node as ExportSpecifier).parent.parent.isTypeOnly;
+        case SyntaxKind.ExportDeclaration:
+            return (node as ExportDeclaration).isTypeOnly && !!(node as ExportDeclaration).moduleSpecifier && !(node as ExportDeclaration).exportClause;
+        case SyntaxKind.NamespaceExport:
+            return (node as NamespaceExport).parent.isTypeOnly;
+    }
+    return false;
+}
+
+export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration {
+    return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
 }
 
 export function isAssertionKey(node: Node): node is AssertionKey {
