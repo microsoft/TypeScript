@@ -5023,7 +5023,7 @@ export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, dire
     };
 }
 
-/** @internal */
+/** @deprecated @internal */
 export function createPrependNodes(
     projectReferences: readonly ProjectReference[] | undefined,
     getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined,

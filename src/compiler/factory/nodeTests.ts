@@ -1011,7 +1011,7 @@ export function isEnumMember(node: Node): node is EnumMember {
 // Unparsed
 
 // TODO(rbuckton): isUnparsedPrologue
-
+/** @deprecated */
 export function isUnparsedPrepend(node: Node): node is UnparsedPrepend {
     return node.kind === SyntaxKind.UnparsedPrepend;
 }
@@ -1029,6 +1029,7 @@ export function isBundle(node: Node): node is Bundle {
     return node.kind === SyntaxKind.Bundle;
 }
 
+/** @deprecated */
 export function isUnparsedSource(node: Node): node is UnparsedSource {
     return node.kind === SyntaxKind.UnparsedSource;
 }

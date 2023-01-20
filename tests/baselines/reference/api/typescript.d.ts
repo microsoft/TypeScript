@@ -348,15 +348,15 @@ declare namespace ts {
         ShorthandPropertyAssignment = 300,
         SpreadAssignment = 301,
         EnumMember = 302,
-        UnparsedPrologue = 303,
-        UnparsedPrepend = 304,
-        UnparsedText = 305,
-        UnparsedInternalText = 306,
-        UnparsedSyntheticReference = 307,
+        /** @deprecated */ UnparsedPrologue = 303,
+        /** @deprecated */ UnparsedPrepend = 304,
+        /** @deprecated */ UnparsedText = 305,
+        /** @deprecated */ UnparsedInternalText = 306,
+        /** @deprecated */ UnparsedSyntheticReference = 307,
         SourceFile = 308,
         Bundle = 309,
-        UnparsedSource = 310,
-        InputFiles = 311,
+        /** @deprecated */ UnparsedSource = 310,
+        /** @deprecated */ InputFiles = 311,
         JSDocTypeExpression = 312,
         JSDocNameReference = 313,
         JSDocMemberName = 314,
@@ -2125,9 +2125,10 @@ declare namespace ts {
     }
     interface Bundle extends Node {
         readonly kind: SyntaxKind.Bundle;
-        readonly prepends: readonly (InputFiles | UnparsedSource)[];
+        /** @deprecated */ readonly prepends: readonly (InputFiles | UnparsedSource)[];
         readonly sourceFiles: readonly SourceFile[];
     }
+    /** @deprecated */
     interface InputFiles extends Node {
         readonly kind: SyntaxKind.InputFiles;
         javascriptPath?: string;
@@ -2139,6 +2140,7 @@ declare namespace ts {
         declarationMapPath?: string;
         declarationMapText?: string;
     }
+    /** @deprecated */
     interface UnparsedSource extends Node {
         readonly kind: SyntaxKind.UnparsedSource;
         fileName: string;
@@ -2154,28 +2156,35 @@ declare namespace ts {
         readonly syntheticReferences?: readonly UnparsedSyntheticReference[];
         readonly texts: readonly UnparsedSourceText[];
     }
+    /** @deprecated */
     type UnparsedSourceText = UnparsedPrepend | UnparsedTextLike;
+    /** @deprecated */
     type UnparsedNode = UnparsedPrologue | UnparsedSourceText | UnparsedSyntheticReference;
+    /** @deprecated */
     interface UnparsedSection extends Node {
         readonly kind: SyntaxKind;
         readonly parent: UnparsedSource;
         readonly data?: string;
     }
+    /** @deprecated */
     interface UnparsedPrologue extends UnparsedSection {
         readonly kind: SyntaxKind.UnparsedPrologue;
         readonly parent: UnparsedSource;
         readonly data: string;
     }
+    /** @deprecated */
     interface UnparsedPrepend extends UnparsedSection {
         readonly kind: SyntaxKind.UnparsedPrepend;
         readonly parent: UnparsedSource;
         readonly data: string;
         readonly texts: readonly UnparsedTextLike[];
     }
+    /** @deprecated */
     interface UnparsedTextLike extends UnparsedSection {
         readonly kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText;
         readonly parent: UnparsedSource;
     }
+    /** @deprecated */
     interface UnparsedSyntheticReference extends UnparsedSection {
         readonly kind: SyntaxKind.UnparsedSyntheticReference;
         readonly parent: UnparsedSource;
@@ -3897,8 +3906,10 @@ declare namespace ts {
         updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
         createCommaListExpression(elements: readonly Expression[]): CommaListExpression;
         updateCommaListExpression(node: CommaListExpression, elements: readonly Expression[]): CommaListExpression;
-        createBundle(sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
-        updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
+        createBundle(sourceFiles: readonly SourceFile[]): Bundle;
+        /** @deprecated*/ createBundle(sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
+        updateBundle(node: Bundle, sourceFiles: readonly SourceFile[]): Bundle;
+        /** @deprecated*/ updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
         createComma(left: Expression, right: Expression): BinaryExpression;
         createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
         createAssignment(left: Expression, right: Expression): AssignmentExpression<EqualsToken>;
@@ -4604,7 +4615,9 @@ declare namespace ts {
     function isNonNullChain(node: Node): node is NonNullChain;
     function isBreakOrContinueStatement(node: Node): node is BreakOrContinueStatement;
     function isNamedExportBindings(node: Node): node is NamedExportBindings;
+    /** @deprecated */
     function isUnparsedTextLike(node: Node): node is UnparsedTextLike;
+    /** @deprecated */
     function isUnparsedNode(node: Node): node is UnparsedNode;
     function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag;
     /**
@@ -4674,11 +4687,17 @@ declare namespace ts {
         name: Identifier;
     };
     function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean;
+    /** @deprecated */
     function createUnparsedSourceFile(text: string): UnparsedSource;
+    /** @deprecated */
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
+    /** @deprecated */
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
+    /** @deprecated */
     function createInputFiles(javascriptText: string, declarationText: string): InputFiles;
+    /** @deprecated */
     function createInputFiles(javascriptText: string, declarationText: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
+    /** @deprecated */
     function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
     /**
      * Create an external source map source file reference
@@ -4912,9 +4931,11 @@ declare namespace ts {
     function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment;
     function isSpreadAssignment(node: Node): node is SpreadAssignment;
     function isEnumMember(node: Node): node is EnumMember;
+    /** @deprecated */
     function isUnparsedPrepend(node: Node): node is UnparsedPrepend;
     function isSourceFile(node: Node): node is SourceFile;
     function isBundle(node: Node): node is Bundle;
+    /** @deprecated */
     function isUnparsedSource(node: Node): node is UnparsedSource;
     function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
     function isJSDocNameReference(node: Node): node is JSDocNameReference;
@@ -5701,7 +5722,7 @@ declare namespace ts {
     }
     enum InvalidatedProjectKind {
         Build = 0,
-        UpdateBundle = 1,
+        /** @deprecated */ UpdateBundle = 1,
         UpdateOutputFileStamps = 2
     }
     interface InvalidatedProjectBase {
@@ -5733,6 +5754,7 @@ declare namespace ts {
         getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]>;
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
     }
+    /** @deprecated */
     interface UpdateBundleProject<T extends BuilderProgram> extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.UpdateBundle;
         emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;

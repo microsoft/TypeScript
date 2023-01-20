@@ -378,17 +378,17 @@ export const enum SyntaxKind {
     // Enum
     EnumMember,
     // Unparsed
-    UnparsedPrologue,
-    UnparsedPrepend,
-    UnparsedText,
-    UnparsedInternalText,
-    UnparsedSyntheticReference,
+    /** @deprecated */ UnparsedPrologue,
+    /** @deprecated */ UnparsedPrepend,
+    /** @deprecated */ UnparsedText,
+    /** @deprecated */ UnparsedInternalText,
+    /** @deprecated */ UnparsedSyntheticReference,
 
     // Top-level nodes
     SourceFile,
     Bundle,
-    UnparsedSource,
-    InputFiles,
+    /** @deprecated */ UnparsedSource,
+    /** @deprecated */ InputFiles,
 
     // JSDoc nodes
     JSDocTypeExpression,
@@ -4408,7 +4408,7 @@ export type ExportedModulesFromDeclarationEmit = readonly Symbol[];
 
 export interface Bundle extends Node {
     readonly kind: SyntaxKind.Bundle;
-    readonly prepends: readonly (InputFiles | UnparsedSource)[];
+    /** @deprecated */ readonly prepends: readonly (InputFiles | UnparsedSource)[];
     readonly sourceFiles: readonly SourceFile[];
     /** @internal */ syntheticFileReferences?: readonly FileReference[];
     /** @internal */ syntheticTypeReferences?: readonly FileReference[];
@@ -4416,6 +4416,7 @@ export interface Bundle extends Node {
     /** @internal */ hasNoDefaultLib?: boolean;
 }
 
+/** @deprecated */
 export interface InputFiles extends Node {
     readonly kind: SyntaxKind.InputFiles;
     javascriptPath?: string;
@@ -4431,6 +4432,7 @@ export interface InputFiles extends Node {
     /** @internal */ oldFileOfCurrentEmit?: boolean;
 }
 
+/** @deprecated */
 export interface UnparsedSource extends Node {
     readonly kind: SyntaxKind.UnparsedSource;
     fileName: string;
@@ -4455,29 +4457,34 @@ export interface UnparsedSource extends Node {
     getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
 }
 
+/** @deprecated */
 export type UnparsedSourceText =
     | UnparsedPrepend
     | UnparsedTextLike
     ;
 
+/** @deprecated */
 export type UnparsedNode =
     | UnparsedPrologue
     | UnparsedSourceText
     | UnparsedSyntheticReference
     ;
 
+/** @deprecated */
 export interface UnparsedSection extends Node {
     readonly kind: SyntaxKind;
     readonly parent: UnparsedSource;
     readonly data?: string;
 }
 
+/** @deprecated */
 export interface UnparsedPrologue extends UnparsedSection {
     readonly kind: SyntaxKind.UnparsedPrologue;
     readonly parent: UnparsedSource;
     readonly data: string;
 }
 
+/** @deprecated */
 export interface UnparsedPrepend extends UnparsedSection {
     readonly kind: SyntaxKind.UnparsedPrepend;
     readonly parent: UnparsedSource;
@@ -4485,11 +4492,13 @@ export interface UnparsedPrepend extends UnparsedSection {
     readonly texts: readonly UnparsedTextLike[];
 }
 
+/** @deprecated */
 export interface UnparsedTextLike extends UnparsedSection {
     readonly kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText;
     readonly parent: UnparsedSource;
 }
 
+/** @deprecated */
 export interface UnparsedSyntheticReference extends UnparsedSection {
     readonly kind: SyntaxKind.UnparsedSyntheticReference;
     readonly parent: UnparsedSource;
@@ -8008,7 +8017,7 @@ export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolution
 
     isEmitBlocked(emitFileName: string): boolean;
 
-    getPrependNodes(): readonly (InputFiles | UnparsedSource)[];
+    /** @deprecated */ getPrependNodes(): readonly (InputFiles | UnparsedSource)[];
 
     writeFile: WriteFileCallback;
     getBuildInfo(bundle: BundleBuildInfo | undefined): BuildInfo | undefined;
@@ -8666,12 +8675,12 @@ export interface NodeFactory {
 
     /** @internal */ createRedirectedSourceFile(redirectInfo: RedirectInfo): SourceFile;
 
-    /** @internal */ createUnparsedSource(prologues: readonly UnparsedPrologue[], syntheticReferences: readonly UnparsedSyntheticReference[] | undefined, texts: readonly UnparsedSourceText[]): UnparsedSource;
-    /** @internal */ createUnparsedPrologue(data?: string): UnparsedPrologue;
-    /** @internal */ createUnparsedPrepend(data: string | undefined, texts: readonly UnparsedSourceText[]): UnparsedPrepend;
-    /** @internal */ createUnparsedTextLike(data: string | undefined, internal: boolean): UnparsedTextLike;
-    /** @internal */ createUnparsedSyntheticReference(section: BundleFileHasNoDefaultLib | BundleFileReference): UnparsedSyntheticReference;
-    /** @internal */ createInputFiles(): InputFiles;
+    /** @deprecated @internal */ createUnparsedSource(prologues: readonly UnparsedPrologue[], syntheticReferences: readonly UnparsedSyntheticReference[] | undefined, texts: readonly UnparsedSourceText[]): UnparsedSource;
+    /** @deprecated @internal */ createUnparsedPrologue(data?: string): UnparsedPrologue;
+    /** @deprecated @internal */ createUnparsedPrepend(data: string | undefined, texts: readonly UnparsedSourceText[]): UnparsedPrepend;
+    /** @deprecated @internal */ createUnparsedTextLike(data: string | undefined, internal: boolean): UnparsedTextLike;
+    /** @deprecated @internal */ createUnparsedSyntheticReference(section: BundleFileHasNoDefaultLib | BundleFileReference): UnparsedSyntheticReference;
+    /** @deprecated @internal */ createInputFiles(): InputFiles;
 
     //
     // Synthetic Nodes
@@ -8692,8 +8701,10 @@ export interface NodeFactory {
     /** @internal */ updateSyntheticReferenceExpression(node: SyntheticReferenceExpression, expression: Expression, thisArg: Expression): SyntheticReferenceExpression;
     createCommaListExpression(elements: readonly Expression[]): CommaListExpression;
     updateCommaListExpression(node: CommaListExpression, elements: readonly Expression[]): CommaListExpression;
-    createBundle(sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
-    updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
+    createBundle(sourceFiles: readonly SourceFile[]): Bundle;
+    /** @deprecated*/ createBundle(sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle; // eslint-disable-line @typescript-eslint/unified-signatures
+    updateBundle(node: Bundle, sourceFiles: readonly SourceFile[]): Bundle;
+    /** @deprecated*/ updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle; // eslint-disable-line @typescript-eslint/unified-signatures
 
     //
     // Common operators
@@ -9159,10 +9170,10 @@ export interface Printer {
     /** @internal */ writeList<T extends Node>(format: ListFormat, list: NodeArray<T> | undefined, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
     /** @internal */ writeFile(sourceFile: SourceFile, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
     /** @internal */ writeBundle(bundle: Bundle, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
-    /** @internal */ bundleFileInfo?: BundleFileInfo;
+    /** @deprecated @internal */ bundleFileInfo?: BundleFileInfo;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export const enum BundleFileSectionKind {
     Prologue = "prologue",
     EmitHelpers = "emitHelpers",
@@ -9178,51 +9189,51 @@ export const enum BundleFileSectionKind {
     // comments?
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface BundleFileSectionBase extends TextRange {
     kind: BundleFileSectionKind;
     data?: string;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface BundleFilePrologue extends BundleFileSectionBase {
     kind: BundleFileSectionKind.Prologue;
     data: string;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface BundleFileEmitHelpers extends BundleFileSectionBase {
     kind: BundleFileSectionKind.EmitHelpers;
     data: string;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface BundleFileHasNoDefaultLib extends BundleFileSectionBase {
     kind: BundleFileSectionKind.NoDefaultLib;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface BundleFileReference extends BundleFileSectionBase {
     kind: BundleFileSectionKind.Reference | BundleFileSectionKind.Type | BundleFileSectionKind.Lib | BundleFileSectionKind.TypeResolutionModeImport | BundleFileSectionKind.TypeResolutionModeRequire;
     data: string;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface BundleFilePrepend extends BundleFileSectionBase {
     kind: BundleFileSectionKind.Prepend;
     data: string;
     texts: BundleFileTextLike[];
 }
 
-/** @internal */
+/** @deprecated @internal */
 export type BundleFileTextLikeKind = BundleFileSectionKind.Text | BundleFileSectionKind.Internal;
 
-/** @internal */
+/** @deprecated @internal */
 export interface BundleFileTextLike extends BundleFileSectionBase {
     kind: BundleFileTextLikeKind;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export type BundleFileSection =
     BundleFilePrologue
     | BundleFileEmitHelpers
@@ -9231,31 +9242,31 @@ export type BundleFileSection =
     | BundleFilePrepend
     | BundleFileTextLike;
 
-/** @internal */
+/** @deprecated @internal */
 export interface SourceFilePrologueDirectiveExpression extends TextRange {
     text: string;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface SourceFilePrologueDirective extends TextRange {
     expression: SourceFilePrologueDirectiveExpression;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface SourceFilePrologueInfo {
     file: number;
     text: string;
     directives: SourceFilePrologueDirective[];
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface SourceFileInfo {
     // List of helpers in own source files emitted if no prepend is present
     helpers?: string[];
     prologues?: SourceFilePrologueInfo[];
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface BundleFileInfo {
     sections: BundleFileSection[];
     hash?: string;
@@ -9263,7 +9274,7 @@ export interface BundleFileInfo {
     sources?: SourceFileInfo;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export interface BundleBuildInfo {
     js?: BundleFileInfo;
     dts?: BundleFileInfo;
@@ -9273,6 +9284,7 @@ export interface BundleBuildInfo {
 
 /** @internal */
 export interface BuildInfo {
+    /** @deprecated */
     bundle?: BundleBuildInfo;
     program?: ProgramBuildInfo;
     version: string;
@@ -9351,7 +9363,7 @@ export interface PrinterOptions {
     /** @internal */ extendedDiagnostics?: boolean;
     /** @internal */ onlyPrintJsDocStyle?: boolean;
     /** @internal */ neverAsciiEscape?: boolean;
-    /** @internal */ writeBundleFileInfo?: boolean;
+    /** @deprecated @internal */ writeBundleFileInfo?: boolean;
     /** @internal */ recordInternalSection?: boolean;
     /** @internal */ stripInternal?: boolean;
     /** @internal */ preserveSourceNewlines?: boolean;
