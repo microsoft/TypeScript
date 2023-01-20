@@ -31260,8 +31260,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const libTargets = getOwnKeys(allFeatures);
         for (const libTarget of libTargets) {
             const featuresOfLib = allFeatures[libTarget];
-            const featuresOfContainingType = featuresOfLib[symbolName(container)];
-            if (featuresOfContainingType !== undefined && contains(featuresOfContainingType, missingProperty)) {
+            const containingTypeName = symbolName(container);
+            const featuresOfContainingType = featuresOfLib.hasOwnProperty(containingTypeName) && featuresOfLib[containingTypeName];
+            if (featuresOfContainingType && contains(featuresOfContainingType, missingProperty)) {
                 return libTarget;
             }
         }
