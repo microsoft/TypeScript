@@ -36342,8 +36342,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         const leftAssignableToNumber = isTypeAssignableTo(left, numberOrBigIntType);
                         const rightAssignableToNumber = isTypeAssignableTo(right, numberOrBigIntType);
-                        return leftAssignableToNumber && rightAssignableToNumber ||
-                            !leftAssignableToNumber && !rightAssignableToNumber && areTypesComparable(left, right);
+                        return leftAssignableToNumber && rightAssignableToNumber;
                     });
                 }
                 return booleanType;
