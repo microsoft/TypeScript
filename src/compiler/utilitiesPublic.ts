@@ -1373,6 +1373,7 @@ export function isNamedExportBindings(node: Node): node is NamedExportBindings {
     return node.kind === SyntaxKind.NamespaceExport || node.kind === SyntaxKind.NamedExports;
 }
 
+/** @deprecated */
 export function isUnparsedTextLike(node: Node): node is UnparsedTextLike {
     switch (node.kind) {
         case SyntaxKind.UnparsedText:
@@ -1383,6 +1384,7 @@ export function isUnparsedTextLike(node: Node): node is UnparsedTextLike {
     }
 }
 
+/** @deprecated */
 export function isUnparsedNode(node: Node): node is UnparsedNode {
     return isUnparsedTextLike(node) ||
         node.kind === SyntaxKind.UnparsedPrologue ||

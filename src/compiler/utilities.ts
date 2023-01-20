@@ -7406,7 +7406,7 @@ export function getNameOfAccessExpression(node: AccessExpression) {
     return node.argumentExpression;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
     switch (section.kind) {
         case BundleFileSectionKind.Text:
