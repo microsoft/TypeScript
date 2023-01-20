@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
+// @newLine: lf
 ////const enum TestEnum {
 ////    Foo, Bar
 ////}
