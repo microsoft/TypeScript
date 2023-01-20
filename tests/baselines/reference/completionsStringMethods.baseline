@@ -1,3 +1,30 @@
+=== /tests/cases/fourslash/completionsStringMethods.ts ===
+// var s = "foo".
+//               ^
+// | ----------------------------------------------------------------------
+// | (method) String.charAt(pos: number): string
+// | (method) String.charCodeAt(index: number): number
+// | (method) String.concat(...strings: string[]): string
+// | (method) String.indexOf(searchString: string, position?: number): number
+// | (method) String.lastIndexOf(searchString: string, position?: number): number
+// | (property) String.length: number
+// | (method) String.localeCompare(that: string): number (+1 overload)
+// | (method) String.match(regexp: string | RegExp): RegExpMatchArray
+// | (method) String.replace(searchValue: string | RegExp, replaceValue: string): string (+1 overload)
+// | (method) String.search(regexp: string | RegExp): number
+// | (method) String.slice(start?: number, end?: number): string
+// | (method) String.split(separator: string | RegExp, limit?: number): string[]
+// | (method) String.substring(start: number, end?: number): string
+// | (method) String.toLocaleLowerCase(locales?: string | string[]): string
+// | (method) String.toLocaleUpperCase(locales?: string | string[]): string
+// | (method) String.toLowerCase(): string
+// | (method) String.toString(): string
+// | (method) String.toUpperCase(): string
+// | (method) String.trim(): string
+// | (method) String.valueOf(): string
+// | (method) String.substr(from: number, length?: number): string
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +32,7 @@
       "position": 14,
       "name": "1"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -1078,7 +1105,7 @@
                   "target": {
                     "fileName": "lib.d.ts",
                     "textSpan": {
-                      "start": 18451,
+                      "start": 18529,
                       "length": 28
                     }
                   }
@@ -1101,7 +1128,7 @@
                   "target": {
                     "fileName": "lib.d.ts",
                     "textSpan": {
-                      "start": 18451,
+                      "start": 18529,
                       "length": 28
                     }
                   }

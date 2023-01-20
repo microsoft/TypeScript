@@ -14,7 +14,6 @@ import {
     ProjectOptions,
     ProjectReferenceProjectLoadKind,
     ProjectService,
-    protocol,
     ScriptInfo,
     ServerHost,
     Session,
@@ -148,6 +147,7 @@ import {
     WatchOptions,
     WatchType,
 } from "./_namespaces/ts";
+import * as protocol from "./protocol";
 
 export enum ProjectKind {
     Inferred,

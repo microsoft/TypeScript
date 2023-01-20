@@ -1,3 +1,14 @@
+=== /tests/cases/fourslash/quickInfoLink10.ts ===
+// /**
+//  * start {@link https://vscode.dev/ | end}
+//  */
+// const a = () => 1;
+//       ^
+// | ----------------------------------------------------------------------
+// | const a: () => number
+// | start {@link https://vscode.dev/ end}
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +16,7 @@
       "position": 57,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
