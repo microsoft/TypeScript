@@ -741,7 +741,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
     const sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
     const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
     const emitterDiagnostics = createDiagnosticCollection();
-    const newLine = getNewLineCharacter(compilerOptions, () => host.getNewLine());
+    const newLine = getNewLineCharacter(compilerOptions);
     const writer = createTextWriter(newLine);
     const { enter, exit } = performance.createTimer("printTime", "beforePrint", "afterPrint");
     let bundleBuildInfo: BundleBuildInfo | undefined;

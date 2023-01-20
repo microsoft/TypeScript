@@ -462,7 +462,7 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
         return getDirectoryPath(normalizePath(system.getExecutingFilePath()));
     }
 
-    const newLine = getNewLineCharacter(options, () => system.newLine);
+    const newLine = getNewLineCharacter(options);
     const realpath = system.realpath && ((path: string) => system.realpath!(path));
     const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes),
