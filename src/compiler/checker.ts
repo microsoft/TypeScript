@@ -10491,6 +10491,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (!type) {
             let types: Type[] | undefined;
+            let declarationsForTypes: Declaration[] | undefined;
             if (symbol.declarations) {
                 let jsdocType: Type | undefined;
                 for (const declaration of symbol.declarations) {
@@ -10516,7 +10517,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         jsdocType = getAnnotatedTypeForAssignmentDeclaration(jsdocType, expression, symbol, declaration);
                     }
                     if (!jsdocType) {
-                        (types || (types = [])).push((isBinaryExpression(expression) || isCallExpression(expression)) ? getInitializerTypeFromAssignmentDeclaration(symbol, resolvedSymbol, expression, kind) : neverType);
+                        types = append(types, (isBinaryExpression(expression) || isCallExpression(expression)) ? getInitializerTypeFromAssignmentDeclaration(symbol, resolvedSymbol, expression, kind) : neverType);
+                        declarationsForTypes = append(declarationsForTypes, declaration);
                     }
                 }
                 type = jsdocType;
@@ -10525,7 +10527,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!length(types)) {
                     return errorType; // No types from any declarations :(
                 }
-                let constructorTypes = definedInConstructor && symbol.declarations ? getConstructorDefinedThisAssignmentTypes(types!, symbol.declarations) : undefined;
+                let constructorTypes = definedInConstructor && declarationsForTypes ? getConstructorDefinedThisAssignmentTypes(types!, declarationsForTypes) : undefined;
                 // use only the constructor types unless they were only assigned null | undefined (including widening variants)
                 if (definedInMethod) {
                     const propType = getTypeOfPropertyInBaseClass(symbol);
