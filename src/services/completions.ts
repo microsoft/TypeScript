@@ -714,7 +714,7 @@ export function getCompletionsAtPosition(
     const compilerOptions = program.getCompilerOptions();
     const incompleteCompletionsCache = preferences.allowIncompleteCompletions ? host.getIncompleteCompletionsCache?.() : undefined;
     if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions && previousToken && isIdentifier(previousToken)) {
-        const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken);
+        const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken, position);
         if (incompleteContinuation) {
             return incompleteContinuation;
         }
@@ -798,10 +798,12 @@ function continuePreviousIncompleteResponse(
     host: LanguageServiceHost,
     preferences: UserPreferences,
     cancellationToken: CancellationToken,
+    position: number,
 ): CompletionInfo | undefined {
     const previousResponse = cache.get();
     if (!previousResponse) return undefined;
 
+    const touchNode = getTouchingPropertyName(file, position);
     const lowerCaseTokenText = location.text.toLowerCase();
     const exportMap = getExportInfoMap(file, host, program, preferences, cancellationToken);
     const newEntries = resolvingModuleSpecifiers(
@@ -857,6 +859,7 @@ function continuePreviousIncompleteResponse(
 
     previousResponse.entries = newEntries;
     previousResponse.flags = (previousResponse.flags || 0) | CompletionInfoFlags.IsContinuation;
+    previousResponse.optionalReplacementSpan = getOptionalReplacementSpan(touchNode);
     return previousResponse;
 }
 
