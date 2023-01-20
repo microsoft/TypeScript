@@ -751,7 +751,7 @@ export function formatLocation(file: SourceFile, start: number, host: FormatDiag
     output += color(relativeFileName, ForegroundColorEscapeSequences.Cyan);
 
     if (withPosition) {
-        const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start); // TODO: GH#18217
+        const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
         output += ":";
         output += color(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
         output += ":";
