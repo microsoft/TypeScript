@@ -5747,9 +5747,9 @@ interface GlobalEventHandlersEventMap {
     "compositionstart": CompositionEvent;
     "compositionupdate": CompositionEvent;
     "contextmenu": MouseEvent;
-    "copy": Event;
+    "copy": ClipboardEvent;
     "cuechange": Event;
-    "cut": Event;
+    "cut": ClipboardEvent;
     "dblclick": MouseEvent;
     "drag": DragEvent;
     "dragend": DragEvent;
@@ -5784,7 +5784,7 @@ interface GlobalEventHandlersEventMap {
     "mouseout": MouseEvent;
     "mouseover": MouseEvent;
     "mouseup": MouseEvent;
-    "paste": Event;
+    "paste": ClipboardEvent;
     "pause": Event;
     "play": Event;
     "playing": Event;
@@ -5870,9 +5870,9 @@ interface GlobalEventHandlers {
      * @param ev The mouse event.
      */
     oncontextmenu: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null;
-    oncopy: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    oncopy: ((this: GlobalEventHandlers, ev: ClipboardEvent) => any) | null;
     oncuechange: ((this: GlobalEventHandlers, ev: Event) => any) | null;
-    oncut: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    oncut: ((this: GlobalEventHandlers, ev: ClipboardEvent) => any) | null;
     /**
      * Fires when the user double-clicks the object.
      * @param ev The mouse event.
@@ -6002,7 +6002,7 @@ interface GlobalEventHandlers {
      * @param ev The mouse event.
      */
     onmouseup: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null;
-    onpaste: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    onpaste: ((this: GlobalEventHandlers, ev: ClipboardEvent) => any) | null;
     /**
      * Occurs when playback is paused.
      * @param ev The event.
@@ -18204,9 +18204,9 @@ declare var onclose: ((this: Window, ev: Event) => any) | null;
  * @param ev The mouse event.
  */
 declare var oncontextmenu: ((this: Window, ev: MouseEvent) => any) | null;
-declare var oncopy: ((this: Window, ev: Event) => any) | null;
+declare var oncopy: ((this: Window, ev: ClipboardEvent) => any) | null;
 declare var oncuechange: ((this: Window, ev: Event) => any) | null;
-declare var oncut: ((this: Window, ev: Event) => any) | null;
+declare var oncut: ((this: Window, ev: ClipboardEvent) => any) | null;
 /**
  * Fires when the user double-clicks the object.
  * @param ev The mouse event.
@@ -18336,7 +18336,7 @@ declare var onmouseover: ((this: Window, ev: MouseEvent) => any) | null;
  * @param ev The mouse event.
  */
 declare var onmouseup: ((this: Window, ev: MouseEvent) => any) | null;
-declare var onpaste: ((this: Window, ev: Event) => any) | null;
+declare var onpaste: ((this: Window, ev: ClipboardEvent) => any) | null;
 /**
  * Occurs when playback is paused.
  * @param ev The event.
