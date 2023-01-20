@@ -251,6 +251,10 @@ interface ObjectConstructor {
  */
 declare var Object: ObjectConstructor;
 
+interface NumericValueOf {
+    valueOf(): number;
+}
+
 /**
  * Creates a new function.
  */

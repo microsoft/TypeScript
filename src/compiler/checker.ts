@@ -1910,7 +1910,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const stringOrNumberType = getUnionType([stringType, numberType]);
     const stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
     const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
-    const numberOrBigIntType = getUnionType([numberType, bigintType]);
     const templateConstraintType = getUnionType([stringType, numberType, booleanType, bigintType, nullType, undefinedType]) as UnionType;
     const numericStringType = getTemplateLiteralType(["", ""], [numberType]);  // The `${number}` type
 
@@ -2044,6 +2043,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     let globalReadonlyArrayType: GenericType;
     let globalStringType: ObjectType;
     let globalNumberType: ObjectType;
+    let globalNumericValueOfType: ObjectType;
     let globalBooleanType: ObjectType;
     let globalRegExpType: ObjectType;
     let globalThisType: GenericType;
@@ -2051,6 +2051,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     let autoArrayType: Type;
     let anyReadonlyArrayType: Type;
     let deferredGlobalNonNullableTypeAlias: Symbol;
+    let numberOrBigIntType: Type;
 
     // The library files are only loaded when the feature is used.
     // This allows users to just specify library files they want to used through --lib
@@ -46217,6 +46218,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         globalNumberType = getGlobalType("Number" as __String, /*arity*/ 0, /*reportErrors*/ true);
         globalBooleanType = getGlobalType("Boolean" as __String, /*arity*/ 0, /*reportErrors*/ true);
         globalRegExpType = getGlobalType("RegExp" as __String, /*arity*/ 0, /*reportErrors*/ true);
+        globalNumericValueOfType = getGlobalType("NumericValueOf" as __String, /*arity*/ 0, /*reportErrors*/ false) || globalNumberType;
+        numberOrBigIntType = getUnionType([globalNumericValueOfType, bigintType]);
         anyArrayType = createArrayType(anyType);
 
         autoArrayType = createArrayType(autoType);
