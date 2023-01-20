@@ -588,8 +588,6 @@ export interface ProjectServiceOptions {
     pluginProbeLocations?: readonly string[];
     allowLocalPluginLoads?: boolean;
     typesMapLocation?: string;
-    /** @deprecated use serverMode instead */
-    syntaxOnly?: boolean;
     serverMode?: LanguageServiceMode;
     session: Session<unknown> | undefined;
 }
@@ -969,8 +967,6 @@ export class ProjectService {
 
     public readonly typesMapLocation: string | undefined;
 
-    /** @deprecated use serverMode instead */
-    public readonly syntaxOnly: boolean;
     public readonly serverMode: LanguageServiceMode;
 
     /** Tracks projects that we have already sent telemetry for. */
@@ -1017,15 +1013,9 @@ export class ProjectService {
 
         if (opts.serverMode !== undefined) {
             this.serverMode = opts.serverMode;
-            this.syntaxOnly = this.serverMode === LanguageServiceMode.Syntactic;
-        }
-        else if (opts.syntaxOnly) {
-            this.serverMode = LanguageServiceMode.Syntactic;
-            this.syntaxOnly = true;
         }
         else {
             this.serverMode = LanguageServiceMode.Semantic;
-            this.syntaxOnly = false;
         }
 
         if (this.host.realpath) {

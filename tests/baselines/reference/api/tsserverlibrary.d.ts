@@ -3054,10 +3054,6 @@ declare namespace ts {
             Info = "Info",
             Perf = "Perf"
         }
-        namespace Msg {
-            /** @deprecated Only here for backwards-compatibility. Prefer just `Msg`. */
-            type Types = Msg;
-        }
         namespace Errors {
             function ThrowNoProject(): never;
             function ThrowProjectLanguageServiceDisabled(): never;
@@ -3533,8 +3529,6 @@ declare namespace ts {
             pluginProbeLocations?: readonly string[];
             allowLocalPluginLoads?: boolean;
             typesMapLocation?: string;
-            /** @deprecated use serverMode instead */
-            syntaxOnly?: boolean;
             serverMode?: LanguageServiceMode;
             session: Session<unknown> | undefined;
         }
@@ -3606,8 +3600,6 @@ declare namespace ts {
             readonly allowLocalPluginLoads: boolean;
             private currentPluginConfigOverrides;
             readonly typesMapLocation: string | undefined;
-            /** @deprecated use serverMode instead */
-            readonly syntaxOnly: boolean;
             readonly serverMode: LanguageServiceMode;
             /** Tracks projects that we have already sent telemetry for. */
             private readonly seenProjects;
@@ -3818,8 +3810,6 @@ declare namespace ts {
             eventHandler?: ProjectServiceEventHandler;
             /** Has no effect if eventHandler is also specified. */
             suppressDiagnosticEvents?: boolean;
-            /** @deprecated use serverMode instead */
-            syntaxOnly?: boolean;
             serverMode?: LanguageServiceMode;
             throttleWaitMilliseconds?: number;
             noGetErrOnBackgroundUpdate?: boolean;
@@ -6306,9 +6296,7 @@ declare namespace ts {
         DiagnosticsPresent_OutputsSkipped = 1,
         DiagnosticsPresent_OutputsGenerated = 2,
         InvalidProject_OutputsSkipped = 3,
-        ProjectReferenceCycle_OutputsSkipped = 4,
-        /** @deprecated Use ProjectReferenceCycle_OutputsSkipped instead. */
-        ProjectReferenceCycle_OutputsSkupped = 4
+        ProjectReferenceCycle_OutputsSkipped = 4
     }
     interface EmitResult {
         emitSkipped: boolean;
@@ -9349,14 +9337,10 @@ declare namespace ts {
      * Note: The file might not exist.
      */
     function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName;
-    /** @deprecated */ function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
     interface FormatDiagnosticsHost {
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
-    }
-    /** @deprecated */ interface ResolveProjectReferencePathHost {
-        fileExists(fileName: string): boolean;
     }
     interface EmitOutput {
         outputFiles: OutputFile[];
