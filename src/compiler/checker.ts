@@ -31257,11 +31257,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!container) {
             return undefined;
         }
+        const containingTypeName = symbolName(container);
         const allFeatures = getScriptTargetFeatures();
         const libTargets = getOwnKeys(allFeatures);
         for (const libTarget of libTargets) {
             const featuresOfLib = allFeatures[libTarget];
-            const containingTypeName = symbolName(container);
             const featuresOfContainingType = hasProperty(featuresOfLib, containingTypeName) && featuresOfLib[containingTypeName];
             if (featuresOfContainingType && contains(featuresOfContainingType, missingProperty)) {
                 return libTarget;

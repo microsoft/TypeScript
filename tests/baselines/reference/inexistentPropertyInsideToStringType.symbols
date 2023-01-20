@@ -1,0 +1,29 @@
+=== tests/cases/compiler/index.js ===
+function SomeClass() {
+>SomeClass : Symbol(SomeClass, Decl(index.js, 0, 0))
+}
+var _proto = SomeClass.prototype;
+>_proto : Symbol(_proto, Decl(index.js, 2, 3), Decl(index.js, 2, 33))
+>SomeClass.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>SomeClass : Symbol(SomeClass, Decl(index.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+
+_proto.toString = function toString() {
+>_proto : Symbol(_proto, Decl(index.js, 2, 3), Decl(index.js, 2, 33))
+>toString : Symbol(toString, Decl(index.js, 3, 17))
+
+    this.yadda
+>this : Symbol(toString, Decl(index.js, 3, 17))
+
+    let someValue = "";
+>someValue : Symbol(someValue, Decl(index.js, 5, 7))
+
+    this.toString = () => someValue;
+>this.toString : Symbol(toString.toString, Decl(index.js, 5, 23))
+>this : Symbol(toString, Decl(index.js, 3, 17))
+>toString : Symbol(toString.toString, Decl(index.js, 5, 23))
+>someValue : Symbol(someValue, Decl(index.js, 5, 7))
+
+    return someValue;
+>someValue : Symbol(someValue, Decl(index.js, 5, 7))
+}
