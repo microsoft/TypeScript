@@ -91,6 +91,7 @@ import {
     getNameOfDeclaration,
     getNameTable,
     getNewLineCharacter,
+    getNewLineOrDefaultFromHost,
     getNewLineKind,
     getPropertyNameForPropertyNameNode,
     getQuotePreference,
@@ -1065,7 +1066,7 @@ function getExhaustiveCaseSnippets(
         }
 
         const newClauses = map(elements, element => factory.createCaseClause(element, []));
-        const newLineChar = getNewLineCharacter(options);
+        const newLineChar = getNewLineOrDefaultFromHost(host);
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,

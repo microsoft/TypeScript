@@ -1270,7 +1270,6 @@ function emitUsingBuildInfoWorker(
         getCommonSourceDirectory: () => getNormalizedAbsolutePath(buildInfo.bundle!.commonSourceDirectory, buildInfoDirectory),
         getCompilerOptions: () => config.options,
         getCurrentDirectory: () => host.getCurrentDirectory(),
-        getNewLine: () => host.getNewLine(),
         getSourceFile: returnUndefined,
         getSourceFileByPath: returnUndefined,
         getSourceFiles: () => sourceFilesForJsEmit,

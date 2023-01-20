@@ -2481,7 +2481,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             getCommonSourceDirectory: program.getCommonSourceDirectory,
             getCompilerOptions: program.getCompilerOptions,
             getCurrentDirectory: () => currentDirectory,
-            getNewLine: () => host.getNewLine(),
             getSourceFile: program.getSourceFile,
             getSourceFileByPath: program.getSourceFileByPath,
             getSourceFiles: program.getSourceFiles,
