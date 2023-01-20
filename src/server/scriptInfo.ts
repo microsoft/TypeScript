@@ -48,10 +48,10 @@ import {
     NormalizedPath,
     Project,
     ProjectKind,
-    protocol,
     ScriptVersionCache,
     ServerHost,
 } from "./_namespaces/ts.server";
+import * as protocol from "./protocol";
 
 export interface ScriptInfoVersion {
     svc: number;

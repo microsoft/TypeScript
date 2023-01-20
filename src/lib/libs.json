@@ -66,6 +66,8 @@
         "es2022.regexp",
         "es2023.array",
         "esnext.intl",
+        "decorators",
+        "decorators.legacy",
         // Default libraries
         "es5.full",
         "es2015.full",

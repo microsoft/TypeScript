@@ -218,7 +218,9 @@ const libEntries: [string, string][] = [
     ["esnext.bigint", "lib.es2020.bigint.d.ts"],
     ["esnext.string", "lib.es2022.string.d.ts"],
     ["esnext.promise", "lib.es2021.promise.d.ts"],
-    ["esnext.weakref", "lib.es2021.weakref.d.ts"]
+    ["esnext.weakref", "lib.es2021.weakref.d.ts"],
+    ["decorators", "lib.decorators.d.ts"],
+    ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
 
 /**
@@ -787,6 +789,13 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         transpileOptionValue: true,
         defaultValueDescription: false,
     },
+    {
+        name: "verbatimModuleSyntax",
+        type: "boolean",
+        category: Diagnostics.Interop_Constraints,
+        description: Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
+        defaultValueDescription: false,
+    },
 
     // Strict Type Checks
     {
@@ -1157,10 +1166,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "experimentalDecorators",
         type: "boolean",
+        affectsEmit: true,
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
         category: Diagnostics.Language_and_Environment,
-        description: Diagnostics.Enable_experimental_support_for_TC39_stage_2_draft_decorators,
+        description: Diagnostics.Enable_experimental_support_for_legacy_experimental_decorators,
         defaultValueDescription: false,
     },
     {

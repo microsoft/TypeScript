@@ -6,7 +6,6 @@
 ////
 ////export class C implements I {
 ////    property = "foo" + "foo"
-////
 ////    /**/
 ////}
 

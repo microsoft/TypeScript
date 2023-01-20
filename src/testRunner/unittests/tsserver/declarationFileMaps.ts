@@ -194,7 +194,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("goToDefinition -- target does not exist", () => {
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.DefinitionRequest>({
-            command: ts.server.CommandNames.Definition,
+            command: ts.server.protocol.CommandTypes.Definition,
             arguments: protocolFileLocationFromSubstring(userTs, "fnB()")
         });
         verifySingleInferredProject(session);
@@ -204,7 +204,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("navigateTo", () => {
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
-            command: ts.server.CommandNames.Navto,
+            command: ts.server.protocol.CommandTypes.Navto,
             arguments: { file: userTs.path, searchValue: "fn" }
         });
         verifySingleInferredProject(session);
@@ -214,7 +214,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("navigateToAll -- when neither file nor project is specified", () => {
         const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
-            command: ts.server.CommandNames.Navto,
+            command: ts.server.protocol.CommandTypes.Navto,
             arguments: { file: undefined, searchValue: "fn" }
         });
         baselineTsserverLogs("declarationFileMaps", "navigateToAll neither file not project is specified", session);
@@ -223,7 +223,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("navigateToAll -- when file is not specified but project is", () => {
         const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
-            command: ts.server.CommandNames.Navto,
+            command: ts.server.protocol.CommandTypes.Navto,
             arguments: { projectFileName: bTsconfig.path, file: undefined, searchValue: "fn" }
         });
         baselineTsserverLogs("declarationFileMaps", "navigateToAll file is not specified but project is", session);

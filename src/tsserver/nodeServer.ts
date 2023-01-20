@@ -1,3 +1,4 @@
+import * as protocol from "../server/protocol";
 import * as ts from "./_namespaces/ts";
 import {
     ApplyCodeActionCommandResult,
@@ -65,7 +66,6 @@ import {
     PackageInstalledResponse,
     Project,
     ProjectService,
-    protocol,
     ServerCancellationToken,
     ServerHost,
     Session,

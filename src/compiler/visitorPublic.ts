@@ -564,6 +564,25 @@ export function visitIterationBody(body: Statement, visitor: Visitor, context: T
 }
 
 /**
+ * Visits the elements of a {@link CommaListExpression}.
+ * @param visitor The visitor to use when visiting expressions whose result will not be discarded at runtime.
+ * @param discardVisitor The visitor to use when visiting expressions whose result will be discarded at runtime. Defaults to {@link visitor}.
+ */
+export function visitCommaListElements(elements: NodeArray<Expression>, visitor: Visitor, discardVisitor = visitor): NodeArray<Expression> {
+    if (discardVisitor === visitor || elements.length <= 1) {
+        return visitNodes(elements, visitor, isExpression);
+    }
+
+    let i = 0;
+    const length = elements.length;
+    return visitNodes(elements, node => {
+        const discarded = i < length - 1;
+        i++;
+        return discarded ? discardVisitor(node) : visitor(node);
+    }, isExpression);
+}
+
+/**
  * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
  *
  * @param node The Node whose children will be visited.
@@ -687,7 +706,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.Constructor]: function visitEachChildOfConstructorDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateConstructorDeclaration(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             visitParameterList(node.parameters, visitor, context, nodesVisitor),
             visitFunctionBody(node.body!, visitor, context, nodeVisitor));
     },
@@ -732,7 +751,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.IndexSignature]: function visitEachChildOfIndexSignatureDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateIndexSignature(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             nodesVisitor(node.parameters, visitor, isParameter),
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)));
     },
@@ -1118,7 +1137,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.VariableStatement]: function visitEachChildOfVariableStatement(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateVariableStatement(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             Debug.checkDefined(nodeVisitor(node.declarationList, visitor, isVariableDeclarationList)));
     },
 
@@ -1249,7 +1268,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.InterfaceDeclaration]: function visitEachChildOfInterfaceDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateInterfaceDeclaration(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
@@ -1258,7 +1277,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.TypeAliasDeclaration]: function visitEachChildOfTypeAliasDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateTypeAliasDeclaration(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)));
@@ -1266,14 +1285,14 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.EnumDeclaration]: function visitEachChildOfEnumDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateEnumDeclaration(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
             nodesVisitor(node.members, visitor, isEnumMember));
     },
 
     [SyntaxKind.ModuleDeclaration]: function visitEachChildOfModuleDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateModuleDeclaration(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isModuleName)),
             nodeVisitor(node.body, visitor, isModuleBody));
     },
@@ -1295,7 +1314,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.ImportEqualsDeclaration]: function visitEachChildOfImportEqualsDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateImportEqualsDeclaration(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             node.isTypeOnly,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
             Debug.checkDefined(nodeVisitor(node.moduleReference, visitor, isModuleReference)));
@@ -1303,7 +1322,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.ImportDeclaration]: function visitEachChildOfImportDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateImportDeclaration(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             nodeVisitor(node.importClause, visitor, isImportClause),
             Debug.checkDefined(nodeVisitor(node.moduleSpecifier, visitor, isExpression)),
             nodeVisitor(node.assertClause, visitor, isAssertClause));
@@ -1352,13 +1371,13 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.ExportAssignment]: function visitEachChildOfExportAssignment(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateExportAssignment(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)));
     },
 
     [SyntaxKind.ExportDeclaration]: function visitEachChildOfExportDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateExportDeclaration(node,
-            nodesVisitor(node.modifiers, visitor, isModifier),
+            nodesVisitor(node.modifiers, visitor, isModifierLike),
             node.isTypeOnly,
             nodeVisitor(node.exportClause, visitor, isNamedExportBindings),
             nodeVisitor(node.moduleSpecifier, visitor, isExpression),

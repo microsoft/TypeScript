@@ -42,14 +42,14 @@ describe("unittests:: tsserver:: Projects", () => {
 
         // Two errors: CommonFile2 not found and cannot find name y
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
-            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path }
         });
 
         host.writeFile(commonFile2.path, commonFile2.content);
         host.runQueuedTimeoutCallbacks();
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
-            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path }
         });
         baselineTsserverLogs("projects", "handles the missing files added with tripleslash ref", session);
@@ -710,7 +710,7 @@ describe("unittests:: tsserver:: Projects", () => {
         const extraFileExtensions = [{ extension: ".html", scriptKind: ts.ScriptKind.JS, isMixedContent: true }];
         // The configured project should now be updated to include html file
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
-            command: ts.server.CommandNames.Configure,
+            command: ts.server.protocol.CommandTypes.Configure,
             arguments: { extraFileExtensions }
         });
 
@@ -819,7 +819,7 @@ describe("unittests:: tsserver:: Projects", () => {
             logger.host = host;
             const session = createSession(host, { logger });
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { extraFileExtensions }
             });
             openFilesForSession([file1], session);
@@ -1012,19 +1012,19 @@ describe("unittests:: tsserver:: Projects", () => {
         const host = createServerHost([f1, libFile, config]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         session.executeCommandSeq({
-            command: ts.server.CommandNames.Open,
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: f1.path
             }
         } as ts.server.protocol.OpenRequest);
         session.executeCommandSeq({
-            command: ts.server.CommandNames.Close,
+            command: ts.server.protocol.CommandTypes.Close,
             arguments: {
                 file: f1.path
             }
         } as ts.server.protocol.CloseRequest);
         session.executeCommandSeq({
-            command: ts.server.CommandNames.Geterr,
+            command: ts.server.protocol.CommandTypes.Geterr,
             arguments: {
                 delay: 0,
                 files: [f1.path]
@@ -1191,7 +1191,7 @@ describe("unittests:: tsserver:: Projects", () => {
             // Configure the deferred extension.
             const extraFileExtensions = [{ extension: ".deferred", scriptKind: ts.ScriptKind.Deferred, isMixedContent: true }];
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { extraFileExtensions }
             });
 
