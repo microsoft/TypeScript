@@ -1571,7 +1571,7 @@ function getEntryForMemberCompletion(
         module: options.module,
         target: options.target,
         omitTrailingSemicolon: false,
-        newLine: getNewLineKind(getNewLineOrDefaultFromHost(host)),
+        newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
     });
     const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
