@@ -4307,17 +4307,23 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function verifyDeprecatedCompilerOptions() {
+    function getVersionForDeprecationDiagnostics(reportInvalidIgnoreDeprecations: boolean) {
         const version = typeScriptVersion || versionMajorMinor;
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
             if (ignoreDeprecations === DeprecationVersion.v5_0 && (version === DeprecationVersion.v5_0 || version === DeprecationVersion.v5_5)) {
                 return;
             }
-            else {
+            else if (reportInvalidIgnoreDeprecations) {
                 createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
             }
         }
+        return version;
+    }
+
+    function verifyDeprecatedCompilerOptions() {
+        const version = getVersionForDeprecationDiagnostics(/*reportInvalidIgnoreDeprecations*/ true);
+        if (!version) return;
         if (options.target === ScriptTarget.ES3) {
             createDeprecatedDiagnosticForOption(version, "target", "ES3");
         }
@@ -4348,16 +4354,19 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (options.preserveValueImports) {
             createDeprecatedDiagnosticForOption(version, "preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
         }
-        forEachProjectReference(projectReferences, resolvedProjectReferences, (_resolvedRef, parent, index) => {
-            const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
-            if (ref.prepend) {
+    }
+
+    function verifyDeprecatedProjectReference(ref: ProjectReference, parentFile: JsonSourceFile | undefined, index: number) {
+        if (ref.prepend) {
+            const version = getVersionForDeprecationDiagnostics(/*reportInvalidIgnoreDeprecations*/ false);
+            if (version) {
                 createDeprecatedOptionForVersionDiagnostic(
                     version,
-                    (message, arg0, arg1, arg2) => createDiagnosticForReference(parent?.sourceFile as JsonSourceFile | undefined, index, message, arg0, arg1, arg2),
+                    (message, arg0, arg1, arg2) => createDiagnosticForReference(parentFile, index, message, arg0, arg1, arg2),
                     "prepend",
                 );
             }
-        });
+        }
     }
 
     function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string, useInstead?: string) {
@@ -4531,6 +4540,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, parent, index) => {
             const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
             const parentFile = parent && parent.sourceFile as JsonSourceFile;
+            verifyDeprecatedProjectReference(ref, parentFile, index);
             if (!resolvedRef) {
                 createDiagnosticForReference(parentFile, index, Diagnostics.File_0_not_found, ref.path);
                 return;
