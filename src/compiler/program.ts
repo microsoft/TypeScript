@@ -5023,11 +5023,6 @@ export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, dire
     };
 }
 
-// For backward compatibility
-/** @deprecated */ export interface ResolveProjectReferencePathHost {
-    fileExists(fileName: string): boolean;
-}
-
 /** @internal */
 export function createPrependNodes(
     projectReferences: readonly ProjectReference[] | undefined,
@@ -5056,11 +5051,8 @@ export function createPrependNodes(
  * Returns the target config filename of a project reference.
  * Note: The file might not exist.
  */
-export function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName;
-/** @deprecated */ export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
-export function resolveProjectReferencePath(hostOrRef: ResolveProjectReferencePathHost | ProjectReference, ref?: ProjectReference): ResolvedConfigFileName {
-    const passedInRef = ref ? ref : hostOrRef as ProjectReference;
-    return resolveConfigFileProjectName(passedInRef.path);
+export function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName {
+    return resolveConfigFileProjectName(ref.path);
 }
 
 /**

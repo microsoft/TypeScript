@@ -928,8 +928,6 @@ export interface SessionOptions {
     eventHandler?: ProjectServiceEventHandler;
     /** Has no effect if eventHandler is also specified. */
     suppressDiagnosticEvents?: boolean;
-    /** @deprecated use serverMode instead */
-    syntaxOnly?: boolean;
     serverMode?: LanguageServiceMode;
     throttleWaitMilliseconds?: number;
     noGetErrOnBackgroundUpdate?: boolean;
@@ -1001,7 +999,6 @@ export class Session<TMessage = string> implements EventSender {
             pluginProbeLocations: opts.pluginProbeLocations,
             allowLocalPluginLoads: opts.allowLocalPluginLoads,
             typesMapLocation: opts.typesMapLocation,
-            syntaxOnly: opts.syntaxOnly,
             serverMode: opts.serverMode,
             session: this
         };
