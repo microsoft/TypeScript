@@ -4887,7 +4887,6 @@ declare namespace ts {
     function isForInitializer(node: Node): node is ForInitializer;
     function isModuleBody(node: Node): node is ModuleBody;
     function isNamedImportBindings(node: Node): node is NamedImportBindings;
-    function isDeclaration(node: Node): node is NamedDeclaration;
     function isStatement(node: Node): node is Statement;
     function isModuleReference(node: Node): node is ModuleReference;
     function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression;

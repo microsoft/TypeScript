@@ -1987,8 +1987,7 @@ export function isUnaryExpressionWithWrite(expr: Node): expr is PrefixUnaryExpre
 }
 
 export function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
-    node = skipPartiallyEmittedExpressions(node);
-    switch (skipPartiallyEmittedExpressions(node).kind) {
+    switch (node.kind) {
         case SyntaxKind.NullKeyword:
         case SyntaxKind.TrueKeyword:
         case SyntaxKind.FalseKeyword:
@@ -2321,6 +2320,7 @@ function isStatementKindButNotDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.MergeDeclarationMarker;
 }
 
+/** @internal */
 export function isDeclaration(node: Node): node is NamedDeclaration {
     if (node.kind === SyntaxKind.TypeParameter) {
         return (node.parent && node.parent.kind !== SyntaxKind.JSDocTemplateTag) || isInJSFile(node);
