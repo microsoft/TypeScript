@@ -626,14 +626,21 @@ function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: U
     const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
     const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
     let sortState = SortKind.Both;
+    let seenUnsortedGroup = false;
     for (const importGroup of importGroups) {
         // Check module specifiers
         if (importGroup.length > 1) {
-            sortState &= detectSortCaseSensitivity(
+            const moduleSpecifierSort = detectSortCaseSensitivity(
                 importGroup,
                 i => tryCast(i.moduleSpecifier, isStringLiteral)?.text ?? "",
                 collateCaseSensitive,
                 collateCaseInsensitive);
+            if (moduleSpecifierSort) {
+                // Don't let a single unsorted group of module specifiers make the whole algorithm detect unsorted.
+                // If other things are sorted consistently, that's a stronger indicator than unsorted module specifiers.
+                sortState &= moduleSpecifierSort;
+                seenUnsortedGroup = true;
+            }
             if (!sortState) {
                 return sortState;
             }
@@ -644,7 +651,13 @@ function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: U
             importGroup,
             i => tryCast(i.importClause?.namedBindings, isNamedImports)?.elements.length! > 1);
         if (declarationWithNamedImports) {
-            sortState &= detectImportSpecifierSorting((declarationWithNamedImports.importClause!.namedBindings as NamedImports).elements, preferences);
+            const namedImportSort = detectImportSpecifierSorting((declarationWithNamedImports.importClause!.namedBindings as NamedImports).elements, preferences);
+            if (namedImportSort) {
+                // Don't let a single unsorted group of named imports make the whole algorithm detect unsorted.
+                // If other things are sorted consistently, that's a stronger indicator than unsorted named imports.
+                sortState &= namedImportSort;
+                seenUnsortedGroup = true;
+            }
             if (!sortState) {
                 return sortState;
             }
@@ -657,7 +670,7 @@ function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: U
             return sortState;
         }
     }
-    return sortState;
+    return seenUnsortedGroup ? SortKind.None : sortState;
 }
 
 /** @internal */
