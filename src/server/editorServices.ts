@@ -65,7 +65,6 @@ import {
     contains,
     containsPath,
     convertCompilerOptionsForTelemetry,
-    convertEnableAutoDiscoveryToEnable,
     convertJsonOption,
     createCachedDirectoryStructureHost,
     createDocumentRegistryInternal,
@@ -4094,7 +4093,7 @@ export class ProjectService {
             }
             else {
                 let exclude = false;
-                if (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery) {
+                if (typeAcquisition.enable) {
                     const baseName = getBaseFileName(toFileNameLowerCase(normalizedNames[i]));
                     if (fileExtensionIs(baseName, "js")) {
                         const inferredTypingName = removeFileExtension(baseName);
@@ -4129,12 +4128,6 @@ export class ProjectService {
     }
 
     openExternalProject(proj: protocol.ExternalProject): void {
-        // typingOptions has been deprecated and is only supported for backward compatibility
-        // purposes. It should be removed in future releases - use typeAcquisition instead.
-        if (proj.typingOptions && !proj.typeAcquisition) {
-            const typeAcquisition = convertEnableAutoDiscoveryToEnable(proj.typingOptions);
-            proj.typeAcquisition = typeAcquisition;
-        }
         proj.typeAcquisition = proj.typeAcquisition || {};
         proj.typeAcquisition.include = proj.typeAcquisition.include || [];
         proj.typeAcquisition.exclude = proj.typeAcquisition.exclude || [];

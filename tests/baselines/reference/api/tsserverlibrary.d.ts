@@ -1145,10 +1145,6 @@ declare namespace ts {
                  */
                 options: ExternalProjectCompilerOptions;
                 /**
-                 * @deprecated typingOptions. Use typeAcquisition instead
-                 */
-                typingOptions?: TypeAcquisition;
-                /**
                  * Explicitly specified type acquisition for the project
                  */
                 typeAcquisition?: TypeAcquisition;
@@ -7154,11 +7150,6 @@ declare namespace ts {
         [option: string]: CompilerOptionsValue | undefined;
     }
     interface TypeAcquisition {
-        /**
-         * @deprecated typingOptions.enableAutoDiscovery
-         * Use typeAcquisition.enable instead.
-         */
-        enableAutoDiscovery?: boolean;
         enable?: boolean;
         include?: string[];
         exclude?: string[];

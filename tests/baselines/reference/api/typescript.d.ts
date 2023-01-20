@@ -3162,11 +3162,6 @@ declare namespace ts {
         [option: string]: CompilerOptionsValue | undefined;
     }
     interface TypeAcquisition {
-        /**
-         * @deprecated typingOptions.enableAutoDiscovery
-         * Use typeAcquisition.enable instead.
-         */
-        enableAutoDiscovery?: boolean;
         enable?: boolean;
         include?: string[];
         exclude?: string[];
