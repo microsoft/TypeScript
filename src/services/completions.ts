@@ -1066,12 +1066,12 @@ function getExhaustiveCaseSnippets(
         }
 
         const newClauses = map(elements, element => factory.createCaseClause(element, []));
-        const newLineChar = getNewLineOrDefaultFromHost(host);
+        const newLineChar = formatContext?.options.newLineCharacter ?? getNewLineOrDefaultFromHost(host);
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
             target: options.target,
-            newLine: getNewLineKind(newLineChar),
+            newLine: getNewLineKind(newLineChar)
         });
         const printNode = formatContext
             ? (node: Node) => printer.printAndFormatNode(EmitHint.Unspecified, node, sourceFile, formatContext)
