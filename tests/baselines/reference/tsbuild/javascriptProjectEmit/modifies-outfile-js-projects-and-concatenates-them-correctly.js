@@ -52,6 +52,7 @@ const c = /** @type {*} */(null);
 {
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
+        "ignoreDeprecations":"5.0",
         "composite": true,
         "outFile": "sub-project.js",
         
@@ -79,6 +80,7 @@ function getVar() {
 {
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
+        "ignoreDeprecations":"5.0",
         "composite": true,
         "outFile": "sub-project-2.js",
         
@@ -103,6 +105,7 @@ function getVar() {
 //// [/src/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations":"5.0",
         "composite": true,
         "outFile": "src.js"
     },
