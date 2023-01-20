@@ -3,9 +3,9 @@
 
 Object.freeze({
 >Object.freeze({    f: function () { }}) : Readonly<{ readonly f: () => void; }>
->Object.freeze : { <T extends Function>(f: T): T; <const T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <const T>(o: T): Readonly<T>; }
+>Object.freeze : { <T extends Function>(f: T): T; <const T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <const T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <const T>(o: T): Readonly<T>; }
+>freeze : { <T extends Function>(f: T): T; <const T>(o: T): Readonly<T>; }
 >{    f: function () { }} : { f: () => void; }
 
     f: function () { }
