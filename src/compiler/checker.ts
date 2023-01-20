@@ -8553,7 +8553,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         for (const node of symbol.declarations) {
                             const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
                             if (!resolvedModule) continue;
-                            addResult(factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, /*exportClause*/ undefined, factory.createStringLiteral(getSpecifierForModuleSymbol(resolvedModule, context))), ModifierFlags.None);
+                            addResult(factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ (node as ExportDeclaration).isTypeOnly, /*exportClause*/ undefined, factory.createStringLiteral(getSpecifierForModuleSymbol(resolvedModule, context))), ModifierFlags.None);
                         }
                     }
                 }

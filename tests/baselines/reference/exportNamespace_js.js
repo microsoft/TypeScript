@@ -35,6 +35,6 @@ A;
 export class A {
 }
 //// [b.d.ts]
-export * from "./a";
+export type * from "./a";
 //// [c.d.ts]
 export {};
