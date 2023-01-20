@@ -1,39 +1,35 @@
-=== /test.js ===
-// class Foo {
-//     constructor() {
-//         this.prop = { };
-//     }
-// 
-//     declare prop: string;
-//     method() {
-//         this.prop.foo
-//                   ^^^
-// | ----------------------------------------------------------------------
-// | any
-// | ----------------------------------------------------------------------
-//     }
-// }
+Syntactic Diagnostics for file '/tests/cases/fourslash/quickInfoAndSemanticsOnJsPropertyWithAmbientDeclaration.ts':
+/test.js(6,5): error TS8009: The 'declare' modifier can only be used in TypeScript files.
+/test.js(6,19): error TS8010: Type annotations can only be used in TypeScript files.
 
-[
-  {
-    "marker": {
-      "fileName": "/test.js",
-      "position": 126,
-      "name": ""
-    },
-    "item": {
-      "kind": "",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 123,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "any",
-          "kind": "keyword"
+
+==== /test.js (2 errors) ====
+    class Foo {
+        constructor() {
+            this.prop = { };
         }
-      ]
+    
+        declare prop: string;
+        ~~~~~~~
+!!! error TS8009: The 'declare' modifier can only be used in TypeScript files.
+                      ~~~~~~
+!!! error TS8010: Type annotations can only be used in TypeScript files.
+        method() {
+            this.prop.foo
+        }
     }
-  }
-]
+
+Semantic Diagnostics for file '/tests/cases/fourslash/quickInfoAndSemanticsOnJsPropertyWithAmbientDeclaration.ts':
+
+
+==== /test.js (0 errors) ====
+    class Foo {
+        constructor() {
+            this.prop = { };
+        }
+    
+        declare prop: string;
+        method() {
+            this.prop.foo
+        }
+    }
