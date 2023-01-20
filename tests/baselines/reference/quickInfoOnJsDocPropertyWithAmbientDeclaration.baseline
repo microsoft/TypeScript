@@ -1,0 +1,39 @@
+=== /test.js ===
+// class Foo {
+//     constructor() {
+//         this.prop = { };
+//     }
+// 
+//     declare prop: string;
+//     method() {
+//         this.prop.foo
+//                   ^^^
+// | ----------------------------------------------------------------------
+// | any
+// | ----------------------------------------------------------------------
+//     }
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/test.js",
+      "position": 126,
+      "name": ""
+    },
+    "item": {
+      "kind": "",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 123,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ]
+    }
+  }
+]
