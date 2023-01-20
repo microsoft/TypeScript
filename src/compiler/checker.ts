@@ -36500,7 +36500,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (checkReferenceExpression(left,
                     Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access,
                     Diagnostics.The_left_hand_side_of_an_assignment_expression_may_not_be_an_optional_property_access)
-                    && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
+                    ) {
 
                     let headMessage: DiagnosticMessage | undefined;
                     if (exactOptionalPropertyTypes && isPropertyAccessExpression(left) && maybeTypeOfKind(valueType, TypeFlags.Undefined)) {
