@@ -10,13 +10,14 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(26,24): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(39,2): error TS2554: Expected 0 arguments, but got 1.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(43,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(43,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'boolean'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(44,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(44,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(45,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (16 errors) ====
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (17 errors) ====
     declare let f: { <T>(): T, g<U>(): U };
     
     // Type arguments in member expressions
@@ -84,6 +85,8 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
     const r1 = f < true > true;
                ~~~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+               ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'boolean'.
     const r2 = f < true > +1;
                ~~~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
