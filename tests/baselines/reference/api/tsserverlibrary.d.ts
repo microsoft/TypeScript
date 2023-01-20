@@ -87,9 +87,6 @@ declare namespace ts {
             readonly kind: ActionSet;
         }
         namespace protocol {
-            /**
-             * Declaration module describing the TypeScript Server protocol
-             */
             enum CommandTypes {
                 JsxClosingTag = "jsxClosingTag",
                 Brace = "brace",
