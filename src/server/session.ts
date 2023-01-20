@@ -1180,13 +1180,8 @@ export class Session<TMessage = string> implements EventSender {
         this.send(toEvent(eventName, body));
     }
 
-    // For backwards-compatibility only.
-    /** @deprecated */
-    public output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void {
-        this.doOutput(info, cmdName, reqSeq!, /*success*/ !errorMsg, errorMsg); // TODO: GH#18217
-    }
-
-    private doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
+    /** @internal */
+    doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
         const res: protocol.Response = {
             seq: 0,
             type: "response",

@@ -3846,9 +3846,6 @@ declare namespace ts {
             send(msg: protocol.Message): void;
             protected writeMessage(msg: protocol.Message): void;
             event<T extends object>(body: T, eventName: string): void;
-            /** @deprecated */
-            output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
-            private doOutput;
             private semanticCheck;
             private syntacticCheck;
             private suggestionCheck;
@@ -4568,10 +4565,6 @@ declare namespace ts {
     type AssertKeyword = KeywordToken<SyntaxKind.AssertKeyword>;
     type AwaitKeyword = KeywordToken<SyntaxKind.AwaitKeyword>;
     type CaseKeyword = KeywordToken<SyntaxKind.CaseKeyword>;
-    /** @deprecated Use `AwaitKeyword` instead. */
-    type AwaitKeywordToken = AwaitKeyword;
-    /** @deprecated Use `AssertsKeyword` instead. */
-    type AssertsToken = AssertsKeyword;
     interface ModifierToken<TKind extends ModifierSyntaxKind> extends KeywordToken<TKind> {
     }
     type AbstractKeyword = ModifierToken<SyntaxKind.AbstractKeyword>;
@@ -4589,8 +4582,6 @@ declare namespace ts {
     type OutKeyword = ModifierToken<SyntaxKind.OutKeyword>;
     type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
     type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
-    /** @deprecated Use `ReadonlyKeyword` instead. */
-    type ReadonlyToken = ReadonlyKeyword;
     type Modifier = AbstractKeyword | AccessorKeyword | AsyncKeyword | ConstKeyword | DeclareKeyword | DefaultKeyword | ExportKeyword | InKeyword | PrivateKeyword | ProtectedKeyword | PublicKeyword | OutKeyword | OverrideKeyword | ReadonlyKeyword | StaticKeyword;
     type ModifierLike = Modifier | Decorator;
     type AccessibilityModifier = PublicKeyword | PrivateKeyword | ProtectedKeyword;
@@ -6434,8 +6425,6 @@ declare namespace ts {
         OmitThisParameter = 33554432,
         AllowThisInObjectLiteral = 32768,
         AllowQualifiedNameInPlaceOfIdentifier = 65536,
-        /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
-        AllowQualifedNameInPlaceOfIdentifier = 65536,
         AllowAnonymousIdentifier = 131072,
         AllowEmptyUnionOrIntersection = 262144,
         AllowEmptyTuple = 524288,
@@ -6470,7 +6459,6 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        /** @deprecated */ WriteOwnNameForAnyLike = 0,
         NodeBuilderFlagsMask = 848330091
     }
     enum SymbolFormatFlags {
@@ -6926,8 +6914,6 @@ declare namespace ts {
         PriorityImpliesCombination = 416,
         Circularity = -1
     }
-    /** @deprecated Use FileExtensionInfo instead. */
-    type JsFileExtensionInfo = FileExtensionInfo;
     interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
