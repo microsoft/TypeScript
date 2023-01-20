@@ -15,3 +15,4 @@
 ////}
 
 verify.baselineQuickInfo();
+verify.baselineSyntacticAndSemanticDiagnostics();
