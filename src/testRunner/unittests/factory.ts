@@ -1,5 +1,6 @@
 import * as ts from "../_namespaces/ts";
 import { setEnableDeprecationWarnings } from "../../deprecatedCompat/deprecate";
+import { Modifier } from "../_namespaces/ts";
 
 describe("unittests:: FactoryAPI", () => {
     function assertSyntaxKind(node: ts.Node, expected: ts.SyntaxKind) {
@@ -111,7 +112,7 @@ describe("unittests:: FactoryAPI", () => {
             assert.doesNotThrow(() => ts.factory.updateConstructorDeclaration(
                 ctor,
                 ctor.decorators,
-                ctor.modifiers,
+                ctor.modifiers as readonly Modifier[] | undefined,
                 ctor.parameters,
                 ctor.body,
             ));
