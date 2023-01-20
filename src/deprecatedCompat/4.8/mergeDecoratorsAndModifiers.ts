@@ -44,6 +44,7 @@ import {
     isIdentifier,
     isImportClause,
     isModifier,
+    isModifierLike,
     isModuleBody,
     isModuleName,
     isModuleReference,
@@ -134,7 +135,7 @@ declare module "../../compiler/types" {
     // Module transform: converted from interface augmentation
     export interface ShorthandPropertyAssignment {
         /** @deprecated A shorthand property assignment cannot have modifiers */
-        readonly modifiers?: NodeArray<Modifier> | undefined;
+        readonly modifiers?: NodeArray<ModifierLike> | undefined;
 
         /** @deprecated A shorthand property assignment cannot have a question token */
         readonly questionToken?: QuestionToken | undefined;
@@ -311,7 +312,6 @@ declare module "../../compiler/types" {
 }
 
 const MUST_MERGE: DeprecationOptions = { since: "4.8", warnAfter: "4.9.0-0", message: "Decorators have been combined with modifiers. Callers should switch to an overload that does not accept a 'decorators' parameter." };
-const DISALLOW_DECORATORS: DeprecationOptions = { since: "4.8", warnAfter: "4.9.0-0", message: `Decorators are no longer supported for this function. Callers should switch to an overload that does not accept a 'decorators' parameter.` };
 const DISALLOW_DECORATORS_AND_MODIFIERS: DeprecationOptions = { since: "4.8", warnAfter: "4.9.0-0", message: `Decorators and modifiers are no longer supported for this function. Callers should switch to an overload that does not accept the 'decorators' and 'modifiers' parameters.` };
 
 function patchNodeFactory(factory: NodeFactory) {
@@ -553,7 +553,7 @@ function patchNodeFactory(factory: NodeFactory) {
 
     factory.createConstructorDeclaration = buildOverload("createConstructorDeclaration")
         .overload({
-            0(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration {
+            0(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration {
                 return createConstructorDeclaration(modifiers, parameters, body);
             },
 
@@ -564,24 +564,24 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, parameters, body, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || !some(modifiers, isDecorator)) &&
-                (parameters === undefined || !some(parameters, isModifier)) &&
+                (modifiers === undefined || isArray(modifiers)) &&
+                (parameters !== undefined && !some(parameters, isModifier)) &&
                 (body === undefined || !isArray(body)),
 
             1: ([decorators, modifiers, parameters, body]) =>
                 (decorators === undefined || !some(decorators, isModifier)) &&
                 (modifiers === undefined || !some(modifiers, isParameter)) &&
-                (parameters === undefined || isArray(parameters)) &&
+                (parameters !== undefined && isArray(parameters)) &&
                 (body === undefined || isBlock(body)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.updateConstructorDeclaration = buildOverload("updateConstructorDeclaration")
         .overload({
-            0(node: ConstructorDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration {
+            0(node: ConstructorDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration {
                 return updateConstructorDeclaration(node, modifiers, parameters, body);
             },
 
@@ -592,18 +592,18 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, parameters, body, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || !some(modifiers, isDecorator)) &&
-                (parameters === undefined || !some(parameters, isModifier)) &&
+                (modifiers === undefined || isArray(modifiers)) &&
+                (parameters !== undefined && !some(parameters, isModifier)) &&
                 (body === undefined || !isArray(body)),
 
             1: ([, decorators, modifiers, parameters, body]) =>
                 (decorators === undefined || !some(decorators, isModifier)) &&
                 (modifiers === undefined || !some(modifiers, isParameter)) &&
-                (parameters === undefined || isArray(parameters)) &&
+                (parameters !== undefined && isArray(parameters)) &&
                 (body === undefined || isBlock(body)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
@@ -621,14 +621,14 @@ function patchNodeFactory(factory: NodeFactory) {
             0: ([, name, parameters, type, body, other]) =>
                 (other === undefined) &&
                 (name === undefined || !isArray(name)) &&
-                (parameters === undefined || isArray(parameters)) &&
+                (parameters !== undefined && isArray(parameters)) &&
                 (type === undefined || !isArray(type)) &&
                 (body === undefined || isBlock(body)),
 
             1: ([, modifiers, name, parameters, type, body]) =>
                 (modifiers === undefined || isArray(modifiers)) &&
                 (name === undefined || !isArray(name)) &&
-                (parameters === undefined || isArray(parameters)) &&
+                (parameters !== undefined && isArray(parameters)) &&
                 (type === undefined || isTypeNode(type)) &&
                 (body === undefined || isBlock(body)),
         })
@@ -725,7 +725,7 @@ function patchNodeFactory(factory: NodeFactory) {
 
     factory.createIndexSignature = buildOverload("createIndexSignature")
         .overload({
-            0(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration {
+            0(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration {
                 return createIndexSignature(modifiers, parameters, type);
             },
 
@@ -736,24 +736,24 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, parameters, type, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
-                (parameters === undefined || every(parameters, isParameter)) &&
+                (modifiers === undefined || isArray(modifiers)) &&
+                (parameters !== undefined && every(parameters, isParameter)) &&
                 (type === undefined || !isArray(type)),
 
             1: ([decorators, modifiers, parameters, type]) =>
                 (decorators === undefined || every(decorators, isDecorator)) &&
                 (modifiers === undefined || every(modifiers, isModifier)) &&
-                (parameters === undefined || isArray(parameters)) &&
+                (parameters !== undefined && isArray(parameters)) &&
                 (type === undefined || isTypeNode(type)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.updateIndexSignature = buildOverload("updateIndexSignature")
         .overload({
-            0(node: IndexSignatureDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration {
+            0(node: IndexSignatureDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration {
                 return updateIndexSignature(node, modifiers, parameters, type);
             },
 
@@ -764,18 +764,18 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, parameters, type, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
-                (parameters === undefined || every(parameters, isParameter)) &&
+                (modifiers === undefined || isArray(modifiers)) &&
+                (parameters !== undefined && every(parameters, isParameter)) &&
                 (type === undefined || !isArray(type)),
 
             1: ([, decorators, modifiers, parameters, type]) =>
                 (decorators === undefined || every(decorators, isDecorator)) &&
                 (modifiers === undefined || every(modifiers, isModifier)) &&
-                (parameters === undefined || isArray(parameters)) &&
+                (parameters !== undefined && isArray(parameters)) &&
                 (type === undefined || isTypeNode(type)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
@@ -797,7 +797,7 @@ function patchNodeFactory(factory: NodeFactory) {
 
             1: ([decorators, modifiers, body]) =>
                 (decorators === undefined || isArray(decorators)) &&
-                (modifiers === undefined || isArray(decorators)) &&
+                (modifiers === undefined || isArray(modifiers)) &&
                 (body === undefined || isBlock(body)),
         })
         .deprecate({
@@ -857,7 +857,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (members === undefined || isArray(members)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
@@ -887,7 +887,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (members === undefined || isArray(members)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
@@ -921,7 +921,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (body === undefined || isBlock(body)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
@@ -955,7 +955,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (body === undefined || isBlock(body)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
@@ -1016,7 +1016,7 @@ function patchNodeFactory(factory: NodeFactory) {
 
     factory.createInterfaceDeclaration = buildOverload("createInterfaceDeclaration")
         .overload({
-            0(modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration {
+            0(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration {
                 return createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members);
             },
 
@@ -1027,7 +1027,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, name, typeParameters, heritageClauses, members, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (name === undefined || !isArray(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
                 (heritageClauses === undefined || every(heritageClauses, isHeritageClause)) &&
@@ -1042,13 +1042,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (members === undefined || every(members, isTypeElement)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.updateInterfaceDeclaration = buildOverload("updateInterfaceDeclaration")
         .overload({
-            0(node: InterfaceDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration {
+            0(node: InterfaceDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration {
                 return updateInterfaceDeclaration(node, modifiers, name, typeParameters, heritageClauses, members);
             },
 
@@ -1059,7 +1059,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, name, typeParameters, heritageClauses, members, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (name === undefined || !isArray(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
                 (heritageClauses === undefined || every(heritageClauses, isHeritageClause)) &&
@@ -1074,13 +1074,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (members === undefined || every(members, isTypeElement)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.createTypeAliasDeclaration = buildOverload("createTypeAliasDeclaration")
         .overload({
-            0(modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration {
+            0(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration {
                 return createTypeAliasDeclaration(modifiers, name, typeParameters, type);
             },
 
@@ -1091,7 +1091,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, name, typeParameters, type, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (name === undefined || !isArray(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
                 (type === undefined || !isArray(type)),
@@ -1104,13 +1104,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (type === undefined || isTypeNode(type)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.updateTypeAliasDeclaration = buildOverload("updateTypeAliasDeclaration")
         .overload({
-            0(node: TypeAliasDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration {
+            0(node: TypeAliasDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration {
                 return updateTypeAliasDeclaration(node, modifiers, name, typeParameters, type);
             },
 
@@ -1121,7 +1121,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, name, typeParameters, type, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (name === undefined || !isArray(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
                 (type === undefined || !isArray(type)),
@@ -1134,13 +1134,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (type === undefined || isTypeNode(type)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.createEnumDeclaration = buildOverload("createEnumDeclaration")
         .overload({
-            0(modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration {
+            0(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration {
                 return createEnumDeclaration(modifiers, name, members);
             },
 
@@ -1151,7 +1151,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, name, members, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (name === undefined || !isArray(name)) &&
                 (members === undefined || isArray(members)),
 
@@ -1162,13 +1162,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (members === undefined || isArray(members)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.updateEnumDeclaration = buildOverload("updateEnumDeclaration")
         .overload({
-            0(node: EnumDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration {
+            0(node: EnumDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration {
                 return updateEnumDeclaration(node, modifiers, name, members);
             },
 
@@ -1179,7 +1179,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, name, members, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (name === undefined || !isArray(name)) &&
                 (members === undefined || isArray(members)),
 
@@ -1190,13 +1190,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (members === undefined || isArray(members)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.createModuleDeclaration = buildOverload("createModuleDeclaration")
         .overload({
-            0(modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration {
+            0(modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration {
                 return createModuleDeclaration(modifiers, name, body, flags);
             },
 
@@ -1207,7 +1207,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, name, body, flags, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (name !== undefined && !isArray(name)) &&
                 (body === undefined || isModuleBody(body)) &&
                 (flags === undefined || typeof flags === "number"),
@@ -1220,13 +1220,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (flags === undefined || typeof flags === "number"),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.updateModuleDeclaration = buildOverload("updateModuleDeclaration")
         .overload({
-            0(node: ModuleDeclaration, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration {
+            0(node: ModuleDeclaration, modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration {
                 return updateModuleDeclaration(node, modifiers, name, body);
             },
 
@@ -1237,7 +1237,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, name, body, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (name === undefined || !isArray(name)) &&
                 (body === undefined || isModuleBody(body)),
 
@@ -1248,13 +1248,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (body === undefined || isModuleBody(body)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.createImportEqualsDeclaration = buildOverload("createImportEqualsDeclaration")
         .overload({
-            0(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration {
+            0(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration {
                 return createImportEqualsDeclaration(modifiers, isTypeOnly, name, moduleReference);
             },
 
@@ -1265,7 +1265,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, isTypeOnly, name, moduleReference, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (isTypeOnly === undefined || typeof isTypeOnly === "boolean") &&
                 (typeof name !== "boolean") &&
                 (typeof moduleReference !== "string"),
@@ -1278,13 +1278,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (moduleReference !== undefined && isModuleReference(moduleReference)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.updateImportEqualsDeclaration = buildOverload("updateImportEqualsDeclaration")
         .overload({
-            0(node: ImportEqualsDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration {
+            0(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration {
                 return updateImportEqualsDeclaration(node, modifiers, isTypeOnly, name, moduleReference);
             },
 
@@ -1295,7 +1295,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, isTypeOnly, name, moduleReference, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (isTypeOnly === undefined || typeof isTypeOnly === "boolean") &&
                 (typeof name !== "boolean") &&
                 (typeof moduleReference !== "string"),
@@ -1308,13 +1308,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (moduleReference !== undefined && isModuleReference(moduleReference)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.createImportDeclaration = buildOverload("createImportDeclaration")
         .overload({
-            0(modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration {
+            0(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration {
                 return createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause);
             },
 
@@ -1325,7 +1325,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, importClause, moduleSpecifier, assertClause, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (importClause === undefined || !isArray(importClause)) &&
                 (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&
                 (assertClause === undefined || isAssertClause(assertClause)),
@@ -1338,13 +1338,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (assertClause === undefined || isAssertClause(assertClause)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.updateImportDeclaration = buildOverload("updateImportDeclaration")
         .overload({
-            0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {
+            0(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {
                 return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);
             },
 
@@ -1355,7 +1355,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (importClause === undefined || !isArray(importClause)) &&
                 (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&
                 (assertClause === undefined || isAssertClause(assertClause)),
@@ -1368,13 +1368,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (assertClause === undefined || isAssertClause(assertClause)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.createExportAssignment = buildOverload("createExportAssignment")
         .overload({
-            0(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment {
+            0(modifiers: readonly ModifierLike[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment {
                 return createExportAssignment(modifiers, isExportEquals, expression);
             },
 
@@ -1385,7 +1385,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, isExportEquals, expression, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (isExportEquals === undefined || typeof isExportEquals === "boolean") &&
                 (typeof expression === "object"),
 
@@ -1396,13 +1396,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (expression !== undefined && isExpression(expression)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.updateExportAssignment = buildOverload("updateExportAssignment")
         .overload({
-            0(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment {
+            0(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment {
                 return updateExportAssignment(node, modifiers, expression);
             },
 
@@ -1413,7 +1413,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, expression, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (expression !== undefined && !isArray(expression)),
 
             1: ([, decorators, modifiers, expression]) =>
@@ -1422,13 +1422,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (expression !== undefined && isExpression(expression)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.createExportDeclaration = buildOverload("createExportDeclaration")
         .overload({
-            0(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration {
+            0(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration {
                 return createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause);
             },
 
@@ -1439,7 +1439,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (typeof isTypeOnly === "boolean") &&
                 (typeof exportClause !== "boolean") &&
                 (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&
@@ -1454,13 +1454,13 @@ function patchNodeFactory(factory: NodeFactory) {
                 (assertClause === undefined || isAssertClause(assertClause)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 
     factory.updateExportDeclaration = buildOverload("updateExportDeclaration")
         .overload({
-            0(node: ExportDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration {
+            0(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration {
                 return updateExportDeclaration(node, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause);
             },
 
@@ -1471,7 +1471,7 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every(modifiers, isModifier)) &&
+                (modifiers === undefined || every(modifiers, isModifierLike)) &&
                 (typeof isTypeOnly === "boolean") &&
                 (typeof exportClause !== "boolean") &&
                 (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&
@@ -1486,7 +1486,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (assertClause === undefined || isAssertClause(assertClause)),
         })
         .deprecate({
-            1: DISALLOW_DECORATORS
+            1: MUST_MERGE
         })
         .finish();
 }

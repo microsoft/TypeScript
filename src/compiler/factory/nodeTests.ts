@@ -40,6 +40,7 @@ import {
     DebuggerStatement,
     Decorator,
     DefaultClause,
+    DefaultKeyword,
     DeleteExpression,
     DoStatement,
     DotDotDotToken,
@@ -107,6 +108,7 @@ import {
     JSDocPublicTag,
     JSDocReadonlyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
     JSDocTemplateTag,
@@ -330,6 +332,11 @@ export function isPrivateIdentifier(node: Node): node is PrivateIdentifier {
 /** @internal */
 export function isExportModifier(node: Node): node is ExportKeyword {
     return node.kind === SyntaxKind.ExportKeyword;
+}
+
+/** @internal */
+export function isDefaultModifier(node: Node): node is DefaultKeyword {
+    return node.kind === SyntaxKind.DefaultKeyword;
 }
 
 /** @internal */
@@ -1186,6 +1193,10 @@ export function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag {
 
 export function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag {
     return node.kind === SyntaxKind.JSDocImplementsTag;
+}
+
+export function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag {
+    return node.kind === SyntaxKind.JSDocSatisfiesTag;
 }
 
 export function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag {

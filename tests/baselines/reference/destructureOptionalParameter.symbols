@@ -48,7 +48,7 @@ interface QueryMetadataFactory {
 >read : Symbol(read, Decl(destructureOptionalParameter.ts, 14, 30))
 
     }): ParameterDecorator;
->ParameterDecorator : Symbol(ParameterDecorator, Decl(lib.es5.d.ts, --, --))
+>ParameterDecorator : Symbol(ParameterDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 
     new (selector: Type | string, {descendants, read}?: {
 >selector : Symbol(selector, Decl(destructureOptionalParameter.ts, 17, 9))
