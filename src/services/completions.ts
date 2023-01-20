@@ -1737,7 +1737,7 @@ function getEntryForObjectLiteralMethodCompletion(
         module: options.module,
         target: options.target,
         omitTrailingSemicolon: false,
-        newLine: getNewLineKind(getNewLineCharacter(options)),
+        newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
     });
     if (formatContext) {
         insertText = printer.printAndFormatSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile, formatContext);

@@ -2437,7 +2437,7 @@ export function createLanguageService(
     }
 
     function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
-        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
+        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, /*formatSettings*/ undefined), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
     }
 
     function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {

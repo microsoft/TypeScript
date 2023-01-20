@@ -2936,7 +2936,7 @@ const lineFeed = "\n";
  *
  * @internal
  */
-export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings?: FormatCodeSettings) {
+export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings: FormatCodeSettings | undefined) {
     return formatSettings?.newLineCharacter ||
         host.getNewLine?.() ||
         lineFeed;
