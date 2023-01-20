@@ -3524,7 +3524,8 @@ export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | El
 export function setValueDeclaration(symbol: Symbol, node: Declaration): void {
     const { valueDeclaration } = symbol;
     if (!valueDeclaration ||
-        ((node.flags & NodeFlags.Ambient) ? (!isAssignmentDeclaration(node) && isAssignmentDeclaration(valueDeclaration)) : (valueDeclaration.flags & NodeFlags.Ambient)) ||
+        !(node.flags & NodeFlags.Ambient && !(valueDeclaration.flags & NodeFlags.Ambient)) && (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
+        node.kind === SyntaxKind.PropertyDeclaration && isAssignmentDeclaration(valueDeclaration) ||
         (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
         // other kinds of value declarations take precedence over modules and assignment declarations
         symbol.valueDeclaration = node;
