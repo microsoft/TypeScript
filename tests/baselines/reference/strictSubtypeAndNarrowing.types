@@ -1,0 +1,288 @@
+=== tests/cases/compiler/strictSubtypeAndNarrowing.ts ===
+// Check that `any` is a strict supertype of `unknown`
+
+declare const x11: { x: unknown };
+>x11 : { x: unknown; }
+>x : unknown
+
+declare const x12: { x: any };
+>x12 : { x: any; }
+>x : any
+
+const a11 = [x11, x12];
+>a11 : { x: any; }[]
+>[x11, x12] : { x: any; }[]
+>x11 : { x: unknown; }
+>x12 : { x: any; }
+
+const a12 = [x12, x11];
+>a12 : { x: any; }[]
+>[x12, x11] : { x: any; }[]
+>x12 : { x: any; }
+>x11 : { x: unknown; }
+
+declare const x21: { x: any };
+>x21 : { x: any; }
+>x : any
+
+declare const x22: { x: unknown };
+>x22 : { x: unknown; }
+>x : unknown
+
+const a21 = [x22, x21];
+>a21 : { x: any; }[]
+>[x22, x21] : { x: any; }[]
+>x22 : { x: unknown; }
+>x21 : { x: any; }
+
+const a22 = [x21, x22];
+>a22 : { x: any; }[]
+>[x21, x22] : { x: any; }[]
+>x21 : { x: any; }
+>x22 : { x: unknown; }
+
+// Strict subtype doesn't infer index signatures in non-fresh object types
+
+const x31 = { a: 1 };
+>x31 : { a: number; }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+declare const x32: { [x: string]: unknown, a: number }
+>x32 : { [x: string]: unknown; a: number; }
+>x : string
+>a : number
+
+const a31 = [x31, x32];
+>a31 : { a: number; }[]
+>[x31, x32] : { a: number; }[]
+>x31 : { a: number; }
+>x32 : { [x: string]: unknown; a: number; }
+
+const a32 = [x32, x31];
+>a32 : { a: number; }[]
+>[x32, x31] : { a: number; }[]
+>x32 : { [x: string]: unknown; a: number; }
+>x31 : { a: number; }
+
+declare const x41: { [x: string]: unknown, a: number }
+>x41 : { [x: string]: unknown; a: number; }
+>x : string
+>a : number
+
+const x42 = { a: 1 };
+>x42 : { a: number; }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+const a41 = [x42, x41];
+>a41 : { a: number; }[]
+>[x42, x41] : { a: number; }[]
+>x42 : { a: number; }
+>x41 : { [x: string]: unknown; a: number; }
+
+const a42 = [x41, x42];
+>a42 : { a: number; }[]
+>[x41, x42] : { a: number; }[]
+>x41 : { [x: string]: unknown; a: number; }
+>x42 : { a: number; }
+
+// (...args: any[]) => any is supertype of all other function types
+
+declare function isFunction(x: unknown): x is (...args: any[]) => any;
+>isFunction : (x: unknown) => x is (...args: any[]) => any
+>x : unknown
+>args : any[]
+
+function qqq(f: (() => void) | undefined) {
+>qqq : (f: (() => void) | undefined) => void
+>f : (() => void) | undefined
+
+    if (isFunction(f)) {
+>isFunction(f) : boolean
+>isFunction : (x: unknown) => x is (...args: any[]) => any
+>f : (() => void) | undefined
+
+        f;  // () => void
+>f : () => void
+    }
+    else {
+        f;  // undefined
+>f : undefined
+    }
+    f;  // (() => void) | undefined
+>f : (() => void) | undefined
+}
+
+// Type of x = y is y with freshness preserved
+
+function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
+>fx10 : (obj1: {    x?: number;}, obj2: {    x?: number;    y?: number;}) => void
+>obj1 : { x?: number | undefined; }
+>x : number | undefined
+>obj2 : { x?: number | undefined; y?: number | undefined; }
+>x : number | undefined
+>y : number | undefined
+
+    obj1 = obj2 = { x: 1, y: 2 };
+>obj1 = obj2 = { x: 1, y: 2 } : { x: number; y: number; }
+>obj1 : { x?: number | undefined; }
+>obj2 = { x: 1, y: 2 } : { x: number; y: number; }
+>obj2 : { x?: number | undefined; y?: number | undefined; }
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+
+    obj2 = obj1 = { x: 1, y: 2 };
+>obj2 = obj1 = { x: 1, y: 2 } : { x: number; y: number; }
+>obj2 : { x?: number | undefined; y?: number | undefined; }
+>obj1 = { x: 1, y: 2 } : { x: number; y: number; }
+>obj1 : { x?: number | undefined; }
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+}
+
+function fx11(): { x?: number } {
+>fx11 : () => {    x?: number;}
+>x : number | undefined
+
+    let obj: { x?: number, y?: number };
+>obj : { x?: number | undefined; y?: number | undefined; }
+>x : number | undefined
+>y : number | undefined
+
+    return obj = { x: 1, y: 2 };
+>obj = { x: 1, y: 2 } : { x: number; y: number; }
+>obj : { x?: number | undefined; y?: number | undefined; }
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+}
+
+// Narrowing preserves original type in false branch for non-identical mutual subtypes
+
+declare function isObject1(value: unknown): value is Record<string, unknown>;
+>isObject1 : (value: unknown) => value is Record<string, unknown>
+>value : unknown
+
+function gg(x: {}) {
+>gg : (x: {}) => void
+>x : {}
+
+    if (isObject1(x)) {
+>isObject1(x) : boolean
+>isObject1 : (value: unknown) => value is Record<string, unknown>
+>x : {}
+
+        x;  // Record<string, unknown>
+>x : Record<string, unknown>
+    }
+    else {
+        x;  // {}
+>x : {}
+    }
+    x;  // {}
+>x : {}
+}
+
+declare function isObject2(value: unknown): value is {};
+>isObject2 : (value: unknown) => value is {}
+>value : unknown
+
+function gg2(x: Record<string, unknown>) {
+>gg2 : (x: Record<string, unknown>) => void
+>x : Record<string, unknown>
+
+    if (isObject2(x)) {
+>isObject2(x) : boolean
+>isObject2 : (value: unknown) => value is {}
+>x : Record<string, unknown>
+
+        x;  // {}
+>x : {}
+    }
+    else {
+        x;  // Record<string, unknown>
+>x : Record<string, unknown>
+    }
+    x;  // Record<string, unknown>
+>x : Record<string, unknown>
+}
+
+// Repro from #50916
+
+type Identity<T> = {[K in keyof T]: T[K]};
+>Identity : Identity<T>
+
+function is<T>(value: T): value is Identity<T> {
+>is : <T>(value: T) => value is Identity<T>
+>value : T
+
+    return true;
+>true : true
+}
+
+type Union =  {a: number} | {b: number} | {c: number};
+>Union : { a: number; } | { b: number; } | { c: number; }
+>a : number
+>b : number
+>c : number
+
+function example(x: Union) {
+>example : (x: Union) => void
+>x : Union
+
+    if (is(x)) { x }
+>is(x) : boolean
+>is : <T>(value: T) => value is Identity<T>
+>x : Union
+>x : { a: number; } | { b: number; } | { c: number; }
+
+    if (is(x)) {}
+>is(x) : boolean
+>is : <T>(value: T) => value is Identity<T>
+>x : Union
+
+    if (is(x)) {}
+>is(x) : boolean
+>is : <T>(value: T) => value is Identity<T>
+>x : Union
+
+    if (is(x)) {}
+>is(x) : boolean
+>is : <T>(value: T) => value is Identity<T>
+>x : Union
+
+    if (is(x)) {}
+>is(x) : boolean
+>is : <T>(value: T) => value is Identity<T>
+>x : Union
+
+    if (is(x)) {}
+>is(x) : boolean
+>is : <T>(value: T) => value is Identity<T>
+>x : Union
+
+    if (is(x)) {}
+>is(x) : boolean
+>is : <T>(value: T) => value is Identity<T>
+>x : Union
+
+    if (is(x)) {}
+>is(x) : boolean
+>is : <T>(value: T) => value is Identity<T>
+>x : Union
+
+    x;  // Union
+>x : Union
+}
+
