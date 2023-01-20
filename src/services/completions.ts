@@ -87,7 +87,6 @@ import {
     getLineAndCharacterOfPosition,
     getLineStartPositionForPosition,
     getLocalSymbolForExportDefault,
-    getNameForExportedSymbol,
     getNameOfDeclaration,
     getNameTable,
     getNewLineCharacter,
@@ -558,7 +557,7 @@ const enum KeywordCompletionFilters {
 const enum GlobalsSearch { Continue, Success, Fail }
 
 interface ModuleSpecifierResolutionContext {
-    tryResolve: (exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult;
+    tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult;
     resolvedAny: () => boolean;
     skippedAny: () => boolean;
     resolvedBeyondLimit: () => boolean;
@@ -606,9 +605,9 @@ function resolvingModuleSpecifiers<TReturn>(
     host.log?.(`${logPrefix}: ${timestamp() - start}`);
     return result;
 
-    function tryResolve(exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean): ModuleSpecifierResolutionResult {
+    function tryResolve(exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult {
         if (isFromAmbientModule) {
-            const result = resolver.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite);
+            const result = resolver.getModuleSpecifierForBestExportInfo(exportInfo, position, isValidTypeOnlyUseSite);
             if (result) {
                 ambientCount++;
             }
@@ -617,7 +616,7 @@ function resolvingModuleSpecifiers<TReturn>(
         const shouldResolveModuleSpecifier = needsFullResolution || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
         const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
         const result = (shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache)
-            ? resolver.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite, shouldGetModuleSpecifierFromCache)
+            ? resolver.getModuleSpecifierForBestExportInfo(exportInfo, position, isValidTypeOnlyUseSite, shouldGetModuleSpecifierFromCache)
             : undefined;
 
         if (!shouldResolveModuleSpecifier && !shouldGetModuleSpecifierFromCache || shouldGetModuleSpecifierFromCache && !result) {
@@ -666,7 +665,7 @@ export function getCompletionsAtPosition(
     const compilerOptions = program.getCompilerOptions();
     const incompleteCompletionsCache = preferences.allowIncompleteCompletions ? host.getIncompleteCompletionsCache?.() : undefined;
     if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions && previousToken && isIdentifier(previousToken)) {
-        const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken);
+        const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken, position);
         if (incompleteContinuation) {
             return incompleteContinuation;
         }
@@ -750,10 +749,12 @@ function continuePreviousIncompleteResponse(
     host: LanguageServiceHost,
     preferences: UserPreferences,
     cancellationToken: CancellationToken,
+    position: number,
 ): CompletionInfo | undefined {
     const previousResponse = cache.get();
     if (!previousResponse) return undefined;
 
+    const touchNode = getTouchingPropertyName(file, position);
     const lowerCaseTokenText = location.text.toLowerCase();
     const exportMap = getExportInfoMap(file, host, program, preferences, cancellationToken);
     const newEntries = resolvingModuleSpecifiers(
@@ -779,7 +780,7 @@ function continuePreviousIncompleteResponse(
                 const { origin } = Debug.checkDefined(getAutoImportSymbolFromCompletionEntryData(entry.name, entry.data, program, host));
                 const info = exportMap.get(file.path, entry.data.exportMapKey);
 
-                const result = info && context.tryResolve(info, entry.name, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
+                const result = info && context.tryResolve(info, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
                 if (result === "skipped") return entry;
                 if (!result || result === "failed") {
                     host.log?.(`Unexpected failure resolving auto import for '${entry.name}' from '${entry.source}'`);
@@ -809,6 +810,7 @@ function continuePreviousIncompleteResponse(
 
     previousResponse.entries = newEntries;
     previousResponse.flags = (previousResponse.flags || 0) | CompletionInfoFlags.IsContinuation;
+    previousResponse.optionalReplacementSpan = getOptionalReplacementSpan(touchNode);
     return previousResponse;
 }
 
@@ -2525,7 +2527,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
         targetSymbol,
         moduleSymbol,
         sourceFile,
-        getNameForExportedSymbol(symbol, getEmitScriptTarget(compilerOptions), isJsxOpeningTagName),
+        name,
         isJsxOpeningTagName,
         host,
         program,
@@ -3196,7 +3198,7 @@ function getCompletionData(
                         moduleSymbol,
                         symbol: firstAccessibleSymbol,
                         targetFlags: skipAlias(firstAccessibleSymbol, typeChecker).flags,
-                    }], firstAccessibleSymbol.name, position, isValidTypeOnlyAliasUseSite(location)) || {};
+                    }], position, isValidTypeOnlyAliasUseSite(location)) || {};
 
                     if (moduleSpecifier) {
                         const origin: SymbolOriginInfoResolvedExport = {
@@ -3518,7 +3520,7 @@ function getCompletionData(
                         // N.B. in this resolution mode we always try to resolve module specifiers here,
                         // because we have to know now if it's going to fail so we can omit the completion
                         // from the list.
-                        const result = context.tryResolve(info, symbolName, isFromAmbientModule) || {};
+                        const result = context.tryResolve(info, isFromAmbientModule) || {};
                         if (result === "failed") return;
 
                         // If we skipped resolving module specifiers, our selection of which ExportInfo

@@ -32,7 +32,6 @@ import {
     PackageInstalledResponse,
     Project,
     ProjectService,
-    protocol,
     ServerCancellationToken,
     ServerHost,
     Session,
@@ -77,6 +76,7 @@ import {
     versionMajorMinor,
     WatchOptions,
 } from "./_namespaces/ts";
+import * as protocol from "../server/protocol";
 
 interface LogOptions {
     file?: string;

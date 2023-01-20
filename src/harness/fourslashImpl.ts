@@ -1972,18 +1972,53 @@ export class TestState {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
-            quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
+            item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
         }));
-        Harness.Baseline.runBaseline(baselineFile, stringify(result));
+        const annotations = this.annotateContentWithTooltips(
+            result,
+            "quickinfo",
+            item => item.textSpan,
+            ({ displayParts, documentation, tags }) => [
+                ...(displayParts ? displayParts.map(p => p.text).join("").split("\n") : []),
+                ...(documentation?.length ? documentation.map(p => p.text).join("").split("\n") : []),
+                ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : [])
+            ]);
+        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
 
     public baselineSignatureHelp() {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
-            signatureHelp: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
+            item: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
         }));
-        Harness.Baseline.runBaseline(baselineFile, stringify(result));
+        const annotations = this.annotateContentWithTooltips(
+            result,
+            "signature help",
+            () => undefined, // use default: marker.position
+            (item, previous) => {
+                const { documentation, tags, prefixDisplayParts, suffixDisplayParts, separatorDisplayParts, parameters } = item.items[item.selectedItemIndex];
+                const tooltip = [];
+                let signature = "";
+                if (prefixDisplayParts.length) signature += prefixDisplayParts.map(p => p.text).join("");
+                const separator = separatorDisplayParts.map(p => p.text).join("");
+                signature += parameters.map((p, i) => {
+                    const text = p.displayParts.map(dp => dp.text).join("");
+                    return i === item.argumentIndex ? "**" + text + "**" : text;
+                }).join(separator);
+                if (suffixDisplayParts.length) signature += suffixDisplayParts.map(p => p.text).join("");
+                tooltip.push(signature);
+                // only display signature documentation on the last argument when multiple arguments are marked
+                if (previous?.applicableSpan.start !== item.applicableSpan.start) {
+                    if (documentation?.length) tooltip.push(...documentation.map(p => p.text).join("").split("\n"));
+                    if (tags?.length) {
+                        tooltip.push(...tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n"));
+                    }
+                }
+                return tooltip;
+            }
+        );
+        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
 
     public baselineCompletions(preferences?: ts.UserPreferences) {
@@ -1993,7 +2028,7 @@ export class TestState {
             const completions = this.getCompletionListAtCaret(preferences);
             return {
                 marker: { ...marker, name },
-                completionList: {
+                item: {
                     ...completions,
                     entries: completions?.entries.map(entry => ({
                         ...entry,
@@ -2002,7 +2037,60 @@ export class TestState {
                 }
             };
         });
-        Harness.Baseline.runBaseline(baselineFile, stringify(result));
+        const annotations = this.annotateContentWithTooltips(
+            result,
+            "completions",
+            item => item.optionalReplacementSpan,
+            item => item.entries?.flatMap(
+                entry => entry.displayParts
+                    ? entry.displayParts.map(p => p.text).join("").split("\n")
+                    : [`(${entry.kindModifiers}${entry.kind}) ${entry.name}`])
+        );
+        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
+    }
+
+    private annotateContentWithTooltips<T extends ts.QuickInfo | ts.SignatureHelpItems | {
+            optionalReplacementSpan?: ts.TextSpan,
+            entries?: {
+                name: string,
+                kind: string,
+                kindModifiers?: string,
+                displayParts?: unknown,
+            }[]
+    }>(
+        items: ({
+            marker: Marker & { name: string },
+            item: T | undefined
+        })[],
+        opName: "completions" | "quickinfo" | "signature help",
+        getSpan: (t: T) => ts.TextSpan | undefined,
+        getToolTipContents: (t: T, prev: T | undefined) => string[] | undefined): string {
+        const bar = "-".repeat(70);
+        const sorted = items.slice();
+        // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
+        sorted.sort((q1, q2) =>
+            q1.marker.fileName === q1.marker.fileName
+            ? (q1.marker.position > q2.marker.position ? -1 : 1)
+            : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
+        const files: Map<string, string[]> = new Map();
+        let previous: T | undefined;
+        for (const { marker, item } of sorted) {
+            const span = (item ? getSpan(item) : undefined) ?? { start: marker.position, length: 1 };
+            const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(marker.fileName, span.start);
+            const underline = " ".repeat(startLc.character) + "^".repeat(span.length);
+            let tooltip = [
+                bar,
+                ...(item ? getToolTipContents(item, previous) : undefined) ?? [`No ${opName} at /*${marker.name}*/.`],
+                bar,
+            ];
+            tooltip = tooltip.map(l => "| " + l);
+            const lines = files.get(marker.fileName) ?? this.getFileContent(marker.fileName).split(/\r?\n/);
+            lines.splice(startLc.line + 1, 0, underline, ...tooltip);
+            files.set(marker.fileName, lines);
+            previous = item;
+        }
+        return Array.from(files.entries(), ([fileName, lines]) => `=== ${fileName} ===\n` + lines.map(l => "// " + l).join("\n"))
+            .join("\n\n");
     }
 
     public baselineSmartSelection() {
@@ -2897,8 +2985,10 @@ export class TestState {
         this.applyChanges(fixes[index].changes);
     }
 
-    public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
-        this.goToMarker(markerName);
+    public applyCodeActionFromCompletion(markerName: string | undefined, options: FourSlashInterface.VerifyCompletionActionOptions) {
+        if (markerName !== undefined) {
+            this.goToMarker(markerName);
+        }
 
         const details = this.getCompletionEntryDetails(options.name, options.source, options.data, options.preferences);
         if (!details) {
@@ -3125,9 +3215,9 @@ export class TestState {
 
             // Undo changes to perform next fix
             const span = change.textChanges[0].span;
-             const deletedText = originalContent.substr(span.start, change.textChanges[0].span.length);
-             const insertedText = change.textChanges[0].newText;
-             this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
+            const deletedText = originalContent.substr(span.start, change.textChanges[0].span.length);
+            const insertedText = change.textChanges[0].newText;
+            this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
         }
         if (expectedTextArray.length !== actualTextArray.length) {
             this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}:\n\n${actualTextArray.join("\n\n" + "-".repeat(20) + "\n\n")}`);
@@ -3213,7 +3303,7 @@ export class TestState {
         }
     }
 
-    public baselineAutoImports(markerName: string, preferences?: ts.UserPreferences) {
+    public baselineAutoImports(markerName: string, fullNamesForCodeFix?: string[], preferences?: ts.UserPreferences) {
         const marker = this.getMarkerByName(markerName);
         const baselineFile = this.getBaselineFileNameForContainingTestFile(`.baseline.md`);
         const completionPreferences = {
@@ -3224,10 +3314,12 @@ export class TestState {
             ...preferences
         };
 
-        const ext = ts.getAnyExtensionFromPath(this.activeFile.fileName).slice(1);
+        this.goToMarker(marker);
+        this.configure(completionPreferences);
+        const fileName = this.activeFile.fileName;
+        const ext = ts.getAnyExtensionFromPath(fileName).slice(1);
         const lang = ["mts", "cts"].includes(ext) ? "ts" : ext;
         let baselineText = codeFence(this.renderMarkers([{ text: "|", fileName: marker.fileName, position: marker.position }], /*useTerminalBoldSequence*/ false), lang) + "\n\n";
-        this.goToMarker(marker);
 
         const completions = this.getCompletionListAtCaret(completionPreferences)!;
 
@@ -3251,7 +3343,36 @@ export class TestState {
             });
         }
 
-        // TODO: do codefixes too
+        if (fullNamesForCodeFix) {
+            const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(fileName)!;
+            const originalContent = scriptInfo.content;
+            const range = this.getRangesInFile()[0]
+                || getRangeOfIdentifierTouchingPosition(this.activeFile.content, marker.position)
+                || { pos: marker.position, end: marker.position };
+
+            baselineText += `## From codefixes\n\n`;
+            for (const fullNameForCodeFix of fullNamesForCodeFix) {
+                this.applyEdits(fileName, [{ span: { start: 0, length: this.getFileContent(fileName).length }, newText: originalContent }]);
+                this.applyEdits(fileName, [{ span: ts.createTextSpanFromRange(range), newText: fullNameForCodeFix }]);
+                baselineText += `### When marker text is \`${fullNameForCodeFix}\`\n\n`;
+
+                const codeFixes = this.getCodeFixes(fileName, /*errorCode*/ undefined, completionPreferences)
+                    .filter(f => f.fixName === ts.codefix.importFixName);
+                for (const fix of codeFixes) {
+                    baselineText += fix.description + "\n";
+                    if (fix.fixAllDescription) {
+                        baselineText += `Fix all available: ${fix.fixAllDescription}\n`;
+                    }
+                    ts.Debug.assert(fix.changes.length === 1);
+                    const change = ts.first(fix.changes);
+                    ts.Debug.assert(change.fileName === fileName);
+                    this.applyEdits(change.fileName, change.textChanges);
+                    const text = this.getFileContent(fileName);
+                    baselineText += "\n" + codeFence(text, lang) + "\n\n";
+                }
+            }
+        }
+
         Harness.Baseline.runBaseline(baselineFile, baselineText);
     }
 
@@ -4702,4 +4823,17 @@ function highlightDifferenceBetweenStrings(source: string, target: string) {
 
 function codeFence(code: string, lang?: string) {
     return `\`\`\`${lang || ""}\n${code}\n\`\`\``;
+}
+
+function getRangeOfIdentifierTouchingPosition(content: string, position: number): ts.TextRange | undefined {
+    const scanner = ts.createScanner(ts.ScriptTarget.Latest, /*skipTrivia*/ true, ts.LanguageVariant.Standard, content);
+    while (scanner.scan() !== ts.SyntaxKind.EndOfFileToken) {
+        const tokenStart = scanner.getStartPos();
+        if (scanner.getToken() === ts.SyntaxKind.Identifier && tokenStart <= position && scanner.getTextPos() >= position) {
+            return { pos: tokenStart, end: scanner.getTextPos() };
+        }
+        if (tokenStart > position) {
+            break;
+        }
+    }
 }

@@ -26,6 +26,7 @@ const myVar = 30;
 //// [/src/app/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "target": "es5",
         "module": "amd",
         "composite": true,
