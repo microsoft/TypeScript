@@ -377,6 +377,7 @@ import {
     hasOnlyExpressionInitializer,
     hasOverrideModifier,
     hasPossibleExternalModuleReference,
+    hasProperty,
     hasQuestionToken,
     hasRestParameter,
     hasScopeMarker,
@@ -31261,7 +31262,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const libTarget of libTargets) {
             const featuresOfLib = allFeatures[libTarget];
             const containingTypeName = symbolName(container);
-            const featuresOfContainingType = featuresOfLib.hasOwnProperty(containingTypeName) && featuresOfLib[containingTypeName];
+            const featuresOfContainingType = hasProperty(featuresOfLib, containingTypeName) && featuresOfLib[containingTypeName];
             if (featuresOfContainingType && contains(featuresOfContainingType, missingProperty)) {
                 return libTarget;
             }

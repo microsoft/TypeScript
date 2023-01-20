@@ -2,10 +2,7 @@
 
 // Repro of crash - #52334
 
-// @allowJs: true
 // @checkJs: true
-// @strict: true
-// @target: esnext
 
 // @Filename: index.js
 //// export var RxQueryBase = /*#__PURE__*/function () {
