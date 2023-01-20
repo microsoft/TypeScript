@@ -19,11 +19,8 @@ import {
     TypeAcquisition,
 } from "./_namespaces/ts";
 
-/**
- * Declaration module describing the TypeScript Server protocol
- */
+// Declaration module describing the TypeScript Server protocol
 
-// NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
     Brace = "brace",
@@ -175,8 +172,6 @@ export const enum CommandTypes {
     ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
     ProvideInlayHints = "provideInlayHints"
-
-    // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
 }
 
 /**
