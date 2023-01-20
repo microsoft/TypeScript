@@ -596,7 +596,7 @@ export namespace Compiler {
                 .map(s => "!!! " + ts.diagnosticCategoryName(error) + " TS" + error.code + ": " + s);
             if (error.relatedInformation) {
                 for (const info of error.relatedInformation) {
-                    errLines.push(`!!! related TS${info.code}${info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity, !isDefaultLibraryFile(info.file.fileName)) : ""}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
+                    errLines.push(`!!! related TS${info.code}${info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity, isDefaultLibraryFile(info.file.fileName)) : ""}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
                 }
             }
             errLines.forEach(e => outputLines += (newLine() + e));

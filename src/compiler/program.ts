@@ -744,13 +744,16 @@ function formatCodeSpan(file: SourceFile, start: number, length: number, indent:
 }
 
 /** @internal */
-export function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color = formatColorAndReset, withPosition = true) {
+export function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color = formatColorAndReset, elidePosition = false) {
     const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
 
     let output = "";
     output += color(relativeFileName, ForegroundColorEscapeSequences.Cyan);
 
-    if (withPosition) {
+    if (elidePosition) {
+        output += ":--:--";
+    }
+    else {
         const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
         output += ":";
         output += color(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
