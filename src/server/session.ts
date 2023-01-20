@@ -899,7 +899,6 @@ const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.Quickinfo,
     protocol.CommandTypes.QuickinfoFull,
     protocol.CommandTypes.CompletionInfo,
-    protocol.CommandTypes.Completions,
     protocol.CommandTypes.CompletionsFull,
     protocol.CommandTypes.CompletionDetails,
     protocol.CommandTypes.CompletionDetailsFull,
@@ -2241,7 +2240,7 @@ export class Session<TMessage = string> implements EventSender {
         });
     }
 
-    private getCompletions(args: protocol.CompletionsRequestArgs, kind: protocol.CommandTypes.CompletionInfo | protocol.CommandTypes.Completions | protocol.CommandTypes.CompletionsFull): WithMetadata<readonly protocol.CompletionEntry[]> | protocol.CompletionInfo | CompletionInfo | undefined {
+    private getCompletions(args: protocol.CompletionsRequestArgs, kind: protocol.CommandTypes.CompletionInfo | protocol.CommandTypes.CompletionsFull): protocol.CompletionInfo | CompletionInfo | undefined {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
         const position = this.getPosition(args, scriptInfo);
@@ -2302,11 +2301,6 @@ export class Session<TMessage = string> implements EventSender {
                 };
             }
         });
-
-        if (kind === protocol.CommandTypes.Completions) {
-            if (completions.metadata) (entries as WithMetadata<readonly protocol.CompletionEntry[]>).metadata = completions.metadata;
-            return entries;
-        }
 
         const res: protocol.CompletionInfo = {
             ...completions,
@@ -3283,9 +3277,6 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.CompletionInfo]: (request: protocol.CompletionsRequest) => {
             return this.requiredResponse(this.getCompletions(request.arguments, protocol.CommandTypes.CompletionInfo));
-        },
-        [protocol.CommandTypes.Completions]: (request: protocol.CompletionsRequest) => {
-            return this.requiredResponse(this.getCompletions(request.arguments, protocol.CommandTypes.Completions));
         },
         [protocol.CommandTypes.CompletionsFull]: (request: protocol.CompletionsRequest) => {
             return this.requiredResponse(this.getCompletions(request.arguments, protocol.CommandTypes.CompletionsFull));

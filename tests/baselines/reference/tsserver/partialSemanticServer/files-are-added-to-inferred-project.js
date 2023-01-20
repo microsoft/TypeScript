@@ -83,7 +83,7 @@ Info 7    [00:00:44.000] response:
     }
 Info 8    [00:00:45.000] request:
     {
-      "command": "completions",
+      "command": "completionInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/a.ts",
         "line": 3,
@@ -116,20 +116,36 @@ FsWatchesRecursive::
 
 Info 15   [00:00:52.000] response:
     {
-      "response": [
-        {
-          "name": "foo",
-          "kind": "method",
-          "kindModifiers": "",
-          "sortText": "11"
+      "response": {
+        "flags": 0,
+        "isGlobalCompletion": false,
+        "isMemberCompletion": true,
+        "isNewIdentifierLocation": false,
+        "optionalReplacementSpan": {
+          "start": {
+            "line": 3,
+            "offset": 47
+          },
+          "end": {
+            "line": 3,
+            "offset": 51
+          }
         },
-        {
-          "name": "prop",
-          "kind": "property",
-          "kindModifiers": "",
-          "sortText": "11"
-        }
-      ],
+        "entries": [
+          {
+            "name": "foo",
+            "kind": "method",
+            "kindModifiers": "",
+            "sortText": "11"
+          },
+          {
+            "name": "prop",
+            "kind": "property",
+            "kindModifiers": "",
+            "sortText": "11"
+          }
+        ]
+      },
       "responseRequired": true
     }
 Info 16   [00:00:53.000] request:
@@ -189,7 +205,7 @@ Info 22   [00:01:07.000] response:
     }
 Info 23   [00:01:08.000] request:
     {
-      "command": "completions",
+      "command": "completionInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/a.ts",
         "line": 3,
@@ -222,19 +238,35 @@ FsWatchesRecursive::
 
 Info 30   [00:01:15.000] response:
     {
-      "response": [
-        {
-          "name": "foo",
-          "kind": "method",
-          "kindModifiers": "",
-          "sortText": "11"
+      "response": {
+        "flags": 0,
+        "isGlobalCompletion": false,
+        "isMemberCompletion": true,
+        "isNewIdentifierLocation": false,
+        "optionalReplacementSpan": {
+          "start": {
+            "line": 3,
+            "offset": 47
+          },
+          "end": {
+            "line": 3,
+            "offset": 51
+          }
         },
-        {
-          "name": "prop",
-          "kind": "property",
-          "kindModifiers": "",
-          "sortText": "11"
-        }
-      ],
+        "entries": [
+          {
+            "name": "foo",
+            "kind": "method",
+            "kindModifiers": "",
+            "sortText": "11"
+          },
+          {
+            "name": "prop",
+            "kind": "property",
+            "kindModifiers": "",
+            "sortText": "11"
+          }
+        ]
+      },
       "responseRequired": true
     }

@@ -62,33 +62,17 @@ describe("unittests:: tsserver:: with metadata in response", () => {
     }
 
     describe("With completion requests", () => {
-        const completionRequestArgs: ts.server.protocol.CompletionsRequestArgs = {
-            file: aTs.path,
-            line: 1,
-            offset: aTs.content.indexOf("this.") + 1 + "this.".length
-        };
-        const expectedCompletionEntries: readonly ts.server.protocol.CompletionEntry[] = [
-            { name: "foo", kind: ts.ScriptElementKind.memberFunctionElement, kindModifiers: "", sortText: ts.Completions.SortText.LocationPriority },
-            { name: "prop", kind: ts.ScriptElementKind.memberVariableElement, kindModifiers: "", sortText: ts.Completions.SortText.LocationPriority }
-        ];
-
-        it("can pass through metadata when the command returns array", () => {
-            const host = createHostWithPlugin([aTs, tsconfig]);
-            const session = createSession(host);
-            openFilesForSession([aTs], session);
-            verifyCommandWithMetadata<ts.server.protocol.CompletionsRequest, readonly ts.server.protocol.CompletionEntry[]>(session, host, {
-                command: ts.server.protocol.CommandTypes.Completions,
-                arguments: completionRequestArgs
-            }, expectedCompletionEntries);
-        });
-
         it("can pass through metadata when the command returns object", () => {
             const host = createHostWithPlugin([aTs, tsconfig]);
             const session = createSession(host);
             openFilesForSession([aTs], session);
             verifyCommandWithMetadata<ts.server.protocol.CompletionsRequest, ts.server.protocol.CompletionInfo>(session, host, {
                 command: ts.server.protocol.CommandTypes.CompletionInfo,
-                arguments: completionRequestArgs
+                arguments: {
+                    file: aTs.path,
+                    line: 1,
+                    offset: aTs.content.indexOf("this.") + 1 + "this.".length
+                }
             }, {
                 flags: 0,
                 isGlobalCompletion: false,
@@ -98,7 +82,10 @@ describe("unittests:: tsserver:: with metadata in response", () => {
                     start: { line: 1, offset: aTs.content.indexOf("prop;") + 1 },
                     end: { line: 1, offset: aTs.content.indexOf("prop;") + 1 + "prop".length }
                 },
-                entries: expectedCompletionEntries
+                entries: [
+                    { name: "foo", kind: ts.ScriptElementKind.memberFunctionElement, kindModifiers: "", sortText: ts.Completions.SortText.LocationPriority },
+                    { name: "prop", kind: ts.ScriptElementKind.memberVariableElement, kindModifiers: "", sortText: ts.Completions.SortText.LocationPriority },
+                ],
             });
         });
 
@@ -108,7 +95,7 @@ describe("unittests:: tsserver:: with metadata in response", () => {
             const session = createSession(host);
             openFilesForSession([aTs], session);
             verifyCommandWithMetadata<ts.server.protocol.CompletionsRequest>(session, host, {
-                command: ts.server.protocol.CommandTypes.Completions,
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: { file: aTs.path, line: 1, offset: aTs.content.indexOf("x") + 1 }
             }, /*expectedResponseBody*/ undefined);
         });

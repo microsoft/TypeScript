@@ -30,8 +30,6 @@ export const enum CommandTypes {
     GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
     Change = "change",
     Close = "close",
-    /** @deprecated Prefer CompletionInfo -- see comment on CompletionsResponse */
-    Completions = "completions",
     CompletionInfo = "completionInfo",
     /** @internal */
     CompletionsFull = "completions-full",
@@ -2237,7 +2235,7 @@ export interface CompletionsRequestArgs extends FileLocationRequestArgs {
  * begin with prefix.
  */
 export interface CompletionsRequest extends FileLocationRequest {
-    command: CommandTypes.Completions | CommandTypes.CompletionInfo;
+    command: CommandTypes.CompletionInfo;
     arguments: CompletionsRequestArgs;
 }
 
@@ -2432,11 +2430,6 @@ export interface CompletionEntryDetails {
      * Human-readable description of the `source` from the CompletionEntry.
      */
     sourceDisplay?: SymbolDisplayPart[];
-}
-
-/** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
-export interface CompletionsResponse extends Response {
-    body?: CompletionEntry[];
 }
 
 export interface CompletionInfoResponse extends Response {

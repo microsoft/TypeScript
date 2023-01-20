@@ -94,8 +94,6 @@ declare namespace ts {
                 GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
                 Change = "change",
                 Close = "close",
-                /** @deprecated Prefer CompletionInfo -- see comment on CompletionsResponse */
-                Completions = "completions",
                 CompletionInfo = "completionInfo",
                 CompletionDetails = "completionEntryDetails",
                 CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
@@ -1730,7 +1728,7 @@ declare namespace ts {
              * begin with prefix.
              */
             interface CompletionsRequest extends FileLocationRequest {
-                command: CommandTypes.Completions | CommandTypes.CompletionInfo;
+                command: CommandTypes.CompletionInfo;
                 arguments: CompletionsRequestArgs;
             }
             /**
@@ -1911,10 +1909,6 @@ declare namespace ts {
                  * Human-readable description of the `source` from the CompletionEntry.
                  */
                 sourceDisplay?: SymbolDisplayPart[];
-            }
-            /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
-            interface CompletionsResponse extends Response {
-                body?: CompletionEntry[];
             }
             interface CompletionInfoResponse extends Response {
                 body?: CompletionInfo;

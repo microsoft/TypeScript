@@ -67,7 +67,7 @@ import { something } from "something";
 
         function verifyCompletions() {
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
-                command: ts.server.protocol.CommandTypes.Completions,
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })
             });
         }
