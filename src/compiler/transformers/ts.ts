@@ -2264,7 +2264,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
         else {
             // Elide named imports if all of its import specifiers are elided and settings allow.
-            const allowEmpty = compilerOptions.preserveValueImports && (
+            const allowEmpty = compilerOptions.verbatimModuleSyntax || compilerOptions.preserveValueImports && (
                 compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
                 compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error);
             const elements = visitNodes(node.elements, visitImportSpecifier, isImportSpecifier);
@@ -2289,7 +2289,7 @@ export function transformTypeScript(context: TransformationContext) {
      */
     function visitExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
         // Elide the export assignment if it does not reference a value.
-        return resolver.isValueAliasDeclaration(node)
+        return compilerOptions.verbatimModuleSyntax || resolver.isValueAliasDeclaration(node)
             ? visitEachChild(node, visitor, context)
             : undefined;
     }
@@ -2312,7 +2312,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         // Elide the export declaration if all of its named exports are elided.
-        const allowEmpty = !!node.moduleSpecifier && (
+        const allowEmpty = compilerOptions.verbatimModuleSyntax || !!node.moduleSpecifier && (
             compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
             compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error);
         const exportClause = visitNode(
@@ -2358,7 +2358,7 @@ export function transformTypeScript(context: TransformationContext) {
      */
     function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> | undefined {
         // Elide an export specifier if it does not reference a value.
-        return !node.isTypeOnly && resolver.isValueAliasDeclaration(node) ? node : undefined;
+        return !node.isTypeOnly && (compilerOptions.verbatimModuleSyntax || resolver.isValueAliasDeclaration(node)) ? node : undefined;
     }
 
     /**
@@ -2714,7 +2714,7 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function shouldEmitAliasDeclaration(node: Node): boolean {
-        return isInJSFile(node) ||
+        return compilerOptions.verbatimModuleSyntax || isInJSFile(node) ||
             (compilerOptions.preserveValueImports
                 ? resolver.isValueAliasDeclaration(node)
                 : resolver.isReferencedAliasDeclaration(node));

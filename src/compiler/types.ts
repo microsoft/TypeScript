@@ -5454,6 +5454,21 @@ export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitialize
 export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
 
 /** @internal */
+export type AliasDeclarationNode =
+    | ImportEqualsDeclaration
+    | VariableDeclarationInitializedTo<RequireOrImportCall
+    | AccessExpression>
+    | ImportClause
+    | NamespaceImport
+    | ImportSpecifier
+    | ExportSpecifier
+    | NamespaceExport
+    | BindingElementOfBareOrAccessedRequire;
+
+/** @internal */
+export type BindingElementOfBareOrAccessedRequire = BindingElement & { parent: { parent: VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression> } };
+
+/** @internal */
 export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
 
 /** @internal */
@@ -7087,6 +7102,7 @@ export interface CompilerOptions {
     types?: string[];
     /** Paths used to compute primary types search locations */
     typeRoots?: string[];
+    verbatimModuleSyntax?: boolean;
     /** @internal */ version?: boolean;
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;

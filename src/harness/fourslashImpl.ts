@@ -2985,8 +2985,10 @@ export class TestState {
         this.applyChanges(fixes[index].changes);
     }
 
-    public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
-        this.goToMarker(markerName);
+    public applyCodeActionFromCompletion(markerName: string | undefined, options: FourSlashInterface.VerifyCompletionActionOptions) {
+        if (markerName !== undefined) {
+            this.goToMarker(markerName);
+        }
 
         const details = this.getCompletionEntryDetails(options.name, options.source, options.data, options.preferences);
         if (!details) {
@@ -3213,9 +3215,9 @@ export class TestState {
 
             // Undo changes to perform next fix
             const span = change.textChanges[0].span;
-             const deletedText = originalContent.substr(span.start, change.textChanges[0].span.length);
-             const insertedText = change.textChanges[0].newText;
-             this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
+            const deletedText = originalContent.substr(span.start, change.textChanges[0].span.length);
+            const insertedText = change.textChanges[0].newText;
+            this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
         }
         if (expectedTextArray.length !== actualTextArray.length) {
             this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}:\n\n${actualTextArray.join("\n\n" + "-".repeat(20) + "\n\n")}`);
@@ -3301,7 +3303,7 @@ export class TestState {
         }
     }
 
-    public baselineAutoImports(markerName: string, preferences?: ts.UserPreferences) {
+    public baselineAutoImports(markerName: string, fullNamesForCodeFix?: string[], preferences?: ts.UserPreferences) {
         const marker = this.getMarkerByName(markerName);
         const baselineFile = this.getBaselineFileNameForContainingTestFile(`.baseline.md`);
         const completionPreferences = {
@@ -3312,10 +3314,12 @@ export class TestState {
             ...preferences
         };
 
-        const ext = ts.getAnyExtensionFromPath(this.activeFile.fileName).slice(1);
+        this.goToMarker(marker);
+        this.configure(completionPreferences);
+        const fileName = this.activeFile.fileName;
+        const ext = ts.getAnyExtensionFromPath(fileName).slice(1);
         const lang = ["mts", "cts"].includes(ext) ? "ts" : ext;
         let baselineText = codeFence(this.renderMarkers([{ text: "|", fileName: marker.fileName, position: marker.position }], /*useTerminalBoldSequence*/ false), lang) + "\n\n";
-        this.goToMarker(marker);
 
         const completions = this.getCompletionListAtCaret(completionPreferences)!;
 
@@ -3339,7 +3343,36 @@ export class TestState {
             });
         }
 
-        // TODO: do codefixes too
+        if (fullNamesForCodeFix) {
+            const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(fileName)!;
+            const originalContent = scriptInfo.content;
+            const range = this.getRangesInFile()[0]
+                || getRangeOfIdentifierTouchingPosition(this.activeFile.content, marker.position)
+                || { pos: marker.position, end: marker.position };
+
+            baselineText += `## From codefixes\n\n`;
+            for (const fullNameForCodeFix of fullNamesForCodeFix) {
+                this.applyEdits(fileName, [{ span: { start: 0, length: this.getFileContent(fileName).length }, newText: originalContent }]);
+                this.applyEdits(fileName, [{ span: ts.createTextSpanFromRange(range), newText: fullNameForCodeFix }]);
+                baselineText += `### When marker text is \`${fullNameForCodeFix}\`\n\n`;
+
+                const codeFixes = this.getCodeFixes(fileName, /*errorCode*/ undefined, completionPreferences)
+                    .filter(f => f.fixName === ts.codefix.importFixName);
+                for (const fix of codeFixes) {
+                    baselineText += fix.description + "\n";
+                    if (fix.fixAllDescription) {
+                        baselineText += `Fix all available: ${fix.fixAllDescription}\n`;
+                    }
+                    ts.Debug.assert(fix.changes.length === 1);
+                    const change = ts.first(fix.changes);
+                    ts.Debug.assert(change.fileName === fileName);
+                    this.applyEdits(change.fileName, change.textChanges);
+                    const text = this.getFileContent(fileName);
+                    baselineText += "\n" + codeFence(text, lang) + "\n\n";
+                }
+            }
+        }
+
         Harness.Baseline.runBaseline(baselineFile, baselineText);
     }
 
@@ -4790,4 +4823,17 @@ function highlightDifferenceBetweenStrings(source: string, target: string) {
 
 function codeFence(code: string, lang?: string) {
     return `\`\`\`${lang || ""}\n${code}\n\`\`\``;
+}
+
+function getRangeOfIdentifierTouchingPosition(content: string, position: number): ts.TextRange | undefined {
+    const scanner = ts.createScanner(ts.ScriptTarget.Latest, /*skipTrivia*/ true, ts.LanguageVariant.Standard, content);
+    while (scanner.scan() !== ts.SyntaxKind.EndOfFileToken) {
+        const tokenStart = scanner.getStartPos();
+        if (scanner.getToken() === ts.SyntaxKind.Identifier && tokenStart <= position && scanner.getTextPos() >= position) {
+            return { pos: tokenStart, end: scanner.getTextPos() };
+        }
+        if (tokenStart > position) {
+            break;
+        }
+    }
 }
