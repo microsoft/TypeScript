@@ -1597,12 +1597,6 @@ export type AssertKeyword = KeywordToken<SyntaxKind.AssertKeyword>;
 export type AwaitKeyword = KeywordToken<SyntaxKind.AwaitKeyword>;
 export type CaseKeyword = KeywordToken<SyntaxKind.CaseKeyword>;
 
-/** @deprecated Use `AwaitKeyword` instead. */
-export type AwaitKeywordToken = AwaitKeyword;
-
-/** @deprecated Use `AssertsKeyword` instead. */
-export type AssertsToken = AssertsKeyword;
-
 export interface ModifierToken<TKind extends ModifierSyntaxKind> extends KeywordToken<TKind> {
 }
 
@@ -1621,9 +1615,6 @@ export type ReadonlyKeyword = ModifierToken<SyntaxKind.ReadonlyKeyword>;
 export type OutKeyword = ModifierToken<SyntaxKind.OutKeyword>;
 export type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
 export type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
-
-/** @deprecated Use `ReadonlyKeyword` instead. */
-export type ReadonlyToken = ReadonlyKeyword;
 
 export type Modifier =
     | AbstractKeyword
@@ -5269,8 +5260,6 @@ export const enum NodeBuilderFlags {
     // Error handling
     AllowThisInObjectLiteral                = 1 << 15,
     AllowQualifiedNameInPlaceOfIdentifier   = 1 << 16,
-    /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
-    AllowQualifedNameInPlaceOfIdentifier    = AllowQualifiedNameInPlaceOfIdentifier,
     AllowAnonymousIdentifier                = 1 << 17,
     AllowEmptyUnionOrIntersection           = 1 << 18,
     AllowEmptyTuple                         = 1 << 19,
@@ -5325,8 +5314,6 @@ export const enum TypeFormatFlags {
     InElementType                           = 1 << 21, // Writing an array or union element type
     InFirstTypeArgument                     = 1 << 22, // Writing first type argument of the instantiated type
     InTypeAlias                             = 1 << 23, // Writing type in type alias declaration
-
-    /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
     NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
         UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
@@ -6813,9 +6800,6 @@ export const enum AssignmentDeclarationKind {
     // Object.defineProperty(Foo.prototype, 'name', ...);
     ObjectDefinePrototypeProperty,
 }
-
-/** @deprecated Use FileExtensionInfo instead. */
-export type JsFileExtensionInfo = FileExtensionInfo;
 
 export interface FileExtensionInfo {
     extension: string;
