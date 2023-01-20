@@ -57,7 +57,7 @@ export declare class A {
 
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-7264743946-export class A {}","signature":"-8728835846-export declare class A {\n}\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-7264743946-export class A {}","signature":"-9529994156-export declare class A {\r\n}\r\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -79,10 +79,10 @@ export declare class A {
       "./index.ts": {
         "original": {
           "version": "-7264743946-export class A {}",
-          "signature": "-8728835846-export declare class A {\n}\n"
+          "signature": "-9529994156-export declare class A {\r\n}\r\n"
         },
         "version": "-7264743946-export class A {}",
-        "signature": "-8728835846-export declare class A {\n}\n"
+        "signature": "-9529994156-export declare class A {\r\n}\r\n"
       }
     },
     "options": {
@@ -97,7 +97,7 @@ export declare class A {
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 756
+  "size": 760
 }
 
 //// [/user/username/projects/transitiveReferences/b/index.js]
@@ -114,7 +114,7 @@ export declare const b: A;
 
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../a/index.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-2591036212-import {A} from '@ref/a';\nexport const b = new A();","signature":"-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../a/index.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-9529994156-export declare class A {\r\n}\r\n",{"version":"-2591036212-import {A} from '@ref/a';\nexport const b = new A();","signature":"-10067914302-import { A } from '@ref/a';\r\nexport declare const b: A;\r\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -140,16 +140,16 @@ export declare const b: A;
         "affectsGlobalScope": true
       },
       "../a/index.d.ts": {
-        "version": "-8728835846-export declare class A {\n}\n",
-        "signature": "-8728835846-export declare class A {\n}\n"
+        "version": "-9529994156-export declare class A {\r\n}\r\n",
+        "signature": "-9529994156-export declare class A {\r\n}\r\n"
       },
       "./index.ts": {
         "original": {
           "version": "-2591036212-import {A} from '@ref/a';\nexport const b = new A();",
-          "signature": "-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n"
+          "signature": "-10067914302-import { A } from '@ref/a';\r\nexport declare const b: A;\r\n"
         },
         "version": "-2591036212-import {A} from '@ref/a';\nexport const b = new A();",
-        "signature": "-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n"
+        "signature": "-10067914302-import { A } from '@ref/a';\r\nexport declare const b: A;\r\n"
       }
     },
     "options": {
@@ -173,7 +173,7 @@ export declare const b: A;
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 913
+  "size": 922
 }
 
 //// [/user/username/projects/transitiveReferences/c/index.js]
@@ -339,7 +339,7 @@ export declare function gfoo(): void;
 
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../a/index.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"1841609480-import {A} from '@ref/a';\nexport const b = new A();export function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../a/index.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-9529994156-export declare class A {\r\n}\r\n",{"version":"1841609480-import {A} from '@ref/a';\nexport const b = new A();export function gfoo() { }","signature":"-10550929548-import { A } from '@ref/a';\r\nexport declare const b: A;\r\nexport declare function gfoo(): void;\r\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -365,16 +365,16 @@ export declare function gfoo(): void;
         "affectsGlobalScope": true
       },
       "../a/index.d.ts": {
-        "version": "-8728835846-export declare class A {\n}\n",
-        "signature": "-8728835846-export declare class A {\n}\n"
+        "version": "-9529994156-export declare class A {\r\n}\r\n",
+        "signature": "-9529994156-export declare class A {\r\n}\r\n"
       },
       "./index.ts": {
         "original": {
           "version": "1841609480-import {A} from '@ref/a';\nexport const b = new A();export function gfoo() { }",
-          "signature": "4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"
+          "signature": "-10550929548-import { A } from '@ref/a';\r\nexport declare const b: A;\r\nexport declare function gfoo(): void;\r\n"
         },
         "version": "1841609480-import {A} from '@ref/a';\nexport const b = new A();export function gfoo() { }",
-        "signature": "4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"
+        "signature": "-10550929548-import { A } from '@ref/a';\r\nexport declare const b: A;\r\nexport declare function gfoo(): void;\r\n"
       }
     },
     "options": {
@@ -398,7 +398,7 @@ export declare function gfoo(): void;
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 976
+  "size": 988
 }
 
 

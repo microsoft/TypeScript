@@ -70,7 +70,7 @@ declare module Hmi {
 
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./Source.ts"],"js":{"sections":[{"pos":0,"end":251,"kind":"text"}],"hash":"10774636636-var Hmi;\n(function (Hmi) {\n    var Button = /** @class */ (function () {\n        function Button() {\n        }\n        Button.myStaticFunction = function () {\n        };\n        return Button;\n    }());\n    Hmi.Button = Button;\n})(Hmi || (Hmi = {}));\n"},"dts":{"sections":[{"pos":0,"end":89,"kind":"text"}],"hash":"-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./Source.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./Source.ts"],"js":{"sections":[{"pos":0,"end":262,"kind":"text"}],"hash":"2173158315-var Hmi;\r\n(function (Hmi) {\r\n    var Button = /** @class */ (function () {\r\n        function Button() {\r\n        }\r\n        Button.myStaticFunction = function () {\r\n        };\r\n        return Button;\r\n    }());\r\n    Hmi.Button = Button;\r\n})(Hmi || (Hmi = {}));\r\n"},"dts":{"sections":[{"pos":0,"end":94,"kind":"text"}],"hash":"-26833949406-declare module Hmi {\r\n    class Button {\r\n        static myStaticFunction(): void;\r\n    }\r\n}\r\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./Source.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"-26833949406-declare module Hmi {\r\n    class Button {\r\n        static myStaticFunction(): void;\r\n    }\r\n}\r\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo.readable.baseline.txt]
 {
@@ -83,21 +83,21 @@ declare module Hmi {
       "sections": [
         {
           "pos": 0,
-          "end": 251,
+          "end": 262,
           "kind": "text"
         }
       ],
-      "hash": "10774636636-var Hmi;\n(function (Hmi) {\n    var Button = /** @class */ (function () {\n        function Button() {\n        }\n        Button.myStaticFunction = function () {\n        };\n        return Button;\n    }());\n    Hmi.Button = Button;\n})(Hmi || (Hmi = {}));\n"
+      "hash": "2173158315-var Hmi;\r\n(function (Hmi) {\r\n    var Button = /** @class */ (function () {\r\n        function Button() {\r\n        }\r\n        Button.myStaticFunction = function () {\r\n        };\r\n        return Button;\r\n    }());\r\n    Hmi.Button = Button;\r\n})(Hmi || (Hmi = {}));\r\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 89,
+          "end": 94,
           "kind": "text"
         }
       ],
-      "hash": "-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n"
+      "hash": "-26833949406-declare module Hmi {\r\n    class Button {\r\n        static myStaticFunction(): void;\r\n    }\r\n}\r\n"
     }
   },
   "program": {
@@ -114,18 +114,18 @@ declare module Hmi {
       "module": 0,
       "outFile": "./Source.js"
     },
-    "outSignature": "-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
+    "outSignature": "-26833949406-declare module Hmi {\r\n    class Button {\r\n        static myStaticFunction(): void;\r\n    }\r\n}\r\n",
     "latestChangedDtsFile": "./Source.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1398
+  "size": 1441
 }
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /user/username/projects/myproject/buttonClass/Source.js
 ----------------------------------------------------------------------
-text: (0-251)
+text: (0-262)
 var Hmi;
 (function (Hmi) {
     var Button = /** @class */ (function () {
@@ -142,7 +142,7 @@ var Hmi;
 ======================================================================
 File:: /user/username/projects/myproject/buttonClass/Source.d.ts
 ----------------------------------------------------------------------
-text: (0-89)
+text: (0-94)
 declare module Hmi {
     class Button {
         static myStaticFunction(): void;
@@ -174,7 +174,7 @@ declare module Hmi {
 
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./Source.ts"],"js":{"sections":[{"pos":0,"end":268,"kind":"text"}],"hash":"7833001416-var Hmi;\n(function (Hmi) {\n    var Sibling = /** @class */ (function () {\n        function Sibling() {\n        }\n        Sibling.prototype.mySiblingFunction = function () {\n        };\n        return Sibling;\n    }());\n    Hmi.Sibling = Sibling;\n})(Hmi || (Hmi = {}));\n"},"dts":{"sections":[{"pos":0,"end":84,"kind":"text"}],"hash":"7777218469-declare module Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../buttonClass/Source.d.ts","./Source.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"7777218469-declare module Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./Source.ts"],"js":{"sections":[{"pos":0,"end":279,"kind":"text"}],"hash":"-11096475433-var Hmi;\r\n(function (Hmi) {\r\n    var Sibling = /** @class */ (function () {\r\n        function Sibling() {\r\n        }\r\n        Sibling.prototype.mySiblingFunction = function () {\r\n        };\r\n        return Sibling;\r\n    }());\r\n    Hmi.Sibling = Sibling;\r\n})(Hmi || (Hmi = {}));\r\n"},"dts":{"sections":[{"pos":0,"end":89,"kind":"text"}],"hash":"-5774053978-declare module Hmi {\r\n    class Sibling {\r\n        mySiblingFunction(): void;\r\n    }\r\n}\r\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../buttonClass/Source.d.ts","./Source.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-26833949406-declare module Hmi {\r\n    class Button {\r\n        static myStaticFunction(): void;\r\n    }\r\n}\r\n","-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"-5774053978-declare module Hmi {\r\n    class Sibling {\r\n        mySiblingFunction(): void;\r\n    }\r\n}\r\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo.readable.baseline.txt]
 {
@@ -187,21 +187,21 @@ declare module Hmi {
       "sections": [
         {
           "pos": 0,
-          "end": 268,
+          "end": 279,
           "kind": "text"
         }
       ],
-      "hash": "7833001416-var Hmi;\n(function (Hmi) {\n    var Sibling = /** @class */ (function () {\n        function Sibling() {\n        }\n        Sibling.prototype.mySiblingFunction = function () {\n        };\n        return Sibling;\n    }());\n    Hmi.Sibling = Sibling;\n})(Hmi || (Hmi = {}));\n"
+      "hash": "-11096475433-var Hmi;\r\n(function (Hmi) {\r\n    var Sibling = /** @class */ (function () {\r\n        function Sibling() {\r\n        }\r\n        Sibling.prototype.mySiblingFunction = function () {\r\n        };\r\n        return Sibling;\r\n    }());\r\n    Hmi.Sibling = Sibling;\r\n})(Hmi || (Hmi = {}));\r\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 84,
+          "end": 89,
           "kind": "text"
         }
       ],
-      "hash": "7777218469-declare module Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n"
+      "hash": "-5774053978-declare module Hmi {\r\n    class Sibling {\r\n        mySiblingFunction(): void;\r\n    }\r\n}\r\n"
     }
   },
   "program": {
@@ -212,7 +212,7 @@ declare module Hmi {
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "../buttonClass/Source.d.ts": "-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
+      "../buttonClass/Source.d.ts": "-26833949406-declare module Hmi {\r\n    class Button {\r\n        static myStaticFunction(): void;\r\n    }\r\n}\r\n",
       "./Source.ts": "-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"
     },
     "options": {
@@ -220,18 +220,18 @@ declare module Hmi {
       "module": 0,
       "outFile": "./Source.js"
     },
-    "outSignature": "7777218469-declare module Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n",
+    "outSignature": "-5774053978-declare module Hmi {\r\n    class Sibling {\r\n        mySiblingFunction(): void;\r\n    }\r\n}\r\n",
     "latestChangedDtsFile": "./Source.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1535
+  "size": 1592
 }
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /user/username/projects/myproject/SiblingClass/Source.js
 ----------------------------------------------------------------------
-text: (0-268)
+text: (0-279)
 var Hmi;
 (function (Hmi) {
     var Sibling = /** @class */ (function () {
@@ -248,7 +248,7 @@ var Hmi;
 ======================================================================
 File:: /user/username/projects/myproject/SiblingClass/Source.d.ts
 ----------------------------------------------------------------------
-text: (0-84)
+text: (0-89)
 declare module Hmi {
     class Sibling {
         mySiblingFunction(): void;

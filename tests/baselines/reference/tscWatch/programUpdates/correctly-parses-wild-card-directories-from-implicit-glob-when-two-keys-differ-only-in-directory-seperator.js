@@ -104,7 +104,7 @@ export declare const y = 1;
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./f2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-6821232426-export declare const x = 1;\r\n"},{"version":"-10905812331-export const y = 1","signature":"-7152462409-export declare const y = 1;\r\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./f2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -127,18 +127,18 @@ export declare const y = 1;
       "./f1.ts": {
         "original": {
           "version": "-10906998252-export const x = 1",
-          "signature": "-7495133367-export declare const x = 1;\n"
+          "signature": "-6821232426-export declare const x = 1;\r\n"
         },
         "version": "-10906998252-export const x = 1",
-        "signature": "-7495133367-export declare const x = 1;\n"
+        "signature": "-6821232426-export declare const x = 1;\r\n"
       },
       "./f2.ts": {
         "original": {
           "version": "-10905812331-export const y = 1",
-          "signature": "-6203665398-export declare const y = 1;\n"
+          "signature": "-7152462409-export declare const y = 1;\r\n"
         },
         "version": "-10905812331-export const y = 1",
-        "signature": "-6203665398-export declare const y = 1;\n"
+        "signature": "-7152462409-export declare const y = 1;\r\n"
       }
     },
     "options": {
@@ -154,7 +154,7 @@ export declare const y = 1;
     "latestChangedDtsFile": "./f2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 863
+  "size": 867
 }
 
 
@@ -225,7 +225,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts","./new-file.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts","./new-file.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-6821232426-export declare const x = 1;\r\n"},{"version":"-10905812331-export const y = 1","signature":"-7152462409-export declare const y = 1;\r\n"},{"version":"-11960320495-export const z = 1;","signature":"-7483692392-export declare const z = 1;\r\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -249,26 +249,26 @@ exitCode:: ExitStatus.undefined
       "./f1.ts": {
         "original": {
           "version": "-10906998252-export const x = 1",
-          "signature": "-7495133367-export declare const x = 1;\n"
+          "signature": "-6821232426-export declare const x = 1;\r\n"
         },
         "version": "-10906998252-export const x = 1",
-        "signature": "-7495133367-export declare const x = 1;\n"
+        "signature": "-6821232426-export declare const x = 1;\r\n"
       },
       "./f2.ts": {
         "original": {
           "version": "-10905812331-export const y = 1",
-          "signature": "-6203665398-export declare const y = 1;\n"
+          "signature": "-7152462409-export declare const y = 1;\r\n"
         },
         "version": "-10905812331-export const y = 1",
-        "signature": "-6203665398-export declare const y = 1;\n"
+        "signature": "-7152462409-export declare const y = 1;\r\n"
       },
       "./new-file.ts": {
         "original": {
           "version": "-11960320495-export const z = 1;",
-          "signature": "-9207164725-export declare const z = 1;\n"
+          "signature": "-7483692392-export declare const z = 1;\r\n"
         },
         "version": "-11960320495-export const z = 1;",
-        "signature": "-9207164725-export declare const z = 1;\n"
+        "signature": "-7483692392-export declare const z = 1;\r\n"
       }
     },
     "options": {
@@ -285,7 +285,7 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./new-file.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 990
+  "size": 996
 }
 
 //// [/user/username/projects/myproject/new-file.js]
@@ -360,7 +360,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/f1.js] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./new-file.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"},{"version":"1363236232-import { z } from \"./new-file\";export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,4,2],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./new-file.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11960320495-export const z = 1;","signature":"-7483692392-export declare const z = 1;\r\n"},{"version":"1363236232-import { z } from \"./new-file\";export const x = 1","signature":"-6821232426-export declare const x = 1;\r\n"},{"version":"-10905812331-export const y = 1","signature":"-7152462409-export declare const y = 1;\r\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,4,2],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -389,26 +389,26 @@ exitCode:: ExitStatus.undefined
       "./new-file.ts": {
         "original": {
           "version": "-11960320495-export const z = 1;",
-          "signature": "-9207164725-export declare const z = 1;\n"
+          "signature": "-7483692392-export declare const z = 1;\r\n"
         },
         "version": "-11960320495-export const z = 1;",
-        "signature": "-9207164725-export declare const z = 1;\n"
+        "signature": "-7483692392-export declare const z = 1;\r\n"
       },
       "./f1.ts": {
         "original": {
           "version": "1363236232-import { z } from \"./new-file\";export const x = 1",
-          "signature": "-7495133367-export declare const x = 1;\n"
+          "signature": "-6821232426-export declare const x = 1;\r\n"
         },
         "version": "1363236232-import { z } from \"./new-file\";export const x = 1",
-        "signature": "-7495133367-export declare const x = 1;\n"
+        "signature": "-6821232426-export declare const x = 1;\r\n"
       },
       "./f2.ts": {
         "original": {
           "version": "-10905812331-export const y = 1",
-          "signature": "-6203665398-export declare const y = 1;\n"
+          "signature": "-7152462409-export declare const y = 1;\r\n"
         },
         "version": "-10905812331-export const y = 1",
-        "signature": "-6203665398-export declare const y = 1;\n"
+        "signature": "-7152462409-export declare const y = 1;\r\n"
       }
     },
     "options": {
@@ -429,6 +429,6 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./new-file.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1046
+  "size": 1052
 }
 

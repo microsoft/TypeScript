@@ -86,7 +86,7 @@ declare function foo(): number;
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"text"}],"hash":"3762995390-function foo() { return 10; }\n"},"dts":{"sections":[{"pos":0,"end":32,"kind":"text"}],"hash":"517738360-declare function foo(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","5450201652-function foo() { return 10; }"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"517738360-declare function foo(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":31,"kind":"text"}],"hash":"3919763691-function foo() { return 10; }\r\n"},"dts":{"sections":[{"pos":0,"end":33,"kind":"text"}],"hash":"-94503195-declare function foo(): number;\r\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","5450201652-function foo() { return 10; }"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-94503195-declare function foo(): number;\r\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -99,21 +99,21 @@ declare function foo(): number;
       "sections": [
         {
           "pos": 0,
-          "end": 30,
+          "end": 31,
           "kind": "text"
         }
       ],
-      "hash": "3762995390-function foo() { return 10; }\n"
+      "hash": "3919763691-function foo() { return 10; }\r\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 32,
+          "end": 33,
           "kind": "text"
         }
       ],
-      "hash": "517738360-declare function foo(): number;\n"
+      "hash": "-94503195-declare function foo(): number;\r\n"
     }
   },
   "program": {
@@ -130,25 +130,25 @@ declare function foo(): number;
       "declaration": true,
       "outFile": "./index.js"
     },
-    "outSignature": "517738360-declare function foo(): number;\n",
+    "outSignature": "-94503195-declare function foo(): number;\r\n",
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 967
+  "size": 973
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /user/username/projects/sample1/core/index.js
 ----------------------------------------------------------------------
-text: (0-30)
+text: (0-31)
 function foo() { return 10; }
 
 ======================================================================
 ======================================================================
 File:: /user/username/projects/sample1/core/index.d.ts
 ----------------------------------------------------------------------
-text: (0-32)
+text: (0-33)
 declare function foo(): number;
 
 ======================================================================
@@ -165,7 +165,7 @@ declare function bar(): number;
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":30,"kind":"text"}]},{"pos":30,"end":69,"kind":"text"}],"hash":"9692417533-function foo() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":32,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":32,"kind":"text"}]},{"pos":32,"end":64,"kind":"text"}],"hash":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","517738360-declare function foo(): number;\n","5542925109-function bar() { return foo() + 1 };"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":31,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":31,"kind":"text"}]},{"pos":31,"end":72,"kind":"text"}],"hash":"14345358628-function foo() { return 10; }\r\nfunction bar() { return foo() + 1; }\r\n;\r\n"},"dts":{"sections":[{"pos":0,"end":33,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":33,"kind":"text"}]},{"pos":33,"end":66,"kind":"text"}],"hash":"6972815766-declare function foo(): number;\r\ndeclare function bar(): number;\r\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-94503195-declare function foo(): number;\r\n","5542925109-function bar() { return foo() + 1 };"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"6972815766-declare function foo(): number;\r\ndeclare function bar(): number;\r\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -178,47 +178,47 @@ declare function bar(): number;
       "sections": [
         {
           "pos": 0,
-          "end": 30,
+          "end": 31,
           "kind": "prepend",
           "data": "../core/index.js",
           "texts": [
             {
               "pos": 0,
-              "end": 30,
+              "end": 31,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 30,
-          "end": 69,
+          "pos": 31,
+          "end": 72,
           "kind": "text"
         }
       ],
-      "hash": "9692417533-function foo() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"
+      "hash": "14345358628-function foo() { return 10; }\r\nfunction bar() { return foo() + 1; }\r\n;\r\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 32,
+          "end": 33,
           "kind": "prepend",
           "data": "../core/index.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 32,
+              "end": 33,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 32,
-          "end": 64,
+          "pos": 33,
+          "end": 66,
           "kind": "text"
         }
       ],
-      "hash": "9641219228-declare function foo(): number;\ndeclare function bar(): number;\n"
+      "hash": "6972815766-declare function foo(): number;\r\ndeclare function bar(): number;\r\n"
     }
   },
   "program": {
@@ -229,7 +229,7 @@ declare function bar(): number;
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "../core/index.d.ts": "517738360-declare function foo(): number;\n",
+      "../core/index.d.ts": "-94503195-declare function foo(): number;\r\n",
       "./index.ts": "5542925109-function bar() { return foo() + 1 };"
     },
     "options": {
@@ -237,24 +237,24 @@ declare function bar(): number;
       "declaration": true,
       "outFile": "./index.js"
     },
-    "outSignature": "9641219228-declare function foo(): number;\ndeclare function bar(): number;\n",
+    "outSignature": "6972815766-declare function foo(): number;\r\ndeclare function bar(): number;\r\n",
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1364
+  "size": 1381
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /user/username/projects/sample1/logic/index.js
 ----------------------------------------------------------------------
-prepend: (0-30):: ../core/index.js texts:: 1
+prepend: (0-31):: ../core/index.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-30)
+text: (0-31)
 function foo() { return 10; }
 
 ----------------------------------------------------------------------
-text: (30-69)
+text: (31-72)
 function bar() { return foo() + 1; }
 ;
 
@@ -262,13 +262,13 @@ function bar() { return foo() + 1; }
 ======================================================================
 File:: /user/username/projects/sample1/logic/index.d.ts
 ----------------------------------------------------------------------
-prepend: (0-32):: ../core/index.d.ts texts:: 1
+prepend: (0-33):: ../core/index.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-32)
+text: (0-33)
 declare function foo(): number;
 
 ----------------------------------------------------------------------
-text: (32-64)
+text: (33-66)
 declare function bar(): number;
 
 ======================================================================
@@ -330,7 +330,7 @@ declare function myFunc(): number;
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"text"}],"hash":"-6033649947-function foo() { return 10; }\nfunction myFunc() { return 10; }\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}],"hash":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":65,"kind":"text"}],"hash":"4398839647-function foo() { return 10; }\r\nfunction myFunc() { return 10; }\r\n"},"dts":{"sections":[{"pos":0,"end":69,"kind":"text"}],"hash":"-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -343,21 +343,21 @@ declare function myFunc(): number;
       "sections": [
         {
           "pos": 0,
-          "end": 63,
+          "end": 65,
           "kind": "text"
         }
       ],
-      "hash": "-6033649947-function foo() { return 10; }\nfunction myFunc() { return 10; }\n"
+      "hash": "4398839647-function foo() { return 10; }\r\nfunction myFunc() { return 10; }\r\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 67,
+          "end": 69,
           "kind": "text"
         }
       ],
-      "hash": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"
+      "hash": "-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n"
     }
   },
   "program": {
@@ -374,18 +374,18 @@ declare function myFunc(): number;
       "declaration": true,
       "outFile": "./index.js"
     },
-    "outSignature": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+    "outSignature": "-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n",
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1111
+  "size": 1124
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /user/username/projects/sample1/core/index.js
 ----------------------------------------------------------------------
-text: (0-63)
+text: (0-65)
 function foo() { return 10; }
 function myFunc() { return 10; }
 
@@ -393,7 +393,7 @@ function myFunc() { return 10; }
 ======================================================================
 File:: /user/username/projects/sample1/core/index.d.ts
 ----------------------------------------------------------------------
-text: (0-67)
+text: (0-69)
 declare function foo(): number;
 declare function myFunc(): number;
 
@@ -455,7 +455,7 @@ declare function bar(): number;
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":63,"kind":"text"}]},{"pos":63,"end":102,"kind":"text"}],"hash":"-12608297404-function foo() { return 10; }\nfunction myFunc() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}],"hash":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","5542925109-function bar() { return foo() + 1 };"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":65,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":65,"kind":"text"}]},{"pos":65,"end":106,"kind":"text"}],"hash":"3972873752-function foo() { return 10; }\r\nfunction myFunc() { return 10; }\r\nfunction bar() { return foo() + 1; }\r\n;\r\n"},"dts":{"sections":[{"pos":0,"end":69,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":69,"kind":"text"}]},{"pos":69,"end":102,"kind":"text"}],"hash":"-20001340-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\ndeclare function bar(): number;\r\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n","5542925109-function bar() { return foo() + 1 };"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-20001340-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\ndeclare function bar(): number;\r\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -468,47 +468,47 @@ declare function bar(): number;
       "sections": [
         {
           "pos": 0,
-          "end": 63,
+          "end": 65,
           "kind": "prepend",
           "data": "../core/index.js",
           "texts": [
             {
               "pos": 0,
-              "end": 63,
+              "end": 65,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 63,
-          "end": 102,
+          "pos": 65,
+          "end": 106,
           "kind": "text"
         }
       ],
-      "hash": "-12608297404-function foo() { return 10; }\nfunction myFunc() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"
+      "hash": "3972873752-function foo() { return 10; }\r\nfunction myFunc() { return 10; }\r\nfunction bar() { return foo() + 1; }\r\n;\r\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 67,
+          "end": 69,
           "kind": "prepend",
           "data": "../core/index.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 67,
+              "end": 69,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 67,
-          "end": 99,
+          "pos": 69,
+          "end": 102,
           "kind": "text"
         }
       ],
-      "hash": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"
+      "hash": "-20001340-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\ndeclare function bar(): number;\r\n"
     }
   },
   "program": {
@@ -519,7 +519,7 @@ declare function bar(): number;
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "../core/index.d.ts": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+      "../core/index.d.ts": "-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n",
       "./index.ts": "5542925109-function bar() { return foo() + 1 };"
     },
     "options": {
@@ -527,25 +527,25 @@ declare function bar(): number;
       "declaration": true,
       "outFile": "./index.js"
     },
-    "outSignature": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n",
+    "outSignature": "-20001340-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\ndeclare function bar(): number;\r\n",
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1512
+  "size": 1532
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /user/username/projects/sample1/logic/index.js
 ----------------------------------------------------------------------
-prepend: (0-63):: ../core/index.js texts:: 1
+prepend: (0-65):: ../core/index.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-63)
+text: (0-65)
 function foo() { return 10; }
 function myFunc() { return 10; }
 
 ----------------------------------------------------------------------
-text: (63-102)
+text: (65-106)
 function bar() { return foo() + 1; }
 ;
 
@@ -553,14 +553,14 @@ function bar() { return foo() + 1; }
 ======================================================================
 File:: /user/username/projects/sample1/logic/index.d.ts
 ----------------------------------------------------------------------
-prepend: (0-67):: ../core/index.d.ts texts:: 1
+prepend: (0-69):: ../core/index.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-67)
+text: (0-69)
 declare function foo(): number;
 declare function myFunc(): number;
 
 ----------------------------------------------------------------------
-text: (67-99)
+text: (69-102)
 declare function bar(): number;
 
 ======================================================================
@@ -617,7 +617,7 @@ function myFunc() { return 100; }
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"text"}],"hash":"-5849092235-function foo() { return 10; }\nfunction myFunc() { return 100; }\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}],"hash":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":66,"kind":"text"}],"hash":"3026098063-function foo() { return 10; }\r\nfunction myFunc() { return 100; }\r\n"},"dts":{"sections":[{"pos":0,"end":69,"kind":"text"}],"hash":"-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -630,21 +630,21 @@ function myFunc() { return 100; }
       "sections": [
         {
           "pos": 0,
-          "end": 64,
+          "end": 66,
           "kind": "text"
         }
       ],
-      "hash": "-5849092235-function foo() { return 10; }\nfunction myFunc() { return 100; }\n"
+      "hash": "3026098063-function foo() { return 10; }\r\nfunction myFunc() { return 100; }\r\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 67,
+          "end": 69,
           "kind": "text"
         }
       ],
-      "hash": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"
+      "hash": "-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n"
     }
   },
   "program": {
@@ -661,18 +661,18 @@ function myFunc() { return 100; }
       "declaration": true,
       "outFile": "./index.js"
     },
-    "outSignature": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+    "outSignature": "-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n",
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1113
+  "size": 1126
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /user/username/projects/sample1/core/index.js
 ----------------------------------------------------------------------
-text: (0-64)
+text: (0-66)
 function foo() { return 10; }
 function myFunc() { return 100; }
 
@@ -680,7 +680,7 @@ function myFunc() { return 100; }
 ======================================================================
 File:: /user/username/projects/sample1/core/index.d.ts
 ----------------------------------------------------------------------
-text: (0-67)
+text: (0-69)
 declare function foo(): number;
 declare function myFunc(): number;
 
@@ -724,7 +724,7 @@ function bar() { return foo() + 1; }
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":103,"kind":"text"}],"hash":"-1300839212-function foo() { return 10; }\nfunction myFunc() { return 100; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}],"hash":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","5542925109-function bar() { return foo() + 1 };"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":66,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":66,"kind":"text"}]},{"pos":66,"end":107,"kind":"text"}],"hash":"4338406472-function foo() { return 10; }\r\nfunction myFunc() { return 100; }\r\nfunction bar() { return foo() + 1; }\r\n;\r\n"},"dts":{"sections":[{"pos":0,"end":69,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":69,"kind":"text"}]},{"pos":69,"end":102,"kind":"text"}],"hash":"-20001340-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\ndeclare function bar(): number;\r\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n","5542925109-function bar() { return foo() + 1 };"],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-20001340-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\ndeclare function bar(): number;\r\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -737,47 +737,47 @@ function bar() { return foo() + 1; }
       "sections": [
         {
           "pos": 0,
-          "end": 64,
+          "end": 66,
           "kind": "prepend",
           "data": "../core/index.js",
           "texts": [
             {
               "pos": 0,
-              "end": 64,
+              "end": 66,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 64,
-          "end": 103,
+          "pos": 66,
+          "end": 107,
           "kind": "text"
         }
       ],
-      "hash": "-1300839212-function foo() { return 10; }\nfunction myFunc() { return 100; }\nfunction bar() { return foo() + 1; }\n;\n"
+      "hash": "4338406472-function foo() { return 10; }\r\nfunction myFunc() { return 100; }\r\nfunction bar() { return foo() + 1; }\r\n;\r\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 67,
+          "end": 69,
           "kind": "prepend",
           "data": "../core/index.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 67,
+              "end": 69,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 67,
-          "end": 99,
+          "pos": 69,
+          "end": 102,
           "kind": "text"
         }
       ],
-      "hash": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"
+      "hash": "-20001340-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\ndeclare function bar(): number;\r\n"
     }
   },
   "program": {
@@ -788,7 +788,7 @@ function bar() { return foo() + 1; }
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "../core/index.d.ts": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+      "../core/index.d.ts": "-2252796589-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\n",
       "./index.ts": "5542925109-function bar() { return foo() + 1 };"
     },
     "options": {
@@ -796,25 +796,25 @@ function bar() { return foo() + 1; }
       "declaration": true,
       "outFile": "./index.js"
     },
-    "outSignature": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n",
+    "outSignature": "-20001340-declare function foo(): number;\r\ndeclare function myFunc(): number;\r\ndeclare function bar(): number;\r\n",
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1512
+  "size": 1533
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /user/username/projects/sample1/logic/index.js
 ----------------------------------------------------------------------
-prepend: (0-64):: ../core/index.js texts:: 1
+prepend: (0-66):: ../core/index.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-64)
+text: (0-66)
 function foo() { return 10; }
 function myFunc() { return 100; }
 
 ----------------------------------------------------------------------
-text: (64-103)
+text: (66-107)
 function bar() { return foo() + 1; }
 ;
 
@@ -822,14 +822,14 @@ function bar() { return foo() + 1; }
 ======================================================================
 File:: /user/username/projects/sample1/logic/index.d.ts
 ----------------------------------------------------------------------
-prepend: (0-67):: ../core/index.d.ts texts:: 1
+prepend: (0-69):: ../core/index.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-67)
+text: (0-69)
 declare function foo(): number;
 declare function myFunc(): number;
 
 ----------------------------------------------------------------------
-text: (67-99)
+text: (69-102)
 declare function bar(): number;
 
 ======================================================================

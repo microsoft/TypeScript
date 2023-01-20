@@ -152,7 +152,7 @@ export type { TheNum } from 'const';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-9751391360-export type { TheNum } from 'const';\n"}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-14496393873-export type TheNum = 42;\r\n"},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-8263302163-export type { TheNum } from 'const';\r\n"}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -180,18 +180,18 @@ export type { TheNum } from 'const';
       "../const.ts": {
         "original": {
           "version": "-11202312776-export type TheNum = 42;",
-          "signature": "-13194036030-export type TheNum = 42;\n"
+          "signature": "-14496393873-export type TheNum = 42;\r\n"
         },
         "version": "-11202312776-export type TheNum = 42;",
-        "signature": "-13194036030-export type TheNum = 42;\n"
+        "signature": "-14496393873-export type TheNum = 42;\r\n"
       },
       "../index.ts": {
         "original": {
           "version": "-10837689162-export type { TheNum } from 'const';",
-          "signature": "-9751391360-export type { TheNum } from 'const';\n"
+          "signature": "-8263302163-export type { TheNum } from 'const';\r\n"
         },
         "version": "-10837689162-export type { TheNum } from 'const';",
-        "signature": "-9751391360-export type { TheNum } from 'const';\n"
+        "signature": "-8263302163-export type { TheNum } from 'const';\r\n"
       }
     },
     "options": {
@@ -216,7 +216,7 @@ export type { TheNum } from 'const';
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 958
+  "size": 962
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]

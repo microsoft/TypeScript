@@ -69,7 +69,7 @@ var y = 20;
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file1.ts","./file2.ts"],"js":{"sections":[{"pos":0,"end":24,"kind":"text"}],"hash":"-5596233073-var x = 10;\nvar y = 20;\n"}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","5029505981-const x = 10;","2026007743-const y = 20;"],"options":{"outFile":"./out.js"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file1.ts","./file2.ts"],"js":{"sections":[{"pos":0,"end":26,"kind":"text"}],"hash":"-4979001463-var x = 10;\r\nvar y = 20;\r\n"}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","5029505981-const x = 10;","2026007743-const y = 20;"],"options":{"outFile":"./out.js"}},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
 {
@@ -83,11 +83,11 @@ var y = 20;
       "sections": [
         {
           "pos": 0,
-          "end": 24,
+          "end": 26,
           "kind": "text"
         }
       ],
-      "hash": "-5596233073-var x = 10;\nvar y = 20;\n"
+      "hash": "-4979001463-var x = 10;\r\nvar y = 20;\r\n"
     }
   },
   "program": {
@@ -106,14 +106,14 @@ var y = 20;
     }
   },
   "version": "FakeTSVersion",
-  "size": 753
+  "size": 757
 }
 
 //// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /users/username/projects/project/out.js
 ----------------------------------------------------------------------
-text: (0-24)
+text: (0-26)
 var x = 10;
 var y = 20;
 

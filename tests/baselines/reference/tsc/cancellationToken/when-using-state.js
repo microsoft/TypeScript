@@ -140,7 +140,7 @@ export declare class D {
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-5130721255-export class C {\n    d = 1;\n}","signature":"-6977846840-export declare class C {\n    d: number;\n}\n"},{"version":"-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}","signature":"-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n"},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n"},{"version":"-7804761415-export class D { }","signature":"-8611429667-export declare class D {\n}\n"}],"options":{"declaration":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-5130721255-export class C {\n    d = 1;\n}","signature":"-8178839921-export declare class C {\r\n    d: number;\r\n}\r\n"},{"version":"-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}","signature":"6540971953-import { C } from './c';\r\nexport declare class B {\r\n    c: C;\r\n}\r\n"},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-4882119183-export {};\r\n"},{"version":"-7804761415-export class D { }","signature":"-10523684105-export declare class D {\r\n}\r\n"}],"options":{"declaration":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2,5]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -173,34 +173,34 @@ export declare class D {
       "./c.ts": {
         "original": {
           "version": "-5130721255-export class C {\n    d = 1;\n}",
-          "signature": "-6977846840-export declare class C {\n    d: number;\n}\n"
+          "signature": "-8178839921-export declare class C {\r\n    d: number;\r\n}\r\n"
         },
         "version": "-5130721255-export class C {\n    d = 1;\n}",
-        "signature": "-6977846840-export declare class C {\n    d: number;\n}\n"
+        "signature": "-8178839921-export declare class C {\r\n    d: number;\r\n}\r\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}",
-          "signature": "-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n"
+          "signature": "6540971953-import { C } from './c';\r\nexport declare class B {\r\n    c: C;\r\n}\r\n"
         },
         "version": "-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}",
-        "signature": "-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n"
+        "signature": "6540971953-import { C } from './c';\r\nexport declare class B {\r\n    c: C;\r\n}\r\n"
       },
       "./a.ts": {
         "original": {
           "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
-          "signature": "-3531856636-export {};\n"
+          "signature": "-4882119183-export {};\r\n"
         },
         "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-4882119183-export {};\r\n"
       },
       "./d.ts": {
         "original": {
           "version": "-7804761415-export class D { }",
-          "signature": "-8611429667-export declare class D {\n}\n"
+          "signature": "-10523684105-export declare class D {\r\n}\r\n"
         },
         "version": "-7804761415-export class D { }",
-        "signature": "-8611429667-export declare class D {\n}\n"
+        "signature": "-10523684105-export declare class D {\r\n}\r\n"
       }
     },
     "options": {
@@ -228,7 +228,7 @@ export declare class D {
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1250
+  "size": 1271
 }
 
 
@@ -270,7 +270,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"840271342-export class C {\n    d = 1;\n}export function foo() {}","signature":"-6977846840-export declare class C {\n    d: number;\n}\n"},{"version":"-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}","signature":"-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n"},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n"},{"version":"-7804761415-export class D { }","signature":"-8611429667-export declare class D {\n}\n"}],"options":{"declaration":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,4,3,5],"changeFileSet":[2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"840271342-export class C {\n    d = 1;\n}export function foo() {}","signature":"-8178839921-export declare class C {\r\n    d: number;\r\n}\r\n"},{"version":"-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}","signature":"6540971953-import { C } from './c';\r\nexport declare class B {\r\n    c: C;\r\n}\r\n"},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-4882119183-export {};\r\n"},{"version":"-7804761415-export class D { }","signature":"-10523684105-export declare class D {\r\n}\r\n"}],"options":{"declaration":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,4,3,5],"changeFileSet":[2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -303,34 +303,34 @@ exitCode:: ExitStatus.undefined
       "./c.ts": {
         "original": {
           "version": "840271342-export class C {\n    d = 1;\n}export function foo() {}",
-          "signature": "-6977846840-export declare class C {\n    d: number;\n}\n"
+          "signature": "-8178839921-export declare class C {\r\n    d: number;\r\n}\r\n"
         },
         "version": "840271342-export class C {\n    d = 1;\n}export function foo() {}",
-        "signature": "-6977846840-export declare class C {\n    d: number;\n}\n"
+        "signature": "-8178839921-export declare class C {\r\n    d: number;\r\n}\r\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}",
-          "signature": "-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n"
+          "signature": "6540971953-import { C } from './c';\r\nexport declare class B {\r\n    c: C;\r\n}\r\n"
         },
         "version": "-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}",
-        "signature": "-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n"
+        "signature": "6540971953-import { C } from './c';\r\nexport declare class B {\r\n    c: C;\r\n}\r\n"
       },
       "./a.ts": {
         "original": {
           "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
-          "signature": "-3531856636-export {};\n"
+          "signature": "-4882119183-export {};\r\n"
         },
         "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-4882119183-export {};\r\n"
       },
       "./d.ts": {
         "original": {
           "version": "-7804761415-export class D { }",
-          "signature": "-8611429667-export declare class D {\n}\n"
+          "signature": "-10523684105-export declare class D {\r\n}\r\n"
         },
         "version": "-7804761415-export class D { }",
-        "signature": "-8611429667-export declare class D {\n}\n"
+        "signature": "-10523684105-export declare class D {\r\n}\r\n"
       }
     },
     "options": {
@@ -360,7 +360,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1290
+  "size": 1311
 }
 
 
@@ -424,7 +424,7 @@ export declare function foo(): void;
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
 //// [/user/username/projects/myproject/a.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"840271342-export class C {\n    d = 1;\n}export function foo() {}","signature":"-7819740442-export declare class C {\n    d: number;\n}\nexport declare function foo(): void;\n"},{"version":"-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}","signature":"-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n"},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n"},{"version":"-7804761415-export class D { }","signature":"-8611429667-export declare class D {\n}\n"}],"options":{"declaration":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"840271342-export class C {\n    d = 1;\n}export function foo() {}","signature":"-6634964454-export declare class C {\r\n    d: number;\r\n}\r\nexport declare function foo(): void;\r\n"},{"version":"-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}","signature":"6540971953-import { C } from './c';\r\nexport declare class B {\r\n    c: C;\r\n}\r\n"},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-4882119183-export {};\r\n"},{"version":"-7804761415-export class D { }","signature":"-10523684105-export declare class D {\r\n}\r\n"}],"options":{"declaration":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2,5]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -457,34 +457,34 @@ export declare function foo(): void;
       "./c.ts": {
         "original": {
           "version": "840271342-export class C {\n    d = 1;\n}export function foo() {}",
-          "signature": "-7819740442-export declare class C {\n    d: number;\n}\nexport declare function foo(): void;\n"
+          "signature": "-6634964454-export declare class C {\r\n    d: number;\r\n}\r\nexport declare function foo(): void;\r\n"
         },
         "version": "840271342-export class C {\n    d = 1;\n}export function foo() {}",
-        "signature": "-7819740442-export declare class C {\n    d: number;\n}\nexport declare function foo(): void;\n"
+        "signature": "-6634964454-export declare class C {\r\n    d: number;\r\n}\r\nexport declare function foo(): void;\r\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}",
-          "signature": "-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n"
+          "signature": "6540971953-import { C } from './c';\r\nexport declare class B {\r\n    c: C;\r\n}\r\n"
         },
         "version": "-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}",
-        "signature": "-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n"
+        "signature": "6540971953-import { C } from './c';\r\nexport declare class B {\r\n    c: C;\r\n}\r\n"
       },
       "./a.ts": {
         "original": {
           "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
-          "signature": "-3531856636-export {};\n"
+          "signature": "-4882119183-export {};\r\n"
         },
         "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-4882119183-export {};\r\n"
       },
       "./d.ts": {
         "original": {
           "version": "-7804761415-export class D { }",
-          "signature": "-8611429667-export declare class D {\n}\n"
+          "signature": "-10523684105-export declare class D {\r\n}\r\n"
         },
         "version": "-7804761415-export class D { }",
-        "signature": "-8611429667-export declare class D {\n}\n"
+        "signature": "-10523684105-export declare class D {\r\n}\r\n"
       }
     },
     "options": {
@@ -512,7 +512,7 @@ export declare function foo(): void;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1310
+  "size": 1333
 }
 
 

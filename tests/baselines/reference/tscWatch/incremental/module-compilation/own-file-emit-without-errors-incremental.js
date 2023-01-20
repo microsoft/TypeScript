@@ -158,7 +158,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;",{"version":"-12438487295-export const z = 10;","signature":"-7483702853-export declare const z = 10;\n"}],"options":{"module":2},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;",{"version":"-12438487295-export const z = 10;","signature":"-6444025464-export declare const z = 10;\r\n"}],"options":{"module":2},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -185,10 +185,10 @@ define(["require", "exports"], function (require, exports) {
       "./file2.ts": {
         "original": {
           "version": "-12438487295-export const z = 10;",
-          "signature": "-7483702853-export declare const z = 10;\n"
+          "signature": "-6444025464-export declare const z = 10;\r\n"
         },
         "version": "-12438487295-export const z = 10;",
-        "signature": "-7483702853-export declare const z = 10;\n"
+        "signature": "-6444025464-export declare const z = 10;\r\n"
       }
     },
     "options": {
@@ -203,6 +203,6 @@ define(["require", "exports"], function (require, exports) {
     ]
   },
   "version": "FakeTSVersion",
-  "size": 765
+  "size": 767
 }
 

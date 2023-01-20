@@ -103,7 +103,7 @@ ts.getFileEmitOutput: /a/a.ts: {
   {
    "name": "/bin/a.d.ts",
    "writeByteOrderMark": false,
-   "text": "declare function f(): void;\n//# sourceMappingURL=a.d.ts.map"
+   "text": "declare function f(): void;\r\n//# sourceMappingURL=a.d.ts.map"
   }
  ],
  "emitSkipped": false,

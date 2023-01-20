@@ -532,7 +532,7 @@ Info 44   [00:01:33.000] response:
           {
             "name": "/user/username/projects/myproject/usage/usage.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn3 = void 0;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\nexports.fn3 = fn3;\n"
+            "text": "\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nexports.fn3 = void 0;\r\nvar fns_1 = require(\"../decls/fns\");\r\n(0, fns_1.fn1)();\r\n(0, fns_1.fn2)();\r\nfunction fn3() { }\r\nexports.fn3 = fn3;\r\n"
           }
         ],
         "emitSkipped": false,

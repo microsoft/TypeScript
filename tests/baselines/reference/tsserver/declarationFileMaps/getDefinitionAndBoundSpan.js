@@ -126,7 +126,7 @@ ts.getFileEmitOutput: /a/a.ts: {
   {
    "name": "/a/bin/a.d.ts",
    "writeByteOrderMark": false,
-   "text": "export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# sourceMappingURL=a.d.ts.map"
+   "text": "export declare function fnA(): void;\r\nexport interface IfaceA {\r\n}\r\nexport declare const instanceA: IfaceA;\r\n//# sourceMappingURL=a.d.ts.map"
   }
  ],
  "emitSkipped": false,
@@ -300,7 +300,7 @@ ts.getFileEmitOutput: /b/b.ts: {
   {
    "name": "/b/bin/b.d.ts",
    "writeByteOrderMark": false,
-   "text": "export declare function fnB(): void;\n//# sourceMappingURL=b.d.ts.map"
+   "text": "export declare function fnB(): void;\r\n//# sourceMappingURL=b.d.ts.map"
   }
  ],
  "emitSkipped": false,

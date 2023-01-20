@@ -667,12 +667,12 @@ Info 70   [00:02:25.000] response:
           {
             "name": "/user/username/projects/myproject/dependency/fns.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn2 = exports.fn1 = void 0;\nfunction fn1() { }\nexports.fn1 = fn1;\nfunction fn2() { }\nexports.fn2 = fn2;\nfunction fn3() { }\n"
+            "text": "\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nexports.fn2 = exports.fn1 = void 0;\r\nfunction fn1() { }\r\nexports.fn1 = fn1;\r\nfunction fn2() { }\r\nexports.fn2 = fn2;\r\nfunction fn3() { }\r\n"
           },
           {
             "name": "/user/username/projects/myproject/decls/fns.d.ts",
             "writeByteOrderMark": false,
-            "text": "export declare function fn1(): void;\nexport declare function fn2(): void;\n"
+            "text": "export declare function fn1(): void;\r\nexport declare function fn2(): void;\r\n"
           }
         ],
         "emitSkipped": false,

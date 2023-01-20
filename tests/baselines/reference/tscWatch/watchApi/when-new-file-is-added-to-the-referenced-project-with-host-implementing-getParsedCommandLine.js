@@ -118,7 +118,7 @@ declare class class2 {
 
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"777933178-class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"777933178-class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2390931783-declare class class2 {\r\n}\r\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -150,11 +150,11 @@ declare class class2 {
       "./class2.ts": {
         "original": {
           "version": "777969115-class class2 {}",
-          "signature": "-2684084705-declare class class2 {\n}\n",
+          "signature": "-2390931783-declare class class2 {\r\n}\r\n",
           "affectsGlobalScope": true
         },
         "version": "777969115-class class2 {}",
-        "signature": "-2684084705-declare class class2 {\n}\n",
+        "signature": "-2390931783-declare class class2 {\r\n}\r\n",
         "affectsGlobalScope": true
       }
     },
@@ -170,7 +170,7 @@ declare class class2 {
     "latestChangedDtsFile": "./class2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 841
+  "size": 845
 }
 
 
@@ -250,7 +250,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.ts","../project1/class3.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"777933178-class class1 {}","signature":"-2723220098-declare class class1 {\n}\n","affectsGlobalScope":true},{"version":"778005052-class class3 {}","signature":"-2644949312-declare class class3 {\n}\n","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.ts","../project1/class3.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"777933178-class class1 {}","signature":"-2059701800-declare class class1 {\r\n}\r\n","affectsGlobalScope":true},{"version":"778005052-class class3 {}","signature":"-2722161766-declare class class3 {\r\n}\r\n","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2390931783-declare class class2 {\r\n}\r\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -274,31 +274,31 @@ exitCode:: ExitStatus.undefined
       "../project1/class1.ts": {
         "original": {
           "version": "777933178-class class1 {}",
-          "signature": "-2723220098-declare class class1 {\n}\n",
+          "signature": "-2059701800-declare class class1 {\r\n}\r\n",
           "affectsGlobalScope": true
         },
         "version": "777933178-class class1 {}",
-        "signature": "-2723220098-declare class class1 {\n}\n",
+        "signature": "-2059701800-declare class class1 {\r\n}\r\n",
         "affectsGlobalScope": true
       },
       "../project1/class3.ts": {
         "original": {
           "version": "778005052-class class3 {}",
-          "signature": "-2644949312-declare class class3 {\n}\n",
+          "signature": "-2722161766-declare class class3 {\r\n}\r\n",
           "affectsGlobalScope": true
         },
         "version": "778005052-class class3 {}",
-        "signature": "-2644949312-declare class class3 {\n}\n",
+        "signature": "-2722161766-declare class class3 {\r\n}\r\n",
         "affectsGlobalScope": true
       },
       "./class2.ts": {
         "original": {
           "version": "777969115-class class2 {}",
-          "signature": "-2684084705-declare class class2 {\n}\n",
+          "signature": "-2390931783-declare class class2 {\r\n}\r\n",
           "affectsGlobalScope": true
         },
         "version": "777969115-class class2 {}",
-        "signature": "-2684084705-declare class class2 {\n}\n",
+        "signature": "-2390931783-declare class class2 {\r\n}\r\n",
         "affectsGlobalScope": true
       }
     },
@@ -315,7 +315,7 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./class2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1041
+  "size": 1053
 }
 
 

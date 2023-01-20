@@ -115,7 +115,7 @@ declare namespace container {
 //# sourceMappingURL=lib.d.ts.map
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../../lib","sourceFiles":["../../lib/index.ts"],"js":{"sections":[{"pos":0,"end":102,"kind":"text"}],"hash":"-5780640416-var container;\n(function (container) {\n    container.myConst = 30;\n})(container || (container = {}));\n"},"dts":{"sections":[{"pos":0,"end":56,"kind":"text"}],"mapHash":"-12950023432-{\"version\":3,\"file\":\"lib.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../lib/index.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B\"}","hash":"-3233313694-declare namespace container {\n    const myConst = 30;\n}\n//# sourceMappingURL=lib.d.ts.map"}},"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-7311945748-namespace container {\r\n    export const myConst = 30;\r\n}"],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../../lib","sourceFiles":["../../lib/index.ts"],"js":{"sections":[{"pos":0,"end":106,"kind":"text"}],"hash":"14511712212-var container;\r\n(function (container) {\r\n    container.myConst = 30;\r\n})(container || (container = {}));\r\n"},"dts":{"sections":[{"pos":0,"end":59,"kind":"text"}],"mapHash":"-12950023432-{\"version\":3,\"file\":\"lib.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../lib/index.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B\"}","hash":"-2467017783-declare namespace container {\r\n    const myConst = 30;\r\n}\r\n//# sourceMappingURL=lib.d.ts.map"}},"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-7311945748-namespace container {\r\n    export const myConst = 30;\r\n}"],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"3606903025-declare namespace container {\r\n    const myConst = 30;\r\n}\r\n","latestChangedDtsFile":"./lib.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo.readable.baseline.txt]
 {
@@ -128,21 +128,21 @@ declare namespace container {
       "sections": [
         {
           "pos": 0,
-          "end": 102,
+          "end": 106,
           "kind": "text"
         }
       ],
-      "hash": "-5780640416-var container;\n(function (container) {\n    container.myConst = 30;\n})(container || (container = {}));\n"
+      "hash": "14511712212-var container;\r\n(function (container) {\r\n    container.myConst = 30;\r\n})(container || (container = {}));\r\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 56,
+          "end": 59,
           "kind": "text"
         }
       ],
-      "hash": "-3233313694-declare namespace container {\n    const myConst = 30;\n}\n//# sourceMappingURL=lib.d.ts.map",
+      "hash": "-2467017783-declare namespace container {\r\n    const myConst = 30;\r\n}\r\n//# sourceMappingURL=lib.d.ts.map",
       "mapHash": "-12950023432-{\"version\":3,\"file\":\"lib.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../lib/index.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B\"}"
     }
   },
@@ -160,18 +160,18 @@ declare namespace container {
       "declarationMap": true,
       "outFile": "./lib.js"
     },
-    "outSignature": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
+    "outSignature": "3606903025-declare namespace container {\r\n    const myConst = 30;\r\n}\r\n",
     "latestChangedDtsFile": "./lib.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1391
+  "size": 1411
 }
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /user/username/projects/container/built/local/lib.js
 ----------------------------------------------------------------------
-text: (0-102)
+text: (0-106)
 var container;
 (function (container) {
     container.myConst = 30;
@@ -181,7 +181,7 @@ var container;
 ======================================================================
 File:: /user/username/projects/container/built/local/lib.d.ts
 ----------------------------------------------------------------------
-text: (0-56)
+text: (0-59)
 declare namespace container {
     const myConst = 30;
 }
@@ -229,7 +229,7 @@ declare namespace container {
 //# sourceMappingURL=compositeExec.d.ts.map
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../../compositeExec","sourceFiles":["../../compositeExec/index.ts"],"js":{"sections":[{"pos":0,"end":102,"kind":"prepend","data":"./lib.js","texts":[{"pos":0,"end":102,"kind":"text"}]},{"pos":102,"end":283,"kind":"text"}],"hash":"-2184050024-var container;\n(function (container) {\n    container.myConst = 30;\n})(container || (container = {}));\nvar container;\n(function (container) {\n    function getMyConst() {\n        return container.myConst;\n    }\n    container.getMyConst = getMyConst;\n})(container || (container = {}));\n"},"dts":{"sections":[{"pos":0,"end":56,"kind":"prepend","data":"./lib.d.ts","texts":[{"pos":0,"end":56,"kind":"text"}]},{"pos":56,"end":123,"kind":"text"}],"mapHash":"25748245913-{\"version\":3,\"file\":\"compositeExec.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../lib/index.ts\",\"../../compositeExec/index.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B;ACFD,kBAAU,SAAS,CAAC;IAChB,SAAgB,UAAU,WAEzB;CACJ\"}","hash":"862035579-declare namespace container {\n    const myConst = 30;\n}\ndeclare namespace container {\n    function getMyConst(): number;\n}\n//# sourceMappingURL=compositeExec.d.ts.map"}},"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-6143734929-namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"5987946274-declare namespace container {\n    const myConst = 30;\n}\ndeclare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../../compositeExec","sourceFiles":["../../compositeExec/index.ts"],"js":{"sections":[{"pos":0,"end":106,"kind":"prepend","data":"./lib.js","texts":[{"pos":0,"end":106,"kind":"text"}]},{"pos":106,"end":294,"kind":"text"}],"hash":"-1762790873-var container;\r\n(function (container) {\r\n    container.myConst = 30;\r\n})(container || (container = {}));\r\nvar container;\r\n(function (container) {\r\n    function getMyConst() {\r\n        return container.myConst;\r\n    }\r\n    container.getMyConst = getMyConst;\r\n})(container || (container = {}));\r\n"},"dts":{"sections":[{"pos":0,"end":59,"kind":"prepend","data":"./lib.d.ts","texts":[{"pos":0,"end":59,"kind":"text"}]},{"pos":59,"end":129,"kind":"text"}],"mapHash":"25748245913-{\"version\":3,\"file\":\"compositeExec.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../lib/index.ts\",\"../../compositeExec/index.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B;ACFD,kBAAU,SAAS,CAAC;IAChB,SAAgB,UAAU,WAEzB;CACJ\"}","hash":"5159110793-declare namespace container {\r\n    const myConst = 30;\r\n}\r\ndeclare namespace container {\r\n    function getMyConst(): number;\r\n}\r\n//# sourceMappingURL=compositeExec.d.ts.map"}},"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","3606903025-declare namespace container {\r\n    const myConst = 30;\r\n}\r\n","-6143734929-namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6084091376-declare namespace container {\r\n    const myConst = 30;\r\n}\r\ndeclare namespace container {\r\n    function getMyConst(): number;\r\n}\r\n","latestChangedDtsFile":"./compositeExec.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo.readable.baseline.txt]
 {
@@ -242,47 +242,47 @@ declare namespace container {
       "sections": [
         {
           "pos": 0,
-          "end": 102,
+          "end": 106,
           "kind": "prepend",
           "data": "./lib.js",
           "texts": [
             {
               "pos": 0,
-              "end": 102,
+              "end": 106,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 102,
-          "end": 283,
+          "pos": 106,
+          "end": 294,
           "kind": "text"
         }
       ],
-      "hash": "-2184050024-var container;\n(function (container) {\n    container.myConst = 30;\n})(container || (container = {}));\nvar container;\n(function (container) {\n    function getMyConst() {\n        return container.myConst;\n    }\n    container.getMyConst = getMyConst;\n})(container || (container = {}));\n"
+      "hash": "-1762790873-var container;\r\n(function (container) {\r\n    container.myConst = 30;\r\n})(container || (container = {}));\r\nvar container;\r\n(function (container) {\r\n    function getMyConst() {\r\n        return container.myConst;\r\n    }\r\n    container.getMyConst = getMyConst;\r\n})(container || (container = {}));\r\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 56,
+          "end": 59,
           "kind": "prepend",
           "data": "./lib.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 56,
+              "end": 59,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 56,
-          "end": 123,
+          "pos": 59,
+          "end": 129,
           "kind": "text"
         }
       ],
-      "hash": "862035579-declare namespace container {\n    const myConst = 30;\n}\ndeclare namespace container {\n    function getMyConst(): number;\n}\n//# sourceMappingURL=compositeExec.d.ts.map",
+      "hash": "5159110793-declare namespace container {\r\n    const myConst = 30;\r\n}\r\ndeclare namespace container {\r\n    function getMyConst(): number;\r\n}\r\n//# sourceMappingURL=compositeExec.d.ts.map",
       "mapHash": "25748245913-{\"version\":3,\"file\":\"compositeExec.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../lib/index.ts\",\"../../compositeExec/index.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B;ACFD,kBAAU,SAAS,CAAC;IAChB,SAAgB,UAAU,WAEzB;CACJ\"}"
     }
   },
@@ -294,7 +294,7 @@ declare namespace container {
     ],
     "fileInfos": {
       "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "./lib.d.ts": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
+      "./lib.d.ts": "3606903025-declare namespace container {\r\n    const myConst = 30;\r\n}\r\n",
       "../../compositeexec/index.ts": "-6143734929-namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"
     },
     "options": {
@@ -302,27 +302,27 @@ declare namespace container {
       "declarationMap": true,
       "outFile": "./compositeExec.js"
     },
-    "outSignature": "5987946274-declare namespace container {\n    const myConst = 30;\n}\ndeclare namespace container {\n    function getMyConst(): number;\n}\n",
+    "outSignature": "6084091376-declare namespace container {\r\n    const myConst = 30;\r\n}\r\ndeclare namespace container {\r\n    function getMyConst(): number;\r\n}\r\n",
     "latestChangedDtsFile": "./compositeExec.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2196
+  "size": 2249
 }
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /user/username/projects/container/built/local/compositeExec.js
 ----------------------------------------------------------------------
-prepend: (0-102):: ./lib.js texts:: 1
+prepend: (0-106):: ./lib.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-102)
+text: (0-106)
 var container;
 (function (container) {
     container.myConst = 30;
 })(container || (container = {}));
 
 ----------------------------------------------------------------------
-text: (102-283)
+text: (106-294)
 var container;
 (function (container) {
     function getMyConst() {
@@ -335,15 +335,15 @@ var container;
 ======================================================================
 File:: /user/username/projects/container/built/local/compositeExec.d.ts
 ----------------------------------------------------------------------
-prepend: (0-56):: ./lib.d.ts texts:: 1
+prepend: (0-59):: ./lib.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-56)
+text: (0-59)
 declare namespace container {
     const myConst = 30;
 }
 
 ----------------------------------------------------------------------
-text: (56-123)
+text: (59-129)
 declare namespace container {
     function getMyConst(): number;
 }
