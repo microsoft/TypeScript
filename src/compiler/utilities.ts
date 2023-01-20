@@ -5,6 +5,7 @@ import {
     addRange,
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
+    AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
     AmpersandAmpersandEqualsToken,
@@ -31,6 +32,7 @@ import {
     BindableStaticElementAccessExpression,
     BindableStaticNameExpression,
     BindingElement,
+    BindingElementOfBareOrAccessedRequire,
     Block,
     BundleFileSection,
     BundleFileSectionKind,
@@ -197,8 +199,8 @@ import {
     HasExpressionInitializer,
     hasExtension,
     HasFlowNode,
-    HasInitializer,
     hasInitializer,
+    HasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -234,6 +236,7 @@ import {
     isArrowFunction,
     isBigIntLiteral,
     isBinaryExpression,
+    isBindingElement,
     isBindingPattern,
     isCallExpression,
     isClassDeclaration,
@@ -1730,8 +1733,7 @@ export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node
 }
 
 /** @internal */
-export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
-    const sourceFile = getSourceFileOfNode(node);
+export function createDiagnosticForNodeFromMessageChain(sourceFile: SourceFile, node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
     const span = getErrorSpanForNode(sourceFile, node);
     return createFileDiagnosticFromMessageChain(sourceFile, span.start, span.length, messageChain, relatedInformation);
 }
@@ -3115,6 +3117,11 @@ export function isVariableDeclarationInitializedToBareOrAccessedRequire(node: No
     return isVariableDeclarationInitializedWithRequireHelper(node, /*allowAccessedRequire*/ true);
 }
 
+/** @internal */
+export function isBindingElementOfBareOrAccessedRequire(node: Node): node is BindingElementOfBareOrAccessedRequire {
+    return isBindingElement(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node.parent.parent);
+}
+
 function isVariableDeclarationInitializedWithRequireHelper(node: Node, allowAccessedRequire: boolean) {
     return isVariableDeclaration(node) &&
         !!node.initializer &&
@@ -3541,14 +3548,23 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.BindingElement:
             return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
         case SyntaxKind.ImportDeclaration:
             return tryCast(node.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportEqualsDeclaration:
             return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
+        case SyntaxKind.ImportClause:
+        case SyntaxKind.NamespaceExport:
+            return tryCast(node.parent.moduleSpecifier, isStringLiteralLike);
+        case SyntaxKind.NamespaceImport:
+        case SyntaxKind.ExportSpecifier:
+            return tryCast(node.parent.parent.moduleSpecifier, isStringLiteralLike);
+        case SyntaxKind.ImportSpecifier:
+            return tryCast(node.parent.parent.parent.moduleSpecifier, isStringLiteralLike);
         default:
             Debug.assertNever(node);
     }
@@ -8006,6 +8022,16 @@ export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
         default:
             return false;
     }
+}
+
+/** @internal */
+export function getIsolatedModules(options: CompilerOptions) {
+    return !!(options.isolatedModules || options.verbatimModuleSyntax);
+}
+
+/** @internal */
+export function importNameElisionDisabled(options: CompilerOptions) {
+    return options.verbatimModuleSyntax || options.isolatedModules && options.preserveValueImports;
 }
 
 /** @internal */

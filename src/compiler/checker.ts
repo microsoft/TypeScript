@@ -7,6 +7,7 @@ import {
     addRange,
     addRelatedInfo,
     addSyntheticLeadingComment,
+    AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
     and,
@@ -283,6 +284,7 @@ import {
     getInitializerOfBinaryExpression,
     getInterfaceBaseTypeNodes,
     getInvokedExpression,
+    getIsolatedModules,
     getJSDocClassTag,
     getJSDocDeprecatedTag,
     getJSDocEnumTag,
@@ -441,6 +443,7 @@ import {
     isBindableStaticElementAccessExpression,
     isBindableStaticNameExpression,
     isBindingElement,
+    isBindingElementOfBareOrAccessedRequire,
     isBindingPattern,
     isBlock,
     isBlockOrCatchScoped,
@@ -1451,6 +1454,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
     const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
+    const isolatedModulesLikeFlagName = compilerOptions.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules";
 
     /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
     let apparentArgumentCount: number | undefined;
@@ -2310,7 +2314,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             addErrorOrSuggestion(isError, "message" in message ? createFileDiagnostic(file, 0, 0, message, arg0, arg1, arg2, arg3) : createDiagnosticForFileFromMessageChain(file, message)); // eslint-disable-line local/no-in-operator
             return;
         }
-        addErrorOrSuggestion(isError, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message)); // eslint-disable-line local/no-in-operator
+        addErrorOrSuggestion(isError, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(location), location, message)); // eslint-disable-line local/no-in-operator
     }
 
     function errorAndMaybeSuggestAwait(
@@ -3091,6 +3095,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 case SyntaxKind.EnumDeclaration:
                     if (result = lookup(getSymbolOfDeclaration(location as EnumDeclaration)?.exports || emptySymbols, name, meaning & SymbolFlags.EnumMember)) {
+                        if (nameNotFoundMessage && getIsolatedModules(compilerOptions) && !(location.flags & NodeFlags.Ambient) && getSourceFileOfNode(location) !== getSourceFileOfNode(result.valueDeclaration)) {
+                            error(
+                                errorLocation,
+                                Diagnostics.Cannot_access_0_from_another_file_without_qualification_when_1_is_enabled_Use_2_instead,
+                                unescapeLeadingUnderscores(name),
+                                isolatedModulesLikeFlagName,
+                                `${unescapeLeadingUnderscores(getSymbolOfNode(location)!.escapedName)}.${unescapeLeadingUnderscores(name)}`);
+                        }
                         break loop;
                     }
                     break;
@@ -4474,6 +4486,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
+        if (compilerOptions.verbatimModuleSyntax) {
+            return;
+        }
         const symbol = getSymbolOfDeclaration(node);
         const target = resolveAlias(symbol);
         if (target) {
@@ -4490,6 +4505,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
     // the alias as an expression (which recursively takes us back here if the target references another alias).
     function markAliasSymbolAsReferenced(symbol: Symbol) {
+        Debug.assert(!compilerOptions.verbatimModuleSyntax);
         const links = getSymbolLinks(symbol);
         if (!links.referenced) {
             links.referenced = true;
@@ -4862,7 +4878,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     }
                                 }
                             }
-                            diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(
+                            diagnostics.add(createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(errorNode), errorNode, chainDiagnosticMessages(
                                 diagnosticDetails,
                                 Diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead,
                                 moduleReference)));
@@ -11651,7 +11667,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!isValidBaseType(reducedBaseType)) {
             const elaboration = elaborateNeverIntersection(/*errorInfo*/ undefined, baseType);
             const diagnostic = chainDiagnosticMessages(elaboration, Diagnostics.Base_constructor_return_type_0_is_not_an_object_type_or_intersection_of_object_types_with_statically_known_members, typeToString(reducedBaseType));
-            diagnostics.add(createDiagnosticForNodeFromMessageChain(baseTypeNode.expression, diagnostic));
+            diagnostics.add(createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(baseTypeNode.expression), baseTypeNode.expression, diagnostic));
             return type.resolvedBaseTypes = emptyArray;
         }
         if (type === reducedBaseType || hasBaseType(reducedBaseType, type)) {
@@ -17110,7 +17126,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     errorInfo,
                                     Diagnostics.Element_implicitly_has_an_any_type_because_expression_of_type_0_can_t_be_used_to_index_type_1, typeToString(fullIndexType), typeToString(objectType)
                                 );
-                                diagnostics.add(createDiagnosticForNodeFromMessageChain(accessExpression, errorInfo));
+                                diagnostics.add(createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(accessExpression), accessExpression, errorInfo));
                             }
                         }
                     }
@@ -19954,7 +19970,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            const diag = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
+            const diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(errorNode!), errorNode!, errorInfo, relatedInformation);
             if (relatedInfo) {
                 addRelatedInfo(diag, ...relatedInfo);
             }
@@ -27279,13 +27295,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function markAliasReferenced(symbol: Symbol, location: Node) {
+        if (compilerOptions.verbatimModuleSyntax) {
+            return;
+        }
         if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
             const target = resolveAlias(symbol);
             if (getAllSymbolFlags(target) & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
                 // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
                 // (because the const enum value will not be inlined), or if (2) the alias is an export
                 // of a const enum declaration that will be preserved.
-                if (compilerOptions.isolatedModules ||
+                if (getIsolatedModules(compilerOptions) ||
                     shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location) ||
                     !isConstEnumOrConstEnumOnlyModule(getExportSymbolOfValueSymbolIfExported(target))
                 ) {
@@ -30366,7 +30385,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 jsxFactorySym.isReferenced = SymbolFlags.All;
 
                 // If react/jsxFactory symbol is alias, mark it as refereced
-                if (jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
+                if (!compilerOptions.verbatimModuleSyntax && jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
                     markAliasSymbolAsReferenced(jsxFactorySym);
                 }
             }
@@ -30937,7 +30956,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //   1. if 'isolatedModules' is enabled, because the const enum value will not be inlined, and
         //   2. if 'preserveConstEnums' is enabled and the expression is itself an export, e.g. `export = Foo.Bar.Baz`.
         if (isIdentifier(left) && parentSymbol && (
-            compilerOptions.isolatedModules ||
+            getIsolatedModules(compilerOptions) ||
             !(prop && (isConstEnumOrConstEnumOnlyModule(prop) || prop.flags & SymbolFlags.EnumMember && node.parent.kind === SyntaxKind.EnumMember)) ||
             shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(node)
         )) {
@@ -31202,7 +31221,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        const resultDiagnostic = createDiagnosticForNodeFromMessageChain(propNode, errorInfo);
+        const resultDiagnostic = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(propNode), propNode, errorInfo);
         if (relatedInfo) {
             addRelatedInfo(resultDiagnostic, relatedInfo);
         }
@@ -32337,7 +32356,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if ("message" in message) { // eslint-disable-line local/no-in-operator
                 return createDiagnosticForNode(node, message, arg0, arg1, arg2, arg3);
             }
-            return createDiagnosticForNodeFromMessageChain(node, message);
+            return createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), node, message);
         }
     }
 
@@ -32667,7 +32686,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         diag = { file, start, length, code: chain.code, category: chain.category, messageText: chain, relatedInformation: related };
                     }
                     else {
-                        diag = createDiagnosticForNodeFromMessageChain(node, chain, related);
+                        diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), node, chain, related);
                     }
                     addImplementationSuccessElaboration(candidatesForArgumentError[0], diag);
                     diagnostics.add(diag);
@@ -33296,7 +33315,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
     function invocationError(errorTarget: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
         const { messageChain, relatedMessage: relatedInfo } = invocationErrorDetails(errorTarget, apparentType, kind);
-        const diagnostic = createDiagnosticForNodeFromMessageChain(errorTarget, messageChain);
+        const diagnostic = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(errorTarget), errorTarget, messageChain);
         if (relatedInfo) {
             addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
         }
@@ -33407,7 +33426,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!callSignatures.length) {
             const errorDetails = invocationErrorDetails(node.expression, apparentType, SignatureKind.Call);
             const messageChain = chainDiagnosticMessages(errorDetails.messageChain, headMessage);
-            const diag = createDiagnosticForNodeFromMessageChain(node.expression, messageChain);
+            const diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node.expression), node.expression, messageChain);
             if (errorDetails.relatedMessage) {
                 addRelatedInfo(diag, createDiagnosticForNode(node.expression, errorDetails.relatedMessage));
             }
@@ -36317,9 +36336,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (checkForDisallowedESSymbolOperand(operator)) {
                     leftType = getBaseTypeOfLiteralType(checkNonNullType(leftType, left));
                     rightType = getBaseTypeOfLiteralType(checkNonNullType(rightType, right));
-                    reportOperatorErrorUnless((left, right) =>
-                        isTypeComparableTo(left, right) || isTypeComparableTo(right, left) || (
-                            isTypeAssignableTo(left, numberOrBigIntType) && isTypeAssignableTo(right, numberOrBigIntType)));
+                    reportOperatorErrorUnless((left, right) => {
+                        if (isTypeAny(left) || isTypeAny(right)) {
+                            return true;
+                        }
+                        const leftAssignableToNumber = isTypeAssignableTo(left, numberOrBigIntType);
+                        const rightAssignableToNumber = isTypeAssignableTo(right, numberOrBigIntType);
+                        return leftAssignableToNumber && rightAssignableToNumber ||
+                            !leftAssignableToNumber && !rightAssignableToNumber && areTypesComparable(left, right);
+                    });
                 }
                 return booleanType;
             case SyntaxKind.EqualsEqualsToken:
@@ -36481,7 +36506,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (checkReferenceExpression(left,
                     Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access,
                     Diagnostics.The_left_hand_side_of_an_assignment_expression_may_not_be_an_optional_property_access)
-                    && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
+                    ) {
 
                     let headMessage: DiagnosticMessage | undefined;
                     if (exactOptionalPropertyTypes && isPropertyAccessExpression(left) && maybeTypeOfKind(valueType, TypeFlags.Undefined)) {
@@ -37151,11 +37176,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
         }
 
-        if (compilerOptions.isolatedModules) {
+        if (getIsolatedModules(compilerOptions)) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
             if (constEnumDeclaration.flags & NodeFlags.Ambient) {
-                error(node, Diagnostics.Cannot_access_ambient_const_enums_when_the_isolatedModules_flag_is_provided);
+                error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
             }
         }
     }
@@ -39031,7 +39056,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     chain = chainDiagnosticMessages(chain, Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1, typeToString(type), typeToString(thisTypeForErrorOut.value));
                 }
                 chain = chainDiagnosticMessages(chain, diagnosticMessage, arg0);
-                diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, chain));
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(errorNode), errorNode, chain));
             }
             return undefined;
         }
@@ -39243,13 +39268,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
         const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isReference*/ true);
         if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
-            if (symbolIsValue(rootSymbol)
+            if (!compilerOptions.verbatimModuleSyntax
+                && symbolIsValue(rootSymbol)
                 && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))
                 && !getTypeOnlyAliasDeclaration(rootSymbol)) {
                 markAliasSymbolAsReferenced(rootSymbol);
             }
             else if (forDecoratorMetadata
-                && compilerOptions.isolatedModules
+                && getIsolatedModules(compilerOptions)
                 && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015
                 && !symbolIsValue(rootSymbol)
                 && !some(rootSymbol.declarations, isTypeOnlyImportOrExportDeclaration)) {
@@ -40354,8 +40380,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // For a commonjs `const x = require`, validate the alias and exit
         const symbol = getSymbolOfDeclaration(node);
-        if (symbol.flags & SymbolFlags.Alias && isVariableDeclarationInitializedToBareOrAccessedRequire(node.kind === SyntaxKind.BindingElement ? node.parent.parent : node)) {
-            checkAliasSymbol(node as BindingElement | VariableDeclaration);
+        if (symbol.flags & SymbolFlags.Alias && (isVariableDeclarationInitializedToBareOrAccessedRequire(node) || isBindingElementOfBareOrAccessedRequire(node))) {
+            checkAliasSymbol(node);
             return;
         }
 
@@ -42761,7 +42787,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                         let errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Named_property_0_of_types_1_and_2_are_not_identical, symbolToString(prop), typeName1, typeName2);
                         errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo));
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(typeNode), typeNode, errorInfo));
                     }
                 }
             }
@@ -43202,25 +43228,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // The following checks only apply on a non-ambient instantiated module declaration.
             if (symbol.flags & SymbolFlags.ValueModule
                 && !inAmbientContext
-                && symbol.declarations
-                && symbol.declarations.length > 1
-                && isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions))) {
-                const firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
-                if (firstNonAmbientClassOrFunc) {
-                    if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
-                        error(node.name, Diagnostics.A_namespace_declaration_cannot_be_in_a_different_file_from_a_class_or_function_with_which_it_is_merged);
+                && isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions))
+            ) {
+                if (getIsolatedModules(compilerOptions) && !getSourceFileOfNode(node).externalModuleIndicator) {
+                    // This could be loosened a little if needed. The only problem we are trying to avoid is unqualified
+                    // references to namespace members declared in other files. But use of namespaces is discouraged anyway,
+                    // so for now we will just not allow them in scripts, which is the only place they can merge cross-file.
+                    error(node.name, Diagnostics.Namespaces_are_not_allowed_in_global_script_files_when_0_is_enabled_If_this_file_is_not_intended_to_be_a_global_script_set_moduleDetection_to_force_or_add_an_empty_export_statement, isolatedModulesLikeFlagName);
+                }
+                if (symbol.declarations?.length! > 1) {
+                    const firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
+                    if (firstNonAmbientClassOrFunc) {
+                        if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
+                            error(node.name, Diagnostics.A_namespace_declaration_cannot_be_in_a_different_file_from_a_class_or_function_with_which_it_is_merged);
+                        }
+                        else if (node.pos < firstNonAmbientClassOrFunc.pos) {
+                            error(node.name, Diagnostics.A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
+                        }
                     }
-                    else if (node.pos < firstNonAmbientClassOrFunc.pos) {
-                        error(node.name, Diagnostics.A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
+
+                    // if the module merges with a class declaration in the same lexical scope,
+                    // we need to track this to ensure the correct emit.
+                    const mergedClass = getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);
+                    if (mergedClass &&
+                        inSameLexicalScope(node, mergedClass)) {
+                        getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithClass;
                     }
                 }
-
-                // if the module merges with a class declaration in the same lexical scope,
-                // we need to track this to ensure the correct emit.
-                const mergedClass = getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);
-                if (mergedClass &&
-                    inSameLexicalScope(node, mergedClass)) {
-                    getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithClass;
+                if (compilerOptions.verbatimModuleSyntax && node.parent.kind === SyntaxKind.SourceFile) {
+                    const exportModifier = node.modifiers?.find(m => m.kind === SyntaxKind.ExportKeyword);
+                    if (exportModifier) {
+                        error(exportModifier, Diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+                    }
                 }
             }
 
@@ -43362,7 +43401,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function checkAliasSymbol(node: ImportEqualsDeclaration | VariableDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier | NamespaceExport | BindingElement) {
+    function checkAliasSymbol(node: AliasDeclarationNode) {
         let symbol = getSymbolOfDeclaration(node);
         const target = resolveAlias(symbol);
 
@@ -43422,7 +43461,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(node, message, symbolToString(symbol));
             }
 
-            if (compilerOptions.isolatedModules
+            if (getIsolatedModules(compilerOptions)
                 && !isTypeOnlyImportOrExportDeclaration(node)
                 && !(node.flags & NodeFlags.Ambient)) {
                 const typeOnlyAlias = getTypeOnlyAliasDeclaration(symbol);
@@ -43432,11 +43471,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         case SyntaxKind.ImportClause:
                         case SyntaxKind.ImportSpecifier:
                         case SyntaxKind.ImportEqualsDeclaration: {
-                            if (compilerOptions.preserveValueImports) {
+                            if (compilerOptions.preserveValueImports || compilerOptions.verbatimModuleSyntax) {
                                 Debug.assertIsDefined(node.name, "An ImportClause with a symbol should have a name");
-                                const message = isType
-                                    ? Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedModules_are_both_enabled
-                                    : Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedModules_are_both_enabled;
+                                const message = compilerOptions.verbatimModuleSyntax && isInternalModuleImportEqualsDeclaration(node)
+                                    ? Diagnostics.An_import_alias_cannot_resolve_to_a_type_or_type_only_declaration_when_verbatimModuleSyntax_is_enabled
+                                    : isType
+                                        ? compilerOptions.verbatimModuleSyntax
+                                            ? Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled
+                                            : Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedModules_are_both_enabled
+                                        : compilerOptions.verbatimModuleSyntax
+                                            ? Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled
+                                            : Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedModules_are_both_enabled;
                                 const name = idText(node.kind === SyntaxKind.ImportSpecifier ? node.propertyName || node.name : node.name);
                                 addTypeOnlyDeclarationRelatedInfo(
                                     error(node, message, name),
@@ -43445,7 +43490,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 );
                             }
                             if (isType && node.kind === SyntaxKind.ImportEqualsDeclaration && hasEffectiveModifier(node, ModifierFlags.Export)) {
-                                error(node, Diagnostics.Cannot_use_export_import_on_a_type_or_type_only_namespace_when_the_isolatedModules_flag_is_provided);
+                                error(node, Diagnostics.Cannot_use_export_import_on_a_type_or_type_only_namespace_when_0_is_enabled, isolatedModulesLikeFlagName);
                             }
                             break;
                         }
@@ -43453,20 +43498,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // Don't allow re-exporting an export that will be elided when `--isolatedModules` is set.
                             // The exception is that `import type { A } from './a'; export { A }` is allowed
                             // because single-file analysis can determine that the export should be dropped.
-                            if (getSourceFileOfNode(typeOnlyAlias) !== getSourceFileOfNode(node)) {
-                                const message = isType
-                                    ? Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type
-                                    : Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type_only_re_export_when_isolatedModules_is_enabled;
+                            if (compilerOptions.verbatimModuleSyntax || getSourceFileOfNode(typeOnlyAlias) !== getSourceFileOfNode(node)) {
                                 const name = idText(node.propertyName || node.name);
-                                addTypeOnlyDeclarationRelatedInfo(
-                                    error(node, message, name),
-                                    isType ? undefined : typeOnlyAlias,
-                                    name
-                                );
-                                return;
+                                const diagnostic = isType
+                                    ? error(node, Diagnostics.Re_exporting_a_type_when_0_is_enabled_requires_using_export_type, isolatedModulesLikeFlagName)
+                                    : error(node, Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type_only_re_export_when_1_is_enabled, name, isolatedModulesLikeFlagName);
+                                addTypeOnlyDeclarationRelatedInfo(diagnostic, isType ? undefined : typeOnlyAlias, name);
+                                break;
                             }
                         }
                     }
+                }
+
+                if (compilerOptions.verbatimModuleSyntax &&
+                    node.kind !== SyntaxKind.ImportEqualsDeclaration &&
+                    !isInJSFile(node) &&
+                    (moduleKind === ModuleKind.CommonJS || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)
+                ) {
+                    error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
                 }
             }
 
@@ -43811,28 +43860,49 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkTypeAssignableTo(checkExpressionCached(node.expression), getTypeFromTypeNode(typeAnnotationNode), node.expression);
         }
 
+        const isIllegalExportDefaultInCJS = !node.isExportEquals &&
+            compilerOptions.verbatimModuleSyntax &&
+            (moduleKind === ModuleKind.CommonJS || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS);
+
         if (node.expression.kind === SyntaxKind.Identifier) {
             const id = node.expression as Identifier;
             const sym = resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node);
             if (sym) {
                 markAliasReferenced(sym, id);
                 // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
-                const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
-                if (getAllSymbolFlags(target) & SymbolFlags.Value) {
+                if (getAllSymbolFlags(sym) & SymbolFlags.Value) {
                     // However if it is a value, we need to check it's being used correctly
-                    checkExpressionCached(node.expression);
+                    checkExpressionCached(id);
+                    if (!isIllegalExportDefaultInCJS && compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
+                        error(id,
+                            node.isExportEquals
+                                ? Diagnostics.An_export_declaration_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration
+                                : Diagnostics.An_export_default_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration,
+                            idText(id));
+                    }
+                }
+                else if (!isIllegalExportDefaultInCJS && compilerOptions.verbatimModuleSyntax) {
+                    error(id,
+                        node.isExportEquals
+                            ? Diagnostics.An_export_declaration_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type
+                            : Diagnostics.An_export_default_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type,
+                        idText(id));
                 }
             }
             else {
-                checkExpressionCached(node.expression); // doesn't resolve, check as expression to mark as error
+                checkExpressionCached(id); // doesn't resolve, check as expression to mark as error
             }
 
             if (getEmitDeclarations(compilerOptions)) {
-                collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true);
+                collectLinkedAliases(id, /*setVisibility*/ true);
             }
         }
         else {
             checkExpressionCached(node.expression);
+        }
+
+        if (isIllegalExportDefaultInCJS) {
+            error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
         }
 
         checkExternalModuleExports(container);
@@ -45423,6 +45493,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isValueAliasDeclaration(node: Node): boolean {
+        Debug.assert(!compilerOptions.verbatimModuleSyntax);
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
                 return isAliasResolvedToValue(getSymbolOfDeclaration(node as ImportEqualsDeclaration));
@@ -45476,6 +45547,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
+        Debug.assert(!compilerOptions.verbatimModuleSyntax);
         if (isAliasSymbolDeclaration(node)) {
             const symbol = getSymbolOfDeclaration(node as Declaration);
             const links = symbol && getSymbolLinks(symbol);
@@ -46461,6 +46533,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         break;
 
                     case SyntaxKind.ExportKeyword:
+                        if (compilerOptions.verbatimModuleSyntax &&
+                            !(node.flags & NodeFlags.Ambient) &&
+                            node.kind !== SyntaxKind.TypeAliasDeclaration &&
+                            node.kind !== SyntaxKind.InterfaceDeclaration &&
+                            // ModuleDeclaration needs to be checked that it is uninstantiated later
+                            node.kind !== SyntaxKind.ModuleDeclaration &&
+                            node.parent.kind === SyntaxKind.SourceFile &&
+                            (moduleKind === ModuleKind.CommonJS || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)
+                        ) {
+                            return grammarErrorOnNode(modifier, Diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+                        }
                         if (flags & ModifierFlags.Export) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "export");
                         }
@@ -47983,6 +48066,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarImportCallExpression(node: ImportCall): boolean {
+        if (compilerOptions.verbatimModuleSyntax && moduleKind === ModuleKind.CommonJS) {
+            return grammarErrorOnNode(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+        }
+
         if (moduleKind === ModuleKind.ES2015) {
             return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_or_nodenext);
         }

@@ -4893,9 +4893,6 @@ export enum ExitStatus {
 
     // When build is skipped because project references form cycle
     ProjectReferenceCycle_OutputsSkipped = 4,
-
-    /** @deprecated Use ProjectReferenceCycle_OutputsSkipped instead. */
-    ProjectReferenceCycle_OutputsSkupped = 4,
 }
 
 export interface EmitResult {
@@ -5452,6 +5449,21 @@ export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitialize
 
 /** @internal */
 export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
+
+/** @internal */
+export type AliasDeclarationNode =
+    | ImportEqualsDeclaration
+    | VariableDeclarationInitializedTo<RequireOrImportCall
+    | AccessExpression>
+    | ImportClause
+    | NamespaceImport
+    | ImportSpecifier
+    | ExportSpecifier
+    | NamespaceExport
+    | BindingElementOfBareOrAccessedRequire;
+
+/** @internal */
+export type BindingElementOfBareOrAccessedRequire = BindingElement & { parent: { parent: VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression> } };
 
 /** @internal */
 export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
@@ -7087,6 +7099,7 @@ export interface CompilerOptions {
     types?: string[];
     /** Paths used to compute primary types search locations */
     typeRoots?: string[];
+    verbatimModuleSyntax?: boolean;
     /** @internal */ version?: boolean;
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;
