@@ -1417,10 +1417,6 @@ export interface ExternalProject {
      */
     options: ExternalProjectCompilerOptions;
     /**
-     * @deprecated typingOptions. Use typeAcquisition instead
-     */
-    typingOptions?: TypeAcquisition;
-    /**
      * Explicitly specified type acquisition for the project
      */
     typeAcquisition?: TypeAcquisition;

@@ -4,7 +4,7 @@ import { notImplementedHost } from "./extract/helpers";
 import { applyChanges, ChangeTracker, deleteNode, LeadingTriviaOption, TrailingTriviaOption } from "../../../services/textChanges";
 import { FormatContext } from "../../../services/types";
 import { getFormatContext } from "../../../services/formatting/formatting";
-import { getNewLineCharacter } from "../../../compiler/sys/utilities";
+import { getNewLineCharacter } from "../../../compiler/utilities";
 
 // Some tests have trailing whitespace
 

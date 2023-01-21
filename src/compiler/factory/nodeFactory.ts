@@ -7295,8 +7295,11 @@ const syntheticFactory: BaseNodeFactory = {
 
 export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
 
+/** @deprecated */
 export function createUnparsedSourceFile(text: string): UnparsedSource;
+/** @deprecated */
 export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
+/** @deprecated */
 export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
 export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapTextOrStripInternal?: string | boolean): UnparsedSource {
     let stripInternal: boolean | undefined;
@@ -7467,10 +7470,12 @@ function parseOldFileOfCurrentEmit(bundleFileInfo: BundleFileInfo) {
 }
 
 // TODO(rbuckton): Move part of this to factory
+/** @deprecated */
 export function createInputFiles(
     javascriptText: string,
     declarationText: string
 ): InputFiles;
+/** @deprecated */
 export function createInputFiles(
     javascriptText: string,
     declarationText: string,
@@ -7479,6 +7484,7 @@ export function createInputFiles(
     declarationMapPath: string | undefined,
     declarationMapText: string | undefined
 ): InputFiles;
+/** @deprecated */
 export function createInputFiles(
     readFileText: (path: string) => string | undefined,
     javascriptPath: string,
@@ -7515,7 +7521,7 @@ export function createInputFiles(
             declarationMapTextOrBuildInfoPath,
         );
 }
-/** @internal */
+/** @deprecated @internal */
 export function createInputFilesWithFilePaths(
     readFileText: (path: string) => string | undefined,
     javascriptPath: string,
@@ -7568,7 +7574,7 @@ export function createInputFilesWithFilePaths(
     });
     return node;
 }
-/** @internal */
+/** @deprecated @internal */
 export function createInputFilesWithFileTexts(
     javascriptPath: string | undefined,
     javascriptText: string,

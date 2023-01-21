@@ -6,7 +6,7 @@ import {
     isParenthesizedExpression,
 } from "../../compiler/factory/nodeTests";
 import {
-    AwaitKeywordToken,
+    AwaitKeyword,
     Node,
     SourceFile,
     SyntaxKind,
@@ -44,7 +44,7 @@ registerCodeFix({
 });
 
 function makeChange(changeTracker: ChangeTracker, sourceFile: SourceFile, span: TextSpan) {
-    const awaitKeyword = tryCast(getTokenAtPosition(sourceFile, span.start), (node): node is AwaitKeywordToken => node.kind === SyntaxKind.AwaitKeyword);
+    const awaitKeyword = tryCast(getTokenAtPosition(sourceFile, span.start), (node): node is AwaitKeyword => node.kind === SyntaxKind.AwaitKeyword);
     const awaitExpression = awaitKeyword && tryCast(awaitKeyword.parent, isAwaitExpression);
     if (!awaitExpression) {
         return;

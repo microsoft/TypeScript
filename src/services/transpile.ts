@@ -23,7 +23,6 @@ import {
     getImpliedNodeFormatForFile,
     getSetExternalModuleIndicator,
 } from "../compiler/program/program";
-import { getNewLineCharacter } from "../compiler/sys/utilities";
 import {
     CommandLineOptionOfCustomType,
     CompilerHost,
@@ -34,6 +33,7 @@ import {
 import {
     forEachEntry,
     getEmitScriptTarget,
+    getNewLineCharacter,
 } from "../compiler/utilities";
 import { getDefaultCompilerOptions } from "./services";
 import { cloneCompilerOptions } from "./utilities";

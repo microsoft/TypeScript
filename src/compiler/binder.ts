@@ -2431,9 +2431,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
             // strict mode identifiers
             const originalKeywordKind = identifierToKeywordKind(node);
+            if (originalKeywordKind === undefined) {
+                return;
+            }
+
             if (inStrictMode &&
-                originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
-                originalKeywordKind! <= SyntaxKind.LastFutureReservedWord) {
+                originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
+                originalKeywordKind <= SyntaxKind.LastFutureReservedWord) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node,
                     getStrictModeIdentifierMessage(node), declarationNameToString(node)));
             }

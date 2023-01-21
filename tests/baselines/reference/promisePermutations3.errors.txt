@@ -398,7 +398,7 @@ tests/cases/compiler/promisePermutations3.ts(165,21): error TS2345: Argument of 
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
 !!! error TS2769:       Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
-!!! related TS2728 /.ts/lib.es5.d.ts:1538:5: 'catch' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'catch' is declared here.
 !!! related TS2771 tests/cases/compiler/promisePermutations3.ts:7:5: The last overload is declared here.
     var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
     
@@ -445,5 +445,5 @@ tests/cases/compiler/promisePermutations3.ts(165,21): error TS2345: Argument of 
                         ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ <T>(x: T): IPromise<T>; <T>(x: T, y: T): Promise<T>; }' is not assignable to parameter of type '(value: (x: any) => any) => Promise<unknown>'.
 !!! error TS2345:   Property 'catch' is missing in type 'IPromise<any>' but required in type 'Promise<unknown>'.
-!!! related TS2728 /.ts/lib.es5.d.ts:1538:5: 'catch' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'catch' is declared here.
     var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok

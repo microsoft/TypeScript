@@ -204,7 +204,7 @@ function f() {
 {"version":3,"file":"first_part3.js","sourceRoot":"","sources":["first_part3.ts"],"names":[],"mappings":"AAAA,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
 //// [/src/first/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./first_part1.ts","./first_part2.ts","./first_part3.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17207381411-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","signature":"-12382020913-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n","affectsGlobalScope":true},{"version":"4973778178-console.log(f());\r\n","signature":"5381-","affectsGlobalScope":true},{"version":"6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}","signature":"-5732730923-declare function f(): string;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./first_part3.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./first_part1.ts","./first_part2.ts","./first_part3.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17207381411-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","signature":"-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n","affectsGlobalScope":true},{"version":"4973778178-console.log(f());\r\n","signature":"5381-","affectsGlobalScope":true},{"version":"6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}","signature":"-6420944280-declare function f(): string;\n","affectsGlobalScope":true}],"options":{"composite":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./first_part3.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -228,11 +228,11 @@ function f() {
       "./first_part1.ts": {
         "original": {
           "version": "-17207381411-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n",
-          "signature": "-12382020913-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n",
+          "signature": "-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n",
           "affectsGlobalScope": true
         },
         "version": "-17207381411-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n",
-        "signature": "-12382020913-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n",
+        "signature": "-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n",
         "affectsGlobalScope": true
       },
       "./first_part2.ts": {
@@ -248,11 +248,11 @@ function f() {
       "./first_part3.ts": {
         "original": {
           "version": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}",
-          "signature": "-5732730923-declare function f(): string;\r\n",
+          "signature": "-6420944280-declare function f(): string;\n",
           "affectsGlobalScope": true
         },
         "version": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}",
-        "signature": "-5732730923-declare function f(): string;\r\n",
+        "signature": "-6420944280-declare function f(): string;\n",
         "affectsGlobalScope": true
       }
     },
@@ -275,7 +275,7 @@ function f() {
     "latestChangedDtsFile": "./first_part3.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1508
+  "size": 1492
 }
 
 //// [/src/second/second_part1.d.ts]
@@ -325,7 +325,7 @@ var C = (function () {
 {"version":3,"file":"second_part2.js","sourceRoot":"","sources":["second_part2.ts"],"names":[],"mappings":"AAAA;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
 
 //// [/src/second/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./second_part1.ts","./second_part2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-21603042336-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n","signature":"-4200194009-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\n","affectsGlobalScope":true},{"version":"9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n","signature":"1950347108-declare class C {\r\n    doSomething(): void;\r\n}\r\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./second_part2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./second_part1.ts","./second_part2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-21603042336-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n","signature":"-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n","affectsGlobalScope":true},{"version":"9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n","signature":"-4226833059-declare class C {\n    doSomething(): void;\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./second_part2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/second/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -348,21 +348,21 @@ var C = (function () {
       "./second_part1.ts": {
         "original": {
           "version": "-21603042336-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n",
-          "signature": "-4200194009-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\n",
+          "signature": "-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n",
           "affectsGlobalScope": true
         },
         "version": "-21603042336-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n",
-        "signature": "-4200194009-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\n",
+        "signature": "-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n",
         "affectsGlobalScope": true
       },
       "./second_part2.ts": {
         "original": {
           "version": "9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n",
-          "signature": "1950347108-declare class C {\r\n    doSomething(): void;\r\n}\r\n",
+          "signature": "-4226833059-declare class C {\n    doSomething(): void;\n}\n",
           "affectsGlobalScope": true
         },
         "version": "9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n",
-        "signature": "1950347108-declare class C {\r\n    doSomething(): void;\r\n}\r\n",
+        "signature": "-4226833059-declare class C {\n    doSomething(): void;\n}\n",
         "affectsGlobalScope": true
       }
     },
@@ -385,7 +385,7 @@ var C = (function () {
     "latestChangedDtsFile": "./second_part2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1386
+  "size": 1374
 }
 
 //// [/src/third/third_part1.d.ts]
@@ -404,7 +404,7 @@ c.doSomething();
 {"version":3,"file":"third_part1.js","sourceRoot":"","sources":["third_part1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
 
 //// [/src/third/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../first/first_part1.d.ts","../first/first_part2.d.ts","../first/first_part3.d.ts","../second/second_part1.d.ts","../second/second_part2.d.ts","./third_part1.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12382020913-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n","affectsGlobalScope":true},"-2054710634-//# sourceMappingURL=first_part2.d.ts.map",{"version":"-5732730923-declare function f(): string;\r\n","affectsGlobalScope":true},{"version":"-4200194009-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\n","affectsGlobalScope":true},{"version":"1950347108-declare class C {\r\n    doSomething(): void;\r\n}\r\n","affectsGlobalScope":true},{"version":"10470273651-var c = new C();\r\nc.doSomething();\r\n","signature":"2394638288-declare var c: C;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3,4,5,6,7],"latestChangedDtsFile":"./third_part1.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../first/first_part1.d.ts","../first/first_part2.d.ts","../first/first_part3.d.ts","../second/second_part1.d.ts","../second/second_part2.d.ts","./third_part1.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n","affectsGlobalScope":true},"-2054710634-//# sourceMappingURL=first_part2.d.ts.map",{"version":"-6420944280-declare function f(): string;\n","affectsGlobalScope":true},{"version":"-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n","affectsGlobalScope":true},{"version":"-4226833059-declare class C {\n    doSomething(): void;\n}\n","affectsGlobalScope":true},{"version":"10470273651-var c = new C();\r\nc.doSomething();\r\n","signature":"1894672131-declare var c: C;\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3,4,5,6,7],"latestChangedDtsFile":"./third_part1.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -430,11 +430,11 @@ c.doSomething();
       },
       "../first/first_part1.d.ts": {
         "original": {
-          "version": "-12382020913-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n",
+          "version": "-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n",
           "affectsGlobalScope": true
         },
-        "version": "-12382020913-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n",
-        "signature": "-12382020913-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n",
+        "version": "-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n",
+        "signature": "-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n",
         "affectsGlobalScope": true
       },
       "../first/first_part2.d.ts": {
@@ -443,39 +443,39 @@ c.doSomething();
       },
       "../first/first_part3.d.ts": {
         "original": {
-          "version": "-5732730923-declare function f(): string;\r\n",
+          "version": "-6420944280-declare function f(): string;\n",
           "affectsGlobalScope": true
         },
-        "version": "-5732730923-declare function f(): string;\r\n",
-        "signature": "-5732730923-declare function f(): string;\r\n",
+        "version": "-6420944280-declare function f(): string;\n",
+        "signature": "-6420944280-declare function f(): string;\n",
         "affectsGlobalScope": true
       },
       "../second/second_part1.d.ts": {
         "original": {
-          "version": "-4200194009-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\n",
+          "version": "-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n",
           "affectsGlobalScope": true
         },
-        "version": "-4200194009-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\n",
-        "signature": "-4200194009-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\n",
+        "version": "-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n",
+        "signature": "-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n",
         "affectsGlobalScope": true
       },
       "../second/second_part2.d.ts": {
         "original": {
-          "version": "1950347108-declare class C {\r\n    doSomething(): void;\r\n}\r\n",
+          "version": "-4226833059-declare class C {\n    doSomething(): void;\n}\n",
           "affectsGlobalScope": true
         },
-        "version": "1950347108-declare class C {\r\n    doSomething(): void;\r\n}\r\n",
-        "signature": "1950347108-declare class C {\r\n    doSomething(): void;\r\n}\r\n",
+        "version": "-4226833059-declare class C {\n    doSomething(): void;\n}\n",
+        "signature": "-4226833059-declare class C {\n    doSomething(): void;\n}\n",
         "affectsGlobalScope": true
       },
       "./third_part1.ts": {
         "original": {
           "version": "10470273651-var c = new C();\r\nc.doSomething();\r\n",
-          "signature": "2394638288-declare var c: C;\r\n",
+          "signature": "1894672131-declare var c: C;\n",
           "affectsGlobalScope": true
         },
         "version": "10470273651-var c = new C();\r\nc.doSomething();\r\n",
-        "signature": "2394638288-declare var c: C;\r\n",
+        "signature": "1894672131-declare var c: C;\n",
         "affectsGlobalScope": true
       }
     },
@@ -502,6 +502,6 @@ c.doSomething();
     "latestChangedDtsFile": "./third_part1.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1689
+  "size": 1659
 }
 

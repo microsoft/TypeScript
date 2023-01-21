@@ -5,7 +5,7 @@ import * as vpath from "./_namespaces/vpath";
 import * as documents from "./_namespaces/documents";
 import * as collections from "./_namespaces/collections";
 import * as Harness from "./_namespaces/Harness";
-import { getNewLineCharacter } from "../compiler/sys/utilities";
+import { getNewLineCharacter } from "../compiler/utilities";
 import { FileSystemEntries, matchFiles } from "../compiler/fileMatcher";
 
 /**
@@ -245,7 +245,7 @@ export class CompilerHost implements ts.CompilerHost {
         if (sys instanceof vfs.FileSystem) sys = new System(sys);
         this.sys = sys;
         this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
-        this._newLine = getNewLineCharacter(options, () => this.sys.newLine);
+        this._newLine = getNewLineCharacter(options);
         this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
         this._setParentNodes = setParentNodes;
         this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);

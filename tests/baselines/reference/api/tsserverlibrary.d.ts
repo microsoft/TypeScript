@@ -1145,10 +1145,6 @@ declare namespace ts {
                  */
                 options: ExternalProjectCompilerOptions;
                 /**
-                 * @deprecated typingOptions. Use typeAcquisition instead
-                 */
-                typingOptions?: TypeAcquisition;
-                /**
                  * Explicitly specified type acquisition for the project
                  */
                 typeAcquisition?: TypeAcquisition;
@@ -3846,9 +3842,6 @@ declare namespace ts {
             send(msg: protocol.Message): void;
             protected writeMessage(msg: protocol.Message): void;
             event<T extends object>(body: T, eventName: string): void;
-            /** @deprecated */
-            output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
-            private doOutput;
             private semanticCheck;
             private syntacticCheck;
             private suggestionCheck;
@@ -4334,15 +4327,15 @@ declare namespace ts {
         ShorthandPropertyAssignment = 300,
         SpreadAssignment = 301,
         EnumMember = 302,
-        UnparsedPrologue = 303,
-        UnparsedPrepend = 304,
-        UnparsedText = 305,
-        UnparsedInternalText = 306,
-        UnparsedSyntheticReference = 307,
+        /** @deprecated */ UnparsedPrologue = 303,
+        /** @deprecated */ UnparsedPrepend = 304,
+        /** @deprecated */ UnparsedText = 305,
+        /** @deprecated */ UnparsedInternalText = 306,
+        /** @deprecated */ UnparsedSyntheticReference = 307,
         SourceFile = 308,
         Bundle = 309,
-        UnparsedSource = 310,
-        InputFiles = 311,
+        /** @deprecated */ UnparsedSource = 310,
+        /** @deprecated */ InputFiles = 311,
         JSDocTypeExpression = 312,
         JSDocNameReference = 313,
         JSDocMemberName = 314,
@@ -4572,10 +4565,6 @@ declare namespace ts {
     type AssertKeyword = KeywordToken<SyntaxKind.AssertKeyword>;
     type AwaitKeyword = KeywordToken<SyntaxKind.AwaitKeyword>;
     type CaseKeyword = KeywordToken<SyntaxKind.CaseKeyword>;
-    /** @deprecated Use `AwaitKeyword` instead. */
-    type AwaitKeywordToken = AwaitKeyword;
-    /** @deprecated Use `AssertsKeyword` instead. */
-    type AssertsToken = AssertsKeyword;
     interface ModifierToken<TKind extends ModifierSyntaxKind> extends KeywordToken<TKind> {
     }
     type AbstractKeyword = ModifierToken<SyntaxKind.AbstractKeyword>;
@@ -4593,8 +4582,6 @@ declare namespace ts {
     type OutKeyword = ModifierToken<SyntaxKind.OutKeyword>;
     type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
     type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
-    /** @deprecated Use `ReadonlyKeyword` instead. */
-    type ReadonlyToken = ReadonlyKeyword;
     type Modifier = AbstractKeyword | AccessorKeyword | AsyncKeyword | ConstKeyword | DeclareKeyword | DefaultKeyword | ExportKeyword | InKeyword | PrivateKeyword | ProtectedKeyword | PublicKeyword | OutKeyword | OverrideKeyword | ReadonlyKeyword | StaticKeyword;
     type ModifierLike = Modifier | Decorator;
     type AccessibilityModifier = PublicKeyword | PrivateKeyword | ProtectedKeyword;
@@ -5726,8 +5713,8 @@ declare namespace ts {
         readonly name: Identifier;
     }
     type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
-    type TypeOnlyCompatibleAliasDeclaration = ImportClause | ImportEqualsDeclaration | NamespaceImport | ImportOrExportSpecifier;
-    type TypeOnlyAliasDeclaration = ImportClause & {
+    type TypeOnlyCompatibleAliasDeclaration = ImportClause | ImportEqualsDeclaration | NamespaceImport | ImportOrExportSpecifier | ExportDeclaration | NamespaceExport;
+    type TypeOnlyImportDeclaration = ImportClause & {
         readonly isTypeOnly: true;
         readonly name: Identifier;
     } | ImportEqualsDeclaration & {
@@ -5744,7 +5731,8 @@ declare namespace ts {
                 readonly isTypeOnly: true;
             };
         };
-    }) | ExportSpecifier & ({
+    });
+    type TypeOnlyExportDeclaration = ExportSpecifier & ({
         readonly isTypeOnly: true;
     } | {
         readonly parent: NamedExports & {
@@ -5752,7 +5740,14 @@ declare namespace ts {
                 readonly isTypeOnly: true;
             };
         };
-    });
+    }) | ExportDeclaration & {
+        readonly isTypeOnly: true;
+    } | NamespaceExport & {
+        readonly parent: ExportDeclaration & {
+            readonly isTypeOnly: true;
+        };
+    };
+    type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
     /**
      * This is either an `export =` or an `export default` declaration.
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
@@ -6109,9 +6104,10 @@ declare namespace ts {
     }
     interface Bundle extends Node {
         readonly kind: SyntaxKind.Bundle;
-        readonly prepends: readonly (InputFiles | UnparsedSource)[];
+        /** @deprecated */ readonly prepends: readonly (InputFiles | UnparsedSource)[];
         readonly sourceFiles: readonly SourceFile[];
     }
+    /** @deprecated */
     interface InputFiles extends Node {
         readonly kind: SyntaxKind.InputFiles;
         javascriptPath?: string;
@@ -6123,6 +6119,7 @@ declare namespace ts {
         declarationMapPath?: string;
         declarationMapText?: string;
     }
+    /** @deprecated */
     interface UnparsedSource extends Node {
         readonly kind: SyntaxKind.UnparsedSource;
         fileName: string;
@@ -6138,28 +6135,35 @@ declare namespace ts {
         readonly syntheticReferences?: readonly UnparsedSyntheticReference[];
         readonly texts: readonly UnparsedSourceText[];
     }
+    /** @deprecated */
     type UnparsedSourceText = UnparsedPrepend | UnparsedTextLike;
+    /** @deprecated */
     type UnparsedNode = UnparsedPrologue | UnparsedSourceText | UnparsedSyntheticReference;
+    /** @deprecated */
     interface UnparsedSection extends Node {
         readonly kind: SyntaxKind;
         readonly parent: UnparsedSource;
         readonly data?: string;
     }
+    /** @deprecated */
     interface UnparsedPrologue extends UnparsedSection {
         readonly kind: SyntaxKind.UnparsedPrologue;
         readonly parent: UnparsedSource;
         readonly data: string;
     }
+    /** @deprecated */
     interface UnparsedPrepend extends UnparsedSection {
         readonly kind: SyntaxKind.UnparsedPrepend;
         readonly parent: UnparsedSource;
         readonly data: string;
         readonly texts: readonly UnparsedTextLike[];
     }
+    /** @deprecated */
     interface UnparsedTextLike extends UnparsedSection {
         readonly kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText;
         readonly parent: UnparsedSource;
     }
+    /** @deprecated */
     interface UnparsedSyntheticReference extends UnparsedSection {
         readonly kind: SyntaxKind.UnparsedSyntheticReference;
         readonly parent: UnparsedSource;
@@ -6430,8 +6434,6 @@ declare namespace ts {
         OmitThisParameter = 33554432,
         AllowThisInObjectLiteral = 32768,
         AllowQualifiedNameInPlaceOfIdentifier = 65536,
-        /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
-        AllowQualifedNameInPlaceOfIdentifier = 65536,
         AllowAnonymousIdentifier = 131072,
         AllowEmptyUnionOrIntersection = 262144,
         AllowEmptyTuple = 524288,
@@ -6466,7 +6468,6 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        /** @deprecated */ WriteOwnNameForAnyLike = 0,
         NodeBuilderFlagsMask = 848330091
     }
     enum SymbolFormatFlags {
@@ -6922,8 +6923,6 @@ declare namespace ts {
         PriorityImpliesCombination = 416,
         Circularity = -1
     }
-    /** @deprecated Use FileExtensionInfo instead. */
-    type JsFileExtensionInfo = FileExtensionInfo;
     interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
@@ -7146,11 +7145,6 @@ declare namespace ts {
         [option: string]: CompilerOptionsValue | undefined;
     }
     interface TypeAcquisition {
-        /**
-         * @deprecated typingOptions.enableAutoDiscovery
-         * Use typeAcquisition.enable instead.
-         */
-        enableAutoDiscovery?: boolean;
         enable?: boolean;
         include?: string[];
         exclude?: string[];
@@ -7886,8 +7880,10 @@ declare namespace ts {
         updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
         createCommaListExpression(elements: readonly Expression[]): CommaListExpression;
         updateCommaListExpression(node: CommaListExpression, elements: readonly Expression[]): CommaListExpression;
-        createBundle(sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
-        updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
+        createBundle(sourceFiles: readonly SourceFile[]): Bundle;
+        /** @deprecated*/ createBundle(sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
+        updateBundle(node: Bundle, sourceFiles: readonly SourceFile[]): Bundle;
+        /** @deprecated*/ updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
         createComma(left: Expression, right: Expression): BinaryExpression;
         createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
         createAssignment(left: Expression, right: Expression): AssignmentExpression<EqualsToken>;
@@ -8589,7 +8585,9 @@ declare namespace ts {
     function isNonNullChain(node: Node): node is NonNullChain;
     function isBreakOrContinueStatement(node: Node): node is BreakOrContinueStatement;
     function isNamedExportBindings(node: Node): node is NamedExportBindings;
+    /** @deprecated */
     function isUnparsedTextLike(node: Node): node is UnparsedTextLike;
+    /** @deprecated */
     function isUnparsedNode(node: Node): node is UnparsedNode;
     function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag;
     /**
@@ -8608,6 +8606,8 @@ declare namespace ts {
     function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken;
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
     function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier;
+    function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration;
+    function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration;
     function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration;
     function isAssertionKey(node: Node): node is AssertionKey;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
@@ -8631,13 +8631,30 @@ declare namespace ts {
      */
     function isTypeNode(node: Node): node is TypeNode;
     function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode;
+    function isArrayBindingElement(node: Node): node is ArrayBindingElement;
     function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName;
     function isCallLikeExpression(node: Node): node is CallLikeExpression;
     function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
     function isTemplateLiteral(node: Node): node is TemplateLiteral;
+    function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression;
+    function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
+    /**
+     * Determines whether a node is an expression based only on its kind.
+     */
+    function isExpression(node: Node): node is Expression;
     function isAssertionExpression(node: Node): node is AssertionExpression;
     function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
     function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
+    function isConciseBody(node: Node): node is ConciseBody;
+    function isForInitializer(node: Node): node is ForInitializer;
+    function isModuleBody(node: Node): node is ModuleBody;
+    function isNamedImportBindings(node: Node): node is NamedImportBindings;
+    function isStatement(node: Node): node is Statement;
+    function isModuleReference(node: Node): node is ModuleReference;
+    function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression;
+    function isJsxChild(node: Node): node is JsxChild;
+    function isJsxAttributeLike(node: Node): node is JsxAttributeLike;
+    function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression;
     function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
@@ -8658,11 +8675,17 @@ declare namespace ts {
     };
     function isExternalModule(file: SourceFile): boolean;
     function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean;
+    /** @deprecated */
     function createUnparsedSourceFile(text: string): UnparsedSource;
+    /** @deprecated */
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
+    /** @deprecated */
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
+    /** @deprecated */
     function createInputFiles(javascriptText: string, declarationText: string): InputFiles;
+    /** @deprecated */
     function createInputFiles(javascriptText: string, declarationText: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
+    /** @deprecated */
     function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
     /**
      * Create an external source map source file reference
@@ -8750,8 +8773,15 @@ declare namespace ts {
     function isPlusToken(node: Node): node is PlusToken;
     function isMinusToken(node: Node): node is MinusToken;
     function isAsteriskToken(node: Node): node is AsteriskToken;
+    function isExclamationToken(node: Node): node is ExclamationToken;
+    function isQuestionToken(node: Node): node is QuestionToken;
+    function isColonToken(node: Node): node is ColonToken;
+    function isQuestionDotToken(node: Node): node is QuestionDotToken;
+    function isEqualsGreaterThanToken(node: Node): node is EqualsGreaterThanToken;
     function isIdentifier(node: Node): node is Identifier;
     function isPrivateIdentifier(node: Node): node is PrivateIdentifier;
+    function isAssertsKeyword(node: Node): node is AssertsKeyword;
+    function isAwaitKeyword(node: Node): node is AwaitKeyword;
     function isQualifiedName(node: Node): node is QualifiedName;
     function isComputedPropertyName(node: Node): node is ComputedPropertyName;
     function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration;
@@ -8895,9 +8925,11 @@ declare namespace ts {
     function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment;
     function isSpreadAssignment(node: Node): node is SpreadAssignment;
     function isEnumMember(node: Node): node is EnumMember;
+    /** @deprecated */
     function isUnparsedPrepend(node: Node): node is UnparsedPrepend;
     function isSourceFile(node: Node): node is SourceFile;
     function isBundle(node: Node): node is Bundle;
+    /** @deprecated */
     function isUnparsedSource(node: Node): node is UnparsedSource;
     function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
     function isJSDocNameReference(node: Node): node is JSDocNameReference;
@@ -8940,6 +8972,12 @@ declare namespace ts {
     function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
     function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
     function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
+    function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken;
+    function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode;
+    function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken;
+    function isQuestionOrPlusOrMinusToken(node: Node): node is QuestionToken | PlusToken | MinusToken;
+    function isModuleName(node: Node): node is ModuleName;
+    function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken;
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
     function canHaveModifiers(node: Node): node is HasModifiers;
     function canHaveDecorators(node: Node): node is HasDecorators;
@@ -9684,7 +9722,7 @@ declare namespace ts {
     }
     enum InvalidatedProjectKind {
         Build = 0,
-        UpdateBundle = 1,
+        /** @deprecated */ UpdateBundle = 1,
         UpdateOutputFileStamps = 2
     }
     interface InvalidatedProjectBase {
@@ -9716,6 +9754,7 @@ declare namespace ts {
         getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]>;
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
     }
+    /** @deprecated */
     interface UpdateBundleProject<T extends BuilderProgram> extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.UpdateBundle;
         emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;

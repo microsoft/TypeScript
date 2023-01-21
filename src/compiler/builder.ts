@@ -169,6 +169,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
      */
     latestChangedDtsFile: string | undefined;
     /**
+     * @deprecated
      * Bundle information either from oldState or current one so it can be used to complete the information in buildInfo when emitting only js or dts files
      */
     bundle?: BundleBuildInfo;

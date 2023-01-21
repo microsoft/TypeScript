@@ -339,6 +339,7 @@ import {
     NamespaceExport,
     NamespaceImport,
     NewExpression,
+    NewLineKind,
     Node,
     NodeArray,
     NodeFlags,
@@ -360,6 +361,7 @@ import {
     PartiallyEmittedExpression,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
+    PrinterOptions,
     PrintHandlers,
     PrivateIdentifier,
     ProjectReference,
@@ -3252,7 +3254,7 @@ export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | El
 export function setValueDeclaration(symbol: Symbol, node: Declaration): void {
     const { valueDeclaration } = symbol;
     if (!valueDeclaration ||
-        !(node.flags & NodeFlags.Ambient && !(valueDeclaration.flags & NodeFlags.Ambient)) &&
+        !(node.flags & NodeFlags.Ambient && !isInJSFile(node) && !(valueDeclaration.flags & NodeFlags.Ambient)) &&
         (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
         (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
         // other kinds of value declarations take precedence over modules and assignment declarations
@@ -6425,6 +6427,20 @@ export function directoryProbablyExists(directoryName: string, host: { directory
     return !host.directoryExists || host.directoryExists(directoryName);
 }
 
+const carriageReturnLineFeed = "\r\n";
+const lineFeed = "\n";
+
+/** @internal */
+export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
+    switch (options.newLine) {
+        case NewLineKind.CarriageReturnLineFeed:
+            return carriageReturnLineFeed;
+        case NewLineKind.LineFeed:
+        case undefined:
+                return lineFeed;
+    }
+}
+
 /**
  * Creates a new TextRange from the provided pos and end.
  *
@@ -6932,7 +6948,7 @@ export function getNameOfAccessExpression(node: AccessExpression) {
     return node.argumentExpression;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
     switch (section.kind) {
         case BundleFileSectionKind.Text:

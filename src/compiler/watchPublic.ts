@@ -55,7 +55,6 @@ import {
     PollingInterval,
     sys,
 } from "./sys/sys";
-import { getNewLineCharacter } from "./sys/utilities";
 import {
     BuildInfo,
     CompilerHost,
@@ -89,6 +88,7 @@ import {
     clearMap,
     closeFileWatcher,
     createCompilerDiagnostic,
+    getNewLineCharacter,
 } from "./utilities";
 import {
     createCompilerHostFromProgramHost,
@@ -464,7 +464,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
     reportWatchDiagnostic(Diagnostics.Starting_compilation_in_watch_mode);
     if (configFileName && !host.configFileParsingResult) {
-        newLine = getNewLineCharacter(optionsToExtendForConfigFile, () => host.getNewLine());
+        newLine = getNewLineCharacter(optionsToExtendForConfigFile);
         Debug.assert(!rootFileNames);
         parseConfigFile();
         newLine = updateNewLine();
@@ -691,7 +691,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function updateNewLine() {
-        return getNewLineCharacter(compilerOptions || optionsToExtendForConfigFile, () => host.getNewLine());
+        return getNewLineCharacter(compilerOptions || optionsToExtendForConfigFile);
     }
 
     function toPathWorker(fileName: string) {

@@ -88,7 +88,6 @@ import {
 } from "../compiler/scanner/scanner";
 import { positionIsSynthesized } from "../compiler/scanner/utilities";
 import { sys } from "../compiler/sys/sys";
-import { getNewLineCharacter } from "../compiler/sys/utilities";
 import { tracing } from "../compiler/tracing";
 import {
     __String,
@@ -190,6 +189,7 @@ import {
     getAssignmentDeclarationKind,
     getEmitDeclarations,
     getEscapedTextOfIdentifierOrLiteral,
+    getNewLineCharacter,
     getObjectFlags,
     getSourceFileOfNode,
     getTokenPosOfNode,
@@ -1695,7 +1695,7 @@ export function createLanguageService(
             getCancellationToken: () => cancellationToken,
             getCanonicalFileName,
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-            getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
+            getNewLine: () => getNewLineCharacter(newSettings),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
             writeFile: noop,
             getCurrentDirectory: () => currentDirectory,
@@ -2488,7 +2488,7 @@ export function createLanguageService(
     }
 
     function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
-        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
+        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, /*formatSettings*/ undefined), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
     }
 
     function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
