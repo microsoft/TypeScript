@@ -682,19 +682,6 @@ export class SessionClient implements LanguageService {
         return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
     }
 
-    getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-        const args = this.createFileLocationRequestArgs(fileName, position);
-
-        const request = this.processRequest<protocol.OccurrencesRequest>(protocol.CommandTypes.Occurrences, args);
-        const response = this.processResponse<protocol.OccurrencesResponse>(request);
-
-        return response.body!.map(entry => ({ // TODO: GH#18217
-            fileName: entry.file,
-            textSpan: this.decodeSpan(entry),
-            isWriteAccess: entry.isWriteAccess,
-        }));
-    }
-
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
         const args: protocol.DocumentHighlightsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), filesToSearch };
 

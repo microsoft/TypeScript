@@ -1113,12 +1113,13 @@ describe("unittests:: tsserver:: Projects", () => {
         });
 
         // Actions on file1 would result in assert
-        session.executeCommandSeq<ts.server.protocol.OccurrencesRequest>({
-            command: ts.server.protocol.CommandTypes.Occurrences,
+        session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
+            command: ts.server.protocol.CommandTypes.DocumentHighlights,
             arguments: {
                 file: filesFile1.path,
                 line: 1,
-                offset: filesFile1.content.indexOf("a")
+                offset: filesFile1.content.indexOf("a"),
+                filesToSearch: [filesFile1.path],
             }
         });
 

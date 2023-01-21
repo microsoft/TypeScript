@@ -121,7 +121,6 @@ import {
     hasStaticModifier,
     hasSyntacticModifier,
     hasTabstop,
-    HighlightSpanKind,
     HostCancellationToken,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
@@ -1531,7 +1530,6 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
     "getTypeDefinitionAtPosition",
     "getReferencesAtPosition",
     "findReferences",
-    "getOccurrencesAtPosition",
     "getDocumentHighlights",
     "getNavigateToItems",
     "getRenameInfo",
@@ -2109,18 +2107,6 @@ export function createLanguageService(
     }
 
     /// References and Occurrences
-    function getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined {
-        return flatMap(
-            getDocumentHighlights(fileName, position, [fileName]),
-            entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
-                fileName: entry.fileName,
-                textSpan: highlightSpan.textSpan,
-                isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                ...highlightSpan.isInString && { isInString: true },
-                ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
-            }))
-        );
-    }
 
     function getDocumentHighlights(fileName: string, position: number, filesToSearch: readonly string[]): DocumentHighlights[] | undefined {
         const normalizedFileName = normalizePath(fileName);
@@ -3004,7 +2990,6 @@ export function createLanguageService(
         getReferencesAtPosition,
         findReferences,
         getFileReferences,
-        getOccurrencesAtPosition,
         getDocumentHighlights,
         getNameOrDottedNameSpan,
         getBreakpointStatementAtPosition,
