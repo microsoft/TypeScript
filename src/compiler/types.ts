@@ -8008,7 +8008,6 @@ export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolution
 
     getCommonSourceDirectory(): string;
     getCanonicalFileName(fileName: string): string;
-    getNewLine(): string;
 
     isEmitBlocked(emitFileName: string): boolean;
 

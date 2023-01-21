@@ -781,7 +781,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     }
 
     private realizeDiagnostics(diagnostics: readonly Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
-        const newLine = getNewLineOrDefaultFromHost(this.host);
+        const newLine = getNewLineOrDefaultFromHost(this.host, /*formatSettings*/ undefined);
         return realizeDiagnostics(diagnostics, newLine);
     }
 

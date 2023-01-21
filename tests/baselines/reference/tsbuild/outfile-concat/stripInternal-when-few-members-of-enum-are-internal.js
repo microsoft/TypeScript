@@ -216,7 +216,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    // Comment text
   >}
@@ -240,7 +240,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -258,7 +258,7 @@ sourceFile:../second/second_part2.ts
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^
-4 >               ^^^^^^^^^^->
+4 >               ^^^^^^^^^->
 1->
 2 >class 
 3 >              C
@@ -323,7 +323,7 @@ sourceFile:../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1 >namespace N {
   >    // Comment text
   >}
@@ -347,7 +347,7 @@ sourceFile:../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -359,7 +359,7 @@ sourceFile:../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -398,7 +398,7 @@ sourceFile:../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -410,7 +410,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -430,7 +430,7 @@ sourceFile:../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^->
+8 >                  ^^^^->
 1->
   >
 2 >}
@@ -459,20 +459,20 @@ sourceFile:../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1->
 1->Emitted(8, 1) Source(1, 1) + SourceIndex(1)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(9, 5) Source(1, 1) + SourceIndex(1)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -486,7 +486,7 @@ sourceFile:../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -524,7 +524,7 @@ sourceFile:../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -562,13 +562,13 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":285,"kind":"text"}],"mapHash":"9890117190-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}","hash":"-23059753096-var N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":100,"kind":"text"}],"mapHash":"7640041563-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd\"}","hash":"7752788385-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-21603042336-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n","9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./second-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"7003440774-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":270,"kind":"text"}],"mapHash":"9890117190-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}","hash":"-2912899787-var N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":93,"kind":"text"}],"mapHash":"7640041563-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd\"}","hash":"-16005591226-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-21603042336-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n","9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./second-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-2513601205-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/2/second-output.js
 ----------------------------------------------------------------------
-text: (0-285)
+text: (0-270)
 var N;
 (function (N) {
     function f() {
@@ -589,7 +589,7 @@ var C = (function () {
 ======================================================================
 File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-text: (0-100)
+text: (0-93)
 declare namespace N {
 }
 declare namespace N {
@@ -612,22 +612,22 @@ declare class C {
       "sections": [
         {
           "pos": 0,
-          "end": 285,
+          "end": 270,
           "kind": "text"
         }
       ],
-      "hash": "-23059753096-var N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map",
+      "hash": "-2912899787-var N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\n//# sourceMappingURL=second-output.js.map",
       "mapHash": "9890117190-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 100,
+          "end": 93,
           "kind": "text"
         }
       ],
-      "hash": "7752788385-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map",
+      "hash": "-16005591226-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n//# sourceMappingURL=second-output.d.ts.map",
       "mapHash": "7640041563-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd\"}"
     }
   },
@@ -653,11 +653,11 @@ declare class C {
       "strict": false,
       "target": 1
     },
-    "outSignature": "7003440774-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+    "outSignature": "-2513601205-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
     "latestChangedDtsFile": "./second-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2780
+  "size": 2723
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -715,7 +715,7 @@ sourceFile:../first_PART1.ts
 1 >^^^^
 2 >    ^^^^
 3 >        ^^^^
-4 >            ^^^^^^^^^^^^^^^^->
+4 >            ^^^^^^^^^^^^^^^->
 1 > {
   >    
 2 >    None
@@ -728,7 +728,7 @@ sourceFile:../first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^
 3 >                      ^^^^
-4 >                          ^^^^^->
+4 >                          ^^^^->
 1->,
   >    /* @internal */
   >    
@@ -755,7 +755,7 @@ sourceFile:../first_PART1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^
 3 >                ^^^^
-4 >                    ^^^^^^^^^^^->
+4 >                    ^^^^^^^^^^->
 1 >,
   >    /* @internal */
   >    
@@ -794,7 +794,7 @@ sourceFile:../first_PART1.ts
 1 >^^^^
 2 >    ^^^^^
 3 >         ^^^^^
-4 >              ^^^^^^^^^->
+4 >              ^^^^^^^^->
 1 >,
   >    
 2 >    Octal
@@ -807,7 +807,7 @@ sourceFile:../first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^
 3 >                ^^^^^
-4 >                     ^^^^^^->
+4 >                     ^^^^^->
 1->,
   >    
 2 >    HexSpecifier
@@ -820,7 +820,6 @@ sourceFile:../first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^
 3 >                   ^^^^^^
-4 >                         ^->
 1->,
   >    
 2 >    BinarySpecifier
@@ -830,15 +829,15 @@ sourceFile:../first_PART1.ts
 3 >Emitted(10, 26) Source(14, 29) + SourceIndex(0)
 ---
 >>>    OctalSpecifier = 256,
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^^^^
 3 >                  ^^^^^^
-4 >                        ^^^^^->
-1->,
+4 >                        ^^^^->
+1 >,
   >    
 2 >    OctalSpecifier
 3 >                   = 1 << 8
-1->Emitted(11, 5) Source(15, 5) + SourceIndex(0)
+1 >Emitted(11, 5) Source(15, 5) + SourceIndex(0)
 2 >Emitted(11, 19) Source(15, 19) + SourceIndex(0)
 3 >Emitted(11, 25) Source(15, 28) + SourceIndex(0)
 ---
@@ -846,7 +845,7 @@ sourceFile:../first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^
 3 >                     ^^^^^^
-4 >                           ^^^^^^^->
+4 >                           ^^^^^^->
 1->,
   >    /* @internal */
   >    
@@ -884,7 +883,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(15, 2) Source(22, 2) + SourceIndex(0)
@@ -921,7 +920,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(18, 2) Source(25, 2) + SourceIndex(0)
@@ -981,7 +980,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(22, 2) Source(31, 2) + SourceIndex(0)
@@ -1052,7 +1051,7 @@ sourceFile:../first_PART1.ts
 1 >
 2 >^^^^
 3 >    ^^^^^^^^^^
-4 >              ^^^^^^^^^^^->
+4 >              ^^^^^^^^^^->
 1 >
 2 >enum 
 3 >    TokenFlags {
@@ -1085,7 +1084,7 @@ sourceFile:../first_PART1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^^^^
-4 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >enum 
 3 >           TokenFlags
@@ -1097,7 +1096,7 @@ sourceFile:../first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                               ^
-4 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    None = 0
@@ -1110,7 +1109,7 @@ sourceFile:../first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                           ^
-4 >                                                                            ^^^^^^^->
+4 >                                                                            ^^^^^^->
 1->,
   >    /* @internal */
   >    
@@ -1137,7 +1136,7 @@ sourceFile:../first_PART1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                               ^
-4 >                                                                ^^^^^^^^^^^^^^^^^^^->
+4 >                                                                ^^^^^^^^^^^^^^^^^^->
 1 >,
   >    /* @internal */
   >    
@@ -1176,7 +1175,7 @@ sourceFile:../first_PART1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                  ^
-4 >                                                   ^^^^^^^^^^^^^^^->
+4 >                                                   ^^^^^^^^^^^^^^->
 1 >,
   >    
 2 >    Octal = 1 << 5
@@ -1189,7 +1188,7 @@ sourceFile:../first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                ^
-4 >                                                                 ^^^^^^^^->
+4 >                                                                 ^^^^^^^->
 1->,
   >    
 2 >    HexSpecifier = 1 << 6
@@ -1214,7 +1213,7 @@ sourceFile:../first_PART1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                     ^
-4 >                                                                      ^^^^^^^->
+4 >                                                                      ^^^^^^->
 1 >,
   >    
 2 >    OctalSpecifier = 1 << 8
@@ -1227,7 +1226,7 @@ sourceFile:../first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                           ^
-4 >                                                                            ^^^^^^^^^^^->
+4 >                                                                            ^^^^^^^^^^->
 1->,
   >    /* @internal */
   >    
@@ -1342,7 +1341,7 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -1407,7 +1406,7 @@ sourceFile:../first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -1443,13 +1442,13 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":1131,"kind":"text"}],"mapHash":"-31206929079-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAK,UAqBJ;AArBD,WAAK,UAAU;IACX,2CAAQ,CAAA;IAER,uEAA2B,CAAA;IAE3B,6EAA8B,CAAA;IAE9B,2DAAqB,CAAA;IAErB,6EAA8B,CAAA;IAC9B,wDAAmB,CAAA;IACnB,8CAAc,CAAA;IACd,4DAAqB,CAAA;IACrB,mEAAwB,CAAA;IACxB,iEAAuB,CAAA;IAEvB,uEAA0B,CAAA;IAE1B,iFAAyD,CAAA;IAEzD,4EAAoG,CAAA;AACxG,CAAC,EArBI,UAAU,KAAV,UAAU,QAqBd;AAKD,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AChCf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"12609243978-var TokenFlags;\r\n(function (TokenFlags) {\r\n    TokenFlags[TokenFlags[\"None\"] = 0] = \"None\";\r\n    TokenFlags[TokenFlags[\"PrecedingLineBreak\"] = 1] = \"PrecedingLineBreak\";\r\n    TokenFlags[TokenFlags[\"PrecedingJSDocComment\"] = 2] = \"PrecedingJSDocComment\";\r\n    TokenFlags[TokenFlags[\"Unterminated\"] = 4] = \"Unterminated\";\r\n    TokenFlags[TokenFlags[\"ExtendedUnicodeEscape\"] = 8] = \"ExtendedUnicodeEscape\";\r\n    TokenFlags[TokenFlags[\"Scientific\"] = 16] = \"Scientific\";\r\n    TokenFlags[TokenFlags[\"Octal\"] = 32] = \"Octal\";\r\n    TokenFlags[TokenFlags[\"HexSpecifier\"] = 64] = \"HexSpecifier\";\r\n    TokenFlags[TokenFlags[\"BinarySpecifier\"] = 128] = \"BinarySpecifier\";\r\n    TokenFlags[TokenFlags[\"OctalSpecifier\"] = 256] = \"OctalSpecifier\";\r\n    TokenFlags[TokenFlags[\"ContainsSeparator\"] = 512] = \"ContainsSeparator\";\r\n    TokenFlags[TokenFlags[\"BinaryOrOctalSpecifier\"] = 384] = \"BinaryOrOctalSpecifier\";\r\n    TokenFlags[TokenFlags[\"NumericLiteralFlags\"] = 1008] = \"NumericLiteralFlags\";\r\n})(TokenFlags || (TokenFlags = {}));\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":42,"kind":"text"},{"pos":42,"end":156,"kind":"internal"},{"pos":158,"end":276,"kind":"text"},{"pos":276,"end":371,"kind":"internal"},{"pos":373,"end":533,"kind":"text"}],"mapHash":"12756767772-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,aAAK,UAAU;IACX,IAAI,IAAI;IAER,kBAAkB,IAAS;IAE3B,qBAAqB,IAAS;IAE9B,YAAY,IAAS;IAErB,qBAAqB,IAAS;IAC9B,UAAU,KAAS;IACnB,KAAK,KAAS;IACd,YAAY,KAAS;IACrB,eAAe,MAAS;IACxB,cAAc,MAAS;IAEvB,iBAAiB,MAAS;IAE1B,sBAAsB,MAAmC;IAEzD,mBAAmB,OAAiF;CACvG;AACD,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AE9BD,iBAAS,CAAC,WAET\"}","hash":"-5295570803-declare enum TokenFlags {\r\n    None = 0,\r\n    PrecedingLineBreak = 1,\r\n    PrecedingJSDocComment = 2,\r\n    Unterminated = 4,\r\n    ExtendedUnicodeEscape = 8,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n    ContainsSeparator = 512,\r\n    BinaryOrOctalSpecifier = 384,\r\n    NumericLiteralFlags = 1008\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-78369044808-enum TokenFlags {\n    None = 0,\n    /* @internal */\n    PrecedingLineBreak = 1 << 0,\n    /* @internal */\n    PrecedingJSDocComment = 1 << 1,\n    /* @internal */\n    Unterminated = 1 << 2,\n    /* @internal */\n    ExtendedUnicodeEscape = 1 << 3,\n    Scientific = 1 << 4,\n    Octal = 1 << 5,\n    HexSpecifier = 1 << 6,\n    BinarySpecifier = 1 << 7,\n    OctalSpecifier = 1 << 8,\n    /* @internal */\n    ContainsSeparator = 1 << 9,\n    /* @internal */\n    BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,\n    /* @internal */\n    NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator\n}\ninterface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"8051664902-declare enum TokenFlags {\r\n    None = 0,\r\n    PrecedingLineBreak = 1,\r\n    PrecedingJSDocComment = 2,\r\n    Unterminated = 4,\r\n    ExtendedUnicodeEscape = 8,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n    ContainsSeparator = 512,\r\n    BinaryOrOctalSpecifier = 384,\r\n    NumericLiteralFlags = 1008\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":1109,"kind":"text"}],"mapHash":"-31206929079-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAK,UAqBJ;AArBD,WAAK,UAAU;IACX,2CAAQ,CAAA;IAER,uEAA2B,CAAA;IAE3B,6EAA8B,CAAA;IAE9B,2DAAqB,CAAA;IAErB,6EAA8B,CAAA;IAC9B,wDAAmB,CAAA;IACnB,8CAAc,CAAA;IACd,4DAAqB,CAAA;IACrB,mEAAwB,CAAA;IACxB,iEAAuB,CAAA;IAEvB,uEAA0B,CAAA;IAE1B,iFAAyD,CAAA;IAEzD,4EAAoG,CAAA;AACxG,CAAC,EArBI,UAAU,KAAV,UAAU,QAqBd;AAKD,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AChCf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"44196247116-var TokenFlags;\n(function (TokenFlags) {\n    TokenFlags[TokenFlags[\"None\"] = 0] = \"None\";\n    TokenFlags[TokenFlags[\"PrecedingLineBreak\"] = 1] = \"PrecedingLineBreak\";\n    TokenFlags[TokenFlags[\"PrecedingJSDocComment\"] = 2] = \"PrecedingJSDocComment\";\n    TokenFlags[TokenFlags[\"Unterminated\"] = 4] = \"Unterminated\";\n    TokenFlags[TokenFlags[\"ExtendedUnicodeEscape\"] = 8] = \"ExtendedUnicodeEscape\";\n    TokenFlags[TokenFlags[\"Scientific\"] = 16] = \"Scientific\";\n    TokenFlags[TokenFlags[\"Octal\"] = 32] = \"Octal\";\n    TokenFlags[TokenFlags[\"HexSpecifier\"] = 64] = \"HexSpecifier\";\n    TokenFlags[TokenFlags[\"BinarySpecifier\"] = 128] = \"BinarySpecifier\";\n    TokenFlags[TokenFlags[\"OctalSpecifier\"] = 256] = \"OctalSpecifier\";\n    TokenFlags[TokenFlags[\"ContainsSeparator\"] = 512] = \"ContainsSeparator\";\n    TokenFlags[TokenFlags[\"BinaryOrOctalSpecifier\"] = 384] = \"BinaryOrOctalSpecifier\";\n    TokenFlags[TokenFlags[\"NumericLiteralFlags\"] = 1008] = \"NumericLiteralFlags\";\n})(TokenFlags || (TokenFlags = {}));\nvar s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":40,"kind":"text"},{"pos":40,"end":151,"kind":"internal"},{"pos":152,"end":265,"kind":"text"},{"pos":265,"end":358,"kind":"internal"},{"pos":359,"end":510,"kind":"text"}],"mapHash":"12756767772-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,aAAK,UAAU;IACX,IAAI,IAAI;IAER,kBAAkB,IAAS;IAE3B,qBAAqB,IAAS;IAE9B,YAAY,IAAS;IAErB,qBAAqB,IAAS;IAC9B,UAAU,KAAS;IACnB,KAAK,KAAS;IACd,YAAY,KAAS;IACrB,eAAe,MAAS;IACxB,cAAc,MAAS;IAEvB,iBAAiB,MAAS;IAE1B,sBAAsB,MAAmC;IAEzD,mBAAmB,OAAiF;CACvG;AACD,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AE9BD,iBAAS,CAAC,WAET\"}","hash":"9708454722-declare enum TokenFlags {\n    None = 0,\n    PrecedingLineBreak = 1,\n    PrecedingJSDocComment = 2,\n    Unterminated = 4,\n    ExtendedUnicodeEscape = 8,\n    Scientific = 16,\n    Octal = 32,\n    HexSpecifier = 64,\n    BinarySpecifier = 128,\n    OctalSpecifier = 256,\n    ContainsSeparator = 512,\n    BinaryOrOctalSpecifier = 384,\n    NumericLiteralFlags = 1008\n}\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-78369044808-enum TokenFlags {\n    None = 0,\n    /* @internal */\n    PrecedingLineBreak = 1 << 0,\n    /* @internal */\n    PrecedingJSDocComment = 1 << 1,\n    /* @internal */\n    Unterminated = 1 << 2,\n    /* @internal */\n    ExtendedUnicodeEscape = 1 << 3,\n    Scientific = 1 << 4,\n    Octal = 1 << 5,\n    HexSpecifier = 1 << 6,\n    BinarySpecifier = 1 << 7,\n    OctalSpecifier = 1 << 8,\n    /* @internal */\n    ContainsSeparator = 1 << 9,\n    /* @internal */\n    BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,\n    /* @internal */\n    NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator\n}\ninterface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"16496689275-declare enum TokenFlags {\n    None = 0,\n    PrecedingLineBreak = 1,\n    PrecedingJSDocComment = 2,\n    Unterminated = 4,\n    ExtendedUnicodeEscape = 8,\n    Scientific = 16,\n    Octal = 32,\n    HexSpecifier = 64,\n    BinarySpecifier = 128,\n    OctalSpecifier = 256,\n    ContainsSeparator = 512,\n    BinaryOrOctalSpecifier = 384,\n    NumericLiteralFlags = 1008\n}\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-1131)
+text: (0-1109)
 var TokenFlags;
 (function (TokenFlags) {
     TokenFlags[TokenFlags["None"] = 0] = "None";
@@ -1477,18 +1476,18 @@ function f() {
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-42)
+text: (0-40)
 declare enum TokenFlags {
     None = 0,
 
 ----------------------------------------------------------------------
-internal: (42-156)
+internal: (40-151)
     PrecedingLineBreak = 1,
     PrecedingJSDocComment = 2,
     Unterminated = 4,
     ExtendedUnicodeEscape = 8,
 ----------------------------------------------------------------------
-text: (158-276)
+text: (152-265)
     Scientific = 16,
     Octal = 32,
     HexSpecifier = 64,
@@ -1496,12 +1495,12 @@ text: (158-276)
     OctalSpecifier = 256,
 
 ----------------------------------------------------------------------
-internal: (276-371)
+internal: (265-358)
     ContainsSeparator = 512,
     BinaryOrOctalSpecifier = 384,
     NumericLiteralFlags = 1008
 ----------------------------------------------------------------------
-text: (373-533)
+text: (359-510)
 }
 interface TheFirst {
     none: any;
@@ -1527,42 +1526,42 @@ declare function f(): string;
       "sections": [
         {
           "pos": 0,
-          "end": 1131,
+          "end": 1109,
           "kind": "text"
         }
       ],
-      "hash": "12609243978-var TokenFlags;\r\n(function (TokenFlags) {\r\n    TokenFlags[TokenFlags[\"None\"] = 0] = \"None\";\r\n    TokenFlags[TokenFlags[\"PrecedingLineBreak\"] = 1] = \"PrecedingLineBreak\";\r\n    TokenFlags[TokenFlags[\"PrecedingJSDocComment\"] = 2] = \"PrecedingJSDocComment\";\r\n    TokenFlags[TokenFlags[\"Unterminated\"] = 4] = \"Unterminated\";\r\n    TokenFlags[TokenFlags[\"ExtendedUnicodeEscape\"] = 8] = \"ExtendedUnicodeEscape\";\r\n    TokenFlags[TokenFlags[\"Scientific\"] = 16] = \"Scientific\";\r\n    TokenFlags[TokenFlags[\"Octal\"] = 32] = \"Octal\";\r\n    TokenFlags[TokenFlags[\"HexSpecifier\"] = 64] = \"HexSpecifier\";\r\n    TokenFlags[TokenFlags[\"BinarySpecifier\"] = 128] = \"BinarySpecifier\";\r\n    TokenFlags[TokenFlags[\"OctalSpecifier\"] = 256] = \"OctalSpecifier\";\r\n    TokenFlags[TokenFlags[\"ContainsSeparator\"] = 512] = \"ContainsSeparator\";\r\n    TokenFlags[TokenFlags[\"BinaryOrOctalSpecifier\"] = 384] = \"BinaryOrOctalSpecifier\";\r\n    TokenFlags[TokenFlags[\"NumericLiteralFlags\"] = 1008] = \"NumericLiteralFlags\";\r\n})(TokenFlags || (TokenFlags = {}));\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "hash": "44196247116-var TokenFlags;\n(function (TokenFlags) {\n    TokenFlags[TokenFlags[\"None\"] = 0] = \"None\";\n    TokenFlags[TokenFlags[\"PrecedingLineBreak\"] = 1] = \"PrecedingLineBreak\";\n    TokenFlags[TokenFlags[\"PrecedingJSDocComment\"] = 2] = \"PrecedingJSDocComment\";\n    TokenFlags[TokenFlags[\"Unterminated\"] = 4] = \"Unterminated\";\n    TokenFlags[TokenFlags[\"ExtendedUnicodeEscape\"] = 8] = \"ExtendedUnicodeEscape\";\n    TokenFlags[TokenFlags[\"Scientific\"] = 16] = \"Scientific\";\n    TokenFlags[TokenFlags[\"Octal\"] = 32] = \"Octal\";\n    TokenFlags[TokenFlags[\"HexSpecifier\"] = 64] = \"HexSpecifier\";\n    TokenFlags[TokenFlags[\"BinarySpecifier\"] = 128] = \"BinarySpecifier\";\n    TokenFlags[TokenFlags[\"OctalSpecifier\"] = 256] = \"OctalSpecifier\";\n    TokenFlags[TokenFlags[\"ContainsSeparator\"] = 512] = \"ContainsSeparator\";\n    TokenFlags[TokenFlags[\"BinaryOrOctalSpecifier\"] = 384] = \"BinaryOrOctalSpecifier\";\n    TokenFlags[TokenFlags[\"NumericLiteralFlags\"] = 1008] = \"NumericLiteralFlags\";\n})(TokenFlags || (TokenFlags = {}));\nvar s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map",
       "mapHash": "-31206929079-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAK,UAqBJ;AArBD,WAAK,UAAU;IACX,2CAAQ,CAAA;IAER,uEAA2B,CAAA;IAE3B,6EAA8B,CAAA;IAE9B,2DAAqB,CAAA;IAErB,6EAA8B,CAAA;IAC9B,wDAAmB,CAAA;IACnB,8CAAc,CAAA;IACd,4DAAqB,CAAA;IACrB,mEAAwB,CAAA;IACxB,iEAAuB,CAAA;IAEvB,uEAA0B,CAAA;IAE1B,iFAAyD,CAAA;IAEzD,4EAAoG,CAAA;AACxG,CAAC,EArBI,UAAU,KAAV,UAAU,QAqBd;AAKD,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AChCf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 42,
+          "end": 40,
           "kind": "text"
         },
         {
-          "pos": 42,
-          "end": 156,
+          "pos": 40,
+          "end": 151,
           "kind": "internal"
         },
         {
-          "pos": 158,
-          "end": 276,
+          "pos": 152,
+          "end": 265,
           "kind": "text"
         },
         {
-          "pos": 276,
-          "end": 371,
+          "pos": 265,
+          "end": 358,
           "kind": "internal"
         },
         {
-          "pos": 373,
-          "end": 533,
+          "pos": 359,
+          "end": 510,
           "kind": "text"
         }
       ],
-      "hash": "-5295570803-declare enum TokenFlags {\r\n    None = 0,\r\n    PrecedingLineBreak = 1,\r\n    PrecedingJSDocComment = 2,\r\n    Unterminated = 4,\r\n    ExtendedUnicodeEscape = 8,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n    ContainsSeparator = 512,\r\n    BinaryOrOctalSpecifier = 384,\r\n    NumericLiteralFlags = 1008\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "hash": "9708454722-declare enum TokenFlags {\n    None = 0,\n    PrecedingLineBreak = 1,\n    PrecedingJSDocComment = 2,\n    Unterminated = 4,\n    ExtendedUnicodeEscape = 8,\n    Scientific = 16,\n    Octal = 32,\n    HexSpecifier = 64,\n    BinarySpecifier = 128,\n    OctalSpecifier = 256,\n    ContainsSeparator = 512,\n    BinaryOrOctalSpecifier = 384,\n    NumericLiteralFlags = 1008\n}\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map",
       "mapHash": "12756767772-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,aAAK,UAAU;IACX,IAAI,IAAI;IAER,kBAAkB,IAAS;IAE3B,qBAAqB,IAAS;IAE9B,YAAY,IAAS;IAErB,qBAAqB,IAAS;IAC9B,UAAU,KAAS;IACnB,KAAK,KAAS;IACd,YAAY,KAAS;IACrB,eAAe,MAAS;IACxB,cAAc,MAAS;IAEvB,iBAAiB,MAAS;IAE1B,sBAAsB,MAAmC;IAEzD,mBAAmB,OAAiF;CACvG;AACD,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AE9BD,iBAAS,CAAC,WAET\"}"
     }
   },
@@ -1589,11 +1588,11 @@ declare function f(): string;
       "strict": false,
       "target": 1
     },
-    "outSignature": "8051664902-declare enum TokenFlags {\r\n    None = 0,\r\n    PrecedingLineBreak = 1,\r\n    PrecedingJSDocComment = 2,\r\n    Unterminated = 4,\r\n    ExtendedUnicodeEscape = 8,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n    ContainsSeparator = 512,\r\n    BinaryOrOctalSpecifier = 384,\r\n    NumericLiteralFlags = 1008\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "outSignature": "16496689275-declare enum TokenFlags {\n    None = 0,\n    PrecedingLineBreak = 1,\n    PrecedingJSDocComment = 2,\n    Unterminated = 4,\n    ExtendedUnicodeEscape = 8,\n    Scientific = 16,\n    Octal = 32,\n    HexSpecifier = 64,\n    BinarySpecifier = 128,\n    OctalSpecifier = 256,\n    ContainsSeparator = 512,\n    BinaryOrOctalSpecifier = 384,\n    NumericLiteralFlags = 1008\n}\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 5930
+  "size": 5794
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -1652,7 +1651,7 @@ sourceFile:../../../first/first_PART1.ts
 1 >^^^^
 2 >    ^^^^
 3 >        ^^^^
-4 >            ^^^^^^^^^->
+4 >            ^^^^^^^^->
 1 > {
   >    
 2 >    None
@@ -1685,7 +1684,7 @@ sourceFile:../../../first/first_PART1.ts
 1 >^^^^
 2 >    ^^^^^
 3 >         ^^^^^
-4 >              ^^^^^^^^^->
+4 >              ^^^^^^^^->
 1 >,
   >    
 2 >    Octal
@@ -1698,7 +1697,7 @@ sourceFile:../../../first/first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^
 3 >                ^^^^^
-4 >                     ^^^^^^->
+4 >                     ^^^^^->
 1->,
   >    
 2 >    HexSpecifier
@@ -1711,7 +1710,6 @@ sourceFile:../../../first/first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^
 3 >                   ^^^^^^
-4 >                         ^->
 1->,
   >    
 2 >    BinarySpecifier
@@ -1721,20 +1719,20 @@ sourceFile:../../../first/first_PART1.ts
 3 >Emitted(6, 26) Source(14, 29) + SourceIndex(0)
 ---
 >>>    OctalSpecifier = 256,
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^^^^
 3 >                  ^^^^^^
-1->,
+1 >,
   >    
 2 >    OctalSpecifier
 3 >                   = 1 << 8
-1->Emitted(7, 5) Source(15, 5) + SourceIndex(0)
+1 >Emitted(7, 5) Source(15, 5) + SourceIndex(0)
 2 >Emitted(7, 19) Source(15, 19) + SourceIndex(0)
 3 >Emitted(7, 25) Source(15, 28) + SourceIndex(0)
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^->
 1 >,
   >    /* @internal */
   >    ContainsSeparator = 1 << 9,
@@ -1777,7 +1775,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(11, 2) Source(25, 2) + SourceIndex(0)
@@ -1837,7 +1835,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(15, 2) Source(31, 2) + SourceIndex(0)
@@ -1882,7 +1880,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    // Comment text
   >}
@@ -1906,7 +1904,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -1924,7 +1922,7 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^
-4 >               ^^^^^^^^^^->
+4 >               ^^^^^^^^^->
 1->
 2 >class 
 3 >              C
@@ -1943,7 +1941,7 @@ sourceFile:../../../second/second_part2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 >() {
   >        console.log("something got done");
   >    }
@@ -2037,7 +2035,7 @@ sourceFile:../../../first/first_PART1.ts
 1 >
 2 >^^^^
 3 >    ^^^^^^^^^^
-4 >              ^^^^^^^^^^^->
+4 >              ^^^^^^^^^^->
 1 >
 2 >enum 
 3 >    TokenFlags {
@@ -2070,7 +2068,7 @@ sourceFile:../../../first/first_PART1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^^^^
-4 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >enum 
 3 >           TokenFlags
@@ -2082,7 +2080,7 @@ sourceFile:../../../first/first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                               ^
-4 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    None = 0
@@ -2095,7 +2093,7 @@ sourceFile:../../../first/first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                           ^
-4 >                                                                            ^^^^^^^->
+4 >                                                                            ^^^^^^->
 1->,
   >    /* @internal */
   >    
@@ -2122,7 +2120,7 @@ sourceFile:../../../first/first_PART1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                               ^
-4 >                                                                ^^^^^^^^^^^^^^^^^^^->
+4 >                                                                ^^^^^^^^^^^^^^^^^^->
 1 >,
   >    /* @internal */
   >    
@@ -2161,7 +2159,7 @@ sourceFile:../../../first/first_PART1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                  ^
-4 >                                                   ^^^^^^^^^^^^^^^->
+4 >                                                   ^^^^^^^^^^^^^^->
 1 >,
   >    
 2 >    Octal = 1 << 5
@@ -2174,7 +2172,7 @@ sourceFile:../../../first/first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                ^
-4 >                                                                 ^^^^^^^^->
+4 >                                                                 ^^^^^^^->
 1->,
   >    
 2 >    HexSpecifier = 1 << 6
@@ -2199,7 +2197,7 @@ sourceFile:../../../first/first_PART1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                     ^
-4 >                                                                      ^^^^^^^->
+4 >                                                                      ^^^^^^->
 1 >,
   >    
 2 >    OctalSpecifier = 1 << 8
@@ -2212,7 +2210,7 @@ sourceFile:../../../first/first_PART1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                           ^
-4 >                                                                            ^^^^^^^^^^^->
+4 >                                                                            ^^^^^^^^^^->
 1->,
   >    /* @internal */
   >    
@@ -2327,7 +2325,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -2392,7 +2390,7 @@ sourceFile:../../../first/first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -2418,7 +2416,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^->
+3 > ^^^^^->
 1 >
   >
 2 >}
@@ -2434,7 +2432,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1->namespace N {
   >    // Comment text
   >}
@@ -2458,7 +2456,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -2470,7 +2468,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -2509,7 +2507,7 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -2521,7 +2519,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -2541,7 +2539,7 @@ sourceFile:../../../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^->
+8 >                  ^^^^->
 1->
   >
 2 >}
@@ -2570,20 +2568,20 @@ sourceFile:../../../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1->
 1->Emitted(30, 1) Source(1, 1) + SourceIndex(4)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(31, 5) Source(1, 1) + SourceIndex(4)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -2597,7 +2595,7 @@ sourceFile:../../../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -2635,7 +2633,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -2656,7 +2654,7 @@ sourceFile:../../../second/second_part2.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -2683,7 +2681,6 @@ sourceFile:../../third_part1.ts
 6 >            ^
 7 >             ^^
 8 >               ^
-9 >                ^->
 1->
 2 >var 
 3 >    c
@@ -2702,21 +2699,21 @@ sourceFile:../../third_part1.ts
 8 >Emitted(38, 17) Source(1, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
-1->
+1 >
 2 >^
 3 > ^
 4 >  ^^^^^^^^^^^
 5 >             ^^
 6 >               ^
 7 >                ^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
   >
 2 >c
 3 > .
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(39, 1) Source(2, 1) + SourceIndex(5)
+1 >Emitted(39, 1) Source(2, 1) + SourceIndex(5)
 2 >Emitted(39, 2) Source(2, 2) + SourceIndex(5)
 3 >Emitted(39, 3) Source(2, 3) + SourceIndex(5)
 4 >Emitted(39, 14) Source(2, 14) + SourceIndex(5)
@@ -2726,15 +2723,15 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":1131,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":1131,"kind":"text"}]},{"pos":1131,"end":1416,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1131,"end":1416,"kind":"text"}]},{"pos":1416,"end":1452,"kind":"text"}],"mapHash":"82804019774-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAK,UAqBJ;AArBD,WAAK,UAAU;IACX,2CAAQ,CAAA;IAER,uEAA2B,CAAA;IAE3B,6EAA8B,CAAA;IAE9B,2DAAqB,CAAA;IAErB,6EAA8B,CAAA;IAC9B,wDAAmB,CAAA;IACnB,8CAAc,CAAA;IACd,4DAAqB,CAAA;IACrB,mEAAwB,CAAA;IACxB,iEAAuB,CAAA;IAEvB,uEAA0B,CAAA;IAE1B,iFAAyD,CAAA;IAEzD,4EAAoG,CAAA;AACxG,CAAC,EArBI,UAAU,KAAV,UAAU,QAqBd;AAKD,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AChCf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}","hash":"32101799743-var TokenFlags;\r\n(function (TokenFlags) {\r\n    TokenFlags[TokenFlags[\"None\"] = 0] = \"None\";\r\n    TokenFlags[TokenFlags[\"PrecedingLineBreak\"] = 1] = \"PrecedingLineBreak\";\r\n    TokenFlags[TokenFlags[\"PrecedingJSDocComment\"] = 2] = \"PrecedingJSDocComment\";\r\n    TokenFlags[TokenFlags[\"Unterminated\"] = 4] = \"Unterminated\";\r\n    TokenFlags[TokenFlags[\"ExtendedUnicodeEscape\"] = 8] = \"ExtendedUnicodeEscape\";\r\n    TokenFlags[TokenFlags[\"Scientific\"] = 16] = \"Scientific\";\r\n    TokenFlags[TokenFlags[\"Octal\"] = 32] = \"Octal\";\r\n    TokenFlags[TokenFlags[\"HexSpecifier\"] = 64] = \"HexSpecifier\";\r\n    TokenFlags[TokenFlags[\"BinarySpecifier\"] = 128] = \"BinarySpecifier\";\r\n    TokenFlags[TokenFlags[\"OctalSpecifier\"] = 256] = \"OctalSpecifier\";\r\n    TokenFlags[TokenFlags[\"ContainsSeparator\"] = 512] = \"ContainsSeparator\";\r\n    TokenFlags[TokenFlags[\"BinaryOrOctalSpecifier\"] = 384] = \"BinaryOrOctalSpecifier\";\r\n    TokenFlags[TokenFlags[\"NumericLiteralFlags\"] = 1008] = \"NumericLiteralFlags\";\r\n})(TokenFlags || (TokenFlags = {}));\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":320,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":320,"kind":"text"}]},{"pos":320,"end":420,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":320,"end":420,"kind":"text"}]},{"pos":420,"end":439,"kind":"text"}],"mapHash":"22013376427-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,aAAK,UAAU;IACX,IAAI,IAAI;IASR,UAAU,KAAS;IACnB,KAAK,KAAS;IACd,YAAY,KAAS;IACrB,eAAe,MAAS;IACxB,cAAc,MAAS;CAO1B;AACD,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AC9BD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-39106923765-declare enum TokenFlags {\r\n    None = 0,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","8051664902-declare enum TokenFlags {\r\n    None = 0,\r\n    PrecedingLineBreak = 1,\r\n    PrecedingJSDocComment = 2,\r\n    Unterminated = 4,\r\n    ExtendedUnicodeEscape = 8,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n    ContainsSeparator = 512,\r\n    BinaryOrOctalSpecifier = 384,\r\n    NumericLiteralFlags = 1008\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","7003440774-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"-41732646255-declare enum TokenFlags {\r\n    None = 0,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":1109,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":1109,"kind":"text"}]},{"pos":1109,"end":1379,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1109,"end":1379,"kind":"text"}]},{"pos":1379,"end":1413,"kind":"text"}],"mapHash":"82804019774-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAK,UAqBJ;AArBD,WAAK,UAAU;IACX,2CAAQ,CAAA;IAER,uEAA2B,CAAA;IAE3B,6EAA8B,CAAA;IAE9B,2DAAqB,CAAA;IAErB,6EAA8B,CAAA;IAC9B,wDAAmB,CAAA;IACnB,8CAAc,CAAA;IACd,4DAAqB,CAAA;IACrB,mEAAwB,CAAA;IACxB,iEAAuB,CAAA;IAEvB,uEAA0B,CAAA;IAE1B,iFAAyD,CAAA;IAEzD,4EAAoG,CAAA;AACxG,CAAC,EArBI,UAAU,KAAV,UAAU,QAqBd;AAKD,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AChCf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}","hash":"81736370692-var TokenFlags;\n(function (TokenFlags) {\n    TokenFlags[TokenFlags[\"None\"] = 0] = \"None\";\n    TokenFlags[TokenFlags[\"PrecedingLineBreak\"] = 1] = \"PrecedingLineBreak\";\n    TokenFlags[TokenFlags[\"PrecedingJSDocComment\"] = 2] = \"PrecedingJSDocComment\";\n    TokenFlags[TokenFlags[\"Unterminated\"] = 4] = \"Unterminated\";\n    TokenFlags[TokenFlags[\"ExtendedUnicodeEscape\"] = 8] = \"ExtendedUnicodeEscape\";\n    TokenFlags[TokenFlags[\"Scientific\"] = 16] = \"Scientific\";\n    TokenFlags[TokenFlags[\"Octal\"] = 32] = \"Octal\";\n    TokenFlags[TokenFlags[\"HexSpecifier\"] = 64] = \"HexSpecifier\";\n    TokenFlags[TokenFlags[\"BinarySpecifier\"] = 128] = \"BinarySpecifier\";\n    TokenFlags[TokenFlags[\"OctalSpecifier\"] = 256] = \"OctalSpecifier\";\n    TokenFlags[TokenFlags[\"ContainsSeparator\"] = 512] = \"ContainsSeparator\";\n    TokenFlags[TokenFlags[\"BinaryOrOctalSpecifier\"] = 384] = \"BinaryOrOctalSpecifier\";\n    TokenFlags[TokenFlags[\"NumericLiteralFlags\"] = 1008] = \"NumericLiteralFlags\";\n})(TokenFlags || (TokenFlags = {}));\nvar s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":304,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":304,"kind":"text"}]},{"pos":304,"end":397,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":304,"end":397,"kind":"text"}]},{"pos":397,"end":415,"kind":"text"}],"mapHash":"22013376427-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,aAAK,UAAU;IACX,IAAI,IAAI;IASR,UAAU,KAAS;IACnB,KAAK,KAAS;IACd,YAAY,KAAS;IACrB,eAAe,MAAS;IACxB,cAAc,MAAS;CAO1B;AACD,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AC9BD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"3834368531-declare enum TokenFlags {\n    None = 0,\n    Scientific = 16,\n    Octal = 32,\n    HexSpecifier = 64,\n    BinarySpecifier = 128,\n    OctalSpecifier = 256,\n}\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","16496689275-declare enum TokenFlags {\n    None = 0,\n    PrecedingLineBreak = 1,\n    PrecedingJSDocComment = 2,\n    Unterminated = 4,\n    ExtendedUnicodeEscape = 8,\n    Scientific = 16,\n    Octal = 32,\n    HexSpecifier = 64,\n    BinarySpecifier = 128,\n    OctalSpecifier = 256,\n    ContainsSeparator = 512,\n    BinaryOrOctalSpecifier = 384,\n    NumericLiteralFlags = 1008\n}\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","-2513601205-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n","10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"2647420825-declare enum TokenFlags {\n    None = 0,\n    Scientific = 16,\n    Octal = 32,\n    HexSpecifier = 64,\n    BinarySpecifier = 128,\n    OctalSpecifier = 256,\n}\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-1131):: ../../../first/bin/first-output.js texts:: 1
+prepend: (0-1109):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-1131)
+text: (0-1109)
 var TokenFlags;
 (function (TokenFlags) {
     TokenFlags[TokenFlags["None"] = 0] = "None";
@@ -2759,9 +2756,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (1131-1416):: ../../../2/second-output.js texts:: 1
+prepend: (1109-1379):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1131-1416)
+text: (1109-1379)
 var N;
 (function (N) {
     function f() {
@@ -2779,7 +2776,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (1416-1452)
+text: (1379-1413)
 var c = new C();
 c.doSomething();
 
@@ -2787,9 +2784,9 @@ c.doSomething();
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-320):: ../../../first/bin/first-output.d.ts texts:: 1
+prepend: (0-304):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-320)
+text: (0-304)
 declare enum TokenFlags {
     None = 0,
     Scientific = 16,
@@ -2808,9 +2805,9 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ----------------------------------------------------------------------
-prepend: (320-420):: ../../../2/second-output.d.ts texts:: 1
+prepend: (304-397):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (320-420)
+text: (304-397)
 declare namespace N {
 }
 declare namespace N {
@@ -2820,7 +2817,7 @@ declare class C {
 }
 
 ----------------------------------------------------------------------
-text: (420-439)
+text: (397-415)
 declare var c: C;
 
 ======================================================================
@@ -2836,74 +2833,74 @@ declare var c: C;
       "sections": [
         {
           "pos": 0,
-          "end": 1131,
+          "end": 1109,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 1131,
+              "end": 1109,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1131,
-          "end": 1416,
+          "pos": 1109,
+          "end": 1379,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 1131,
-              "end": 1416,
+              "pos": 1109,
+              "end": 1379,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1416,
-          "end": 1452,
+          "pos": 1379,
+          "end": 1413,
           "kind": "text"
         }
       ],
-      "hash": "32101799743-var TokenFlags;\r\n(function (TokenFlags) {\r\n    TokenFlags[TokenFlags[\"None\"] = 0] = \"None\";\r\n    TokenFlags[TokenFlags[\"PrecedingLineBreak\"] = 1] = \"PrecedingLineBreak\";\r\n    TokenFlags[TokenFlags[\"PrecedingJSDocComment\"] = 2] = \"PrecedingJSDocComment\";\r\n    TokenFlags[TokenFlags[\"Unterminated\"] = 4] = \"Unterminated\";\r\n    TokenFlags[TokenFlags[\"ExtendedUnicodeEscape\"] = 8] = \"ExtendedUnicodeEscape\";\r\n    TokenFlags[TokenFlags[\"Scientific\"] = 16] = \"Scientific\";\r\n    TokenFlags[TokenFlags[\"Octal\"] = 32] = \"Octal\";\r\n    TokenFlags[TokenFlags[\"HexSpecifier\"] = 64] = \"HexSpecifier\";\r\n    TokenFlags[TokenFlags[\"BinarySpecifier\"] = 128] = \"BinarySpecifier\";\r\n    TokenFlags[TokenFlags[\"OctalSpecifier\"] = 256] = \"OctalSpecifier\";\r\n    TokenFlags[TokenFlags[\"ContainsSeparator\"] = 512] = \"ContainsSeparator\";\r\n    TokenFlags[TokenFlags[\"BinaryOrOctalSpecifier\"] = 384] = \"BinaryOrOctalSpecifier\";\r\n    TokenFlags[TokenFlags[\"NumericLiteralFlags\"] = 1008] = \"NumericLiteralFlags\";\r\n})(TokenFlags || (TokenFlags = {}));\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "hash": "81736370692-var TokenFlags;\n(function (TokenFlags) {\n    TokenFlags[TokenFlags[\"None\"] = 0] = \"None\";\n    TokenFlags[TokenFlags[\"PrecedingLineBreak\"] = 1] = \"PrecedingLineBreak\";\n    TokenFlags[TokenFlags[\"PrecedingJSDocComment\"] = 2] = \"PrecedingJSDocComment\";\n    TokenFlags[TokenFlags[\"Unterminated\"] = 4] = \"Unterminated\";\n    TokenFlags[TokenFlags[\"ExtendedUnicodeEscape\"] = 8] = \"ExtendedUnicodeEscape\";\n    TokenFlags[TokenFlags[\"Scientific\"] = 16] = \"Scientific\";\n    TokenFlags[TokenFlags[\"Octal\"] = 32] = \"Octal\";\n    TokenFlags[TokenFlags[\"HexSpecifier\"] = 64] = \"HexSpecifier\";\n    TokenFlags[TokenFlags[\"BinarySpecifier\"] = 128] = \"BinarySpecifier\";\n    TokenFlags[TokenFlags[\"OctalSpecifier\"] = 256] = \"OctalSpecifier\";\n    TokenFlags[TokenFlags[\"ContainsSeparator\"] = 512] = \"ContainsSeparator\";\n    TokenFlags[TokenFlags[\"BinaryOrOctalSpecifier\"] = 384] = \"BinaryOrOctalSpecifier\";\n    TokenFlags[TokenFlags[\"NumericLiteralFlags\"] = 1008] = \"NumericLiteralFlags\";\n})(TokenFlags || (TokenFlags = {}));\nvar s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map",
       "mapHash": "82804019774-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAK,UAqBJ;AArBD,WAAK,UAAU;IACX,2CAAQ,CAAA;IAER,uEAA2B,CAAA;IAE3B,6EAA8B,CAAA;IAE9B,2DAAqB,CAAA;IAErB,6EAA8B,CAAA;IAC9B,wDAAmB,CAAA;IACnB,8CAAc,CAAA;IACd,4DAAqB,CAAA;IACrB,mEAAwB,CAAA;IACxB,iEAAuB,CAAA;IAEvB,uEAA0B,CAAA;IAE1B,iFAAyD,CAAA;IAEzD,4EAAoG,CAAA;AACxG,CAAC,EArBI,UAAU,KAAV,UAAU,QAqBd;AAKD,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AChCf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 320,
+          "end": 304,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 320,
+              "end": 304,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 320,
-          "end": 420,
+          "pos": 304,
+          "end": 397,
           "kind": "prepend",
           "data": "../../../2/second-output.d.ts",
           "texts": [
             {
-              "pos": 320,
-              "end": 420,
+              "pos": 304,
+              "end": 397,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 420,
-          "end": 439,
+          "pos": 397,
+          "end": 415,
           "kind": "text"
         }
       ],
-      "hash": "-39106923765-declare enum TokenFlags {\r\n    None = 0,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "hash": "3834368531-declare enum TokenFlags {\n    None = 0,\n    Scientific = 16,\n    Octal = 32,\n    HexSpecifier = 64,\n    BinarySpecifier = 128,\n    OctalSpecifier = 256,\n}\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map",
       "mapHash": "22013376427-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,aAAK,UAAU;IACX,IAAI,IAAI;IASR,UAAU,KAAS;IACnB,KAAK,KAAS;IACd,YAAY,KAAS;IACrB,eAAe,MAAS;IACxB,cAAc,MAAS;CAO1B;AACD,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AC9BD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
@@ -2916,8 +2913,8 @@ declare var c: C;
     ],
     "fileInfos": {
       "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../../../first/bin/first-output.d.ts": "8051664902-declare enum TokenFlags {\r\n    None = 0,\r\n    PrecedingLineBreak = 1,\r\n    PrecedingJSDocComment = 2,\r\n    Unterminated = 4,\r\n    ExtendedUnicodeEscape = 8,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n    ContainsSeparator = 512,\r\n    BinaryOrOctalSpecifier = 384,\r\n    NumericLiteralFlags = 1008\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
-      "../../../2/second-output.d.ts": "7003440774-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+      "../../../first/bin/first-output.d.ts": "16496689275-declare enum TokenFlags {\n    None = 0,\n    PrecedingLineBreak = 1,\n    PrecedingJSDocComment = 2,\n    Unterminated = 4,\n    ExtendedUnicodeEscape = 8,\n    Scientific = 16,\n    Octal = 32,\n    HexSpecifier = 64,\n    BinarySpecifier = 128,\n    OctalSpecifier = 256,\n    ContainsSeparator = 512,\n    BinaryOrOctalSpecifier = 384,\n    NumericLiteralFlags = 1008\n}\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
+      "../../../2/second-output.d.ts": "-2513601205-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
       "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
     },
     "options": {
@@ -2932,10 +2929,10 @@ declare var c: C;
       "stripInternal": true,
       "target": 1
     },
-    "outSignature": "-41732646255-declare enum TokenFlags {\r\n    None = 0,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "outSignature": "2647420825-declare enum TokenFlags {\n    None = 0,\n    Scientific = 16,\n    Octal = 32,\n    HexSpecifier = 64,\n    BinarySpecifier = 128,\n    OctalSpecifier = 256,\n}\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n",
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 6907
+  "size": 6671
 }
 

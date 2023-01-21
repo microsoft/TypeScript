@@ -5,10 +5,10 @@ import * as collections from "./_namespaces/collections";
 import * as vpath from "./_namespaces/vpath";
 import {
     Compiler,
-    harnessNewLine,
     mockHash,
     virtualFileSystemRoot,
 } from "./_namespaces/Harness";
+import { getNewLineCharacter } from "./_namespaces/ts";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
@@ -149,7 +149,7 @@ export abstract class LanguageServiceAdapterHost {
     }
 
     public getNewLine(): string {
-        return harnessNewLine;
+        return getNewLineCharacter(this.settings);
     }
 
     public getFilenames(): string[] {
