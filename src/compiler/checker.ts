@@ -1240,7 +1240,7 @@ export const enum SignatureCheckMode {
     StrictCallback = 1 << 1,
     IgnoreReturnTypes = 1 << 2,
     StrictArity = 1 << 3,
-    StrictAnySignature = 1 << 4,
+    StrictTopSignature = 1 << 4,
     Callback = BivariantCallback | StrictCallback,
 }
 
@@ -19428,12 +19428,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     type ErrorReporter = (message: DiagnosticMessage, arg0?: string, arg1?: string) => void;
 
     /**
-     * Returns true if `s` is `(...args: any[]) => any` or `(this: any, ...args: any[]) => any`
+     * Returns true if `s` is `(...args: A) => R` where `A` is `any`, `any[]`, `never`, or `never[]`, and `R` is `any` or `unknown`.
      */
-    function isAnySignature(s: Signature) {
-        return !s.typeParameters && (!s.thisParameter || isTypeAny(getTypeOfParameter(s.thisParameter))) && s.parameters.length === 1 &&
-            signatureHasRestParameter(s) && (getTypeOfParameter(s.parameters[0]) === anyArrayType || isTypeAny(getTypeOfParameter(s.parameters[0]))) &&
-            isTypeAny(getReturnTypeOfSignature(s));
+    function isTopSignature(s: Signature) {
+        if (!s.typeParameters && (!s.thisParameter || isTypeAny(getTypeOfParameter(s.thisParameter))) && s.parameters.length === 1 && signatureHasRestParameter(s)) {
+            const paramType = getTypeOfParameter(s.parameters[0]);
+            const restType = isArrayType(paramType) ? getTypeArguments(paramType)[0] : paramType;
+            return !!(restType.flags & (TypeFlags.Any | TypeFlags.Never) && getReturnTypeOfSignature(s).flags & TypeFlags.AnyOrUnknown);
+        }
+        return false;
     }
 
     /**
@@ -19452,10 +19455,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return Ternary.True;
         }
 
-        if (isAnySignature(target)) {
+        if (!(checkMode & SignatureCheckMode.StrictTopSignature && isTopSignature(source)) && isTopSignature(target)) {
             return Ternary.True;
         }
-        if (checkMode & SignatureCheckMode.StrictAnySignature && isAnySignature(source)) {
+        if (checkMode & SignatureCheckMode.StrictTopSignature && isTopSignature(source) && !isTopSignature(target)) {
             return Ternary.False;
         }
 
@@ -21985,8 +21988,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * See signatureAssignableTo, compareSignaturesIdentical
          */
         function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: (source: Type, target: Type) => void): Ternary {
-            const checkMode = relation === subtypeRelation ? SignatureCheckMode.StrictAnySignature :
-                relation === strictSubtypeRelation ? SignatureCheckMode.StrictAnySignature | SignatureCheckMode.StrictArity :
+            const checkMode = relation === subtypeRelation ? SignatureCheckMode.StrictTopSignature :
+                relation === strictSubtypeRelation ? SignatureCheckMode.StrictTopSignature | SignatureCheckMode.StrictArity :
                 SignatureCheckMode.None;
             return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
                 checkMode, reportErrors, reportError, incompatibleReporter, isRelatedToWorker, reportUnreliableMapper);
