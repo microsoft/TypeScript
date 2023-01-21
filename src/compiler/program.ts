@@ -3449,7 +3449,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             addFileIncludeReason(file || undefined, reason);
             // try to check if we've already seen this file but with a different casing in path
             // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
-            if (file && options.forceConsistentCasingInFileNames !== false) {
+            if (file && !(options.forceConsistentCasingInFileNames === false)) {
                 const checkedName = file.fileName;
                 const isRedirect = toPath(checkedName) !== toPath(fileName);
                 if (isRedirect) {
