@@ -203,7 +203,7 @@ FsWatches::
 FsWatchesRecursive::
 
 Info 16   [00:00:24.000] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[{"start":{"line":2,"offset":17},"end":{"line":2,"offset":20},"text":"'bar' refers to a value, but is being used as a type here. Did you mean 'typeof bar'?","code":2749,"category":"error"}]}}
+    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[{"start":{"line":2,"offset":17},"end":{"line":2,"offset":20},"text":"Cannot find name 'bar'.","code":2304,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
