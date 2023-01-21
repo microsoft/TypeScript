@@ -95,6 +95,7 @@ secondsecond_part2Spread(10, ...secondsecond_part2_ar);
 //// [/src/second/tsconfig.json]
 {
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true,
     "removeComments": true,
@@ -124,6 +125,7 @@ thirdthird_part1Spread(10, ...thirdthird_part1_ar);
 //// [/src/third/tsconfig.json]
 {
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true,
     "removeComments": true,

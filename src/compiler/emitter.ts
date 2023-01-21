@@ -1168,6 +1168,7 @@ export const notImplementedResolver: EmitResolver = {
 /**
  * File that isnt present resulting in error or output files
  *
+ * @deprecated
  * @internal
  */
 export type EmitUsingBuildInfoResult = string | readonly OutputFile[];
@@ -1199,7 +1200,7 @@ function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfo
     });
 }
 
-/** @internal */
+/** @deprecated @internal */
 export function emitUsingBuildInfo(
     config: ParsedCommandLine,
     host: CompilerHost,

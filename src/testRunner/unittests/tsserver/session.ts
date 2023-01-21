@@ -334,7 +334,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             };
             const command = "test";
 
-            session.output(body, command, /*reqSeq*/ 0);
+            session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true);
 
             expect(lastSent).to.deep.equal({
                 seq: 0,
@@ -454,7 +454,7 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
         };
         const command = "test";
 
-        session.output(body, command, /*reqSeq*/ 0);
+        session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true);
 
         expect(session.lastSent).to.deep.equal({
             seq: 0,
@@ -524,11 +524,11 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
                 response = this.executeCommand(msg).response as ts.server.protocol.Response;
             }
             catch (e) {
-                this.output(undefined, msg.command, msg.seq, e.toString());
+                this.doOutput(/*info*/ undefined, msg.command, msg.seq, /*success*/ false, e.toString());
                 return;
             }
             if (response) {
-                this.output(response, msg.command, msg.seq);
+                this.doOutput(response, msg.command, msg.seq, /*success*/ true);
             }
         }
 

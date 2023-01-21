@@ -65,7 +65,6 @@ import {
     contains,
     containsPath,
     convertCompilerOptionsForTelemetry,
-    convertEnableAutoDiscoveryToEnable,
     convertJsonOption,
     createCachedDirectoryStructureHost,
     createDocumentRegistryInternal,
@@ -588,8 +587,6 @@ export interface ProjectServiceOptions {
     pluginProbeLocations?: readonly string[];
     allowLocalPluginLoads?: boolean;
     typesMapLocation?: string;
-    /** @deprecated use serverMode instead */
-    syntaxOnly?: boolean;
     serverMode?: LanguageServiceMode;
     session: Session<unknown> | undefined;
 }
@@ -969,8 +966,6 @@ export class ProjectService {
 
     public readonly typesMapLocation: string | undefined;
 
-    /** @deprecated use serverMode instead */
-    public readonly syntaxOnly: boolean;
     public readonly serverMode: LanguageServiceMode;
 
     /** Tracks projects that we have already sent telemetry for. */
@@ -1017,15 +1012,9 @@ export class ProjectService {
 
         if (opts.serverMode !== undefined) {
             this.serverMode = opts.serverMode;
-            this.syntaxOnly = this.serverMode === LanguageServiceMode.Syntactic;
-        }
-        else if (opts.syntaxOnly) {
-            this.serverMode = LanguageServiceMode.Syntactic;
-            this.syntaxOnly = true;
         }
         else {
             this.serverMode = LanguageServiceMode.Semantic;
-            this.syntaxOnly = false;
         }
 
         if (this.host.realpath) {
@@ -4094,7 +4083,7 @@ export class ProjectService {
             }
             else {
                 let exclude = false;
-                if (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery) {
+                if (typeAcquisition.enable) {
                     const baseName = getBaseFileName(toFileNameLowerCase(normalizedNames[i]));
                     if (fileExtensionIs(baseName, "js")) {
                         const inferredTypingName = removeFileExtension(baseName);
@@ -4129,12 +4118,6 @@ export class ProjectService {
     }
 
     openExternalProject(proj: protocol.ExternalProject): void {
-        // typingOptions has been deprecated and is only supported for backward compatibility
-        // purposes. It should be removed in future releases - use typeAcquisition instead.
-        if (proj.typingOptions && !proj.typeAcquisition) {
-            const typeAcquisition = convertEnableAutoDiscoveryToEnable(proj.typingOptions);
-            proj.typeAcquisition = typeAcquisition;
-        }
         proj.typeAcquisition = proj.typeAcquisition || {};
         proj.typeAcquisition.include = proj.typeAcquisition.include || [];
         proj.typeAcquisition.exclude = proj.typeAcquisition.exclude || [];
