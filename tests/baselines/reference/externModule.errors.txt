@@ -66,20 +66,20 @@ tests/cases/compiler/externModule.ts(37,3): error TS2552: Cannot find name 'XDat
     var d=new XDate();
               ~~~~~
 !!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-!!! related TS2728 /.ts/lib.es5.d.ts:941:13: 'Date' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Date' is declared here.
     d.getDay();
     d=new XDate(1978,2);
           ~~~~~
 !!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-!!! related TS2728 /.ts/lib.es5.d.ts:941:13: 'Date' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Date' is declared here.
     d.getXDate();
     var n=XDate.parse("3/2/2004");
           ~~~~~
 !!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-!!! related TS2728 /.ts/lib.es5.d.ts:941:13: 'Date' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Date' is declared here.
     n=XDate.UTC(1964,2,1);
       ~~~~~
 !!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
-!!! related TS2728 /.ts/lib.es5.d.ts:941:13: 'Date' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Date' is declared here.
     
     

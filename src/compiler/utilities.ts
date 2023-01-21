@@ -490,7 +490,6 @@ import {
     SymbolTable,
     SyntaxKind,
     SyntaxList,
-    sys,
     TaggedTemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
@@ -3531,7 +3530,7 @@ export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | El
 export function setValueDeclaration(symbol: Symbol, node: Declaration): void {
     const { valueDeclaration } = symbol;
     if (!valueDeclaration ||
-        !(node.flags & NodeFlags.Ambient && !(valueDeclaration.flags & NodeFlags.Ambient)) &&
+        !(node.flags & NodeFlags.Ambient && !isInJSFile(node) && !(valueDeclaration.flags & NodeFlags.Ambient)) &&
         (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
         (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
         // other kinds of value declarations take precedence over modules and assignment declarations
@@ -6870,14 +6869,14 @@ export function directoryProbablyExists(directoryName: string, host: { directory
 const carriageReturnLineFeed = "\r\n";
 const lineFeed = "\n";
 /** @internal */
-export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
+export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
     switch (options.newLine) {
         case NewLineKind.CarriageReturnLineFeed:
             return carriageReturnLineFeed;
         case NewLineKind.LineFeed:
-            return lineFeed;
+        case undefined:
+                return lineFeed;
     }
-    return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
 }
 
 /**
@@ -7406,7 +7405,7 @@ export function getNameOfAccessExpression(node: AccessExpression) {
     return node.argumentExpression;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
     switch (section.kind) {
         case BundleFileSectionKind.Text:

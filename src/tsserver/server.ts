@@ -26,13 +26,12 @@ function findArgumentStringArray(argName: string): readonly string[] {
 
 
 function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
-    const syntaxOnly = hasArgument("--syntaxOnly");
 
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${args.join(" ")}`);
     logger.info(`Platform: ${platform} NodeVersion: ${getNodeMajorVersion()} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
-    logger.info(`ServerMode: ${serverMode} syntaxOnly: ${syntaxOnly} hasUnknownServerMode: ${unknownServerMode}`);
+    logger.info(`ServerMode: ${serverMode} hasUnknownServerMode: ${unknownServerMode}`);
 
     setStackTraceLimit();
 
@@ -61,7 +60,6 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
             useInferredProjectPerProjectRoot: hasArgument("--useInferredProjectPerProjectRoot"),
             suppressDiagnosticEvents: hasArgument("--suppressDiagnosticEvents"),
             noGetErrOnBackgroundUpdate: hasArgument("--noGetErrOnBackgroundUpdate"),
-            syntaxOnly,
             serverMode
         },
         logger,

@@ -237,8 +237,8 @@ export interface SolutionBuilderHostBase<T extends BuilderProgram> extends Progr
     // TODO: To do better with watch mode and normal build mode api that creates program and emits files
     // This currently helps enable --diagnostics and --extendedDiagnostics
     afterProgramEmitAndDiagnostics?(program: T): void;
-    /** @internal */ beforeEmitBundle?(config: ParsedCommandLine): void;
-    /** @internal */ afterEmitBundle?(config: ParsedCommandLine): void;
+    /** @deprecated @internal */ beforeEmitBundle?(config: ParsedCommandLine): void;
+    /** @deprecated @internal */ afterEmitBundle?(config: ParsedCommandLine): void;
 
     // For testing
     /** @internal */ now?(): Date;
@@ -795,7 +795,7 @@ function setupInitialBuild<T extends BuilderProgram>(state: SolutionBuilderState
 
 export enum InvalidatedProjectKind {
     Build,
-    UpdateBundle,
+    /** @deprecated */ UpdateBundle,
     UpdateOutputFileStamps
 }
 
@@ -847,6 +847,7 @@ export interface BuildInvalidedProject<T extends BuilderProgram> extends Invalid
     // emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
 }
 
+/** @deprecated */
 export interface UpdateBundleProject<T extends BuilderProgram> extends InvalidatedProjectBase {
     readonly kind: InvalidatedProjectKind.UpdateBundle;
     emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
@@ -898,9 +899,9 @@ enum BuildStep {
     SyntaxDiagnostics,
     SemanticDiagnostics,
     Emit,
-    EmitBundle,
+    /** @deprecated */ EmitBundle,
     EmitBuildInfo,
-    BuildInvalidatedProjectOfBundle,
+    /** @deprecated */ BuildInvalidatedProjectOfBundle,
     QueueReferencingProjects,
     Done
 }

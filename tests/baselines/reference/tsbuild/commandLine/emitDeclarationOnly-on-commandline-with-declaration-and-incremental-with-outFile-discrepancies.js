@@ -16,11 +16,11 @@ CleanBuild:
       "sections": [
         {
           "pos": 0,
-          "end": 232,
+          "end": 219,
           "kind": "text"
         }
       ],
-      "hash": "18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+      "hash": "106974224-declare module \"a\" {\n    export const a = 10;\n    export const aaa = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n"
     }
   },
   "program": {
@@ -54,21 +54,21 @@ IncrementalBuild:
       "sections": [
         {
           "pos": 0,
-          "end": 945,
+          "end": 917,
           "kind": "text"
         }
       ],
-      "hash": "18337089228-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.aaa = exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n    exports.aaa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"
+      "hash": "36756736640-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.aaa = exports.a = void 0;\n    exports.a = 10;\n    var aLocal = 10;\n    var aa = 10;\n    exports.aaa = 10;\n});\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.b = void 0;\n    exports.b = 10;\n    var bLocal = 10;\n});\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.c = void 0;\n    exports.c = a_1.a;\n});\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.d = void 0;\n    exports.d = b_1.b;\n});\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 232,
+          "end": 219,
           "kind": "text"
         }
       ],
-      "hash": "18384476281-declare module \"a\" {\r\n    export const a = 10;\r\n    export const aaa = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+      "hash": "106974224-declare module \"a\" {\n    export const a = 10;\n    export const aaa = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n"
     }
   },
   "program": {
@@ -92,7 +92,7 @@ CleanBuild:
 ======================================================================
 File:: /src/project1/outFile.d.ts
 ----------------------------------------------------------------------
-text: (0-232)
+text: (0-219)
 declare module "a" {
     export const a = 10;
     export const aaa = 10;
@@ -112,7 +112,7 @@ IncrementalBuild:
 ======================================================================
 File:: /src/project1/outFile.js
 ----------------------------------------------------------------------
-text: (0-945)
+text: (0-917)
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -146,7 +146,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 ======================================================================
 File:: /src/project1/outFile.d.ts
 ----------------------------------------------------------------------
-text: (0-232)
+text: (0-219)
 declare module "a" {
     export const a = 10;
     export const aaa = 10;

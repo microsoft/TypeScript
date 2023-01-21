@@ -85,7 +85,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         };
 
         const host = createServerHost([file1]);
-        const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
+        const projectService = createProjectService(host, { useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
 
         projectService.openClientFile(file1.path, file1.content);
 

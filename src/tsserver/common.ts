@@ -28,7 +28,6 @@ export interface StartSessionOptions {
     useInferredProjectPerProjectRoot: SessionOptions["useInferredProjectPerProjectRoot"];
     suppressDiagnosticEvents: SessionOptions["suppressDiagnosticEvents"];
     noGetErrOnBackgroundUpdate: SessionOptions["noGetErrOnBackgroundUpdate"];
-    syntaxOnly: SessionOptions["syntaxOnly"];
     serverMode: SessionOptions["serverMode"];
 }
 

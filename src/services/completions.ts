@@ -91,6 +91,7 @@ import {
     getNameTable,
     getNewLineCharacter,
     getNewLineKind,
+    getNewLineOrDefaultFromHost,
     getPropertyNameForPropertyNameNode,
     getQuotePreference,
     getReplacementSpanForContextToken,
@@ -227,6 +228,7 @@ import {
     isTypeLiteralNode,
     isTypeNode,
     isTypeOfExpression,
+    isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
@@ -261,7 +263,6 @@ import {
     LiteralTypeNode,
     map,
     mapDefined,
-    maybeBind,
     MemberOverrideStatus,
     memoize,
     memoizeOne,
@@ -352,7 +353,7 @@ import {
     typeHasCallOrConstructSignatures,
     TypeLiteralNode,
     TypeNode,
-    TypeOnlyAliasDeclaration,
+    TypeOnlyImportDeclaration,
     TypeQueryNode,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -467,8 +468,8 @@ interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
     moduleSpecifier: string;
 }
 
-interface SymbolOriginInfoTypeOnlyAlias extends SymbolOriginInfo {
-    declaration: TypeOnlyAliasDeclaration;
+interface SymbolOriginInfoTypeOnlyImport extends SymbolOriginInfo {
+    declaration: TypeOnlyImportDeclaration;
 }
 
 interface SymbolOriginInfoObjectLiteralMethod extends SymbolOriginInfo {
@@ -509,7 +510,7 @@ function originIsNullableMember(origin: SymbolOriginInfo): boolean {
     return !!(origin.kind & SymbolOriginInfoKind.Nullable);
 }
 
-function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoTypeOnlyAlias {
+function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoTypeOnlyImport {
     return !!(origin && origin.kind & SymbolOriginInfoKind.TypeOnlyAlias);
 }
 
@@ -1068,12 +1069,12 @@ function getExhaustiveCaseSnippets(
         }
 
         const newClauses = map(elements, element => factory.createCaseClause(element, []));
-        const newLineChar = getNewLineCharacter(options, maybeBind(host, host.getNewLine));
+        const newLineChar = getNewLineOrDefaultFromHost(host, formatContext?.options);
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
             target: options.target,
-            newLine: getNewLineKind(newLineChar),
+            newLine: getNewLineKind(newLineChar)
         });
         const printNode = formatContext
             ? (node: Node) => printer.printAndFormatNode(EmitHint.Unspecified, node, sourceFile, formatContext)
@@ -1571,7 +1572,7 @@ function getEntryForMemberCompletion(
         module: options.module,
         target: options.target,
         omitTrailingSemicolon: false,
-        newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+        newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
     });
     const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
@@ -1737,7 +1738,7 @@ function getEntryForObjectLiteralMethodCompletion(
         module: options.module,
         target: options.target,
         omitTrailingSemicolon: false,
-        newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+        newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
     });
     if (formatContext) {
         insertText = printer.printAndFormatSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile, formatContext);
@@ -3351,9 +3352,9 @@ function getCompletionData(
                 symbolToSortTextMap[getSymbolId(symbol)] = SortText.GlobalsOrKeywords;
             }
             if (typeOnlyAliasNeedsPromotion && !(symbol.flags & SymbolFlags.Value)) {
-                const typeOnlyAliasDeclaration = symbol.declarations && find(symbol.declarations, isTypeOnlyImportOrExportDeclaration);
+                const typeOnlyAliasDeclaration = symbol.declarations && find(symbol.declarations, isTypeOnlyImportDeclaration);
                 if (typeOnlyAliasDeclaration) {
-                    const origin: SymbolOriginInfoTypeOnlyAlias = { kind: SymbolOriginInfoKind.TypeOnlyAlias, declaration: typeOnlyAliasDeclaration };
+                    const origin: SymbolOriginInfoTypeOnlyImport = { kind: SymbolOriginInfoKind.TypeOnlyAlias, declaration: typeOnlyAliasDeclaration };
                     symbolToOriginInfoMap[i] = origin;
                 }
             }

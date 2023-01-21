@@ -2930,16 +2930,16 @@ function findLinkNameEnd(text: string) {
     return 0;
 }
 
-const carriageReturnLineFeed = "\r\n";
+const lineFeed = "\n";
 /**
- * The default is CRLF.
+ * The default is LF.
  *
  * @internal
  */
-export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings?: FormatCodeSettings) {
+export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings: FormatCodeSettings | undefined) {
     return formatSettings?.newLineCharacter ||
         host.getNewLine?.() ||
-        carriageReturnLineFeed;
+        lineFeed;
 }
 
 /** @internal */

@@ -1471,7 +1471,7 @@ export function f(p: C) { return p; }`
             };
             const config: File = {
                 path: `/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: {} })
+                content: JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: false } })
             };
             return createWatchedSystem([aFile, bFile, config, libFile], { useCaseSensitiveFileNames: false });
         },

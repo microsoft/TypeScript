@@ -2,11 +2,11 @@ import * as collections from "./_namespaces/collections";
 import * as fakes from "./_namespaces/fakes";
 import {
     Compiler,
-    harnessNewLine,
     mockHash,
     virtualFileSystemRoot,
 } from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
+import { getNewLineCharacter } from "./_namespaces/ts";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
 
@@ -149,7 +149,7 @@ export abstract class LanguageServiceAdapterHost {
     }
 
     public getNewLine(): string {
-        return harnessNewLine;
+        return getNewLineCharacter(this.settings);
     }
 
     public getFilenames(): string[] {

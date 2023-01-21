@@ -1643,7 +1643,7 @@ export function createLanguageService(
             getCancellationToken: () => cancellationToken,
             getCanonicalFileName,
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-            getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
+            getNewLine: () => getNewLineCharacter(newSettings),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
             writeFile: noop,
             getCurrentDirectory: () => currentDirectory,
@@ -2437,7 +2437,7 @@ export function createLanguageService(
     }
 
     function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
-        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
+        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, /*formatSettings*/ undefined), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
     }
 
     function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {

@@ -1285,7 +1285,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         paramType: Diagnostics.NEWLINE,
         category: Diagnostics.Emit,
         description: Diagnostics.Set_the_newline_character_for_emitting_files,
-        defaultValueDescription: Diagnostics.Platform_specific
+        defaultValueDescription: "lf"
     },
     {
         name: "noErrorTruncation",
@@ -1461,7 +1461,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Ensure_that_casing_is_correct_in_imports,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
     {
         name: "maxNodeModuleJsDepth",
@@ -1618,14 +1618,6 @@ export const buildOpts: CommandLineOption[] = [
 /** @internal */
 export const typeAcquisitionDeclarations: CommandLineOption[] = [
     {
-        /* @deprecated typingOptions.enableAutoDiscovery
-         * Use typeAcquisition.enable instead.
-         */
-        name: "enableAutoDiscovery",
-        type: "boolean",
-        defaultValueDescription: false,
-    },
-    {
         name: "enable",
         type: "boolean",
         defaultValueDescription: false,
@@ -1694,19 +1686,6 @@ export const defaultInitCompilerOptions: CompilerOptions = {
     forceConsistentCasingInFileNames: true,
     skipLibCheck: true
 };
-
-/** @internal */
-export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
-    // Convert deprecated typingOptions.enableAutoDiscovery to typeAcquisition.enable
-    if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
-        return {
-            enable: typeAcquisition.enableAutoDiscovery,
-            include: typeAcquisition.include || [],
-            exclude: typeAcquisition.exclude || []
-        };
-    }
-    return typeAcquisition;
-}
 
 /** @internal */
 export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
@@ -2193,12 +2172,6 @@ function getTsconfigRootOptionsMap() {
                     type: "object",
                     elementOptions: getCommandLineWatchOptionsMap(),
                     extraKeyDiagnostics: watchOptionsDidYouMeanDiagnostics,
-                },
-                {
-                    name: "typingOptions",
-                    type: "object",
-                    elementOptions: getCommandLineTypeAcquisitionMap(),
-                    extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics,
                 },
                 {
                     name: "typeAcquisition",
@@ -3282,9 +3255,7 @@ function parseOwnConfigOfJson(
     }
 
     const options = convertCompilerOptionsFromJsonWorker(json.compilerOptions, basePath, errors, configFileName);
-    // typingOptions has been deprecated and is only supported for backward compatibility purposes.
-    // It should be removed in future releases - use typeAcquisition instead.
-    const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition || json.typingOptions, basePath, errors, configFileName);
+    const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition, basePath, errors, configFileName);
     const watchOptions = convertWatchOptionsFromJsonWorker(json.watchOptions, basePath, errors);
     json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
     let extendedConfigPath: string | string[] | undefined;
@@ -3322,7 +3293,7 @@ function parseOwnConfigOfJsonSourceFile(
     errors: Push<Diagnostic>
 ): ParsedTsconfig {
     const options = getDefaultCompilerOptions(configFileName);
-    let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
+    let typeAcquisition: TypeAcquisition | undefined;
     let watchOptions: WatchOptions | undefined;
     let extendedConfigPath: string | string[] | undefined;
     let rootCompilerOptions: PropertyName[] | undefined;
@@ -3339,9 +3310,6 @@ function parseOwnConfigOfJsonSourceFile(
                     break;
                 case "typeAcquisition":
                     currentOption = (typeAcquisition || (typeAcquisition = getDefaultTypeAcquisition(configFileName)));
-                    break;
-                case "typingOptions":
-                    currentOption = (typingOptionstypeAcquisition || (typingOptionstypeAcquisition = getDefaultTypeAcquisition(configFileName)));
                     break;
                 default:
                     Debug.fail("Unknown option");
@@ -3394,18 +3362,7 @@ function parseOwnConfigOfJsonSourceFile(
     const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
 
     if (!typeAcquisition) {
-        if (typingOptionstypeAcquisition) {
-            typeAcquisition = (typingOptionstypeAcquisition.enableAutoDiscovery !== undefined) ?
-                {
-                    enable: typingOptionstypeAcquisition.enableAutoDiscovery,
-                    include: typingOptionstypeAcquisition.include,
-                    exclude: typingOptionstypeAcquisition.exclude
-                } :
-                typingOptionstypeAcquisition;
-        }
-        else {
-            typeAcquisition = getDefaultTypeAcquisition(configFileName);
-        }
+        typeAcquisition = getDefaultTypeAcquisition(configFileName);
     }
 
     if (rootCompilerOptions && json && json.compilerOptions === undefined) {
@@ -3539,9 +3496,7 @@ function convertTypeAcquisitionFromJsonWorker(jsonOptions: any,
     basePath: string, errors: Push<Diagnostic>, configFileName?: string): TypeAcquisition {
 
     const options = getDefaultTypeAcquisition(configFileName);
-    const typeAcquisition = convertEnableAutoDiscoveryToEnable(jsonOptions);
-
-    convertOptionsFromJson(getCommandLineTypeAcquisitionMap(), typeAcquisition, basePath, options, typeAcquisitionDidYouMeanDiagnostics, errors);
+    convertOptionsFromJson(getCommandLineTypeAcquisitionMap(), jsonOptions, basePath, options, typeAcquisitionDidYouMeanDiagnostics, errors);
     return options;
 }
 

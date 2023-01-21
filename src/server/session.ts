@@ -928,8 +928,6 @@ export interface SessionOptions {
     eventHandler?: ProjectServiceEventHandler;
     /** Has no effect if eventHandler is also specified. */
     suppressDiagnosticEvents?: boolean;
-    /** @deprecated use serverMode instead */
-    syntaxOnly?: boolean;
     serverMode?: LanguageServiceMode;
     throttleWaitMilliseconds?: number;
     noGetErrOnBackgroundUpdate?: boolean;
@@ -1001,7 +999,6 @@ export class Session<TMessage = string> implements EventSender {
             pluginProbeLocations: opts.pluginProbeLocations,
             allowLocalPluginLoads: opts.allowLocalPluginLoads,
             typesMapLocation: opts.typesMapLocation,
-            syntaxOnly: opts.syntaxOnly,
             serverMode: opts.serverMode,
             session: this
         };
@@ -1183,13 +1180,8 @@ export class Session<TMessage = string> implements EventSender {
         this.send(toEvent(eventName, body));
     }
 
-    // For backwards-compatibility only.
-    /** @deprecated */
-    public output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void {
-        this.doOutput(info, cmdName, reqSeq!, /*success*/ !errorMsg, errorMsg); // TODO: GH#18217
-    }
-
-    private doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
+    /** @internal */
+    doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
         const res: protocol.Response = {
             seq: 0,
             type: "response",

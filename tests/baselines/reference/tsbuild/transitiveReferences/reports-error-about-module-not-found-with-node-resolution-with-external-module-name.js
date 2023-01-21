@@ -90,7 +90,7 @@ exports.A = A;
 
 
 //// [/src/tsconfig.a.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8566332115-export class A {}\r\n","signature":"-9529994156-export declare class A {\r\n}\r\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8566332115-export class A {}\r\n","signature":"-8728835846-export declare class A {\n}\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.a.tsbuildinfo.readable.baseline.txt]
 {
@@ -112,10 +112,10 @@ exports.A = A;
       "./a.ts": {
         "original": {
           "version": "-8566332115-export class A {}\r\n",
-          "signature": "-9529994156-export declare class A {\r\n}\r\n"
+          "signature": "-8728835846-export declare class A {\n}\n"
         },
         "version": "-8566332115-export class A {}\r\n",
-        "signature": "-9529994156-export declare class A {\r\n}\r\n"
+        "signature": "-8728835846-export declare class A {\n}\n"
       }
     },
     "options": {
@@ -130,7 +130,7 @@ exports.A = A;
     "latestChangedDtsFile": "./a.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 822
+  "size": 818
 }
 
 //// [/src/tsconfig.b.tsbuildinfo]
