@@ -199,7 +199,7 @@
           "kind": "method",
           "kindModifiers": "",
           "sortText": "17",
-          "insertText": "method(): void {\r\n}",
+          "insertText": "method(): void {\n}",
           "displayParts": [
             {
               "text": "(",
