@@ -12,10 +12,12 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-
     strategy:
       matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
         node-version:
           - "19"
           - "18"
@@ -26,8 +28,10 @@ jobs:
         include:
           - node-version: "*"
             bundle: "false"
+            os: ubuntu-latest
 
-    name: Test Node ${{ matrix.node-version }} with --bundle=${{ matrix.bundle }}
+    runs-on: ${{ matrix.os }}
+    name: Test Node ${{ matrix.node-version }} on ${{ matrix.os }} with --bundle=${{ matrix.bundle }}
 
     steps:
     - uses: actions/checkout@v3
