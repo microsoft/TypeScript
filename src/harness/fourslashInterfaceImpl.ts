@@ -1137,6 +1137,7 @@ export namespace Completion {
         interfaceEntry("StringConstructor"),
         varEntry("Boolean"),
         interfaceEntry("BooleanConstructor"),
+        interfaceEntry("NumericValueOf"),
         varEntry("Number"),
         interfaceEntry("NumberConstructor"),
         interfaceEntry("TemplateStringsArray"),

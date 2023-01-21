@@ -628,15 +628,15 @@ if (typeof bigIntOrNumber === "number") {
 >bigIntOrNumber : number | bigint
 
 ~bigIntOrNumber; // should infer number | bigint
->~bigIntOrNumber : number | bigint
+>~bigIntOrNumber : bigint | NumericValueOf
 >bigIntOrNumber : number | bigint
 
 bigIntOrNumber++; // should infer number | bigint
->bigIntOrNumber++ : number | bigint
+>bigIntOrNumber++ : bigint | NumericValueOf
 >bigIntOrNumber : number | bigint
 
 ++bigIntOrNumber; // should infer number | bigint
->++bigIntOrNumber : number | bigint
+>++bigIntOrNumber : bigint | NumericValueOf
 >bigIntOrNumber : number | bigint
 
 let anyValue: any;
