@@ -2605,6 +2605,13 @@ namespace Parser {
         return createIdentifier(tokenIsIdentifierOrKeyword(token()), diagnosticMessage);
     }
 
+    function parseIdentifierNameErrorOnUnicodeEscapeSequence(): Identifier {
+        if (scanner.hasUnicodeEscape() || scanner.hasExtendedUnicodeEscape()) {
+            parseErrorAtCurrentToken(Diagnostics.Unicode_escape_sequence_cannot_appear_here);
+        }
+        return createIdentifier(tokenIsIdentifierOrKeyword(token()));
+    }
+
     function isLiteralPropertyName(): boolean {
         return tokenIsIdentifierOrKeyword(token()) ||
             token() === SyntaxKind.StringLiteral ||
@@ -3454,7 +3461,7 @@ namespace Parser {
             entity = finishNode(
                 factory.createQualifiedName(
                     entity,
-                    parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false) as Identifier
+                    parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false, /** allowUnicodeEscapeSequenceInIdentifierName */ true) as Identifier
                 ),
                 pos
             );
@@ -3466,7 +3473,7 @@ namespace Parser {
         return finishNode(factory.createQualifiedName(entity, name), entity.pos);
     }
 
-    function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateIdentifiers: boolean): Identifier | PrivateIdentifier {
+    function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateIdentifiers: boolean, allowUnicodeEscapeSequenceInIdentifierName: boolean): Identifier | PrivateIdentifier {
         // Technically a keyword is valid here as all identifiers and keywords are identifier names.
         // However, often we'll encounter this in error situations when the identifier or keyword
         // is actually starting another valid construct.
@@ -3502,7 +3509,11 @@ namespace Parser {
             return allowPrivateIdentifiers ? node : createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
         }
 
-        return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
+        if (allowIdentifierNames) {
+            return allowUnicodeEscapeSequenceInIdentifierName ? parseIdentifierName() : parseIdentifierNameErrorOnUnicodeEscapeSequence();
+        }
+
+        return parseIdentifier();
     }
 
     function parseTemplateSpans(isTaggedTemplate: boolean) {
@@ -5869,7 +5880,7 @@ namespace Parser {
         // If it wasn't then just try to parse out a '.' and report an error.
         parseExpectedToken(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
         // private names will never work with `super` (`super.#foo`), but that's a semantic error, not syntactic
-        return finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true)), pos);
+        return finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true, /** allowUnicodeEscapeSequenceInIdentifierName */ true)), pos);
     }
 
     function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment): JsxElement | JsxSelfClosingElement | JsxFragment {
@@ -6058,9 +6069,9 @@ namespace Parser {
         // We can't just simply use parseLeftHandSideExpressionOrHigher because then we will start consider class,function etc as a keyword
         // We only want to consider "this" as a primaryExpression
         let expression: JsxTagNameExpression = token() === SyntaxKind.ThisKeyword ?
-            parseTokenNode<ThisExpression>() : parseIdentifierName();
+            parseTokenNode<ThisExpression>() : parseIdentifierNameErrorOnUnicodeEscapeSequence();
         while (parseOptional(SyntaxKind.DotToken)) {
-            expression = finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false)), pos) as JsxTagNamePropertyAccess;
+            expression = finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false, /** allowUnicodeEscapeSequenceInIdentifierName */ false)), pos) as JsxTagNamePropertyAccess;
         }
         return expression;
     }
@@ -6099,7 +6110,7 @@ namespace Parser {
 
         scanJsxIdentifier();
         const pos = getNodePos();
-        return finishNode(factory.createJsxAttribute(parseIdentifierName(), parseJsxAttributeValue()), pos);
+        return finishNode(factory.createJsxAttribute(parseIdentifierNameErrorOnUnicodeEscapeSequence(), parseJsxAttributeValue()), pos);
     }
 
     function parseJsxAttributeValue(): JsxAttributeValue | undefined {
@@ -6205,7 +6216,7 @@ namespace Parser {
     }
 
     function parsePropertyAccessExpressionRest(pos: number, expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined) {
-        const name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true);
+        const name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true, /** allowUnicodeEscapeSequenceInIdentifierName */ true);
         const isOptionalChain = questionDotToken || tryReparseOptionalChain(expression);
         const propertyAccess = isOptionalChain ?
             factory.createPropertyAccessChain(expression, questionDotToken, name) :
