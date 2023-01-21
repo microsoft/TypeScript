@@ -2083,7 +2083,7 @@ export class Session<TMessage = string> implements EventSender {
     private getDocCommentTemplate(args: protocol.FileLocationRequestArgs) {
         const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
         const position = this.getPositionInFile(args, file);
-        return languageService.getDocCommentTemplateAtPosition(file, position, this.getPreferences(file));
+        return languageService.getDocCommentTemplateAtPosition(file, position, this.getPreferences(file), this.getFormatOptions(file));
     }
 
     private getSpanOfEnclosingComment(args: protocol.SpanOfEnclosingCommentRequestArgs) {

@@ -727,7 +727,7 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getDocCommentTemplateAtPosition(_fileName: string, _position: number, _options?: DocCommentTemplateOptions): TextInsertion {
+    getDocCommentTemplateAtPosition(_fileName: string, _position: number, _options?: DocCommentTemplateOptions, _formatOptions?: FormatCodeSettings): TextInsertion {
         return notImplemented();
     }
 
