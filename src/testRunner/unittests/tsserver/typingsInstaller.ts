@@ -92,7 +92,7 @@ describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("config"), globalTypingsCacheLocation: typesCache });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, _cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, _cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 assert(false, "should not be called");
             }
         })();
@@ -140,7 +140,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings = ["@types/jquery"];
                 const typingFiles = [jquery];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -184,7 +184,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings = ["@types/jquery"];
                 const typingFiles = [jquery];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -218,10 +218,10 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
             }
-            enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
+            override enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
                 super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
                 const installedTypings: string[] = [];
                 const typingFiles: File[] = [];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -258,7 +258,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host);
             }
-            enqueueInstallTypingsRequest() {
+            override enqueueInstallTypingsRequest() {
                 assert(false, "auto discovery should not be enabled");
             }
         })();
@@ -290,7 +290,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("node") });
             }
-            installWorker() {
+            override installWorker() {
                 assert(false, "nothing should get installed");
             }
         })();
@@ -317,7 +317,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            enqueueInstallTypingsRequest() {
+            override enqueueInstallTypingsRequest() {
                 assert(false, "auto discovery should not be enabled");
             }
         })();
@@ -351,11 +351,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
+            override enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
                 enqueueIsCalled = true;
                 super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
                 const installedTypings = ["@types/node"];
                 const typingFiles = [jquery];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -409,7 +409,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("lodash", "react") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
                 const installedTypings = ["@types/lodash", "@types/react"];
                 const typingFiles = [lodashDts, reactDts];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -450,10 +450,10 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
+            override enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
                 super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
                 const installedTypings: string[] = [];
                 const typingFiles: File[] = [];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -490,10 +490,10 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
             }
-            enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
+            override enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
                 super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
                 const installedTypings: string[] = [];
                 const typingFiles: File[] = [];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -537,10 +537,10 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
+            override enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
                 super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
                 const installedTypings: string[] = [];
                 const typingFiles: File[] = [];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -616,7 +616,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery", "commander", "moment", "express") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
                 const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment"];
                 const typingFiles = [commander, express, jquery, moment];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -699,7 +699,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { throttleLimit: 3, typesRegistry: createTypesRegistry("commander", "express", "jquery", "moment", "lodash") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
                 const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash"];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
             }
@@ -778,7 +778,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
             }
-            installWorker(_requestId: number, args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+            override installWorker(_requestId: number, args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
                 let typingFiles: (File & { typings: string })[] = [];
                 if (args.indexOf(ts.server.typingsInstaller.typingsName("commander")) >= 0) {
                     typingFiles = [commander, jquery, lodash, cordova];
@@ -876,7 +876,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("zkat__cacache", "nested", "commander") });
             }
-            installWorker(_requestId: number, args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 assert.deepEqual(args, [`@types/zkat__cacache@ts${ts.versionMajorMinor}`]);
                 const installedTypings = ["@types/zkat__cacache"];
                 const typingFiles = [cacacheDTS];
@@ -953,7 +953,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery", "nested", "commander") });
             }
-            installWorker(_requestId: number, args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 assert.deepEqual(args, [`@types/jquery@ts${ts.versionMajorMinor}`]);
                 const installedTypings = ["@types/jquery"];
                 const typingFiles = [jqueryDTS];
@@ -1037,7 +1037,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings = ["@types/jquery"];
                 const typingFiles = [jqueryDTS];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -1083,7 +1083,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings = ["@types/jquery"];
                 const typingFiles = [jqueryDTS];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -1127,7 +1127,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings = ["@types/commander"];
                 const typingFiles = [commander];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -1173,7 +1173,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("node", "commander") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings = ["@types/node", "@types/commander", `@types/${emberComponentDirectory}`];
                 const typingFiles = [node, commander, emberComponent];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -1214,7 +1214,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry(...typeNames) });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings = typeNames.map(name => `@types/${name}`);
                 const typingFiles = typeNames.map((name): File => ({ path: typePath(name), content: "" }));
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -1253,7 +1253,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("foo") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 executeCommand(this, host, ["foo"], [], cb);
             }
         })();
@@ -1362,7 +1362,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings = ["@types/jquery"];
                 const typingFiles = [jquery];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -1434,7 +1434,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings: string[] = [];
                 const typingFiles: File[] = [];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -1522,7 +1522,7 @@ describe("unittests:: tsserver:: typingsInstaller:: Invalid package names", () =
             constructor() {
                 super(host, { globalTypingsCacheLocation: "/tmp" }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, _cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, _cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 assert(false, "runCommand should not be invoked");
             }
         })();
@@ -1792,12 +1792,12 @@ describe("unittests:: tsserver:: typingsInstaller:: telemetry events", () => {
             constructor() {
                 super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings = ["@types/commander"];
                 const typingFiles = [commander];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
             }
-            sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes) {
+            override sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes) {
                 if (response.kind === ts.server.EventBeginInstallTypes) {
                     return;
                 }
@@ -1853,12 +1853,12 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
             constructor() {
                 super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 const installedTypings = ["@types/commander"];
                 const typingFiles = [commander];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
             }
-            sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes) {
+            override sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes) {
                 if (response.kind === ts.server.EventBeginInstallTypes) {
                     beginEvent = response;
                     return;
@@ -1901,10 +1901,10 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
             constructor() {
                 super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 executeCommand(this, host, "", [], cb);
             }
-            sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes) {
+            override sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes) {
                 if (response.kind === ts.server.EventBeginInstallTypes) {
                     beginEvent = response;
                     return;
@@ -1984,7 +1984,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
             constructor() {
                 super(host, { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("foo") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 executeCommand(this, host, typingNames, typingFiles, cb);
             }
         })();
@@ -2069,7 +2069,7 @@ declare module "stream" {
             constructor() {
                 super(host, { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("node") });
             }
-            installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+            override installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
                 executeCommand(this, host, ["node"], [nodeTyping], cb);
             }
         })();

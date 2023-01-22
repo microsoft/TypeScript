@@ -36,7 +36,6 @@ import {
     ProjectFilesWithTSDiagnostics,
     ProjectKind,
     ProjectOptions,
-    protocol,
     ScriptInfo,
     ScriptInfoVersion,
     ServerHost,
@@ -66,7 +65,6 @@ import {
     contains,
     containsPath,
     convertCompilerOptionsForTelemetry,
-    convertEnableAutoDiscoveryToEnable,
     convertJsonOption,
     createCachedDirectoryStructureHost,
     createDocumentRegistryInternal,
@@ -179,6 +177,7 @@ import {
     WatchType,
     WildcardDirectoryWatcher,
 } from "./_namespaces/ts";
+import * as protocol from "./protocol";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 /** @internal */
@@ -588,8 +587,6 @@ export interface ProjectServiceOptions {
     pluginProbeLocations?: readonly string[];
     allowLocalPluginLoads?: boolean;
     typesMapLocation?: string;
-    /** @deprecated use serverMode instead */
-    syntaxOnly?: boolean;
     serverMode?: LanguageServiceMode;
     session: Session<unknown> | undefined;
 }
@@ -733,7 +730,7 @@ function forEachResolvedProjectReferenceProjectWorker<T>(
 
 function forEachPotentialProjectReference<T>(
     project: ConfiguredProject,
-    cb: (potentialProjectReference: Path) => T | undefined
+    cb: (potentialProjectReference: NormalizedPath) => T | undefined
 ): T | undefined {
     return project.potentialProjectReferences &&
         forEachKey(project.potentialProjectReferences, cb);
@@ -743,7 +740,7 @@ function forEachAnyProjectReferenceKind<T>(
     project: ConfiguredProject,
     cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
     cbProjectRef: (projectReference: ProjectReference) => T | undefined,
-    cbPotentialProjectRef: (potentialProjectReference: Path) => T | undefined
+    cbPotentialProjectRef: (potentialProjectReference: NormalizedPath) => T | undefined
 ): T | undefined {
     return project.getCurrentProgram() ?
         project.forEachResolvedProjectReference(cb) :
@@ -752,10 +749,10 @@ function forEachAnyProjectReferenceKind<T>(
             forEach(project.getProjectReferences(), cbProjectRef);
 }
 
-function callbackRefProject<T>(
+function callbackRefProject<T, P extends string>(
     project: ConfiguredProject,
     cb: (refProj: ConfiguredProject) => T | undefined,
-    refPath: Path | undefined
+    refPath: P | undefined
 ) {
     const refProject = refPath && project.projectService.configuredProjects.get(refPath);
     return refProject && cb(refProject);
@@ -969,8 +966,6 @@ export class ProjectService {
 
     public readonly typesMapLocation: string | undefined;
 
-    /** @deprecated use serverMode instead */
-    public readonly syntaxOnly: boolean;
     public readonly serverMode: LanguageServiceMode;
 
     /** Tracks projects that we have already sent telemetry for. */
@@ -1017,15 +1012,9 @@ export class ProjectService {
 
         if (opts.serverMode !== undefined) {
             this.serverMode = opts.serverMode;
-            this.syntaxOnly = this.serverMode === LanguageServiceMode.Syntactic;
-        }
-        else if (opts.syntaxOnly) {
-            this.serverMode = LanguageServiceMode.Syntactic;
-            this.syntaxOnly = true;
         }
         else {
             this.serverMode = LanguageServiceMode.Semantic;
-            this.syntaxOnly = false;
         }
 
         if (this.host.realpath) {
@@ -4094,7 +4083,7 @@ export class ProjectService {
             }
             else {
                 let exclude = false;
-                if (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery) {
+                if (typeAcquisition.enable) {
                     const baseName = getBaseFileName(toFileNameLowerCase(normalizedNames[i]));
                     if (fileExtensionIs(baseName, "js")) {
                         const inferredTypingName = removeFileExtension(baseName);
@@ -4129,12 +4118,6 @@ export class ProjectService {
     }
 
     openExternalProject(proj: protocol.ExternalProject): void {
-        // typingOptions has been deprecated and is only supported for backward compatibility
-        // purposes. It should be removed in future releases - use typeAcquisition instead.
-        if (proj.typingOptions && !proj.typeAcquisition) {
-            const typeAcquisition = convertEnableAutoDiscoveryToEnable(proj.typingOptions);
-            proj.typeAcquisition = typeAcquisition;
-        }
         proj.typeAcquisition = proj.typeAcquisition || {};
         proj.typeAcquisition.include = proj.typeAcquisition.include || [];
         proj.typeAcquisition.exclude = proj.typeAcquisition.exclude || [];

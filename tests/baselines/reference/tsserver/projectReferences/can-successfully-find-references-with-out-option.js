@@ -44,6 +44,7 @@ namespace container {
 //// [/user/username/projects/container/exec/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "outFile": "../built/local/exec.js",
     },
     "files": [
@@ -65,6 +66,7 @@ namespace container {
 //// [/user/username/projects/container/compositeExec/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "outFile": "../built/local/compositeExec.js",
         "composite": true,
         "declarationMap": true,
@@ -363,6 +365,7 @@ Info 6    [00:01:16.000] Config: /user/username/projects/container/compositeExec
   "/user/username/projects/container/compositeExec/index.ts"
  ],
  "options": {
+  "ignoreDeprecations": "5.0",
   "outFile": "/user/username/projects/container/built/local/compositeExec.js",
   "composite": true,
   "declarationMap": true,
@@ -531,6 +534,7 @@ Info 43   [00:02:02.000] Config: /user/username/projects/container/exec/tsconfig
   "/user/username/projects/container/exec/index.ts"
  ],
  "options": {
+  "ignoreDeprecations": "5.0",
   "outFile": "/user/username/projects/container/built/local/exec.js",
   "configFilePath": "/user/username/projects/container/exec/tsconfig.json"
  },

@@ -5,7 +5,6 @@ import {
     addEmitHelpers,
     addRange,
     addSyntheticTrailingComment,
-    AllDecorators,
     append,
     ArrowFunction,
     AssertionExpression,
@@ -16,6 +15,7 @@ import {
     childIsDecorated,
     ClassDeclaration,
     ClassElement,
+    classElementOrClassElementParameterIsDecorated,
     ClassExpression,
     ClassLikeDeclaration,
     classOrConstructorParameterIsDecorated,
@@ -30,7 +30,6 @@ import {
     Declaration,
     Decorator,
     ElementAccessExpression,
-    elideNodes,
     EmitFlags,
     EmitHint,
     EntityName,
@@ -43,16 +42,12 @@ import {
     ExpressionWithTypeArguments,
     filter,
     findSuperStatementIndex,
-    firstOrUndefined,
-    flatMap,
     flattenDestructuringAssignment,
     FlattenLevel,
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
-    getAllDecoratorsOfClass,
-    getAllDecoratorsOfClassElement,
     getEffectiveBaseTypeNode,
     getEmitFlags,
     getEmitModuleKind,
@@ -77,6 +72,7 @@ import {
     ImportSpecifier,
     InitializedVariableDeclaration,
     insertStatementsAfterStandardPrologue,
+    InternalEmitFlags,
     isAccessExpression,
     isArray,
     isAssertionExpression,
@@ -88,6 +84,7 @@ import {
     isDecorator,
     isElementAccessExpression,
     isEnumConst,
+    isExportOrDefaultModifier,
     isExportSpecifier,
     isExpression,
     isExternalModule,
@@ -110,7 +107,7 @@ import {
     isNamedExportBindings,
     isNamedImportBindings,
     isNamespaceExport,
-    isObjectLiteralElement,
+    isObjectLiteralElementLike,
     isParameterPropertyDeclaration,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -119,9 +116,9 @@ import {
     isSimpleInlineableExpression,
     isSourceFile,
     isStatement,
+    isTemplateLiteral,
     JsxOpeningElement,
     JsxSelfClosingElement,
-    lastOrUndefined,
     LeftHandSideExpression,
     map,
     mapDefined,
@@ -141,6 +138,7 @@ import {
     NamespaceExport,
     NewExpression,
     Node,
+    NodeArray,
     NodeFlags,
     nodeIsMissing,
     NonNullExpression,
@@ -161,6 +159,7 @@ import {
     setCommentRange,
     setConstantValue,
     setEmitFlags,
+    setInternalEmitFlags,
     setOriginalNode,
     setParent,
     setSourceMapRange,
@@ -169,27 +168,26 @@ import {
     setTextRange,
     setTextRangeEnd,
     setTextRangePos,
-    setTextRangePosEnd,
     setTypeNode,
     ShorthandPropertyAssignment,
     shouldPreserveConstEnums,
-    singleOrMany,
     skipOuterExpressions,
     skipPartiallyEmittedExpressions,
     skipTrivia,
+    skipWhile,
     some,
     SourceFile,
     startOnNewLine,
     Statement,
     SyntaxKind,
     TaggedTemplateExpression,
+    takeWhile,
     TextRange,
     TransformationContext,
     TransformFlags,
     UnderscoreEscapedMap,
     VariableDeclaration,
     VariableStatement,
-    visitArray,
     visitEachChild,
     visitFunctionBody,
     visitLexicalEnvironment,
@@ -214,16 +212,14 @@ const enum TypeScriptSubstitutionFlags {
 const enum ClassFacts {
     None = 0,
     HasStaticInitializedProperties = 1 << 0,
-    HasConstructorDecorators = 1 << 1,
+    HasClassOrConstructorParameterDecorators = 1 << 1,
     HasMemberDecorators = 1 << 2,
     IsExportOfNamespace = 1 << 3,
     IsNamedExternalExport = 1 << 4,
     IsDefaultExternalExport = 1 << 5,
     IsDerivedClass = 1 << 6,
-    UseImmediatelyInvokedFunctionExpression = 1 << 7,
 
-    HasAnyDecorators = HasConstructorDecorators | HasMemberDecorators,
-    NeedsName = HasStaticInitializedProperties | HasMemberDecorators,
+    HasAnyDecorators = HasClassOrConstructorParameterDecorators | HasMemberDecorators,
     MayNeedImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
     IsExported = IsExportOfNamespace | IsDefaultExternalExport | IsNamedExternalExport,
 }
@@ -243,6 +239,7 @@ export function transformTypeScript(context: TransformationContext) {
     const compilerOptions = context.getCompilerOptions();
     const languageVersion = getEmitScriptTarget(compilerOptions);
     const moduleKind = getEmitModuleKind(compilerOptions);
+    const legacyDecorators = !!compilerOptions.experimentalDecorators;
     const typeSerializer = compilerOptions.emitDecoratorMetadata ? createRuntimeTypeSerializer(context) : undefined;
 
     // Save the previous transformation hooks.
@@ -319,7 +316,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
+    function saveStateAndInvoke<T, U extends Node>(node: U, f: (node: U) => T): T {
         // Save state
         const savedCurrentScope = currentLexicalScope;
         const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
@@ -381,7 +378,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: Node): VisitResult<Node | undefined> {
         return saveStateAndInvoke(node, visitorWorker);
     }
 
@@ -390,7 +387,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitorWorker(node: Node): VisitResult<Node> {
+    function visitorWorker(node: Node): VisitResult<Node | undefined> {
         if (node.transformFlags & TransformFlags.ContainsTypeScript) {
             return visitTypeScript(node);
         }
@@ -402,7 +399,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function sourceElementVisitor(node: Node): VisitResult<Node> {
+    function sourceElementVisitor(node: Node): VisitResult<Node | undefined> {
         return saveStateAndInvoke(node, sourceElementVisitorWorker);
     }
 
@@ -411,7 +408,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function sourceElementVisitorWorker(node: Node): VisitResult<Node> {
+    function sourceElementVisitorWorker(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
@@ -423,7 +420,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node> {
+    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
         const parsed = getParseTreeNode(node);
         if (parsed !== node) {
             // If the node has been transformed by a `before` transformer, perform no ellision on it
@@ -456,7 +453,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function namespaceElementVisitor(node: Node): VisitResult<Node> {
+    function namespaceElementVisitor(node: Node): VisitResult<Node | undefined> {
         return saveStateAndInvoke(node, namespaceElementVisitorWorker);
     }
 
@@ -465,7 +462,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function namespaceElementVisitorWorker(node: Node): VisitResult<Node> {
+    function namespaceElementVisitorWorker(node: Node): VisitResult<Node | undefined> {
         if (node.kind === SyntaxKind.ExportDeclaration ||
             node.kind === SyntaxKind.ImportDeclaration ||
             node.kind === SyntaxKind.ImportClause ||
@@ -486,7 +483,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param parent The class containing the elements to visit.
      */
-    function getClassElementVisitor(parent: ClassLikeDeclaration): (node: Node) => VisitResult<Node> {
+    function getClassElementVisitor(parent: ClassLikeDeclaration): (node: Node) => VisitResult<Node | undefined> {
         return node => saveStateAndInvoke(node, n => classElementVisitorWorker(n, parent));
     }
 
@@ -495,7 +492,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node> {
+    function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.Constructor:
                 return visitConstructor(node as ConstructorDeclaration);
@@ -533,11 +530,11 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): (node: Node) => VisitResult<Node> {
+    function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): <T extends Node>(node: T) => VisitResult<Node | undefined> {
         return node => saveStateAndInvoke(node, n => objectLiteralElementVisitorWorker(n, parent));
     }
 
-    function objectLiteralElementVisitorWorker(node: Node, parent: ObjectLiteralExpression): VisitResult<Node> {
+    function objectLiteralElementVisitorWorker(node: Node, parent: ObjectLiteralExpression): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
@@ -562,7 +559,15 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function modifierVisitor(node: Node): VisitResult<Node> {
+    function decoratorElidingVisitor(node: Node): VisitResult<Node | undefined> {
+        return isDecorator(node) ? undefined : visitor(node);
+    }
+
+    function modifierElidingVisitor(node: Node): VisitResult<Node | undefined> {
+        return isModifier(node) ? undefined : visitor(node);
+    }
+
+    function modifierVisitor(node: Node): VisitResult<Node | undefined> {
         if (isDecorator(node)) return undefined;
         if (modifierToFlag(node.kind) & ModifierFlags.TypeScriptModifier) {
             return undefined;
@@ -579,7 +584,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitTypeScript(node: Node): VisitResult<Node> {
+    function visitTypeScript(node: Node): VisitResult<Node | undefined> {
         if (isStatement(node) && hasSyntacticModifier(node, ModifierFlags.Ambient)) {
             // TypeScript ambient declarations are elided, but some comments may be preserved.
             // See the implementation of `getLeadingComments` in comments.ts for more details.
@@ -789,21 +794,20 @@ export function transformTypeScript(context: TransformationContext) {
     function visitObjectLiteralExpression(node: ObjectLiteralExpression) {
         return factory.updateObjectLiteralExpression(
             node,
-            visitNodes(node.properties, getObjectLiteralElementVisitor(node), isObjectLiteralElement)
+            visitNodes(node.properties, getObjectLiteralElementVisitor(node), isObjectLiteralElementLike)
         );
     }
 
-    function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
+    function getClassFacts(node: ClassDeclaration) {
         let facts = ClassFacts.None;
-        if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
+        if (some(getProperties(node, /*requireInitialized*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
         const extendsClauseElement = getEffectiveBaseTypeNode(node);
         if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
-        if (classOrConstructorParameterIsDecorated(node)) facts |= ClassFacts.HasConstructorDecorators;
-        if (childIsDecorated(node)) facts |= ClassFacts.HasMemberDecorators;
+        if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasClassOrConstructorParameterDecorators;
+        if (childIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasMemberDecorators;
         if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
         else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
         else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
-        if (languageVersion <= ScriptTarget.ES5 && (facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression)) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
         return facts;
     }
 
@@ -819,7 +823,13 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-        if (!isClassLikeDeclarationWithTypeScriptSyntax(node) && !(currentNamespace && hasSyntacticModifier(node, ModifierFlags.Export))) {
+        const facts = getClassFacts(node);
+        const promoteToIIFE = languageVersion <= ScriptTarget.ES5 &&
+            !!(facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression);
+
+        if (!isClassLikeDeclarationWithTypeScriptSyntax(node) &&
+            !classOrConstructorParameterIsDecorated(legacyDecorators, node) &&
+            !isExportOfNamespace(node)) {
             return factory.updateClassDeclaration(
                 node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
@@ -830,28 +840,42 @@ export function transformTypeScript(context: TransformationContext) {
             );
         }
 
-        const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
-        const facts = getClassFacts(node, staticProperties);
-
-        if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
+        if (promoteToIIFE) {
             context.startLexicalEnvironment();
         }
 
-        const name = node.name || (facts & ClassFacts.NeedsName ? factory.getGeneratedNameForNode(node) : undefined);
-        const allDecorators = getAllDecoratorsOfClass(node);
-        const decorators = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
+        const moveModifiers =
+            promoteToIIFE ||
+            facts & ClassFacts.IsExportOfNamespace ||
+            facts & ClassFacts.HasClassOrConstructorParameterDecorators && legacyDecorators ||
+            facts & ClassFacts.HasStaticInitializedProperties;
 
-        // we do not emit modifiers on the declaration if we are emitting an IIFE
-        const modifiers = !(facts & ClassFacts.UseImmediatelyInvokedFunctionExpression)
-            ? visitNodes(node.modifiers, modifierVisitor, isModifier)
-            : elideNodes(factory, node.modifiers); // preserve positions, if available
+        // elide modifiers on the declaration if we are emitting an IIFE or the class is
+        // a namespace export
+        let modifiers = moveModifiers ?
+            visitNodes(node.modifiers, modifierElidingVisitor, isModifierLike) :
+            visitNodes(node.modifiers, visitor, isModifierLike);
+
+        // inject metadata only if the class is decorated
+        if (facts & ClassFacts.HasClassOrConstructorParameterDecorators) {
+            modifiers = injectClassTypeMetadata(modifiers, node);
+        }
+
+        const needsName =
+            moveModifiers && !node.name ||
+            facts & ClassFacts.HasMemberDecorators ||
+            facts & ClassFacts.HasStaticInitializedProperties;
+
+        const name = needsName ?
+            node.name ?? factory.getGeneratedNameForNode(node) :
+            node.name;
 
         //  ${modifiers} class ${name} ${heritageClauses} {
         //      ${members}
         //  }
-        const classStatement = factory.updateClassDeclaration(
+        const classDeclaration = factory.updateClassDeclaration(
             node,
-            concatenate<ModifierLike>(decorators, modifiers),
+            modifiers,
             name,
             /*typeParameters*/ undefined,
             visitNodes(node.heritageClauses, visitor, isHeritageClause),
@@ -865,11 +889,10 @@ export function transformTypeScript(context: TransformationContext) {
             emitFlags |= EmitFlags.NoTrailingSourceMap;
         }
 
-        setEmitFlags(classStatement, emitFlags);
+        setEmitFlags(classDeclaration, emitFlags);
 
-        let statements: Statement[] = [classStatement];
-
-        if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
+        let statement: VariableStatement | ClassDeclaration;
+        if (promoteToIIFE) {
             // When we emit a TypeScript class down to ES5, we must wrap it in an IIFE so that the
             // 'es2015' transformer can properly nest static initializers and decorators. The result
             // looks something like:
@@ -881,6 +904,7 @@ export function transformTypeScript(context: TransformationContext) {
             //      return C;
             //  }();
             //
+            const statements: Statement[] = [classDeclaration];
             const closingBraceLocation = createTokenRange(skipTrivia(currentSourceFile.text, node.members.end), SyntaxKind.CloseBraceToken);
             const localName = factory.getInternalName(node);
 
@@ -890,18 +914,24 @@ export function transformTypeScript(context: TransformationContext) {
             setTextRangeEnd(outer, closingBraceLocation.end);
             setEmitFlags(outer, EmitFlags.NoComments);
 
-            const statement = factory.createReturnStatement(outer);
-            setTextRangePos(statement, closingBraceLocation.pos);
-            setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
-            statements.push(statement);
+            const returnStatement = factory.createReturnStatement(outer);
+            setTextRangePos(returnStatement, closingBraceLocation.pos);
+            setEmitFlags(returnStatement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
+            statements.push(returnStatement);
 
             insertStatementsAfterStandardPrologue(statements, context.endLexicalEnvironment());
 
             const iife = factory.createImmediatelyInvokedArrowFunction(statements);
-            setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
+            setInternalEmitFlags(iife, InternalEmitFlags.TypeScriptClassWrapper);
 
+            //  export let C = (() => { ... })();
+            const modifiers = facts & ClassFacts.IsNamedExternalExport ?
+                factory.createModifiersFromModifierFlags(ModifierFlags.Export) :
+                undefined;
+
+            //  let C = (() => { ... })();
             const varStatement = factory.createVariableStatement(
-                /*modifiers*/ undefined,
+                modifiers,
                 factory.createVariableDeclarationList([
                     factory.createVariableDeclaration(
                         factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
@@ -909,52 +939,62 @@ export function transformTypeScript(context: TransformationContext) {
                         /*type*/ undefined,
                         iife
                     )
-                ])
+                ], NodeFlags.Let)
             );
 
             setOriginalNode(varStatement, node);
             setCommentRange(varStatement, node);
             setSourceMapRange(varStatement, moveRangePastDecorators(node));
             startOnNewLine(varStatement);
-            statements = [varStatement];
+            statement = varStatement;
+        }
+        else {
+            statement = classDeclaration;
         }
 
-        // If the class is exported as part of a TypeScript namespace, emit the namespace export.
-        // Otherwise, if the class was exported at the top level and was decorated, emit an export
-        // declaration or export default for the class.
-        if (facts & ClassFacts.IsExportOfNamespace) {
-            addExportMemberAssignment(statements, node);
-        }
-        else if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression || facts & ClassFacts.HasConstructorDecorators) {
+        if (moveModifiers) {
+            if (facts & ClassFacts.IsExportOfNamespace) {
+                return demarcateMultiStatementExport(
+                    statement,
+                    createExportMemberAssignmentStatement(node));
+            }
             if (facts & ClassFacts.IsDefaultExternalExport) {
-                statements.push(factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
+                return demarcateMultiStatementExport(
+                    statement,
+                    factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
             }
-            else if (facts & ClassFacts.IsNamedExternalExport) {
-                statements.push(factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
+            if (facts & ClassFacts.IsNamedExternalExport && !promoteToIIFE) {
+                return demarcateMultiStatementExport(
+                    statement,
+                    factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
             }
         }
 
-        if (statements.length > 1) {
-            // Add a DeclarationMarker as a marker for the end of the declaration
-            statements.push(factory.createEndOfDeclarationMarker(node));
-            setEmitFlags(classStatement, getEmitFlags(classStatement) | EmitFlags.HasEndOfDeclarationMarker);
-        }
+        return statement;
+    }
 
-        return singleOrMany(statements);
+    function demarcateMultiStatementExport(declarationStatement: Statement, exportStatement: Statement) {
+        addEmitFlags(declarationStatement, EmitFlags.HasEndOfDeclarationMarker);
+        return [
+            declarationStatement,
+            exportStatement,
+            factory.createEndOfDeclarationMarker(declarationStatement)
+        ];
     }
 
     function visitClassExpression(node: ClassExpression): Expression {
-        const allDecorators = getAllDecoratorsOfClass(node);
-        const decorators = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
+        let modifiers = visitNodes(node.modifiers, modifierElidingVisitor, isModifierLike);
+        if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) {
+            modifiers = injectClassTypeMetadata(modifiers, node);
+        }
+
         return factory.updateClassExpression(
             node,
-            decorators,
+            modifiers,
             node.name,
             /*typeParameters*/ undefined,
             visitNodes(node.heritageClauses, visitor, isHeritageClause),
-            isClassLikeDeclarationWithTypeScriptSyntax(node) ?
-                transformClassMembers(node) :
-                visitNodes(node.members, getClassElementVisitor(node), isClassElement)
+            transformClassMembers(node)
         );
     }
 
@@ -964,72 +1004,60 @@ export function transformTypeScript(context: TransformationContext) {
      * @param node The current class.
      */
     function transformClassMembers(node: ClassDeclaration | ClassExpression) {
-        const members: ClassElement[] = [];
+        const members = visitNodes(node.members, getClassElementVisitor(node), isClassElement);
+
+        let newMembers: ClassElement[] | undefined;
         const constructor = getFirstConstructorWithBody(node);
         const parametersWithPropertyAssignments = constructor &&
-            filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
+            filter(constructor.parameters, (p): p is ParameterPropertyDeclaration => isParameterPropertyDeclaration(p, constructor));
 
         if (parametersWithPropertyAssignments) {
             for (const parameter of parametersWithPropertyAssignments) {
-                if (isIdentifier(parameter.name)) {
-                    members.push(setOriginalNode(factory.createPropertyDeclaration(
-                        /*modifiers*/ undefined,
-                        parameter.name,
-                        /*questionOrExclamationToken*/ undefined,
-                        /*type*/ undefined,
-                        /*initializer*/ undefined), parameter));
-                }
+                const parameterProperty = factory.createPropertyDeclaration(
+                    /*modifiers*/ undefined,
+                    parameter.name,
+                    /*questionOrExclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    /*initializer*/ undefined);
+                setOriginalNode(parameterProperty, parameter);
+                newMembers = append(newMembers, parameterProperty);
             }
         }
 
-        addRange(members, visitNodes(node.members, getClassElementVisitor(node), isClassElement));
-        return setTextRange(factory.createNodeArray(members), /*location*/ node.members);
-    }
-
-    /**
-     * Transforms all of the decorators for a declaration into an array of expressions.
-     *
-     * @param node The declaration node.
-     * @param allDecorators An object containing all of the decorators for the declaration.
-     */
-    function transformAllDecoratorsOfDeclaration(node: Declaration, container: ClassLikeDeclaration, allDecorators: AllDecorators | undefined) {
-        if (!allDecorators) {
-            return undefined;
+        if (newMembers) {
+            newMembers = addRange(newMembers, members);
+            return setTextRange(factory.createNodeArray(newMembers), /*location*/ node.members);
         }
 
-        const decorators = visitArray(allDecorators.decorators, visitor, isDecorator);
-        const parameterDecorators = flatMap(allDecorators.parameters, transformDecoratorsOfParameter);
-        const metadataDecorators = some(decorators) || some(parameterDecorators) ? getTypeMetadata(node, container) : undefined;
-        const result = factory.createNodeArray(concatenate(concatenate(decorators, parameterDecorators), metadataDecorators));
-        const pos = firstOrUndefined(allDecorators.decorators)?.pos ?? -1;
-        const end = lastOrUndefined(allDecorators.decorators)?.end ?? -1;
-        setTextRangePosEnd(result, pos, end);
-        return result;
+        return members;
     }
 
-    /**
-     * Transforms the decorators of a parameter into decorators of the class/method.
-     *
-     * @param parameterDecorators The decorators for the parameter at the provided offset.
-     * @param parameterOffset The offset of the parameter.
-     */
-    function transformDecoratorsOfParameter(parameterDecorators: Decorator[], parameterOffset: number) {
-        if (parameterDecorators) {
-            const decorators: Decorator[] = [];
-            for (const parameterDecorator of parameterDecorators) {
-                const expression = visitNode(parameterDecorator.expression, visitor, isExpression);
-                const helper = emitHelpers().createParamHelper(expression, parameterOffset);
-                setTextRange(helper, parameterDecorator.expression);
-                setEmitFlags(helper, EmitFlags.NoComments);
+    function injectClassTypeMetadata(modifiers: NodeArray<ModifierLike> | undefined, node: ClassLikeDeclaration) {
+        const metadata = getTypeMetadata(node, node);
+        if (some(metadata)) {
+            const modifiersArray: ModifierLike[] = [];
+            addRange(modifiersArray, takeWhile(modifiers, isExportOrDefaultModifier));
+            addRange(modifiersArray, filter(modifiers, isDecorator));
+            addRange(modifiersArray, metadata);
+            addRange(modifiersArray, filter(skipWhile(modifiers, isExportOrDefaultModifier), isModifier));
+            modifiers = setTextRange(factory.createNodeArray(modifiersArray), modifiers);
+        }
 
-                const decorator = factory.createDecorator(helper);
-                setSourceMapRange(decorator, parameterDecorator.expression);
-                setCommentRange(decorator, parameterDecorator.expression);
-                setEmitFlags(decorator, EmitFlags.NoComments);
-                decorators.push(decorator);
+        return modifiers;
+    }
+
+    function injectClassElementTypeMetadata(modifiers: NodeArray<ModifierLike> | undefined, node: ClassElement, container: ClassLikeDeclaration | ObjectLiteralExpression) {
+        if (isClassLike(container) && classElementOrClassElementParameterIsDecorated(legacyDecorators, node, container)) {
+            const metadata = getTypeMetadata(node, container);
+            if (some(metadata)) {
+                const modifiersArray: ModifierLike[] = [];
+                addRange(modifiersArray, filter(modifiers, isDecorator));
+                addRange(modifiersArray, metadata);
+                addRange(modifiersArray, filter(modifiers, isModifier));
+                modifiers = setTextRange(factory.createNodeArray(modifiersArray), modifiers);
             }
-            return decorators;
         }
+        return modifiers;
     }
 
     /**
@@ -1038,6 +1066,8 @@ export function transformTypeScript(context: TransformationContext) {
      * @param node The declaration node.
      */
     function getTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
+        // Decorator metadata is not yet supported for ES decorators.
+        if (!legacyDecorators) return undefined;
         return USE_NEW_TYPE_METADATA_FORMAT ?
             getNewTypeMetadata(node, container) :
             getOldTypeMetadata(node, container);
@@ -1167,8 +1197,9 @@ export function transformTypeScript(context: TransformationContext) {
         // The names are used more than once when:
         //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
         //   - the property has a decorator.
-        if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member))) {
+        if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)) {
             const expression = visitNode(name.expression, visitor, isExpression);
+            Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
             if (!isSimpleInlineableExpression(innerExpression)) {
                 const generatedName = factory.getGeneratedNameForNode(name);
@@ -1176,7 +1207,7 @@ export function transformTypeScript(context: TransformationContext) {
                 return factory.updateComputedPropertyName(name, factory.createAssignment(generatedName, expression));
             }
         }
-        return visitNode(name, visitor, isPropertyName);
+        return Debug.checkDefined(visitNode(name, visitor, isPropertyName));
     }
 
     /**
@@ -1207,7 +1238,7 @@ export function transformTypeScript(context: TransformationContext) {
     function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): ExpressionWithTypeArguments {
         return factory.updateExpressionWithTypeArguments(
             node,
-            visitNode(node.expression, visitor, isLeftHandSideExpression),
+            Debug.checkDefined(visitNode(node.expression, visitor, isLeftHandSideExpression)),
             /*typeArguments*/ undefined
         );
     }
@@ -1224,19 +1255,23 @@ export function transformTypeScript(context: TransformationContext) {
 
     function visitPropertyDeclaration(node: PropertyDeclaration, parent: ClassLikeDeclaration) {
         const isAmbient = node.flags & NodeFlags.Ambient || hasSyntacticModifier(node, ModifierFlags.Abstract);
-        if (isAmbient && !hasDecorators(node)) {
+        if (isAmbient && !(legacyDecorators && hasDecorators(node))) {
             return undefined;
         }
 
-        const allDecorators = getAllDecoratorsOfClassElement(node, parent);
-        const decorators = transformAllDecoratorsOfDeclaration(node, parent, allDecorators);
+        let modifiers = isClassLike(parent) ? !isAmbient ?
+            visitNodes(node.modifiers, visitor, isModifierLike) :
+            visitNodes(node.modifiers, modifierElidingVisitor, isModifierLike) :
+            visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+
+        modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
 
         // Preserve a `declare x` property with decorators to be handled by the decorators transform
         if (isAmbient) {
             return factory.updatePropertyDeclaration(
                 node,
-                concatenate<ModifierLike>(decorators, factory.createModifiersFromModifierFlags(ModifierFlags.Ambient)),
-                visitNode(node.name, visitor, isPropertyName),
+                concatenate<ModifierLike>(modifiers, factory.createModifiersFromModifierFlags(ModifierFlags.Ambient)),
+                Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
                 /*questionOrExclamationToken*/ undefined,
                 /*type*/ undefined,
                 /*initializer*/ undefined
@@ -1245,11 +1280,11 @@ export function transformTypeScript(context: TransformationContext) {
 
         return factory.updatePropertyDeclaration(
             node,
-            concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
+            modifiers,
             visitPropertyNameOfClassElement(node),
             /*questionOrExclamationToken*/ undefined,
             /*type*/ undefined,
-            visitNode(node.initializer, visitor)
+            visitNode(node.initializer, visitor, isExpression)
         );
     }
 
@@ -1268,7 +1303,7 @@ export function transformTypeScript(context: TransformationContext) {
 
     function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
         const parametersWithPropertyAssignments = constructor &&
-            filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
+            filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as readonly ParameterPropertyDeclaration[] | undefined;
         if (!some(parametersWithPropertyAssignments)) {
             return visitFunctionBody(body, visitor, context);
         }
@@ -1379,11 +1414,15 @@ export function transformTypeScript(context: TransformationContext) {
             return undefined;
         }
 
-        const allDecorators = isClassLike(parent) ? getAllDecoratorsOfClassElement(node, parent) : undefined;
-        const decorators = isClassLike(parent) ? transformAllDecoratorsOfDeclaration(node, parent, allDecorators) : undefined;
+        let modifiers = isClassLike(parent) ?
+            visitNodes(node.modifiers, visitor, isModifierLike) :
+            visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+
+        modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
+
         return factory.updateMethodDeclaration(
             node,
-            concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
+            modifiers,
             node.asteriskToken,
             visitPropertyNameOfClassElement(node),
             /*questionToken*/ undefined,
@@ -1413,13 +1452,15 @@ export function transformTypeScript(context: TransformationContext) {
             return undefined;
         }
 
-        const decorators = isClassLike(parent) ?
-            transformAllDecoratorsOfDeclaration(node, parent, getAllDecoratorsOfClassElement(node, parent)) :
-            undefined;
+        let modifiers = isClassLike(parent) ?
+            visitNodes(node.modifiers, visitor, isModifierLike) :
+            visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+
+        modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
 
         return factory.updateGetAccessorDeclaration(
             node,
-            concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
+            modifiers,
             visitPropertyNameOfClassElement(node),
             visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
@@ -1436,13 +1477,15 @@ export function transformTypeScript(context: TransformationContext) {
             return undefined;
         }
 
-        const decorators = isClassLike(parent) ?
-            transformAllDecoratorsOfDeclaration(node, parent, getAllDecoratorsOfClassElement(node, parent)) :
-            undefined;
+        let modifiers = isClassLike(parent) ?
+            visitNodes(node.modifiers, visitor, isModifierLike) :
+            visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+
+        modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
 
         return factory.updateSetAccessorDeclaration(
             node,
-            concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
+            modifiers,
             visitPropertyNameOfClassElement(node),
             visitParameterList(node.parameters, visitor, context),
             visitFunctionBody(node.body, visitor, context) || factory.createBlock([])
@@ -1508,9 +1551,9 @@ export function transformTypeScript(context: TransformationContext) {
 
         const updated = factory.updateParameterDeclaration(
             node,
-            elideNodes(factory, node.modifiers), // preserve positions, if available
+            visitNodes(node.modifiers, node => isDecorator(node) ? visitor(node) : undefined, isModifierLike),
             node.dotDotDotToken,
-            visitNode(node.name, visitor, isBindingName),
+            Debug.checkDefined(visitNode(node.name, visitor, isBindingName)),
             /*questionToken*/ undefined,
             /*type*/ undefined,
             visitNode(node.initializer, visitor, isExpression)
@@ -1564,7 +1607,7 @@ export function transformTypeScript(context: TransformationContext) {
             return setTextRange(
                 factory.createAssignment(
                     getNamespaceMemberNameWithSourceMapsAndWithoutComments(name),
-                    visitNode(node.initializer, visitor, isExpression)
+                    Debug.checkDefined(visitNode(node.initializer, visitor, isExpression))
                 ),
                 /*location*/ node
             );
@@ -1574,7 +1617,7 @@ export function transformTypeScript(context: TransformationContext) {
     function visitVariableDeclaration(node: VariableDeclaration) {
         const updated = factory.updateVariableDeclaration(
             node,
-            visitNode(node.name, visitor, isBindingName),
+            Debug.checkDefined(visitNode(node.name, visitor, isBindingName)),
             /*exclamationToken*/ undefined,
             /*type*/ undefined,
             visitNode(node.initializer, visitor, isExpression));
@@ -1590,6 +1633,7 @@ export function transformTypeScript(context: TransformationContext) {
             // Make sure we consider all nested cast expressions, e.g.:
             // (<any><number><any>-A).x;
             const expression = visitNode(node.expression, visitor, isExpression);
+            Debug.assert(expression);
 
             // We have an expression of the form: (<Type>SubExpr). Emitting this as (SubExpr)
             // is really not desirable. We would like to emit the subexpression as-is. Omitting
@@ -1616,23 +1660,26 @@ export function transformTypeScript(context: TransformationContext) {
 
     function visitAssertionExpression(node: AssertionExpression): Expression {
         const expression = visitNode(node.expression, visitor, isExpression);
+        Debug.assert(expression);
         return factory.createPartiallyEmittedExpression(expression, node);
     }
 
     function visitNonNullExpression(node: NonNullExpression): Expression {
         const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
+        Debug.assert(expression);
         return factory.createPartiallyEmittedExpression(expression, node);
     }
 
     function visitSatisfiesExpression(node: SatisfiesExpression): Expression {
         const expression = visitNode(node.expression, visitor, isExpression);
+        Debug.assert(expression);
         return factory.createPartiallyEmittedExpression(expression, node);
     }
 
     function visitCallExpression(node: CallExpression) {
         return factory.updateCallExpression(
             node,
-            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             /*typeArguments*/ undefined,
             visitNodes(node.arguments, visitor, isExpression));
     }
@@ -1640,7 +1687,7 @@ export function transformTypeScript(context: TransformationContext) {
     function visitNewExpression(node: NewExpression) {
         return factory.updateNewExpression(
             node,
-            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             /*typeArguments*/ undefined,
             visitNodes(node.arguments, visitor, isExpression));
     }
@@ -1648,25 +1695,25 @@ export function transformTypeScript(context: TransformationContext) {
     function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
         return factory.updateTaggedTemplateExpression(
             node,
-            visitNode(node.tag, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.tag, visitor, isExpression)),
             /*typeArguments*/ undefined,
-            visitNode(node.template, visitor, isExpression));
+            Debug.checkDefined(visitNode(node.template, visitor, isTemplateLiteral)));
     }
 
     function visitJsxSelfClosingElement(node: JsxSelfClosingElement) {
         return factory.updateJsxSelfClosingElement(
             node,
-            visitNode(node.tagName, visitor, isJsxTagNameExpression),
+            Debug.checkDefined(visitNode(node.tagName, visitor, isJsxTagNameExpression)),
             /*typeArguments*/ undefined,
-            visitNode(node.attributes, visitor, isJsxAttributes));
+            Debug.checkDefined(visitNode(node.attributes, visitor, isJsxAttributes)));
     }
 
     function visitJsxJsxOpeningElement(node: JsxOpeningElement) {
         return factory.updateJsxOpeningElement(
             node,
-            visitNode(node.tagName, visitor, isJsxTagNameExpression),
+            Debug.checkDefined(visitNode(node.tagName, visitor, isJsxTagNameExpression)),
             /*typeArguments*/ undefined,
-            visitNode(node.attributes, visitor, isJsxAttributes));
+            Debug.checkDefined(visitNode(node.attributes, visitor, isJsxAttributes)));
     }
 
     /**
@@ -1847,7 +1894,7 @@ export function transformTypeScript(context: TransformationContext) {
         else {
             enableSubstitutionForNonQualifiedEnumMembers();
             if (member.initializer) {
-                return visitNode(member.initializer, visitor, isExpression);
+                return Debug.checkDefined(visitNode(member.initializer, visitor, isExpression));
             }
             else {
                 return factory.createVoidZero();
@@ -2095,7 +2142,7 @@ export function transformTypeScript(context: TransformationContext) {
         let blockLocation: TextRange | undefined;
         if (node.body) {
             if (node.body.kind === SyntaxKind.ModuleBlock) {
-                saveStateAndInvoke(node.body, body => addRange(statements, visitNodes((body as ModuleBlock).statements, namespaceElementVisitor, isStatement)));
+                saveStateAndInvoke(node.body, body => addRange(statements, visitNodes(body.statements, namespaceElementVisitor, isStatement)));
                 statementsLocation = node.body.statements;
                 blockLocation = node.body;
             }
@@ -2167,7 +2214,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The import declaration node.
      */
-    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
+    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
         if (!node.importClause) {
             // Do not elide a side-effect only import declaration.
             //  import "foo";
@@ -2197,7 +2244,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The import clause node.
      */
-    function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
+    function visitImportClause(node: ImportClause): VisitResult<ImportClause> | undefined {
         Debug.assert(!node.isTypeOnly);
         // Elide the import clause if we elide both its name and its named bindings.
         const name = shouldEmitAliasDeclaration(node) ? node.name : undefined;
@@ -2210,14 +2257,14 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The named import bindings node.
      */
-    function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> {
+    function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> | undefined {
         if (node.kind === SyntaxKind.NamespaceImport) {
             // Elide a namespace import if it is not referenced.
             return shouldEmitAliasDeclaration(node) ? node : undefined;
         }
         else {
             // Elide named imports if all of its import specifiers are elided and settings allow.
-            const allowEmpty = compilerOptions.preserveValueImports && (
+            const allowEmpty = compilerOptions.verbatimModuleSyntax || compilerOptions.preserveValueImports && (
                 compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
                 compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error);
             const elements = visitNodes(node.elements, visitImportSpecifier, isImportSpecifier);
@@ -2230,7 +2277,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The import specifier node.
      */
-    function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> {
+    function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> | undefined {
         return !node.isTypeOnly && shouldEmitAliasDeclaration(node) ? node : undefined;
     }
 
@@ -2240,9 +2287,9 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The export assignment node.
      */
-    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
+    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
         // Elide the export assignment if it does not reference a value.
-        return resolver.isValueAliasDeclaration(node)
+        return compilerOptions.verbatimModuleSyntax || resolver.isValueAliasDeclaration(node)
             ? visitEachChild(node, visitor, context)
             : undefined;
     }
@@ -2252,7 +2299,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The export declaration node.
      */
-    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement | undefined> {
         if (node.isTypeOnly) {
             return undefined;
         }
@@ -2265,7 +2312,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         // Elide the export declaration if all of its named exports are elided.
-        const allowEmpty = !!node.moduleSpecifier && (
+        const allowEmpty = compilerOptions.verbatimModuleSyntax || !!node.moduleSpecifier && (
             compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
             compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error);
         const exportClause = visitNode(
@@ -2290,17 +2337,17 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The named exports node.
      */
-    function visitNamedExports(node: NamedExports, allowEmpty: boolean): VisitResult<NamedExports> {
+    function visitNamedExports(node: NamedExports, allowEmpty: boolean): VisitResult<NamedExports> | undefined {
         // Elide the named exports if all of its export specifiers were elided.
         const elements = visitNodes(node.elements, visitExportSpecifier, isExportSpecifier);
         return allowEmpty || some(elements) ? factory.updateNamedExports(node, elements) : undefined;
     }
 
     function visitNamespaceExports(node: NamespaceExport): VisitResult<NamespaceExport> {
-        return factory.updateNamespaceExport(node, visitNode(node.name, visitor, isIdentifier));
+        return factory.updateNamespaceExport(node, Debug.checkDefined(visitNode(node.name, visitor, isIdentifier)));
     }
 
-    function visitNamedExportBindings(node: NamedExportBindings, allowEmpty: boolean): VisitResult<NamedExportBindings> {
+    function visitNamedExportBindings(node: NamedExportBindings, allowEmpty: boolean): VisitResult<NamedExportBindings> | undefined {
         return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node, allowEmpty);
     }
 
@@ -2309,9 +2356,9 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The export specifier node.
      */
-    function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> {
+    function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> | undefined {
         // Elide an export specifier if it does not reference a value.
-        return !node.isTypeOnly && resolver.isValueAliasDeclaration(node) ? node : undefined;
+        return !node.isTypeOnly && (compilerOptions.verbatimModuleSyntax || resolver.isValueAliasDeclaration(node)) ? node : undefined;
     }
 
     /**
@@ -2333,7 +2380,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The import equals declaration node.
      */
-    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
         // Always elide type-only imports
         if (node.isTypeOnly) {
             return undefined;
@@ -2442,7 +2489,7 @@ export function transformTypeScript(context: TransformationContext) {
             && hasSyntacticModifier(node, ModifierFlags.Default);
     }
 
-    function addExportMemberAssignment(statements: Statement[], node: ClassDeclaration | FunctionDeclaration) {
+    function createExportMemberAssignmentStatement(node: ClassDeclaration | FunctionDeclaration) {
         const expression = factory.createAssignment(
             factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true),
             factory.getLocalName(node)
@@ -2451,7 +2498,11 @@ export function transformTypeScript(context: TransformationContext) {
 
         const statement = factory.createExpressionStatement(expression);
         setSourceMapRange(statement, createRange(-1, node.end));
-        statements.push(statement);
+        return statement;
+    }
+
+    function addExportMemberAssignment(statements: Statement[], node: ClassDeclaration | FunctionDeclaration) {
+        statements.push(createExportMemberAssignmentStatement(node));
     }
 
     function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
@@ -2663,7 +2714,7 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function shouldEmitAliasDeclaration(node: Node): boolean {
-        return isInJSFile(node) ||
+        return compilerOptions.verbatimModuleSyntax || isInJSFile(node) ||
             (compilerOptions.preserveValueImports
                 ? resolver.isValueAliasDeclaration(node)
                 : resolver.isReferencedAliasDeclaration(node));

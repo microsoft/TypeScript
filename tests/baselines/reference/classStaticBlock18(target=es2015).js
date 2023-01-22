@@ -15,6 +15,10 @@ function foo () {
 
 
 //// [classStaticBlock18.js]
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 function foo() {
     var _a;
     return _a = class {
@@ -24,6 +28,7 @@ function foo() {
             var _a;
             const c = (_a = class {
                 },
+                __setFunctionName(_a, "c"),
                 _a.bar = 2,
                 (() => {
                     // do

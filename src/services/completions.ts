@@ -87,11 +87,11 @@ import {
     getLineAndCharacterOfPosition,
     getLineStartPositionForPosition,
     getLocalSymbolForExportDefault,
-    getNameForExportedSymbol,
     getNameOfDeclaration,
     getNameTable,
     getNewLineCharacter,
     getNewLineKind,
+    getNewLineOrDefaultFromHost,
     getPropertyNameForPropertyNameNode,
     getQuotePreference,
     getReplacementSpanForContextToken,
@@ -228,6 +228,7 @@ import {
     isTypeLiteralNode,
     isTypeNode,
     isTypeOfExpression,
+    isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
@@ -237,6 +238,7 @@ import {
     JSDocParameterTag,
     JSDocPropertyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocTag,
     JSDocTagInfo,
     JSDocTemplateTag,
@@ -261,7 +263,6 @@ import {
     LiteralTypeNode,
     map,
     mapDefined,
-    maybeBind,
     MemberOverrideStatus,
     memoize,
     memoizeOne,
@@ -352,7 +353,7 @@ import {
     typeHasCallOrConstructSignatures,
     TypeLiteralNode,
     TypeNode,
-    TypeOnlyAliasDeclaration,
+    TypeOnlyImportDeclaration,
     TypeQueryNode,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -467,8 +468,8 @@ interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
     moduleSpecifier: string;
 }
 
-interface SymbolOriginInfoTypeOnlyAlias extends SymbolOriginInfo {
-    declaration: TypeOnlyAliasDeclaration;
+interface SymbolOriginInfoTypeOnlyImport extends SymbolOriginInfo {
+    declaration: TypeOnlyImportDeclaration;
 }
 
 interface SymbolOriginInfoObjectLiteralMethod extends SymbolOriginInfo {
@@ -509,7 +510,7 @@ function originIsNullableMember(origin: SymbolOriginInfo): boolean {
     return !!(origin.kind & SymbolOriginInfoKind.Nullable);
 }
 
-function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoTypeOnlyAlias {
+function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoTypeOnlyImport {
     return !!(origin && origin.kind & SymbolOriginInfoKind.TypeOnlyAlias);
 }
 
@@ -557,7 +558,7 @@ const enum KeywordCompletionFilters {
 const enum GlobalsSearch { Continue, Success, Fail }
 
 interface ModuleSpecifierResolutionContext {
-    tryResolve: (exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult;
+    tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult;
     resolvedAny: () => boolean;
     skippedAny: () => boolean;
     resolvedBeyondLimit: () => boolean;
@@ -605,9 +606,9 @@ function resolvingModuleSpecifiers<TReturn>(
     host.log?.(`${logPrefix}: ${timestamp() - start}`);
     return result;
 
-    function tryResolve(exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean): ModuleSpecifierResolutionResult {
+    function tryResolve(exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult {
         if (isFromAmbientModule) {
-            const result = resolver.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite);
+            const result = resolver.getModuleSpecifierForBestExportInfo(exportInfo, position, isValidTypeOnlyUseSite);
             if (result) {
                 ambientCount++;
             }
@@ -616,7 +617,7 @@ function resolvingModuleSpecifiers<TReturn>(
         const shouldResolveModuleSpecifier = needsFullResolution || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
         const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
         const result = (shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache)
-            ? resolver.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite, shouldGetModuleSpecifierFromCache)
+            ? resolver.getModuleSpecifierForBestExportInfo(exportInfo, position, isValidTypeOnlyUseSite, shouldGetModuleSpecifierFromCache)
             : undefined;
 
         if (!shouldResolveModuleSpecifier && !shouldGetModuleSpecifierFromCache || shouldGetModuleSpecifierFromCache && !result) {
@@ -665,7 +666,7 @@ export function getCompletionsAtPosition(
     const compilerOptions = program.getCompilerOptions();
     const incompleteCompletionsCache = preferences.allowIncompleteCompletions ? host.getIncompleteCompletionsCache?.() : undefined;
     if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions && previousToken && isIdentifier(previousToken)) {
-        const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken);
+        const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken, position);
         if (incompleteContinuation) {
             return incompleteContinuation;
         }
@@ -749,10 +750,12 @@ function continuePreviousIncompleteResponse(
     host: LanguageServiceHost,
     preferences: UserPreferences,
     cancellationToken: CancellationToken,
+    position: number,
 ): CompletionInfo | undefined {
     const previousResponse = cache.get();
     if (!previousResponse) return undefined;
 
+    const touchNode = getTouchingPropertyName(file, position);
     const lowerCaseTokenText = location.text.toLowerCase();
     const exportMap = getExportInfoMap(file, host, program, preferences, cancellationToken);
     const newEntries = resolvingModuleSpecifiers(
@@ -778,7 +781,7 @@ function continuePreviousIncompleteResponse(
                 const { origin } = Debug.checkDefined(getAutoImportSymbolFromCompletionEntryData(entry.name, entry.data, program, host));
                 const info = exportMap.get(file.path, entry.data.exportMapKey);
 
-                const result = info && context.tryResolve(info, entry.name, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
+                const result = info && context.tryResolve(info, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
                 if (result === "skipped") return entry;
                 if (!result || result === "failed") {
                     host.log?.(`Unexpected failure resolving auto import for '${entry.name}' from '${entry.source}'`);
@@ -808,6 +811,7 @@ function continuePreviousIncompleteResponse(
 
     previousResponse.entries = newEntries;
     previousResponse.flags = (previousResponse.flags || 0) | CompletionInfoFlags.IsContinuation;
+    previousResponse.optionalReplacementSpan = getOptionalReplacementSpan(touchNode);
     return previousResponse;
 }
 
@@ -927,6 +931,7 @@ function completionInfoFromData(
         /*replacementToken*/ undefined,
         contextToken,
         location,
+        position,
         sourceFile,
         host,
         program,
@@ -1048,10 +1053,10 @@ function getExhaustiveCaseSnippets(
             else if (!tracker.hasValue(type.value)) {
                 switch (typeof type.value) {
                     case "object":
-                        elements.push(factory.createBigIntLiteral(type.value));
+                        elements.push(type.value.negative ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createBigIntLiteral({ negative: false, base10Value: type.value.base10Value })) : factory.createBigIntLiteral(type.value));
                         break;
                     case "number":
-                        elements.push(factory.createNumericLiteral(type.value));
+                        elements.push(type.value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-type.value)) : factory.createNumericLiteral(type.value));
                         break;
                     case "string":
                         elements.push(factory.createStringLiteral(type.value, quotePreference === QuotePreference.Single));
@@ -1064,12 +1069,12 @@ function getExhaustiveCaseSnippets(
         }
 
         const newClauses = map(elements, element => factory.createCaseClause(element, []));
-        const newLineChar = getNewLineCharacter(options, maybeBind(host, host.getNewLine));
+        const newLineChar = getNewLineOrDefaultFromHost(host, formatContext?.options);
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
             target: options.target,
-            newLine: getNewLineKind(newLineChar),
+            newLine: getNewLineKind(newLineChar)
         });
         const printNode = formatContext
             ? (node: Node) => printer.printAndFormatNode(EmitHint.Unspecified, node, sourceFile, formatContext)
@@ -1316,6 +1321,7 @@ function createCompletionEntry(
     replacementToken: Node | undefined,
     contextToken: Node | undefined,
     location: Node,
+    position: number,
     sourceFile: SourceFile,
     host: LanguageServiceHost,
     program: Program,
@@ -1406,7 +1412,8 @@ function createCompletionEntry(
         completionKind === CompletionKind.MemberLike &&
         isClassLikeMemberCompletion(symbol, location, sourceFile)) {
         let importAdder;
-        ({ insertText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
+        ({ insertText, isSnippet, importAdder, replacementSpan } =
+            getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext));
         sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
         if (importAdder?.hasFixes()) {
             hasAction = true;
@@ -1545,6 +1552,7 @@ function getEntryForMemberCompletion(
     name: string,
     symbol: Symbol,
     location: Node,
+    position: number,
     contextToken: Node | undefined,
     formatContext: formatting.FormatContext | undefined,
 ): { insertText: string, isSnippet?: true, importAdder?: codefix.ImportAdder, replacementSpan?: TextSpan } {
@@ -1564,7 +1572,7 @@ function getEntryForMemberCompletion(
         module: options.module,
         target: options.target,
         omitTrailingSemicolon: false,
-        newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+        newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
     });
     const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
@@ -1586,7 +1594,7 @@ function getEntryForMemberCompletion(
     let modifiers = ModifierFlags.None;
     // Whether the suggested member should be abstract.
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
-    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken);
+    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken, sourceFile, position);
     const isAbstract = !!(presentModifiers & ModifierFlags.Abstract);
     const completionNodes: Node[] = [];
     codefix.addNewNodeForMemberSymbol(
@@ -1650,8 +1658,13 @@ function getEntryForMemberCompletion(
     return { insertText, isSnippet, importAdder, replacementSpan };
 }
 
-function getPresentModifiers(contextToken: Node | undefined): { modifiers: ModifierFlags, span?: TextSpan } {
-    if (!contextToken) {
+function getPresentModifiers(
+    contextToken: Node | undefined,
+    sourceFile: SourceFile,
+    position: number): { modifiers: ModifierFlags, span?: TextSpan } {
+    if (!contextToken ||
+        getLineAndCharacterOfPosition(sourceFile, position).line
+            > getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line) {
         return { modifiers: ModifierFlags.None };
     }
     let modifiers = ModifierFlags.None;
@@ -1725,7 +1738,7 @@ function getEntryForObjectLiteralMethodCompletion(
         module: options.module,
         target: options.target,
         omitTrailingSemicolon: false,
-        newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+        newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
     });
     if (formatContext) {
         insertText = printer.printAndFormatSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile, formatContext);
@@ -2086,6 +2099,7 @@ export function getCompletionEntriesFromSymbols(
     replacementToken: Node | undefined,
     contextToken: Node | undefined,
     location: Node,
+    position: number,
     sourceFile: SourceFile,
     host: LanguageServiceHost,
     program: Program,
@@ -2132,6 +2146,7 @@ export function getCompletionEntriesFromSymbols(
             replacementToken,
             contextToken,
             location,
+            position,
             sourceFile,
             host,
             program,
@@ -2471,6 +2486,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             name,
             symbol,
             location,
+            position,
             contextToken,
             formatContext);
         if (importAdder) {
@@ -2512,7 +2528,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
         targetSymbol,
         moduleSymbol,
         sourceFile,
-        getNameForExportedSymbol(symbol, getEmitScriptTarget(compilerOptions), isJsxOpeningTagName),
+        name,
         isJsxOpeningTagName,
         host,
         program,
@@ -2999,7 +3015,8 @@ function getCompletionData(
         | JSDocTypeTag
         | JSDocTypedefTag
         | JSDocTemplateTag
-        | JSDocThrowsTag;
+        | JSDocThrowsTag
+        | JSDocSatisfiesTag;
 
     function isTagWithTypeExpression(tag: JSDocTag): tag is JSDocTagWithTypeExpression {
         switch (tag.kind) {
@@ -3009,6 +3026,7 @@ function getCompletionData(
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocThrowsTag:
+            case SyntaxKind.JSDocSatisfiesTag:
                 return true;
             case SyntaxKind.JSDocTemplateTag:
                 return !!(tag as JSDocTemplateTag).constraint;
@@ -3181,7 +3199,7 @@ function getCompletionData(
                         moduleSymbol,
                         symbol: firstAccessibleSymbol,
                         targetFlags: skipAlias(firstAccessibleSymbol, typeChecker).flags,
-                    }], firstAccessibleSymbol.name, position, isValidTypeOnlyAliasUseSite(location)) || {};
+                    }], position, isValidTypeOnlyAliasUseSite(location)) || {};
 
                     if (moduleSpecifier) {
                         const origin: SymbolOriginInfoResolvedExport = {
@@ -3334,9 +3352,9 @@ function getCompletionData(
                 symbolToSortTextMap[getSymbolId(symbol)] = SortText.GlobalsOrKeywords;
             }
             if (typeOnlyAliasNeedsPromotion && !(symbol.flags & SymbolFlags.Value)) {
-                const typeOnlyAliasDeclaration = symbol.declarations && find(symbol.declarations, isTypeOnlyImportOrExportDeclaration);
+                const typeOnlyAliasDeclaration = symbol.declarations && find(symbol.declarations, isTypeOnlyImportDeclaration);
                 if (typeOnlyAliasDeclaration) {
-                    const origin: SymbolOriginInfoTypeOnlyAlias = { kind: SymbolOriginInfoKind.TypeOnlyAlias, declaration: typeOnlyAliasDeclaration };
+                    const origin: SymbolOriginInfoTypeOnlyImport = { kind: SymbolOriginInfoKind.TypeOnlyAlias, declaration: typeOnlyAliasDeclaration };
                     symbolToOriginInfoMap[i] = origin;
                 }
             }
@@ -3503,7 +3521,7 @@ function getCompletionData(
                         // N.B. in this resolution mode we always try to resolve module specifiers here,
                         // because we have to know now if it's going to fail so we can omit the completion
                         // from the list.
-                        const result = context.tryResolve(info, symbolName, isFromAmbientModule) || {};
+                        const result = context.tryResolve(info, isFromAmbientModule) || {};
                         if (result === "failed") return;
 
                         // If we skipped resolving module specifiers, our selection of which ExportInfo
