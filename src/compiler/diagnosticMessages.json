@@ -5707,7 +5707,7 @@
         "category": "Message",
         "code": 6629
     },
-    "Enable experimental support for legacy experimental decorators.": {
+    "Enable experimental support for TC39 stage 2 draft decorators.": {
         "category": "Message",
         "code": 6630
     },
@@ -6007,7 +6007,7 @@
         "category": "Message",
         "code": 6706
     },
-    "Specify the path to .tsbuildinfo incremental compilation file.": {
+    "Specify the folder for .tsbuildinfo incremental compilation files.": {
         "category": "Message",
         "code": 6707
     },

@@ -728,7 +728,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Projects,
         transpileOptionValue: undefined,
         defaultValueDescription: ".tsbuildinfo",
-        description: Diagnostics.Specify_the_path_to_tsbuildinfo_incremental_compilation_file,
+        description: Diagnostics.Specify_the_folder_for_tsbuildinfo_incremental_compilation_files,
     },
     {
         name: "removeComments",
@@ -1170,7 +1170,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
         category: Diagnostics.Language_and_Environment,
-        description: Diagnostics.Enable_experimental_support_for_legacy_experimental_decorators,
+        description: Diagnostics.Enable_experimental_support_for_TC39_stage_2_draft_decorators,
         defaultValueDescription: false,
     },
     {
