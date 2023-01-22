@@ -1,0 +1,3 @@
+=== tests/cases/compiler/sourceMap-EmptyExport.ts ===
+
+export { }
