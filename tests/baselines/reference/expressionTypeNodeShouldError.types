@@ -31,9 +31,9 @@ class C {
 const nodes = document.getElementsByTagName("li");
 >nodes : HTMLCollectionOf<HTMLLIElement>
 >document.getElementsByTagName("li") : HTMLCollectionOf<HTMLLIElement>
->document.getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>document.getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
 >document : Document
->getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
 >"li" : "li"
 
 type ItemType = "".typeof(nodes.item(0));
@@ -72,9 +72,9 @@ class C2 {
 const nodes2 = document.getElementsByTagName("li");
 >nodes2 : HTMLCollectionOf<HTMLLIElement>
 >document.getElementsByTagName("li") : HTMLCollectionOf<HTMLLIElement>
->document.getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>document.getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
 >document : Document
->getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
 >"li" : "li"
 
 type ItemType2 = 4..typeof(nodes.item(0));
@@ -114,9 +114,9 @@ class C3 {
 const nodes3 = document.getElementsByTagName("li");
 >nodes3 : HTMLCollectionOf<HTMLLIElement>
 >document.getElementsByTagName("li") : HTMLCollectionOf<HTMLLIElement>
->document.getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>document.getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
 >document : Document
->getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
 >"li" : "li"
 
 type ItemType3 = true.typeof(nodes.item(0));

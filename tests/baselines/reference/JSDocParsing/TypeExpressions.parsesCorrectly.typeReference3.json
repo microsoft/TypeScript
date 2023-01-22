@@ -28,7 +28,6 @@
             "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
-            "originalKeywordKind": "FunctionKeyword",
             "escapedText": "function"
         }
     }

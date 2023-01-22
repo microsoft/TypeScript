@@ -198,7 +198,7 @@ export function getStringLiteralCompletions(
     if (isInString(sourceFile, position, contextToken)) {
         if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
         const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, program.getTypeChecker(), options, host, preferences);
-        return convertStringLiteralCompletions(entries, contextToken, sourceFile, host, program, log, options, preferences);
+        return convertStringLiteralCompletions(entries, contextToken, sourceFile, host, program, log, options, preferences, position);
     }
 }
 
@@ -211,6 +211,7 @@ function convertStringLiteralCompletions(
     log: Log,
     options: CompilerOptions,
     preferences: UserPreferences,
+    position: number,
 ): CompletionInfo | undefined {
     if (completion === undefined) {
         return undefined;
@@ -228,6 +229,7 @@ function convertStringLiteralCompletions(
                 contextToken,
                 contextToken,
                 sourceFile,
+                position,
                 sourceFile,
                 host,
                 program,
@@ -1023,7 +1025,7 @@ function removeLeadingDirectorySeparator(path: string): string {
 function getAmbientModuleCompletions(fragment: string, fragmentDirectory: string | undefined, checker: TypeChecker): readonly string[] {
     // Get modules that the type checker picked up
     const ambientModules = checker.getAmbientModules().map(sym => stripQuotes(sym.name));
-    const nonRelativeModuleNames = ambientModules.filter(moduleName => startsWith(moduleName, fragment));
+    const nonRelativeModuleNames = ambientModules.filter(moduleName => startsWith(moduleName, fragment) && moduleName.indexOf("*") < 0);
 
     // Nested modules of the form "module-name/sub" need to be adjusted to only return the string
     // after the last '/' that appears in the fragment because that's where the replacement span

@@ -274,7 +274,7 @@ export class someClass2 { }`),
                 const logicTsConfig: File = {
                     path: logic[0].path,
                     content: JSON.stringify({
-                        compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
+                        compilerOptions: { ignoreDeprecations: "5.0", composite: true, declaration: true, outFile: "index.js" },
                         references: [{ path: "../core", prepend: true }]
                     })
                 };

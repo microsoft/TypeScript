@@ -63,21 +63,21 @@ Incremental signature is neither dts signature nor file version for File:: ./ind
 Incremental:: {
   "original": {
     "version": "3708260210-const m = 10;",
-    "signature": "1073907769-declare const m = 10;\r\n",
+    "signature": "-357908916-declare const m = 10;\n",
     "affectsGlobalScope": true
   },
   "version": "3708260210-const m = 10;",
-  "signature": "1073907769-declare const m = 10;\r\n",
+  "signature": "-357908916-declare const m = 10;\n",
   "affectsGlobalScope": true
 }
 Clean:: {
   "original": {
     "version": "3708260210-const m = 10;",
-    "signature": "-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",
+    "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
     "affectsGlobalScope": true
   },
   "version": "3708260210-const m = 10;",
-  "signature": "-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",
+  "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
   "affectsGlobalScope": true
 }
 Dts Signature:: $undefined
@@ -107,11 +107,11 @@ Incremental buildInfoText:: {
       "./index.ts": {
         "original": {
           "version": "3708260210-const m = 10;",
-          "signature": "1073907769-declare const m = 10;\r\n",
+          "signature": "-357908916-declare const m = 10;\n",
           "affectsGlobalScope": true
         },
         "version": "3708260210-const m = 10;",
-        "signature": "1073907769-declare const m = 10;\r\n",
+        "signature": "-357908916-declare const m = 10;\n",
         "affectsGlobalScope": true
       }
     },
@@ -136,7 +136,7 @@ Incremental buildInfoText:: {
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 929
+  "size": 927
 }
 Clean buildInfoText:: {
   "program": {
@@ -163,11 +163,11 @@ Clean buildInfoText:: {
       "./index.ts": {
         "original": {
           "version": "3708260210-const m = 10;",
-          "signature": "-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",
+          "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
           "affectsGlobalScope": true
         },
         "version": "3708260210-const m = 10;",
-        "signature": "-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",
+        "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
         "affectsGlobalScope": true
       }
     },
@@ -192,7 +192,7 @@ Clean buildInfoText:: {
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1031
+  "size": 1029
 }
 Incremental build contains ./index.ts file as pending emit, clean build does not have it: /src/tests/tsconfig.tsbuildinfo.readable.baseline.txt::
 Incremental buildInfoText:: {
@@ -214,11 +214,11 @@ Incremental buildInfoText:: {
       "./index.ts": {
         "original": {
           "version": "3708260210-const m = 10;",
-          "signature": "1073907769-declare const m = 10;\r\n",
+          "signature": "-357908916-declare const m = 10;\n",
           "affectsGlobalScope": true
         },
         "version": "3708260210-const m = 10;",
-        "signature": "1073907769-declare const m = 10;\r\n",
+        "signature": "-357908916-declare const m = 10;\n",
         "affectsGlobalScope": true
       }
     },
@@ -243,7 +243,7 @@ Incremental buildInfoText:: {
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 929
+  "size": 927
 }
 Clean buildInfoText:: {
   "program": {
@@ -270,11 +270,11 @@ Clean buildInfoText:: {
       "./index.ts": {
         "original": {
           "version": "3708260210-const m = 10;",
-          "signature": "-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",
+          "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
           "affectsGlobalScope": true
         },
         "version": "3708260210-const m = 10;",
-        "signature": "-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",
+        "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
         "affectsGlobalScope": true
       }
     },
@@ -299,5 +299,5 @@ Clean buildInfoText:: {
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1031
+  "size": 1029
 }
