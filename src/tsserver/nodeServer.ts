@@ -1,82 +1,110 @@
-import * as ts from "./_namespaces/ts";
-import * as server from "./_namespaces/ts.server";
+import * as Debug from "../compiler/debug";
+import * as protocol from "../server/protocol";
+import {
+    Event,
+    formatMessage,
+    nullCancellationToken,
+    ServerCancellationToken,
+    Session,
+    toEvent,
+} from "../server/session";
 import {
     ActionInvalidate,
     ActionPackageInstalled,
     ActionSet,
     Arguments,
-    BeginInstallTypes,
-    createInstallTypingsRequest,
-    EndInstallTypes,
     EventBeginInstallTypes,
     EventEndInstallTypes,
     EventInitializationFailed,
     EventTypesRegistry,
     findArgument,
-    formatMessage,
-    getLogLevel,
     hasArgument,
-    indent,
+    nowString,
+} from "../jsTyping/shared";
+import {
+    BeginInstallTypes,
+    EndInstallTypes,
     InitializationFailedResponse,
-    InstallPackageOptionsWithProject,
     InstallPackageRequest,
     InvalidateCachedTypings,
-    ITypingsInstaller,
-    Logger,
-    LogLevel,
-    ModuleImportResult,
-    Msg,
-    nowString,
-    nullCancellationToken,
-    nullTypingsInstaller,
     PackageInstalledResponse,
-    Project,
-    ProjectService,
-    ServerCancellationToken,
-    ServerHost,
-    Session,
     SetTypings,
-    StartInput,
-    StartSessionOptions,
-    stringifyIndented,
-    toEvent,
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
-} from "./_namespaces/ts.server";
+} from "../jsTyping/types";
+import {
+    NameValidationResult,
+    validatePackageName,
+} from "../jsTyping/jsTyping";
+import {
+    createInstallTypingsRequest,
+    Logger,
+    LogLevel,
+    Msg,
+} from "../server/utilitiesPublic";
+import {
+    indent,
+    stringifyIndented,
+} from "../server/utilities";
+import {
+    InstallPackageOptionsWithProject,
+    ITypingsInstaller,
+    nullTypingsInstaller,
+} from "../server/typingsCache";
+import { Project } from "../server/project";
+import {
+    ModuleImportResult,
+    ServerHost,
+} from "../server/types";
+import { ProjectService } from "../server/editorServices";
 import {
     ApplyCodeActionCommandResult,
-    assertType,
-    CharacterCodes,
-    combinePaths,
-    createQueue,
-    Debug,
-    directorySeparator,
-    DirectoryWatcherCallback,
-    FileWatcher,
-    getDirectoryPath,
-    getNodeMajorVersion,
-    getRootLength,
-    JsTyping,
     LanguageServiceMode,
-    MapLike,
+} from "../services/types";
+import {
+    getLogLevel,
+    StartInput,
+    StartSessionOptions,
+} from "./common";
+import {
+    assertType,
+    createQueue,
     noop,
-    noopFileWatcher,
+    toFileNameLowerCase,
+} from "../compiler/core";
+import {
+    MapLike,
+    SortedReadonlyArray,
+    versionMajorMinor,
+} from "../compiler/corePublic";
+import { resolveJSModule } from "../compiler/moduleNameResolver/moduleNameResolver";
+import {
+    combinePaths,
+    directorySeparator,
+    getDirectoryPath,
+    getRootLength,
     normalizePath,
     normalizeSlashes,
-    perfLogger,
-    resolveJSModule,
-    SortedReadonlyArray,
-    startTracing,
-    stripQuotes,
-    sys,
-    toFileNameLowerCase,
-    tracing,
+} from "../compiler/path";
+import { perfLogger } from "../compiler/perfLogger";
+import {
+    getNodeMajorVersion,
+    sys as system,
+} from "../compiler/sys/sys";
+import {
+    CharacterCodes,
+    DirectoryWatcherCallback,
+    FileWatcher,
     TypeAcquisition,
-    validateLocaleAndSetLanguage,
-    versionMajorMinor,
     WatchOptions,
-} from "./_namespaces/ts";
-import * as protocol from "../server/protocol";
+} from "../compiler/types";
+import {
+    startTracing,
+    tracing,
+} from "../compiler/tracing";
+import { stripQuotes } from "../compiler/utilities";
+import { validateLocaleAndSetLanguage } from "../compiler/utilitiesPublic";
+import { noopFileWatcher } from "../compiler/watch";
 
 interface LogOptions {
     file?: string;
@@ -168,7 +196,7 @@ function parseServerMode(): LanguageServiceMode | string | undefined {
 
 /** @internal */
 export function initializeNodeSystem(): StartInput {
-    const sys = Debug.checkDefined(ts.sys) as ServerHost;
+    const sys = Debug.checkDefined(system) as ServerHost;
     const childProcess: {
         execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
     } = require("child_process");
@@ -564,13 +592,13 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
             private readonly validateDefaultNpmLocation: boolean,
-            private event: server.Event) {
+            private event: Event) {
         }
 
         isKnownTypesPackageName(name: string): boolean {
             // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
-            const validationResult = JsTyping.validatePackageName(name);
-            if (validationResult !== JsTyping.NameValidationResult.Ok) {
+            const validationResult = validatePackageName(name);
+            if (validationResult !== NameValidationResult.Ok) {
                 return false;
             }
 
@@ -631,7 +659,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                 }
             }
 
-            const typingsInstaller = combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typingsInstaller.js");
+            const typingsInstaller = combinePaths(getDirectoryPath(system.getExecutingFilePath()), "typingsInstaller.js");
             this.installer = childProcess.fork(typingsInstaller, args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
 
@@ -805,7 +833,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                 this.event(body, eventName);
             };
 
-            const host = sys as ServerHost;
+            const host = system as ServerHost;
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
@@ -917,7 +945,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
     const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(system.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
     const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");

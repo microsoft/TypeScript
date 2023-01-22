@@ -1,18 +1,20 @@
+import * as Debug from "../compiler/debug";
+import { version } from "../compiler/corePublic";
 import {
-    emptyArray,
-    findArgument,
-    hasArgument,
-    initializeNodeSystem,
-    Msg,
-    StartInput,
-} from "./_namespaces/ts.server";
-import {
-    Debug,
     getNodeMajorVersion,
     setStackTraceLimit,
     sys,
-    version,
-} from "./_namespaces/ts";
+} from "../compiler/sys/sys";
+import {
+    findArgument,
+    hasArgument,
+} from "../jsTyping/shared";
+import {
+    emptyArray,
+    Msg,
+} from "../server/utilitiesPublic";
+import { StartInput } from "./common";
+import { initializeNodeSystem } from "./nodeServer";
 
 export * from "./_namespaces/ts";
 
@@ -23,7 +25,6 @@ function findArgumentStringArray(argName: string): readonly string[] {
     }
     return arg.split(",").filter(name => name !== "");
 }
-
 
 function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
 

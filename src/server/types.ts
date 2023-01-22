@@ -1,4 +1,10 @@
-import { DirectoryWatcherCallback, FileWatcher, FileWatcherCallback, System, WatchOptions } from "../compiler/types";
+import {
+    DirectoryWatcherCallback,
+    FileWatcher,
+    FileWatcherCallback,
+    System,
+    WatchOptions,
+} from "../compiler/types";
 
 export interface CompressedData {
     length: number;
