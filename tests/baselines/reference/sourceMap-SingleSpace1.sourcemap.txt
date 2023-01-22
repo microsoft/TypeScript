@@ -4,4 +4,12 @@ mapUrl: sourceMap-SingleSpace1.js.map
 sourceRoot: 
 sources: sourceMap-SingleSpace1.ts
 ===================================================================
->>>//# sourceMappingURL=sourceMap-SingleSpace1.js.map
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMap-SingleSpace1.js
+sourceFile:sourceMap-SingleSpace1.ts
+-------------------------------------------------------------------
+>>>//# sourceMappingURL=sourceMap-SingleSpace1.js.map1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
