@@ -1,0 +1,16 @@
+[
+    "======== Resolving module 'lodash' from '/index.ts'. ========",
+    "Explicitly specified module resolution kind: 'Bundler'.",
+    "File '/package.json' does not exist.",
+    "Loading module 'lodash' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
+    "Found 'package.json' at '/node_modules/lodash/package.json'.",
+    "Saw non-matching condition 'browser'.",
+    "Matched 'exports' condition 'webpack'.",
+    "Using 'exports' subpath '.' with target './webpack.js'.",
+    "File name '/node_modules/lodash/webpack.js' has a '.js' extension - stripping it.",
+    "File '/node_modules/lodash/webpack.ts' does not exist.",
+    "File '/node_modules/lodash/webpack.tsx' does not exist.",
+    "File '/node_modules/lodash/webpack.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/node_modules/lodash/webpack.d.ts', result '/node_modules/lodash/webpack.d.ts'.",
+    "======== Module name 'lodash' was successfully resolved to '/node_modules/lodash/webpack.d.ts' with Package ID 'lodash/webpack.d.ts@1.0.0'. ========"
+]

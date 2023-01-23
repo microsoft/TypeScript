@@ -40,7 +40,7 @@ var D = /** @class */ (function (_super) {
         var _this = this;
         var x = {
             k: _this = _super.call(this, undefined) || this,
-            j: _this._t
+            j: _this._t, // no error
         };
         return _this;
     }

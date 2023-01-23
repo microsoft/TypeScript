@@ -20,7 +20,7 @@ export const classMap = directive(ClassMapDirective);
 
 //// [lit.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.classMap = exports.directive = void 0;
 var ClassMapDirective = /** @class */ (function () {
     function ClassMapDirective() {
@@ -29,14 +29,14 @@ var ClassMapDirective = /** @class */ (function () {
 }());
 var directive = function (class_) {
     return function () { return ({
-        directive: class_
+        directive: class_,
     }); };
 };
 exports.directive = directive;
 exports.classMap = (0, exports.directive)(ClassMapDirective);
 //// [button.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 var lit_js_1 = require("./lit.js");
 exports.c = (0, lit_js_1.classMap)();
