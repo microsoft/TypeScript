@@ -163,7 +163,7 @@ async function runDtsBundler(entrypoint, output) {
  * @typedef BundlerTaskOptions
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
- * @property {esbuild.WatchMode} [watchMode]
+ * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const getOptions = memoize(async () => {
@@ -220,7 +220,30 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
 
     return {
         build: async () => esbuild.build(await getOptions()),
-        watch: async () => esbuild.build({ ...await getOptions(), watch: taskOptions.watchMode ?? true, logLevel: "info" }),
+        watch: async () => {
+            /** @type {esbuild.BuildOptions} */
+            const options = { ...await getOptions(), logLevel: "info" };
+            if (taskOptions.onWatchRebuild) {
+                const onRebuild = taskOptions.onWatchRebuild;
+                options.plugins = (options.plugins?.slice(0) ?? []).concat([{
+                    name: "watch",
+                    setup: (build) => {
+                        let firstBuild = true;
+                        build.onEnd(() => {
+                            if (firstBuild) {
+                                firstBuild = false;
+                            }
+                            else {
+                                onRebuild();
+                            }
+                        });
+                    }
+                }]);
+            }
+
+            const ctx = await esbuild.context(options);
+            ctx.watch();
+        },
     };
 }
 
@@ -426,10 +449,8 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
     bundlerOptions: {
         // Ensure we never drop any dead code, which might be helpful while debugging.
         treeShaking: false,
-        watchMode: {
-            onRebuild() {
-                watchTestsEmitter.emit("rebuild");
-            }
+        onWatchRebuild() {
+            watchTestsEmitter.emit("rebuild");
         }
     },
 });

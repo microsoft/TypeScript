@@ -722,7 +722,7 @@ class SymbolObject implements Symbol {
 }
 
 class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
-    public kind: TKind;
+    public override kind: TKind;
 
     constructor(kind: TKind, pos: number, end: number) {
         super(pos, end);
@@ -731,7 +731,7 @@ class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject impl
 }
 
 class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
-    public kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
+    public override kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
     public escapedText!: __String;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
@@ -753,7 +753,7 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
 }
 IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
-    public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
+    public override kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
@@ -992,7 +992,7 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
 }
 
 class SourceFileObject extends NodeObject implements SourceFile {
-    public kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
+    public override kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
     public fileName!: string;
@@ -1643,7 +1643,7 @@ export function createLanguageService(
             getCancellationToken: () => cancellationToken,
             getCanonicalFileName,
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-            getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
+            getNewLine: () => getNewLineCharacter(newSettings),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
             writeFile: noop,
             getCurrentDirectory: () => currentDirectory,
@@ -2437,7 +2437,7 @@ export function createLanguageService(
     }
 
     function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
-        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
+        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, /*formatSettings*/ undefined), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
     }
 
     function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {

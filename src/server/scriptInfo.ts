@@ -11,7 +11,6 @@ import {
     NormalizedPath,
     Project,
     ProjectKind,
-    protocol,
     ScriptVersionCache,
     ServerHost,
 } from "./_namespaces/ts.server";
@@ -52,6 +51,7 @@ import {
     TextSpan,
     unorderedRemoveItem,
 } from "./_namespaces/ts";
+import * as protocol from "./protocol";
 
 export interface ScriptInfoVersion {
     svc: number;
