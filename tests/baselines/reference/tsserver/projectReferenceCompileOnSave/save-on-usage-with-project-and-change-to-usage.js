@@ -1,12 +1,12 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:30.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
@@ -100,7 +100,7 @@ Info 24   [00:00:53.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../dependency/fns.ts
 	  Imported via '../decls/fns' from file 'usage.ts'
 	usage.ts
@@ -146,12 +146,12 @@ Info 26   [00:01:01.000] response:
     }
 Info 27   [00:01:02.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -196,7 +196,7 @@ Info 39   [00:01:14.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	fns.ts
 	  Matched by default include pattern '**/*'
 
@@ -252,7 +252,7 @@ Info 44   [00:01:30.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 1,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -366,7 +366,7 @@ Info 48   [00:01:56.000] request:
         "endOffset": 1,
         "insertString": "export function fn3() { }"
       },
-      "seq": 2,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -432,7 +432,7 @@ Info 50   [00:01:58.000] request:
         "file": "/user/username/projects/myproject/usage/usage.ts",
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
-      "seq": 3,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -510,7 +510,7 @@ Info 55   [00:02:03.000] request:
         "file": "/user/username/projects/myproject/usage/usage.ts",
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
-      "seq": 4,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -545,7 +545,7 @@ Info 58   [00:02:08.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 After request
 //// [/user/username/projects/myproject/usage/usage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn3 = void 0;
 var fns_1 = require("../decls/fns");
 (0, fns_1.fn1)();
@@ -591,7 +591,7 @@ Info 60   [00:02:10.000] request:
         "file": "/user/username/projects/myproject/usage/usage.ts",
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
-      "seq": 5,
+      "seq": 7,
       "type": "request"
     }
 Before request
@@ -653,7 +653,7 @@ Info 61   [00:02:11.000] response:
           {
             "name": "/user/username/projects/myproject/usage/usage.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nexports.__esModule = true;\nexports.fn3 = void 0;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\nexports.fn3 = fn3;\n"
+            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn3 = void 0;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\nexports.fn3 = fn3;\n"
           }
         ],
         "emitSkipped": false,

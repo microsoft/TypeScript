@@ -1,7 +1,14 @@
 import * as ts from "./_namespaces/ts";
 import * as compiler from "./_namespaces/compiler";
 import * as Utils from "./_namespaces/Utils";
-import { Baseline, Compiler, IO, RunnerBase, TestCaseParser, TestRunnerKind } from "./_namespaces/Harness";
+import {
+    Baseline,
+    Compiler,
+    IO,
+    RunnerBase,
+    TestCaseParser,
+    TestRunnerKind,
+} from "./_namespaces/Harness";
 
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
 export class Test262BaselineRunner extends RunnerBase {
@@ -66,7 +73,7 @@ export class Test262BaselineRunner extends RunnerBase {
             });
 
             it("has the expected emitted code", () => {
-                const files = Array.from(testState.compilerResult.js.values()).filter(f => f.file !== Test262BaselineRunner.helpersFilePath);
+                const files = ts.arrayFrom(testState.compilerResult.js.values()).filter(f => f.file !== Test262BaselineRunner.helpersFilePath);
                 Baseline.runBaseline(testState.filename + ".output.js", Compiler.collateOutputs(files), Test262BaselineRunner.baselineOptions);
             });
 

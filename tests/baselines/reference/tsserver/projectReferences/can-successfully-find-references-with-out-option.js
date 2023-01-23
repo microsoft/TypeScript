@@ -1,12 +1,12 @@
 Info 0    [00:01:10.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:11.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/container/compositeExec/index.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -44,6 +44,7 @@ namespace container {
 //// [/user/username/projects/container/exec/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "outFile": "../built/local/exec.js",
     },
     "files": [
@@ -65,6 +66,7 @@ namespace container {
 //// [/user/username/projects/container/compositeExec/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "outFile": "../built/local/compositeExec.js",
         "composite": true,
         "declarationMap": true,
@@ -363,6 +365,7 @@ Info 6    [00:01:16.000] Config: /user/username/projects/container/compositeExec
   "/user/username/projects/container/compositeExec/index.ts"
  ],
  "options": {
+  "ignoreDeprecations": "5.0",
   "outFile": "/user/username/projects/container/built/local/compositeExec.js",
   "composite": true,
   "declarationMap": true,
@@ -404,7 +407,7 @@ Info 18   [00:01:28.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts
@@ -462,7 +465,7 @@ Info 27   [00:01:46.000] request:
         "line": 3,
         "offset": 16
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -503,7 +506,7 @@ Info 38   [00:01:57.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -531,6 +534,7 @@ Info 43   [00:02:02.000] Config: /user/username/projects/container/exec/tsconfig
   "/user/username/projects/container/exec/index.ts"
  ],
  "options": {
+  "ignoreDeprecations": "5.0",
   "outFile": "/user/username/projects/container/built/local/exec.js",
   "configFilePath": "/user/username/projects/container/exec/tsconfig.json"
  },
@@ -563,7 +567,7 @@ Info 58   [00:02:17.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts

@@ -1,13 +1,54 @@
 import {
-    ApplicableRefactorInfo, arrayFrom, codefix, Debug, Diagnostics, emptyArray, Expression, factory, FindAllReferences,
-    findAncestor, findNextToken, getAllowSyntheticDefaultImports, getLocaleSpecificMessage, getOwnValues,
-    getParentNodeInSpan, getRefactorContextSpan, getTokenAtPosition, getUniqueName, Identifier, ImportClause,
-    ImportDeclaration, ImportKind, ImportSpecifier, isExportSpecifier, isImportDeclaration, isPropertyAccessExpression,
-    isPropertyAccessOrQualifiedName, isShorthandPropertyAssignment, isStringLiteral, Map, NamedImports, NamespaceImport,
-    Program, PropertyAccessExpression, QualifiedName, RefactorContext, RefactorEditInfo, ScriptTarget, Set, some,
-    SourceFile, Symbol, SymbolFlags, SyntaxKind, textChanges, TypeChecker,
+    ApplicableRefactorInfo,
+    arrayFrom,
+    codefix,
+    Debug,
+    Diagnostics,
+    emptyArray,
+    Expression,
+    factory,
+    FindAllReferences,
+    findAncestor,
+    findNextToken,
+    getAllowSyntheticDefaultImports,
+    getLocaleSpecificMessage,
+    getOwnValues,
+    getParentNodeInSpan,
+    getRefactorContextSpan,
+    getTokenAtPosition,
+    getUniqueName,
+    Identifier,
+    ImportClause,
+    ImportDeclaration,
+    ImportKind,
+    ImportSpecifier,
+    isExportSpecifier,
+    isImportDeclaration,
+    isPropertyAccessExpression,
+    isPropertyAccessOrQualifiedName,
+    isShorthandPropertyAssignment,
+    isStringLiteral,
+    NamedImports,
+    NamespaceImport,
+    Program,
+    PropertyAccessExpression,
+    QualifiedName,
+    RefactorContext,
+    RefactorEditInfo,
+    ScriptTarget,
+    some,
+    SourceFile,
+    Symbol,
+    SymbolFlags,
+    SyntaxKind,
+    textChanges,
+    TypeChecker,
 } from "../_namespaces/ts";
-import { isRefactorErrorInfo, RefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";
+import {
+    isRefactorErrorInfo,
+    RefactorErrorInfo,
+    registerRefactor,
+} from "../_namespaces/ts.refactor";
 
 const refactorName = "Convert import";
 
@@ -222,7 +263,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
         ? factory.createIdentifier(namespaceImportName)
         : factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)));
     if (neededNamedImports.size) {
-        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values()).map(element =>
+        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values(), element =>
             factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
         changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
     }

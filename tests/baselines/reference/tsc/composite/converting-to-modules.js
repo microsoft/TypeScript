@@ -36,7 +36,7 @@ var x = 10;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","signature":"-3198459068-declare const x = 10;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","signature":"-4001438729-declare const x = 10;\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -58,11 +58,11 @@ var x = 10;
       "./src/main.ts": {
         "original": {
           "version": "5029505981-const x = 10;",
-          "signature": "-3198459068-declare const x = 10;\r\n",
+          "signature": "-4001438729-declare const x = 10;\n",
           "affectsGlobalScope": true
         },
         "version": "5029505981-const x = 10;",
-        "signature": "-3198459068-declare const x = 10;\r\n",
+        "signature": "-4001438729-declare const x = 10;\n",
         "affectsGlobalScope": true
       }
     },
@@ -77,7 +77,7 @@ var x = 10;
     "latestChangedDtsFile": "./src/main.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 816
+  "size": 814
 }
 
 
@@ -96,7 +96,7 @@ exitCode:: ExitStatus.Success
 
 //// [/src/project/src/main.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","signature":"-3198459068-declare const x = 10;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"module":5},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","signature":"-4001438729-declare const x = 10;\n","affectsGlobalScope":true}],"options":{"composite":true,"module":5},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -118,11 +118,11 @@ exitCode:: ExitStatus.Success
       "./src/main.ts": {
         "original": {
           "version": "5029505981-const x = 10;",
-          "signature": "-3198459068-declare const x = 10;\r\n",
+          "signature": "-4001438729-declare const x = 10;\n",
           "affectsGlobalScope": true
         },
         "version": "5029505981-const x = 10;",
-        "signature": "-3198459068-declare const x = 10;\r\n",
+        "signature": "-4001438729-declare const x = 10;\n",
         "affectsGlobalScope": true
       }
     },
@@ -139,6 +139,6 @@ exitCode:: ExitStatus.Success
     "latestChangedDtsFile": "./src/main.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 859
+  "size": 857
 }
 

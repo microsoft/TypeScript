@@ -179,7 +179,7 @@ Info 25   [00:01:04.000] 	Files (5)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../core/index.ts
 	  Imported via '../core/index' from file 'index.ts'
 	  Imported via '../core/index' from file '../logic/index.ts'

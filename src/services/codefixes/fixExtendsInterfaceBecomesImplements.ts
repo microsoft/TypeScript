@@ -1,8 +1,20 @@
 import {
-    Diagnostics, factory, getContainingClass, getTokenAtPosition, HeritageClause, isWhiteSpaceSingleLine, Node,
-    SourceFile, SyntaxKind, textChanges,
+    Diagnostics,
+    factory,
+    getContainingClass,
+    getTokenAtPosition,
+    HeritageClause,
+    isWhiteSpaceSingleLine,
+    Node,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "extendsInterfaceBecomesImplements";
 const errorCodes = [Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements.code];

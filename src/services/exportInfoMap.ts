@@ -1,15 +1,64 @@
 import {
-    __String, addToSeen, arrayIsEqualTo, CancellationToken, CompilerOptions, consumesNodeCoreModules, createMultiMap,
-    Debug, emptyArray, findIndex, firstDefined, forEachAncestorDirectory, forEachEntry, getBaseFileName,
-    GetCanonicalFileName, getDirectoryPath, getLocalSymbolForExportDefault, getNameForExportedSymbol,
-    getNamesForExportedSymbol, getNodeModulePathParts, getPackageNameFromTypesPackageName, getPatternFromSpec,
-    getRegexFromPattern, getSymbolId, hostGetCanonicalFileName, hostUsesCaseSensitiveFileNames, InternalSymbolName,
-    isExportAssignment, isExportSpecifier, isExternalModuleNameRelative, isExternalModuleSymbol,
-    isExternalOrCommonJsModule, isIdentifier, isKnownSymbol, isNonGlobalAmbientModule, isPrivateIdentifierSymbol,
-    LanguageServiceHost, Map, mapDefined, ModuleSpecifierCache, ModuleSpecifierResolutionHost, moduleSpecifiers,
-    nodeModulesPathPart, PackageJsonImportFilter, Path, Program, skipAlias, skipOuterExpressions, SourceFile,
-    startsWith, Statement, stringContains, stripQuotes, Symbol, SymbolFlags, timestamp, tryCast, TypeChecker,
-    unescapeLeadingUnderscores, unmangleScopedPackageName, UserPreferences,
+    __String,
+    addToSeen,
+    arrayIsEqualTo,
+    CancellationToken,
+    CompilerOptions,
+    consumesNodeCoreModules,
+    createMultiMap,
+    Debug,
+    emptyArray,
+    findIndex,
+    firstDefined,
+    forEachAncestorDirectory,
+    forEachEntry,
+    getBaseFileName,
+    GetCanonicalFileName,
+    getDirectoryPath,
+    getLocalSymbolForExportDefault,
+    getNameForExportedSymbol,
+    getNamesForExportedSymbol,
+    getNodeModulePathParts,
+    getPackageNameFromTypesPackageName,
+    getPatternFromSpec,
+    getRegexFromPattern,
+    getSymbolId,
+    hostGetCanonicalFileName,
+    hostUsesCaseSensitiveFileNames,
+    InternalSymbolName,
+    isExportAssignment,
+    isExportSpecifier,
+    isExternalModuleNameRelative,
+    isExternalModuleSymbol,
+    isExternalOrCommonJsModule,
+    isIdentifier,
+    isKnownSymbol,
+    isNonGlobalAmbientModule,
+    isPrivateIdentifierSymbol,
+    LanguageServiceHost,
+    mapDefined,
+    ModuleSpecifierCache,
+    ModuleSpecifierResolutionHost,
+    moduleSpecifiers,
+    nodeModulesPathPart,
+    PackageJsonImportFilter,
+    Path,
+    Program,
+    skipAlias,
+    skipOuterExpressions,
+    SourceFile,
+    startsWith,
+    Statement,
+    stringContains,
+    stripQuotes,
+    Symbol,
+    SymbolFlags,
+    timestamp,
+    tryCast,
+    TypeChecker,
+    unescapeLeadingUnderscores,
+    unmangleScopedPackageName,
+    UserPreferences,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -379,14 +428,14 @@ export function forEachExternalModuleToImportFrom(
 }
 
 function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
-    const isExcluded = (fileName: string) => excludePatterns?.some(p => p.test(fileName));
+    const isExcluded = excludePatterns && ((fileName: string) => excludePatterns.some(p => p.test(fileName)));
     for (const ambient of checker.getAmbientModules()) {
-        if (!stringContains(ambient.name, "*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded(d.getSourceFile().fileName)))) {
+        if (!stringContains(ambient.name, "*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile().fileName)))) {
             cb(ambient, /*sourceFile*/ undefined);
         }
     }
     for (const sourceFile of allSourceFiles) {
-        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded(sourceFile.fileName)) {
+        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile.fileName)) {
             cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
         }
     }
@@ -477,12 +526,13 @@ function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker):
     if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
 }
 
-function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
+/** @internal */
+export function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly resolvedSymbol: Symbol, readonly name: string } | undefined {
     const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-    if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name };
+    if (localSymbol) return { resolvedSymbol: localSymbol, name: localSymbol.name };
 
     const name = getNameForExportDefault(defaultExport);
-    if (name !== undefined) return { symbolForMeaning: defaultExport, name };
+    if (name !== undefined) return { resolvedSymbol: defaultExport, name };
 
     if (defaultExport.flags & SymbolFlags.Alias) {
         const aliased = checker.getImmediateAliasedSymbol(defaultExport);
@@ -497,9 +547,9 @@ function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker,
 
     if (defaultExport.escapedName !== InternalSymbolName.Default &&
         defaultExport.escapedName !== InternalSymbolName.ExportEquals) {
-        return { symbolForMeaning: defaultExport, name: defaultExport.getName() };
+        return { resolvedSymbol: defaultExport, name: defaultExport.getName() };
     }
-    return { symbolForMeaning: defaultExport, name: getNameForExportedSymbol(defaultExport, compilerOptions.target) };
+    return { resolvedSymbol: defaultExport, name: getNameForExportedSymbol(defaultExport, compilerOptions.target) };
 }
 
 function getNameForExportDefault(symbol: Symbol): string | undefined {

@@ -32,7 +32,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     }
 
     function assertTypeAcquisitionWithJson(json: any, configFileName: string, expectedResult: ExpectedResult) {
-        const jsonOptions = json.typeAcquisition || json.typingOptions;
+        const jsonOptions = json.typeAcquisition;
         const { options: actualTypeAcquisition, errors: actualErrors } = ts.convertTypeAcquisitionFromJson(jsonOptions, "/apath/", configFileName);
         verifyAcquisition(actualTypeAcquisition, expectedResult);
         verifyErrors(actualErrors, expectedResult);
@@ -50,30 +50,6 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
         const actualErrors = ts.filter(actualParseErrors, error => error.code !== ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
         verifyErrors(actualErrors, expectedResult, /*hasLocation*/ true);
     }
-
-    // tsconfig.json
-    it("Convert deprecated typingOptions.enableAutoDiscovery format tsconfig.json to typeAcquisition ", () => {
-        assertTypeAcquisition(
-            {
-                typingOptions:
-                {
-                    enableAutoDiscovery: true,
-                    include: ["0.d.ts", "1.d.ts"],
-                    exclude: ["0.js", "1.js"]
-                }
-            },
-            "tsconfig.json",
-            {
-                typeAcquisition:
-                {
-                    enable: true,
-                    include: ["0.d.ts", "1.d.ts"],
-                    exclude: ["0.js", "1.js"]
-                },
-                errors: [] as ts.Diagnostic[]
-            }
-        );
-    });
 
     it("Convert correctly format tsconfig.json to typeAcquisition ", () => {
         assertTypeAcquisition(
@@ -114,8 +90,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                 },
                 errors: [
                     {
-                        category: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
-                        code: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
+                        category: ts.Diagnostics.Unknown_type_acquisition_option_0.category,
+                        code: ts.Diagnostics.Unknown_type_acquisition_option_0.code,
                         file: undefined,
                         start: 0,
                         length: 0,
@@ -209,8 +185,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                 },
                 errors: [
                     {
-                        category: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
-                        code: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
+                        category: ts.Diagnostics.Unknown_type_acquisition_option_0.category,
+                        code: ts.Diagnostics.Unknown_type_acquisition_option_0.code,
                         file: undefined,
                         start: 0,
                         length: 0,

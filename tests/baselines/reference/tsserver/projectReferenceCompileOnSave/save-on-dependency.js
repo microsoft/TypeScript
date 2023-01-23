@@ -1,12 +1,12 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:30.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
@@ -100,7 +100,7 @@ Info 24   [00:00:53.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../dependency/fns.ts
 	  Imported via '../decls/fns' from file 'usage.ts'
 	usage.ts
@@ -146,12 +146,12 @@ Info 26   [00:01:01.000] response:
     }
 Info 27   [00:01:02.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -196,7 +196,7 @@ Info 39   [00:01:14.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	fns.ts
 	  Matched by default include pattern '**/*'
 
@@ -252,7 +252,7 @@ Info 44   [00:01:30.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 1,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -361,7 +361,7 @@ Info 48   [00:01:56.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 2,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -405,7 +405,7 @@ Info 60   [00:02:15.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 After request
 //// [/user/username/projects/myproject/dependency/fns.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn2 = exports.fn1 = void 0;
 function fn1() { }
 exports.fn1 = fn1;
@@ -454,7 +454,7 @@ Info 62   [00:02:17.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 3,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -516,7 +516,7 @@ Info 63   [00:02:18.000] response:
           {
             "name": "/user/username/projects/myproject/dependency/fns.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nexports.__esModule = true;\nexports.fn2 = exports.fn1 = void 0;\nfunction fn1() { }\nexports.fn1 = fn1;\nfunction fn2() { }\nexports.fn2 = fn2;\n"
+            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn2 = exports.fn1 = void 0;\nfunction fn1() { }\nexports.fn1 = fn1;\nfunction fn2() { }\nexports.fn2 = fn2;\n"
           },
           {
             "name": "/user/username/projects/myproject/decls/fns.d.ts",
