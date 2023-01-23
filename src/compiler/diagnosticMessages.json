@@ -1549,7 +1549,7 @@
         "category": "Error",
         "code": 1484
     },
-    "'{0}' is not allowed.": {
+    "Escape sequence '{0}' is not allowed.": {
         "category": "Error",
         "code": 1485
     },

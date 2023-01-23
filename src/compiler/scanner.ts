@@ -1415,6 +1415,21 @@ export function createScanner(languageVersion: ScriptTarget,
         return resultingToken;
     }
 
+    // Extract from Section A.1
+    // EscapeSequence ::
+    //     | CharacterEscapeSequence
+    //     | 0 (?![0-9])
+    //     | LegacyOctalEscapeSequence
+    //     | NonOctalDecimalEscapeSequence
+    //     | HexEscapeSequence
+    //     | UnicodeEscapeSequence
+    // LegacyOctalEscapeSequence ::=
+    //     | '0' (?=[89])
+    //     | [1-7] (?![0-7])
+    //     | [0-3] [0-7] (?![0-7])
+    //     | [4-7] [0-7]
+    //     | [0-3] [0-7] [0-7]
+    // NonOctalDecimalEscapeSequence ::= [89]
     function scanEscapeSequence(shouldEmitInvalidEscapeError?: boolean): string {
         const start = pos;
         pos++;
@@ -1426,8 +1441,9 @@ export function createScanner(languageVersion: ScriptTarget,
         pos++;
         switch (ch) {
             case CharacterCodes._0:
-                // '\08' is '\0' + '8' but is treated as an octal escape sequence, thus isDigit
-                if (!(pos < end && isDigit(text.charCodeAt(pos)))) {
+                // Although '0' preceding any digit is treated as LegacyOctalEscapeSequence,
+                // '\08' should separately be interpreted as '\0' + '8'.
+                if (pos >= end || !isDigit(text.charCodeAt(pos))) {
                     return "\0";
                 }
             // '\01', '\011'
@@ -1462,7 +1478,7 @@ export function createScanner(languageVersion: ScriptTarget,
                 // the invalid '\8' and '\9'
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
                 if (shouldEmitInvalidEscapeError) {
-                    error(Diagnostics._0_is_not_allowed, start, 2, text.substring(start, pos));
+                    error(Diagnostics.Escape_sequence_0_is_not_allowed, start, pos - start, text.substring(start, pos));
                     return String.fromCharCode(ch);
                 }
                 return text.substring(start, pos);
