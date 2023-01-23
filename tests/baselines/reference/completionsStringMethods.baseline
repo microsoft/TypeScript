@@ -1105,8 +1105,8 @@
                   "target": {
                     "fileName": "lib.d.ts",
                     "textSpan": {
-                      "start": 18529,
-                      "length": 28
+                      "start": "--",
+                      "end": "--"
                     }
                   }
                 },
@@ -1128,8 +1128,8 @@
                   "target": {
                     "fileName": "lib.d.ts",
                     "textSpan": {
-                      "start": 18529,
-                      "length": 28
+                      "start": "--",
+                      "end": "--"
                     }
                   }
                 },

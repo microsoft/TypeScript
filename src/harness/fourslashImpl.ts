@@ -2046,6 +2046,22 @@ export class TestState {
                     ? entry.displayParts.map(p => p.text).join("").split("\n")
                     : [`(${entry.kindModifiers}${entry.kind}) ${entry.name}`])
         );
+        for (const r of result) {
+            for (const entry of r.item.entries ?? []) {
+                for (const tag of entry.tags ?? []) {
+                    for (const part of tag.text ?? []) {
+                        if (part.kind === "linkName") {
+                            const link = part as ts.JSDocLinkDisplayPart;
+                            if (/lib(?:.*)\.d\.ts$/.test(link.target.fileName)) {
+                                // elidedSpan doesn't have the correct type, but we're only going to
+                                // use these results in the baseline for diffing, so just overwrite.
+                                (link.target.textSpan as any) = { start: "--", end: "--" };
+                            }
+                        }
+                    }
+                }
+            }
+        }
         Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
 
