@@ -1,6 +1,6 @@
 [
     "======== Resolving module 'some-library/foo' from '/index.ts'. ========",
-    "Explicitly specified module resolution kind: 'NodeJs'.",
+    "Explicitly specified module resolution kind: 'Node10'.",
     "Loading module 'some-library/foo' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "File '/node_modules/some-library/package.json' does not exist.",
     "File '/node_modules/some-library/foo.ios.ts' does not exist.",

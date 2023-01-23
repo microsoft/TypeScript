@@ -84,7 +84,7 @@ Info 12   [00:00:41.000] FileWatcher:: Added:: WatchInfo: /src/projects/common/t
 Info 13   [00:00:42.000] DirectoryWatcher:: Added:: WatchInfo: /src/projects/common 1 undefined Config: /src/projects/common/tsconfig.json WatchType: Wild card directory
 Info 14   [00:00:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/projects/common 1 undefined Config: /src/projects/common/tsconfig.json WatchType: Wild card directory
 Info 15   [00:00:44.000] ======== Resolving module 'moduleX' from '/src/projects/app/appA.ts'. ========
-Info 16   [00:00:45.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 16   [00:00:45.000] Module resolution kind is not specified, using 'Node10'.
 Info 17   [00:00:46.000] Loading module 'moduleX' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 18   [00:00:47.000] Directory '/src/projects/app/node_modules' does not exist, skipping all lookups in it.
 Info 19   [00:00:48.000] File '/src/projects/node_modules/moduleX/package.json' does not exist.
@@ -99,14 +99,14 @@ Info 27   [00:00:56.000] ======== Module name 'moduleX' was successfully resolve
 Info 28   [00:00:57.000] DirectoryWatcher:: Added:: WatchInfo: /src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 29   [00:00:58.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 30   [00:00:59.000] ======== Resolving module '../common/moduleB' from '/src/projects/app/appB.ts'. ========
-Info 31   [00:01:00.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 31   [00:01:00.000] Module resolution kind is not specified, using 'Node10'.
 Info 32   [00:01:01.000] Loading module as file / folder, candidate module location '/src/projects/common/moduleB', target file types: TypeScript, Declaration.
 Info 33   [00:01:02.000] File '/src/projects/common/moduleB.ts' exist - use it as a name resolution result.
 Info 34   [00:01:03.000] ======== Module name '../common/moduleB' was successfully resolved to '/src/projects/common/moduleB.ts'. ========
 Info 35   [00:01:04.000] FileWatcher:: Added:: WatchInfo: /src/projects/common/moduleB.ts 500 undefined WatchType: Closed Script info
 Info 36   [00:01:05.000] ======== Resolving module 'moduleX' from '/src/projects/common/moduleB.ts'. ========
 Info 37   [00:01:06.000] Using compiler options of project reference redirect '/src/projects/common/tsconfig.json'.
-Info 38   [00:01:07.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 38   [00:01:07.000] Module resolution kind is not specified, using 'Node10'.
 Info 39   [00:01:08.000] Loading module 'moduleX' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 40   [00:01:09.000] Directory '/src/projects/common/node_modules' does not exist, skipping all lookups in it.
 Info 41   [00:01:10.000] File '/src/projects/node_modules/moduleX/package.json' does not exist according to earlier cached lookups.

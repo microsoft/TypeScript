@@ -134,7 +134,7 @@ exports.default = index_json_1.default.hello;
 
 
 //// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../src/index.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2379406821-{\"hello\":\"world\"}",{"version":"-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello","signature":"-1680156224-declare const _default: string;\r\nexport default _default;\r\n"}],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../src/index.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2379406821-{\"hello\":\"world\"}",{"version":"-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello","signature":"6785192742-declare const _default: string;\nexport default _default;\n"}],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo.readable.baseline.txt]
 {
@@ -166,10 +166,10 @@ exports.default = index_json_1.default.hello;
       "../src/index.ts": {
         "original": {
           "version": "-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello",
-          "signature": "-1680156224-declare const _default: string;\r\nexport default _default;\r\n"
+          "signature": "6785192742-declare const _default: string;\nexport default _default;\n"
         },
         "version": "-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello",
-        "signature": "-1680156224-declare const _default: string;\r\nexport default _default;\r\n"
+        "signature": "6785192742-declare const _default: string;\nexport default _default;\n"
       }
     },
     "options": {
@@ -194,6 +194,6 @@ exports.default = index_json_1.default.hello;
     "latestChangedDtsFile": "./src/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1109
+  "size": 1104
 }
 

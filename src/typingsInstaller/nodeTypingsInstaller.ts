@@ -27,7 +27,6 @@ import {
     Debug,
     forEachAncestorDirectory,
     getDirectoryPath,
-    getEntries,
     MapLike,
     normalizePath,
     normalizeSlashes,
@@ -83,7 +82,7 @@ function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypin
     }
     try {
         const content = JSON.parse(host.readFile(typesRegistryFilePath)!) as TypesRegistryFile;
-        return new Map(getEntries(content.entries));
+        return new Map(Object.entries(content.entries));
     }
     catch (e) {
         if (log.isEnabled()) {

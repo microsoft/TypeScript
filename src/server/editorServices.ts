@@ -36,7 +36,6 @@ import {
     ProjectFilesWithTSDiagnostics,
     ProjectKind,
     ProjectOptions,
-    protocol,
     ScriptInfo,
     ScriptInfoVersion,
     ServerHost,
@@ -66,7 +65,6 @@ import {
     contains,
     containsPath,
     convertCompilerOptionsForTelemetry,
-    convertEnableAutoDiscoveryToEnable,
     convertJsonOption,
     createCachedDirectoryStructureHost,
     createDocumentRegistryInternal,
@@ -100,7 +98,6 @@ import {
     getDefaultFormatCodeSettings,
     getDirectoryPath,
     getDocumentPositionMapper,
-    getEntries,
     getFileNamesFromConfigSpecs,
     getFileWatcherEventKind,
     getNormalizedAbsolutePath,
@@ -180,6 +177,7 @@ import {
     WatchType,
     WildcardDirectoryWatcher,
 } from "./_namespaces/ts";
+import * as protocol from "./protocol";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 /** @internal */
@@ -356,7 +354,7 @@ function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: Command
 
 const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
 const watchOptionsConverters = prepareConvertersForEnumLikeCompilerOptions(optionsForWatch);
-const indentStyle = new Map(getEntries({
+const indentStyle = new Map(Object.entries({
     none: IndentStyle.None,
     block: IndentStyle.Block,
     smart: IndentStyle.Smart
@@ -589,8 +587,6 @@ export interface ProjectServiceOptions {
     pluginProbeLocations?: readonly string[];
     allowLocalPluginLoads?: boolean;
     typesMapLocation?: string;
-    /** @deprecated use serverMode instead */
-    syntaxOnly?: boolean;
     serverMode?: LanguageServiceMode;
     session: Session<unknown> | undefined;
 }
@@ -734,7 +730,7 @@ function forEachResolvedProjectReferenceProjectWorker<T>(
 
 function forEachPotentialProjectReference<T>(
     project: ConfiguredProject,
-    cb: (potentialProjectReference: Path) => T | undefined
+    cb: (potentialProjectReference: NormalizedPath) => T | undefined
 ): T | undefined {
     return project.potentialProjectReferences &&
         forEachKey(project.potentialProjectReferences, cb);
@@ -744,7 +740,7 @@ function forEachAnyProjectReferenceKind<T>(
     project: ConfiguredProject,
     cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
     cbProjectRef: (projectReference: ProjectReference) => T | undefined,
-    cbPotentialProjectRef: (potentialProjectReference: Path) => T | undefined
+    cbPotentialProjectRef: (potentialProjectReference: NormalizedPath) => T | undefined
 ): T | undefined {
     return project.getCurrentProgram() ?
         project.forEachResolvedProjectReference(cb) :
@@ -753,10 +749,10 @@ function forEachAnyProjectReferenceKind<T>(
             forEach(project.getProjectReferences(), cbProjectRef);
 }
 
-function callbackRefProject<T>(
+function callbackRefProject<T, P extends string>(
     project: ConfiguredProject,
     cb: (refProj: ConfiguredProject) => T | undefined,
-    refPath: Path | undefined
+    refPath: P | undefined
 ) {
     const refProject = refPath && project.projectService.configuredProjects.get(refPath);
     return refProject && cb(refProject);
@@ -823,7 +819,7 @@ export interface OpenFileArguments {
 /** @internal */
 export interface ChangeFileArguments {
     fileName: string;
-    changes: Iterator<TextChange>;
+    changes: Iterable<TextChange>;
 }
 
 export interface WatchOptionsAndErrors {
@@ -970,8 +966,6 @@ export class ProjectService {
 
     public readonly typesMapLocation: string | undefined;
 
-    /** @deprecated use serverMode instead */
-    public readonly syntaxOnly: boolean;
     public readonly serverMode: LanguageServiceMode;
 
     /** Tracks projects that we have already sent telemetry for. */
@@ -1018,15 +1012,9 @@ export class ProjectService {
 
         if (opts.serverMode !== undefined) {
             this.serverMode = opts.serverMode;
-            this.syntaxOnly = this.serverMode === LanguageServiceMode.Syntactic;
-        }
-        else if (opts.syntaxOnly) {
-            this.serverMode = LanguageServiceMode.Syntactic;
-            this.syntaxOnly = true;
         }
         else {
             this.serverMode = LanguageServiceMode.Semantic;
-            this.syntaxOnly = false;
         }
 
         if (this.host.realpath) {
@@ -2472,7 +2460,7 @@ export class ProjectService {
             config!.watchedDirectoriesStale = false;
             updateWatchingWildcardDirectories(
                 config!.watchedDirectories ||= new Map(),
-                new Map(getEntries(config!.parsedCommandLine!.wildcardDirectories!)),
+                new Map(Object.entries(config!.parsedCommandLine!.wildcardDirectories!)),
                 // Create new directory watcher
                 (directory, flags) => this.watchWildcardDirectory(directory as Path, flags, configFileName, config!),
             );
@@ -2783,7 +2771,7 @@ export class ProjectService {
 
     /** @internal */
     logErrorForScriptInfoNotFound(fileName: string): void {
-        const names = arrayFrom(this.filenameToScriptInfo.entries()).map(([path, scriptInfo]) => ({ path, fileName: scriptInfo.fileName }));
+        const names = arrayFrom(this.filenameToScriptInfo.entries(), ([path, scriptInfo]) => ({ path, fileName: scriptInfo.fileName }));
         this.logger.msg(`Could not find file ${JSON.stringify(fileName)}.\nAll files are: ${JSON.stringify(names)}`, Msg.Err);
     }
 
@@ -3879,7 +3867,7 @@ export class ProjectService {
 
     private collectChanges(
         lastKnownProjectVersions: protocol.ProjectVersionInfo[],
-        currentProjects: Project[],
+        currentProjects: Iterable<Project>,
         includeProjectReferenceRedirectInfo: boolean | undefined,
         result: ProjectFilesWithTSDiagnostics[]
         ): void {
@@ -3893,20 +3881,17 @@ export class ProjectService {
     synchronizeProjectList(knownProjects: protocol.ProjectVersionInfo[], includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics[] {
         const files: ProjectFilesWithTSDiagnostics[] = [];
         this.collectChanges(knownProjects, this.externalProjects, includeProjectReferenceRedirectInfo, files);
-        this.collectChanges(knownProjects, arrayFrom(this.configuredProjects.values()), includeProjectReferenceRedirectInfo, files);
+        this.collectChanges(knownProjects, this.configuredProjects.values(), includeProjectReferenceRedirectInfo, files);
         this.collectChanges(knownProjects, this.inferredProjects, includeProjectReferenceRedirectInfo, files);
         return files;
     }
 
     /** @internal */
-    applyChangesInOpenFiles(openFiles: Iterator<OpenFileArguments> | undefined, changedFiles?: Iterator<ChangeFileArguments>, closedFiles?: string[]): void {
+    applyChangesInOpenFiles(openFiles: Iterable<OpenFileArguments> | undefined, changedFiles?: Iterable<ChangeFileArguments>, closedFiles?: string[]): void {
         let openScriptInfos: ScriptInfo[] | undefined;
         let assignOrphanScriptInfosToInferredProject = false;
         if (openFiles) {
-            while (true) {
-                const iterResult = openFiles.next();
-                if (iterResult.done) break;
-                const file = iterResult.value;
+            for (const file of openFiles) {
                 // Create script infos so we have the new content for all the open files before we do any updates to projects
                 const info = this.getOrCreateOpenScriptInfo(
                     toNormalizedPath(file.fileName),
@@ -3920,10 +3905,7 @@ export class ProjectService {
         }
 
         if (changedFiles) {
-            while (true) {
-                const iterResult = changedFiles.next();
-                if (iterResult.done) break;
-                const file = iterResult.value;
+            for (const file of changedFiles) {
                 const scriptInfo = this.getScriptInfo(file.fileName)!;
                 Debug.assert(!!scriptInfo);
                 // Make edits to script infos and marks containing project as dirty
@@ -3962,11 +3944,8 @@ export class ProjectService {
     }
 
     /** @internal */
-    applyChangesToFile(scriptInfo: ScriptInfo, changes: Iterator<TextChange>) {
-        while (true) {
-            const iterResult = changes.next();
-            if (iterResult.done) break;
-            const change = iterResult.value;
+    applyChangesToFile(scriptInfo: ScriptInfo, changes: Iterable<TextChange>) {
+        for (const change of changes) {
             scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
         }
     }
@@ -4104,7 +4083,7 @@ export class ProjectService {
             }
             else {
                 let exclude = false;
-                if (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery) {
+                if (typeAcquisition.enable) {
                     const baseName = getBaseFileName(toFileNameLowerCase(normalizedNames[i]));
                     if (fileExtensionIs(baseName, "js")) {
                         const inferredTypingName = removeFileExtension(baseName);
@@ -4139,12 +4118,6 @@ export class ProjectService {
     }
 
     openExternalProject(proj: protocol.ExternalProject): void {
-        // typingOptions has been deprecated and is only supported for backward compatibility
-        // purposes. It should be removed in future releases - use typeAcquisition instead.
-        if (proj.typingOptions && !proj.typeAcquisition) {
-            const typeAcquisition = convertEnableAutoDiscoveryToEnable(proj.typingOptions);
-            proj.typeAcquisition = typeAcquisition;
-        }
         proj.typeAcquisition = proj.typeAcquisition || {};
         proj.typeAcquisition.include = proj.typeAcquisition.include || [];
         proj.typeAcquisition.exclude = proj.typeAcquisition.exclude || [];

@@ -279,10 +279,10 @@ export class Data {
         };
         const lib1ToolsPublic: File = {
             path: `/user/username/projects/myproject/lib1/tools/public.ts`,
-            content: `export * from "./tools.interface";`
+            content: `export * from "./toolsinterface";`
         };
         const lib1ToolsInterface: File = {
-            path: `/user/username/projects/myproject/lib1/tools/tools.interface.ts`,
+            path: `/user/username/projects/myproject/lib1/tools/toolsinterface.ts`,
             content: `export interface ITest {
     title: string;
 }`
