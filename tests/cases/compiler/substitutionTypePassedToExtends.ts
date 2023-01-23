@@ -1,4 +1,5 @@
 // @strict: true
+// @target: esnext
 
 type Foo1<A,B> = [A, B] extends unknown[][] ? Bar1<[A, B]> : 'else'
 type Bar1<T extends unknown[][]> = T

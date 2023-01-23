@@ -6,7 +6,7 @@ type Bar1<T extends unknown[][]> = T
 >Bar1 : T
 
 type Foo2<A> = Set<A> extends Set<unknown[]> ? Bar2<Set<A>> : 'else'
->Foo2 : Set<A>
+>Foo2 : Foo2<A>
 
 type Bar2<T extends Set<unknown[]>> = T
 >Bar2 : T
