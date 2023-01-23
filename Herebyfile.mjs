@@ -59,10 +59,7 @@ export const generateLibs = task({
 
             for (const source of lib.sources) {
                 const contents = await fs.promises.readFile(source, "utf-8");
-                // TODO(jakebailey): "\n\n" is for compatibility with our current tests; our test baselines
-                // are sensitive to the positions of things in the lib files. Eventually remove this,
-                // or remove lib.d.ts line numbers from our baselines.
-                output += "\n\n" + contents.replace(/\r\n/g, "\n");
+                output += "\n" + contents.replace(/\r\n/g, "\n");
             }
 
             await fs.promises.writeFile(lib.target, output);
