@@ -56,12 +56,12 @@ export function start() {
             this.pending = false;
             this.delayed = false;
         }
-        addSuite(suite: RemoteSuite) {
+        override addSuite(suite: RemoteSuite) {
             super.addSuite(suite);
             this.suiteMap.set(suite.title, suite);
             return this;
         }
-        addTest(test: RemoteTest) {
+        override addTest(test: RemoteTest) {
             return super.addTest(test);
         }
     }
@@ -372,10 +372,10 @@ export function start() {
                             }
                             worker.currentTasks = taskList;
                             if (taskList.length === 1) {
-                                worker.process.send({ type: "test", payload: taskList[0] } as ParallelHostMessage); // TODO: GH#18217
+                                worker.process.send({ type: "test", payload: taskList[0] } satisfies ParallelHostMessage); // TODO: GH#18217
                             }
                             else {
-                                worker.process.send({ type: "batch", payload: taskList } as ParallelHostMessage); // TODO: GH#18217
+                                worker.process.send({ type: "batch", payload: taskList } satisfies ParallelHostMessage); // TODO: GH#18217
                             }
                         }
                     }

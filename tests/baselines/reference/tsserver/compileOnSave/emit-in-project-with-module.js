@@ -86,7 +86,7 @@ Info 18   [00:00:45.000] 	Files (5)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	file1.ts
 	  Matched by default include pattern '**/*'
 	file2.ts
@@ -506,7 +506,7 @@ Info 48   [00:01:53.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 After request
 //// [/user/username/projects/myproject/module.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.xyz = void 0;
 exports.xyz = 4;
 

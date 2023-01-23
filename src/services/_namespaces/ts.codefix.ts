@@ -34,7 +34,6 @@ export * from "../codefixes/fixCannotFindModule";
 export * from "../codefixes/fixClassDoesntImplementInheritedAbstractMember";
 export * from "../codefixes/fixClassSuperMustPrecedeThisAccess";
 export * from "../codefixes/fixConstructorForDerivedNeedSuperCall";
-export * from "../codefixes/fixEnableExperimentalDecorators";
 export * from "../codefixes/fixEnableJsxFlag";
 export * from "../codefixes/fixNaNEquality";
 export * from "../codefixes/fixModuleAndTargetOptions";

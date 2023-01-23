@@ -21,11 +21,9 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 
 Resolving "m2" from /root/a/b/main.ts
@@ -33,7 +31,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m2/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m2.ts",
@@ -42,9 +41,7 @@ Resolution:: {
     "/root/m2/package.json",
     "/root/m2/index.ts",
     "/root/m2/index.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "m3" from /root/a/b/main.ts
@@ -52,7 +49,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m3/dist/typings.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m3.ts",
@@ -61,8 +59,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/root/m3/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "m4" from /root/a/b/main.ts
@@ -70,7 +67,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/node_modules/m4.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m4.ts",
@@ -101,9 +99,7 @@ Resolution:: {
     "/root/a/node_modules/@types/m4.d.ts",
     "/root/a/node_modules/@types/m4/index.d.ts",
     "/root/node_modules/m4/package.json"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 //// [/root/a/b/main.ts]
@@ -129,11 +125,9 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 
 Resolving "m2" from /root/a/b/main.ts with host that doesnt have directoryExists
@@ -141,7 +135,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m2/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m2.ts",
@@ -150,9 +145,7 @@ Resolution:: {
     "/root/m2/package.json",
     "/root/m2/index.ts",
     "/root/m2/index.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "m3" from /root/a/b/main.ts with host that doesnt have directoryExists
@@ -160,7 +153,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m3/dist/typings.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m3.ts",
@@ -169,8 +163,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/root/m3/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "m4" from /root/a/b/main.ts with host that doesnt have directoryExists
@@ -178,7 +171,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/node_modules/m4.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m4.ts",
@@ -209,7 +203,5 @@ Resolution:: {
     "/root/a/node_modules/@types/m4.d.ts",
     "/root/a/node_modules/@types/m4/index.d.ts",
     "/root/node_modules/m4/package.json"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }

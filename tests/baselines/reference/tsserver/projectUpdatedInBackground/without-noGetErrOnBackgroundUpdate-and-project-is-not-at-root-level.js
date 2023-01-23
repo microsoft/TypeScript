@@ -76,7 +76,7 @@ Info 23   [00:00:52.000] 	Files (3)
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	file1.ts
 	  Matched by default include pattern '**/*'
 	file3.ts
@@ -281,7 +281,7 @@ Info 61   [00:01:56.000] 	Files (4)
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../node_modules/file2.d.ts
 	  Imported via "file2" from file 'file1.ts'
 	file1.ts

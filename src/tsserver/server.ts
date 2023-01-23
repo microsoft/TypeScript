@@ -3,7 +3,6 @@ import {
     findArgument,
     hasArgument,
     initializeNodeSystem,
-    initializeWebSystem,
     Msg,
     StartInput,
 } from "./_namespaces/ts.server";
@@ -17,8 +16,6 @@ import {
 
 export * from "./_namespaces/ts";
 
-declare const addEventListener: any;
-declare const removeEventListener: any;
 function findArgumentStringArray(argName: string): readonly string[] {
     const arg = findArgument(argName);
     if (arg === undefined) {
@@ -29,13 +26,12 @@ function findArgumentStringArray(argName: string): readonly string[] {
 
 
 function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
-    const syntaxOnly = hasArgument("--syntaxOnly");
 
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${args.join(" ")}`);
     logger.info(`Platform: ${platform} NodeVersion: ${getNodeMajorVersion()} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
-    logger.info(`ServerMode: ${serverMode} syntaxOnly: ${syntaxOnly} hasUnknownServerMode: ${unknownServerMode}`);
+    logger.info(`ServerMode: ${serverMode} hasUnknownServerMode: ${unknownServerMode}`);
 
     setStackTraceLimit();
 
@@ -64,7 +60,6 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
             useInferredProjectPerProjectRoot: hasArgument("--useInferredProjectPerProjectRoot"),
             suppressDiagnosticEvents: hasArgument("--suppressDiagnosticEvents"),
             noGetErrOnBackgroundUpdate: hasArgument("--noGetErrOnBackgroundUpdate"),
-            syntaxOnly,
             serverMode
         },
         logger,
@@ -73,16 +68,4 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
 }
 
 setStackTraceLimit();
-// Cannot check process var directory in webworker so has to be typeof check here
-if (typeof process !== "undefined") {
-    start(initializeNodeSystem(), require("os").platform());
-}
-else {
-    // Get args from first message
-    const listener = (e: any) => {
-        removeEventListener("message", listener);
-        const args = e.data;
-        start(initializeWebSystem(args), "web");
-    };
-    addEventListener("message", listener);
-}
+start(initializeNodeSystem(), require("os").platform());

@@ -72,7 +72,7 @@ File '/src/projects/node_modules/@types/pg/index.d.ts' exist - use it as a name 
 Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts', primary: true. ========
 lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 src/projects/a/src/index.ts
   Matched by default include pattern '**/*'
 src/projects/node_modules/@types/pg/index.d.ts

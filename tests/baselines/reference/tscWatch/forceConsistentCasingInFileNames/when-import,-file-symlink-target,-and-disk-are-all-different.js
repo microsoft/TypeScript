@@ -42,7 +42,7 @@ Output::
 [7m [0m [91m                  ~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 XY.ts
   Matched by default include pattern '**/*'
 link.ts
@@ -103,7 +103,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/XY.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;
@@ -111,7 +111,7 @@ exports.b = 2;
 
 //// [/user/username/projects/myproject/link.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;
@@ -119,7 +119,7 @@ exports.b = 2;
 
 //// [/user/username/projects/myproject/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var yX_1 = require("./yX");
 var link_1 = require("./link");
 yX_1.a;
@@ -148,7 +148,7 @@ Output::
 [7m [0m [91m                  ~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 XY.ts
   Matched by default include pattern '**/*'
 link.ts
@@ -204,7 +204,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/XY.js]
 "use strict";
 // some comment
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;

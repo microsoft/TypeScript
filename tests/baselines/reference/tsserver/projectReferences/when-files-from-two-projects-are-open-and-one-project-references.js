@@ -342,7 +342,7 @@ Info 61   [00:02:54.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
@@ -509,7 +509,7 @@ Info 77   [00:03:16.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
@@ -688,7 +688,7 @@ Info 93   [00:03:43.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
@@ -708,7 +708,7 @@ Info 104  [00:03:54.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
@@ -728,7 +728,7 @@ Info 115  [00:04:05.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
@@ -748,7 +748,7 @@ Info 126  [00:04:16.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
@@ -768,7 +768,7 @@ Info 137  [00:04:27.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
@@ -788,7 +788,7 @@ Info 148  [00:04:38.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 

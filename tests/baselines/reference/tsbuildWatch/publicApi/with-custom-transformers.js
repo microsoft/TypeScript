@@ -109,7 +109,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/shared/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.f2 = exports.e = exports.c = exports.f1 = void 0;
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
 function f1() { }
@@ -188,7 +188,7 @@ export declare function f2(): void;
 
 //// [/user/username/projects/myproject/webpack/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.f22 = exports.e2 = exports.c2 = exports.f2 = void 0;
 /*@before/user/username/projects/myproject/webpack/tsconfig.json*/
 function f2() { }
@@ -343,7 +343,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/shared/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.f2 = exports.e = exports.c = exports.f1 = exports.fooBar = void 0;
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
 function fooBar() { }

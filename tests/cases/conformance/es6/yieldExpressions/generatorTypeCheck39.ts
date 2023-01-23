@@ -1,4 +1,6 @@
-//@target: ES6
+// @target: ES6
+// @experimentalDecorators: true
+
 function decorator(x: any) {
     return y => { };
 }

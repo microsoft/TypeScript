@@ -47,7 +47,7 @@ export function bar() { }
 //// [/user/username/projects/myproject/node_modules/b] symlink(/user/username/projects/myproject/packages/B)
 //// [/user/username/projects/myproject/packages/B/lib/foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 function foo() { }
 exports.foo = foo;
@@ -59,7 +59,7 @@ export declare function foo(): void;
 
 //// [/user/username/projects/myproject/packages/B/lib/bar/foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
@@ -127,7 +127,7 @@ export declare function bar(): void;
 
 //// [/user/username/projects/myproject/packages/A/lib/test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("b/lib/foo");
 var foo_2 = require("b/lib/bar/foo");
 (0, foo_1.foo)();
@@ -283,7 +283,7 @@ Info 35   [00:01:51.000] 	Files (4)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../B/src/foo.ts
 	  Imported via 'b/lib/foo' from file 'src/test.ts'
 	../B/src/bar/foo.ts

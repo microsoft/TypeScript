@@ -66,7 +66,7 @@ Info 10   [00:00:27.000] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	file1.ts
 	  Root file specified for compilation
 	file2.js

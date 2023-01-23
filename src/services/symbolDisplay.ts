@@ -48,7 +48,6 @@ import {
     isFunctionBlock,
     isFunctionExpression,
     isFunctionLike,
-    isFunctionLikeKind,
     isIdentifier,
     isInExpressionContext,
     isJsxOpeningLikeElement,
@@ -59,6 +58,8 @@ import {
     isObjectBindingPattern,
     isTaggedTemplateExpression,
     isThisInTypeQuery,
+    isTransientSymbol,
+    isTypeAliasDeclaration,
     isVarConst,
     JSDocTagInfo,
     JsxOpeningLikeElement,
@@ -176,7 +177,7 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
     if (flags & SymbolFlags.Signature) return ScriptElementKind.indexSignatureElement;
 
     if (flags & SymbolFlags.Property) {
-        if (flags & SymbolFlags.Transient && (symbol as TransientSymbol).checkFlags & CheckFlags.Synthetic) {
+        if (flags & SymbolFlags.Transient && (symbol as TransientSymbol).links.checkFlags & CheckFlags.Synthetic) {
             // If union property is result of union of non method (property/accessors/variables), it is labeled as property
             const unionPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
                 const rootSymbolFlags = rootSymbol.getFlags();
@@ -493,19 +494,19 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
             const declaration = decl.parent;
 
             if (declaration) {
-                if (isFunctionLikeKind(declaration.kind)) {
+                if (isFunctionLike(declaration)) {
                     addInPrefix();
-                    const signature = typeChecker.getSignatureFromDeclaration(declaration as SignatureDeclaration)!; // TODO: GH#18217
+                    const signature = typeChecker.getSignatureFromDeclaration(declaration)!; // TODO: GH#18217
                     if (declaration.kind === SyntaxKind.ConstructSignature) {
                         displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                         displayParts.push(spacePart());
                     }
-                    else if (declaration.kind !== SyntaxKind.CallSignature && (declaration as SignatureDeclaration).name) {
+                    else if (declaration.kind !== SyntaxKind.CallSignature && declaration.name) {
                         addFullSymbolName(declaration.symbol);
                     }
                     addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
-                else if (declaration.kind === SyntaxKind.TypeAliasDeclaration) {
+                else if (isTypeAliasDeclaration(declaration)) {
                     // Type alias type parameter
                     // For example
                     //      type list<T> = T[]; // Both T will go through same code path
@@ -645,8 +646,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                     else {
                         addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
                     }
-                    if ((symbol as TransientSymbol).target && ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
-                        const labelDecl = ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+                    if (isTransientSymbol(symbol) && symbol.links.target && isTransientSymbol(symbol.links.target) && symbol.links.target.links.tupleLabelDeclaration) {
+                        const labelDecl = symbol.links.target.links.tupleLabelDeclaration;
                         Debug.assertNode(labelDecl.name, isIdentifier);
                         displayParts.push(spacePart());
                         displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));

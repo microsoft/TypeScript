@@ -1,6 +1,6 @@
 [
     "======== Resolving module 'ext' from 'tests/cases/conformance/moduleResolution/main.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "Loading module 'ext' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "Found 'package.json' at 'tests/cases/conformance/moduleResolution/node_modules/ext/package.json'.",
     "File 'tests/cases/conformance/moduleResolution/node_modules/ext.ts' does not exist.",
@@ -20,7 +20,7 @@
     "Resolving real path for 'tests/cases/conformance/moduleResolution/node_modules/ext/ts3.1/index.d.ts', result 'tests/cases/conformance/moduleResolution/node_modules/ext/ts3.1/index.d.ts'.",
     "======== Module name 'ext' was successfully resolved to 'tests/cases/conformance/moduleResolution/node_modules/ext/ts3.1/index.d.ts' with Package ID 'ext/ts3.1/index.d.ts@1.0.0'. ========",
     "======== Resolving module 'ext/other' from 'tests/cases/conformance/moduleResolution/main.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "Loading module 'ext/other' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "File 'tests/cases/conformance/moduleResolution/node_modules/ext/package.json' exists according to earlier cached lookups.",
     "'package.json' has a 'typesVersions' entry '>=3.1.0-0' that matches compiler version '3.1.0-dev', looking for a pattern to match module name 'other'.",

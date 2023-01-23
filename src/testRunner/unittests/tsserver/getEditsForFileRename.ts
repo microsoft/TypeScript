@@ -6,7 +6,6 @@ import {
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
-    createProjectService,
     createSession,
     openFilesForSession,
     textSpanFromSubstring,
@@ -28,13 +27,25 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         };
 
         const host = createServerHost([userTs, newTs, tsconfig]);
-        const projectService = createProjectService(host);
-        projectService.openClientFile(userTs.path);
-        const project = projectService.configuredProjects.get(tsconfig.path)!;
-
-        ts.Debug.assert(!!project.resolveModuleNames);
-
-        const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", ts.testFormatSettings, ts.emptyOptions);
+        const options: ts.CompilerOptions = {};
+        const moduleResolutionCache = ts.createModuleResolutionCache(host.getCurrentDirectory(), ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames), options);
+        const lsHost: ts.LanguageServiceHost = {
+            getCompilationSettings: () => options,
+            getScriptFileNames: () => [newTs.path, userTs.path],
+            getScriptVersion: fileName => host.readFile(fileName)!,
+            getScriptSnapshot: fileName => {
+                const text = host.readFile(fileName);
+                return text ? ts.ScriptSnapshot.fromString(text) : undefined;
+            },
+            getCurrentDirectory: () => host.getCurrentDirectory(),
+            getDefaultLibFileName: options => ts.getDefaultLibFileName(options),
+            readFile: path => host.readFile(path),
+            fileExists: path => host.fileExists(path),
+            resolveModuleNames: (moduleNames, containingFile) => moduleNames.map(name => ts.resolveModuleName(name, containingFile, options, lsHost, moduleResolutionCache).resolvedModule),
+            getResolvedModuleWithFailedLookupLocationsFromCache: (moduleName, containingFile, mode) => moduleResolutionCache.getFromDirectoryCache(moduleName, mode, ts.getDirectoryPath(containingFile), /*redirectedReference*/ undefined),
+        };
+        const service = ts.createLanguageService(lsHost);
+        const edits = service.getEditsForFileRename("/old.ts", "/new.ts", ts.testFormatSettings, ts.emptyOptions);
         assert.deepEqual<readonly ts.FileTextChanges[]>(edits, [{
             fileName: "/user.ts",
             textChanges: [{
@@ -71,7 +82,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         openFilesForSession([aUserTs, bUserTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
-            command: ts.server.CommandNames.GetEditsForFileRename,
+            command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
                 oldFilePath: aOldTs.path,
                 newFilePath: "/a/new.ts",
@@ -90,7 +101,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         openFilesForSession([aTs, cTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
-            command: ts.server.CommandNames.GetEditsForFileRename,
+            command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
                 oldFilePath: "/b.ts",
                 newFilePath: cTs.path,

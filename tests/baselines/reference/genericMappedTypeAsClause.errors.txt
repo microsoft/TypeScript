@@ -6,9 +6,10 @@ tests/cases/compiler/genericMappedTypeAsClause.ts(17,11): error TS2322: Type 'bo
 tests/cases/compiler/genericMappedTypeAsClause.ts(18,34): error TS2322: Type '{ a: string; b: number; }' is not assignable to type 'MappedModel<T>'.
   Object literal may only specify known properties, and 'a' does not exist in type 'MappedModel<T>'.
 tests/cases/compiler/genericMappedTypeAsClause.ts(19,11): error TS2322: Type 'undefined' is not assignable to type 'MappedModel<T>'.
+tests/cases/compiler/genericMappedTypeAsClause.ts(25,60): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
 
 
-==== tests/cases/compiler/genericMappedTypeAsClause.ts (7 errors) ====
+==== tests/cases/compiler/genericMappedTypeAsClause.ts (8 errors) ====
     type Model = {
         a: string;
         b: number;
@@ -45,4 +46,11 @@ tests/cases/compiler/genericMappedTypeAsClause.ts(19,11): error TS2322: Type 'un
               ~~
 !!! error TS2322: Type 'undefined' is not assignable to type 'MappedModel<T>'.
     }
+    
+    // repro from #43189
+    
+    type RemapRecord<K extends keyof any, V> = { [_ in never as K]: V }
+    interface RecordInterface2<K extends keyof any, V> extends RemapRecord<K, V> {} // should error
+                                                               ~~~~~~~~~~~~~~~~~
+!!! error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
     

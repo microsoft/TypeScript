@@ -1,0 +1,28 @@
+=== /main.ts ===
+import CJSy = require("./decl"); // error
+>CJSy : typeof CJSy
+
+import type CJSy2 = require("./decl"); // ok I guess?
+>CJSy2 : typeof CJSy
+
+import CJSy3 from "./decl"; // ok in esModuleInterop
+>CJSy3 : typeof CJSy
+
+import * as types from "./types"; // ok
+>types : typeof types
+
+CJSy;
+>CJSy : typeof CJSy
+
+=== /decl.d.ts ===
+declare class CJSy {}
+>CJSy : CJSy
+
+export = CJSy;
+>CJSy : CJSy
+
+=== /types.ts ===
+interface Typey {}
+export type { Typey };
+>Typey : Typey
+

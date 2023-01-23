@@ -51,7 +51,7 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
  *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.createProgram = void 0;
 var ts = require("typescript");
 function printError(error) {

@@ -25,14 +25,14 @@ foo[undefined];
 
 //// [foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.undefined = exports.NaN = exports.Infinity = void 0;
 exports.Infinity = "NaN";
 exports.NaN = "undefined";
 exports.undefined = "Infinity";
 //// [bar.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("./foo");
 var foo = require("./foo");
 foo_1.Infinity;
