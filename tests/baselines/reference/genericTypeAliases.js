@@ -81,7 +81,7 @@ var tree = {
         right: {
             left: 1,
             right: 2
-        }
+        },
     },
     right: 3
 };

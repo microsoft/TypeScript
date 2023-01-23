@@ -209,12 +209,12 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = {
     lastName: 'sdsd'
 };
@@ -222,7 +222,7 @@ var a = {
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 console.log("hi");
 
 
@@ -398,7 +398,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = "hello";
 
 

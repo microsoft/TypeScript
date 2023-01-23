@@ -75,14 +75,14 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
 //// [/user/username/projects/myproject/dist/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -234,7 +234,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/renamed.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 

@@ -1,8 +1,28 @@
 import {
-    arrayFrom, cast, CodeActionCommand, CodeFixAction, CodeFixAllContext, CodeFixContext, CodeFixContextBase,
-    CodeFixRegistration, CombinedCodeActions, computeSuggestionDiagnostics, contains, createMultiMap, Debug, Diagnostic,
-    DiagnosticAndArguments, diagnosticToString, DiagnosticWithLocation, FileTextChanges, flatMap, isString, map, Map,
-    Push, TextChange, textChanges,
+    arrayFrom,
+    cast,
+    CodeActionCommand,
+    CodeFixAction,
+    CodeFixAllContext,
+    CodeFixContext,
+    CodeFixContextBase,
+    CodeFixRegistration,
+    CombinedCodeActions,
+    computeSuggestionDiagnostics,
+    contains,
+    createMultiMap,
+    Debug,
+    Diagnostic,
+    DiagnosticAndArguments,
+    diagnosticToString,
+    DiagnosticWithLocation,
+    FileTextChanges,
+    flatMap,
+    isString,
+    map,
+    Push,
+    TextChange,
+    textChanges,
 } from "./_namespaces/ts";
 
 const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
@@ -41,7 +61,7 @@ export function registerCodeFix(reg: CodeFixRegistration) {
 }
 
 /** @internal */
-export function getSupportedErrorCodes(): string[] {
+export function getSupportedErrorCodes(): readonly string[] {
     return arrayFrom(errorCodeToFixes.keys());
 }
 
