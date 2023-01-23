@@ -853,7 +853,7 @@ function fx2<T extends {}>(value: T & ({} | null)) {
 >42 : 42
 
         value;  // T & {}
->value : T & {}
+>value : T & ({} | null)
     }
     else {
         value;  // T & ({} | null)
@@ -872,7 +872,7 @@ function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 >42 : 42
 
         value;  // T & {}
->value : T & {}
+>value : T & ({} | null)
     }
     else {
         value;  // T & ({} | null)
@@ -1022,6 +1022,109 @@ function doSomething2(value: unknown): void {
 
         value;
 >value : 42
+    }
+}
+
+// Repro from #51009
+
+type TypeA = {
+>TypeA : { A: 'A'; B: 'B'; }
+
+    A: 'A',
+>A : "A"
+
+    B: 'B',
+>B : "B"
+}
+
+type TypeB = {
+>TypeB : { A: 'A'; B: 'B'; C: 'C'; }
+
+    A: 'A',
+>A : "A"
+
+    B: 'B',
+>B : "B"
+
+    C: 'C',
+>C : "C"
+}
+
+type R<T extends keyof TypeA> =
+>R : R<T>
+
+    T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never;
+
+type R2<T extends PropertyKey> =
+>R2 : R2<T>
+
+    T extends keyof TypeA ? T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never : never;
+
+// Repro from #51041
+
+type AB = "A" | "B";
+>AB : "A" | "B"
+
+function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
+>x : <T_AB extends AB>(x: T_AB & undefined, y: any) => void
+>x : T_AB & undefined
+>y : any
+
+    let r2: never = y as T_AB & undefined;
+>r2 : never
+>y as T_AB & undefined : T_AB & undefined
+>y : any
+} 
+
+// Repro from #51538
+
+type Left = 'left';
+>Left : "left"
+
+type Right = 'right' & { right: 'right' };
+>Right : "right" & { right: 'right'; }
+>right : "right"
+
+type Either = Left | Right;
+>Either : Right | "left"
+
+function assertNever(v: never): never {
+>assertNever : (v: never) => never
+>v : never
+
+    throw new Error('never');
+>new Error('never') : Error
+>Error : ErrorConstructor
+>'never' : "never"
+}
+
+function fx20(value: Either) {
+>fx20 : (value: Either) => void
+>value : Either
+
+    if (value === 'left') {
+>value === 'left' : boolean
+>value : Either
+>'left' : "left"
+
+        const foo: 'left' = value;
+>foo : "left"
+>value : "left"
+    }
+    else if (value === 'right') {
+>value === 'right' : boolean
+>value : Right
+>'right' : "right"
+
+        const bar: 'right' = value;
+>bar : "right"
+>value : Right
+    }
+    else {
+        assertNever(value);
+>assertNever(value) : never
+>assertNever : (v: never) => never
+>value : never
     }
 }
 

@@ -1,12 +1,12 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:22.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/a.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/a.ts]
@@ -71,7 +71,7 @@ Info 7    [00:00:34.000] response:
 Info 8    [00:00:35.000] request:
     {
       "type": "request",
-      "seq": 1,
+      "seq": 2,
       "command": "syntacticDiagnosticsSync",
       "arguments": {
         "file": "/user/username/projects/myproject/a.ts"
@@ -139,7 +139,7 @@ Info 10   [00:00:37.000] request:
           "/user/username/projects/myproject/a.ts"
         ]
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -171,7 +171,7 @@ FsWatches::
 FsWatchesRecursive::
 
 Info 12   [00:00:39.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/a.ts","diagnostics":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":18},"text":"')' expected.","code":1005,"category":"error","relatedInformation":[{"span":{"start":{"line":1,"offset":4},"end":{"line":1,"offset":5},"file":"/user/username/projects/myproject/a.ts"},"message":"The parser expected to find a ')' to match the '(' token here.","category":"error","code":1007}]}]}}
-Info 13   [00:00:40.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+Info 13   [00:00:40.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 After checking timeout queue length (1) and running
 
 PolledWatches::

@@ -4,6 +4,6 @@ export var a = 10;
 >10 : 10
 
 === tests/cases/compiler/es6ImportWithoutFromClause_1.ts ===
+
 import "es6ImportWithoutFromClause_0";
-No type information for this code.
-No type information for this code.
+

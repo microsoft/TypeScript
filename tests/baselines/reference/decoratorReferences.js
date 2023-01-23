@@ -27,7 +27,7 @@ var C = /** @class */ (function () {
         y(null) // <-- y should resolve to the function declaration, not the parameter; T should resolve to the type parameter of the class
         ,
         __param(0, y)
-    ], C.prototype, "method");
+    ], C.prototype, "method", null);
     C = C_1 = __decorate([
         y(1, C_1) // <-- T should be resolved to the type alias, not the type parameter of the class; C should resolve to the class
     ], C);
