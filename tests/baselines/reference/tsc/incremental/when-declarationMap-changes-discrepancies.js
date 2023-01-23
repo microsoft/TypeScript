@@ -96,7 +96,7 @@ IncrementalBuild:
       [
         "./a.ts",
         [
-          "-3198459068-declare const x = 10;\r\n"
+          "-4001438729-declare const x = 10;\n"
         ]
       ],
       [

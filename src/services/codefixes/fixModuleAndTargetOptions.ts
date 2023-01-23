@@ -1,9 +1,20 @@
 import {
-    createCodeFixActionWithoutFixAll, registerCodeFix, setJsonCompilerOptionValue, setJsonCompilerOptionValues,
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+    setJsonCompilerOptionValue,
+    setJsonCompilerOptionValues,
 } from "../_namespaces/ts.codefix";
 import {
-    CodeFixAction, Diagnostics, Expression, factory, getEmitModuleKind, getEmitScriptTarget,
-    getTsConfigObjectLiteralExpression, ModuleKind, ScriptTarget, textChanges,
+    CodeFixAction,
+    Diagnostics,
+    Expression,
+    factory,
+    getEmitModuleKind,
+    getEmitScriptTarget,
+    getTsConfigObjectLiteralExpression,
+    ModuleKind,
+    ScriptTarget,
+    textChanges,
 } from "../_namespaces/ts";
 
 registerCodeFix({

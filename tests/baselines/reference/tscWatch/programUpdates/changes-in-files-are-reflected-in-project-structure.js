@@ -28,7 +28,7 @@ Output::
 [[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
 a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/b/f2.ts
   Imported via "./f2" from file 'a/b/f1.ts'
 a/b/f1.ts
@@ -71,7 +71,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/f2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 1;
 
@@ -92,7 +92,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./f2"), exports);
 
 
@@ -109,7 +109,7 @@ Output::
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/c/f3.ts
   Imported via "../c/f3" from file 'a/b/f2.ts'
 a/b/f2.ts
@@ -171,14 +171,14 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("../c/f3"), exports);
 
 
 //// [/a/b/f1.js] file written with same contents
 //// [/a/c/f3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 1;
 

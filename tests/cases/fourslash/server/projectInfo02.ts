@@ -10,4 +10,4 @@
 ////{ "files": ["a.ts", "b.ts"] }
 
 goTo.file("a.ts")
-verify.ProjectInfo(["/lib.d.ts", "a.ts", "b.ts", "tsconfig.json"])
+verify.ProjectInfo(["/lib.d.ts", "/lib.decorators.d.ts", "/lib.decorators.legacy.d.ts", "a.ts", "b.ts", "tsconfig.json"])

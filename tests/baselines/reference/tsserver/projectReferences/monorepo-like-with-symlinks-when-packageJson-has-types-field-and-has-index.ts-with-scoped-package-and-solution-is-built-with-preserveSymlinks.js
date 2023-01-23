@@ -1,12 +1,12 @@
 Info 0    [00:01:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:14.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/packages/A/src/index.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -47,7 +47,7 @@ export function bar() { }
 //// [/user/username/projects/myproject/node_modules/@issue/b] symlink(/user/username/projects/myproject/packages/B)
 //// [/user/username/projects/myproject/packages/B/lib/bar.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
@@ -59,7 +59,7 @@ export declare function bar(): void;
 
 //// [/user/username/projects/myproject/packages/B/lib/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 function foo() { }
 exports.foo = foo;
@@ -127,7 +127,7 @@ export declare function foo(): void;
 
 //// [/user/username/projects/myproject/packages/A/lib/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("@issue/b");
 var bar_1 = require("@issue/b/lib/bar");
 (0, b_1.foo)();
@@ -285,7 +285,7 @@ Info 35   [00:01:48.000] 	Files (4)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../B/src/index.ts
 	  Imported via '@issue/b' from file 'src/index.ts'
 	../B/src/bar.ts
@@ -358,7 +358,7 @@ Info 43   [00:02:02.000] request:
           "/user/username/projects/myproject/packages/A/src/index.ts"
         ]
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -624,7 +624,7 @@ FsWatchesRecursive::
 Info 47   [00:02:06.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 Info 48   [00:02:07.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
@@ -684,7 +684,7 @@ Info 49   [00:02:08.000] request:
           }
         ]
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -773,7 +773,7 @@ Info 51   [00:02:10.000] request:
           "/user/username/projects/myproject/packages/A/src/index.ts"
         ]
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -1042,7 +1042,7 @@ FsWatchesRecursive::
 Info 58   [00:02:17.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 Info 59   [00:02:18.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::

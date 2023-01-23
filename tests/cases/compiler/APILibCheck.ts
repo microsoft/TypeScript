@@ -1,7 +1,7 @@
 // @module: commonjs
 // @noImplicitAny: true
 // @strictNullChecks: true
-// @lib: es2015.iterable, es2015.generator, es5
+// @lib: es2018
 
 // @filename: node_modules/typescript/package.json
 {

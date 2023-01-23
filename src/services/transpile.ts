@@ -1,9 +1,31 @@
 import {
-    addRange, cloneCompilerOptions, CommandLineOptionOfCustomType, CompilerHost, CompilerOptions,
-    createCompilerDiagnosticForInvalidCustomType, createProgram, createSourceFile, CustomTransformers, Debug,
-    Diagnostic, fileExtensionIs, filter, forEachEntry, getDefaultCompilerOptions, getEmitScriptTarget, getEntries,
-    getImpliedNodeFormatForFile, getNewLineCharacter, getSetExternalModuleIndicator, hasProperty, isString, Map,
-    MapLike, normalizePath, optionDeclarations, parseCustomTypeOption, toPath, transpileOptionValueCompilerOptions,
+    addRange,
+    cloneCompilerOptions,
+    CommandLineOptionOfCustomType,
+    CompilerHost,
+    CompilerOptions,
+    createCompilerDiagnosticForInvalidCustomType,
+    createProgram,
+    createSourceFile,
+    CustomTransformers,
+    Debug,
+    Diagnostic,
+    fileExtensionIs,
+    filter,
+    forEachEntry,
+    getDefaultCompilerOptions,
+    getEmitScriptTarget,
+    getImpliedNodeFormatForFile,
+    getNewLineCharacter,
+    getSetExternalModuleIndicator,
+    hasProperty,
+    isString,
+    MapLike,
+    normalizePath,
+    optionDeclarations,
+    parseCustomTypeOption,
+    toPath,
+    transpileOptionValueCompilerOptions,
 } from "./_namespaces/ts";
 
 export interface TranspileOptions {
@@ -94,7 +116,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     }
 
     if (transpileOptions.renamedDependencies) {
-        sourceFile.renamedDependencies = new Map(getEntries(transpileOptions.renamedDependencies));
+        sourceFile.renamedDependencies = new Map(Object.entries(transpileOptions.renamedDependencies));
     }
 
     // Output

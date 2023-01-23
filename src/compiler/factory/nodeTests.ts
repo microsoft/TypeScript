@@ -1,41 +1,231 @@
 import {
-    AbstractKeyword, AccessorKeyword, ArrayBindingPattern, ArrayLiteralExpression, ArrayTypeNode, ArrowFunction,
-    AsExpression, AssertClause, AssertEntry, AssertsKeyword, AsteriskToken, AsyncKeyword, AwaitExpression, AwaitKeyword,
-    BigIntLiteral, BinaryExpression, BindingElement, Block, BreakStatement, Bundle, CallExpression,
-    CallSignatureDeclaration, CaseBlock, CaseClause, CatchClause, ClassDeclaration, ClassExpression,
-    ClassStaticBlockDeclaration, ColonToken, CommaListExpression, ComputedPropertyName, ConditionalExpression,
-    ConditionalTypeNode, ConstructorDeclaration, ConstructorTypeNode, ConstructSignatureDeclaration, ContinueStatement,
-    DebuggerStatement, Decorator, DefaultClause, DeleteExpression, DoStatement, DotDotDotToken, ElementAccessExpression,
-    EmptyStatement, EndOfDeclarationMarker, EnumDeclaration, EnumMember, EqualsGreaterThanToken, ExclamationToken,
-    ExportAssignment, ExportDeclaration, ExportKeyword, ExportSpecifier, ExpressionStatement,
-    ExpressionWithTypeArguments, ExternalModuleReference, ForInStatement, ForOfStatement, ForStatement,
-    FunctionDeclaration, FunctionExpression, FunctionTypeNode, GetAccessorDeclaration, HeritageClause, Identifier,
-    IfStatement, ImportClause, ImportDeclaration, ImportEqualsDeclaration, ImportExpression, ImportSpecifier,
-    ImportTypeAssertionContainer, ImportTypeNode, IndexedAccessTypeNode, IndexSignatureDeclaration, InferTypeNode,
-    InterfaceDeclaration, IntersectionTypeNode, JSDoc, JSDocAllType, JSDocAugmentsTag, JSDocAuthorTag, JSDocCallbackTag,
-    JSDocClassTag, JSDocDeprecatedTag, JSDocEnumTag, JSDocFunctionType, JSDocImplementsTag, JSDocLink, JSDocLinkCode,
-    JSDocLinkPlain, JSDocMemberName, JSDocNamepathType, JSDocNameReference, JSDocNonNullableType, JSDocNullableType,
-    JSDocOptionalType, JSDocOverrideTag, JSDocParameterTag, JSDocPrivateTag, JSDocPropertyTag, JSDocProtectedTag,
-    JSDocPublicTag, JSDocReadonlyTag, JSDocReturnTag, JSDocSeeTag, JSDocSignature, JSDocTemplateTag, JSDocThisTag,
-    JSDocTypedefTag, JSDocTypeExpression, JSDocTypeLiteral, JSDocTypeTag, JSDocUnknownTag, JSDocUnknownType,
-    JSDocVariadicType, JsxAttribute, JsxAttributes, JsxClosingElement, JsxClosingFragment, JsxElement, JsxExpression,
-    JsxFragment, JsxOpeningElement, JsxOpeningFragment, JsxSelfClosingElement, JsxSpreadAttribute, JsxText,
-    LabeledStatement, LiteralTypeNode, MappedTypeNode, MergeDeclarationMarker, MetaProperty, MethodDeclaration,
-    MethodSignature, MinusToken, MissingDeclaration, ModuleBlock, ModuleDeclaration, NamedExports, NamedImports,
-    NamedTupleMember, NamespaceExport, NamespaceExportDeclaration, NamespaceImport, NewExpression, Node,
-    NonNullExpression, NoSubstitutionTemplateLiteral, NotEmittedStatement, NumericLiteral, ObjectBindingPattern,
-    ObjectLiteralExpression, OmittedExpression, OptionalTypeNode, OverrideKeyword, ParameterDeclaration,
-    ParenthesizedExpression, ParenthesizedTypeNode, PartiallyEmittedExpression, PlusToken, PostfixUnaryExpression,
-    PrefixUnaryExpression, PrivateIdentifier, PropertyAccessExpression, PropertyAssignment, PropertyDeclaration,
-    PropertySignature, QualifiedName, QuestionDotToken, QuestionToken, ReadonlyKeyword, RegularExpressionLiteral,
-    RestTypeNode, ReturnStatement, SatisfiesExpression, SemicolonClassElement, SetAccessorDeclaration,
-    ShorthandPropertyAssignment, SourceFile, SpreadAssignment, SpreadElement, StaticKeyword, StringLiteral,
-    SuperExpression, SwitchStatement, SyntaxKind, SyntaxList, SyntheticExpression, SyntheticReferenceExpression,
-    TaggedTemplateExpression, TemplateExpression, TemplateHead, TemplateLiteralTypeNode, TemplateLiteralTypeSpan,
-    TemplateMiddle, TemplateSpan, TemplateTail, ThisTypeNode, ThrowStatement, Token, TryStatement, TupleTypeNode,
-    TypeAliasDeclaration, TypeAssertion, TypeLiteralNode, TypeOfExpression, TypeOperatorNode, TypeParameterDeclaration,
-    TypePredicateNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode, UnparsedPrepend, UnparsedSource,
-    VariableDeclaration, VariableDeclarationList, VariableStatement, VoidExpression, WhileStatement, WithStatement,
+    AbstractKeyword,
+    AccessorKeyword,
+    ArrayBindingPattern,
+    ArrayLiteralExpression,
+    ArrayTypeNode,
+    ArrowFunction,
+    AsExpression,
+    AssertClause,
+    AssertEntry,
+    AssertsKeyword,
+    AsteriskToken,
+    AsyncKeyword,
+    AwaitExpression,
+    AwaitKeyword,
+    BigIntLiteral,
+    BinaryExpression,
+    BindingElement,
+    Block,
+    BreakStatement,
+    Bundle,
+    CallExpression,
+    CallSignatureDeclaration,
+    CaseBlock,
+    CaseClause,
+    CaseKeyword,
+    CatchClause,
+    ClassDeclaration,
+    ClassExpression,
+    ClassStaticBlockDeclaration,
+    ColonToken,
+    CommaListExpression,
+    ComputedPropertyName,
+    ConditionalExpression,
+    ConditionalTypeNode,
+    ConstructorDeclaration,
+    ConstructorTypeNode,
+    ConstructSignatureDeclaration,
+    ContinueStatement,
+    DebuggerStatement,
+    Decorator,
+    DefaultClause,
+    DefaultKeyword,
+    DeleteExpression,
+    DoStatement,
+    DotDotDotToken,
+    ElementAccessExpression,
+    EmptyStatement,
+    EndOfDeclarationMarker,
+    EnumDeclaration,
+    EnumMember,
+    EqualsGreaterThanToken,
+    ExclamationToken,
+    ExportAssignment,
+    ExportDeclaration,
+    ExportKeyword,
+    ExportSpecifier,
+    ExpressionStatement,
+    ExpressionWithTypeArguments,
+    ExternalModuleReference,
+    ForInStatement,
+    ForOfStatement,
+    ForStatement,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionTypeNode,
+    GetAccessorDeclaration,
+    HeritageClause,
+    Identifier,
+    IfStatement,
+    ImportClause,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    ImportExpression,
+    ImportSpecifier,
+    ImportTypeAssertionContainer,
+    ImportTypeNode,
+    IndexedAccessTypeNode,
+    IndexSignatureDeclaration,
+    InferTypeNode,
+    InterfaceDeclaration,
+    IntersectionTypeNode,
+    JSDoc,
+    JSDocAllType,
+    JSDocAugmentsTag,
+    JSDocAuthorTag,
+    JSDocCallbackTag,
+    JSDocClassTag,
+    JSDocDeprecatedTag,
+    JSDocEnumTag,
+    JSDocFunctionType,
+    JSDocImplementsTag,
+    JSDocLink,
+    JSDocLinkCode,
+    JSDocLinkPlain,
+    JSDocMemberName,
+    JSDocNamepathType,
+    JSDocNameReference,
+    JSDocNonNullableType,
+    JSDocNullableType,
+    JSDocOptionalType,
+    JSDocOverloadTag,
+    JSDocOverrideTag,
+    JSDocParameterTag,
+    JSDocPrivateTag,
+    JSDocPropertyTag,
+    JSDocProtectedTag,
+    JSDocPublicTag,
+    JSDocReadonlyTag,
+    JSDocReturnTag,
+    JSDocSatisfiesTag,
+    JSDocSeeTag,
+    JSDocSignature,
+    JSDocTemplateTag,
+    JSDocThisTag,
+    JSDocThrowsTag,
+    JSDocTypedefTag,
+    JSDocTypeExpression,
+    JSDocTypeLiteral,
+    JSDocTypeTag,
+    JSDocUnknownTag,
+    JSDocUnknownType,
+    JSDocVariadicType,
+    JsxAttribute,
+    JsxAttributes,
+    JsxClosingElement,
+    JsxClosingFragment,
+    JsxElement,
+    JsxExpression,
+    JsxFragment,
+    JsxOpeningElement,
+    JsxOpeningFragment,
+    JsxSelfClosingElement,
+    JsxSpreadAttribute,
+    JsxText,
+    LabeledStatement,
+    LiteralTypeNode,
+    MappedTypeNode,
+    MergeDeclarationMarker,
+    MetaProperty,
+    MethodDeclaration,
+    MethodSignature,
+    MinusToken,
+    MissingDeclaration,
+    ModuleBlock,
+    ModuleDeclaration,
+    NamedExports,
+    NamedImports,
+    NamedTupleMember,
+    NamespaceExport,
+    NamespaceExportDeclaration,
+    NamespaceImport,
+    NewExpression,
+    Node,
+    NonNullExpression,
+    NoSubstitutionTemplateLiteral,
+    NotEmittedStatement,
+    NumericLiteral,
+    ObjectBindingPattern,
+    ObjectLiteralExpression,
+    OmittedExpression,
+    OptionalTypeNode,
+    OverrideKeyword,
+    ParameterDeclaration,
+    ParenthesizedExpression,
+    ParenthesizedTypeNode,
+    PartiallyEmittedExpression,
+    PlusToken,
+    PostfixUnaryExpression,
+    PrefixUnaryExpression,
+    PrivateIdentifier,
+    PropertyAccessExpression,
+    PropertyAssignment,
+    PropertyDeclaration,
+    PropertySignature,
+    QualifiedName,
+    QuestionDotToken,
+    QuestionToken,
+    ReadonlyKeyword,
+    RegularExpressionLiteral,
+    RestTypeNode,
+    ReturnStatement,
+    SatisfiesExpression,
+    SemicolonClassElement,
+    SetAccessorDeclaration,
+    ShorthandPropertyAssignment,
+    SourceFile,
+    SpreadAssignment,
+    SpreadElement,
+    StaticKeyword,
+    StringLiteral,
+    SuperExpression,
+    SwitchStatement,
+    SyntaxKind,
+    SyntaxList,
+    SyntheticExpression,
+    SyntheticReferenceExpression,
+    TaggedTemplateExpression,
+    TemplateExpression,
+    TemplateHead,
+    TemplateLiteralTypeNode,
+    TemplateLiteralTypeSpan,
+    TemplateMiddle,
+    TemplateSpan,
+    TemplateTail,
+    ThisTypeNode,
+    ThrowStatement,
+    Token,
+    TryStatement,
+    TupleTypeNode,
+    TypeAliasDeclaration,
+    TypeAssertion,
+    TypeLiteralNode,
+    TypeOfExpression,
+    TypeOperatorNode,
+    TypeParameterDeclaration,
+    TypePredicateNode,
+    TypeQueryNode,
+    TypeReferenceNode,
+    UnionTypeNode,
+    UnparsedPrepend,
+    UnparsedSource,
+    VariableDeclaration,
+    VariableDeclarationList,
+    VariableStatement,
+    VoidExpression,
+    WhileStatement,
+    WithStatement,
     YieldExpression,
 } from "../_namespaces/ts";
 
@@ -102,27 +292,22 @@ export function isAsteriskToken(node: Node): node is AsteriskToken {
     return node.kind === SyntaxKind.AsteriskToken;
 }
 
-/** @internal */
 export function isExclamationToken(node: Node): node is ExclamationToken {
     return node.kind === SyntaxKind.ExclamationToken;
 }
 
-/** @internal */
 export function isQuestionToken(node: Node): node is QuestionToken {
     return node.kind === SyntaxKind.QuestionToken;
 }
 
-/** @internal */
 export function isColonToken(node: Node): node is ColonToken {
     return node.kind === SyntaxKind.ColonToken;
 }
 
-/** @internal */
 export function isQuestionDotToken(node: Node): node is QuestionDotToken {
     return node.kind === SyntaxKind.QuestionDotToken;
 }
 
-/** @internal */
 export function isEqualsGreaterThanToken(node: Node): node is EqualsGreaterThanToken {
     return node.kind === SyntaxKind.EqualsGreaterThanToken;
 }
@@ -145,16 +330,19 @@ export function isExportModifier(node: Node): node is ExportKeyword {
 }
 
 /** @internal */
+export function isDefaultModifier(node: Node): node is DefaultKeyword {
+    return node.kind === SyntaxKind.DefaultKeyword;
+}
+
+/** @internal */
 export function isAsyncModifier(node: Node): node is AsyncKeyword {
     return node.kind === SyntaxKind.AsyncKeyword;
 }
 
-/** @internal */
 export function isAssertsKeyword(node: Node): node is AssertsKeyword {
     return node.kind === SyntaxKind.AssertsKeyword;
 }
 
-/** @internal */
 export function isAwaitKeyword(node: Node): node is AwaitKeyword {
     return node.kind === SyntaxKind.AwaitKeyword;
 }
@@ -192,6 +380,11 @@ export function isSuperKeyword(node: Node): node is SuperExpression {
 /** @internal */
 export function isImportKeyword(node: Node): node is ImportExpression {
     return node.kind === SyntaxKind.ImportKeyword;
+}
+
+/** @internal */
+export function isCaseKeyword(node: Node): node is CaseKeyword {
+    return node.kind === SyntaxKind.CaseKeyword;
 }
 
 // Names
@@ -811,7 +1004,7 @@ export function isEnumMember(node: Node): node is EnumMember {
 // Unparsed
 
 // TODO(rbuckton): isUnparsedPrologue
-
+/** @deprecated */
 export function isUnparsedPrepend(node: Node): node is UnparsedPrepend {
     return node.kind === SyntaxKind.UnparsedPrepend;
 }
@@ -829,6 +1022,7 @@ export function isBundle(node: Node): node is Bundle {
     return node.kind === SyntaxKind.Bundle;
 }
 
+/** @deprecated */
 export function isUnparsedSource(node: Node): node is UnparsedSource {
     return node.kind === SyntaxKind.UnparsedSource;
 }
@@ -943,6 +1137,10 @@ export function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag {
     return node.kind === SyntaxKind.JSDocOverrideTag;
 }
 
+export function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag {
+    return node.kind === SyntaxKind.JSDocOverloadTag;
+}
+
 export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
     return node.kind === SyntaxKind.JSDocDeprecatedTag;
 }
@@ -989,6 +1187,14 @@ export function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag {
 
 export function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag {
     return node.kind === SyntaxKind.JSDocImplementsTag;
+}
+
+export function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag {
+    return node.kind === SyntaxKind.JSDocSatisfiesTag;
+}
+
+export function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag {
+    return node.kind === SyntaxKind.JSDocThrowsTag;
 }
 
 // Synthesized list

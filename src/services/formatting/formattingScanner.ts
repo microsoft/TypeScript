@@ -1,9 +1,25 @@
 import {
-    append, createScanner, Debug, isJsxAttribute, isJsxElement, isJsxText, isKeyword, isToken, isTrivia,
-    LanguageVariant, last, Node, NodeArray, ScriptTarget, SyntaxKind,
+    append,
+    createScanner,
+    Debug,
+    isJsxAttribute,
+    isJsxElement,
+    isJsxText,
+    isKeyword,
+    isToken,
+    isTrivia,
+    LanguageVariant,
+    last,
+    Node,
+    NodeArray,
+    ScriptTarget,
+    SyntaxKind,
 } from "../_namespaces/ts";
 import {
-    createTextRangeWithKind, TextRangeWithKind, TextRangeWithTriviaKind, TokenInfo,
+    createTextRangeWithKind,
+    TextRangeWithKind,
+    TextRangeWithTriviaKind,
+    TokenInfo,
 } from "../_namespaces/ts.formatting";
 
 const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);

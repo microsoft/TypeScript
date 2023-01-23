@@ -72,30 +72,30 @@ var HelloWorld = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
-    ], HelloWorld.prototype, "handleEvent1");
+    ], HelloWorld.prototype, "handleEvent1", null);
     __decorate([
         EventListener('2'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
-    ], HelloWorld.prototype, "handleEvent2");
+    ], HelloWorld.prototype, "handleEvent2", null);
     __decorate([
         EventListener('1'),
         __metadata("design:type", Object)
-    ], HelloWorld.prototype, "p1");
+    ], HelloWorld.prototype, "p1", void 0);
     __decorate([
         EventListener('1'),
         __metadata("design:type", Object)
-    ], HelloWorld.prototype, "p1_ns");
+    ], HelloWorld.prototype, "p1_ns", void 0);
     __decorate([
         EventListener('2'),
         __metadata("design:type", Object)
-    ], HelloWorld.prototype, "p2");
+    ], HelloWorld.prototype, "p2", void 0);
     __decorate([
         EventListener('3'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [C3]),
         __metadata("design:returntype", Object)
-    ], HelloWorld.prototype, "handleEvent3");
+    ], HelloWorld.prototype, "handleEvent3", null);
     return HelloWorld;
 }());

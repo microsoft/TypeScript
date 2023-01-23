@@ -429,3 +429,25 @@ type AB = "A" | "B";
 function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
     let r2: never = y as T_AB & undefined;
 } 
+
+// Repro from #51538
+
+type Left = 'left';
+type Right = 'right' & { right: 'right' };
+type Either = Left | Right;
+
+function assertNever(v: never): never {
+    throw new Error('never');
+}
+
+function fx20(value: Either) {
+    if (value === 'left') {
+        const foo: 'left' = value;
+    }
+    else if (value === 'right') {
+        const bar: 'right' = value;
+    }
+    else {
+        assertNever(value);
+    }
+}

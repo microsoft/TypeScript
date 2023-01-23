@@ -75,7 +75,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
-'package.json' does not have a 'typesVersions' field.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
@@ -86,7 +85,6 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg/impo
 Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg1/package.json'.
-'package.json' does not have a 'typesVersions' field.
 Saw non-matching condition 'import'.
 Matched 'exports' condition 'require'.
 Using 'exports' subpath '.' with target './require.js'.
@@ -196,14 +194,14 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
 //// [/user/username/projects/myproject/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" resolution-mode="import"/>
 /// <reference types="pkg1" resolution-mode="require"/>
 
@@ -351,7 +349,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 /// <reference types="pkg" resolution-mode="import"/>
 exports.x = 10;

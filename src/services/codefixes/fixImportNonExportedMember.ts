@@ -1,12 +1,41 @@
 import {
-    canHaveExportModifier, Declaration, Diagnostics, ExportDeclaration, factory, find, findAncestor, findLast,
-    firstOrUndefined, getResolvedModule, getTokenAtPosition, Identifier, isExportDeclaration, isIdentifier,
-    isImportDeclaration, isNamedExports, isSourceFileFromLibrary, isStringLiteral, isTypeDeclaration,
-    isVariableDeclaration, isVariableStatement, length, map, Map, Node, Program, SourceFile, Symbol, textChanges,
-    tryCast, VariableStatement,
+    canHaveExportModifier,
+    canHaveLocals,
+    Declaration,
+    Diagnostics,
+    ExportDeclaration,
+    factory,
+    find,
+    findAncestor,
+    findLast,
+    firstOrUndefined,
+    getResolvedModule,
+    getTokenAtPosition,
+    Identifier,
+    isExportDeclaration,
+    isIdentifier,
+    isImportDeclaration,
+    isNamedExports,
+    isSourceFileFromLibrary,
+    isStringLiteral,
+    isTypeDeclaration,
+    isVariableDeclaration,
+    isVariableStatement,
+    length,
+    map,
+    Node,
+    Program,
+    SourceFile,
+    Symbol,
+    textChanges,
+    tryCast,
+    VariableStatement,
 } from "../_namespaces/ts";
 import {
-    createCodeFixAction, createCombinedCodeActions, eachDiagnostic, registerCodeFix,
+    createCodeFixAction,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
 } from "../_namespaces/ts.codefix";
 
 const fixId = "fixImportNonExportedMember";
@@ -97,7 +126,7 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         if (moduleSourceFile === undefined || isSourceFileFromLibrary(program, moduleSourceFile)) return undefined;
 
         const moduleSymbol = moduleSourceFile.symbol;
-        const locals = moduleSymbol.valueDeclaration?.locals;
+        const locals = tryCast(moduleSymbol.valueDeclaration, canHaveLocals)?.locals;
         if (locals === undefined) return undefined;
 
         const localSymbol = locals.get(token.escapedText);
