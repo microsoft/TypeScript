@@ -94,7 +94,7 @@ Info 26   [00:01:17.000] 	Files (3)
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../recognizers-text/dist/types/recognizers-text.d.ts
 	  Imported via "@microsoft/recognizers-text" from file 'src/datetime/baseDate.ts'
 	src/datetime/baseDate.ts
@@ -448,7 +448,7 @@ Info 59   [00:01:59.000] 	Files (2)
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/datetime/baseDate.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
@@ -1040,7 +1040,7 @@ Info 100  [00:02:58.000] 	Files (3)
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../recognizers-text/dist/types/recognizers-text.d.ts
 	  Imported via "@microsoft/recognizers-text" from file 'src/datetime/baseDate.ts'
 	src/datetime/baseDate.ts

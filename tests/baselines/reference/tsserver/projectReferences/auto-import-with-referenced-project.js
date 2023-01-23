@@ -1,12 +1,12 @@
 Info 0    [00:00:47.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:48.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/app/src/program/index.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/tsconfig.json]
@@ -118,7 +118,7 @@ Info 36   [00:01:23.000] 	Files (4)
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../../../shared/src/library/index.ts
 	  Imported via "shared" from file 'bar.ts' with packageId 'shared/bld/library/index.d.ts@1.0.0'
 	bar.ts
@@ -203,7 +203,7 @@ Info 45   [00:01:41.000] request:
           2304
         ]
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request

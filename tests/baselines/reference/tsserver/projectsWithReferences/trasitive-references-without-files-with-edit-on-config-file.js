@@ -138,7 +138,7 @@ Info 35   [00:01:14.000] 	Files (5)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../a/index.ts
 	  Imported via '@ref/a' from file '../b/index.ts'
 	../b/index.ts
@@ -265,7 +265,7 @@ Info 74   [00:02:06.000] 	Files (5)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../a/index.ts
 	  Imported via '@ref/a' from file '../b/index.ts'
 	../b/index.ts
@@ -435,7 +435,7 @@ Info 113  [00:03:00.000] 	Files (5)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../a/index.ts
 	  Imported via '@ref/a' from file '../b/index.ts'
 	../b/index.ts

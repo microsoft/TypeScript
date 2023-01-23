@@ -1,6 +1,16 @@
 import {
-    Bundle, Debug, EmitHint, isSourceFile, map, ModuleKind, Node, SourceFile, SyntaxKind, TransformationContext,
-    transformECMAScriptModule, transformModule,
+    Bundle,
+    Debug,
+    EmitHint,
+    isSourceFile,
+    map,
+    ModuleKind,
+    Node,
+    SourceFile,
+    SyntaxKind,
+    TransformationContext,
+    transformECMAScriptModule,
+    transformModule,
 } from "../../_namespaces/ts";
 
 /** @internal */

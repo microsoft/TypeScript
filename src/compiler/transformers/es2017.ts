@@ -1,20 +1,101 @@
 import {
-    __String, AccessorDeclaration, addEmitHelper, addEmitHelpers, advancedAsyncSuperHelper, ArrowFunction,
-    asyncSuperHelper, AwaitExpression, BindingElement, Block, CallExpression, CatchClause, chainBundle,
-    ClassDeclaration, concatenate, ConciseBody, ConstructorDeclaration, Debug, ElementAccessExpression, EmitFlags,
-    EmitHint, EmitResolver, Expression, forEach, ForInitializer, ForInStatement, ForOfStatement, ForStatement,
-    FunctionBody, FunctionDeclaration, FunctionExpression, FunctionFlags, FunctionLikeDeclaration,
-    GeneratedIdentifierFlags, GetAccessorDeclaration, getEmitScriptTarget, getEntityNameFromTypeNode, getFunctionFlags,
-    getInitializedVariables, getNodeId, getOriginalNode, insertStatementsAfterStandardPrologue, isBlock, isConciseBody,
-    isEffectiveStrictModeSourceFile, isEntityName, isExpression, isForInitializer, isFunctionLike,
-    isFunctionLikeDeclaration, isIdentifier, isModifierLike, isNodeWithPossibleHoistedDeclaration, isOmittedExpression,
-    isPropertyAccessExpression, isStatement, isSuperProperty, isToken, isVariableDeclarationList,
-    LeftHandSideExpression, map, MethodDeclaration, Node, NodeCheckFlags, NodeFactory, NodeFlags, ParameterDeclaration,
-    PropertyAccessExpression, PropertyAssignment, ScriptTarget, Set, SetAccessorDeclaration, setEmitFlags,
-    setOriginalNode, setSourceMapRange, setTextRange, some, SourceFile, Statement, SyntaxKind, TextRange,
-    TransformationContext, TransformFlags, TypeNode, TypeReferenceSerializationKind, unescapeLeadingUnderscores,
-    VariableDeclaration, VariableDeclarationList, VariableStatement, visitEachChild, visitFunctionBody,
-    visitIterationBody, visitNode, visitNodes, visitParameterList, VisitResult, Bundle,
+    __String,
+    AccessorDeclaration,
+    addEmitHelper,
+    addEmitHelpers,
+    advancedAsyncSuperHelper,
+    ArrowFunction,
+    asyncSuperHelper,
+    AwaitExpression,
+    BindingElement,
+    Block,
+    Bundle,
+    CallExpression,
+    CatchClause,
+    chainBundle,
+    ClassDeclaration,
+    concatenate,
+    ConciseBody,
+    ConstructorDeclaration,
+    Debug,
+    ElementAccessExpression,
+    EmitFlags,
+    EmitHint,
+    EmitResolver,
+    Expression,
+    forEach,
+    ForInitializer,
+    ForInStatement,
+    ForOfStatement,
+    ForStatement,
+    FunctionBody,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionFlags,
+    FunctionLikeDeclaration,
+    GeneratedIdentifierFlags,
+    GetAccessorDeclaration,
+    getEmitScriptTarget,
+    getEntityNameFromTypeNode,
+    getFunctionFlags,
+    getInitializedVariables,
+    getNodeId,
+    getOriginalNode,
+    insertStatementsAfterStandardPrologue,
+    isAwaitKeyword,
+    isBlock,
+    isConciseBody,
+    isEffectiveStrictModeSourceFile,
+    isEntityName,
+    isExpression,
+    isForInitializer,
+    isFunctionLike,
+    isFunctionLikeDeclaration,
+    isIdentifier,
+    isModifier,
+    isModifierLike,
+    isNodeWithPossibleHoistedDeclaration,
+    isOmittedExpression,
+    isPropertyAccessExpression,
+    isStatement,
+    isSuperProperty,
+    isVariableDeclarationList,
+    LeftHandSideExpression,
+    map,
+    MethodDeclaration,
+    Node,
+    NodeCheckFlags,
+    NodeFactory,
+    NodeFlags,
+    ParameterDeclaration,
+    PropertyAccessExpression,
+    PropertyAssignment,
+    ScriptTarget,
+    SetAccessorDeclaration,
+    setEmitFlags,
+    setOriginalNode,
+    setSourceMapRange,
+    setTextRange,
+    some,
+    SourceFile,
+    Statement,
+    SyntaxKind,
+    TextRange,
+    TransformationContext,
+    TransformFlags,
+    TypeNode,
+    TypeReferenceSerializationKind,
+    unescapeLeadingUnderscores,
+    VariableDeclaration,
+    VariableDeclarationList,
+    VariableStatement,
+    visitEachChild,
+    visitFunctionBody,
+    visitIterationBody,
+    visitNode,
+    visitNodes,
+    visitParameterList,
+    VisitResult,
 } from "../_namespaces/ts";
 
 type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
@@ -25,6 +106,7 @@ const enum ES2017SubstitutionFlags {
 }
 
 const enum ContextFlags {
+    None = 0,
     NonTopLevel = 1 << 0,
     HasLexicalThis = 1 << 1
 }
@@ -66,7 +148,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     /** A set of node IDs for generated super accessors (variable statements). */
     const substitutedSuperAccessors: boolean[] = [];
 
-    let contextFlags: ContextFlags = 0;
+    let contextFlags = ContextFlags.None;
 
     // Save the previous transformation hooks.
     const previousOnEmitNode = context.onEmitNode;
@@ -121,7 +203,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         return visitEachChild(node, visitor, context);
     }
 
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: Node): VisitResult<Node | undefined> {
         if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
             return node;
         }
@@ -172,7 +254,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         }
     }
 
-    function asyncBodyVisitor(node: Node): VisitResult<Node> {
+    function asyncBodyVisitor(node: Node): VisitResult<Node | undefined> {
         if (isNodeWithPossibleHoistedDeclaration(node)) {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
@@ -244,8 +326,8 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             node,
             isVariableDeclarationListWithCollidingName(node.initializer)
                 ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
-                : visitNode(node.initializer, visitor, isForInitializer),
-            visitNode(node.expression, visitor, isExpression),
+                : Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
+                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             visitIterationBody(node.statement, asyncBodyVisitor, context)
         );
     }
@@ -253,11 +335,11 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     function visitForOfStatementInAsyncBody(node: ForOfStatement) {
         return factory.updateForOfStatement(
             node,
-            visitNode(node.awaitModifier, visitor, isToken),
+            visitNode(node.awaitModifier, visitor, isAwaitKeyword),
             isVariableDeclarationListWithCollidingName(node.initializer)
                 ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
-                : visitNode(node.initializer, visitor, isForInitializer),
-            visitNode(node.expression, visitor, isExpression),
+                : Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
             visitIterationBody(node.statement, asyncBodyVisitor, context)
         );
     }
@@ -302,7 +384,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     function visitConstructorDeclaration(node: ConstructorDeclaration) {
         return factory.updateConstructorDeclaration(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            visitNodes(node.modifiers, visitor, isModifier),
             visitParameterList(node.parameters, visitor, context),
             transformMethodBody(node)
         );
@@ -387,7 +469,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     function visitFunctionExpression(node: FunctionExpression): Expression {
         return factory.updateFunctionExpression(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            visitNodes(node.modifiers, visitor, isModifier),
             node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
@@ -410,7 +492,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     function visitArrowFunction(node: ArrowFunction) {
         return factory.updateArrowFunction(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            visitNodes(node.modifiers, visitor, isModifier),
             /*typeParameters*/ undefined,
             visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
@@ -480,7 +562,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             ),
             node
         );
-        return visitNode(converted, visitor, isExpression);
+        return Debug.checkDefined(visitNode(converted, visitor, isExpression));
     }
 
     function collidesWithParameterName({ name }: VariableDeclaration | BindingElement): boolean {
@@ -647,7 +729,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             return factory.updateBlock(body, visitNodes(body.statements, asyncBodyVisitor, isStatement, start));
         }
         else {
-            return factory.converters.convertToFunctionBlock(visitNode(body, asyncBodyVisitor, isConciseBody));
+            return factory.converters.convertToFunctionBlock(Debug.checkDefined(visitNode(body, asyncBodyVisitor, isConciseBody)));
         }
     }
 
@@ -837,7 +919,7 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
             factory.createArrowFunction(
                 /* modifiers */ undefined,
                 /* typeParameters */ undefined,
-                /* parameters */ [],
+                /* parameters */[],
                 /* type */ undefined,
                 /* equalsGreaterThanToken */ undefined,
                 setEmitFlags(
@@ -859,7 +941,7 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                     factory.createArrowFunction(
                         /* modifiers */ undefined,
                         /* typeParameters */ undefined,
-                        /* parameters */ [
+                        /* parameters */[
                             factory.createParameterDeclaration(
                                 /* modifiers */ undefined,
                                 /* dotDotDotToken */ undefined,

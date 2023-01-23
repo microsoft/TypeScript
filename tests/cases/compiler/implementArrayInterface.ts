@@ -1,4 +1,4 @@
-// @lib: esnext
+// @lib: es2022
 
 declare class MyArray<T> implements Array<T> {
     toString(): string;

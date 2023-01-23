@@ -1076,3 +1076,55 @@ function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
 >y : any
 } 
 
+// Repro from #51538
+
+type Left = 'left';
+>Left : "left"
+
+type Right = 'right' & { right: 'right' };
+>Right : "right" & { right: 'right'; }
+>right : "right"
+
+type Either = Left | Right;
+>Either : Right | "left"
+
+function assertNever(v: never): never {
+>assertNever : (v: never) => never
+>v : never
+
+    throw new Error('never');
+>new Error('never') : Error
+>Error : ErrorConstructor
+>'never' : "never"
+}
+
+function fx20(value: Either) {
+>fx20 : (value: Either) => void
+>value : Either
+
+    if (value === 'left') {
+>value === 'left' : boolean
+>value : Either
+>'left' : "left"
+
+        const foo: 'left' = value;
+>foo : "left"
+>value : "left"
+    }
+    else if (value === 'right') {
+>value === 'right' : boolean
+>value : Right
+>'right' : "right"
+
+        const bar: 'right' = value;
+>bar : "right"
+>value : Right
+    }
+    else {
+        assertNever(value);
+>assertNever(value) : never
+>assertNever : (v: never) => never
+>value : never
+    }
+}
+

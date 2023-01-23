@@ -1,0 +1,13 @@
+error TS5101: Flag 'noStrictGenericChecks' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+
+
+!!! error TS5101: Flag 'noStrictGenericChecks' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+==== tests/cases/compiler/noStrictGenericChecks.ts (0 errors) ====
+    type A = <T, U>(x: T, y: U) => [T, U];
+    type B = <S>(x: S, y: S) => [S, S];
+    
+    function f(a: A, b: B) {
+        a = b;  // Error disabled here
+        b = a;  // Ok
+    }
+    

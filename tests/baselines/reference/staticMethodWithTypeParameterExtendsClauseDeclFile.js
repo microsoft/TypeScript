@@ -23,7 +23,7 @@ export class publicClassWithWithPrivateTypeParameters {
 
 //// [staticMethodWithTypeParameterExtendsClauseDeclFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicClassWithWithPrivateTypeParameters = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {

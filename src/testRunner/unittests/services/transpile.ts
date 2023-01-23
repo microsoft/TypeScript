@@ -286,7 +286,7 @@ var x = 0;`, {
     });
 
     transpilesCorrectly("Supports setting 'moduleResolution'", "x;", {
-        options: { compilerOptions: { moduleResolution: ts.ModuleResolutionKind.NodeJs }, fileName: "input.js", reportDiagnostics: true }
+        options: { compilerOptions: { moduleResolution: ts.ModuleResolutionKind.Node10 }, fileName: "input.js", reportDiagnostics: true }
     });
 
     transpilesCorrectly("Supports setting 'newLine'", "x;", {
@@ -440,7 +440,7 @@ var x = 0;`, {
                 compilerOptions: {
                     target: ts.ScriptTarget.ES5,
                     module: ts.ModuleKind.CommonJS,
-                    moduleResolution: ts.ModuleResolutionKind.NodeJs,
+                    moduleResolution: ts.ModuleResolutionKind.Node10,
                     emitDecoratorMetadata: true,
                     experimentalDecorators: true,
                     isolatedModules: true,
@@ -460,7 +460,7 @@ var x = 0;`, {
                 compilerOptions: {
                     target: ts.ScriptTarget.ES5,
                     module: ts.ModuleKind.System,
-                    moduleResolution: ts.ModuleResolutionKind.NodeJs,
+                    moduleResolution: ts.ModuleResolutionKind.Node10,
                     emitDecoratorMetadata: true,
                     experimentalDecorators: true,
                     isolatedModules: true,

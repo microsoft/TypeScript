@@ -22,7 +22,7 @@ export const spread = {
 
 //// [bug.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.createInstance = exports.SYMBOL = void 0;
 exports.SYMBOL = Symbol();
 function createInstance() {
@@ -45,7 +45,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.spread = void 0;
 var bug_1 = require("./bug");
 exports.spread = __assign({}, (0, bug_1.createInstance)());
