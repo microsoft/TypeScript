@@ -526,15 +526,15 @@ IncrementalBuild:
     "emitSignatures": [
       [
         "./src/class.ts",
-        "-6712382238-export declare class classC {\r\n    prop: number;\r\n}\r\n"
+        "-9508063301-export declare class classC {\n    prop: number;\n}\n"
       ],
       [
         "./src/directuse.ts",
-        "-4882119183-export {};\r\n"
+        "-3531856636-export {};\n"
       ],
       [
         "./src/indirectuse.ts",
-        "-4882119183-export {};\r\n"
+        "-3531856636-export {};\n"
       ]
     ],
     "latestChangedDtsFile": "FakeFileName"
@@ -1451,15 +1451,15 @@ IncrementalBuild:
     "emitSignatures": [
       [
         "./src/class.ts",
-        "-3790894605-export declare class classC {\r\n    prop1: number;\r\n}\r\n"
+        "-12157283604-export declare class classC {\n    prop1: number;\n}\n"
       ],
       [
         "./src/directuse.ts",
-        "-4882119183-export {};\r\n"
+        "-3531856636-export {};\n"
       ],
       [
         "./src/indirectuse.ts",
-        "-4882119183-export {};\r\n"
+        "-3531856636-export {};\n"
       ]
     ],
     "latestChangedDtsFile": "FakeFileName"

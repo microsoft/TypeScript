@@ -3,14 +3,17 @@
 // @Filename: a.ts
 // @newline: LF
 
-////class A {
-////    protected foo(): void {
-////        return;
-////    }
-////}
-////class B extends A {
-////    protected /**/
-////}
+// Issue #52211
+
+//// interface Interface {
+////     method(): void;
+//// }
+////
+//// export class Class implements Interface {
+////     property = "yadda";
+////
+////     /**/
+//// }
 
 verify.completions({
     marker: "",
@@ -20,13 +23,12 @@ verify.completions({
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithClassMemberSnippets: true,
     },
-    exact: [
+    includes: [
         {
-            name: "foo",
-            sortText: completion.SortText.LocationPriority,
-            insertText: "protected foo(): void {\n}",
-            filterText: "foo(): void {\n}"
+            name: "method",
+            sortText: completion.SortText.ClassMemberSnippets,
+            insertText: "method(): void {\n}",
+            replacementSpan: undefined,
         },
-        ...completion.classElementKeywords,
     ],
 });

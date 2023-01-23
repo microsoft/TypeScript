@@ -154,6 +154,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
      */
     latestChangedDtsFile: string | undefined;
     /**
+     * @deprecated
      * Bundle information either from oldState or current one so it can be used to complete the information in buildInfo when emitting only js or dts files
      */
     bundle?: BundleBuildInfo;
@@ -1163,7 +1164,7 @@ function convertToReusableCompilerOptionValue(option: CommandLineOption | undefi
     if (option) {
         Debug.assert(option.type !== "listOrElement");
         if (option.type === "list") {
-            const values = value as readonly (string | number)[];
+            const values = value as readonly string[];
             if (option.element.isFilePath && values.length) {
                 return values.map(relativeToBuildInfo);
             }
