@@ -44826,9 +44826,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let meaning = SymbolFlags.None;
             // In an interface or class, we're definitely interested in a type.
             if (name.parent.kind === SyntaxKind.ExpressionWithTypeArguments) {
-                if (isPartOfTypeNode(name)) {
-                    meaning = SymbolFlags.Type;
-                }
+               (isPartOfTypeNode(name)) ? meaning = SymbolFlags.Type : meaning |= SymbolFlags.Value;
 
                 // In a class 'extends' clause we are also looking for a value.
                 if (isExpressionWithTypeArgumentsInClassExtendsClause(name.parent)) {
