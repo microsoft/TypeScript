@@ -11,7 +11,7 @@ const tag = <El className="ok" key="key">{"Title"}</El>;
 //// [jsxIntrinsicUnions.js]
 "use strict";
 /// <reference path="react16.d.ts" />
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var El = Math.random() ? 'h1' : 'h2';
 var tag = React.createElement(El, { className: "ok", key: "key" }, "Title");

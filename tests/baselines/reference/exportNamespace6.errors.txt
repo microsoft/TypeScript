@@ -1,0 +1,24 @@
+/d.ts(2,16): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+/d.ts(3,17): error TS1362: 'B' cannot be used as a value because it was exported using 'export type'.
+
+
+==== /a.ts (0 errors) ====
+    export class A {}
+    export class B {}
+    
+==== /b.ts (0 errors) ====
+    export type * from "./a";
+    
+==== /c.ts (0 errors) ====
+    export * from "./b";
+    
+==== /d.ts (2 errors) ====
+    import { A, B } from "./c";
+    let _: A = new A();  // Error
+                   ~
+!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 /b.ts:1:1: 'A' was exported here.
+    let __: B = new B(); // Error
+                    ~
+!!! error TS1362: 'B' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 /b.ts:1:1: 'B' was exported here.

@@ -85,9 +85,9 @@ exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/src/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var classnames_1 = require("classnames");
-(0, classnames_1["default"])().foo;
+(0, classnames_1.default)().foo;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]

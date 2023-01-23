@@ -21,5 +21,5 @@ export {b as b2};
 
 //// [file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b2 = exports.a2 = exports.z1 = exports.z = exports.b1 = exports.b = exports.a1 = exports.a = exports.y1 = exports.x1 = exports.y = exports.x = void 0;

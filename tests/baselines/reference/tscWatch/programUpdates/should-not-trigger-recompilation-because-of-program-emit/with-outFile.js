@@ -68,13 +68,13 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/build/outFile.js]
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = void 0;
     exports.c = 30;
 });
 define("src/file2", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.d = void 0;
     exports.d = 30;
 });
@@ -165,19 +165,19 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/build/outFile.js]
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = void 0;
     exports.c = 30;
 });
 define("src/file2", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.d = void 0;
     exports.d = 30;
 });
 define("src/file3", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.y = void 0;
     exports.y = 10;
 });

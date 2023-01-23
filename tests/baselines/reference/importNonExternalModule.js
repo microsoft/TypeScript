@@ -21,7 +21,7 @@ var foo;
 //// [foo_1.js]
 define(["require", "exports", "./foo_0"], function (require, exports, foo) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     // Import should fail.  foo_0 not an external module
     if (foo.answer === 42) {
     }

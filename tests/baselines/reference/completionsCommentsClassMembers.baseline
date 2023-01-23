@@ -1,3 +1,3338 @@
+=== /tests/cases/fourslash/completionsCommentsClassMembers.ts ===
+// /** This is comment for c1*/
+// class c1 {
+//     /** p1 is property of c1*/
+//     public p1: number;
+//     /** sum with property*/
+//     public p2(/** number to add*/b: number) {
+//         return this.p1 + b;
+//                     ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.nc_pp1: number
+// | (method) c1.nc_pp2(b: number): number
+// | (property) c1.nc_pp3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | (property) c1.pp1: number
+// | (method) c1.pp2(b: number): number
+// | (property) c1.pp3: number
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | (parameter) b: number
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     /** getter property 1*/
+//     public get p3() {
+//         return this.p2(this.p1);
+//                     ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.nc_pp1: number
+// | (method) c1.nc_pp2(b: number): number
+// | (property) c1.nc_pp3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | (property) c1.pp1: number
+// | (method) c1.pp2(b: number): number
+// | (property) c1.pp3: number
+// | ----------------------------------------------------------------------
+//                             ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.nc_pp1: number
+// | (method) c1.nc_pp2(b: number): number
+// | (property) c1.nc_pp3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | (property) c1.pp1: number
+// | (method) c1.pp2(b: number): number
+// | (property) c1.pp3: number
+// | ----------------------------------------------------------------------
+//     }
+//     /** setter property 1*/
+//     public set p3(/** this is value*/value: number) {
+//         this.p1 = this.p2(value);
+//              ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.nc_pp1: number
+// | (method) c1.nc_pp2(b: number): number
+// | (property) c1.nc_pp3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | (property) c1.pp1: number
+// | (method) c1.pp2(b: number): number
+// | (property) c1.pp3: number
+// | ----------------------------------------------------------------------
+//                        ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.nc_pp1: number
+// | (method) c1.nc_pp2(b: number): number
+// | (property) c1.nc_pp3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | (property) c1.pp1: number
+// | (method) c1.pp2(b: number): number
+// | (property) c1.pp3: number
+// | ----------------------------------------------------------------------
+//                           ^^^^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | (parameter) value: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     /** pp1 is property of c1*/
+//     private pp1: number;
+//     /** sum with property*/
+//     private pp2(/** number to add*/b: number) {
+//         return this.p1 + b;
+//                     ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.nc_pp1: number
+// | (method) c1.nc_pp2(b: number): number
+// | (property) c1.nc_pp3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | (property) c1.pp1: number
+// | (method) c1.pp2(b: number): number
+// | (property) c1.pp3: number
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | (parameter) b: number
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     /** getter property 2*/
+//     private get pp3() {
+//         return this.pp2(this.pp1);
+//                     ^^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.nc_pp1: number
+// | (method) c1.nc_pp2(b: number): number
+// | (property) c1.nc_pp3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | (property) c1.pp1: number
+// | (method) c1.pp2(b: number): number
+// | (property) c1.pp3: number
+// | ----------------------------------------------------------------------
+//                              ^^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.nc_pp1: number
+// | (method) c1.nc_pp2(b: number): number
+// | (property) c1.nc_pp3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | (property) c1.pp1: number
+// | (method) c1.pp2(b: number): number
+// | (property) c1.pp3: number
+// | ----------------------------------------------------------------------
+//     }
+//     /** setter property 2*/
+//     private set pp3( /** this is value*/value: number) {
+//         this.pp1 = this.pp2(value);
+//              ^^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.nc_pp1: number
+// | (method) c1.nc_pp2(b: number): number
+// | (property) c1.nc_pp3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | (property) c1.pp1: number
+// | (method) c1.pp2(b: number): number
+// | (property) c1.pp3: number
+// | ----------------------------------------------------------------------
+//                         ^^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.nc_pp1: number
+// | (method) c1.nc_pp2(b: number): number
+// | (property) c1.nc_pp3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | (property) c1.pp1: number
+// | (method) c1.pp2(b: number): number
+// | (property) c1.pp3: number
+// | ----------------------------------------------------------------------
+//                             ^^^^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | (parameter) value: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     /** Constructor method*/
+//     constructor() {
+//     }
+//     /** s1 is static property of c1*/
+//     static s1: number;
+//     /** static sum with property*/
+//     static s2(/** number to add*/b: number) {
+//         return c1.s1 + b;
+//                ^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | (parameter) b: number
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//                   ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_s1: number
+// | (method) c1.nc_s2(b: number): number
+// | (property) c1.nc_s3: number
+// | (property) c1.s1: number
+// | (method) c1.s2(b: number): number
+// | (property) c1.s3: number
+// | (method) Function.apply(this: Function, thisArg: any, argArray?: any): any
+// | (property) Function.arguments: any
+// | (method) Function.bind(this: Function, thisArg: any, ...argArray: any[]): any
+// | (method) Function.call(this: Function, thisArg: any, ...argArray: any[]): any
+// | (property) Function.caller: Function
+// | (property) Function.length: number
+// | (property) c1.prototype: c1
+// | (method) Function.toString(): string
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | (parameter) b: number
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     /** static getter property*/
+//     static get s3() {
+//         return c1.s2(c1.s1);
+//                ^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//                   ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_s1: number
+// | (method) c1.nc_s2(b: number): number
+// | (property) c1.nc_s3: number
+// | (property) c1.s1: number
+// | (method) c1.s2(b: number): number
+// | (property) c1.s3: number
+// | (method) Function.apply(this: Function, thisArg: any, argArray?: any): any
+// | (property) Function.arguments: any
+// | (method) Function.bind(this: Function, thisArg: any, ...argArray: any[]): any
+// | (method) Function.call(this: Function, thisArg: any, ...argArray: any[]): any
+// | (property) Function.caller: Function
+// | (property) Function.length: number
+// | (property) c1.prototype: c1
+// | (method) Function.toString(): string
+// | ----------------------------------------------------------------------
+//                      ^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//                         ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_s1: number
+// | (method) c1.nc_s2(b: number): number
+// | (property) c1.nc_s3: number
+// | (property) c1.s1: number
+// | (method) c1.s2(b: number): number
+// | (property) c1.s3: number
+// | (method) Function.apply(this: Function, thisArg: any, argArray?: any): any
+// | (property) Function.arguments: any
+// | (method) Function.bind(this: Function, thisArg: any, ...argArray: any[]): any
+// | (method) Function.call(this: Function, thisArg: any, ...argArray: any[]): any
+// | (property) Function.caller: Function
+// | (property) Function.length: number
+// | (property) c1.prototype: c1
+// | (method) Function.toString(): string
+// | ----------------------------------------------------------------------
+//     }
+//     /** setter property 3*/
+//     static set s3( /** this is value*/value: number) {
+//         c1.s1 = c1.s2(value);
+//         ^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | (parameter) value: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//            ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_s1: number
+// | (method) c1.nc_s2(b: number): number
+// | (property) c1.nc_s3: number
+// | (property) c1.s1: number
+// | (method) c1.s2(b: number): number
+// | (property) c1.s3: number
+// | (method) Function.apply(this: Function, thisArg: any, argArray?: any): any
+// | (property) Function.arguments: any
+// | (method) Function.bind(this: Function, thisArg: any, ...argArray: any[]): any
+// | (method) Function.call(this: Function, thisArg: any, ...argArray: any[]): any
+// | (property) Function.caller: Function
+// | (property) Function.length: number
+// | (property) c1.prototype: c1
+// | (method) Function.toString(): string
+// | ----------------------------------------------------------------------
+//                 ^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | (parameter) value: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//                    ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_s1: number
+// | (method) c1.nc_s2(b: number): number
+// | (property) c1.nc_s3: number
+// | (property) c1.s1: number
+// | (method) c1.s2(b: number): number
+// | (property) c1.s3: number
+// | (method) Function.apply(this: Function, thisArg: any, argArray?: any): any
+// | (property) Function.arguments: any
+// | (method) Function.bind(this: Function, thisArg: any, ...argArray: any[]): any
+// | (method) Function.call(this: Function, thisArg: any, ...argArray: any[]): any
+// | (property) Function.caller: Function
+// | (property) Function.length: number
+// | (property) c1.prototype: c1
+// | (method) Function.toString(): string
+// | ----------------------------------------------------------------------
+//                       ^^^^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | (parameter) value: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     public nc_p1: number;
+//     public nc_p2(b: number) {
+//         return this.nc_p1 + b;
+//                             ^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | (parameter) b: number
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     public get nc_p3() {
+//         return this.nc_p2(this.nc_p1);
+//     }
+//     public set nc_p3(value: number) {
+//         this.nc_p1 = this.nc_p2(value);
+//                                 ^^^^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | (parameter) value: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     private nc_pp1: number;
+//     private nc_pp2(b: number) {
+//         return this.nc_pp1 + b;
+//                              ^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | (parameter) b: number
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     private get nc_pp3() {
+//         return this.nc_pp2(this.nc_pp1);
+//     }
+//     private set nc_pp3(value: number) {
+//         this.nc_pp1 = this.nc_pp2(value);
+//                                   ^^^^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | (parameter) value: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     static nc_s1: number;
+//     static nc_s2(b: number) {
+//         return c1.nc_s1 + b;
+//                           ^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | (parameter) b: number
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+//     static get nc_s3() {
+//         return c1.nc_s2(c1.nc_s1);
+//     }
+//     static set nc_s3(value: number) {
+//         c1.nc_s1 = c1.nc_s2(value);
+//                             ^^^^^
+// | ----------------------------------------------------------------------
+// | (local var) arguments: IArguments
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | (parameter) value: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var i1 = new c1();
+// var i1_p = i1.p1;
+//               ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_p1: number
+// | (method) c1.nc_p2(b: number): number
+// | (property) c1.nc_p3: number
+// | (property) c1.p1: number
+// | (method) c1.p2(b: number): number
+// | (property) c1.p3: number
+// | ----------------------------------------------------------------------
+// var i1_f = i1.p2;
+// var i1_r = i1.p2(20);
+// var i1_prop = i1.p3;
+// i1.p3 = i1_prop;
+// var i1_nc_p = i1.nc_p1;
+// var i1_ncf = i1.nc_p2;
+// var i1_ncr = i1.nc_p2(20);
+// var i1_ncprop = i1.nc_p3;
+// i1.nc_p3 = i1_ncprop;
+// var i1_s_p = c1.s1;
+//              ^^
+// | ----------------------------------------------------------------------
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | abstract
+// | any
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | asserts
+// | async
+// | await
+// | bigint
+// | boolean
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | declare
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | infer
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | keyof
+// | let
+// | interface Math
+// | var Math: Math
+// | module
+// | namespace
+// | var NaN: number
+// | never
+// | new
+// | null
+// | number
+// | interface Number
+// | var Number: NumberConstructor
+// | object
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | readonly
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | string
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | symbol
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | unique
+// | unknown
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//                 ^^
+// | ----------------------------------------------------------------------
+// | (property) c1.nc_s1: number
+// | (method) c1.nc_s2(b: number): number
+// | (property) c1.nc_s3: number
+// | (property) c1.s1: number
+// | (method) c1.s2(b: number): number
+// | (property) c1.s3: number
+// | (method) Function.apply(this: Function, thisArg: any, argArray?: any): any
+// | (property) Function.arguments: any
+// | (method) Function.bind(this: Function, thisArg: any, ...argArray: any[]): any
+// | (method) Function.call(this: Function, thisArg: any, ...argArray: any[]): any
+// | (property) Function.caller: Function
+// | (property) Function.length: number
+// | (property) c1.prototype: c1
+// | (method) Function.toString(): string
+// | ----------------------------------------------------------------------
+// var i1_s_f = c1.s2;
+// var i1_s_r = c1.s2(20);
+// var i1_s_prop = c1.s3;
+// c1.s3 = i1_s_prop;
+// var i1_s_nc_p = c1.nc_s1;
+// var i1_s_ncf = c1.nc_s2;
+// var i1_s_ncr = c1.nc_s2(20);
+// var i1_s_ncprop = c1.nc_s3;
+// c1.nc_s3 = i1_s_ncprop;
+// var i1_c = c1;
+// 
+// ^
+// | ----------------------------------------------------------------------
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | abstract
+// | any
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | asserts
+// | async
+// | await
+// | bigint
+// | boolean
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | declare
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | infer
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | keyof
+// | let
+// | interface Math
+// | var Math: Math
+// | module
+// | namespace
+// | var NaN: number
+// | never
+// | new
+// | null
+// | number
+// | interface Number
+// | var Number: NumberConstructor
+// | object
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | readonly
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | string
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | symbol
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | unique
+// | unknown
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+// class cProperties {
+//     private val: number;
+//     /** getter only property*/
+//     public get p1() {
+//         return this.val;
+//     }
+//     public get nc_p1() {
+//         return this.val;
+//     }
+//     /**setter only property*/
+//     public set p2(value: number) {
+//         this.val = value;
+//     }
+//     public set nc_p2(value: number) {
+//         this.val = value;
+//     }
+// }
+// var cProperties_i = new cProperties();
+// cProperties_i.p2 = cProperties_i.p1;
+//               ^^
+// | ----------------------------------------------------------------------
+// | (property) cProperties.nc_p1: number
+// | (property) cProperties.nc_p2: number
+// | (property) cProperties.p1: number
+// | (property) cProperties.p2: number
+// | ----------------------------------------------------------------------
+// cProperties_i.nc_p2 = cProperties_i.nc_p1;
+// class cWithConstructorProperty {
+//     /**
+//     * this is class cWithConstructorProperty's constructor
+//     * @param a this is first parameter a
+//     */
+//     constructor(/**more info about a*/public a: number) {
+//         var bbbb = 10;
+//         this.a = a + 2 + bbbb;
+//              ^
+// | ----------------------------------------------------------------------
+// | (property) cWithConstructorProperty.a: number
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: number
+// | (local var) arguments: IArguments
+// | (local var) bbbb: number
+// | class c1
+// | class cProperties
+// | var cProperties_i: cProperties
+// | class cWithConstructorProperty
+// | var i1: c1
+// | var i1_c: typeof c1
+// | var i1_f: (b: number) => number
+// | var i1_nc_p: number
+// | var i1_ncf: (b: number) => number
+// | var i1_ncprop: number
+// | var i1_ncr: number
+// | var i1_p: number
+// | var i1_prop: number
+// | var i1_r: number
+// | var i1_s_f: (b: number) => number
+// | var i1_s_nc_p: number
+// | var i1_s_ncf: (b: number) => number
+// | var i1_s_ncprop: number
+// | var i1_s_ncr: number
+// | var i1_s_p: number
+// | var i1_s_prop: number
+// | var i1_s_r: number
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+//     }
+// }
+
 [
   {
     "marker": {
@@ -5,7 +3340,7 @@
       "position": 188,
       "name": "4"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -754,7 +4089,7 @@
       "position": 193,
       "name": "5"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -4843,7 +8178,7 @@
       "position": 272,
       "name": "7"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -5592,7 +8927,7 @@
       "position": 280,
       "name": "9"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -6341,7 +9676,7 @@
       "position": 386,
       "name": "11"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -7090,7 +10425,7 @@
       "position": 396,
       "name": "12"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -7839,7 +11174,7 @@
       "position": 399,
       "name": "13"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -11928,7 +15263,7 @@
       "position": 566,
       "name": "16"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -12677,7 +16012,7 @@
       "position": 571,
       "name": "17"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -16766,7 +20101,7 @@
       "position": 652,
       "name": "19"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -17515,7 +20850,7 @@
       "position": 661,
       "name": "21"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -18264,7 +21599,7 @@
       "position": 771,
       "name": "23"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -19013,7 +22348,7 @@
       "position": 782,
       "name": "24"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -19762,7 +23097,7 @@
       "position": 786,
       "name": "25"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -23851,7 +27186,7 @@
       "position": 1012,
       "name": "29"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
@@ -27940,7 +31275,7 @@
       "position": 1015,
       "name": "30"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -29096,7 +32431,7 @@
       "position": 1020,
       "name": "31"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -33185,7 +36520,7 @@
       "position": 1099,
       "name": "33"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
@@ -37228,7 +40563,7 @@
       "position": 1102,
       "name": "34"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -38384,7 +41719,7 @@
       "position": 1105,
       "name": "35"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -42427,7 +45762,7 @@
       "position": 1108,
       "name": "36"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -43583,7 +46918,7 @@
       "position": 1210,
       "name": "38"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
@@ -47672,7 +51007,7 @@
       "position": 1213,
       "name": "39"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -48828,7 +52163,7 @@
       "position": 1218,
       "name": "40"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -52917,7 +56252,7 @@
       "position": 1221,
       "name": "41"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -54073,7 +57408,7 @@
       "position": 1224,
       "name": "42"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -58162,7 +61497,7 @@
       "position": 1322,
       "name": "45"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -62246,7 +65581,7 @@
       "position": 1471,
       "name": "49"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -66330,7 +69665,7 @@
       "position": 1574,
       "name": "52"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -70414,7 +73749,7 @@
       "position": 1731,
       "name": "56"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -74498,7 +77833,7 @@
       "position": 1827,
       "name": "59"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -78582,7 +81917,7 @@
       "position": 1968,
       "name": "63"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -82666,7 +86001,7 @@
       "position": 2017,
       "name": "67"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -83050,7 +86385,7 @@
       "position": 2234,
       "name": "87"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -87235,7 +90570,7 @@
       "position": 2237,
       "name": "88"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -88391,7 +91726,7 @@
       "position": 2474,
       "name": "109"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
@@ -92605,7 +95940,7 @@
       "position": 2882,
       "name": "110"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -92830,7 +96165,7 @@
       "position": 3190,
       "name": "114"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
@@ -92930,7 +96265,7 @@
       "position": 3194,
       "name": "115"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,

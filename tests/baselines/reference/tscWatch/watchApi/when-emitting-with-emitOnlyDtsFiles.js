@@ -377,7 +377,7 @@ Input::
 //// [/user/username/projects/myproject/a.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
     exports.x = 10;
 });
@@ -386,7 +386,7 @@ define(["require", "exports"], function (require, exports) {
 //// [/user/username/projects/myproject/b.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.y = void 0;
     exports.y = 10;
 });

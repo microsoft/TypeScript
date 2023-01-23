@@ -4,8 +4,8 @@ const React: any = null;
 >null : null
 
 const elem = <div></div>;
->elem : error
-><div></div> : error
+>elem : any
+><div></div> : any
 >div : any
 >div : any
 
