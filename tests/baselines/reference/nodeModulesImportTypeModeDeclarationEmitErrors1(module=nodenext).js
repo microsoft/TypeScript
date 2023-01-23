@@ -119,10 +119,6 @@ exports.a = null;
 exports.b = null;
 
 
-//// [index.d.ts]
-export type LocalInterface = import("pkg", { assert: { "resolution-mode": "foobar" } }).RequireInterface & import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
-export declare const a: import("pkg").RequireInterface;
-export declare const b: import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
 //// [other.d.ts]
 export type LocalInterface = import("pkg", { assert: {} });
 export declare const a: any;
