@@ -3810,7 +3810,12 @@ namespace Parser {
         const name = parseIdentifier();
         let constraint: TypeNode | undefined;
         let expression: Expression | undefined;
-        if (parseOptional(SyntaxKind.ExtendsKeyword)) {
+        if (parseOptional(SyntaxKind.ExtendsKeyword) || token() === SyntaxKind.ColonToken) {
+            if (token() === SyntaxKind.ColonToken) {
+                parseErrorAtCurrentToken(Diagnostics.Invalid_character);
+                nextToken();
+                constraint = parseType();
+            }
             // It's not uncommon for people to write improper constraints to a generic.  If the
             // user writes a constraint that is an expression and not an actual type, then parse
             // it out as an expression (so we can recover well), but report that a type is needed
@@ -4228,6 +4233,10 @@ namespace Parser {
     function parseObjectTypeMembers(): NodeArray<TypeElement> {
         let members: NodeArray<TypeElement>;
         if (parseExpected(SyntaxKind.OpenBraceToken)) {
+            if (token() === SyntaxKind.BarToken) {
+                parseErrorAtCurrentToken(Diagnostics.Invalid_character);
+                nextToken();
+            }
             members = parseList(ParsingContext.TypeMembers, parseTypeMember);
             parseExpected(SyntaxKind.CloseBraceToken);
         }
