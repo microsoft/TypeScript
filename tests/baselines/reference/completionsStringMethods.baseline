@@ -1106,7 +1106,7 @@
                     "fileName": "lib.d.ts",
                     "textSpan": {
                       "start": "--",
-                      "end": "--"
+                      "length": "--"
                     }
                   }
                 },
@@ -1129,7 +1129,7 @@
                     "fileName": "lib.d.ts",
                     "textSpan": {
                       "start": "--",
-                      "end": "--"
+                      "length": "--"
                     }
                   }
                 },

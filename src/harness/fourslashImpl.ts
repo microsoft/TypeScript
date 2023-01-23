@@ -2055,7 +2055,7 @@ export class TestState {
                             if (/lib(?:.*)\.d\.ts$/.test(link.target.fileName)) {
                                 // elidedSpan doesn't have the correct type, but we're only going to
                                 // use these results in the baseline for diffing, so just overwrite.
-                                (link.target.textSpan as any) = { start: "--", end: "--" };
+                                (link.target.textSpan as any) = { start: "--", length: "--" };
                             }
                         }
                     }
