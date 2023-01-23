@@ -16,7 +16,7 @@ import BaseA from './BaseA';
 >BaseA : typeof BaseA
 
 export default class B<T: BaseA> {
->B : B<T, BaseA>
+>B : B<T>
 
     _AClass: Class<T>;
 >_AClass : Class<T>
@@ -41,7 +41,7 @@ import BaseB from './BaseB';
 
 export default class SubB extends BaseB<SubA> {
 >SubB : SubB
->BaseB : BaseB<SubA, any>
+>BaseB : BaseB<SubA>
 
     constructor() {
         super(SubA);

@@ -1,5 +1,6 @@
 tests/cases/compiler/BaseB.js(2,24): error TS8004: Type parameter declarations can only be used in TypeScript files.
-tests/cases/compiler/BaseB.js(2,25): error TS1005: ',' expected.
+tests/cases/compiler/BaseB.js(2,25): error TS1127: Invalid character.
+tests/cases/compiler/BaseB.js(2,32): error TS1109: Expression expected.
 tests/cases/compiler/BaseB.js(3,14): error TS2304: Cannot find name 'Class'.
 tests/cases/compiler/BaseB.js(3,14): error TS8010: Type annotations can only be used in TypeScript files.
 tests/cases/compiler/BaseB.js(4,25): error TS2304: Cannot find name 'Class'.
@@ -15,13 +16,15 @@ tests/cases/compiler/SubB.js(3,41): error TS8011: Type arguments can only be use
     import BaseA from './BaseA';
     export default class SubA extends BaseA {
     }
-==== tests/cases/compiler/BaseB.js (6 errors) ====
+==== tests/cases/compiler/BaseB.js (7 errors) ====
     import BaseA from './BaseA';
     export default class B<T: BaseA> {
                            ~~~~~~~~
 !!! error TS8004: Type parameter declarations can only be used in TypeScript files.
                             ~
-!!! error TS1005: ',' expected.
+!!! error TS1127: Invalid character.
+                                   ~
+!!! error TS1109: Expression expected.
         _AClass: Class<T>;
                  ~~~~~
 !!! error TS2304: Cannot find name 'Class'.

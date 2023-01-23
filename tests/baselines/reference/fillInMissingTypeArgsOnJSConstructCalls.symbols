@@ -18,7 +18,7 @@ import BaseA from './BaseA';
 export default class B<T: BaseA> {
 >B : Symbol(B, Decl(BaseB.js, 0, 28))
 >T : Symbol(T, Decl(BaseB.js, 1, 23))
->BaseA : Symbol(BaseA, Decl(BaseB.js, 1, 25))
+>BaseA : Symbol(BaseA, Decl(BaseB.js, 0, 6))
 
     _AClass: Class<T>;
 >_AClass : Symbol(B._AClass, Decl(BaseB.js, 1, 34))
