@@ -3435,7 +3435,8 @@ namespace Parser {
         return list;
     }
 
-    function isMissingList(arr: NodeArray<Node>): boolean {
+    function isMiss
+    ingList(arr: NodeArray<Node>): boolean {
         return !!(arr as MissingList<Node>).isMissingList;
     }
 
@@ -3461,7 +3462,7 @@ namespace Parser {
             entity = finishNode(
                 factory.createQualifiedName(
                     entity,
-                    parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false, /** allowUnicodeEscapeSequenceInIdentifierName */ true) as Identifier
+                    parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false, /* allowUnicodeEscapeSequenceInIdentifierName */ true) as Identifier
                 ),
                 pos
             );
@@ -5880,7 +5881,7 @@ namespace Parser {
         // If it wasn't then just try to parse out a '.' and report an error.
         parseExpectedToken(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
         // private names will never work with `super` (`super.#foo`), but that's a semantic error, not syntactic
-        return finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true, /** allowUnicodeEscapeSequenceInIdentifierName */ true)), pos);
+        return finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true, /* allowUnicodeEscapeSequenceInIdentifierName */ true)), pos);
     }
 
     function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment): JsxElement | JsxSelfClosingElement | JsxFragment {
@@ -6071,7 +6072,7 @@ namespace Parser {
         let expression: JsxTagNameExpression = token() === SyntaxKind.ThisKeyword ?
             parseTokenNode<ThisExpression>() : parseIdentifierNameErrorOnUnicodeEscapeSequence();
         while (parseOptional(SyntaxKind.DotToken)) {
-            expression = finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false, /** allowUnicodeEscapeSequenceInIdentifierName */ false)), pos) as JsxTagNamePropertyAccess;
+            expression = finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false, /*allowUnicodeEscapeSequenceInIdentifierName*/ false)), pos) as JsxTagNamePropertyAccess;
         }
         return expression;
     }
@@ -6216,7 +6217,7 @@ namespace Parser {
     }
 
     function parsePropertyAccessExpressionRest(pos: number, expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined) {
-        const name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true, /** allowUnicodeEscapeSequenceInIdentifierName */ true);
+        const name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true, /*allowUnicodeEscapeSequenceInIdentifierName*/ true);
         const isOptionalChain = questionDotToken || tryReparseOptionalChain(expression);
         const propertyAccess = isOptionalChain ?
             factory.createPropertyAccessChain(expression, questionDotToken, name) :
