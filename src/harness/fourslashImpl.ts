@@ -2047,9 +2047,9 @@ export class TestState {
                     : [`(${entry.kindModifiers}${entry.kind}) ${entry.name}`])
         );
         for (const r of result) {
-            for (const entry of r.item.entries ?? []) {
-                for (const tag of entry.tags ?? []) {
-                    for (const part of tag.text ?? []) {
+            for (const entry of r.item.entries ?? ts.emptyArray) {
+                for (const tag of entry.tags ?? ts.emptyArray) {
+                    for (const part of tag.text ?? ts.emptyArray) {
                         if (part.kind === "linkName") {
                             const link = part as ts.JSDocLinkDisplayPart;
                             if (/lib(?:.*)\.d\.ts$/.test(link.target.fileName)) {
