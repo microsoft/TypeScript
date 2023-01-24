@@ -44824,9 +44824,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (isHeritageClauseElementIdentifier(name)) {
             let meaning = SymbolFlags.None;
-            // In an interface or class, we're definitely interested in a type.
             if (name.parent.kind === SyntaxKind.ExpressionWithTypeArguments) {
-               meaning = isPartOfTypeNode(name) ? SymbolFlags.Type : SymbolFlags.Value;
+                //An 'ExpressionWithTypeArguments' may appear in type space (interface Foo extends Bar<T>),
+                //value space (return foo<T>), or both(class Foo extends Bar<T>); ensure the meaning matches.
+                meaning = isPartOfTypeNode(name) ? SymbolFlags.Type : SymbolFlags.Value;
 
                 // In a class 'extends' clause we are also looking for a value.
                 if (isExpressionWithTypeArgumentsInClassExtendsClause(name.parent)) {
