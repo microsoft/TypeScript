@@ -147,6 +147,7 @@ const jsDocTagNames = [
     "package",
     "param",
     "private",
+    "prop",
     "property",
     "protected",
     "public",
