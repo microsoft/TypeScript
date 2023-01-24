@@ -1,6 +1,8 @@
+error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
 file.ts(1,1): error TS1434: Unexpected keyword or identifier.
 
 
+!!! error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
 ==== file.ts (1 errors) ====
     a b
     ~

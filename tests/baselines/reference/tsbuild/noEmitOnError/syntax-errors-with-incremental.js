@@ -223,7 +223,7 @@ console.log("hi");
 
 
 //// [/src/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-6245214333-export interface A {\r\n    name: string;\r\n}\r\n"},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-4882119183-export {};\r\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-4882119183-export {};\r\n"}],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/src/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -252,26 +252,26 @@ console.log("hi");
       "../shared/types/db.ts": {
         "original": {
           "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
-          "signature": "-6245214333-export interface A {\r\n    name: string;\r\n}\r\n"
+          "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
         },
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
-        "signature": "-6245214333-export interface A {\r\n    name: string;\r\n}\r\n"
+        "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
       },
       "../src/main.ts": {
         "original": {
           "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
-          "signature": "-4882119183-export {};\r\n"
+          "signature": "-3531856636-export {};\n"
         },
         "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
-        "signature": "-4882119183-export {};\r\n"
+        "signature": "-3531856636-export {};\n"
       },
       "../src/other.ts": {
         "original": {
           "version": "11373096570-console.log(\"hi\");\r\nexport { }",
-          "signature": "-4882119183-export {};\r\n"
+          "signature": "-3531856636-export {};\n"
         },
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
-        "signature": "-4882119183-export {};\r\n"
+        "signature": "-3531856636-export {};\n"
       }
     },
     "options": {
@@ -292,7 +292,7 @@ console.log("hi");
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1180
+  "size": 1170
 }
 
 

@@ -6,6 +6,7 @@ Info 3    [00:01:13.000] Config: /user/username/projects/container/compositeExec
   "/user/username/projects/container/compositeExec/index.ts"
  ],
  "options": {
+  "ignoreDeprecations": "5.0",
   "outFile": "/user/username/projects/container/built/local/compositeExec.js",
   "composite": true,
   "declarationMap": true,
@@ -62,6 +63,7 @@ Info 20   [00:01:30.000] Config: /user/username/projects/container/exec/tsconfig
   "/user/username/projects/container/exec/index.ts"
  ],
  "options": {
+  "ignoreDeprecations": "5.0",
   "outFile": "/user/username/projects/container/built/local/exec.js",
   "configFilePath": "/user/username/projects/container/exec/tsconfig.json"
  },
@@ -182,6 +184,7 @@ namespace container {
 //// [/user/username/projects/container/exec/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "outFile": "../built/local/exec.js",
     },
     "files": [
@@ -203,6 +206,7 @@ namespace container {
 //// [/user/username/projects/container/compositeExec/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "outFile": "../built/local/compositeExec.js",
         "composite": true,
         "declarationMap": true,

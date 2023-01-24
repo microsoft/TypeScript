@@ -611,6 +611,7 @@ ${internal} enum internalEnum { a, b, c }`);
                     }));
                     fs.writeFileSync("/src/third/tsconfig.json", JSON.stringify({
                         compilerOptions: {
+                            ignoreDeprecations: "5.0",
                             composite: true,
                             declaration: true,
                             declarationMap: false,

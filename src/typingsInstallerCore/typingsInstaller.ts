@@ -69,7 +69,7 @@ const nullLog: Log = {
 
 function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string | undefined {
     try {
-        const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
+        const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.Node10 }, installTypingHost);
         return result.resolvedModule && result.resolvedModule.resolvedFileName;
     }
     catch (e) {
@@ -136,8 +136,8 @@ const enum ProjectWatcherType {
 
 type ProjectWatchers = Map<string, FileWatcher> & { isInvoked?: boolean; };
 
-function getDetailWatchInfo(projectName: string, watchers: ProjectWatchers) {
-    return `Project: ${projectName} watcher already invoked: ${watchers.isInvoked}`;
+function getDetailWatchInfo(projectName: string, watchers: ProjectWatchers | undefined) {
+    return `Project: ${projectName} watcher already invoked: ${watchers?.isInvoked}`;
 }
 
 export abstract class TypingsInstaller {

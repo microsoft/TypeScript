@@ -135,8 +135,10 @@ class CompilerTest {
         "module",
         "moduleResolution",
         "moduleDetection",
+        "allowImportingTsExtensions",
         "target",
         "jsx",
+        "noEmit",
         "removeComments",
         "importHelpers",
         "importHelpers",
@@ -161,6 +163,10 @@ class CompilerTest {
         "useUnknownInCatchVariables",
         "noUncheckedIndexedAccess",
         "noPropertyAccessFromIndexSignature",
+        "resolvePackageJsonExports",
+        "resolvePackageJsonImports",
+        "resolveJsonModule",
+        "allowArbitraryExtensions",
     ];
     private fileName: string;
     private justName: string;

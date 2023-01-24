@@ -85,7 +85,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         };
 
         const host = createServerHost([file1]);
-        const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
+        const projectService = createProjectService(host, { useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
 
         projectService.openClientFile(file1.path, file1.content);
 
@@ -170,7 +170,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         session.executeCommand({
             seq: 1,
             type: "request",
-            command: ts.server.CommandNames.CompilerOptionsForInferredProjects,
+            command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
             arguments: {
                 options: {
                     allowJs: true,
@@ -181,7 +181,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         session.executeCommand({
             seq: 2,
             type: "request",
-            command: ts.server.CommandNames.CompilerOptionsForInferredProjects,
+            command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
             arguments: {
                 options: {
                     allowJs: true,
@@ -193,7 +193,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         session.executeCommand({
             seq: 3,
             type: "request",
-            command: ts.server.CommandNames.Open,
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: file1.path,
                 fileContent: file1.content,
@@ -204,7 +204,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         session.executeCommand({
             seq: 4,
             type: "request",
-            command: ts.server.CommandNames.Open,
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: file2.path,
                 fileContent: file2.content,
@@ -215,7 +215,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         session.executeCommand({
             seq: 5,
             type: "request",
-            command: ts.server.CommandNames.Open,
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: file3.path,
                 fileContent: file3.content,
@@ -226,7 +226,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         session.executeCommand({
             seq: 6,
             type: "request",
-            command: ts.server.CommandNames.Open,
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: file4.path,
                 fileContent: file4.content,

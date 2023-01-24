@@ -6,6 +6,7 @@ import { task } from "hereby";
 import _glob from "glob";
 import util from "util";
 import chalk from "chalk";
+import fsExtra from "fs-extra";
 import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
 import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
 import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
@@ -160,10 +161,9 @@ async function runDtsBundler(entrypoint, output) {
  * @param {BundlerTaskOptions} [taskOptions]
  *
  * @typedef BundlerTaskOptions
- * @property {string[]} [external]
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
- * @property {esbuild.WatchMode} [watchMode]
+ * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const getOptions = memoize(async () => {
@@ -179,32 +179,10 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             sourcemap: "linked",
             sourcesContent: false,
             treeShaking: taskOptions.treeShaking,
-            external: [
-                ...(taskOptions.external ?? []),
-                "source-map-support",
-            ],
+            packages: "external",
             logLevel: "warning",
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
             plugins: [
-                {
-                    name: "no-node-modules",
-                    setup: (build) => {
-                        build.onLoad({ filter: /[\\/]node_modules[\\/]/ }, () => {
-                            // Ideally, we'd use "--external:./node_modules/*" here, but that doesn't work; we
-                            // will instead end up with paths to node_modules rather than the package names.
-                            // Instead, we'll return a load error when we see that we're trying to bundle from
-                            // node_modules, then explicitly declare which external dependencies we rely on, which
-                            // ensures that the correct module specifier is kept in the output (the non-wildcard
-                            // form works properly). It also helps us keep tabs on what external dependencies we
-                            // may be importing, which is handy.
-                            //
-                            // See: https://github.com/evanw/esbuild/issues/1958
-                            return {
-                                errors: [{ text: 'Attempted to bundle from node_modules; ensure "external" is set correctly.' }]
-                            };
-                        });
-                    }
-                },
                 {
                     name: "fix-require",
                     setup: (build) => {
@@ -242,7 +220,30 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
 
     return {
         build: async () => esbuild.build(await getOptions()),
-        watch: async () => esbuild.build({ ...await getOptions(), watch: taskOptions.watchMode ?? true, logLevel: "info" }),
+        watch: async () => {
+            /** @type {esbuild.BuildOptions} */
+            const options = { ...await getOptions(), logLevel: "info" };
+            if (taskOptions.onWatchRebuild) {
+                const onRebuild = taskOptions.onWatchRebuild;
+                options.plugins = (options.plugins?.slice(0) ?? []).concat([{
+                    name: "watch",
+                    setup: (build) => {
+                        let firstBuild = true;
+                        build.onEnd(() => {
+                            if (firstBuild) {
+                                firstBuild = false;
+                            }
+                            else {
+                                onRebuild();
+                            }
+                        });
+                    }
+                }]);
+            }
+
+            const ctx = await esbuild.context(options);
+            ctx.watch();
+        },
     };
 }
 
@@ -448,18 +449,8 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
     bundlerOptions: {
         // Ensure we never drop any dead code, which might be helpful while debugging.
         treeShaking: false,
-        // These are directly imported via import statements and should not be bundled.
-        external: [
-            "chai",
-            "del",
-            "diff",
-            "mocha",
-            "ms",
-        ],
-        watchMode: {
-            onRebuild() {
-                watchTestsEmitter.emit("rebuild");
-            }
+        onWatchRebuild() {
+            watchTestsEmitter.emit("rebuild");
         }
     },
 });
@@ -849,13 +840,6 @@ export const lkg = task({
     dependencies: [produceLKG],
 });
 
-export const generateSpec = task({
-    name: "generate-spec",
-    description: "Generates a Markdown version of the Language Specification",
-    hiddenFromTaskList: true,
-    run: () => exec("cscript", ["//nologo", "scripts/word2md.mjs", path.resolve("doc/TypeScript Language Specification - ARCHIVED.docx"), path.resolve("doc/spec-ARCHIVED.md")]),
-});
-
 export const cleanBuilt = task({
     name: "clean-built",
     hiddenFromTaskList: true,
@@ -891,4 +875,15 @@ export const help = task({
     description: "Prints the top-level tasks.",
     hiddenFromTaskList: true,
     run: () => exec("hereby", ["--tasks"], { hidePrompt: true }),
+});
+
+export const bumpLkgToNightly = task({
+    name: "bump-lkg-to-nightly",
+    description: "Bumps typescript in package.json to the latest nightly and copies it to LKG.",
+    run: async () => {
+        await exec("npm", ["install", "--save-dev", "--save-exact", "typescript@next"]);
+        await fs.promises.rm("lib", { recursive: true, force: true });
+        await fsExtra.copy("node_modules/typescript/lib", "lib");
+        await fs.promises.writeFile("lib/.gitattributes", "* text eol=lf");
+    }
 });

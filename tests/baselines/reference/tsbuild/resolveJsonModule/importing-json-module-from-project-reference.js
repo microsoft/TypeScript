@@ -109,7 +109,7 @@ console.log(foo_json_1.foo);
 
 
 //// [/src/main/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../strings/foo.json","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"4395333385-{\n    \"foo\": \"bar baz\"\n}",{"version":"-4651661680-import { foo } from '../strings/foo.json';\n\nconsole.log(foo);","signature":"-4882119183-export {};\r\n"}],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../strings/foo.json","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"4395333385-{\n    \"foo\": \"bar baz\"\n}",{"version":"-4651661680-import { foo } from '../strings/foo.json';\n\nconsole.log(foo);","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/main/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -141,10 +141,10 @@ console.log(foo_json_1.foo);
       "./index.ts": {
         "original": {
           "version": "-4651661680-import { foo } from '../strings/foo.json';\n\nconsole.log(foo);",
-          "signature": "-4882119183-export {};\r\n"
+          "signature": "-3531856636-export {};\n"
         },
         "version": "-4651661680-import { foo } from '../strings/foo.json';\n\nconsole.log(foo);",
-        "signature": "-4882119183-export {};\r\n"
+        "signature": "-3531856636-export {};\n"
       }
     },
     "options": {
@@ -169,7 +169,7 @@ console.log(foo_json_1.foo);
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1023
+  "size": 1021
 }
 
 //// [/src/strings/tsconfig.tsbuildinfo]
