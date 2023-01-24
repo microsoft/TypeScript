@@ -263,6 +263,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
+    symbol = typeChecker.getExportSymbolOfSymbol(symbol);
 
     if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
         return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
@@ -446,19 +447,16 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         writeTypeParametersOfSymbol(symbol, sourceFile);
     }
     if ((symbolFlags & SymbolFlags.TypeAlias) && (semanticMeaning & SemanticMeaning.Type)) {
-
-        const exportSymbol = typeChecker.getExportSymbolOfSymbol(symbol);
-
         prefixNextMeaning();
         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
         displayParts.push(spacePart());
         addFullSymbolName(symbol);
-        writeTypeParametersOfSymbol(exportSymbol, sourceFile);
+        writeTypeParametersOfSymbol(symbol, sourceFile);
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
 
-        addRange(displayParts, typeToDisplayParts(typeChecker, isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(exportSymbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
+        addRange(displayParts, typeToDisplayParts(typeChecker, isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();
