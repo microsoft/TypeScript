@@ -1429,7 +1429,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeFile,
         writeBundle,
         bundleFileInfo,
-        reset,
     };
 
     function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
