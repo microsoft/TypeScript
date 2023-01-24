@@ -5,7 +5,7 @@ import {
     CallExpression,
     CheckFlags,
     contains,
-    createPrinterWithRemoveComments,
+    createOrReusePrinter,
     Debug,
     displayPart,
     EmitHint,
@@ -728,7 +728,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     return { displayParts, documentation, symbolKind, tags: tags.length === 0 ? undefined : tags };
 
     function getPrinter() {
-        return createPrinterWithRemoveComments();
+        return createOrReusePrinter({ removeComments: true });
     }
 
     function prefixNextMeaning() {

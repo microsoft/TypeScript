@@ -34,6 +34,7 @@ import {
     ConstructorDeclaration,
     ContextFlags,
     createModuleSpecifierResolutionHost,
+    createOrReusePrinter,
     createPackageJsonImportFilter,
     createPrinter,
     createSortedArray,
@@ -1747,7 +1748,7 @@ function getEntryForObjectLiteralMethodCompletion(
         insertText = printer.printSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile);
     }
 
-    const signaturePrinter = createPrinter({
+    const signaturePrinter = createOrReusePrinter({
         removeComments: true,
         module: options.module,
         target: options.target,

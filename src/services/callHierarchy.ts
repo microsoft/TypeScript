@@ -14,7 +14,7 @@ import {
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
     compareStringsCaseSensitive,
-    createPrinterWithRemoveCommentsOmitTrailingSemicolon,
+    createOrReusePrinter,
     createTextRangeFromNode,
     createTextSpanFromBounds,
     createTextSpanFromRange,
@@ -245,7 +245,7 @@ function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclarati
     }
     if (text === undefined) {
         // get the text from printing the node on a single line without comments...
-        const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
+        const printer = createOrReusePrinter({ removeComments: true, omitTrailingSemicolon: true });
         text = usingSingleLineStringWriter(writer => printer.writeNode(EmitHint.Unspecified, node, node.getSourceFile(), writer));
     }
     return { text, pos: declName.getStart(), end: declName.getEnd() };

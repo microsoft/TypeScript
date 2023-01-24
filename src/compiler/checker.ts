@@ -111,10 +111,7 @@ import {
     createGetCanonicalFileName,
     createGetSymbolWalker,
     createModeAwareCacheKey,
-    createPrinterWithDefaults,
-    createPrinterWithRemoveComments,
-    createPrinterWithRemoveCommentsNeverAsciiEscape,
-    createPrinterWithRemoveCommentsOmitTrailingSemicolon,
+    createOrReusePrinter,
     createPropertyNameNodeForIdentifierOrLiteral,
     createSymbolTable,
     createTextWriter,
@@ -6127,8 +6124,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const entity = builder(symbol, meaning!, enclosingDeclaration, nodeFlags)!; // TODO: GH#18217
             // add neverAsciiEscape for GH#39027
             const printer = enclosingDeclaration?.kind === SyntaxKind.SourceFile
-                ? createPrinterWithRemoveCommentsNeverAsciiEscape()
-                : createPrinterWithRemoveComments();
+                ? createOrReusePrinter({ removeComments: true, neverAsciiEscape: true })
+                : createOrReusePrinter({ removeComments: true });
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
             return writer;
@@ -6147,7 +6144,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 sigOutput = kind === SignatureKind.Construct ? SyntaxKind.ConstructSignature : SyntaxKind.CallSignature;
             }
             const sig = nodeBuilder.signatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
-            const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
+            const printer = createOrReusePrinter({ removeComments: true, omitTrailingSemicolon: true });
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, sig!, /*sourceFile*/ sourceFile, getTrailingSemicolonDeferringWriter(writer)); // TODO: GH#18217
             return writer;
@@ -6160,7 +6157,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (typeNode === undefined) return Debug.fail("should always get typenode");
         // The unresolved type gets a synthesized comment on `any` to hint to users that it's not a plain `any`.
         // Otherwise, we always strip comments out.
-        const printer = type !== unresolvedType ? createPrinterWithRemoveComments() : createPrinterWithDefaults();
+        const options = { removeComments: type !== unresolvedType };
+        const printer = createOrReusePrinter(options);
         const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
         printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
         const result = writer.getText();
@@ -9640,7 +9638,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? factory.createIdentifier(typePredicate.parameterName) : factory.createThisTypeNode(),
                 typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)! // TODO: GH#18217
             );
-            const printer = createPrinterWithRemoveComments();
+            const printer = createOrReusePrinter({ removeComments: true });
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, predicate, /*sourceFile*/ sourceFile, writer);
             return writer;

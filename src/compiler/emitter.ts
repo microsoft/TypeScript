@@ -1343,17 +1343,29 @@ const enum PipelinePhase {
     Emit,
 }
 
+const printerCache = new Map<string, Printer>();
+
+// If updating this, make sure the cache key is updated too.
 /** @internal */
-export const createPrinterWithDefaults = memoize(() => createPrinter({}));
+export type ReusablePrinterOptions = Pick<PrinterOptions, "removeComments" | "neverAsciiEscape" | "omitTrailingSemicolon" | "module" | "target" | "newLine">;
 
 /** @internal */
-export const createPrinterWithRemoveComments = memoize(() => createPrinter({ removeComments: true }));
+export function createOrReusePrinter(o: ReusablePrinterOptions = {}) {
+    const key = `${keyBool(o.removeComments)}|${keyBool(o.neverAsciiEscape)}|${keyBool(o.omitTrailingSemicolon)}|${keyNum(o.module)}|${keyNum(o.target)}|${keyNum(o.newLine)}`;
+    let printer = printerCache.get(key);
+    if (!printer) {
+        printerCache.set(key, printer = createPrinter(o));
+    }
+    return printer;
 
-/** @internal */
-export const createPrinterWithRemoveCommentsNeverAsciiEscape = memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
+    function keyBool(value: boolean | undefined) {
+        return value === undefined ? "u" : value ? 1 : 0;
+    }
 
-/** @internal */
-export const createPrinterWithRemoveCommentsOmitTrailingSemicolon = memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
+    function keyNum(value: number | undefined) {
+        return value === undefined ? "u" : `${value}`;
+    }
+}
 
 export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
     const {
