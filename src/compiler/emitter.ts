@@ -1347,11 +1347,11 @@ const printerCache = new Map<string, Printer>();
 
 // If updating this, make sure the cache key is updated too.
 /** @internal */
-export type ReusablePrinterOptions = Pick<PrinterOptions, "removeComments" | "neverAsciiEscape" | "omitTrailingSemicolon" | "module" | "target" | "newLine">;
+export type ReusablePrinterOptions = Pick<PrinterOptions, "removeComments" | "neverAsciiEscape" | "omitTrailingSemicolon" | "module" | "target" | "newLine" | "preserveSourceNewlines" | "terminateUnterminatedLiterals">;
 
 /** @internal */
 export function createOrReusePrinter(o: ReusablePrinterOptions = {}) {
-    const key = `${keyBool(o.removeComments)}|${keyBool(o.neverAsciiEscape)}|${keyBool(o.omitTrailingSemicolon)}|${keyNum(o.module)}|${keyNum(o.target)}|${keyNum(o.newLine)}`;
+    const key = `${keyBool(o.removeComments)}|${keyBool(o.neverAsciiEscape)}|${keyBool(o.omitTrailingSemicolon)}|${keyNum(o.module)}|${keyNum(o.target)}|${keyNum(o.newLine)}|${keyBool(o.preserveSourceNewlines)}|${keyBool(o.terminateUnterminatedLiterals)}`;
     let printer = printerCache.get(key);
     if (!printer) {
         printerCache.set(key, printer = createPrinter(o));
@@ -1368,18 +1368,19 @@ export function createOrReusePrinter(o: ReusablePrinterOptions = {}) {
 }
 
 export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
-    const {
-        hasGlobalName,
-        onEmitNode = noEmitNotification,
-        isEmitNotificationEnabled,
-        substituteNode = noEmitSubstitution,
-        onBeforeEmitNode,
-        onAfterEmitNode,
-        onBeforeEmitNodeArray,
-        onAfterEmitNodeArray,
-        onBeforeEmitToken,
-        onAfterEmitToken
-    } = handlers;
+    let theHandlers!: PrintHandlers & Required<Pick<PrintHandlers, "onEmitNode" | "substituteNode">>;
+
+    function setHandlers(newHandlers?: PrintHandlers) {
+        if (newHandlers) {
+            theHandlers = {
+                onEmitNode: noEmitNotification,
+                substituteNode: noEmitSubstitution,
+                ...newHandlers,
+            };
+        }
+    }
+
+    setHandlers(handlers);
 
     const extendedDiagnostics = !!printerOptions.extendedDiagnostics;
     const newLine = getNewLineCharacter(printerOptions);
@@ -1499,18 +1500,23 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     /**
      * If `sourceFile` is `undefined`, `node` must be a synthesized `TypeNode`.
      */
-    function writeNode(hint: EmitHint, node: TypeNode, sourceFile: undefined, output: EmitTextWriter): void;
-    function writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, output: EmitTextWriter): void;
-    function writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, output: EmitTextWriter) {
+    function writeNode(hint: EmitHint, node: TypeNode, sourceFile: undefined, output: EmitTextWriter, handlers?: PrintHandlers): void;
+    function writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, output: EmitTextWriter, handlers?: PrintHandlers): void;
+    function writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, output: EmitTextWriter, handlers?: PrintHandlers) {
         const previousWriter = writer;
+        const previousHandlers = theHandlers;
+        setHandlers(handlers);
         setWriter(output, /*_sourceMapGenerator*/ undefined);
         print(hint, node, sourceFile);
         reset();
         writer = previousWriter;
+        theHandlers = previousHandlers;
     }
 
-    function writeList<T extends Node>(format: ListFormat, nodes: NodeArray<T>, sourceFile: SourceFile | undefined, output: EmitTextWriter) {
+    function writeList<T extends Node>(format: ListFormat, nodes: NodeArray<T>, sourceFile: SourceFile | undefined, output: EmitTextWriter, handlers?: PrintHandlers) {
         const previousWriter = writer;
+        const previousHandlers = theHandlers;
+        setHandlers(handlers);
         setWriter(output, /*_sourceMapGenerator*/ undefined);
         if (sourceFile) {
             setSourceFile(sourceFile);
@@ -1518,6 +1524,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitList(/*parentNode*/ undefined, nodes, format);
         reset();
         writer = previousWriter;
+        theHandlers = previousHandlers;
     }
 
     function getTextPosWithWriteLine() {
@@ -1566,9 +1573,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return false;
     }
 
-    function writeBundle(bundle: Bundle, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
+    function writeBundle(bundle: Bundle, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined, handlers?: PrintHandlers) {
         isOwnFileEmit = false;
         const previousWriter = writer;
+        const previousHandlers = theHandlers;
+        setHandlers(handlers);
         setWriter(output, sourceMapGenerator);
         emitShebangIfNeeded(bundle);
         emitPrologueDirectivesIfNeeded(bundle);
@@ -1623,6 +1632,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         reset();
         writer = previousWriter;
+        theHandlers = previousHandlers;
     }
 
     function writeUnparsedSource(unparsed: UnparsedSource, output: EmitTextWriter) {
@@ -1633,15 +1643,18 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writer = previousWriter;
     }
 
-    function writeFile(sourceFile: SourceFile, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
+    function writeFile(sourceFile: SourceFile, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined, handlers?: PrintHandlers) {
         isOwnFileEmit = true;
         const previousWriter = writer;
+        const previousHandlers = theHandlers;
+        setHandlers(handlers);
         setWriter(output, sourceMapGenerator);
         emitShebangIfNeeded(sourceFile);
         emitPrologueDirectivesIfNeeded(sourceFile);
         print(EmitHint.SourceFile, sourceFile, sourceFile);
         reset();
         writer = previousWriter;
+        theHandlers = previousHandlers;
     }
 
     function beginPrint() {
@@ -1765,12 +1778,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function getPipelinePhase(phase: PipelinePhase, emitHint: EmitHint, node: Node) {
         switch (phase) {
             case PipelinePhase.Notification:
-                if (onEmitNode !== noEmitNotification && (!isEmitNotificationEnabled || isEmitNotificationEnabled(node))) {
+                if (theHandlers.onEmitNode !== noEmitNotification && (!theHandlers.isEmitNotificationEnabled || theHandlers.isEmitNotificationEnabled(node))) {
                     return pipelineEmitWithNotification;
                 }
                 // falls through
             case PipelinePhase.Substitution:
-                if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node) || node) !== node) {
+                if (theHandlers.substituteNode !== noEmitSubstitution && (lastSubstitution = theHandlers.substituteNode(emitHint, node) || node) !== node) {
                     if (currentParenthesizerRule) {
                         lastSubstitution = currentParenthesizerRule(lastSubstitution);
                     }
@@ -1800,11 +1813,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function pipelineEmitWithNotification(hint: EmitHint, node: Node) {
         const pipelinePhase = getNextPipelinePhase(PipelinePhase.Notification, hint, node);
-        onEmitNode(hint, node, pipelinePhase);
+        theHandlers.onEmitNode(hint, node, pipelinePhase);
     }
 
     function pipelineEmitWithHint(hint: EmitHint, node: Node): void {
-        onBeforeEmitNode?.(node);
+        theHandlers.onBeforeEmitNode?.(node);
         if (preserveSourceNewlines) {
             const savedPreserveSourceNewlines = preserveSourceNewlines;
             beforeEmitNode(node);
@@ -1814,7 +1827,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         else {
             pipelineEmitWithHintWorker(hint, node);
         }
-        onAfterEmitNode?.(node);
+        theHandlers.onAfterEmitNode?.(node);
         // clear the parenthesizer rule as we ascend
         currentParenthesizerRule = undefined;
     }
@@ -2185,8 +2198,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             }
             if (isExpression(node)) {
                 hint = EmitHint.Expression;
-                if (substituteNode !== noEmitSubstitution) {
-                    const substitute = substituteNode(hint, node) || node;
+                if (theHandlers.substituteNode !== noEmitSubstitution) {
+                    const substitute = theHandlers.substituteNode(hint, node) || node;
                     if (substitute !== node) {
                         node = substitute;
                         if (currentParenthesizerRule) {
@@ -3227,7 +3240,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 state.declarationListContainerEndStack[state.stackIndex] = declarationListContainerEnd;
                 const emitComments = state.shouldEmitCommentsStack[state.stackIndex] = shouldEmitComments(node);
                 const emitSourceMaps = state.shouldEmitSourceMapsStack[state.stackIndex] = shouldEmitSourceMaps(node);
-                onBeforeEmitNode?.(node);
+                theHandlers.onBeforeEmitNode?.(node);
                 if (emitComments) emitCommentsBeforeNode(node);
                 if (emitSourceMaps) emitSourceMapsBeforeNode(node);
                 beforeEmitNode(node);
@@ -3279,7 +3292,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 afterEmitNode(savedPreserveSourceNewlines);
                 if (shouldEmitSourceMaps) emitSourceMapsAfterNode(node);
                 if (shouldEmitComments) emitCommentsAfterNode(node, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
-                onAfterEmitNode?.(node);
+                theHandlers.onAfterEmitNode?.(node);
                 state.stackIndex--;
             }
         }
@@ -3780,7 +3793,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitBlockFunctionBody(body: Block) {
-        onBeforeEmitNode?.(body);
+        theHandlers.onBeforeEmitNode?.(body);
         writeSpace();
         writePunctuation("{");
         increaseIndent();
@@ -3793,7 +3806,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         decreaseIndent();
         writeToken(SyntaxKind.CloseBraceToken, body.statements.end, writePunctuation, body);
-        onAfterEmitNode?.(body);
+        theHandlers.onAfterEmitNode?.(body);
     }
 
     function emitBlockFunctionBodyOnSingleLine(body: Block) {
@@ -4761,7 +4774,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 return node.pos;
             }
 
-            onBeforeEmitNodeArray?.(modifiers);
+            theHandlers.onBeforeEmitNodeArray?.(modifiers);
 
             // partition modifiers into contiguous chunks of `Modifier` or `Decorator`
             let lastMode: "modifiers" | "decorators" | undefined;
@@ -4803,7 +4816,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 pos++;
             }
 
-            onAfterEmitNodeArray?.(modifiers);
+            theHandlers.onAfterEmitNodeArray?.(modifiers);
 
             if (lastModifier && !positionIsSynthesized(lastModifier.end)) {
                 return lastModifier.end;
@@ -4978,8 +4991,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         const isEmpty = children === undefined || start >= children.length || count === 0;
         if (isEmpty && format & ListFormat.OptionalIfEmpty) {
-            onBeforeEmitNodeArray?.(children);
-            onAfterEmitNodeArray?.(children);
+            theHandlers.onBeforeEmitNodeArray?.(children);
+            theHandlers.onAfterEmitNodeArray?.(children);
             return;
         }
 
@@ -4990,7 +5003,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             }
         }
 
-        onBeforeEmitNodeArray?.(children);
+        theHandlers.onBeforeEmitNodeArray?.(children);
 
         if (isEmpty) {
             // Write a line terminator if the parent node was multi-line
@@ -5005,7 +5018,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             emitNodeListItems(emit, parentNode, children, format, parenthesizerRule, start, count, children.hasTrailingComma, children);
         }
 
-        onAfterEmitNodeArray?.(children);
+        theHandlers.onAfterEmitNodeArray?.(children);
 
         if (format & ListFormat.BracketsMask) {
             if (isEmpty && children) {
@@ -5231,12 +5244,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function writeTokenNode(node: Node, writer: (s: string) => void) {
-        if (onBeforeEmitToken) {
-            onBeforeEmitToken(node);
+        if (theHandlers.onBeforeEmitToken) {
+            theHandlers.onBeforeEmitToken(node);
         }
         writer(tokenToString(node.kind)!);
-        if (onAfterEmitToken) {
-            onAfterEmitToken(node);
+        if (theHandlers.onAfterEmitToken) {
+            theHandlers.onAfterEmitToken(node);
         }
     }
 
@@ -5778,7 +5791,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * when `isfileLevelUniqueName` is passed as a callback to `makeUniqueName`.
      */
     function isFileLevelUniqueName(name: string, _isPrivate: boolean) {
-        return currentSourceFile ? ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
+        return currentSourceFile ? ts.isFileLevelUniqueName(currentSourceFile, name, theHandlers.hasGlobalName) : true;
     }
 
     /**

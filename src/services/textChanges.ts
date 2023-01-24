@@ -11,7 +11,7 @@ import {
     ConstructorDeclaration,
     contains,
     createNodeFactory,
-    createPrinter,
+    createOrReusePrinter,
     createRange,
     createSourceFile,
     createTextChange,
@@ -1301,12 +1301,12 @@ namespace changesToText {
     export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
         const writer = createWriter(newLineCharacter);
         const newLine = getNewLineKind(newLineCharacter);
-        createPrinter({
+        createOrReusePrinter({
             newLine,
             neverAsciiEscape: true,
             preserveSourceNewlines: true,
             terminateUnterminatedLiterals: true
-        }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+        }).writeNode(EmitHint.Unspecified, node, sourceFile, writer, writer);
         return { text: writer.getText(), node: assignPositionsToNode(node) };
     }
 }

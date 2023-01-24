@@ -36,7 +36,6 @@ import {
     createModuleSpecifierResolutionHost,
     createOrReusePrinter,
     createPackageJsonImportFilter,
-    createPrinter,
     createSortedArray,
     createTextRangeFromSpan,
     createTextSpanFromBounds,
@@ -292,7 +291,6 @@ import {
     positionBelongsToNode,
     positionIsASICandidate,
     positionsAreOnSameLine,
-    PrinterOptions,
     probablyUsesSemicolons,
     Program,
     programContainsModules,
@@ -308,6 +306,7 @@ import {
     rangeContainsPosition,
     rangeContainsPositionExclusive,
     rangeIsOnSingleLine,
+    ReusablePrinterOptions,
     ScriptElementKind,
     ScriptElementKindModifier,
     ScriptTarget,
@@ -1851,11 +1850,11 @@ function createObjectLiteralMethod(
 }
 
 function createSnippetPrinter(
-    printerOptions: PrinterOptions,
+    printerOptions: ReusablePrinterOptions,
 ) {
     let escapes: TextChange[] | undefined;
     const baseWriter = textChanges.createWriter(getNewLineCharacter(printerOptions));
-    const printer = createPrinter(printerOptions, baseWriter);
+    const printer = createOrReusePrinter(printerOptions);
     const writer: EmitTextWriter = {
         ...baseWriter,
         write: s => escapingWrite(s, () => baseWriter.write(s)),
@@ -1909,7 +1908,7 @@ function createSnippetPrinter(
     ): string {
         escapes = undefined;
         writer.clear();
-        printer.writeList(format, list, sourceFile, writer);
+        printer.writeList(format, list, sourceFile, writer, baseWriter);
         return writer.getText();
     }
 
@@ -1956,7 +1955,7 @@ function createSnippetPrinter(
     function printUnescapedNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
         escapes = undefined;
         writer.clear();
-        printer.writeNode(hint, node, sourceFile, writer);
+        printer.writeNode(hint, node, sourceFile, writer, baseWriter);
         return writer.getText();
     }
 
