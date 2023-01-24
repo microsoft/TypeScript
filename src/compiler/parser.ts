@@ -3435,8 +3435,7 @@ namespace Parser {
         return list;
     }
 
-    function isMiss
-    ingList(arr: NodeArray<Node>): boolean {
+    function isMissingList(arr: NodeArray<Node>): boolean {
         return !!(arr as MissingList<Node>).isMissingList;
     }
 
