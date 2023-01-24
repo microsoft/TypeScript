@@ -71,6 +71,7 @@ import "./unittests/tsbuild/demo";
 import "./unittests/tsbuild/emitDeclarationOnly";
 import "./unittests/tsbuild/emptyFiles";
 import "./unittests/tsbuild/exitCodeOnBogusFile";
+import "./unittests/tsbuild/fileDelete";
 import "./unittests/tsbuild/graphOrdering";
 import "./unittests/tsbuild/inferredTypeFromTransitiveModule";
 import "./unittests/tsbuild/javascriptProjectEmit";
