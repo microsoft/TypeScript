@@ -1343,6 +1343,18 @@ const enum PipelinePhase {
     Emit,
 }
 
+/** @internal */
+export const createPrinterWithDefaults = memoize(() => createPrinter({}));
+
+/** @internal */
+export const createPrinterWithRemoveComments = memoize(() => createPrinter({ removeComments: true }));
+
+/** @internal */
+export const createPrinterWithRemoveCommentsNeverAsciiEscape = memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
+
+/** @internal */
+export const createPrinterWithRemoveCommentsOmitTrailingSemicolon = memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
+
 export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
     const {
         hasGlobalName,
