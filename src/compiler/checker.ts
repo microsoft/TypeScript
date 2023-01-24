@@ -871,6 +871,7 @@ import {
     pathIsRelative,
     PatternAmbientModule,
     PlusToken,
+    pooled,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrivateIdentifier,
@@ -2172,6 +2173,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         [".jsx", ".jsx"],
         [".json", ".json"],
     ];
+
+    const symbolToStringWorkerSourceFilePrinter = pooled(() => createPrinter({ removeComments: true, neverAsciiEscape: true }), (printer) => printer.reset());
+    const symbolToStringWorkerNonSourceFilePrinter = pooled(() => createPrinter({ removeComments: true }), (printer) => printer.reset());
 
     initializeTypeChecker();
 
@@ -6123,9 +6127,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function symbolToStringWorker(writer: EmitTextWriter) {
             const entity = builder(symbol, meaning!, enclosingDeclaration, nodeFlags)!; // TODO: GH#18217
             // add neverAsciiEscape for GH#39027
-            const printer = enclosingDeclaration?.kind === SyntaxKind.SourceFile ? createPrinter({ removeComments: true, neverAsciiEscape: true }) : createPrinter({ removeComments: true });
+            const [printer, disposePrinter] = enclosingDeclaration?.kind === SyntaxKind.SourceFile
+                ? symbolToStringWorkerSourceFilePrinter()
+                : symbolToStringWorkerNonSourceFilePrinter();
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
+            disposePrinter();
             return writer;
         }
     }

@@ -9165,6 +9165,7 @@ export interface Printer {
     /** @internal */ writeFile(sourceFile: SourceFile, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
     /** @internal */ writeBundle(bundle: Bundle, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
     /** @deprecated @internal */ bundleFileInfo?: BundleFileInfo;
+    /** @internal */ reset(): void;
 }
 
 /** @deprecated @internal */

@@ -2917,3 +2917,33 @@ export function isNodeLikeSystem(): boolean {
         && !process.browser
         && typeof module === "object";
 }
+
+/** @internal */
+export function pooled<T>(fn: () => T, reset: (value: T) => void): () => [value: T, dispose: () => void] {
+    // TODO(jakebailey): this is supposed to be something like Go's sync.Pool,
+    // but I don't know of a way to "eventually" return the pool's contents to GC.
+    // For now, this just holds onto the objects even when they may not have been
+    // in use for a long time.
+    const pool: T[] = [];
+
+    return () => {
+        let value: T;
+        if (pool.length > 1) {
+            const end = pool.length - 1;
+            value = pool[end];
+            pool.length = end;
+        }
+        else {
+            value = fn();
+        }
+
+        const dispose = () => {
+            if (pool.length < 8) {
+                reset(value);
+                pool.push(value);
+            }
+        };
+
+        return [value, dispose];
+    };
+}
