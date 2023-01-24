@@ -1,0 +1,19 @@
+//// [arrayForEachNarrowing.ts]
+const foo: (number | string)[] = ['aaa'];
+
+function assertString(x: unknown): asserts x is string {
+  if (typeof x !== 'string') throw new Error('Must be a string!');
+}
+
+foo.forEach(assertString);
+foo[0].slice(0);
+
+
+//// [arrayForEachNarrowing.js]
+var foo = ['aaa'];
+function assertString(x) {
+    if (typeof x !== 'string')
+        throw new Error('Must be a string!');
+}
+foo.forEach(assertString);
+foo[0].slice(0);

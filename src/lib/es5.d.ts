@@ -1224,6 +1224,12 @@ interface ReadonlyArray<T> {
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
+    forEach<S extends T>(callbackfn: (value: T, index: number, array: readonly T[]) => asserts value is S, thisArg?: any): asserts this is readonly S[];
+    /**
+     * Performs the specified action for each element in an array.
+     * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
+     * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     */
     forEach(callbackfn: (value: T, index: number, array: readonly T[]) => void, thisArg?: any): void;
     /**
      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
@@ -1410,6 +1416,12 @@ interface Array<T> {
      * If thisArg is omitted, undefined is used as the this value.
      */
     some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
+    /**
+     * Performs the specified action for each element in an array.
+     * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
+     * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     */
+    forEach<S extends T>(callbackfn: (value: T, index: number, array: T[]) => asserts value is S, thisArg?: any): asserts this is S[];
     /**
      * Performs the specified action for each element in an array.
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.

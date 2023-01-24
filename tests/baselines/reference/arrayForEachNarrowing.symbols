@@ -1,0 +1,25 @@
+=== tests/cases/compiler/arrayForEachNarrowing.ts ===
+const foo: (number | string)[] = ['aaa'];
+>foo : Symbol(foo, Decl(arrayForEachNarrowing.ts, 0, 5))
+
+function assertString(x: unknown): asserts x is string {
+>assertString : Symbol(assertString, Decl(arrayForEachNarrowing.ts, 0, 41))
+>x : Symbol(x, Decl(arrayForEachNarrowing.ts, 2, 22))
+>x : Symbol(x, Decl(arrayForEachNarrowing.ts, 2, 22))
+
+  if (typeof x !== 'string') throw new Error('Must be a string!');
+>x : Symbol(x, Decl(arrayForEachNarrowing.ts, 2, 22))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+foo.forEach(assertString);
+>foo.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayForEachNarrowing.ts, 0, 5))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assertString : Symbol(assertString, Decl(arrayForEachNarrowing.ts, 0, 41))
+
+foo[0].slice(0);
+>foo[0].slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayForEachNarrowing.ts, 0, 5))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+
