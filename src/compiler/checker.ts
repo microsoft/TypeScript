@@ -19920,6 +19920,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getNormalizedType(type: Type, writing: boolean): Type {
         while (true) {
             const t = isFreshLiteralType(type) ? (type as FreshableType).regularType :
+                isGenericTupleType(type) ? getNormalizedTupleType(type, writing) :
                 getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).node ? createTypeReference((type as TypeReference).target, getTypeArguments(type as TypeReference)) : getSingleBaseForNonAugmentingSubtype(type) || type :
                 type.flags & TypeFlags.UnionOrIntersection ? getNormalizedUnionOrIntersectionType(type as UnionOrIntersectionType, writing) :
                 type.flags & TypeFlags.Substitution ? writing ? (type as SubstitutionType).baseType : getSubstitutionIntersection(type as SubstitutionType) :
@@ -19942,6 +19943,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return type;
+    }
+
+    function getNormalizedTupleType(type: TupleTypeReference, writing: boolean): Type {
+        let normalizedElements: Type[] | undefined;
+        const elements = getTypeArguments(type);
+
+        for (let i = 0; i < elements.length; i++) {
+            if (elements[i].flags & TypeFlags.Simplifiable) {
+                normalizedElements ??= elements.slice(0, i);
+                normalizedElements.push(getSimplifiedType(elements[i], writing));
+            }
+            else {
+                normalizedElements?.push(elements[i]);
+            }
+        }
+
+        return normalizedElements ? createNormalizedTupleType(type.target, normalizedElements) : type;
     }
 
     /**
