@@ -33,6 +33,20 @@ CleanBuild:
       "./project/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
       "./project/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./project/a.ts",
+          "./project/b.ts",
+          "./project/c.ts",
+          "./project/d.ts"
+        ]
+      ]
+    ],
     "options": {
       "module": 2,
       "outFile": "./outFile.js"
@@ -80,6 +94,20 @@ IncrementalBuild:
       "./project/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
       "./project/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./project/a.ts",
+          "./project/b.ts",
+          "./project/c.ts",
+          "./project/d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "declarationMap": true,
@@ -209,6 +237,20 @@ CleanBuild:
       "./project/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
       "./project/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./project/a.ts",
+          "./project/b.ts",
+          "./project/c.ts",
+          "./project/d.ts"
+        ]
+      ]
+    ],
     "options": {
       "module": 2,
       "outFile": "./outFile.js"
@@ -256,6 +298,20 @@ IncrementalBuild:
       "./project/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
       "./project/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./project/a.ts",
+          "./project/b.ts",
+          "./project/c.ts",
+          "./project/d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "declarationMap": true,

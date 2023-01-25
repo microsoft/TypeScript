@@ -50,7 +50,11 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
                 fs.rimrafSync("/src/child/child2.ts");
                 fs.rimrafSync("/src/child/child2.js");
                 fs.rimrafSync("/src/child/child2.d.ts");
-            }
+            },
+            discrepancyExplanation: () => [
+                "Clean build will not have latestChangedDtsFile as there was no emit and emitSignatures as undefined for files",
+                "Incremental will store the past latestChangedDtsFile and emitSignatures",
+            ]
         }],
     });
 

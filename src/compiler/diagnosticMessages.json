@@ -5562,6 +5562,10 @@
         "category": "Message",
         "code": 6411
     },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that file '{2}' was root file of compilation but not any more.": {
+        "category": "Message",
+        "code": 6412
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
