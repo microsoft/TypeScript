@@ -2,7 +2,7 @@ import {
     __String,
     ArrowFunction,
     CallExpression,
-    createOrReusePrinter,
+    createPrinterWithRemoveComments,
     Debug,
     EmitHint,
     EnumMember,
@@ -382,7 +382,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function printTypeInSingleLine(type: Type) {
         const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
-        const printer = createOrReusePrinter({ removeComments: true });
+        const printer = createPrinterWithRemoveComments();
 
         return usingSingleLineStringWriter(writer => {
             const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);

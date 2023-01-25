@@ -30,7 +30,7 @@ import {
     ConditionalExpression,
     contains,
     ContextFlags,
-    createOrReusePrinter,
+    createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createRange,
     createScanner,
     createTextSpan,
@@ -2984,7 +2984,7 @@ export function signatureToDisplayParts(typechecker: TypeChecker, signature: Sig
 export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
     const file = enclosingDeclaration.getSourceFile();
     return mapToDisplayParts(writer => {
-        const printer = createOrReusePrinter({ removeComments: true, omitTrailingSemicolon: true });
+        const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
         printer.writeNode(EmitHint.Unspecified, node, file, writer);
     });
 }
