@@ -1358,7 +1358,7 @@ export function createOrReusePrinter(o: ReusablePrinterOptions = {}) {
         + keyNum(o.target)
         + keyNum(o.newLine);
     let printer = printerCache.get(key);
-    if (!printer) {
+    if (printer === undefined) {
         printerCache.set(key, printer = createPrinter(o));
     }
     return printer;
