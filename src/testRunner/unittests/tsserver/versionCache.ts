@@ -211,7 +211,7 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
 
     before(() => {
         // Use scanner.ts, decent size, does not change frequently
-        const testFileName = "src/compiler/scanner/scanner.ts";
+        const testFileName = "src/compiler/scanner.ts";
         testContent = Harness.IO.readFile(testFileName)!;
         const totalChars = testContent.length;
         assert.isTrue(totalChars > 0, "Failed to read test file.");
