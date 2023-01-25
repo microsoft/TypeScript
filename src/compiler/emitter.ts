@@ -1358,11 +1358,11 @@ export function createOrReusePrinter(o: ReusablePrinterOptions = {}) {
     }
     return printer;
 
-    function keyBool(value: boolean | undefined) {
-        return value === undefined ? "u" : value ? 1 : 0;
+    function keyBool(value: boolean | undefined): string {
+        return value === undefined ? "u" : value ? "1" : "0";
     }
 
-    function keyNum(value: number | undefined) {
+    function keyNum(value: number | undefined): string {
         return value === undefined ? "u" : `${value}`;
     }
 }
