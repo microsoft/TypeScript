@@ -3,7 +3,6 @@ import {
     equateStringsCaseInsensitive,
     some,
 } from "../compiler/core";
-import { createPrinter } from "../compiler/emitter";
 import {
     isArrowFunction,
     isCallExpression,
@@ -44,7 +43,6 @@ import {
     NodeBuilderFlags,
     ParameterDeclaration,
     PrefixUnaryExpression,
-    PrinterOptions,
     PropertyDeclaration,
     Signature,
     Symbol,
@@ -81,6 +79,7 @@ import {
     InlayHintsContext,
 } from "./types";
 import { findChildOfKind } from "./utilities";
+import { createPrinterWithRemoveComments } from "../compiler/emitter";
 
 const maxHintsLength = 30;
 
@@ -395,8 +394,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function printTypeInSingleLine(type: Type) {
         const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
-        const options: PrinterOptions = { removeComments: true };
-        const printer = createPrinter(options);
+        const printer = createPrinterWithRemoveComments();
 
         return usingSingleLineStringWriter(writer => {
             const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);

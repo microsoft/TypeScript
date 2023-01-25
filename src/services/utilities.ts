@@ -42,7 +42,6 @@ import {
     tryCast,
 } from "../compiler/core";
 import { Comparison } from "../compiler/corePublic";
-import { createPrinter } from "../compiler/emitter";
 import {
     addEmitFlags,
     addSyntheticLeadingComment,
@@ -404,6 +403,7 @@ import {
     TextChange,
     TextRangeWithKind,
 } from "./types";
+import { createPrinterWithRemoveCommentsOmitTrailingSemicolon } from "../compiler/emitter";
 
 // These utilities are common to multiple language service features.
 //#region
@@ -3035,7 +3035,7 @@ export function signatureToDisplayParts(typechecker: TypeChecker, signature: Sig
 export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
     const file = enclosingDeclaration.getSourceFile();
     return mapToDisplayParts(writer => {
-        const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
+        const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
         printer.writeNode(EmitHint.Unspecified, node, file, writer);
     });
 }

@@ -11,7 +11,6 @@ import {
     length,
     some,
 } from "../compiler/core";
-import { createPrinter } from "../compiler/emitter";
 import {
     isArrowFunction,
     isBindingElement,
@@ -41,7 +40,6 @@ import {
     Node,
     NodeBuilderFlags,
     ObjectFlags,
-    Printer,
     PropertyAccessExpression,
     PropertyDeclaration,
     SetAccessorDeclaration,
@@ -120,6 +118,7 @@ import {
     textPart,
     typeToDisplayParts,
 } from "./utilities";
+import { createPrinterWithRemoveComments } from "../compiler/emitter";
 
 const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 
@@ -271,7 +270,6 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     let hasAddedSymbolInfo = false;
     const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location) || isThisInTypeQuery(location);
     let type: Type | undefined;
-    let printer: Printer;
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
@@ -742,10 +740,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     return { displayParts, documentation, symbolKind, tags: tags.length === 0 ? undefined : tags };
 
     function getPrinter() {
-        if (!printer) {
-            printer = createPrinter({ removeComments: true });
-        }
-        return printer;
+        return createPrinterWithRemoveComments();
     }
 
     function prefixNextMeaning() {
