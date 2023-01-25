@@ -83,7 +83,7 @@ function getDeleteAction(context: CodeFixContext, { name, jsDocHost, jsDocParame
     );
 }
 
-function getRenameAction(context: CodeFixContext, { name, signature, jsDocParameterTag }: Info) {
+function getRenameAction(context: CodeFixContext, { name, jsDocHost, signature, jsDocParameterTag }: Info) {
     if (!length(signature.parameters)) return undefined;
 
     const sourceFile = context.sourceFile;
@@ -110,7 +110,7 @@ function getRenameAction(context: CodeFixContext, { name, signature, jsDocParame
         jsDocParameterTag.comment
     );
     const changes = textChanges.ChangeTracker.with(context, changeTracker =>
-        changeTracker.replaceJSDocComment(sourceFile, signature, map(tags, t => t === jsDocParameterTag ? newJSDocParameterTag : t)));
+        changeTracker.replaceJSDocComment(sourceFile, jsDocHost, map(tags, t => t === jsDocParameterTag ? newJSDocParameterTag : t)));
     return createCodeFixActionWithoutFixAll(renameUnmatchedParameter, changes, [Diagnostics.Rename_param_tag_name_0_to_1, name.getText(sourceFile), parameterName]);
 }
 

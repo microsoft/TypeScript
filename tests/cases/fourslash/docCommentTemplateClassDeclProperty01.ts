@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 const singleLineOffset = 3;
-const multiLineOffset = 12;
+const multiLineOffset = 11;
 
 
 ////class C {
