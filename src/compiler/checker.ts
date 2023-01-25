@@ -27211,7 +27211,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isFunctionLike(node) && !getImmediatelyInvokedFunctionExpression(node) ||
             node.kind === SyntaxKind.ModuleBlock ||
             node.kind === SyntaxKind.SourceFile ||
-            node.kind === SyntaxKind.CatchClause ||
             node.kind === SyntaxKind.PropertyDeclaration)!;
     }
 
@@ -27587,7 +27586,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
         const declarationContainer = getControlFlowContainer(declaration);
         let flowContainer = getControlFlowContainer(node);
-        const isCatch = flowContainer.kind === SyntaxKind.CatchClause;
         const isOuterVariable = flowContainer !== declarationContainer;
         const isSpreadDestructuringAssignmentTarget = node.parent && node.parent.parent && isSpreadAssignment(node.parent) && isDestructuringAssignmentTarget(node.parent.parent);
         const isModuleExports = symbol.flags & SymbolFlags.ModuleExports;
@@ -27602,7 +27600,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
         // the entire control flow graph from the variable's declaration (i.e. when the flow container and
         // declaration container are the same).
-        const assumeInitialized = isParameter || isCatch || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
+        const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
             type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
             isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
             node.parent.kind === SyntaxKind.NonNullExpression ||
