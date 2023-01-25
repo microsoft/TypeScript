@@ -20937,25 +20937,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
                     }
                 }
-                // For certain combinations involving intersections and optional, excess, or mismatched properties we need
-                // an extra property check where the intersection is viewed as a single object. The following are motivating
-                // examples that all should be errors, but aren't without this extra property check:
+                // When the target is an intersection we need an extra property check in order to detect nested excess
+                // properties and nested weak types. The following are motivating examples that all should be errors, but
+                // aren't without this extra property check:
                 //
                 //   let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
                 //
                 //   declare let wrong: { a: { y: string } };
                 //   let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
                 //
-                //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
-                //     x = y;  // Mismatched property in source intersection
-                //   }
-                if (result && !(intersectionState & IntersectionState.Target) && (
-                    target.flags & TypeFlags.Intersection && !isGenericObjectType(target) && source.flags & (TypeFlags.Object | TypeFlags.Intersection) ||
-                    isNonGenericObjectType(target) && !isArrayOrTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
-                    result &= propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
+                if (result && !(intersectionState & IntersectionState.Target) &&
+                    target.flags & TypeFlags.Intersection && !isGenericObjectType(target) && source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
+                    result &= propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, /*optionalsOnly*/ false, IntersectionState.None);
                     if (result && isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral) {
                         result &= indexSignaturesRelatedTo(source, target, /*sourceIsPrimitive*/ false, reportErrors, IntersectionState.None);
                     }
+                }
+                // When the source is an intersection we need an extra check of any optional properties in the target to
+                // detect possible mismatched property types. For example:
+                //
+                //   function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
+                //     x = y;  // Mismatched property in source intersection
+                //   }
+                //
+                else if (result && isNonGenericObjectType(target) && !isArrayOrTupleType(target) && some(getPropertiesOfType(target), p => !!(p.flags & SymbolFlags.Optional)) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
+                    result &= propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, /*optionalsOnly*/ true, intersectionState);
                 }
             }
             if (result) {
@@ -21463,7 +21469,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (sourceFlags & (TypeFlags.Object | TypeFlags.Intersection) && targetFlags & TypeFlags.Object) {
                     // Report structural errors only if we haven't reported any errors yet
                     const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo.errorInfo && !sourceIsPrimitive;
-                    result = propertiesRelatedTo(source, target, reportStructuralErrors, /*excludedProperties*/ undefined, intersectionState);
+                    result = propertiesRelatedTo(source, target, reportStructuralErrors, /*excludedProperties*/ undefined, /*optionalsOnly*/ false, intersectionState);
                     if (result) {
                         result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportStructuralErrors, intersectionState);
                         if (result) {
@@ -21638,7 +21644,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Compare the remaining non-discriminant properties of each match.
             let result = Ternary.True;
             for (const type of matchingTypes) {
-                result &= propertiesRelatedTo(source, type, /*reportErrors*/ false, excludedProperties, IntersectionState.None);
+                result &= propertiesRelatedTo(source, type, /*reportErrors*/ false, excludedProperties, /*optionalsOnly*/ false, IntersectionState.None);
                 if (result) {
                     result &= signaturesRelatedTo(source, type, SignatureKind.Call, /*reportStructuralErrors*/ false, IntersectionState.None);
                     if (result) {
@@ -21805,7 +21811,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // No array like or unmatched property error - just issue top level error (errorInfo = undefined)
         }
 
-        function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean, excludedProperties: Set<__String> | undefined, intersectionState: IntersectionState): Ternary {
+        function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean, excludedProperties: Set<__String> | undefined, optionalsOnly: boolean, intersectionState: IntersectionState): Ternary {
             if (relation === identityRelation) {
                 return propertiesIdenticalTo(source, target, excludedProperties);
             }
@@ -21940,7 +21946,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const numericNamesOnly = isTupleType(source) && isTupleType(target);
             for (const targetProp of excludeProperties(properties, excludedProperties)) {
                 const name = targetProp.escapedName;
-                if (!(targetProp.flags & SymbolFlags.Prototype) && (!numericNamesOnly || isNumericLiteralName(name) || name === "length")) {
+                if (!(targetProp.flags & SymbolFlags.Prototype) && (!numericNamesOnly || isNumericLiteralName(name) || name === "length") && (!optionalsOnly || targetProp.flags & SymbolFlags.Optional)) {
                     const sourceProp = getPropertyOfType(source, name);
                     if (sourceProp && sourceProp !== targetProp) {
                         const related = propertyRelatedTo(source, target, sourceProp, targetProp, getNonMissingTypeOfSymbol, reportErrors, intersectionState, relation === comparableRelation);
