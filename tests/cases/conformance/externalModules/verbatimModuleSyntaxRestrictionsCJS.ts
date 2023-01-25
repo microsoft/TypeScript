@@ -9,6 +9,12 @@ declare function esmy(): void;
 export default esmy;
 export declare function funciton(): void;
 
+// @Filename: /ambient.d.ts
+declare module "ambient" {
+    const _default: number;
+    export default _default;
+}
+
 // @Filename: /main.ts
 import esmy from "./decl"; // error
 import * as esmy2 from "./decl"; // error
