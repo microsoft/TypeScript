@@ -1351,12 +1351,7 @@ export type ReusablePrinterOptions = Pick<PrinterOptions, "removeComments" | "ne
 
 /** @internal */
 export function createOrReusePrinter(o: ReusablePrinterOptions = {}) {
-    const key = keyBool(o.removeComments)
-        + keyBool(o.neverAsciiEscape)
-        + keyBool(o.omitTrailingSemicolon)
-        + keyNum(o.module)
-        + keyNum(o.target)
-        + keyNum(o.newLine);
+    const key = `${keyBool(o.removeComments)}|${keyBool(o.neverAsciiEscape)}|${keyBool(o.omitTrailingSemicolon)}|${keyNum(o.module)}|${keyNum(o.target)}|${keyNum(o.newLine)}`;
     let printer = printerCache.get(key);
     if (!printer) {
         printerCache.set(key, printer = createPrinter(o));
@@ -1364,11 +1359,11 @@ export function createOrReusePrinter(o: ReusablePrinterOptions = {}) {
     return printer;
 
     function keyBool(value: boolean | undefined): string {
-        return value === undefined ? "u," : value ? "1," : "0,";
+        return value === undefined ? "u" : value ? "1" : "0";
     }
 
     function keyNum(value: number | undefined): string {
-        return value === undefined ? "u," : `${value},`;
+        return value === undefined ? "u" : `${value}`;
     }
 }
 
