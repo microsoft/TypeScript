@@ -1,0 +1,18 @@
+tests/cases/compiler/potentiallyUnassignedVariableInCatch.ts(1,5): error TS7034: Variable 'foo' implicitly has type 'any' in some locations where its type cannot be determined.
+tests/cases/compiler/potentiallyUnassignedVariableInCatch.ts(7,2): error TS7005: Variable 'foo' implicitly has an 'any' type.
+
+
+==== tests/cases/compiler/potentiallyUnassignedVariableInCatch.ts (2 errors) ====
+    let foo;
+        ~~~
+!!! error TS7034: Variable 'foo' implicitly has type 'any' in some locations where its type cannot be determined.
+    try {
+    	if (Math.random() > 0.5) {
+    		foo = 1234;
+    	}
+    } catch {
+    	foo;
+    	~~~
+!!! error TS7005: Variable 'foo' implicitly has an 'any' type.
+    }
+    
