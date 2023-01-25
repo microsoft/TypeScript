@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { getSymbolId } from "../compiler/checker/utilities";
+import { getSymbolId } from "../compiler/checkerUtilities";
 import {
     arrayIsEqualTo,
     createMultiMap,
@@ -25,9 +25,9 @@ import {
     getPackageNameFromTypesPackageName,
     nodeModulesPathPart,
     unmangleScopedPackageName,
-} from "../compiler/moduleNameResolver/moduleNameResolver";
-import { forEachFileNameOfModule } from "../compiler/moduleSpecifiers/moduleSpecifiers";
-import { getNodeModulePathParts } from "../compiler/moduleSpecifiers/utilities";
+} from "../compiler/moduleNameResolver";
+import { forEachFileNameOfModule } from "../compiler/moduleSpecifiers";
+import { getNodeModulePathParts } from "../compiler/moduleSpecifiersUtilities";
 import {
     forEachAncestorDirectory,
     getBaseFileName,

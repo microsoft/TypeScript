@@ -7,9 +7,9 @@ import {
     pushIfUnique,
     some,
 } from "../core";
-import { parseNodeFactory } from "../parser/parser";
-import { setParent } from "../parser/utilities";
-import { isIdentifierText } from "../scanner/scanner";
+import { parseNodeFactory } from "../parser";
+import { setParent } from "../parserUtilities";
+import { isIdentifierText } from "../scanner";
 import {
     AccessorDeclaration,
     AdditiveOperator,
@@ -181,7 +181,7 @@ import {
     setOriginalNode,
     setTextRange,
 } from "./utilitiesPublic";
-import { getExternalModuleNameFromPath } from "../moduleNameResolver/utilities";
+import { getExternalModuleNameFromPath } from "../moduleNameResolverUtilities";
 
 // Compound nodes
 

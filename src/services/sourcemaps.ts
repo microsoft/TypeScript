@@ -2,9 +2,9 @@ import {
     createGetCanonicalFileName,
     isString,
 } from "../compiler/core";
-import { getDeclarationEmitOutputFilePathWorker } from "../compiler/emitter/utilities";
+import { getDeclarationEmitOutputFilePathWorker } from "../compiler/emitterUtilities";
 import { removeFileExtension } from "../compiler/extension";
-import { isDeclarationFileName } from "../compiler/parser/parser";
+import { isDeclarationFileName } from "../compiler/parser";
 import {
     getDirectoryPath,
     getNormalizedAbsolutePath,
@@ -13,7 +13,7 @@ import {
 import {
     computeLineAndCharacterOfPosition,
     getLineStarts,
-} from "../compiler/scanner/scanner";
+} from "../compiler/scanner";
 import {
     createDocumentPositionMapper,
     getLineInfo,
@@ -22,7 +22,7 @@ import {
     tryGetSourceMappingURL,
     tryParseRawSourceMap,
 } from "../compiler/sourcemap";
-import { sys } from "../compiler/sys/sys";
+import { sys } from "../compiler/sys";
 import {
     DocumentPosition,
     DocumentPositionMapper,

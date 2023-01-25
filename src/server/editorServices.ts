@@ -10,7 +10,7 @@ import {
     parseJsonSourceFileConfigFileContent,
     tryReadFile,
     typeAcquisitionDeclarations,
-} from "../compiler/commandLineParser/commandLineParser";
+} from "../compiler/commandLineParser";
 import {
     arrayFrom,
     arrayToMap,
@@ -42,8 +42,8 @@ import {
     ReadonlyCollection,
     version,
 } from "../compiler/corePublic";
-import { parsePackageName } from "../compiler/moduleNameResolver/moduleNameResolver";
-import { parseJsonText } from "../compiler/parser/parser";
+import { parsePackageName } from "../compiler/moduleNameResolver";
+import { parseJsonText } from "../compiler/parser";
 import {
     combinePaths,
     containsPath,
@@ -65,7 +65,7 @@ import {
 import {
     forEachResolvedProjectReference,
     resolveProjectReferencePath,
-} from "../compiler/program/program";
+} from "../compiler/program";
 import {
     canWatchDirectoryOrFile,
     removeIgnoredPath,
@@ -74,7 +74,7 @@ import {
     getFileWatcherEventKind,
     missingFileModifiedTime,
     PollingInterval,
-} from "../compiler/sys/sys";
+} from "../compiler/sys";
 import { tracing } from "../compiler/tracing";
 import {
     CommandLineOption,

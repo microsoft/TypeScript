@@ -77,7 +77,7 @@ import {
     SortedReadonlyArray,
     versionMajorMinor,
 } from "../compiler/corePublic";
-import { resolveJSModule } from "../compiler/moduleNameResolver/moduleNameResolver";
+import { resolveJSModule } from "../compiler/moduleNameResolver";
 import {
     combinePaths,
     directorySeparator,
@@ -90,7 +90,7 @@ import { perfLogger } from "../compiler/perfLogger";
 import {
     getNodeMajorVersion,
     sys as system,
-} from "../compiler/sys/sys";
+} from "../compiler/sys";
 import {
     CharacterCodes,
     DirectoryWatcherCallback,

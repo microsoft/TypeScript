@@ -1,5 +1,5 @@
 import * as Debug from "../../compiler/debug";
-import { getNodeId } from "../../compiler/checker/utilities";
+import { getNodeId } from "../../compiler/checkerUtilities";
 import {
     arrayFrom,
     concatenate,
@@ -45,8 +45,8 @@ import {
     isTypeLiteralNode,
 } from "../../compiler/factory/nodeTests";
 import { createPropertyNameNodeForIdentifierOrLiteral } from "../../compiler/factory/utilities";
-import { setParent } from "../../compiler/parser/utilities";
-import { isIdentifierText } from "../../compiler/scanner/scanner";
+import { setParent } from "../../compiler/parserUtilities";
+import { isIdentifierText } from "../../compiler/scanner";
 import {
     __String,
     BigIntLiteralType,

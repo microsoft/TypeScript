@@ -14,7 +14,7 @@ import {
     isOverrideModifier,
     isStaticModifier,
 } from "../../compiler/factory/nodeTests";
-import { skipTrivia } from "../../compiler/scanner/scanner";
+import { skipTrivia } from "../../compiler/scanner";
 import {
     ConstructorDeclaration,
     DiagnosticMessage,

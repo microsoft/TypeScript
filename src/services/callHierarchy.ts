@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { getNodeId } from "../compiler/checker/utilities";
+import { getNodeId } from "../compiler/checkerUtilities";
 import {
     append,
     compareStringsCaseSensitive,
@@ -11,7 +11,7 @@ import {
     isArray,
     map,
 } from "../compiler/core";
-import { createPrinter } from "../compiler/emitter/emitter";
+import { createPrinter } from "../compiler/emitter";
 import {
     isArrowFunction,
     isClassDeclaration,
@@ -34,8 +34,8 @@ import {
     isVariableDeclaration,
 } from "../compiler/factory/nodeTests";
 import { canHaveModifiers } from "../compiler/factory/utilitiesPublic";
-import { forEachChild } from "../compiler/parser/parser";
-import { skipTrivia } from "../compiler/scanner/scanner";
+import { forEachChild } from "../compiler/parser";
+import { skipTrivia } from "../compiler/scanner";
 import {
     AccessExpression,
     ArrowFunction,

@@ -1,4 +1,4 @@
-import { getNodeId } from "../../compiler/checker/utilities";
+import { getNodeId } from "../../compiler/checkerUtilities";
 import {
     find,
     isNumber,

@@ -6,7 +6,7 @@ import {
     MultiMap,
     startsWith,
 } from "./core";
-import { ModeAwareCache } from "./moduleNameResolver/moduleNameResolver";
+import { ModeAwareCache } from "./moduleNameResolver";
 import {
     ensureTrailingDirectorySeparator,
     getNormalizedAbsolutePath,
@@ -14,7 +14,7 @@ import {
     getPathFromPathComponents,
     toPath,
 } from "./path";
-import { containsIgnoredPath } from "./sys/utilities";
+import { containsIgnoredPath } from "./sysUtilities";
 import {
     Path,
     ResolvedModuleFull,

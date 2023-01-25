@@ -1,4 +1,4 @@
-import { getNodeId } from "../../compiler/checker/utilities";
+import { getNodeId } from "../../compiler/checkerUtilities";
 import {
     find,
     isString,
@@ -10,7 +10,7 @@ import {
     isMappedTypeNode,
     isTypeParameterDeclaration,
 } from "../../compiler/factory/nodeTests";
-import { flattenDiagnosticMessageText } from "../../compiler/program/program";
+import { flattenDiagnosticMessageText } from "../../compiler/program";
 import {
     DiagnosticMessageChain,
     Node,

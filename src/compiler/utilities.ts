@@ -1,5 +1,5 @@
 import * as Debug from "./debug";
-import { getSymbolId } from "./checker/utilities";
+import { getSymbolId } from "./checkerUtilities";
 import {
     addRange,
     arrayFrom,
@@ -161,11 +161,11 @@ import {
     skipTrivia,
     stringToToken,
     tokenToString,
-} from "./scanner/scanner";
+} from "./scanner";
 import {
     parsePseudoBigInt,
     positionIsSynthesized,
-} from "./scanner/utilities";
+} from "./scannerUtilities";
 import {
     __String,
     AccessExpression,

@@ -36,8 +36,8 @@ import {
     isVariableStatement,
     isYieldExpression,
 } from "../compiler/factory/nodeTests";
-import { forEachChild } from "../compiler/parser/parser";
-import { forEachReturnStatement } from "../compiler/parser/utilities";
+import { forEachChild } from "../compiler/parser";
+import { forEachReturnStatement } from "../compiler/parserUtilities";
 import { toPath } from "../compiler/path";
 import {
     __String,

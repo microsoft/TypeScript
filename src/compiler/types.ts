@@ -1,5 +1,5 @@
 import { ProgramBuildInfo } from "./builder";
-import { OptionsNameMap } from "./commandLineParser/commandLineParser";
+import { OptionsNameMap } from "./commandLineParser";
 import {
     GetCanonicalFileName,
     MultiMap,
@@ -17,8 +17,8 @@ import {
     ModuleResolutionCache,
     PackageJsonInfo,
     PackageJsonInfoCache,
-} from "./moduleNameResolver/moduleNameResolver";
-import { CreateSourceFileOptions } from "./parser/parser";
+} from "./moduleNameResolver";
+import { CreateSourceFileOptions } from "./parser";
 import { SymlinkCache } from "./symlinkCache";
 import { ThisContainer } from "./utilities";
 

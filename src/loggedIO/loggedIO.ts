@@ -1,4 +1,4 @@
-import { parseCommandLine } from "../compiler/commandLineParser/commandLineParser";
+import { parseCommandLine } from "../compiler/commandLineParser";
 import {
     createGetCanonicalFileName,
     flatMap,

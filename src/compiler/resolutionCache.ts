@@ -28,7 +28,7 @@ import {
     resolveModuleName,
     trace,
     updateResolutionField,
-} from "./moduleNameResolver/moduleNameResolver";
+} from "./moduleNameResolver";
 import {
     directorySeparator,
     fileExtensionIs,
@@ -44,8 +44,8 @@ import {
 import {
     createTypeReferenceResolutionLoader,
     inferredTypesContainingFile, moduleResolutionNameAndModeGetter, ResolutionLoader,
-} from "./program/program";
-import { ignoredPaths } from "./sys/utilities";
+} from "./program";
+import { ignoredPaths } from "./sysUtilities";
 import {
     CharacterCodes,
     CompilerOptions,

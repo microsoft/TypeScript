@@ -1,27 +1,27 @@
 import {
     filter,
     GetCanonicalFileName,
-} from "../core";
+} from "./core";
 import {
     getDeclarationEmitExtensionForPath,
     removeFileExtension,
-} from "../extension";
+} from "./extension";
 import {
     combinePaths,
     getNormalizedAbsolutePath,
-} from "../path";
+} from "./path";
 import {
     CompilerOptions,
     EmitHost,
     ModuleKind,
     SourceFile,
-} from "../types";
+} from "./types";
 import {
     getEmitModuleKind,
     isExternalModule,
     outFile,
     sourceFileMayBeEmitted,
-} from "../utilities";
+} from "./utilities";
 
 /**
  * Gets the source files that are expected to have an emit output.

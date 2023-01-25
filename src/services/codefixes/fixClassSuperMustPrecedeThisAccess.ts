@@ -1,10 +1,10 @@
-import { getNodeId } from "../../compiler/checker/utilities";
+import { getNodeId } from "../../compiler/checkerUtilities";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import {
     isExpressionStatement,
     isPropertyAccessExpression,
 } from "../../compiler/factory/nodeTests";
-import { forEachChild } from "../../compiler/parser/parser";
+import { forEachChild } from "../../compiler/parser";
 import {
     CallExpression,
     ConstructorDeclaration,

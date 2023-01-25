@@ -2,7 +2,7 @@ import * as performance from "./performance";
 import * as Debug from "./debug";
 import { combinePaths } from "./path";
 import { timestamp } from "./performanceCore";
-import { getLineAndCharacterOfPosition } from "./scanner/scanner";
+import { getLineAndCharacterOfPosition } from "./scanner";
 import {
     ConditionalType,
     EvolvingArrayType,

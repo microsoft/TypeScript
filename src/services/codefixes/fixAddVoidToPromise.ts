@@ -11,7 +11,7 @@ import {
     isTypeReferenceNode,
     isUnionTypeNode,
 } from "../../compiler/factory/nodeTests";
-import { skipTrivia } from "../../compiler/scanner/scanner";
+import { skipTrivia } from "../../compiler/scanner";
 import {
     NewExpression,
     ParameterDeclaration,

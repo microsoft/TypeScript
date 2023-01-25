@@ -1,5 +1,5 @@
 import * as Debug from "../../compiler/debug";
-import { getSymbolId } from "../../compiler/checker/utilities";
+import { getSymbolId } from "../../compiler/checkerUtilities";
 import {
     append,
     cast,
@@ -44,7 +44,7 @@ import {
     canHaveDecorators,
     canHaveModifiers,
 } from "../../compiler/factory/utilitiesPublic";
-import { getModuleSpecifier } from "../../compiler/moduleSpecifiers/moduleSpecifiers";
+import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 import {
     combinePaths,
     getBaseFileName,

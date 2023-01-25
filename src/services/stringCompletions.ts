@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { readJson } from "../compiler/commandLineParser/utilities";
+import { readJson } from "../compiler/commandLineParserUtilities";
 import {
     arrayFrom,
     compareStringsCaseSensitive,
@@ -48,9 +48,9 @@ import {
     getPackageJsonTypesVersionsPaths,
     isApplicableVersionedTypesKey,
     unmangleScopedPackageName,
-} from "../compiler/moduleNameResolver/moduleNameResolver";
-import { tryGetJSExtensionForFile, tryGetRealFileNameForNonJsDeclarationFileName } from "../compiler/moduleSpecifiers/moduleSpecifiers";
-import { getModuleSpecifierEndingPreference } from "../compiler/moduleSpecifiers/utilities";
+} from "../compiler/moduleNameResolver";
+import { tryGetJSExtensionForFile, tryGetRealFileNameForNonJsDeclarationFileName } from "../compiler/moduleSpecifiers";
+import { getModuleSpecifierEndingPreference } from "../compiler/moduleSpecifiersUtilities";
 import {
     altDirectorySeparator,
     combinePaths,
@@ -71,11 +71,11 @@ import {
     removeTrailingDirectorySeparator,
     resolvePath,
 } from "../compiler/path";
-import { getModeForUsageLocation } from "../compiler/program/program";
+import { getModeForUsageLocation } from "../compiler/program";
 import {
     getLeadingCommentRanges,
     isIdentifierText,
-} from "../compiler/scanner/scanner";
+} from "../compiler/scanner";
 import {
     CallLikeExpression,
     CancellationToken,

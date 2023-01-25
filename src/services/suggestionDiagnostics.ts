@@ -18,9 +18,9 @@ import {
     isVariableDeclaration,
     isVariableStatement,
 } from "../compiler/factory/nodeTests";
-import { forEachReturnStatement } from "../compiler/parser/utilities";
+import { forEachReturnStatement } from "../compiler/parserUtilities";
 import { fileExtensionIsOneOf } from "../compiler/path";
-import { getModeForUsageLocation } from "../compiler/program/program";
+import { getModeForUsageLocation } from "../compiler/program";
 import {
     AnyValidImportOrReExport,
     ArrowFunction,

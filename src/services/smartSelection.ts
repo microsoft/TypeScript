@@ -29,8 +29,8 @@ import {
     isVariableDeclarationList,
     isVariableStatement,
 } from "../compiler/factory/nodeTests";
-import { parseNodeFactory } from "../compiler/parser/parser";
-import { getTrailingCommentRanges } from "../compiler/scanner/scanner";
+import { parseNodeFactory } from "../compiler/parser";
+import { getTrailingCommentRanges } from "../compiler/scanner";
 import {
     CharacterCodes,
     Node,

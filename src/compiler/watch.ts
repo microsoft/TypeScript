@@ -10,7 +10,7 @@ import {
     getParsedCommandLineOfConfigFile,
     ParseConfigFileHost,
     targetOptionDeclaration,
-} from "./commandLineParser/commandLineParser";
+} from "./commandLineParser";
 import {
     addRange,
     contains,
@@ -57,8 +57,8 @@ import {
     getReferencedFileLocation,
     isReferencedFile,
     isReferenceFileLocation,
-} from "./program/program";
-import { getLineAndCharacterOfPosition } from "./scanner/scanner";
+} from "./program";
+import { getLineAndCharacterOfPosition } from "./scanner";
 import {
     sourceMapCommentRegExp,
     sourceMapCommentRegExpDontCareLineStart,
@@ -67,7 +67,7 @@ import {
 import {
     generateDjb2Hash,
     sys,
-} from "./sys/sys";
+} from "./sys";
 import {
     ReportEmitErrorSummary,
     ReportFileInError,

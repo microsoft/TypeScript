@@ -2,7 +2,7 @@ import { find } from "../../compiler/core";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { factory } from "../../compiler/factory/nodeFactory";
 import { isBinaryExpression } from "../../compiler/factory/nodeTests";
-import { flattenDiagnosticMessageText } from "../../compiler/program/program";
+import { flattenDiagnosticMessageText } from "../../compiler/program";
 import {
     BinaryExpression,
     DiagnosticMessageChain,

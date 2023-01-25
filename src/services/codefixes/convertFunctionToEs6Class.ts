@@ -23,7 +23,7 @@ import {
     isVariableDeclarationList,
 } from "../../compiler/factory/nodeTests";
 import { canHaveModifiers } from "../../compiler/factory/utilitiesPublic";
-import { isIdentifierText } from "../../compiler/scanner/scanner";
+import { isIdentifierText } from "../../compiler/scanner";
 import {
     __String,
     AccessExpression,

@@ -8,7 +8,7 @@ import {
     isJsxElement,
     isJsxText,
 } from "../../compiler/factory/nodeTests";
-import { createScanner } from "../../compiler/scanner/scanner";
+import { createScanner } from "../../compiler/scanner";
 import {
     LanguageVariant,
     Node,

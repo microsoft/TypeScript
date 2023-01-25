@@ -1,6 +1,6 @@
 import * as Debug from "../compiler/debug";
 import { noop } from "../compiler/core";
-import { sys } from "../compiler/sys/sys";
+import { sys } from "../compiler/sys";
 import { executeCommandLine } from "../executeCommandLine/executeCommandLine";
 
 // This file actually uses arguments passed on commandline and executes it

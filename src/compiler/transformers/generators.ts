@@ -26,7 +26,7 @@ import {
     setOriginalNode,
     setTextRange,
 } from "../factory/utilitiesPublic";
-import { setParent } from "../parser/utilities";
+import { setParent } from "../parserUtilities";
 import {
     AccessorDeclaration,
     ArrayLiteralExpression,

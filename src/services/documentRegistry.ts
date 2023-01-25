@@ -1,7 +1,7 @@
 import * as Debug from "../compiler/debug";
 import {
     sourceFileAffectingCompilerOptions,
-} from "../compiler/commandLineParser/commandLineParser";
+} from "../compiler/commandLineParser";
 import {
     arrayFrom,
     createGetCanonicalFileName,
@@ -9,16 +9,16 @@ import {
     getOrUpdate,
     identity,
 } from "../compiler/core";
-import { getKeyForCompilerOptions } from "../compiler/moduleNameResolver/moduleNameResolver";
+import { getKeyForCompilerOptions } from "../compiler/moduleNameResolver";
 import {
     CreateSourceFileOptions,
     isDeclarationFileName,
-} from "../compiler/parser/parser";
+} from "../compiler/parser";
 import { toPath } from "../compiler/path";
 import {
     getImpliedNodeFormatForFile,
     getSetExternalModuleIndicator,
-} from "../compiler/program/program";
+} from "../compiler/program";
 import { tracing } from "../compiler/tracing";
 import {
     CompilerOptions,

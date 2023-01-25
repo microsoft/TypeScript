@@ -1,4 +1,4 @@
-import * as Debug from "../debug";
+import * as Debug from "./debug";
 import {
     append,
     arrayFrom,
@@ -21,16 +21,16 @@ import {
     some,
     startsWith,
     stringContains,
-} from "../core";
+} from "./core";
 import {
     Comparison,
     MapLike,
-} from "../corePublic";
+} from "./corePublic";
 import {
     isModuleBlock,
     isModuleDeclaration,
     isSourceFile,
-} from "../factory/nodeTests";
+} from "./factory/nodeTests";
 import {
     allKeysStartWithDot,
     getPackageJsonTypesVersionsPaths,
@@ -38,13 +38,13 @@ import {
     isApplicableVersionedTypesKey,
     pathContainsNodeModules,
     shouldAllowImportingTsExtension,
-} from "../moduleNameResolver/moduleNameResolver";
+} from "./moduleNameResolver";
 import {
     getModuleSpecifierEndingPreference,
     getNodeModulePathParts,
     NodeModulePathParts,
-} from "./utilities";
-import { isDeclarationFileName } from "../parser/parser";
+} from "./moduleSpecifiersUtilities";
+import { isDeclarationFileName } from "./parser";
 import {
     combinePaths,
     comparePaths,
@@ -66,12 +66,12 @@ import {
     resolvePath,
     startsWithDirectory,
     toPath,
-} from "../path";
+} from "./path";
 import {
     getModeForResolutionAtIndex,
     getModuleNameStringLiteralAt,
-} from "../program/program";
-import { containsIgnoredPath } from "../sys/utilities";
+} from "./program";
+import { containsIgnoredPath } from "./sysUtilities";
 import {
     __String,
     AmbientModuleDeclaration,
@@ -100,7 +100,7 @@ import {
     SymbolFlags,
     TypeChecker,
     UserPreferences,
-} from "../types";
+} from "./types";
 import {
     compareNumberOfDirectorySeparators,
     getEmitModuleResolutionKind,
@@ -114,8 +114,8 @@ import {
     matchPatternOrExact,
     ModuleSpecifierEnding,
     tryParsePatterns,
-} from "../utilities";
-import { isExternalModuleNameRelative } from "../utilitiesPublic";
+} from "./utilities";
+import { isExternalModuleNameRelative } from "./utilitiesPublic";
 import {
     extensionFromPath,
     getSupportedExtensions,
@@ -124,7 +124,7 @@ import {
     removeExtension,
     removeFileExtension,
     tryGetExtensionFromPath,
-} from "../extension";
+} from "./extension";
 
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 

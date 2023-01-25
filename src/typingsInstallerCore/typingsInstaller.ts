@@ -16,7 +16,7 @@ import {
 import {
     mangleScopedPackageName,
     resolveModuleName,
-} from "../compiler/moduleNameResolver/moduleNameResolver";
+} from "../compiler/moduleNameResolver";
 import {
     combinePaths,
     containsPath,
@@ -26,7 +26,7 @@ import {
     getDirectoryPath,
 } from "../compiler/path";
 import { Version } from "../compiler/semver";
-import { PollingInterval } from "../compiler/sys/sys";
+import { PollingInterval } from "../compiler/sys";
 import {
     Extension,
     FileWatcher,

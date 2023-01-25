@@ -3,7 +3,7 @@ import { getFileEmitOutput } from "../compiler/builderState";
 import {
     ParseConfigFileHost,
     parseJsonSourceFileConfigFileContent,
-} from "../compiler/commandLineParser/commandLineParser";
+} from "../compiler/commandLineParser";
 import {
     compareValues,
     createGetCanonicalFileName,
@@ -54,7 +54,7 @@ import {
     isPropertyAccessExpression,
 } from "../compiler/factory/nodeTests";
 import { getSnippetElement } from "../compiler/factory/emitNode";
-import { ModeAwareCache } from "../compiler/moduleNameResolver/moduleNameResolver";
+import { ModeAwareCache } from "../compiler/moduleNameResolver";
 import {
     ObjectAllocator,
     setObjectAllocator,
@@ -65,7 +65,7 @@ import {
     forEachChild,
     tagNamesAreEquivalent,
     updateSourceFile,
-} from "../compiler/parser/parser";
+} from "../compiler/parser";
 import {
     combinePaths,
     getDirectoryPath,
@@ -80,14 +80,14 @@ import {
     getImpliedNodeFormatForFile,
     getSetExternalModuleIndicator,
     isProgramUptoDate,
-} from "../compiler/program/program";
+} from "../compiler/program";
 import {
     computePositionOfLineAndCharacter,
     getLineAndCharacterOfPosition,
     getLineStarts,
-} from "../compiler/scanner/scanner";
-import { positionIsSynthesized } from "../compiler/scanner/utilities";
-import { sys } from "../compiler/sys/sys";
+} from "../compiler/scanner";
+import { positionIsSynthesized } from "../compiler/scannerUtilities";
+import { sys } from "../compiler/sys";
 import { tracing } from "../compiler/tracing";
 import {
     __String,

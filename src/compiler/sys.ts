@@ -1,5 +1,5 @@
-import * as Debug from "../debug";
-import { matchesExclude } from "../commandLineParser/commandLineParser";
+import * as Debug from "./debug";
+import { matchesExclude } from "./commandLineParser";
 import { isNodeLikeSystem } from "./platform";
 import {
     contains,
@@ -19,14 +19,14 @@ import {
     startsWith,
     stringContains,
     unorderedRemoveItem,
-} from "../core";
-import { Comparison } from "../corePublic";
+} from "./core";
+import { Comparison } from "./corePublic";
 import {
     emptyFileSystemEntries,
     FileSystemEntries,
     matchFiles,
-} from "../fileMatcher";
-import { resolveJSModule } from "../moduleNameResolver/moduleNameResolver";
+} from "./fileMatcher";
+import { resolveJSModule } from "./moduleNameResolver";
 import {
     combinePaths,
     containsPath,
@@ -37,10 +37,10 @@ import {
     getRootLength,
     normalizePath,
     normalizeSlashes,
-} from "../path";
-import { perfLogger } from "../perfLogger";
-import { timestamp } from "../performanceCore";
-import { ignoredPaths } from "./utilities";
+} from "./path";
+import { perfLogger } from "./perfLogger";
+import { timestamp } from "./performanceCore";
+import { ignoredPaths } from "./sysUtilities";
 import {
     DirectoryWatcherCallback,
     FileWatcher,
@@ -52,15 +52,15 @@ import {
     WatchDirectoryKind,
     WatchFileKind,
     WatchOptions,
-} from "../types";
+} from "./types";
 import {
     closeFileWatcher,
     writeFileEnsuringDirectories,
-} from "../utilities";
+} from "./utilities";
 import {
     closeFileWatcherOf,
     getFallbackOptions,
-} from "../watchUtilities";
+} from "./watchUtilities";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;

@@ -1,4 +1,4 @@
-import { removeFileExtension } from "../extension";
+import { removeFileExtension } from "./extension";
 import {
     ensurePathIsNonModuleName,
     ensureTrailingDirectorySeparator,
@@ -7,7 +7,7 @@ import {
     getRelativePathToDirectoryOrUrl,
     pathIsRelative,
     toPath,
-} from "../path";
+} from "./path";
 import {
     EmitResolver,
     ExportDeclaration,
@@ -16,9 +16,9 @@ import {
     ImportTypeNode,
     ModuleDeclaration,
     SourceFile,
-} from "../types";
-import { getExternalModuleName } from "../utilities";
-import { isStringLiteralLike } from "../utilitiesPublic";
+} from "./types";
+import { getExternalModuleName } from "./utilities";
+import { isStringLiteralLike } from "./utilitiesPublic";
 
 /** @internal */
 export interface ResolveModuleNameResolutionHost {

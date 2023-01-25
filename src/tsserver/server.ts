@@ -4,7 +4,7 @@ import {
     getNodeMajorVersion,
     setStackTraceLimit,
     sys,
-} from "../compiler/sys/sys";
+} from "../compiler/sys";
 import {
     findArgument,
     hasArgument,

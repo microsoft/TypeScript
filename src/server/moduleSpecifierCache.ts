@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { nodeModulesPathPart } from "../compiler/moduleNameResolver/moduleNameResolver";
+import { nodeModulesPathPart } from "../compiler/moduleNameResolver";
 import {
     FileWatcher,
     ModulePath,

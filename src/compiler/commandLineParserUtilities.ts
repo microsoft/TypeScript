@@ -1,5 +1,5 @@
 import { parseConfigFileTextToJson } from "./commandLineParser";
-import { isString } from "../core";
+import { isString } from "./core";
 
 /** @internal */
 export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined } | string): object | undefined {

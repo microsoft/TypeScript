@@ -1,16 +1,16 @@
 /* eslint-disable */
-import * as types from "../types";
+import * as types from "./types";
 /* eslint-enable */
 
-import * as Debug from "../debug";
-import * as performance from "../performance";
+import * as Debug from "./debug";
+import * as performance from "./performance";
 import {
     computeSignature,
     ProgramBuildInfo,
     ProgramBundleEmitBuildInfo,
-} from "../builder";
-import { OutputFile } from "../builderStatePublic";
-import { getNodeId } from "../checker/utilities";
+} from "./builder";
+import { OutputFile } from "./builderStatePublic";
+import { getNodeId } from "./checkerUtilities";
 import {
     arrayToMap,
     cast,
@@ -39,12 +39,12 @@ import {
     stableSort,
     stringContains,
     tryCast,
-} from "../core";
-import { Comparison, version } from "../corePublic";
+} from "./core";
+import { Comparison, version } from "./corePublic";
 import {
     createBinaryExpressionTrampoline,
-} from "../factory/binaryExpressionStateMachine";
-import { compareEmitHelpers } from "../factory/emitHelpers";
+} from "./factory/binaryExpressionStateMachine";
+import { compareEmitHelpers } from "./factory/emitHelpers";
 import {
     getCommentRange,
     getConstantValue,
@@ -56,11 +56,11 @@ import {
     getSyntheticLeadingComments,
     getSyntheticTrailingComments,
     getTypeNode,
-} from "../factory/emitNode";
+} from "./factory/emitNode";
 import {
     createInputFilesWithFileTexts,
     factory,
-} from "../factory/nodeFactory";
+} from "./factory/nodeFactory";
 import {
     isArrowFunction,
     isBinaryExpression,
@@ -84,23 +84,23 @@ import {
     isUnparsedPrepend,
     isUnparsedSource,
     isVariableStatement,
-} from "../factory/nodeTests";
+} from "./factory/nodeTests";
 import {
     formatGeneratedName,
     formatGeneratedNamePart,
     getExternalHelpersModuleName,
     getNodeForGeneratedName,
     hasRecordedExternalHelpers,
-} from "../factory/utilities";
+} from "./factory/utilities";
 import {
     setOriginalNode,
     setTextRange,
-} from "../factory/utilitiesPublic";
+} from "./factory/utilitiesPublic";
 import {
     forEachChild,
     isDeclarationFileName,
     isJSDocLikeText,
-} from "../parser/parser";
+} from "./parser";
 import {
     combinePaths,
     comparePaths,
@@ -118,11 +118,11 @@ import {
     normalizePath,
     normalizeSlashes,
     resolvePath,
-} from "../path";
+} from "./path";
 import {
     computeCommonSourceDirectoryOfFilenames,
     createPrependNodes,
-} from "../program/program";
+} from "./program";
 import {
     computeLineStarts,
     forEachLeadingCommentRange,
@@ -134,20 +134,20 @@ import {
     getTrailingCommentRanges,
     skipTrivia,
     tokenToString,
-} from "../scanner/scanner";
+} from "./scanner";
 import {
     createSourceMapGenerator,
     tryParseRawSourceMap,
-} from "../sourcemap";
-import { sys } from "../sys/sys";
-import { tracing } from "../tracing";
+} from "./sourcemap";
+import { sys } from "./sys";
+import { tracing } from "./tracing";
 import {
     getTransformers,
     noEmitNotification,
     noEmitSubstitution,
     transformNodes,
-} from "../transformer";
-import { isInternalDeclaration } from "../transformers/declarations";
+} from "./transformer";
+import { isInternalDeclaration } from "./transformers/declarations";
 import {
     AccessorDeclaration,
     ArrayBindingPattern,
@@ -402,7 +402,7 @@ import {
     WithStatement,
     WriteFileCallbackData,
     YieldExpression,
-} from "../types";
+} from "./types";
 import {
     base64encode,
     createDiagnosticCollection,
@@ -456,7 +456,7 @@ import {
     setTextRangePosWidth,
     writeCommentRange,
     writeFile,
-} from "../utilities";
+} from "./utilities";
 import {
     canHaveLocals,
     escapeLeadingUnderscores,
@@ -478,25 +478,25 @@ import {
     isTokenKind,
     isUnparsedNode,
     skipPartiallyEmittedExpressions,
-} from "../utilitiesPublic";
-import { positionIsSynthesized } from "../scanner/utilities";
+} from "./utilitiesPublic";
+import { positionIsSynthesized } from "./scannerUtilities";
 import {
     getDeclarationEmitOutputFilePath,
     getOwnEmitOutputFilePath,
     getSourceFilePathInNewDir,
     getSourceFilesToEmit,
-} from "./utilities";
+} from "./emitterUtilities";
 import {
     setEachParent,
     setParent,
-} from "../parser/utilities";
-import { readJsonOrUndefined } from "../commandLineParser/utilities";
+} from "./parserUtilities";
+import { readJsonOrUndefined } from "./commandLineParserUtilities";
 import {
     changeExtension,
     getDeclarationEmitExtensionForPath,
     removeFileExtension,
     supportedJSExtensionsFlat,
-} from "../extension";
+} from "./extension";
 
 const brackets = createBracketsMap();
 

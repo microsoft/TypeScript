@@ -24,7 +24,7 @@ import {
     tryCast,
 } from "../core";
 import { Diagnostics } from "../diagnosticInformationMap.generated";
-import { getOutputPathsFor } from "../emitter/emitter";
+import { getOutputPathsFor } from "../emitter";
 import {
     getCommentRange,
     removeAllComments,
@@ -73,10 +73,10 @@ import {
     setOriginalNode,
     setTextRange,
 } from "../factory/utilitiesPublic";
-import { pathContainsNodeModules } from "../moduleNameResolver/moduleNameResolver";
-import { getModuleSpecifier } from "../moduleSpecifiers/moduleSpecifiers";
-import { parseNodeFactory } from "../parser/parser";
-import { setParent } from "../parser/utilities";
+import { pathContainsNodeModules } from "../moduleNameResolver";
+import { getModuleSpecifier } from "../moduleSpecifiers";
+import { parseNodeFactory } from "../parser";
+import { setParent } from "../parserUtilities";
 import {
     getDirectoryPath,
     getRelativePathToDirectoryOrUrl,
@@ -85,13 +85,13 @@ import {
     pathIsRelative,
     toPath,
 } from "../path";
-import { getResolutionModeOverrideForClause } from "../program/program";
+import { getResolutionModeOverrideForClause } from "../program";
 import {
     getLeadingCommentRanges,
     getLineAndCharacterOfPosition,
     getTrailingCommentRanges,
     skipTrivia,
-} from "../scanner/scanner";
+} from "../scanner";
 import { transformNodes } from "../transformer";
 import {
     AccessorDeclaration,
@@ -242,7 +242,7 @@ import { getOriginalNodeId } from "./utilities";
 import {
     getExternalModuleNameFromDeclaration,
     getResolvedExternalModuleName,
-} from "../moduleNameResolver/utilities";
+} from "../moduleNameResolverUtilities";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {

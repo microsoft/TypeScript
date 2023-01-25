@@ -11,7 +11,7 @@ import { BuilderState } from "./builderState";
 import {
     convertToOptionsWithAbsolutePaths,
     getOptionsNameMap,
-} from "./commandLineParser/commandLineParser";
+} from "./commandLineParser";
 import {
     addRange,
     arrayFrom,
@@ -40,8 +40,8 @@ import { ReadonlyCollection } from "./corePublic";
 import {
     createBuildInfo,
     getTsBuildInfoEmitOutputFilePath,
-} from "./emitter/emitter";
-import { isDeclarationFileName } from "./parser/parser";
+} from "./emitter";
+import { isDeclarationFileName } from "./parser";
 import {
     ensurePathIsNonModuleName,
     getDirectoryPath,
@@ -54,13 +54,13 @@ import {
     emitSkippedWithNoDiagnostics,
     filterSemanticDiagnostics,
     handleNoEmitOptions,
-} from "./program/program";
+} from "./program";
 import {
     compilerOptionsAffectDeclarationPath,
     compilerOptionsAffectEmit,
     compilerOptionsAffectSemanticDiagnostics,
-} from "./program/utilities";
-import { generateDjb2Hash } from "./sys/sys";
+} from "./programUtilities";
+import { generateDjb2Hash } from "./sys";
 import {
     BuildInfo,
     BundleBuildInfo,

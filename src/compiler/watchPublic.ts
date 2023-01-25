@@ -13,7 +13,7 @@ import {
     getFileNamesFromConfigSpecs,
     getParsedCommandLineOfConfigFile,
     updateErrorForNoInputFiles,
-} from "./commandLineParser/commandLineParser";
+} from "./commandLineParser";
 import {
     createGetCanonicalFileName,
     isArray,
@@ -30,9 +30,9 @@ import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
     getBuildInfo,
     getTsBuildInfoEmitOutputFilePath,
-} from "./emitter/emitter";
-import { ModuleResolutionCache } from "./moduleNameResolver/moduleNameResolver";
-import { CreateSourceFileOptions } from "./parser/parser";
+} from "./emitter";
+import { ModuleResolutionCache } from "./moduleNameResolver";
+import { CreateSourceFileOptions } from "./parser";
 import {
     getDirectoryPath,
     getNormalizedAbsolutePath,
@@ -45,8 +45,8 @@ import {
     getConfigFileParsingDiagnostics,
     isProgramUptoDate,
     parseConfigHostFromCompilerHostLike,
-} from "./program/program";
-import { changesAffectModuleResolution } from "./program/utilities";
+} from "./program";
+import { changesAffectModuleResolution } from "./programUtilities";
 import {
     createResolutionCache,
     ResolutionCacheHost,
@@ -54,7 +54,7 @@ import {
 import {
     PollingInterval,
     sys,
-} from "./sys/sys";
+} from "./sys";
 import {
     BuildInfo,
     CompilerHost,

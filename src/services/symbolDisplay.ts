@@ -11,7 +11,7 @@ import {
     length,
     some,
 } from "../compiler/core";
-import { createPrinter } from "../compiler/emitter/emitter";
+import { createPrinter } from "../compiler/emitter";
 import {
     isArrowFunction,
     isBindingElement,

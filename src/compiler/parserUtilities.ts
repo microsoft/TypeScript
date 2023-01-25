@@ -11,16 +11,16 @@ import {
     Statement,
     SyntaxKind,
     YieldExpression,
-} from "../types";
+} from "./types";
 import {
     isPartOfTypeNode,
     nodeIsPresent,
-} from "../utilities";
+} from "./utilities";
 import {
     hasJSDocNodes,
     isFunctionLike,
     isJSDocNode,
-} from "../utilitiesPublic";
+} from "./utilitiesPublic";
 
 function aggregateChildData(node: Node): void {
     if (!(node.flags & NodeFlags.HasAggregatedChildData)) {

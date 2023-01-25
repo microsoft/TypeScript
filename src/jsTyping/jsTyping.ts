@@ -1,5 +1,5 @@
 import * as Debug from "../compiler/debug";
-import { readConfigFile } from "../compiler/commandLineParser/commandLineParser";
+import { readConfigFile } from "../compiler/commandLineParser";
 import {
     compareStringsCaseSensitive,
     deduplicate,

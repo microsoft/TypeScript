@@ -1,5 +1,5 @@
 import * as Debug from "../debug";
-import { getNodeId } from "../checker/utilities";
+import { getNodeId } from "../checkerUtilities";
 import {
     concatenate,
     forEach,

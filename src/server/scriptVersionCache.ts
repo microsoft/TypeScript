@@ -1,6 +1,6 @@
 import * as Debug from "../compiler/debug";
 import * as protocol from "./protocol";
-import { computeLineStarts } from "../compiler/scanner/scanner";
+import { computeLineStarts } from "../compiler/scanner";
 import {
     TextChangeRange,
     TextSpan,

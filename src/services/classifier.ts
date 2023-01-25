@@ -15,13 +15,13 @@ import {
     isJSDoc,
     isModuleDeclaration,
 } from "../compiler/factory/nodeTests";
-import { parseIsolatedJSDocComment } from "../compiler/parser/parser";
-import { setParent } from "../compiler/parser/utilities";
+import { parseIsolatedJSDocComment } from "../compiler/parser";
+import { setParent } from "../compiler/parserUtilities";
 import {
     couldStartTrivia,
     createScanner,
     Scanner,
-} from "../compiler/scanner/scanner";
+} from "../compiler/scanner";
 import {
     __String,
     CancellationToken,

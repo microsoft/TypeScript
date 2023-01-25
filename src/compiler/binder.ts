@@ -1,5 +1,5 @@
 import * as Debug from "./debug";
-import { getNodeId } from "./checker/utilities";
+import { getNodeId } from "./checkerUtilities";
 import {
     append,
     appendIfUnique,
@@ -51,14 +51,14 @@ import {
     isVariableStatement,
 } from "./factory/nodeTests";
 import { objectAllocator } from "./objectAllocator";
-import { forEachChild } from "./parser/parser";
+import { forEachChild } from "./parser";
 import {
     setParent,
     setParentRecursive,
-} from "./parser/utilities";
+} from "./parserUtilities";
 import { perfLogger } from "./perfLogger";
 import * as performance from "./performance";
-import { tokenToString } from "./scanner/scanner";
+import { tokenToString } from "./scanner";
 import {
     tracing,
     TracingNode,

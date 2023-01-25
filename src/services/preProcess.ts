@@ -6,7 +6,7 @@ import {
 import {
     processCommentPragmas,
     processPragmasIntoFields,
-} from "../compiler/parser/parser";
+} from "../compiler/parser";
 import {
     FileReference,
     PragmaContext,

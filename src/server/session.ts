@@ -41,20 +41,20 @@ import {
     getTemporaryModuleResolutionState,
     nodeModulesPathPart,
     unmangleScopedPackageName,
-} from "../compiler/moduleNameResolver/moduleNameResolver";
-import { getNodeModulePathParts } from "../compiler/moduleSpecifiers/utilities";
-import { isDeclarationFileName } from "../compiler/parser/parser";
+} from "../compiler/moduleNameResolver";
+import { getNodeModulePathParts } from "../compiler/moduleSpecifiersUtilities";
+import { isDeclarationFileName } from "../compiler/parser";
 import {
     getNormalizedAbsolutePath,
     normalizePath,
 } from "../compiler/path";
 import { perfLogger } from "../compiler/perfLogger";
-import { flattenDiagnosticMessageText } from "../compiler/program/program";
+import { flattenDiagnosticMessageText } from "../compiler/program";
 import {
     computeLineAndCharacterOfPosition,
     computeLineStarts,
     getLineAndCharacterOfPosition,
-} from "../compiler/scanner/scanner";
+} from "../compiler/scanner";
 import { tracing } from "../compiler/tracing";
 import {
     BufferEncoding,

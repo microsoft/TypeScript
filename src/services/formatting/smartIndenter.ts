@@ -12,7 +12,7 @@ import {
 import {
     getLineAndCharacterOfPosition,
     skipTrivia,
-} from "../../compiler/scanner/scanner";
+} from "../../compiler/scanner";
 import {
     ArrayBindingPattern,
     ArrayLiteralExpression,

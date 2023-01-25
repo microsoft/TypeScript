@@ -4,7 +4,7 @@ import {
     ExtendedConfigCacheEntry,
     isExcludedFile,
     matchesExclude,
-} from "./commandLineParser/commandLineParser";
+} from "./commandLineParser";
 import {
     arrayToMap,
     binarySearch,
@@ -29,7 +29,7 @@ import {
     FileSystemEntries,
     matchFiles,
 } from "./fileMatcher";
-import { isDeclarationFileName } from "./parser/parser";
+import { isDeclarationFileName } from "./parser";
 import {
     ensureTrailingDirectorySeparator,
     fileExtensionIs,
@@ -46,7 +46,7 @@ import { removeIgnoredPath } from "./resolutionCache";
 import {
     PollingInterval,
     setSysLog,
-} from "./sys/sys";
+} from "./sys";
 import {
     CompilerOptions,
     DirectoryWatcherCallback,

@@ -2,7 +2,7 @@ import * as Debug from "../../compiler/debug";
 import {
     getNodeId,
     getSymbolId,
-} from "../../compiler/checker/utilities";
+} from "../../compiler/checkerUtilities";
 import {
     arrayFrom,
     cast,
@@ -42,11 +42,11 @@ import {
     isNamespaceImport,
     isStringLiteral,
 } from "../../compiler/factory/nodeTests";
-import { pathContainsNodeModules } from "../../compiler/moduleNameResolver/moduleNameResolver";
+import { pathContainsNodeModules } from "../../compiler/moduleNameResolver";
 import {
     getModuleSpecifiersWithCacheInfo,
     tryGetModuleSpecifiersFromCache,
-} from "../../compiler/moduleSpecifiers/moduleSpecifiers";
+} from "../../compiler/moduleSpecifiers";
 import {
     getBaseFileName,
     getDirectoryPath,
@@ -56,7 +56,7 @@ import {
 import {
     isIdentifierPart,
     isIdentifierStart,
-} from "../../compiler/scanner/scanner";
+} from "../../compiler/scanner";
 import {
     AnyImportOrRequire,
     AnyImportOrRequireStatement,

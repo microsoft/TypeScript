@@ -1,7 +1,7 @@
 import { EmitOutput } from "../compiler/builderStatePublic";
 import {
     parseJsonSourceFileConfigFileContent,
-} from "../compiler/commandLineParser/commandLineParser";
+} from "../compiler/commandLineParser";
 import {
     clear,
     createGetCanonicalFileName,
@@ -18,15 +18,15 @@ import {
     getAutomaticTypeDirectiveNames,
     resolveModuleName,
     resolveTypeReferenceDirective,
-} from "../compiler/moduleNameResolver/moduleNameResolver";
-import { parseJsonText } from "../compiler/parser/parser";
+} from "../compiler/moduleNameResolver";
+import { parseJsonText } from "../compiler/parser";
 import {
     getDirectoryPath,
     normalizeSlashes,
     toPath,
 } from "../compiler/path";
 import { timestamp } from "../compiler/performanceCore";
-import { flattenDiagnosticMessageText } from "../compiler/program/program";
+import { flattenDiagnosticMessageText } from "../compiler/program";
 import {
     CompilerOptions,
     Diagnostic,

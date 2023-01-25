@@ -72,8 +72,8 @@ import {
     setOriginalNode,
     setTextRange,
 } from "../factory/utilitiesPublic";
-import { setParent } from "../parser/utilities";
-import { skipTrivia } from "../scanner/scanner";
+import { setParent } from "../parserUtilities";
+import { skipTrivia } from "../scanner";
 import {
     __String,
     AccessorDeclaration,

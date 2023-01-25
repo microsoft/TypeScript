@@ -2,7 +2,7 @@ import * as Debug from "../../compiler/debug";
 import {
     getNodeId,
     getSymbolId,
-} from "../../compiler/checker/utilities";
+} from "../../compiler/checkerUtilities";
 import {
     arrayFrom,
     assertType,
@@ -53,8 +53,8 @@ import {
     isVariableStatement,
 } from "../../compiler/factory/nodeTests";
 import { canHaveModifiers } from "../../compiler/factory/utilitiesPublic";
-import { forEachChild } from "../../compiler/parser/parser";
-import { positionIsSynthesized } from "../../compiler/scanner/utilities";
+import { forEachChild } from "../../compiler/parser";
+import { positionIsSynthesized } from "../../compiler/scannerUtilities";
 import { nullTransformationContext } from "../../compiler/transformer";
 import {
     __String,

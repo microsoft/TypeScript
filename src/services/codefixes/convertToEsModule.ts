@@ -27,7 +27,7 @@ import {
     isPropertyAccessExpression,
     isVariableStatement,
 } from "../../compiler/factory/nodeTests";
-import { getModeForUsageLocation } from "../../compiler/program/program";
+import { getModeForUsageLocation } from "../../compiler/program";
 import {
     __String,
     ArrowFunction,

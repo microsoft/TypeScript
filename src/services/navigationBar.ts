@@ -30,7 +30,7 @@ import {
     isVariableDeclaration,
 } from "../compiler/factory/nodeTests";
 import { setTextRange } from "../compiler/factory/utilitiesPublic";
-import { forEachChild } from "../compiler/parser/parser";
+import { forEachChild } from "../compiler/parser";
 import {
     getBaseFileName,
     normalizePath,

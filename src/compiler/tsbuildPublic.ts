@@ -22,7 +22,7 @@ import {
     getParsedCommandLineOfConfigFile,
     ParseConfigFileHost,
     updateErrorForNoInputFiles,
-} from "./commandLineParser/commandLineParser";
+} from "./commandLineParser";
 import {
     arrayToMap,
     assertType,
@@ -49,13 +49,13 @@ import {
     getBuildInfo,
     getFirstProjectOutput,
     getTsBuildInfoEmitOutputFilePath,
-} from "./emitter/emitter";
+} from "./emitter";
 import {
     createModuleResolutionCache,
     createTypeReferenceDirectiveResolutionCache,
     ModuleResolutionCache,
     TypeReferenceDirectiveResolutionCache,
-} from "./moduleNameResolver/moduleNameResolver";
+} from "./moduleNameResolver";
 import {
     convertToRelativePath,
     getDirectoryPath,
@@ -75,13 +75,13 @@ import {
     loadWithModeAwareCache,
     parseConfigHostFromCompilerHostLike,
     resolveProjectReferencePath,
-} from "./program/program";
+} from "./program";
 import {
     getModifiedTime,
     missingFileModifiedTime,
     PollingInterval,
     sys,
-} from "./sys/sys";
+} from "./sys";
 import {
     resolveConfigFileProjectName,
     Status,

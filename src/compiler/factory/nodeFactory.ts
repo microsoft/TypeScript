@@ -1,5 +1,5 @@
 import * as Debug from "../debug";
-import { getNodeId } from "../checker/utilities";
+import { getNodeId } from "../checkerUtilities";
 import {
     addRange,
     append,
@@ -22,19 +22,19 @@ import {
     startsWith,
 } from "../core";
 import { Push } from "../corePublic";
-import { getBuildInfo } from "../emitter/emitter";
+import { getBuildInfo } from "../emitter";
 import { objectAllocator } from "../objectAllocator";
-import { parseNodeFactory } from "../parser/parser";
+import { parseNodeFactory } from "../parser";
 import {
     setEachParent,
     setParent,
-} from "../parser/utilities";
+} from "../parserUtilities";
 import {
     createScanner,
     getLineAndCharacterOfPosition,
     Scanner,
     stringToToken,
-} from "../scanner/scanner";
+} from "../scanner";
 import {
     __String,
     ArrayBindingElement,

@@ -9,7 +9,7 @@ import {
 } from "../../compiler/core";
 import { isDecorator } from "../../compiler/factory/nodeTests";
 import { canHaveModifiers } from "../../compiler/factory/utilitiesPublic";
-import { forEachChild } from "../../compiler/parser/parser";
+import { forEachChild } from "../../compiler/parser";
 import {
     Block,
     CallExpression,

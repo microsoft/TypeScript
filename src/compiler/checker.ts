@@ -1,16 +1,16 @@
-import * as Debug from "../debug";
+import * as Debug from "./debug";
 import {
     bindSourceFile,
     getModuleInstanceState,
     ModuleInstanceState,
-} from "../binder";
+} from "./binder";
 import {
     CheckMode,
     getNodeId,
     getSymbolId,
     SignatureCheckMode,
     TypeFacts,
-} from "./utilities";
+} from "./checkerUtilities";
 import {
     addRange,
     and,
@@ -79,13 +79,13 @@ import {
     stringContains,
     tryAddToSet,
     tryCast,
-} from "../core";
-import { Comparison } from "../corePublic";
-import { Diagnostics } from "../diagnosticInformationMap.generated";
-import { createPrinter } from "../emitter/emitter";
+} from "./core";
+import { Comparison } from "./corePublic";
+import { Diagnostics } from "./diagnosticInformationMap.generated";
+import { createPrinter } from "./emitter";
 import {
     createBinaryExpressionTrampoline,
-} from "../factory/binaryExpressionStateMachine";
+} from "./factory/binaryExpressionStateMachine";
 import {
     addSyntheticLeadingComment,
     getIdentifierGeneratedImportReference,
@@ -94,8 +94,8 @@ import {
     setEmitFlags,
     setIdentifierTypeArguments,
     setSyntheticLeadingComments,
-} from "../factory/emitNode";
-import { factory } from "../factory/nodeFactory";
+} from "./factory/emitNode";
+import { factory } from "./factory/nodeFactory";
 import {
     isArrayBindingPattern,
     isArrayLiteralExpression,
@@ -218,45 +218,45 @@ import {
     isVariableDeclaration,
     isVariableDeclarationList,
     isVariableStatement,
-} from "../factory/nodeTests";
+} from "./factory/nodeTests";
 import {
     canHaveIllegalModifiers,
     createEmptyExports,
     createPropertyNameNodeForIdentifierOrLiteral,
     getJSDocTypeAssertionType,
     isCommaSequence,
-} from "../factory/utilities";
+} from "./factory/utilities";
 import {
     canHaveDecorators,
     canHaveModifiers,
     setOriginalNode,
     setTextRange,
-} from "../factory/utilitiesPublic";
+} from "./factory/utilitiesPublic";
 import {
     createModeAwareCacheKey,
     getTypesPackageName,
     mangleScopedPackageName,
     nodeModulesPathPart,
     shouldAllowImportingTsExtension,
-} from "../moduleNameResolver/moduleNameResolver";
+} from "./moduleNameResolver";
 import {
     countPathComponents,
     getModuleSpecifiers,
-} from "../moduleSpecifiers/moduleSpecifiers";
-import { objectAllocator } from "../objectAllocator";
+} from "./moduleSpecifiers";
+import { objectAllocator } from "./objectAllocator";
 import {
     forEachChild,
     forEachChildRecursively,
     isDeclarationFileName,
     parseIsolatedEntityName,
     parseNodeFactory,
-} from "../parser/parser";
+} from "./parser";
 import {
     containsParseError,
     forEachReturnStatement,
     forEachYieldExpression,
     setParent,
-} from "../parser/utilities";
+} from "./parserUtilities";
 import {
     combinePaths,
     comparePaths,
@@ -266,28 +266,28 @@ import {
     getNormalizedAbsolutePath,
     hasExtension,
     pathIsRelative,
-} from "../path";
-import * as performance from "../performance";
+} from "./path";
+import * as performance from "./performance";
 import {
     getModeForUsageLocation,
     getResolutionDiagnostic,
     getResolutionModeOverrideForClause,
     isExclusivelyTypeOnlyImportOrExport,
     resolveTripleslashReference,
-} from "../program/program";
+} from "./program";
 import {
     getLineAndCharacterOfPosition,
     isIdentifierText,
     skipTrivia,
     tokenToString,
-} from "../scanner/scanner";
-import { parsePseudoBigInt } from "../scanner/utilities";
-import { createGetSymbolWalker } from "../symbolWalker";
+} from "./scanner";
+import { parsePseudoBigInt } from "./scannerUtilities";
+import { createGetSymbolWalker } from "./symbolWalker";
 import {
     tracing,
     TracingNode,
-} from "../tracing";
-import { nullTransformationContext } from "../transformer";
+} from "./tracing";
+import { nullTransformationContext } from "./transformer";
 import {
     __String,
     AccessExpression,
@@ -682,7 +682,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-} from "../types";
+} from "./types";
 import {
     addRelatedInfo,
     arrayIsHomogeneous,
@@ -996,7 +996,7 @@ import {
     walkUpParenthesizedExpressions,
     walkUpParenthesizedTypes,
     walkUpParenthesizedTypesAndGetParentAndChild,
-} from "../utilities";
+} from "./utilities";
 import {
     canHaveLocals,
     canHaveSymbol,
@@ -1093,20 +1093,20 @@ import {
     textSpanEnd,
     unescapeLeadingUnderscores,
     walkUpBindingElementsAndPatterns,
-} from "../utilitiesPublic";
+} from "./utilitiesPublic";
 import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "../visitorPublic";
+} from "./visitorPublic";
 import {
     removeExtension,
     resolutionExtensionIsTSOrJson,
     tryExtractTSExtension,
     tryGetExtensionFromPath,
-} from "../extension";
-import { getResolvedExternalModuleName } from "../moduleNameResolver/utilities";
-import { isInitializedProperty } from "../transformers/utilities";
+} from "./extension";
+import { getResolvedExternalModuleName } from "./moduleNameResolverUtilities";
+import { isInitializedProperty } from "./transformers/utilities";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;

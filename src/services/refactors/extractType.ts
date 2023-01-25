@@ -31,11 +31,11 @@ import {
     isTypeReferenceNode,
 } from "../../compiler/factory/nodeTests";
 import { setTextRange } from "../../compiler/factory/utilitiesPublic";
-import { forEachChild } from "../../compiler/parser/parser";
+import { forEachChild } from "../../compiler/parser";
 import {
     getLineAndCharacterOfPosition,
     skipTrivia,
-} from "../../compiler/scanner/scanner";
+} from "../../compiler/scanner";
 import {
     EmitFlags,
     JSDocTag,

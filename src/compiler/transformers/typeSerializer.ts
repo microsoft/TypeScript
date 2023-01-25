@@ -14,8 +14,8 @@ import {
     isVoidExpression,
 } from "../factory/nodeTests";
 import { setTextRange } from "../factory/utilitiesPublic";
-import { parseNodeFactory } from "../parser/parser";
-import { setParent } from "../parser/utilities";
+import { parseNodeFactory } from "../parser";
+import { setParent } from "../parserUtilities";
 import {
     AccessorDeclaration,
     ArrayLiteralExpression,

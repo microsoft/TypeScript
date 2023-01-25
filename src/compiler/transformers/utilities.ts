@@ -1,4 +1,4 @@
-import { getNodeId } from "../checker/utilities";
+import { getNodeId } from "../checkerUtilities";
 import {
     append,
     cast,

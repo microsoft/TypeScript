@@ -1,4 +1,4 @@
-import { some, stringContains } from "../core";
+import { some, stringContains } from "./core";
 
 /** @internal */
 export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];

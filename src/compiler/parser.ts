@@ -1,5 +1,5 @@
-import * as Debug from "../debug";
-import { convertToObjectWorker } from "../commandLineParser/commandLineParser";
+import * as Debug from "./debug";
+import { convertToObjectWorker } from "./commandLineParser";
 import {
     addRange,
     append,
@@ -20,13 +20,13 @@ import {
     stringContains,
     toArray,
     trimString,
-} from "../core";
-import { Diagnostics } from "../diagnosticInformationMap.generated";
-import { BaseNodeFactory } from "../factory/baseNodeFactory";
+} from "./core";
+import { Diagnostics } from "./diagnosticInformationMap.generated";
+import { BaseNodeFactory } from "./factory/baseNodeFactory";
 import {
     createNodeFactory,
     NodeFactoryFlags,
-} from "../factory/nodeFactory";
+} from "./factory/nodeFactory";
 import {
     isAsyncModifier,
     isExportAssignment,
@@ -50,27 +50,27 @@ import {
     isSetAccessorDeclaration,
     isTaggedTemplateExpression,
     isTypeReferenceNode,
-} from "../factory/nodeTests";
+} from "./factory/nodeTests";
 import {
     canHaveModifiers,
     setTextRange,
-} from "../factory/utilitiesPublic";
-import { PackageJsonInfo } from "../moduleNameResolver/moduleNameResolver";
-import { objectAllocator } from "../objectAllocator";
+} from "./factory/utilitiesPublic";
+import { PackageJsonInfo } from "./moduleNameResolver";
+import { objectAllocator } from "./objectAllocator";
 import {
     containsParseError,
     getLastChild,
     setParent,
     setParentRecursive,
-} from "./utilities";
+} from "./parserUtilities";
 import {
     fileExtensionIs,
     fileExtensionIsOneOf,
     getBaseFileName,
     normalizePath,
-} from "../path";
-import { perfLogger } from "../perfLogger";
-import * as performance from "../performance";
+} from "./path";
+import { perfLogger } from "./perfLogger";
+import * as performance from "./performance";
 import {
     createScanner,
     getLeadingCommentRanges,
@@ -79,9 +79,9 @@ import {
     tokenIsIdentifierOrKeyword,
     tokenIsIdentifierOrKeywordOrGreaterThan,
     tokenToString,
-} from "../scanner/scanner";
-import { textToKeywordObj } from "../scanner/keywords";
-import { tracing } from "../tracing";
+} from "./scanner";
+import { textToKeywordObj } from "./scannerKeywords";
+import { tracing } from "./tracing";
 import {
     AccessorDeclaration,
     ArrayBindingElement,
@@ -370,7 +370,7 @@ import {
     WhileStatement,
     WithStatement,
     YieldExpression,
-} from "../types";
+} from "./types";
 import {
     addRelatedInfo,
     attachFileToDiagnostics,
@@ -393,7 +393,7 @@ import {
     setTextRangePos,
     setTextRangePosEnd,
     setTextRangePosWidth,
-} from "../utilities";
+} from "./utilities";
 import {
     createTextChangeRange,
     createTextSpanFromBounds,
@@ -407,8 +407,8 @@ import {
     textChangeRangeIsUnchanged,
     textChangeRangeNewSpan,
     textSpanEnd,
-} from "../utilitiesPublic";
-import { supportedDeclarationExtensions } from "../extension";
+} from "./utilitiesPublic";
+import { supportedDeclarationExtensions } from "./extension";
 
 const enum SignatureFlags {
     None = 0,
