@@ -20960,7 +20960,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 //     x = y;  // Mismatched property in source intersection
                 //   }
                 //
-                else if (result && isNonGenericObjectType(target) && !isArrayOrTupleType(target) && some(getPropertiesOfType(target), p => !!(p.flags & SymbolFlags.Optional)) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
+                else if (result && isNonGenericObjectType(target) && !isArrayOrTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
                     result &= propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, /*optionalsOnly*/ true, intersectionState);
                 }
             }
