@@ -531,7 +531,7 @@ function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile
 
     const scriptPath = sourceFile.path;
     const scriptDirectory = getDirectoryPath(scriptPath);
-    const extensionOptions = getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile, preferences, mode);
+    const extensionOptions = getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile, typeChecker, preferences, mode);
 
     return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && (isRootedDiskPath(literalValue) || isUrl(literalValue))
         ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath, extensionOptions)
@@ -546,9 +546,9 @@ interface ExtensionOptions {
     readonly resolutionMode?: ResolutionMode;
 }
 
-function getExtensionOptions(compilerOptions: CompilerOptions, referenceKind: ReferenceKind, importingSourceFile: SourceFile, preferences?: UserPreferences, resolutionMode?: ResolutionMode): ExtensionOptions {
+function getExtensionOptions(compilerOptions: CompilerOptions, referenceKind: ReferenceKind, importingSourceFile: SourceFile, typeChecker?: TypeChecker, preferences?: UserPreferences, resolutionMode?: ResolutionMode): ExtensionOptions {
     return {
-        extensionsToSearch: flatten(getSupportedExtensionsForModuleResolution(compilerOptions)),
+        extensionsToSearch: flatten(getSupportedExtensionsForModuleResolution(compilerOptions, typeChecker)),
         referenceKind,
         importingSourceFile,
         endingPreference: preferences?.importModuleSpecifierEnding,
@@ -565,8 +565,17 @@ function getCompletionEntriesForRelativeModules(literalValue: string, scriptDire
     }
 }
 
-function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[][] {
-    const extensions = getSupportedExtensions(compilerOptions);
+function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions, typeChecker?: TypeChecker): readonly Extension[][] {
+    /** file extensions from ambient modules declarations e.g. *.css */
+    const ambientModulesExtensions = !typeChecker ? [] : mapDefined(typeChecker.getAmbientModules(),
+        module => {
+            const name = module.name.slice(1, -1);
+            if (!name.startsWith("*.") || name.includes("/")) return;
+            return name.slice(1);
+        }
+    ) as Extension[];
+
+    const extensions = [...getSupportedExtensions(compilerOptions), ambientModulesExtensions];
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
     return moduleResolutionUsesNodeModules(moduleResolution) ?
         getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) :
