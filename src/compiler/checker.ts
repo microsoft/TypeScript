@@ -43901,6 +43901,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const isIllegalExportDefaultInCJS = !node.isExportEquals &&
+            !(node.flags & NodeFlags.Ambient) &&
             compilerOptions.verbatimModuleSyntax &&
             (moduleKind === ModuleKind.CommonJS || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS);
 
