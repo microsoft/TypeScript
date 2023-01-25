@@ -1,4 +1,3 @@
-/decl.d.ts(2,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main.ts(1,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main.ts(2,13): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main.ts(3,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
@@ -12,12 +11,16 @@
 /main7.ts(2,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 
 
-==== /decl.d.ts (1 errors) ====
+==== /decl.d.ts (0 errors) ====
     declare function esmy(): void;
     export default esmy;
-    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     export declare function funciton(): void;
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "ambient" {
+        const _default: number;
+        export default _default;
+    }
     
 ==== /main.ts (6 errors) ====
     import esmy from "./decl"; // error

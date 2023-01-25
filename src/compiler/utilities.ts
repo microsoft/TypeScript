@@ -1279,6 +1279,20 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
             BigUint64Array: ["at"],
             ObjectConstructor: ["hasOwn"],
             Error: ["cause"]
+        },
+        es2023: {
+            Array: ["findLastIndex", "findLast"],
+            Int8Array: ["findLastIndex", "findLast"],
+            Uint8Array: ["findLastIndex", "findLast"],
+            Uint8ClampedArray: ["findLastIndex", "findLast"],
+            Int16Array: ["findLastIndex", "findLast"],
+            Uint16Array: ["findLastIndex", "findLast"],
+            Int32Array: ["findLastIndex", "findLast"],
+            Uint32Array: ["findLastIndex", "findLast"],
+            Float32Array: ["findLastIndex", "findLast"],
+            Float64Array: ["findLastIndex", "findLast"],
+            BigInt64Array: ["findLastIndex", "findLast"],
+            BigUint64Array: ["findLastIndex", "findLast"],
         }
     };
 }

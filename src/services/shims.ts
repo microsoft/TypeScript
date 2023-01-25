@@ -349,7 +349,7 @@ export interface LanguageServiceShim extends Shim {
     /**
      * Returns JSON-encoded value of the type TextInsertion.
      */
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string;
+    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): string;
 
     /**
      * Returns JSON-encoded boolean to indicate whether we should support brace location
@@ -1091,10 +1091,10 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             });
     }
 
-    public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string {
+    public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): string {
         return this.forwardJSONCall(
             `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options)
+            () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options, formatOptions)
         );
     }
 

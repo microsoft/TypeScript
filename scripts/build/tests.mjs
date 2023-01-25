@@ -176,9 +176,9 @@ export async function cleanTestDirs() {
  * @param {string} runners
  * @param {boolean} light
  * @param {string} [taskConfigsFolder]
- * @param {string | number} [workerCount]
+ * @param {number} [workerCount]
  * @param {string} [stackTraceLimit]
- * @param {string | number} [timeout]
+ * @param {number} [timeout]
  * @param {boolean} [keepFailed]
  * @param {number | undefined} [shards]
  * @param {number | undefined} [shardId]

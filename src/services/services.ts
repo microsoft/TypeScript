@@ -2436,8 +2436,9 @@ export function createLanguageService(
             : Promise.reject("Host does not implement `installPackage`");
     }
 
-    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
-        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, /*formatSettings*/ undefined), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
+    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined {
+        const formatSettings = formatOptions ? formatting.getFormatContext(formatOptions, host).options : undefined;
+        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, formatSettings), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
     }
 
     function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
