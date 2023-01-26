@@ -653,7 +653,8 @@ interface Symbol {
                 }
                 Harness.Baseline.runBaseline(
                     `${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${subScenario.split(" ").join("-")}-discrepancies.js`,
-                    baselines ? baselines.join("\r\n") : null // eslint-disable-line no-null/no-null
+                    baselines ? baselines.join("\r\n") : null, // eslint-disable-line no-null/no-null
+                    { PrintDiff: true }
                 );
             });
         });

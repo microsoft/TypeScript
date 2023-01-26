@@ -208,7 +208,7 @@ ${patch ? vfs.formatPatch(patch) : ""}`
     export function verifyTscBaseline(sys: () => { baseLine: TscCompileSystem["baseLine"]; }) {
         it(`Generates files matching the baseline`, () => {
             const { file, text } = sys().baseLine();
-            Harness.Baseline.runBaseline(file, text);
+            Harness.Baseline.runBaseline(file, text, { PrintDiff: true });
         });
     }
     export interface VerifyTscCompileLike {

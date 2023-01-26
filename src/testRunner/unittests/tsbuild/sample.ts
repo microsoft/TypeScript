@@ -285,7 +285,7 @@ namespace ts {
                 verifyBuildNextResult(); // logic
                 verifyBuildNextResult();// tests
                 verifyBuildNextResult(); // All Done
-                Harness.Baseline.runBaseline(`tsbuild/sample1/building-using-getNextInvalidatedProject.js`, baseline.join("\r\n"));
+                Harness.Baseline.runBaseline(`tsbuild/sample1/building-using-getNextInvalidatedProject.js`, baseline.join("\r\n"), { PrintDiff: true });
 
                 function verifyBuildNextResult() {
                     const project = builder.getNextInvalidatedProject();
@@ -365,7 +365,7 @@ namespace ts {
                 // Rebuild this project
                 system.appendFile(logicIndex.path, `export class cNew {}`);
                 verifyInvalidation("Dts change to Logic");
-                Harness.Baseline.runBaseline(`tsbuild/sample1/invalidates-projects-correctly.js`, baseline.join("\r\n"));
+                Harness.Baseline.runBaseline(`tsbuild/sample1/invalidates-projects-correctly.js`, baseline.join("\r\n"), { PrintDiff: true });
 
                 function verifyInvalidation(heading: string) {
                     // Rebuild this project

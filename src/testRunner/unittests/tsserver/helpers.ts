@@ -150,7 +150,7 @@ namespace ts.projectSystem {
 
     export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: Logger; }) {
         Debug.assert(sessionOrService.logger.logs.length); // Ensure caller used in memory logger
-        Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
+        Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"), { PrintDiff: true });
     }
 
     export function appendAllScriptInfos(service: server.ProjectService, logs: string[]) {

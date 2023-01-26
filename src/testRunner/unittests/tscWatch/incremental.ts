@@ -40,7 +40,7 @@ namespace ts.tscWatch {
                 build(oldSnap);
             }
 
-            Harness.Baseline.runBaseline(`${isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
+            Harness.Baseline.runBaseline(`${isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"), { PrintDiff: true });
 
             function build(oldSnap: SystemSnap) {
                 const closer = executeCommandLine(

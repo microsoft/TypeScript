@@ -565,7 +565,7 @@ export class A {
             sys.checkTimeoutQueueLength(0);
             baseline.push(`First program is not updated:: ${getPrograms() === emptyArray}`);
             baseline.push(`Second program is not updated:: ${getPrograms2() === emptyArray}`);
-            Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
+            Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"), { PrintDiff: true });
         });
 
         verifyTscWatch({

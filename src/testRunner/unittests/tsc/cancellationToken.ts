@@ -105,7 +105,7 @@ namespace ts.tscWatch {
                 noChange("Clean build");
                 baselineCleanBuild();
 
-                Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
+                Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"), { PrintDiff: true });
 
                 function noChange(caption: string) {
                     oldSnap = applyChange(sys, baseline, noop, caption);
