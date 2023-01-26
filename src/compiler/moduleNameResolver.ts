@@ -659,7 +659,7 @@ function getNodeResolutionFeatures(options: CompilerOptions) {
     return features;
 }
 
-function getConditions(options: CompilerOptions, esmMode?: boolean) {
+export function getConditions(options: CompilerOptions, esmMode?: boolean) {
     // conditions are only used by the node16/nodenext/bundler resolvers - there's no priority order in the list,
     // it's essentially a set (priority is determined by object insertion order in the object we look at).
     const conditions = esmMode || getEmitModuleResolutionKind(options) === ModuleResolutionKind.Bundler
