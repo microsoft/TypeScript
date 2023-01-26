@@ -290,7 +290,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 path: "/tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: { allowArbitraryExtensions: true },
-                    files: [aTs.path],
+                    files: ["/a.ts"],
                 })
             };
             return createWatchedSystem([libFile, aTs, bCssTs, tsconfig]);
@@ -299,14 +299,16 @@ describe("unittests:: tsc-watch:: program updates", () => {
             {
                 caption: "Disable  allowArbitraryExtensions",
                 edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                    compilerOptions: { allowArbitraryExtensions: false }
+                    compilerOptions: { allowArbitraryExtensions: false },
+                    files: ["/a.ts"],
                 })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
             },
             {
                 caption: "Enable  allowArbitraryExtensions",
                 edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                    compilerOptions: { allowArbitraryExtensions: true }
+                    compilerOptions: { allowArbitraryExtensions: true },
+                    files: ["/a.ts"],
                 })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
