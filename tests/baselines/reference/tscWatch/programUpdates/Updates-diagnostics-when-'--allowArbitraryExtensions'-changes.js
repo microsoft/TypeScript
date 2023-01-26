@@ -89,7 +89,7 @@ Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS6263: [0mModule './b.css' was resolved to '/b.d.css.ts', but '--allowArbitraryExtensions' is not set.
+[96ma.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2306: [0mFile '/b.d.css.ts' is not a module.
 
 [7m1[0m import {} from './b.css'
 [7m [0m [91m               ~~~~~~~~~[0m
@@ -100,16 +100,13 @@ Output::
 
 Program root files: ["/a.ts","/b.d.css.ts","/a/lib/lib.d.ts"]
 Program options: {"allowArbitraryExtensions":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
-Program structureReused: Completely
+Program structureReused: SafeModules
 Program files::
-/b.d.css.ts
 /a.ts
+/b.d.css.ts
 /a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/b.d.css.ts
-/a.ts
-/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 
@@ -154,16 +151,13 @@ Output::
 
 Program root files: ["/a.ts","/b.d.css.ts","/a/lib/lib.d.ts"]
 Program options: {"allowArbitraryExtensions":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
-Program structureReused: Completely
+Program structureReused: SafeModules
 Program files::
 /b.d.css.ts
 /a.ts
 /a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/b.d.css.ts
-/a.ts
-/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 
