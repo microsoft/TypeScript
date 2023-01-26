@@ -1221,7 +1221,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "allowArbitraryExtensions",
         type: "boolean",
-        affectsModuleResolution: true,
+        affectsProgramStructure: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Enable_importing_files_with_any_extension_provided_a_declaration_file_is_present,
         defaultValueDescription: false,
