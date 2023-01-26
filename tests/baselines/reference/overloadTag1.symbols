@@ -1,0 +1,48 @@
+=== tests/cases/conformance/jsdoc/overloadTag1.js ===
+/**
+ * @overload
+ * @param {number} a 
+ * @param {number} b
+ * @returns {number} 
+ */
+/**
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ */
+/**
+ * @param {string | number} a
+ * @param {string | number} b
+ * @returns {string | number}
+ */
+export function overloaded(a,b) {
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+>a : Symbol(a, Decl(overloadTag1.js, 17, 27))
+>b : Symbol(b, Decl(overloadTag1.js, 17, 29))
+
+  if (typeof a === "string" && typeof b === "string") {
+>a : Symbol(a, Decl(overloadTag1.js, 17, 27))
+>b : Symbol(b, Decl(overloadTag1.js, 17, 29))
+
+    return a + b;
+>a : Symbol(a, Decl(overloadTag1.js, 17, 27))
+>b : Symbol(b, Decl(overloadTag1.js, 17, 29))
+
+  } else if (typeof a === "number" && typeof b === "number") {
+>a : Symbol(a, Decl(overloadTag1.js, 17, 27))
+>b : Symbol(b, Decl(overloadTag1.js, 17, 29))
+
+    return a + b;
+>a : Symbol(a, Decl(overloadTag1.js, 17, 27))
+>b : Symbol(b, Decl(overloadTag1.js, 17, 29))
+  }
+  throw new Error("Invalid arguments");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+overloaded(1,2)
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+
+overloaded("zero", "one")
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+

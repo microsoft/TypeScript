@@ -38583,9 +38583,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         lastSeenNonAmbientDeclaration = node as FunctionLikeDeclaration;
                     }
                 }
+                if (isInJSFile(current) && isFunctionLike(current) && current.jsDoc) {
+                    // TODO: De-duplicate tag check and improve error span
+                    outer: for (const node of current.jsDoc) {
+                        if (node.tags) {
+                            for (const tag of node.tags) {
+                                if (isJSDocOverloadTag(tag)) {
+                                    hasOverloads = true;
+                                    break outer;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-
         if (multipleConstructorImplementation) {
             forEach(functionDeclarations, declaration => {
                 error(declaration, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
