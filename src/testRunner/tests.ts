@@ -85,6 +85,7 @@ import "./unittests/tsbuild/outputPaths";
 import "./unittests/tsbuild/publicApi";
 import "./unittests/tsbuild/referencesWithRootDirInParent";
 import "./unittests/tsbuild/resolveJsonModule";
+import "./unittests/tsbuild/roots";
 import "./unittests/tsbuild/sample";
 import "./unittests/tsbuild/transitiveReferences";
 import "./unittests/tsbuildWatch/configFileErrors";
