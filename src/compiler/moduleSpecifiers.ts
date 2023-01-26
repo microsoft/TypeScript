@@ -33,6 +33,7 @@ import {
     forEachAncestorDirectory,
     getBaseFileName,
     GetCanonicalFileName,
+    getConditions,
     getDirectoryPath,
     getEmitModuleResolutionKind,
     getModeForResolutionAtIndex,
@@ -46,6 +47,7 @@ import {
     getPathsBasePath,
     getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
+    getResolvePackageJsonExports,
     getSourceFileOfModule,
     getSupportedExtensions,
     getTextOfIdentifierOrLiteral,
@@ -945,8 +947,8 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
             const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
             const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
-            if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
-                const conditions = ["node", importMode === ModuleKind.ESNext ? "import" : "require", "types"];
+            if (getResolvePackageJsonExports(options)) {
+                const conditions = getConditions(options, importMode === ModuleKind.ESNext);
                 const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string"
                     ? tryGetModuleNameFromExports(options, path, packageRootPath, getPackageNameFromTypesPackageName(packageJsonContent.name), packageJsonContent.exports, conditions)
                     : undefined;
