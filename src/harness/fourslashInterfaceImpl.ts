@@ -452,7 +452,7 @@ export class Verify extends VerifyNegatable {
 
     public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string, options?: ts.DocCommentTemplateOptions) {
         this.state.goToMarker(marker);
-        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset }, options);
+        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, ts.testFormatSettings.newLineCharacter!), caretOffset: expectedOffset }, options);
     }
 
     public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {

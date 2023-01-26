@@ -13,7 +13,7 @@
 ////    }
 ////}
 
-const newTextOffset = 12;
+const newTextOffset = 11;
 verify.docCommentTemplateAt("0", /*newTextOffset*/ newTextOffset,
    `/**
      * 

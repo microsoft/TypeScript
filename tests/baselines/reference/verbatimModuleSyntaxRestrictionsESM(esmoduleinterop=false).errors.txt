@@ -17,6 +17,12 @@
     declare class CJSy {}
     export = CJSy;
     
+==== /ambient.d.ts (0 errors) ====
+    declare module "ambient" {
+        const _export: number;
+        export = _export;
+    }
+    
 ==== /types.ts (0 errors) ====
     interface Typey {}
     export type { Typey };
