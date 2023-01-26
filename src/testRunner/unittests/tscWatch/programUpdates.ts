@@ -289,7 +289,8 @@ describe("unittests:: tsc-watch:: program updates", () => {
             const tsconfig: File = {
                 path: "/tsconfig.json",
                 content: JSON.stringify({
-                    compilerOptions: { allowArbitraryExtensions: true }
+                    compilerOptions: { allowArbitraryExtensions: true },
+                    files: [aTs.path],
                 })
             };
             return createWatchedSystem([libFile, aTs, bCssTs, tsconfig]);

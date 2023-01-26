@@ -19,7 +19,7 @@ import {} from './b.css'
 declare const style: string;
 
 //// [/tsconfig.json]
-{"compilerOptions":{"allowArbitraryExtensions":true}}
+{"compilerOptions":{"allowArbitraryExtensions":true},"files":["/a.ts"]}
 
 
 /a/lib/tsc.js -w -p /tsconfig.json
@@ -36,23 +36,23 @@ Output::
 
 
 
-Program root files: ["/a.ts","/b.d.css.ts","/a/lib/lib.d.ts"]
+Program root files: ["/a.ts"]
 Program options: {"allowArbitraryExtensions":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
 Program structureReused: Not
 Program files::
+/a/lib/lib.d.ts
 /b.d.css.ts
 /a.ts
-/a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
 /b.d.css.ts
 /a.ts
-/a/lib/lib.d.ts
 
 Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
 /b.d.css.ts (used version)
 /a.ts (used version)
-/a/lib/lib.d.ts (used version)
 
 PolledWatches::
 
@@ -67,8 +67,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -100,7 +98,7 @@ Output::
 
 Program root files: ["/a.ts","/b.d.css.ts","/a/lib/lib.d.ts"]
 Program options: {"allowArbitraryExtensions":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
-Program structureReused: SafeModules
+Program structureReused: Not
 Program files::
 /a.ts
 /b.d.css.ts
