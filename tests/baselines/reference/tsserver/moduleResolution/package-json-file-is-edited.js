@@ -75,7 +75,7 @@ Info 15   [00:00:42.000] Module resolution kind is not specified, using 'Node16'
 Info 16   [00:00:43.000] Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Info 17   [00:00:44.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 Info 18   [00:00:45.000] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-Info 19   [00:00:46.000] File '/user/username/projects/myproject/src/fileB.mts' exist - use it as a name resolution result.
+Info 19   [00:00:46.000] File '/user/username/projects/myproject/src/fileB.mts' exists - use it as a name resolution result.
 Info 20   [00:00:47.000] ======== Module name './fileB.mjs' was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'. ========
 Info 21   [00:00:48.000] File '/a/lib/package.json' does not exist.
 Info 22   [00:00:49.000] File '/a/package.json' does not exist.
@@ -245,7 +245,7 @@ Info 59   [00:01:35.000] Module resolution kind is not specified, using 'Node16'
 Info 60   [00:01:36.000] Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Info 61   [00:01:37.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 Info 62   [00:01:38.000] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-Info 63   [00:01:39.000] File '/user/username/projects/myproject/src/fileB.mts' exist - use it as a name resolution result.
+Info 63   [00:01:39.000] File '/user/username/projects/myproject/src/fileB.mts' exists - use it as a name resolution result.
 Info 64   [00:01:40.000] ======== Module name './fileB.mjs' was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'. ========
 Info 65   [00:01:41.000] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info 66   [00:01:42.000] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -610,7 +610,7 @@ Info 100  [00:02:31.000] Module resolution kind is not specified, using 'Node16'
 Info 101  [00:02:32.000] Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Info 102  [00:02:33.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 Info 103  [00:02:34.000] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-Info 104  [00:02:35.000] File '/user/username/projects/myproject/src/fileB.mts' exist - use it as a name resolution result.
+Info 104  [00:02:35.000] File '/user/username/projects/myproject/src/fileB.mts' exists - use it as a name resolution result.
 Info 105  [00:02:36.000] ======== Module name './fileB.mjs' was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'. ========
 Info 106  [00:02:37.000] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info 107  [00:02:38.000] File '/a/package.json' does not exist according to earlier cached lookups.

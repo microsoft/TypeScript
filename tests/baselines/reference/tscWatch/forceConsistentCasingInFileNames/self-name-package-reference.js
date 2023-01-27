@@ -36,7 +36,7 @@ Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/Users/name/projects/web/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath '.' with target './dist/index.js'.
-File '/Users/name/projects/web/index.ts' exist - use it as a name resolution result.
+File '/Users/name/projects/web/index.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/index.ts', result '/Users/name/projects/web/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/Users/name/projects/web/index.ts'. ========
 File '/a/lib/package.json' does not exist.
@@ -98,7 +98,7 @@ export declare function thing(): void;
 
 
 //// [/Users/name/projects/web/dist/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.esnext.full.d.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n","signature":"-2724770439-export declare function thing(): void;\n","impliedFormat":99}],"options":{"composite":true,"declarationDir":"../types","module":199,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"../types/index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.esnext.full.d.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n","signature":"-2724770439-export declare function thing(): void;\n","impliedFormat":99}],"root":[2],"options":{"composite":true,"declarationDir":"../types","module":199,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"../types/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/Users/name/projects/web/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -135,6 +135,12 @@ export declare function thing(): void;
         "impliedFormat": "esnext"
       }
     },
+    "root": [
+      [
+        2,
+        "../index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationDir": "../types",
@@ -154,6 +160,6 @@ export declare function thing(): void;
     "latestChangedDtsFile": "../types/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 974
+  "size": 985
 }
 
