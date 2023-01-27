@@ -43909,7 +43909,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (node.expression.kind === SyntaxKind.Identifier) {
             const id = node.expression as Identifier;
-            const sym = resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node);
+            const sym = getExportSymbolOfValueSymbolIfExported(resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node));
             if (sym) {
                 markAliasReferenced(sym, id);
                 // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
