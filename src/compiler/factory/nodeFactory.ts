@@ -1108,7 +1108,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral {
         const node = createBaseToken<BigIntLiteral>(SyntaxKind.BigIntLiteral);
         node.text = typeof value === "string" ? value : pseudoBigIntToString(value) + "n";
-        node.transformFlags |= TransformFlags.ContainsESNext;
+        node.transformFlags |= TransformFlags.ContainsES2020;
         return node;
     }
 
@@ -3695,7 +3695,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 node.transformFlags |= TransformFlags.ContainsES2015;
                 break;
             case SyntaxKind.ImportKeyword:
-                node.transformFlags |= TransformFlags.ContainsESNext;
+                node.transformFlags |= TransformFlags.ContainsES2020;
                 break;
             default:
                 return Debug.assertNever(keywordToken);
@@ -4735,7 +4735,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.name = name;
         node.transformFlags |=
             propagateChildFlags(node.name) |
-            TransformFlags.ContainsESNext;
+            TransformFlags.ContainsES2020;
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return node;
     }
