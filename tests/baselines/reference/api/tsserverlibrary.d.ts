@@ -6400,6 +6400,19 @@ declare namespace ts {
         getApparentType(type: Type): Type;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
+        getAnyType(): Type;
+        getStringType(): Type;
+        getStringLiteralType(value: string): StringLiteralType;
+        getNumberType(): Type;
+        getNumberLiteralType(value: number): NumberLiteralType;
+        getBooleanType(): Type;
+        getFalseType(fresh?: boolean): Type;
+        getTrueType(fresh?: boolean): Type;
+        getVoidType(): Type;
+        getUndefinedType(): Type;
+        getNullType(): Type;
+        getESSymbolType(): Type;
+        getNeverType(): Type;
         getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
         /**
          * Depending on the operation performed, it may be appropriate to throw away the checker
