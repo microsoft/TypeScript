@@ -4,6 +4,7 @@ import {
 } from "./path";
 import {
     Extension,
+    Path,
     ResolvedConfigFileName,
 } from "./types";
 
@@ -30,6 +31,7 @@ export enum UpToDateStatusType {
     OutOfDateWithUpstream,
     OutOfDateBuildInfo,
     OutOfDateOptions,
+    OutOfDateRoots,
     UpstreamOutOfDate,
     UpstreamBlocked,
     ComputingUpstream,
@@ -53,6 +55,7 @@ export type UpToDateStatus =
     | Status.OutOfDateWithSelf
     | Status.OutOfDateWithUpstream
     | Status.OutOfDateBuildInfo
+    | Status.OutOfDateRoots
     | Status.UpstreamOutOfDate
     | Status.UpstreamBlocked
     | Status.ComputingUpstream
@@ -129,8 +132,14 @@ export namespace Status {
      * Buildinfo indicates that build is out of date
      */
     export interface OutOfDateBuildInfo {
-        type: UpToDateStatusType.OutOfDateBuildInfo | UpToDateStatusType.OutOfDateOptions,
+        type: UpToDateStatusType.OutOfDateBuildInfo | UpToDateStatusType.OutOfDateOptions;
         buildInfoFile: string;
+    }
+
+    export interface OutOfDateRoots {
+        type: UpToDateStatusType.OutOfDateRoots,
+        buildInfoFile: string;
+        inputFile: Path;
     }
 
     /**

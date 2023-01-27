@@ -1385,16 +1385,16 @@ const enum PipelinePhase {
 }
 
 /** @internal */
-export const createPrinterWithDefaults: () => Printer = memoize(() => createPrinter({}));
+export const createPrinterWithDefaults: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({}));
 
 /** @internal */
-export const createPrinterWithRemoveComments: () => Printer = memoize(() => createPrinter({ removeComments: true }));
+export const createPrinterWithRemoveComments: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true }));
 
 /** @internal */
-export const createPrinterWithRemoveCommentsNeverAsciiEscape: () => Printer = memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
+export const createPrinterWithRemoveCommentsNeverAsciiEscape: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
 
 /** @internal */
-export const createPrinterWithRemoveCommentsOmitTrailingSemicolon: () => Printer = memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
+export const createPrinterWithRemoveCommentsOmitTrailingSemicolon: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
 
 export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
     const {
