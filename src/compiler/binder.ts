@@ -121,6 +121,7 @@ import {
     InternalSymbolName,
     isAliasableExpression,
     isAmbientModule,
+    isAssignmentDeclaration,
     isAssignmentExpression,
     isAssignmentOperator,
     isAssignmentTarget,
@@ -3339,6 +3340,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     return declareSymbol(table, parent, id, flags, excludeFlags);
                 }
             });
+        }
+        if (namespaceSymbol && namespaceSymbol.valueDeclaration) {
+            if (isAssignmentDeclaration(namespaceSymbol.valueDeclaration)) containerIsClass = false;
         }
         if (containerIsClass && namespaceSymbol && namespaceSymbol.valueDeclaration) {
             addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);

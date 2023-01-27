@@ -7,5 +7,5 @@
 //// Thing.prototype.def = 456
 //// new Thing/**/();
 
-verify.goToDefinition("", []);
+verify.goToDefinition("", "");
 verify.noErrors();
