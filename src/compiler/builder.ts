@@ -37,6 +37,7 @@ import {
     emitSkippedWithNoDiagnostics,
     emptyArray,
     ensurePathIsNonModuleName,
+    FileIncludeKind,
     filterSemanticDiagnostics,
     forEach,
     forEachEntry,
@@ -911,9 +912,17 @@ export type ProgramBuildInfoEmitSignature = ProgramBuildInfoFileId | [fileId: Pr
  */
 export type ProgramMultiFileEmitBuildInfoFileInfo = string | ProgramMultiFileEmitBuildInfoBuilderStateFileInfo;
 /** @internal */
+export type ProgramBuildInfoRootStartEnd = [start: ProgramBuildInfoFileId, end: ProgramBuildInfoFileId];
+/**
+ * Either start and end of FileId for consecutive fileIds to be included as root or single fileId that is root
+ * @internal
+ */
+export type ProgramBuildInfoRoot = ProgramBuildInfoRootStartEnd | ProgramBuildInfoFileId;
+/** @internal */
 export interface ProgramMultiFileEmitBuildInfo {
     fileNames: readonly string[];
     fileInfos: readonly ProgramMultiFileEmitBuildInfoFileInfo[];
+    root: readonly ProgramBuildInfoRoot[];
     options: CompilerOptions | undefined;
     fileIdsList: readonly (readonly ProgramBuildInfoFileId[])[] | undefined;
     referencedMap: ProgramBuildInfoReferencedMap | undefined;
@@ -942,6 +951,7 @@ export type ProgramBuildInfoBundlePendingEmit = BuilderFileEmit | false;
 export interface ProgramBundleEmitBuildInfo {
     fileNames: readonly string[];
     fileInfos: readonly ProgramBundleEmitBuildInfoFileInfo[];
+    root: readonly ProgramBuildInfoRoot[];
     options: CompilerOptions | undefined;
     outSignature: EmitSignature | undefined;
     latestChangedDtsFile: string | undefined;
@@ -966,12 +976,14 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
     const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
     const fileNames: string[] = [];
     const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
+    const root: ProgramBuildInfoRoot[] = [];
     if (outFile(state.compilerOptions)) {
         // Copy all fileInfo, version and impliedFormat
         // Affects global scope and signature doesnt matter because with --out they arent calculated or needed to determine upto date ness
         const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBundleEmitBuildInfoFileInfo => {
             // Ensure fileId
-            toFileId(key);
+            const fileId = toFileId(key);
+            tryAddRoot(key, fileId);
             return value.impliedFormat ?
                 { version: value.version, impliedFormat: value.impliedFormat, signature: undefined, affectsGlobalScope: undefined } :
                 value.version;
@@ -979,6 +991,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
         const program: ProgramBundleEmitBuildInfo = {
             fileNames,
             fileInfos,
+            root,
             options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
             outSignature: state.outSignature,
             latestChangedDtsFile,
@@ -1005,6 +1018,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
     const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramMultiFileEmitBuildInfoFileInfo => {
         // Ensure fileId
         const fileId = toFileId(key);
+        tryAddRoot(key, fileId);
         Debug.assert(fileNames[fileId - 1] === relativeToBuildInfo(key));
         const oldSignature = state.oldSignatures?.get(key);
         const actualSignature = oldSignature !== undefined ? oldSignature || undefined : value.signature;
@@ -1100,6 +1114,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
     const program: ProgramMultiFileEmitBuildInfo = {
         fileNames,
         fileInfos,
+        root,
         options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
         fileIdsList,
         referencedMap,
@@ -1138,6 +1153,25 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
             (fileNamesToFileIdListId ||= new Map()).set(key, fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId);
         }
         return fileIdListId;
+    }
+
+    function tryAddRoot(path: Path, fileId: ProgramBuildInfoFileId) {
+        const file = state.program!.getSourceFile(path)!;
+        if (!state.program!.getFileIncludeReasons().get(file.path)!.some(r => r.kind === FileIncludeKind.RootFile)) return;
+        // First fileId as is
+        if (!root.length) return root.push(fileId);
+        const last = root[root.length - 1];
+        const isLastStartEnd = isArray(last);
+        // If its [..., last = [start, end = fileId - 1]], update last to [start, fileId]
+        if (isLastStartEnd && last[1] === fileId - 1) return last[1] = fileId;
+        // If its [..., last = [start, end !== fileId - 1]] or [last] or [..., last !== fileId - 1], push the fileId
+        if (isLastStartEnd || root.length === 1 || last !== fileId - 1) return root.push(fileId);
+        const lastButOne = root[root.length - 2];
+        // If [..., lastButOne = [start, end], lastFileId] or [..., lastButOne !== lastFileId - 1, lastFileId], push the fileId
+        if (!isNumber(lastButOne) || lastButOne !== last - 1) return root.push(fileId);
+        // Convert lastButOne as [lastButOne, fileId]
+        root[root.length - 2] = [lastButOne, fileId];
+        return root.length = root.length - 1;
     }
 
     /**
@@ -1776,16 +1810,32 @@ export function getBuildInfoFileVersionMap(
     program: ProgramBuildInfo,
     buildInfoPath: string,
     host: Pick<ReadBuildProgramHost, "useCaseSensitiveFileNames" | "getCurrentDirectory">
-): Map<Path, string> {
+) {
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     const fileInfos = new Map<Path, string>();
+    let rootIndex = 0;
+    const roots: Path[] = [];
     program.fileInfos.forEach((fileInfo, index) => {
         const path = toPath(program.fileNames[index], buildInfoDirectory, getCanonicalFileName);
         const version = isString(fileInfo) ? fileInfo : fileInfo.version;
         fileInfos.set(path, version);
+        if (rootIndex < program.root.length) {
+            const current = program.root[rootIndex];
+            const fileId = (index + 1) as ProgramBuildInfoFileId;
+            if (isArray(current)) {
+                if (current[0] <= fileId && fileId <= current[1]) {
+                    roots.push(path);
+                    if (current[1] === fileId) rootIndex++;
+                }
+            }
+            else if (current === fileId) {
+                roots.push(path);
+                rootIndex++;
+            }
+        }
     });
-    return fileInfos;
+    return { fileInfos, roots };
 }
 
 /** @internal */
