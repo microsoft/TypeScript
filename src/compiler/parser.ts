@@ -1413,6 +1413,7 @@ namespace Parser {
     let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
     let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
     let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
+    let isInTsserver = true;
 
     function countNode(node: Node) {
         nodeCount++;
@@ -1659,6 +1660,7 @@ namespace Parser {
         IdentifierConstructor = objectAllocator.getIdentifierConstructor();
         PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor();
         SourceFileConstructor = objectAllocator.getSourceFileConstructor();
+        isInTsserver = !!(new NodeConstructor(0, 0, 0).constructor);
 
         fileName = normalizePath(_fileName);
         sourceText = _sourceText;
@@ -1759,13 +1761,20 @@ namespace Parser {
     }
 
     function withJSDoc<T extends HasJSDoc>(node: T, hasJSDoc: boolean): T {
-        return hasJSDoc && (node.flags & NodeFlags.JavaScriptFile) ? addJSDocComment(node) : node;
+        return hasJSDoc ? addJSDocComment(node) : node;
+    }
+
+    function shouldCheckJSDoc<T extends HasJSDoc>(node: T, comment: ts.CommentRange) {
+        if (isInTsserver) return true;
+        if (node.flags & NodeFlags.JavaScriptFile) return true;
+        const i = sourceText.indexOf("@link", comment.pos)
+        if (comment.pos < i && i < comment.end) return true;
     }
 
     let hasDeprecatedTag = false;
     function addJSDocComment<T extends HasJSDoc>(node: T): T {
         Debug.assert(!node.jsDoc); // Should only be called once per node
-        const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
+        const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => shouldCheckJSDoc(node, comment) && JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
         if (jsDoc.length) node.jsDoc = jsDoc;
         if (hasDeprecatedTag) {
             hasDeprecatedTag = false;

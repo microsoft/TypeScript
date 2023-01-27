@@ -44038,6 +44038,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkSourceElementWorker(node: Node): void {
         if (canHaveJSDoc(node)) {
+            // TODO: This part still needs to be disabled for tsc in a lazy-jsdoc-parsing build
             forEach(node.jsDoc, ({ comment, tags }) => {
                 checkJSDocCommentWorker(comment);
                 forEach(tags, tag => {
