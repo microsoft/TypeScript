@@ -1767,8 +1767,10 @@ namespace Parser {
     function shouldCheckJSDoc<T extends HasJSDoc>(node: T, comment: ts.CommentRange) {
         if (isInTsserver) return true;
         if (node.flags & NodeFlags.JavaScriptFile) return true;
-        const i = sourceText.indexOf("@link", comment.pos)
-        if (comment.pos < i && i < comment.end) return true;
+        const link = sourceText.indexOf("@link", comment.pos);
+        const see = sourceText.indexOf("@see", comment.pos);
+        if (comment.pos < link && link < comment.end) return true;
+        if (comment.pos < see && see < comment.end) return true;
     }
 
     let hasDeprecatedTag = false;
