@@ -4927,7 +4927,7 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 
 export interface TypeChecker {
     getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
-    /** @internal */ getTypeOfSymbol(symbol: Symbol): Type;
+    getTypeOfSymbol(symbol: Symbol): Type;
     getDeclaredTypeOfSymbol(symbol: Symbol): Type;
     getPropertiesOfType(type: Type): Symbol[];
     getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
@@ -5153,8 +5153,8 @@ export interface TypeChecker {
     /** @internal */ getRecursionIdentity(type: Type): object | undefined;
     /** @internal */ getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol>;
 
-    /** @internal */ isArrayType(type: Type): boolean;
-    /** @internal */ isTupleType(type: Type): boolean;
+    isArrayType(type: Type): boolean;
+    isTupleType(type: Type): boolean;
     /** @internal */ isArrayLikeType(type: Type): boolean;
 
     /**
