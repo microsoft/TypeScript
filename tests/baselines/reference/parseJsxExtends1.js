@@ -9,8 +9,6 @@ export function Foo() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 function Foo() {
-    return function () {
-        return ;
-    };
+    return <const T extends/>;
 }
 exports.Foo = Foo;

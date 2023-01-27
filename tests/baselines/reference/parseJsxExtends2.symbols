@@ -3,6 +3,6 @@ export function Foo() {
 >Foo : Symbol(Foo, Decl(index.tsx, 0, 0))
 
     return <T extends/>
->T : Symbol(T, Decl(index.tsx, 1, 12))
+>extends : Symbol(extends, Decl(index.tsx, 1, 13))
 }
 

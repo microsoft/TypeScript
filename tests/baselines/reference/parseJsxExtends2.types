@@ -1,10 +1,10 @@
 === tests/cases/compiler/index.tsx ===
 export function Foo() {
->Foo : () => <T>() => any
+>Foo : () => any
 
     return <T extends/>
-><T extends/> : <T>() => any
->/> : RegExp
+><T extends/> : any
+>T : any
+>extends : true
 }
-> : any
 
