@@ -34271,7 +34271,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (pos < paramCount) {
             return getTypeOfParameter(signature.parameters[pos]);
         }
-        if (signatureHasRestParameter(signature)) {
+        if (signature.parameters.length !== 0 && signatureHasRestParameter(signature)) {
             // We want to return the value undefined for an out of bounds parameter position,
             // so we need to check bounds here before calling getIndexedAccessType (which
             // otherwise would return the type 'undefined').
@@ -34317,7 +34317,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // latter example, the effective rest type is [...string[], boolean].
     function getParameterCount(signature: Signature) {
         const length = signature.parameters.length;
-        if (signatureHasRestParameter(signature)) {
+        if (length !== 0 && signatureHasRestParameter(signature)) {
             const restType = getTypeOfSymbol(signature.parameters[length - 1]);
             if (isTupleType(restType)) {
                 return length + restType.target.fixedLength - (restType.target.hasRestElement ? 0 : 1);
@@ -34363,8 +34363,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function hasEffectiveRestParameter(signature: Signature) {
-        if (signatureHasRestParameter(signature)) {
-            const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+        const length = signature.parameters.length;
+        if (length !== 0 && signatureHasRestParameter(signature)) {
+            const restType = getTypeOfSymbol(signature.parameters[length - 1]);
             return !isTupleType(restType) || restType.target.hasRestElement;
         }
         return false;
