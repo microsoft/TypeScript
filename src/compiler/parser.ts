@@ -5193,7 +5193,7 @@ namespace Parser {
 
             // JSX overrides
             if (languageVariant === LanguageVariant.JSX) {
-                return lookAhead(() => {
+                const isArrowFunctionInJsx = lookAhead(() => {
                     parseOptional(SyntaxKind.ConstKeyword);
                     const third = nextToken();
                     if (third === SyntaxKind.ExtendsKeyword) {
@@ -5201,16 +5201,23 @@ namespace Parser {
                         switch (fourth) {
                             case SyntaxKind.EqualsToken:
                             case SyntaxKind.GreaterThanToken:
-                                return Tristate.False;
+                            case SyntaxKind.SlashToken:
+                                return false;
                             default:
-                                return Tristate.Unknown;
+                                return true;
                         }
                     }
                     else if (third === SyntaxKind.CommaToken || third === SyntaxKind.EqualsToken) {
-                        return Tristate.True;
+                        return true;
                     }
-                    return Tristate.False;
+                    return false;
                 });
+
+                if (isArrowFunctionInJsx) {
+                    return Tristate.True;
+                }
+
+                return Tristate.False;
             }
 
             // This *could* be a parenthesized arrow function.
