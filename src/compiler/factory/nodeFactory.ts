@@ -1054,7 +1054,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             array.end = elements.end;
             array.hasTrailingComma = hasTrailingComma;
             array.transformFlags = elements.transformFlags;
-            Debug.attachNodeArrayDebugInfo(array);
+            Debug.attachNodeArrayDebugInfo(array as NodeArray<Node>);
             return array;
         }
 
@@ -1068,7 +1068,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         array.hasTrailingComma = !!hasTrailingComma;
         array.transformFlags = TransformFlags.None;
         aggregateChildrenFlags(array);
-        Debug.attachNodeArrayDebugInfo(array);
+        Debug.attachNodeArrayDebugInfo(array as NodeArray<Node>);
         return array;
     }
 
