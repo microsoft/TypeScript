@@ -31,7 +31,7 @@ Info 15   [00:00:34.000] Auto discovery for typings is enabled in project '/dev/
 Info 16   [00:00:35.000] File '/a/cache/node_modules/lib.d.ts' does not exist.
 Info 17   [00:00:36.000] File '/a/cache/node_modules/@types/lib/package.json' does not exist.
 Info 18   [00:00:37.000] File '/a/cache/node_modules/@types/lib.d.ts' does not exist.
-Info 19   [00:00:38.000] File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.
+Info 19   [00:00:38.000] File '/a/cache/node_modules/@types/lib/index.d.ts' exists - use it as a name resolution result.
 Info 20   [00:00:39.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 21   [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 22   [00:00:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
