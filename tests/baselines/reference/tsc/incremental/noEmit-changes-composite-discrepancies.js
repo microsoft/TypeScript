@@ -30,6 +30,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -105,6 +121,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -177,6 +209,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -252,6 +300,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -324,6 +388,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -443,6 +523,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -573,6 +669,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -648,6 +760,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -720,6 +848,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -795,6 +939,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -867,6 +1027,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -986,6 +1162,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -1102,6 +1294,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -1221,6 +1429,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -1337,6 +1561,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -1412,6 +1652,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -1498,6 +1754,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -1573,6 +1845,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -1645,6 +1933,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -1720,6 +2024,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
