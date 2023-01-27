@@ -515,6 +515,7 @@ const { main: watchGuard, watch: watchWatchGuard } = entrypointBuildTask({
 export const generateTypesMap = task({
     name: "generate-types-map",
     run: async () => {
+        await fs.promises.mkdir("./built/local", { recursive: true });
         const source = "src/server/typesMap.json";
         const target = "built/local/typesMap.json";
         const contents = await fs.promises.readFile(source, "utf-8");
