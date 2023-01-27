@@ -1759,7 +1759,7 @@ namespace Parser {
     }
 
     function withJSDoc<T extends HasJSDoc>(node: T, hasJSDoc: boolean): T {
-        return hasJSDoc ? addJSDocComment(node) : node;
+        return hasJSDoc && (node.flags & NodeFlags.JavaScriptFile) ? addJSDocComment(node) : node;
     }
 
     let hasDeprecatedTag = false;
