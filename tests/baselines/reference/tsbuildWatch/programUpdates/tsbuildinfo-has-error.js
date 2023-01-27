@@ -46,17 +46,17 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /src/project/main.ts (used version)
 
-WatchedFiles::
-/src/project/tsconfig.json:
-  {"fileName":"/src/project/tsconfig.json","pollingInterval":250}
-/src/project/main.ts:
-  {"fileName":"/src/project/main.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/src/project/tsconfig.json:
+  {}
+/src/project/main.ts:
+  {}
 
 FsWatchesRecursive::
 /src/project:
-  {"directoryName":"/src/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -65,7 +65,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/src/project/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
@@ -79,6 +79,10 @@ exports.x = 10;
     ],
     "fileInfos": {
       "../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true

@@ -243,4 +243,4 @@ declare namespace Tree {
         export const parentSource: string;
     }
 }
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';

@@ -59,7 +59,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -93,43 +93,43 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/modulea.ts (used version)
 /user/username/projects/myproject/moduleb.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/modulea.ts:
-  {"fileName":"/user/username/projects/myproject/moduleA.ts","pollingInterval":250}
-/user/username/projects/myproject/modulec.ts:
-  {"fileName":"/user/username/projects/myproject/ModuleC.ts","pollingInterval":250}
-/user/username/projects/myproject/moduleb.ts:
-  {"fileName":"/user/username/projects/myproject/moduleB.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/modulea.ts:
+  {}
+/user/username/projects/myproject/modulec.ts:
+  {}
+/user/username/projects/myproject/moduleb.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/ModuleC.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
 //// [/user/username/projects/myproject/moduleA.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/moduleB.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -174,7 +174,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -202,25 +202,25 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/modulea.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/modulea.ts:
-  {"fileName":"/user/username/projects/myproject/moduleA.ts","pollingInterval":250}
-/user/username/projects/myproject/modulec.ts:
-  {"fileName":"/user/username/projects/myproject/ModuleC.ts","pollingInterval":250}
-/user/username/projects/myproject/moduleb.ts:
-  {"fileName":"/user/username/projects/myproject/moduleB.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/modulea.ts:
+  {}
+/user/username/projects/myproject/modulec.ts:
+  {}
+/user/username/projects/myproject/moduleb.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -25,5 +25,6 @@ export class C  extends base{
 >prop : Symbol(prop, Decl(2.ts, 3, 16))
 
         super();
+>super : Symbol(base, Decl(0.ts, 0, 0))
     }
 }

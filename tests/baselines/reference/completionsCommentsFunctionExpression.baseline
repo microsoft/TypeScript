@@ -1,3 +1,601 @@
+=== /tests/cases/fourslash/completionsCommentsFunctionExpression.ts ===
+// /** lambdaFoo var comment*/
+// var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;
+//                                                                                                ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: number
+// | function anotherFunc(a: number): string
+// | var assigned: (s: string) => number
+// | (parameter) b: number
+// | var lambdaFoo: (a: number, b: number) => number
+// | var lambddaNoVarComment: (a: number, b: number) => number
+// | abstract
+// | any
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | asserts
+// | async
+// | await
+// | bigint
+// | boolean
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | declare
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | infer
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | keyof
+// | let
+// | interface Math
+// | var Math: Math
+// | module
+// | namespace
+// | var NaN: number
+// | never
+// | new
+// | null
+// | number
+// | interface Number
+// | var Number: NumberConstructor
+// | object
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | readonly
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | string
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | symbol
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | unique
+// | unknown
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+// var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
+// lambdaFoo(10, 20);
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function anotherFunc(a: number): string
+// | var assigned: (s: string) => number
+// | var lambdaFoo: (a: number, b: number) => number
+// | var lambddaNoVarComment: (a: number, b: number) => number
+// | abstract
+// | any
+// | var Array: ArrayConstructor
+// | (arrayLength?: number) => any[] (+2 overloads)
+// | interface Array<T>
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | asserts
+// | async
+// | await
+// | bigint
+// | boolean
+// | var Boolean: BooleanConstructor
+// | <T>(value?: T) => boolean
+// | interface Boolean
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | var Date: DateConstructor
+// | () => string
+// | interface Date
+// | debugger
+// | declare
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | var Error: ErrorConstructor
+// | (message?: string) => Error
+// | interface Error
+// | function eval(x: string): any
+// | var EvalError: EvalErrorConstructor
+// | (message?: string) => EvalError (+1 overload)
+// | interface EvalError
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | var Function: FunctionConstructor
+// | (...args: string[]) => Function
+// | interface Function
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | infer
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | keyof
+// | let
+// | interface Math
+// | var Math: Math
+// | module
+// | namespace
+// | var NaN: number
+// | never
+// | new
+// | null
+// | number
+// | var Number: NumberConstructor
+// | (value?: any) => number
+// | interface Number
+// | object
+// | var Object: ObjectConstructor
+// | () => any (+1 overload)
+// | interface Object
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | var RangeError: RangeErrorConstructor
+// | (message?: string) => RangeError (+1 overload)
+// | interface RangeError
+// | readonly
+// | var ReferenceError: ReferenceErrorConstructor
+// | (message?: string) => ReferenceError (+1 overload)
+// | interface ReferenceError
+// | var RegExp: RegExpConstructor
+// | (pattern: string | RegExp) => RegExp (+1 overload)
+// | interface RegExp
+// | return
+// | satisfies
+// | string
+// | var String: StringConstructor
+// | (value?: any) => string
+// | interface String
+// | super
+// | switch
+// | symbol
+// | var SyntaxError: SyntaxErrorConstructor
+// | (message?: string) => SyntaxError (+1 overload)
+// | interface SyntaxError
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | var TypeError: TypeErrorConstructor
+// | (message?: string) => TypeError (+1 overload)
+// | interface TypeError
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | unique
+// | unknown
+// | var URIError: URIErrorConstructor
+// | (message?: string) => URIError (+1 overload)
+// | interface URIError
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+// function anotherFunc(a: number) {
+//     /** documentation
+//         @param b {string} inner parameter */
+//     var lambdaVar = /** inner docs */(b: string) => {
+//         var localVar = "Hello ";
+//         return localVar + b;
+//     }
+//     return lambdaVar("World") + a;
+// }
+// /**
+//  * On variable
+//  * @param s the first parameter!
+//  * @returns the parameter's length
+//  */
+// var assigned = /**
+//                 * Summary on expression
+//                 * @param s param on expression
+//                 * @returns return on expression
+//                 */function(/** On parameter */s: string) {
+//   return s.length;
+//          ^
+// | ----------------------------------------------------------------------
+// | function anotherFunc(a: number): string
+// | (local var) arguments: IArguments
+// | var assigned: (s: string) => number
+// | var lambdaFoo: (a: number, b: number) => number
+// | var lambddaNoVarComment: (a: number, b: number) => number
+// | (parameter) s: string
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | interface Number
+// | var Number: NumberConstructor
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+// }
+// assigned("hey");
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function anotherFunc(a: number): string
+// | var assigned: (s: string) => number
+// | var lambdaFoo: (a: number, b: number) => number
+// | var lambddaNoVarComment: (a: number, b: number) => number
+// | var Array: ArrayConstructor
+// | (arrayLength?: number) => any[] (+2 overloads)
+// | interface Array<T>
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | async
+// | await
+// | var Boolean: BooleanConstructor
+// | <T>(value?: T) => boolean
+// | interface Boolean
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | var Date: DateConstructor
+// | () => string
+// | interface Date
+// | debugger
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | var Error: ErrorConstructor
+// | (message?: string) => Error
+// | interface Error
+// | function eval(x: string): any
+// | var EvalError: EvalErrorConstructor
+// | (message?: string) => EvalError (+1 overload)
+// | interface EvalError
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | var Function: FunctionConstructor
+// | (...args: string[]) => Function
+// | interface Function
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | let
+// | interface Math
+// | var Math: Math
+// | var NaN: number
+// | new
+// | null
+// | var Number: NumberConstructor
+// | (value?: any) => number
+// | interface Number
+// | var Object: ObjectConstructor
+// | () => any (+1 overload)
+// | interface Object
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | var RangeError: RangeErrorConstructor
+// | (message?: string) => RangeError (+1 overload)
+// | interface RangeError
+// | var ReferenceError: ReferenceErrorConstructor
+// | (message?: string) => ReferenceError (+1 overload)
+// | interface ReferenceError
+// | var RegExp: RegExpConstructor
+// | (pattern: string | RegExp) => RegExp (+1 overload)
+// | interface RegExp
+// | return
+// | satisfies
+// | var String: StringConstructor
+// | (value?: any) => string
+// | interface String
+// | super
+// | switch
+// | var SyntaxError: SyntaxErrorConstructor
+// | (message?: string) => SyntaxError (+1 overload)
+// | interface SyntaxError
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | var TypeError: TypeErrorConstructor
+// | (message?: string) => TypeError (+1 overload)
+// | interface TypeError
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | var URIError: URIErrorConstructor
+// | (message?: string) => URIError (+1 overload)
+// | interface URIError
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +603,7 @@
       "position": 123,
       "name": "2"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
@@ -638,7 +1236,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -1655,7 +2253,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -1709,7 +2307,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -1967,7 +2565,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -2021,7 +2619,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -2075,7 +2673,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -2844,7 +3442,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -3355,7 +3953,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -3409,7 +4007,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -3463,7 +4061,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -3517,7 +4115,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -3865,7 +4463,7 @@
       "position": 249,
       "name": "4"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
@@ -4490,7 +5088,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -5719,7 +6317,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -5773,7 +6371,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -6087,7 +6685,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -6141,7 +6739,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -6195,7 +6793,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -7063,7 +7661,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -8014,7 +8612,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -8068,7 +8666,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -8122,7 +8720,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -8176,7 +8774,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -8600,7 +9198,7 @@
       "position": 841,
       "name": "15"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
@@ -9256,7 +9854,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -10225,7 +10823,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -10279,7 +10877,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -10525,7 +11123,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -10579,7 +11177,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -10633,7 +11231,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -11330,7 +11928,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -11805,7 +12403,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -11859,7 +12457,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -11913,7 +12511,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -11967,7 +12565,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -12291,7 +12889,7 @@
       "position": 861,
       "name": "17"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
@@ -12892,7 +13490,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -14073,7 +14671,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -14127,7 +14725,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -14429,7 +15027,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -14483,7 +15081,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -14537,7 +15135,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -15333,7 +15931,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -16248,7 +16846,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -16302,7 +16900,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -16356,7 +16954,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -16410,7 +17008,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]

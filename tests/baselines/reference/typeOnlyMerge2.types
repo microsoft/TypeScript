@@ -1,0 +1,33 @@
+=== tests/cases/conformance/externalModules/a.ts ===
+const A = {}
+>A : {}
+>{} : {}
+
+export { A };
+>A : {}
+
+=== tests/cases/conformance/externalModules/b.ts ===
+import { A } from "./a";
+>A : {}
+
+type A = any;
+>A : any
+
+export type { A };
+>A : any
+
+=== tests/cases/conformance/externalModules/c.ts ===
+import { A } from "./b";
+>A : {}
+
+namespace A {}
+export { A };
+>A : {}
+
+=== tests/cases/conformance/externalModules/d.ts ===
+import { A } from "./c";
+>A : {}
+
+A;
+>A : {}
+
