@@ -54,7 +54,7 @@ File '/src/project/node_modules/pkg0.tsx' does not exist.
 File '/src/project/node_modules/pkg0.d.ts' does not exist.
 File '/src/project/node_modules/pkg0/index.ts' does not exist.
 File '/src/project/node_modules/pkg0/index.tsx' does not exist.
-File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
+File '/src/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
@@ -79,7 +79,7 @@ Root directory cannot be determined, skipping primary search paths.
 Looking up in 'node_modules' folder, initial location '/src/project'.
 File '/src/project/node_modules/pkg2/package.json' does not exist.
 File '/src/project/node_modules/pkg2.d.ts' does not exist.
-File '/src/project/node_modules/pkg2/index.d.ts' exist - use it as a name resolution result.
+File '/src/project/node_modules/pkg2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg2/index.d.ts', result '/src/project/node_modules/pkg2/index.d.ts'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts', primary: false. ========
 ======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory not set. ========
@@ -357,7 +357,7 @@ File '/src/project/node_modules/pkg1.tsx' does not exist.
 File '/src/project/node_modules/pkg1.d.ts' does not exist.
 File '/src/project/node_modules/pkg1/index.ts' does not exist.
 File '/src/project/node_modules/pkg1/index.tsx' does not exist.
-File '/src/project/node_modules/pkg1/index.d.ts' exist - use it as a name resolution result.
+File '/src/project/node_modules/pkg1/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg1/index.d.ts', result '/src/project/node_modules/pkg1/index.d.ts'.
 ======== Module name 'pkg1' was successfully resolved to '/src/project/node_modules/pkg1/index.d.ts'. ========
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg1/index.d.ts 250 undefined Source file
@@ -591,7 +591,7 @@ Root directory cannot be determined, skipping primary search paths.
 Looking up in 'node_modules' folder, initial location '/src/project'.
 File '/src/project/node_modules/pkg3/package.json' does not exist.
 File '/src/project/node_modules/pkg3.d.ts' does not exist.
-File '/src/project/node_modules/pkg3/index.d.ts' exist - use it as a name resolution result.
+File '/src/project/node_modules/pkg3/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg3/index.d.ts', result '/src/project/node_modules/pkg3/index.d.ts'.
 ======== Type reference directive 'pkg3' was successfully resolved to '/src/project/node_modules/pkg3/index.d.ts', primary: false. ========
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg3/index.d.ts 250 undefined Source file

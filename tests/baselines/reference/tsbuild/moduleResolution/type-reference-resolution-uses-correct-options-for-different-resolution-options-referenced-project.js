@@ -47,7 +47,7 @@ Output::
 ======== Resolving type reference directive 'sometype', containing file '/src/packages/__inferred type names__.ts', root directory '/src/packages/typeroot1'. ========
 Resolving with primary search path '/src/packages/typeroot1'.
 File '/src/packages/typeroot1/sometype/package.json' does not exist.
-File '/src/packages/typeroot1/sometype/index.d.ts' exist - use it as a name resolution result.
+File '/src/packages/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/packages/typeroot1/sometype/index.d.ts', result '/src/packages/typeroot1/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/src/packages/typeroot1/sometype/index.d.ts', primary: true. ========
 [[90m12:00:25 AM[0m] Project 'src/packages/pkg2.tsconfig.json' is out of date because output file 'src/packages/pkg2.tsconfig.tsbuildinfo' does not exist
@@ -57,7 +57,7 @@ Resolving real path for '/src/packages/typeroot1/sometype/index.d.ts', result '/
 ======== Resolving type reference directive 'sometype', containing file '/src/packages/__inferred type names__.ts', root directory '/src/packages/typeroot2'. ========
 Resolving with primary search path '/src/packages/typeroot2'.
 File '/src/packages/typeroot2/sometype/package.json' does not exist.
-File '/src/packages/typeroot2/sometype/index.d.ts' exist - use it as a name resolution result.
+File '/src/packages/typeroot2/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/packages/typeroot2/sometype/index.d.ts', result '/src/packages/typeroot2/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/src/packages/typeroot2/sometype/index.d.ts', primary: true. ========
 exitCode:: ExitStatus.Success
