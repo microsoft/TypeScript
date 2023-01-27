@@ -695,7 +695,7 @@
   "Fallthrough_case_in_switch_7029": "Przepuszczająca klauzula case w instrukcji switch.",
   "File_0_does_not_exist_6096": "Plik „{0}” nie istnieje.",
   "File_0_does_not_exist_according_to_earlier_cached_lookups_6240": "Biorąc pod uwagę wcześniejsze wyszukiwania w pamięci podręcznej, plik „{0}” nie istnieje.",
-  "File_0_exist_use_it_as_a_name_resolution_result_6097": "Plik „{0}” istnieje — użyj go jako wyniku rozpoznawania nazw.",
+  "File_0_exists_use_it_as_a_name_resolution_result_6097": "Plik „{0}” istnieje — użyj go jako wyniku rozpoznawania nazw.",
   "File_0_exists_according_to_earlier_cached_lookups_6239": "Biorąc pod uwagę wcześniejsze wyszukiwania w pamięci podręcznej, plik „{0}” istnieje.",
   "File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1_6054": "Plik „{0}” ma nieobsługiwane rozszerzenie. Obsługiwane są tylko rozszerzenia {1}.",
   "File_0_has_an_unsupported_extension_so_skipping_it_6081": "Plik „{0}” ma nieobsługiwane rozszerzenie, dlatego zostanie pominięty.",

@@ -695,7 +695,7 @@
   "Fallthrough_case_in_switch_7029": "Případ Fallthrough v příkazu switch",
   "File_0_does_not_exist_6096": "Soubor {0} neexistuje.",
   "File_0_does_not_exist_according_to_earlier_cached_lookups_6240": "Podle dřívějších vyhledávání v mezipaměti soubor {0} neexistuje.",
-  "File_0_exist_use_it_as_a_name_resolution_result_6097": "Soubor {0} existuje – použijte ho jako výsledek překladu IP adres.",
+  "File_0_exists_use_it_as_a_name_resolution_result_6097": "Soubor {0} existuje – použijte ho jako výsledek překladu IP adres.",
   "File_0_exists_according_to_earlier_cached_lookups_6239": "Podle dřívějších vyhledávání v mezipaměti soubor {0} existuje.",
   "File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1_6054": "Soubor {0} má nepodporovanou příponu. Jediné podporované přípony jsou {1}.",
   "File_0_has_an_unsupported_extension_so_skipping_it_6081": "Soubor {0} má nepodporovanou příponu, a proto se přeskočí.",

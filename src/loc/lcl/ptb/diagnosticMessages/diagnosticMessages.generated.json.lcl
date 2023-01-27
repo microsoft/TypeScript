@@ -6464,9 +6464,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";File_0_exist_use_it_as_a_name_resolution_result_6097" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";File_0_exists_use_it_as_a_name_resolution_result_6097" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[File '{0}' exist - use it as a name resolution result.]]></Val>
+          <Val><![CDATA[File '{0}' exists - use it as a name resolution result.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[O arquivo '{0}' existe; use-o como um resultado de resolução de nome.]]></Val>
           </Tgt>

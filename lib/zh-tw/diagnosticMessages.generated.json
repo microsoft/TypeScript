@@ -695,7 +695,7 @@
   "Fallthrough_case_in_switch_7029": "參數中的 fallthrough 案例。",
   "File_0_does_not_exist_6096": "檔案 '{0}' 不存在。",
   "File_0_does_not_exist_according_to_earlier_cached_lookups_6240": "根據之前快取的查閱，檔案 '{0}' 不存在。",
-  "File_0_exist_use_it_as_a_name_resolution_result_6097": "檔案 '{0}' 存在 - 將其作為名稱解析結果使用。",
+  "File_0_exists_use_it_as_a_name_resolution_result_6097": "檔案 '{0}' 存在 - 將其作為名稱解析結果使用。",
   "File_0_exists_according_to_earlier_cached_lookups_6239": "根據之前快取的查閱，檔案 '{0}' 存在。",
   "File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1_6054": "不支援檔案 '{0}' 的副檔名。支援的副檔名只有 {1}。",
   "File_0_has_an_unsupported_extension_so_skipping_it_6081": "因為不支援檔案 '{0}' 的副檔名，所以將其跳過。",

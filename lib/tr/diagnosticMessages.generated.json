@@ -695,7 +695,7 @@
   "Fallthrough_case_in_switch_7029": "switch deyiminde sonraki ifadeye geçiş.",
   "File_0_does_not_exist_6096": "'{0}' adlı dosya yok.",
   "File_0_does_not_exist_according_to_earlier_cached_lookups_6240": "'{0}' dosyası, önceden önbelleğe alınan aramalara göre mevcut değil.",
-  "File_0_exist_use_it_as_a_name_resolution_result_6097": "'{0}' adlı dosya yok; bunu bir çözümleme sonucu olarak kullanın.",
+  "File_0_exists_use_it_as_a_name_resolution_result_6097": "'{0}' adlı dosya yok; bunu bir çözümleme sonucu olarak kullanın.",
   "File_0_exists_according_to_earlier_cached_lookups_6239": "'{0}' dosyası, önceden önbelleğe alınan aramalara göre mevcut.",
   "File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1_6054": "'{0}' dosyası desteklenmeyen uzantıya sahip. Yalnızca şu uzantılar desteklenir: {1}.",
   "File_0_has_an_unsupported_extension_so_skipping_it_6081": "'{0}' dosyasının desteklenmeyen bir uzantısı olduğundan dosya atlanıyor.",

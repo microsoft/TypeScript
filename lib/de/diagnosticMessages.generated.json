@@ -695,7 +695,7 @@
   "Fallthrough_case_in_switch_7029": "FallThrough-Fall in switch-Anweisung.",
   "File_0_does_not_exist_6096": "Die Datei \"{0}\" ist nicht vorhanden.",
   "File_0_does_not_exist_according_to_earlier_cached_lookups_6240": "Die Datei \"{0}\" ist gemäß früheren zwischengespeicherten Lookups nicht vorhanden.",
-  "File_0_exist_use_it_as_a_name_resolution_result_6097": "Die Datei \"{0}\" ist vorhanden – sie wird als Ergebnis der Namensauflösung verwendet.",
+  "File_0_exists_use_it_as_a_name_resolution_result_6097": "Die Datei \"{0}\" ist vorhanden – sie wird als Ergebnis der Namensauflösung verwendet.",
   "File_0_exists_according_to_earlier_cached_lookups_6239": "Die Datei \"{0}\" ist gemäß früheren zwischengespeicherten Lookups vorhanden.",
   "File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1_6054": "Die Datei \"{0}\" weist eine nicht unterstützte Erweiterung auf. Es werden nur die folgenden Erweiterungen unterstützt: {1}.",
   "File_0_has_an_unsupported_extension_so_skipping_it_6081": "Die Datei \"{0}\" hat eine nicht unterstützte Erweiterung und wird übersprungen.",

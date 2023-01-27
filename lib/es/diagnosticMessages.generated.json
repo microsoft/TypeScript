@@ -695,7 +695,7 @@
   "Fallthrough_case_in_switch_7029": "Caso de Fallthrough en instrucción switch.",
   "File_0_does_not_exist_6096": "El archivo '{0}' no existe.",
   "File_0_does_not_exist_according_to_earlier_cached_lookups_6240": "El archivo \"{0}\" no existe de acuerdo con las búsquedas en caché anteriores.",
-  "File_0_exist_use_it_as_a_name_resolution_result_6097": "El archivo '{0}' existe. Utilícelo como resultado de resolución de nombres.",
+  "File_0_exists_use_it_as_a_name_resolution_result_6097": "El archivo '{0}' existe. Utilícelo como resultado de resolución de nombres.",
   "File_0_exists_according_to_earlier_cached_lookups_6239": "El archivo \"{0}\" existe de acuerdo con las búsquedas en caché anteriores.",
   "File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1_6054": "El archivo \"{0}\" tiene una extensión no compatible. Las únicas extensiones compatibles son {1}.",
   "File_0_has_an_unsupported_extension_so_skipping_it_6081": "El archivo \"{0}\" tiene una extensión no admitida, así que se omitirá.",

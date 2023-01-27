@@ -695,7 +695,7 @@
   "Fallthrough_case_in_switch_7029": "switch에 Fallthrough case가 있습니다.",
   "File_0_does_not_exist_6096": "'{0}' 파일이 없습니다.",
   "File_0_does_not_exist_according_to_earlier_cached_lookups_6240": "이전 캐시된 검색에 따라 '{0}' 파일이 존재하지 않습니다.",
-  "File_0_exist_use_it_as_a_name_resolution_result_6097": "'{0}' 파일이 있습니다. 이 파일을 이름 확인 결과로 사용하세요.",
+  "File_0_exists_use_it_as_a_name_resolution_result_6097": "'{0}' 파일이 있습니다. 이 파일을 이름 확인 결과로 사용하세요.",
   "File_0_exists_according_to_earlier_cached_lookups_6239": "파일 '{0}'은(는) 이전 캐시된 검색에 따라 존재합니다.",
   "File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1_6054": "'{0}' 파일의 확장명이 지원되지 않습니다. 지원되는 확장명은 {1}뿐입니다.",
   "File_0_has_an_unsupported_extension_so_skipping_it_6081": "'{0}' 파일은 확장명이 지원되지 않으므로 건너뜁니다.",

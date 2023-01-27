@@ -4647,7 +4647,7 @@
         "category": "Message",
         "code": 6096
     },
-    "File '{0}' exist - use it as a name resolution result.": {
+    "File '{0}' exists - use it as a name resolution result.": {
         "category": "Message",
         "code": 6097
     },
