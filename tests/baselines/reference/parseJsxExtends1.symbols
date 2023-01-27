@@ -1,0 +1,8 @@
+=== tests/cases/compiler/index.tsx ===
+export function Foo() {
+>Foo : Symbol(Foo, Decl(index.tsx, 0, 0))
+
+    return <const T extends/>
+>T : Symbol(T, Decl(index.tsx, 1, 12))
+}
+

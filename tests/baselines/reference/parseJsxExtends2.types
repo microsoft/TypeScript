@@ -1,0 +1,10 @@
+=== tests/cases/compiler/index.tsx ===
+export function Foo() {
+>Foo : () => <T>() => any
+
+    return <T extends/>
+><T extends/> : <T>() => any
+>/> : RegExp
+}
+> : any
+

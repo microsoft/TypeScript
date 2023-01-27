@@ -1,0 +1,13 @@
+tests/cases/compiler/index.tsx(2,23): error TS1161: Unterminated regular expression literal.
+tests/cases/compiler/index.tsx(3,1): error TS1005: ',' expected.
+
+
+==== tests/cases/compiler/index.tsx (2 errors) ====
+    export function Foo() {
+        return <T extends/>
+                          
+!!! error TS1161: Unterminated regular expression literal.
+    }
+    ~
+!!! error TS1005: ',' expected.
+    
