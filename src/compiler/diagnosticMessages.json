@@ -3499,7 +3499,7 @@
         "category": "Error",
         "code": 2808
     },
-    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
+    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.": {
         "category": "Error",
         "code": 2809
     },
@@ -5234,7 +5234,7 @@
         "category": "Error",
         "code": 6258
     },
-      "Found 1 error in {1}": {
+    "Found 1 error in {1}": {
         "category": "Message",
         "code": 6259
     },
@@ -6184,9 +6184,9 @@
         "category": "Message",
         "code": 6930
     },
-    "List of file name suffixes to search when resolving a module." : {
-      "category": "Error",
-      "code": 6931
+    "List of file name suffixes to search when resolving a module.": {
+        "category": "Error",
+        "code": 6931
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
