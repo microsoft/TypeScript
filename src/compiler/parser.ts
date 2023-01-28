@@ -1660,7 +1660,7 @@ namespace Parser {
         IdentifierConstructor = objectAllocator.getIdentifierConstructor();
         PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor();
         SourceFileConstructor = objectAllocator.getSourceFileConstructor();
-        isInTsserver = !!(new NodeConstructor(0, 0, 0).constructor);
+        isInTsserver = (new NodeConstructor(0, 0, 0).constructor.name !== "Node");
 
         fileName = normalizePath(_fileName);
         sourceText = _sourceText;
