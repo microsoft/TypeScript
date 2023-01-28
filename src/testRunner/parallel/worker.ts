@@ -196,7 +196,7 @@ export function start() {
             newSuite.addTest(test);
             root.addSuite(newSuite);
             Object.setPrototypeOf(newSuite.ctx, root.ctx);
-            Object.setPrototypeOf(test.ctx, root.ctx);
+            Object.setPrototypeOf(test.ctx!, root.ctx);
             test.parent = newSuite;
             suite = newSuite;
         }

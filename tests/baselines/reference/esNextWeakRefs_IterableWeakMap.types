@@ -307,9 +307,9 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
 Object.defineProperties(IterableWeakMap.prototype, {
 >Object.defineProperties(IterableWeakMap.prototype, {    [Symbol.iterator]: {        configurable: true,        enumerable: false,        writable: true,        value: Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value,    },    [Symbol.toStringTag]: {        configurable: true,        enumerable: false,        writable: false,        value: "IterableWeakMap",    },}) : IterableWeakMap<any, any>
->Object.defineProperties : <T>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
+>Object.defineProperties : <T extends object>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperties : <T>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
+>defineProperties : <T extends object>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
 >IterableWeakMap.prototype : IterableWeakMap<any, any>
 >IterableWeakMap : typeof IterableWeakMap
 >prototype : IterableWeakMap<any, any>
@@ -339,9 +339,9 @@ Object.defineProperties(IterableWeakMap.prototype, {
 >Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value : any
 >Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )! : PropertyDescriptor
 >Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        ) : PropertyDescriptor | undefined
->Object.getOwnPropertyDescriptor : (o: any, p: PropertyKey) => PropertyDescriptor | undefined
+>Object.getOwnPropertyDescriptor : (o: {}, p: PropertyKey) => PropertyDescriptor | undefined
 >Object : ObjectConstructor
->getOwnPropertyDescriptor : (o: any, p: PropertyKey) => PropertyDescriptor | undefined
+>getOwnPropertyDescriptor : (o: {}, p: PropertyKey) => PropertyDescriptor | undefined
 
             IterableWeakMap.prototype,
 >IterableWeakMap.prototype : IterableWeakMap<any, any>

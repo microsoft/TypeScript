@@ -261,9 +261,16 @@ interface ObjectConstructor {
      * Copy the values of all of the enumerable own properties from one or more source objects to a
      * target object. Returns the target object.
      * @param target The target object to copy to.
+     */
+    assign<T extends {}>(target: T): T;
+
+    /**
+     * Copy the values of all of the enumerable own properties from one or more source objects to a
+     * target object. Returns the target object.
+     * @param target The target object to copy to.
      * @param source The source object from which to copy properties.
      */
-    assign<T extends {}, U>(target: T, source: U): T & U;
+    assign<T extends {}, U>(target: T, source: U): T & Writable<U>;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
@@ -272,7 +279,7 @@ interface ObjectConstructor {
      * @param source1 The first source object from which to copy properties.
      * @param source2 The second source object from which to copy properties.
      */
-    assign<T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V;
+    assign<T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
@@ -282,21 +289,21 @@ interface ObjectConstructor {
      * @param source2 The second source object from which to copy properties.
      * @param source3 The third source object from which to copy properties.
      */
-    assign<T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
+    assign<T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
      * target object. Returns the target object.
      * @param target The target object to copy to.
-     * @param sources One or more source objects from which to copy properties
+     * @param sources One or more source objects from which to copy properties.
      */
-    assign(target: object, ...sources: any[]): any;
+    assign(target: {}, ...sources: any[]): any;
 
     /**
      * Returns an array of all symbol properties found directly on object o.
      * @param o Object to retrieve the symbols from.
      */
-    getOwnPropertySymbols(o: any): symbol[];
+    getOwnPropertySymbols(o: {}): symbol[];
 
     /**
      * Returns the names of the enumerable string properties and methods of an object.
@@ -316,7 +323,7 @@ interface ObjectConstructor {
      * @param o The object to change its prototype.
      * @param proto The value of the new prototype or null.
      */
-    setPrototypeOf(o: any, proto: object | null): any;
+    setPrototypeOf(o: {}, proto: object | null): any;
 }
 
 interface ReadonlyArray<T> {

@@ -1192,6 +1192,7 @@ export namespace Completion {
         typeEntry("Partial"),
         typeEntry("Required"),
         typeEntry("Readonly"),
+        typeEntry("Writable"),
         typeEntry("Pick"),
         typeEntry("Record"),
         typeEntry("Exclude"),
