@@ -4,14 +4,12 @@
  * @param {number} a 
  * @param {number} b
  * @returns {number} 
- */
-/**
+ *
  * @overload
  * @param {string} a
  * @param {boolean} b
  * @returns {string}
- */
-/**
+ *
  * @param {string | number} a
  * @param {string | number} b
  * @returns {string | number}
@@ -67,6 +65,39 @@ overloaded(1,2)
 overloaded("zero", "one")
 >overloaded("zero", "one") : never
 >overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
+>"zero" : "zero"
+>"one" : "one"
+
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ */
+export function uncheckedInternally(a, b) {
+>uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
+>a : any
+>b : any
+
+    return a + b;
+>a + b : any
+>a : any
+>b : any
+}
+uncheckedInternally(1,2)
+>uncheckedInternally(1,2) : number
+>uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
+>1 : 1
+>2 : 2
+
+uncheckedInternally("zero", "one")
+>uncheckedInternally("zero", "one") : never
+>uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >"zero" : "zero"
 >"one" : "one"
 

@@ -230,6 +230,7 @@ import {
     getAliasDeclarationFromName,
     getAllAccessorDeclarations,
     getAllJSDocTags,
+    getAllJSDocTagsOfKind,
     getAllowSyntheticDefaultImports,
     getAncestor,
     getAssignedExpandoInitializer,
@@ -279,6 +280,7 @@ import {
     getExternalModuleRequireArgument,
     getFirstConstructorWithBody,
     getFirstIdentifier,
+    getFirstJSDocTag,
     getFunctionFlags,
     getHostSignatureFromJSDoc,
     getIdentifierGeneratedImportReference,
@@ -745,6 +747,7 @@ import {
     JSDocMemberName,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocParameterTag,
     JSDocPrivateTag,
     JSDocPropertyLikeTag,
@@ -14442,15 +14445,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (isInJSFile(decl) && decl.jsDoc) {
                 let hasJSDocOverloads = false;
-                for (const node of decl.jsDoc) {
-                    if (node.tags) {
-                        for (const tag of node.tags) {
-                            if (isJSDocOverloadTag(tag)) {
-                                result.push(getSignatureFromDeclaration(tag.typeExpression));
-                                hasJSDocOverloads = true;
-                            }
-                        }
-                    }
+                for (const tag of getAllJSDocTagsOfKind(decl, SyntaxKind.JSDocOverloadTag)) {
+                    result.push(getSignatureFromDeclaration((tag as JSDocOverloadTag).typeExpression));
+                    hasJSDocOverloads = true;
                 }
                 if (hasJSDocOverloads) {
                     continue;
@@ -38584,20 +38581,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 if (isInJSFile(current) && isFunctionLike(current) && current.jsDoc) {
-                    // TODO: De-duplicate tag check and improve error span
-                    outer: for (const node of current.jsDoc) {
-                        if (node.tags) {
-                            for (const tag of node.tags) {
-                                if (isJSDocOverloadTag(tag)) {
-                                    hasOverloads = true;
-                                    break outer;
-                                }
-                            }
-                        }
+                    if (getFirstJSDocTag(current, isJSDocOverloadTag)) {
+                        hasOverloads = true;
                     }
                 }
             }
         }
+
         if (multipleConstructorImplementation) {
             forEach(functionDeclarations, declaration => {
                 error(declaration, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
@@ -38646,8 +38636,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const bodySignature = getSignatureFromDeclaration(bodyDeclaration);
                 for (const signature of signatures) {
                     if (!isImplementationCompatibleWithOverload(bodySignature, signature)) {
+                        const errorNode = signature.declaration && isJSDocSignature(signature.declaration)
+                            ? (signature.declaration.parent as JSDocOverloadTag | JSDocCallbackTag).tagName
+                            : signature.declaration;
                         addRelatedInfo(
-                            error(signature.declaration, Diagnostics.This_overload_signature_is_not_compatible_with_its_implementation_signature),
+                            error(errorNode, Diagnostics.This_overload_signature_is_not_compatible_with_its_implementation_signature),
                             createDiagnosticForNode(bodyDeclaration, Diagnostics.The_implementation_signature_is_declared_here)
                         );
                         break;

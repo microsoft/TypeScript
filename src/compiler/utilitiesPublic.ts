@@ -1205,8 +1205,10 @@ export function getJSDocTagsNoCache(node: Node): readonly JSDocTag[] {
     return getJSDocTagsWorker(node, /*noCache*/ true);
 }
 
-/** Get the first JSDoc tag of a specified kind, or undefined if not present. */
-function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
+/** @internal
+ * Get the first JSDoc tag of a specified kind, or undefined if not present.
+ */
+export function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
     return find(getJSDocTagsWorker(node, noCache), predicate);
 }
 
