@@ -20946,8 +20946,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 //   declare let wrong: { a: { y: string } };
                 //   let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
                 //
-                if (result && !(intersectionState & IntersectionState.Target) &&
-                    target.flags & TypeFlags.Intersection && !isGenericObjectType(target) && source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
+                if (result && !(intersectionState & IntersectionState.Target) && target.flags & TypeFlags.Intersection &&
+                    !isGenericObjectType(target) && source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                     result &= propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, /*optionalsOnly*/ false, IntersectionState.None);
                     if (result && isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral) {
                         result &= indexSignaturesRelatedTo(source, target, /*sourceIsPrimitive*/ false, reportErrors, IntersectionState.None);
@@ -20960,7 +20960,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 //     x = y;  // Mismatched property in source intersection
                 //   }
                 //
-                else if (result && isNonGenericObjectType(target) && !isArrayOrTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
+                else if (result && isNonGenericObjectType(target) && !isArrayOrTupleType(target) &&
+                    source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType &&
+                    !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
                     result &= propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, /*optionalsOnly*/ true, intersectionState);
                 }
             }
@@ -22596,12 +22598,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // to terminate the expansion, and we do so here.
     function isDeeplyNestedType(type: Type, stack: Type[], depth: number, maxDepth = 3): boolean {
         if (depth >= maxDepth) {
+            if (type.flags & TypeFlags.Intersection) {
+                return some((type as IntersectionType).types, t => isDeeplyNestedType(t, stack, depth, maxDepth));
+            }
             const identity = getRecursionIdentity(type);
             let count = 0;
             let lastTypeId = 0;
             for (let i = 0; i < depth; i++) {
                 const t = stack[i];
-                if (getRecursionIdentity(t) === identity) {
+                if (t.flags & TypeFlags.Intersection ? some((t as IntersectionType).types, u => getRecursionIdentity(u) === identity) : getRecursionIdentity(t) === identity) {
                     // We only count occurrences with a higher type id than the previous occurrence, since higher
                     // type ids are an indicator of newer instantiations caused by recursion.
                     if (t.id >= lastTypeId) {
