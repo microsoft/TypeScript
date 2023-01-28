@@ -219,22 +219,24 @@ interface String {
     match(matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null;
 
     /**
-     * Passes a string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkcode searchValue}. This method is expected to implement its own replacement algorithm.
+     * Passes a string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkcode searchValue}.
      * @param searchValue An object that supports searching for and replacing matches within a string.
+     * This object is expected to implement its own replacement algorithm.
      * @param replaceValue The replacement text.
      */
     replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
 
     /**
-     * Replaces text in a string, using an object that supports replacement within a string.
-     * @param searchValue A object can search for and replace matches within a string.
+     * Passes a string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkcode searchValue}.
+     * @param searchValue An object that supports searching for and replacing matches within a string.
+     * This object is expected to implement its own replacement algorithm.
      * @param replacer A function that returns the replacement text.
      */
     replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
      * Finds the first substring match in a regular expression search.
-     * @param searcher An object which supports searching within a string.
+     * @param searcher An object that supports searching within a string.
      */
     search(searcher: { [Symbol.search](string: string): number; }): number;
 

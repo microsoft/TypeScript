@@ -194,7 +194,7 @@ interface NumberConstructor {
     /**
      * The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1
      * that is representable as a Number value, which is approximately:
-     * 2.2204460492503130808472633361816 x 10‍−‍16.
+     * 2.2204460492503130808472633361816E−‍16 (2^-52).
      */
     readonly EPSILON: number;
 
@@ -229,14 +229,14 @@ interface NumberConstructor {
     /**
      * The value of the largest integer n such that n and n + 1 are both exactly representable as
      * a Number value.
-     * The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1.
+     * The value of Number.MAX_SAFE_INTEGER is 9007199254740991 (2^53 − 1).
      */
     readonly MAX_SAFE_INTEGER: number;
 
     /**
      * The value of the smallest integer n such that n and n − 1 are both exactly representable as
      * a Number value.
-     * The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)).
+     * The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−2^53 + 1).
      */
     readonly MIN_SAFE_INTEGER: number;
 
@@ -379,11 +379,11 @@ interface RegExpConstructor {
 
 interface String {
     /**
-     * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point
-     * value of the UTF-16 encoded code point starting at the string element at position pos in
-     * the String resulting from converting this object to a String.
-     * If there is no element at that position, the result is undefined.
-     * If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
+     * Returns a non-negative integer less than 1114112 (0x110000) that is the code point value
+     * starting at the string element at the specified position.
+     * @param pos The zero-based index of the desired code point. If there is no character at the
+     * specified index, undefined is returned. If a UTF-16 surrogate pair does not begin at pos,
+     * the result is the code unit at pos.
      */
     codePointAt(pos: number): number | undefined;
 
@@ -397,46 +397,38 @@ interface String {
     includes(searchString: string, position?: number): boolean;
 
     /**
-     * Returns true if the sequence of elements of searchString converted to a String is the
-     * same as the corresponding elements of this object (converted to a String) starting at
-     * endPosition – length(this). Otherwise returns false.
+     * Determines whether the string ends with a substring, ending at the specified index.
+     * @param searchString The string to search for.
+     * @param endPosition The index at which to begin searching for. The default value is the
+     * length of searchString.
      */
     endsWith(searchString: string, endPosition?: number): boolean;
 
     /**
      * Returns the String value result of normalizing the string into the normalization form
      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-     * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
-     * is "NFC"
+     * @param form The normalization form to be used. The default value is "NFC".
      */
-    normalize(form: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
-
-    /**
-     * Returns the String value result of normalizing the string into the normalization form
-     * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-     * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
-     * is "NFC"
-     */
-    normalize(form?: string): string;
+    normalize(form?: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
 
     /**
      * Returns a String value that is made from count copies appended together. If count is 0,
      * the empty string is returned.
-     * @param count number of copies to append
+     * @param count The number of copies to append
      */
     repeat(count: number): string;
 
     /**
-     * Returns true if the sequence of elements of searchString converted to a String is the
-     * same as the corresponding elements of this object (converted to a String) starting at
-     * position. Otherwise returns false.
+     * Determines whether the string starts with a substring, beginning at the specified index.
+     * @param searchString The string to search for.
+     * @param position The index at which to begin searching for. The default value is 0.
      */
     startsWith(searchString: string, position?: number): boolean;
 
     /**
-     * Returns an `<a>` HTML anchor element and sets the name attribute to the text value
+     * Returns an `<a>` HTML anchor element and sets the name attribute value
      * @deprecated A legacy feature for browser compatibility
-     * @param name
+     * @param name The name attribute value
      */
     anchor(name: string): string;
 
@@ -467,20 +459,16 @@ interface String {
     /**
      * Returns a `<font>` HTML element and sets the color attribute value
      * @deprecated A legacy feature for browser compatibility
+     * @param color The color attribute value
      */
     fontcolor(color: string): string;
 
     /**
      * Returns a `<font>` HTML element and sets the size attribute value
      * @deprecated A legacy feature for browser compatibility
+     * @param size The size attribute value
      */
-    fontsize(size: number): string;
-
-    /**
-     * Returns a `<font>` HTML element and sets the size attribute value
-     * @deprecated A legacy feature for browser compatibility
-     */
-    fontsize(size: string): string;
+    fontsize(size: number | string): string;
 
     /**
      * Returns an `<i>` HTML element
@@ -491,6 +479,7 @@ interface String {
     /**
      * Returns an `<a>` HTML element and sets the href attribute value
      * @deprecated A legacy feature for browser compatibility
+     * @param url The href attribute value
      */
     link(url: string): string;
 
@@ -521,8 +510,9 @@ interface String {
 
 interface StringConstructor {
     /**
-     * Return the String value whose elements are, in order, the elements in the List elements.
-     * If length is 0, the empty string is returned.
+     * Returns a string created by a sequence of code points.
+     * If no arguments are given, the empty string is returned.
+     * @param codePoints A sequence of code points.
      */
     fromCodePoint(...codePoints: number[]): string;
 
@@ -535,5 +525,5 @@ interface StringConstructor {
      * @param template A well-formed template string call site representation.
      * @param substitutions A set of substitution values.
      */
-    raw(template: { raw: readonly string[] | ArrayLike<string>}, ...substitutions: any[]): string;
+    raw(template: { raw: readonly string[] | ArrayLike<string> }, ...substitutions: any[]): string;
 }

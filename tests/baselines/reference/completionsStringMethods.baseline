@@ -208,7 +208,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns the Unicode value of the character at the specified location.",
+              "text": "Returns a non-negative integer less than 65536 (0x10000) that is the code unit value of the character at the specified index.",
               "kind": "text"
             }
           ],
@@ -780,7 +780,7 @@
           ],
           "documentation": [
             {
-              "text": "Determines whether two strings are equivalent in the current locale.",
+              "text": "Determines whether the reference string comes before, after or is equivalent to the specified string in the current locale.\nReturns a negative integer if it comes before, a positive number if it comes after, and 0 if they are equivalent.",
               "kind": "text"
             }
           ],
@@ -797,7 +797,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "String to compare to target string",
+                  "text": "The string to compare to.",
                   "kind": "text"
                 }
               ]
@@ -910,7 +910,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A variable name or string literal containing the regular expression pattern and flags.",
+                  "text": "The regular expression for matching. If the provided value is not a RegExp, it is implicitly\nconverted to a RegExp by using `new RegExp(regexp)`.",
                   "kind": "text"
                 }
               ]
@@ -1058,7 +1058,53 @@
           ],
           "documentation": [
             {
-              "text": "Replaces text in a string, using a regular expression or search string.",
+              "text": "Replaces one or more occurrences of substrings that match a search string or a regular expression.\nWhen the ",
+              "kind": "text"
+            },
+            {
+              "text": "{@linkcode ",
+              "kind": "link"
+            },
+            {
+              "text": "searchValue",
+              "kind": "linkName",
+              "target": {
+                "fileName": "lib.d.ts",
+                "textSpan": {
+                  "start": 18865,
+                  "length": 28
+                }
+              }
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": " is a `RegExp`, all matches are replaced if the `g` (global) flag is set\n(or only those matches at the beginning, if the `y` (sticky) flag is also present).\nOtherwise, only the first match of ",
+              "kind": "text"
+            },
+            {
+              "text": "{@linkcode ",
+              "kind": "link"
+            },
+            {
+              "text": "searchValue",
+              "kind": "linkName",
+              "target": {
+                "fileName": "lib.d.ts",
+                "textSpan": {
+                  "start": 18865,
+                  "length": 28
+                }
+              }
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": " is replaced.",
               "kind": "text"
             }
           ],
@@ -1092,53 +1138,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string containing the text to replace. When the ",
-                  "kind": "text"
-                },
-                {
-                  "text": "{@linkcode ",
-                  "kind": "link"
-                },
-                {
-                  "text": "searchValue",
-                  "kind": "linkName",
-                  "target": {
-                    "fileName": "lib.d.ts",
-                    "textSpan": {
-                      "start": 18529,
-                      "length": 28
-                    }
-                  }
-                },
-                {
-                  "text": "}",
-                  "kind": "link"
-                },
-                {
-                  "text": " is a `RegExp`, all matches are replaced if the `g` flag is set (or only those matches at the beginning, if the `y` flag is also present). Otherwise, only the first match of ",
-                  "kind": "text"
-                },
-                {
-                  "text": "{@linkcode ",
-                  "kind": "link"
-                },
-                {
-                  "text": "searchValue",
-                  "kind": "linkName",
-                  "target": {
-                    "fileName": "lib.d.ts",
-                    "textSpan": {
-                      "start": 18529,
-                      "length": 28
-                    }
-                  }
-                },
-                {
-                  "text": "}",
-                  "kind": "link"
-                },
-                {
-                  "text": " is replaced.",
+                  "text": "The replacement text.",
                   "kind": "text"
                 }
               ]
@@ -1251,7 +1251,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The regular expression pattern and applicable flags.",
+                  "text": "The regular expression for matching. If the provided value is not a RegExp, it is implicitly\nconverted to a RegExp by using `new RegExp(regexp)`.",
                   "kind": "text"
                 }
               ]
@@ -1380,7 +1380,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The index to the beginning of the specified portion of stringObj.",
+                  "text": "The index to the beginning of the specified portion of the string.",
                   "kind": "text"
                 }
               ]
@@ -1397,7 +1397,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.\nIf this value is not specified, the substring continues to the end of stringObj.",
+                  "text": "The index to the end of the specified portion of the string. The substring includes the characters up to, but not including, the character indicated by end.\nIf this value is not specified, the substring continues to the end of the string.",
                   "kind": "text"
                 }
               ]
@@ -1671,7 +1671,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns the substring at the specified location within a String object.",
+              "text": "Returns the substring beginning at the specified index within a String object.",
               "kind": "text"
             }
           ],
@@ -1688,7 +1688,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The zero-based index number indicating the beginning of the substring.",
+                  "text": "The zero-based index indicating the beginning of the substring.",
                   "kind": "text"
                 }
               ]
@@ -1705,7 +1705,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\nIf end is omitted, the characters from start through the end of the original string are returned.",
+                  "text": "The zero-based index indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\nIf end is omitted, the characters from start through the end of the original string are returned.",
                   "kind": "text"
                 }
               ]
@@ -2335,7 +2335,7 @@
           ],
           "documentation": [
             {
-              "text": "Gets a substring beginning at the specified location and having the specified length.",
+              "text": "Gets a substring beginning at the specified index and having the specified length.",
               "kind": "text"
             }
           ],
@@ -2361,7 +2361,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The starting position of the desired substring. The index of the first character in the string is zero.",
+                  "text": "The starting index of the desired substring. The index of the first character in the string is zero.",
                   "kind": "text"
                 }
               ]
