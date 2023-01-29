@@ -1039,7 +1039,9 @@ export function isRecognizedTripleSlashComment(text: string, commentPos: number,
         const textSubStr = text.substring(commentPos, commentEnd);
         return fullTripleSlashReferencePathRegEx.test(textSubStr) ||
             fullTripleSlashAMDReferencePathRegEx.test(textSubStr) ||
+            fullTripleSlashAMDModuleRegEx.test(textSubStr) ||
             fullTripleSlashReferenceTypeReferenceDirectiveRegEx.test(textSubStr) ||
+            fullTripleSlashLibReferenceRegEx.test(textSubStr) ||
             defaultLibReferenceRegEx.test(textSubStr) ?
             true : false;
     }
@@ -2021,9 +2023,12 @@ export function getJSDocCommentRanges(node: Node, text: string) {
 /** @internal */
 export const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
 const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
+const fullTripleSlashLibReferenceRegEx = /^(\/\/\/\s*<reference\s+lib\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
 /** @internal */
 export const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
+const fullTripleSlashAMDModuleRegEx = /^\/\/\/\s*<amd-module\s+.*?\/>/;
 const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)(('[^']*')|("[^"]*"))\s*\/>/;
+
 
 /** @internal */
 export function isPartOfTypeNode(node: Node): boolean {
