@@ -1,5 +1,5 @@
 //// [nonNullAssertionUndefinedAutoVariables.ts]
-// repro of #52439
+// repro from #52439
 
 
 //@ts-ignore
@@ -16,7 +16,7 @@ let baz = foo!;
 
 //// [nonNullAssertionUndefinedAutoVariables.js]
 "use strict";
-// repro of #52439
+// repro from #52439
 //@ts-ignore
 var foo;
 if (Math.random() > 0.5) {
