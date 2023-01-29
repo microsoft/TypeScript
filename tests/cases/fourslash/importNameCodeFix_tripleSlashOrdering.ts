@@ -2,6 +2,13 @@
 
 // repro from #52263
 
+// @Filename: /tsconfig.json
+////{
+////    "compilerOptions": {
+////        "skipDefaultLibCheck": false
+////    }
+////}
+
 // @Filename: /a.ts
 ////export const x = 0;
 
@@ -29,7 +36,7 @@
 // @Filename: /e.ts
 ////// some comment
 ////
-/////// <reference no-default-lib="false" />
+/////// <reference no-default-lib="true" />
 ////
 ////const y = x + 1;
 
@@ -80,17 +87,17 @@ import { x } from "./a";
 const y = x + 1;`,
 ]);
 
-// goTo.file("/e.ts");
+goTo.file("/e.ts");
 
-// verify.importFixAtPosition([
-// `// some comment
+verify.importFixAtPosition([
+`// some comment
 
-// /// <reference no-default-lib="true" />
+/// <reference no-default-lib="true" />
 
-// import { x } from "./a";
+import { x } from "./a";
 
-// const y = x + 1;`,
-// ]);
+const y = x + 1;`,
+]);
 
 goTo.file("/f.ts");
 verify.importFixAtPosition([
