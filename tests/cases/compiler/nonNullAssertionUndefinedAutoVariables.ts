@@ -1,4 +1,4 @@
-// repro of #52439
+// repro from #52439
 
 // @strict: true
 
