@@ -8520,7 +8520,7 @@ namespace Parser {
             let tagsEnd: number;
             let linkEnd: number;
             let commentsPos: number | undefined;
-            let comments: string[] = [];
+            let comments = "";
             const parts: JSDocComment[] = [];
 
             // + 3 for leading /**, - 5 in total for /** */
@@ -8536,7 +8536,7 @@ namespace Parser {
                     if (!margin) {
                         margin = indent;
                     }
-                    comments.push(text);
+                    comments += text;
                     indent += text.length;
                 }
 
@@ -8550,7 +8550,6 @@ namespace Parser {
                     switch (token()) {
                         case SyntaxKind.AtToken:
                             if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
-                                removeTrailingWhitespace(comments);
                                 if (!commentsPos) commentsPos = getNodePos();
                                 addTag(parseTag(indent));
                                 // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
@@ -8564,7 +8563,7 @@ namespace Parser {
                             }
                             break;
                         case SyntaxKind.NewLineTrivia:
-                            comments.push(scanner.getTokenText());
+                            comments += scanner.getTokenText();
                             state = JSDocState.BeginningOfLine;
                             indent = 0;
                             break;
@@ -8585,10 +8584,10 @@ namespace Parser {
                             // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
                             const whitespace = scanner.getTokenText();
                             if (state === JSDocState.SavingComments) {
-                                comments.push(whitespace);
+                                comments += whitespace;
                             }
                             else if (margin !== undefined && indent + whitespace.length > margin) {
-                                comments.push(whitespace.slice(margin - indent));
+                                comments += whitespace.slice(margin - indent);
                             }
                             indent += whitespace.length;
                             break;
@@ -8601,11 +8600,11 @@ namespace Parser {
                             const link = parseJSDocLink(linkStart);
                             if (link) {
                                 if (!linkEnd) {
-                                    removeLeadingNewlines(comments);
+                                    comments = removeLeadingNewlines(comments);
                                 }
-                                parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentEnd));
+                                parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? start, commentEnd));
                                 parts.push(link);
-                                comments = [];
+                                comments = "";
                                 linkEnd = scanner.getTextPos();
                                 break;
                             }
@@ -8620,25 +8619,21 @@ namespace Parser {
                     }
                     nextTokenJSDoc();
                 }
-                removeTrailingWhitespace(comments);
                 if (parts.length && comments.length) {
-                    parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentsPos));
+                    parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? start, commentsPos));
                 }
                 if (parts.length && tags) Debug.assertIsDefined(commentsPos, "having parsed tags implies that the end of the comment span should be set");
                 const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
-                return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : comments.length ? comments.join("") : undefined, tagsArray), start, end);
+                return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : comments.length ? comments : undefined, tagsArray), start, end);
             });
 
-            function removeLeadingNewlines(comments: string[]) {
-                while (comments.length && (comments[0] === "\n" || comments[0] === "\r")) {
-                    comments.shift();
+            function removeLeadingNewlines(comments: string) {
+                // TODO: Also a regex would work, and perhaps faster
+                let i = 0
+                while (i < comments.length && (comments[i] === "\n" || comments[i] === "\r")) {
+                    i++;
                 }
-            }
-
-            function removeTrailingWhitespace(comments: string[]) {
-                while (comments.length && comments[comments.length - 1].trim() === "") {
-                    comments.pop();
-                }
+                return i > 0 ? comments.slice(i) : comments;
             }
 
             function isNextNonwhitespaceTokenEndOfFile(): boolean {
@@ -8789,7 +8784,7 @@ namespace Parser {
 
             function parseTagComments(indent: number, initialMargin?: string): string | NodeArray<JSDocComment> | undefined {
                 const commentsPos = getNodePos();
-                let comments: string[] = [];
+                let comments = "";
                 const parts: JSDocComment[] = [];
                 let linkEnd;
                 let state = JSDocState.BeginningOfLine;
@@ -8799,7 +8794,7 @@ namespace Parser {
                     if (!margin) {
                         margin = indent;
                     }
-                    comments.push(text);
+                    comments += text;
                     indent += text.length;
                 }
                 if (initialMargin !== undefined) {
@@ -8815,14 +8810,14 @@ namespace Parser {
                         case SyntaxKind.NewLineTrivia:
                             state = JSDocState.BeginningOfLine;
                             // don't use pushComment here because we want to keep the margin unchanged
-                            comments.push(scanner.getTokenText());
+                            comments += scanner.getTokenText();
                             indent = 0;
                             break;
                         case SyntaxKind.AtToken:
                             if (state === JSDocState.SavingBackticks
                                 || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
                                 // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
-                                comments.push(scanner.getTokenText());
+                                comments += scanner.getTokenText();
                                 break;
                             }
                             scanner.setTextPos(scanner.getTextPos() - 1);
@@ -8838,7 +8833,7 @@ namespace Parser {
                                 const whitespace = scanner.getTokenText();
                                 // if the whitespace crosses the margin, take only the whitespace that passes the margin
                                 if (margin !== undefined && indent + whitespace.length > margin) {
-                                    comments.push(whitespace.slice(margin - indent));
+                                    comments += whitespace.slice(margin - indent);
                                 }
                                 indent += whitespace.length;
                             }
@@ -8849,9 +8844,9 @@ namespace Parser {
                             const linkStart = scanner.getTextPos() - 1;
                             const link = parseJSDocLink(linkStart);
                             if (link) {
-                                parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos, commentEnd));
+                                parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? commentsPos, commentEnd));
                                 parts.push(link);
-                                comments = [];
+                                comments = "";
                                 linkEnd = scanner.getTextPos();
                             }
                             else {
@@ -8887,16 +8882,15 @@ namespace Parser {
                     tok = nextTokenJSDoc();
                 }
 
-                removeLeadingNewlines(comments);
-                removeTrailingWhitespace(comments);
+                comments = removeLeadingNewlines(comments);
                 if (parts.length) {
                     if (comments.length) {
-                        parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos));
+                        parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? commentsPos));
                     }
                     return createNodeArray(parts, commentsPos, scanner.getTextPos());
                 }
                 else if (comments.length) {
-                    return comments.join("");
+                    return comments;
                 }
             }
 
