@@ -7560,6 +7560,14 @@
         "category": "Message",
         "code": 95175
     },
+    "Convert typedef to TypeScript type.": {
+        "category": "Message",
+        "code": 95176
+    },
+    "Convert all typedef to TypeScript types.": {
+        "category": "Message",
+        "code": 95177
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

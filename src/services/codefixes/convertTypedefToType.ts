@@ -2,6 +2,7 @@ import {
     Diagnostics,
     factory,
     flatMap,
+    getSynthesizedDeepClone,
     getTokenAtPosition,
     HasJSDoc,
     hasJSDocNodes,
@@ -14,16 +15,12 @@ import {
     JSDocTypeLiteral,
     mapDefined,
     Node,
-    ParenthesizedTypeNode,
     PropertySignature,
     some,
     SourceFile,
     SyntaxKind,
     textChanges,
     TypeAliasDeclaration,
-    TypeNode,
-    TypeNodeSyntaxKind,
-    UnionTypeNode,
 } from "../_namespaces/ts";
 import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
 
@@ -45,9 +42,9 @@ registerCodeFix({
                 createCodeFixAction(
                     fixId,
                     changes,
-                    Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type,
+                    Diagnostics.Convert_typedef_to_TypeScript_type,
                     fixId,
-                    Diagnostics.JSDoc_typedefs_may_be_converted_to_TypeScript_types
+                    Diagnostics.Convert_all_typedef_to_TypeScript_types,
                 ),
             ];
         }
@@ -86,7 +83,7 @@ function fixSingleTypeDef(
 function createDeclaration(tag: JSDocTypedefTag): InterfaceDeclaration | TypeAliasDeclaration | undefined {
     const { typeExpression } = tag;
     if (!typeExpression) return;
-    const typeName = tag.name?.getFullText().trim();
+    const typeName = tag.name?.getText();
     if (!typeName) return;
 
     // For use case @typedef {object}Foo @property{bar}number
@@ -96,7 +93,6 @@ function createDeclaration(tag: JSDocTypedefTag): InterfaceDeclaration | TypeAli
     }
     // for use case @typedef {(number|string|undefined)} Foo or @typedef {number|string|undefined} Foo
     // In this case, we reach the leaf node of AST.
-    // Here typeExpression.type is a TypeNode, e.g. a UnionType or a primitive type, such as "number".
     if (typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
         return createTypeAliasForTypeExpression(typeName, typeExpression);
     }
@@ -122,7 +118,7 @@ function createTypeAliasForTypeExpression(
     typeName: string,
     typeExpression: JSDocTypeExpression
 ): TypeAliasDeclaration | undefined {
-    const typeReference = createTypeReference(typeExpression.type);
+    const typeReference = getSynthesizedDeepClone(typeExpression.type);
     if (!typeReference) return;
     const declaration = factory.createTypeAliasDeclaration(
         [],
@@ -150,7 +146,7 @@ function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): Property
         }
         // Leaf node, where type.kind === SyntaxKind.JSDocTypeExpression
         else if (type) {
-            typeReference = createTypeReference(type);
+            typeReference = getSynthesizedDeepClone(type);
         }
 
         if (typeReference && name) {
@@ -166,7 +162,7 @@ function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): Property
         }
     };
 
-    const props = mapDefined(propertyTags, getSignature);
+    const props = mapDefined(propertyTags as JSDocPropertyTag[], getSignature);
     return props;
 }
 
@@ -178,59 +174,14 @@ function getPropertyName(tag: JSDocPropertyTag): string | undefined {
     // for "@property {string} parent.child" or "@property {string} parent.child.grandchild" in nested object type
     // We'll get "child" in the first example or "grandchild" in the second example as the prop name
     if (name.kind === SyntaxKind.QualifiedName) {
-        propertyName = name.right.getFullText().trim();
+        propertyName = name.right.text;
     }
     else {
-        propertyName = tag.name.getFullText().trim();
+        propertyName = tag.name.getText();
     }
     return propertyName;
 }
 
-// Create TypeReferenceNode when we reach the leaf node of AST
-function createTypeReference(type: TypeNode): TypeNode | undefined {
-    let typeReference;
-    if (type.kind === SyntaxKind.ParenthesizedType) {
-        type = (type as ParenthesizedTypeNode).type;
-    }
-    // Create TypeReferenceNode for UnionType
-    if (type.kind === SyntaxKind.UnionType) {
-        const elements = (type as UnionTypeNode).types;
-        const nodes = mapDefined(
-            elements,
-            (element) => {
-                const node = transformUnionTypeKeyword(element.kind);
-                if (node) {
-                    return node;
-                }
-            }
-        );
-
-        if (!nodes) return;
-        typeReference = factory.createUnionTypeNode(nodes);
-    }
-    //Create TypeReferenceNode for primitive types
-    else {
-        typeReference = transformUnionTypeKeyword(type.kind);
-    }
-    return typeReference;
-}
-
-function transformUnionTypeKeyword(keyword: TypeNodeSyntaxKind): TypeNode | undefined {
-    switch (keyword) {
-        case SyntaxKind.NumberKeyword:
-            return factory.createTypeReferenceNode("number");
-        case SyntaxKind.StringKeyword:
-            return factory.createTypeReferenceNode("string");
-        case SyntaxKind.UndefinedKeyword:
-            return factory.createTypeReferenceNode("undefined");
-        case SyntaxKind.ObjectKeyword:
-            return factory.createTypeReferenceNode("object");
-        case SyntaxKind.VoidKeyword:
-            return factory.createTypeReferenceNode("void");
-        default:
-            return;
-    }
-}
 
 /** @internal */
 export function containsJSDocTypedef(node: Node): node is HasJSDoc {
