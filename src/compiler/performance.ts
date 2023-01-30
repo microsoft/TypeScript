@@ -12,7 +12,7 @@ import {
 /** Performance measurements for the compiler. */
 
 // NOTE: declared global is injected by ts-perf to monitor profiler marks to generate heap snapshots.
-declare var onProfilerEvent: ((eventName: string) => void) | undefined;
+declare let onProfilerEvent: ((eventName: string) => void) | undefined;
 
 let perfHooks: PerformanceHooks | undefined;
 // when set, indicates the implementation of `Performance` to use for user timing.
