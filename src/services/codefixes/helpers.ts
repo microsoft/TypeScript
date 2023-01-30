@@ -194,7 +194,8 @@ export function addNewNodeForMemberSymbol(
     const kind = declaration?.kind ?? SyntaxKind.PropertySignature;
     const declarationName = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
     const effectiveModifierFlags = declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None;
-    let modifierFlags =
+    let modifierFlags = effectiveModifierFlags & ModifierFlags.Static;
+    modifierFlags |=
         effectiveModifierFlags & ModifierFlags.Public ? ModifierFlags.Public :
         effectiveModifierFlags & ModifierFlags.Protected ? ModifierFlags.Protected :
         ModifierFlags.None;

@@ -42,13 +42,15 @@ verify.completions({
     includes: [
         {
             name: "hint",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "protected hint(): string {\n}",
+            filterText: "hint",
         },
         {
             name: "refuse",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "public refuse(): string {\n}",
+            filterText: "refuse",
         }
     ],
 });

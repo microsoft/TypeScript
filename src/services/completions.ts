@@ -1565,12 +1565,12 @@ function getEntryForMemberCompletion(
 ): { insertText: string, filterText?: string, isSnippet?: true, importAdder?: codefix.ImportAdder } | undefined {
     const classLikeDeclaration = findAncestor(location, isClassLike);
     if (!classLikeDeclaration) {
-        return undefined;
+        return undefined; // This should never happen.
     }
 
     let isSnippet: true | undefined;
     let insertText: string = name;
-    let filterText: string = name;
+    const filterText: string = name;
 
     const checker = program.getTypeChecker();
     const sourceFile = location.getSourceFile();
@@ -1652,6 +1652,10 @@ function getEntryForMemberCompletion(
         // If the original member is protected, we allow it to change to public.
         if (modifiers & ModifierFlags.Protected && allowedAndPresent & ModifierFlags.Public) {
             modifiers &= ~ModifierFlags.Protected;
+        }
+        // `public` modifier is optional and can be dropped.
+        if (allowedAndPresent !== ModifierFlags.None && !(allowedAndPresent & ModifierFlags.Public)) {
+            modifiers &= ~ModifierFlags.Public;
         }
         modifiers |= allowedAndPresent;
         completionNodes = completionNodes.map(node => factory.updateModifiers(node, modifiers));
