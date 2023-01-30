@@ -24,10 +24,10 @@ jobs:
           - "16"
           - "14"
         bundle:
-          - "true"
+          - true
         include:
           - node-version: "*"
-            bundle: "false"
+            bundle: false
             os: ubuntu-latest
 
     runs-on: ${{ matrix.os }}
