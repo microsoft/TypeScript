@@ -30986,7 +30986,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 const isSetonlyAccessor = prop && prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
-                if (isSetonlyAccessor && assignmentKind !== AssignmentKind.Definite) {
+                if (isSetonlyAccessor && assignmentKind !== AssignmentKind.Definite && assignmentKind !== AssignmentKind.CompoundLike) {
                     error(node, Diagnostics.Private_accessor_was_defined_without_a_getter);
                 }
             }
