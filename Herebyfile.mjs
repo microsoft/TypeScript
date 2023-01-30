@@ -182,28 +182,6 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             packages: "external",
             logLevel: "warning",
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
-            plugins: [
-                {
-                    name: "fix-require",
-                    setup: (build) => {
-                        build.onEnd(async () => {
-                            // esbuild converts calls to "require" to "__require"; this function
-                            // calls the real require if it exists, or throws if it does not (rather than
-                            // throwing an error like "require not defined"). But, since we want typescript
-                            // to be consumable by other bundlers, we need to convert these calls back to
-                            // require so our imports are visible again.
-                            //
-                            // The leading spaces are to keep the offsets the same within the files to keep
-                            // source maps working (though this only really matters for the line the require is on).
-                            //
-                            // See: https://github.com/evanw/esbuild/issues/1905
-                            let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(/__require\(/g, "  require(");
-                            await fs.promises.writeFile(outfile, contents);
-                        });
-                    },
-                }
-            ]
         };
 
         if (taskOptions.exportIsTsObject) {
@@ -213,6 +191,30 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             options.globalName = "ts";
             // If we are in a CJS context, export the ts namespace.
             options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }` };
+
+            // esbuild converts calls to "require" to "__require"; this function
+            // calls the real require if it exists, or throws if it does not (rather than
+            // throwing an error like "require not defined"). But, since we want typescript
+            // to be consumable by other bundlers, we need to convert these calls back to
+            // require so our imports are visible again.
+            //
+            // The leading spaces are to keep the offsets the same within the files to keep
+            // source maps working (though this only really matters for the line the require is on).
+            //
+            // See: https://github.com/evanw/esbuild/issues/1905
+            options.define = { require: "$$require" };
+            options.plugins = [
+                {
+                    name: "fix-require",
+                    setup: (build) => {
+                        build.onEnd(async () => {
+                            let contents = await fs.promises.readFile(outfile, "utf-8");
+                            contents = contents.replace(/\$\$require/g, "  require");
+                            await fs.promises.writeFile(outfile, contents);
+                        });
+                    },
+                }
+            ];
         }
 
         return options;
