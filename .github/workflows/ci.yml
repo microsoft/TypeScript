@@ -12,7 +12,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest-16-cores
+    runs-on: ubuntu-latest-xl
 
     strategy:
       matrix:
