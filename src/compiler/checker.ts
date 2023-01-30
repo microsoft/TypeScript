@@ -36975,7 +36975,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (signature && signature.typeParameters) {
                 const contextualType = getApparentTypeOfContextualType(node as Expression, ContextFlags.NoConstraints);
                 if (contextualType) {
-                    const contextualSignature = getSingleSignature(getNonNullableType(contextualType), callSignature ? SignatureKind.Call : SignatureKind.Construct, /*allowMembers*/ false);
+                    const contextualSignature = getSingleSignature(getNonNullableType(contextualType), callSignature ? SignatureKind.Call : SignatureKind.Construct, /*allowMembers*/ true);
                     if (contextualSignature && !contextualSignature.typeParameters) {
                         if (checkMode & CheckMode.SkipGenericFunctions) {
                             skippedGenericFunction(node, checkMode);

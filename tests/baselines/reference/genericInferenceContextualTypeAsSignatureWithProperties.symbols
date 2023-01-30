@@ -1,0 +1,36 @@
+=== tests/cases/compiler/genericInferenceContextualTypeAsSignatureWithProperties.ts ===
+// repro from #52262
+
+const inner = <T extends 'a' | 'b' | 'c'>(cb: (arg: T) => void) => {};
+>inner : Symbol(inner, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 2, 5))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 2, 15))
+>cb : Symbol(cb, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 2, 42))
+>arg : Symbol(arg, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 2, 47))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 2, 15))
+
+interface FuncB<T> {
+>FuncB : Symbol(FuncB, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 2, 70))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 4, 16))
+
+  (arg: T): void;
+>arg : Symbol(arg, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 5, 3))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 4, 16))
+
+  x?: string;
+>x : Symbol(FuncB.x, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 5, 17))
+
+};
+const outerB = <T,>(func: FuncB<T>, arg: T) => {};
+>outerB : Symbol(outerB, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 8, 5))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 8, 16))
+>func : Symbol(func, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 8, 20))
+>FuncB : Symbol(FuncB, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 2, 70))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 8, 16))
+>arg : Symbol(arg, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 8, 35))
+>T : Symbol(T, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 8, 16))
+
+outerB(inner, (arg: 'a' | 'b') => {});
+>outerB : Symbol(outerB, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 8, 5))
+>inner : Symbol(inner, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 2, 5))
+>arg : Symbol(arg, Decl(genericInferenceContextualTypeAsSignatureWithProperties.ts, 9, 15))
+
