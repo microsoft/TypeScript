@@ -12,6 +12,7 @@ import "./unittests/jsonParserRecovery";
 import "./unittests/moduleResolution";
 import "./unittests/parsePseudoBigInt";
 import "./unittests/paths";
+import "./unittests/performance";
 import "./unittests/printer";
 import "./unittests/programApi";
 import "./unittests/publicApi";
