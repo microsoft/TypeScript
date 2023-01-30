@@ -1,0 +1,30 @@
+/a.js(2,5): error TS7010: 'overload', which lacks return-type annotation, implicitly has an 'any' return type.
+/a.js(7,5): error TS7010: 'overload', which lacks return-type annotation, implicitly has an 'any' return type.
+
+
+==== /a.js (2 errors) ====
+    /**
+     * @overload
+        ~~~~~~~~
+!!! error TS7010: 'overload', which lacks return-type annotation, implicitly has an 'any' return type.
+     * @param {number} x
+     */
+    
+    /**
+     * @overload
+        ~~~~~~~~
+!!! error TS7010: 'overload', which lacks return-type annotation, implicitly has an 'any' return type.
+     * @param {string} x
+     */
+    
+    /**
+     * @param {string | number} x
+     * @returns {string | number}
+     */
+    function id(x) {
+        return x;
+    }
+    
+    export let a = id(123);
+    export let b = id("hello");
+    
