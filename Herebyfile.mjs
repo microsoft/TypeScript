@@ -202,14 +202,14 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // source maps working (though this only really matters for the line the require is on).
             //
             // See: https://github.com/evanw/esbuild/issues/1905
-            options.define = { require: "$require" };
+            options.define = { require: "$$require" };
             options.plugins = [
                 {
                     name: "fix-require",
                     setup: (build) => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(/\$require\(/g, " require(");
+                            contents = contents.replace(/\$\$require/g, "  require");
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },
