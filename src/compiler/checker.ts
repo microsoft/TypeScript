@@ -44696,7 +44696,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return node.parent.kind === SyntaxKind.TypeReference;
     }
 
-    function isHeritageClauseElementIdentifier(node: Node): boolean {
+    function isInNameOfExpressionWithTypeArguments(node: Node): boolean {
         while (node.parent.kind === SyntaxKind.PropertyAccessExpression) {
             node = node.parent;
         }
@@ -44822,7 +44822,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             name = name.parent as QualifiedName | PropertyAccessEntityNameExpression | JSDocMemberName;
         }
 
-        if (isHeritageClauseElementIdentifier(name)) {
+        if (isInNameOfExpressionWithTypeArguments(name)) {
             let meaning = SymbolFlags.None;
             if (name.parent.kind === SyntaxKind.ExpressionWithTypeArguments) {
                 //An 'ExpressionWithTypeArguments' may appear in type space (interface Foo extends Bar<T>),
