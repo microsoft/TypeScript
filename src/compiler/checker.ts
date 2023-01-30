@@ -26208,7 +26208,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isReachableFlowNode(flow)) {
                     return unreachableNeverType;
                 }
-                if (getAssignmentTargetKind(node) === AssignmentKind.Compound) {
+                const assignmentKind = getAssignmentTargetKind(node);
+                if (assignmentKind === AssignmentKind.Compound) {
                     const flowType = getTypeAtFlowNode(flow.antecedent);
                     return createFlowType(getBaseTypeOfLiteralType(getTypeFromFlowType(flowType)), isIncomplete(flowType));
                 }
@@ -26219,10 +26220,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const assignedType = getWidenedLiteralType(getInitialOrAssignedType(flow));
                     return isTypeAssignableTo(assignedType, declaredType) ? assignedType : anyArrayType;
                 }
-                if (declaredType.flags & TypeFlags.Union) {
-                    return getAssignmentReducedType(declaredType as UnionType, getInitialOrAssignedType(flow));
+                const t = assignmentKind === AssignmentKind.CompoundLike ? getBaseTypeOfLiteralType(declaredType) : declaredType;
+                if (t.flags & TypeFlags.Union) {
+                    return getAssignmentReducedType(t as UnionType, getInitialOrAssignedType(flow));
                 }
-                return declaredType;
+                return t;
             }
             // We didn't have a direct match. However, if the reference is a dotted name, this
             // may be an assignment to a left hand part of the reference. For example, for a
@@ -27569,6 +27571,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (localOrExportSymbol.flags & SymbolFlags.Variable) {
             if (assignmentKind === AssignmentKind.Definite) {
                 return type;
+            }
+            if (assignmentKind === AssignmentKind.CompoundLike) {
+                return getBaseTypeOfLiteralType(type);
             }
         }
         else if (isAlias) {
@@ -31090,7 +31095,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // assignment target, and the referenced property was declared as a variable, property,
         // accessor, or optional method.
         const assignmentKind = getAssignmentTargetKind(node);
-        if (assignmentKind === AssignmentKind.Definite) {
+        if (assignmentKind === AssignmentKind.Definite || assignmentKind === AssignmentKind.CompoundLike) {
             return removeMissingType(propType, !!(prop && prop.flags & SymbolFlags.Optional));
         }
         if (prop &&

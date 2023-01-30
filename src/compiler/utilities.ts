@@ -230,6 +230,7 @@ import {
     InterfaceDeclaration,
     InternalEmitFlags,
     isAccessor,
+    isAdditiveOperatorOrHigher,
     isAnyDirectorySeparator,
     isArray,
     isArrayLiteralExpression,
@@ -4009,7 +4010,7 @@ export function hasTypeArguments(node: Node): node is HasTypeArguments {
 
 /** @internal */
 export const enum AssignmentKind {
-    None, Definite, Compound
+    None, Definite, Compound, CompoundLike
 }
 
 /** @internal */
@@ -4020,7 +4021,8 @@ export function getAssignmentTargetKind(node: Node): AssignmentKind {
             case SyntaxKind.BinaryExpression:
                 const binaryOperator = (parent as BinaryExpression).operatorToken.kind;
                 return isAssignmentOperator(binaryOperator) && (parent as BinaryExpression).left === node ?
-                    binaryOperator === SyntaxKind.EqualsToken || isLogicalOrCoalescingAssignmentOperator(binaryOperator) ? AssignmentKind.Definite : AssignmentKind.Compound :
+                    binaryOperator === SyntaxKind.EqualsToken ? (isCompoundLikeAssignment(parent as BinaryExpression) ? AssignmentKind.CompoundLike : AssignmentKind.Definite) :
+                    isLogicalOrCoalescingAssignmentOperator(binaryOperator) ? AssignmentKind.Definite : AssignmentKind.Compound :
                     AssignmentKind.None;
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
@@ -4064,6 +4066,11 @@ export function getAssignmentTargetKind(node: Node): AssignmentKind {
 /** @internal */
 export function isAssignmentTarget(node: Node): boolean {
     return getAssignmentTargetKind(node) !== AssignmentKind.None;
+}
+
+function isCompoundLikeAssignment(assignment: BinaryExpression): boolean {
+    const right = skipParentheses(assignment.right);
+    return right.kind === SyntaxKind.BinaryExpression && isAdditiveOperatorOrHigher((right as BinaryExpression).operatorToken.kind);
 }
 
 /** @internal */

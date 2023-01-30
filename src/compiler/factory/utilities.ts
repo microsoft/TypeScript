@@ -1206,7 +1206,8 @@ function isAdditiveOperator(kind: SyntaxKind): kind is AdditiveOperator {
         || kind === SyntaxKind.MinusToken;
 }
 
-function isAdditiveOperatorOrHigher(kind: SyntaxKind): kind is AdditiveOperatorOrHigher {
+/** @internal */
+export function isAdditiveOperatorOrHigher(kind: SyntaxKind): kind is AdditiveOperatorOrHigher {
     return isAdditiveOperator(kind)
         || isMultiplicativeOperatorOrHigher(kind);
 }
