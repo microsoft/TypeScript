@@ -44825,8 +44825,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isInNameOfExpressionWithTypeArguments(name)) {
             let meaning = SymbolFlags.None;
             if (name.parent.kind === SyntaxKind.ExpressionWithTypeArguments) {
-                //An 'ExpressionWithTypeArguments' may appear in type space (interface Foo extends Bar<T>),
-                //value space (return foo<T>), or both(class Foo extends Bar<T>); ensure the meaning matches.
+                // An 'ExpressionWithTypeArguments' may appear in type space (interface Foo extends Bar<T>),
+                // value space (return foo<T>), or both(class Foo extends Bar<T>); ensure the meaning matches.
                 meaning = isPartOfTypeNode(name) ? SymbolFlags.Type : SymbolFlags.Value;
 
                 // In a class 'extends' clause we are also looking for a value.
