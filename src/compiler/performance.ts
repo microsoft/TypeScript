@@ -10,6 +10,9 @@ import { System } from "./types";
 
 /** Performance measurements for the compiler. */
 
+// NOTE: declared global is injected by ts-perf to monitor profiler marks to generate heap snapshots.
+declare let onProfilerEvent: ((eventName: string) => void) | undefined;
+
 let perfHooks: PerformanceHooks | undefined;
 // when set, indicates the implementation of `Performance` to use for user timing.
 // when unset, indicates user timing is unavailable or disabled.
@@ -73,6 +76,9 @@ export function mark(markName: string) {
         counts.set(markName, count + 1);
         marks.set(markName, timestamp());
         performanceImpl?.mark(markName);
+        if (typeof onProfilerEvent === "function") {
+            onProfilerEvent(markName);
+        }
     }
 }
 

@@ -36,7 +36,7 @@ Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/Users/name/projects/web/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath '.' with target './dist/index.js'.
-File '/Users/name/projects/web/index.ts' exist - use it as a name resolution result.
+File '/Users/name/projects/web/index.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/index.ts', result '/Users/name/projects/web/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/Users/name/projects/web/index.ts'. ========
 File '/a/lib/package.json' does not exist.

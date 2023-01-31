@@ -1464,7 +1464,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.JsxExpression]: function visitEachChildOfJsxExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateJsxExpression(node,
-            Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)));
+            nodeVisitor(node.expression, visitor, isExpression));
     },
 
     // Clauses

@@ -4647,7 +4647,7 @@
         "category": "Message",
         "code": 6096
     },
-    "File '{0}' exist - use it as a name resolution result.": {
+    "File '{0}' exists - use it as a name resolution result.": {
         "category": "Message",
         "code": 6097
     },
@@ -6212,6 +6212,10 @@
     "Function expression, which lacks return-type annotation, implicitly has an '{0}' return type.": {
         "category": "Error",
         "code": 7011
+    },
+    "This overload implicitly returns the type '{0}' because it lacks a return type annotation.": {
+        "category": "Error",
+        "code": 7012
     },
     "Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
