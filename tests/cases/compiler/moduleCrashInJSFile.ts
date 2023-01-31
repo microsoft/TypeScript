@@ -1,5 +1,6 @@
 // @filename: a.js
 // @checkJs: true
+// @outDir: out/
 
 //// [thisKeyword.ts]
 module foo {

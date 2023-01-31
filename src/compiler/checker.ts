@@ -3742,7 +3742,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // Block-scoped variables cannot be used before their definition
         const declaration = result.declarations?.find(
-            d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration));
+            d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration) || (d.kind === SyntaxKind.ModuleDeclaration));
 
         if (declaration === undefined) return Debug.fail("checkResolvedBlockScopedVariable could not find block-scoped declaration");
 
