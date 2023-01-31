@@ -6213,6 +6213,10 @@
         "category": "Error",
         "code": 7011
     },
+    "This overload implicitly returns the type '{0}' because it lacks a return type annotation.": {
+        "category": "Error",
+        "code": 7012
+    },
     "Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7013
