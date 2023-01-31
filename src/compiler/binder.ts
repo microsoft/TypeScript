@@ -3157,7 +3157,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         switch (thisContainer.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ModuleDeclaration:
                 let constructorSymbol: Symbol | undefined = thisContainer.symbol;
                 // For `f.prototype.m = function() { this.x = 0; }`, `this.x = 0` should modify `f`'s members, not the function expression.
                 if (isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
@@ -3210,7 +3209,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
                 }
                 break;
-
+            case SyntaxKind.ModuleDeclaration:
+                break;
             default:
                 Debug.failBadSyntaxKind(thisContainer);
         }
