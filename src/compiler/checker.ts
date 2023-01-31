@@ -23425,10 +23425,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return;
             case SyntaxKind.JSDocSignature:
                 if (noImplicitAny && isJSDocOverloadTag(declaration.parent)) {
-                    const jsDocOverloadTag = declaration.parent;
-                    const sourceFile = getSourceFileOfNode(jsDocOverloadTag);
-                    diagnostics.add(
-                        createFileDiagnostic(sourceFile, jsDocOverloadTag.pos, jsDocOverloadTag.tagName.end - jsDocOverloadTag.pos, Diagnostics.This_overload_implicitly_returns_the_type_0_because_it_lacks_a_return_type_annotation, typeAsString));
+                    error(declaration.parent.tagName, Diagnostics.This_overload_implicitly_returns_the_type_0_because_it_lacks_a_return_type_annotation, typeAsString);
                 }
                 return;
             case SyntaxKind.FunctionDeclaration:
