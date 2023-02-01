@@ -1,0 +1,35 @@
+=== tests/cases/compiler/declarationEmitKeywordDestructuring.ts ===
+type P = {
+>P : { enum: boolean; function: boolean; one: boolean; }
+
+    enum: boolean;
+>enum : boolean
+
+    function: boolean;
+>function : boolean
+
+    one: boolean;
+>one : boolean
+
+};
+
+function f1({ enum: _enum, ...rest }: P) {
+>f1 : ({ enum: _enum, ...rest }: P) => { function: boolean; one: boolean; }
+>enum : any
+>_enum : boolean
+>rest : { function: boolean; one: boolean; }
+
+    return rest;
+>rest : { function: boolean; one: boolean; }
+}
+
+function f2({ function: _function, ...rest }: P) {
+>f2 : ({ function: _function, ...rest }: P) => { enum: boolean; one: boolean; }
+>function : any
+>_function : boolean
+>rest : { enum: boolean; one: boolean; }
+
+    return rest;
+>rest : { enum: boolean; one: boolean; }
+}
+

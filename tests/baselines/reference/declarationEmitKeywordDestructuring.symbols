@@ -1,0 +1,37 @@
+=== tests/cases/compiler/declarationEmitKeywordDestructuring.ts ===
+type P = {
+>P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
+
+    enum: boolean;
+>enum : Symbol(enum, Decl(declarationEmitKeywordDestructuring.ts, 0, 10))
+
+    function: boolean;
+>function : Symbol(function, Decl(declarationEmitKeywordDestructuring.ts, 1, 18))
+
+    one: boolean;
+>one : Symbol(one, Decl(declarationEmitKeywordDestructuring.ts, 2, 22))
+
+};
+
+function f1({ enum: _enum, ...rest }: P) {
+>f1 : Symbol(f1, Decl(declarationEmitKeywordDestructuring.ts, 4, 2))
+>enum : Symbol(enum, Decl(declarationEmitKeywordDestructuring.ts, 0, 10))
+>_enum : Symbol(_enum, Decl(declarationEmitKeywordDestructuring.ts, 6, 13))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 6, 26))
+>P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
+
+    return rest;
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 6, 26))
+}
+
+function f2({ function: _function, ...rest }: P) {
+>f2 : Symbol(f2, Decl(declarationEmitKeywordDestructuring.ts, 8, 1))
+>function : Symbol(function, Decl(declarationEmitKeywordDestructuring.ts, 1, 18))
+>_function : Symbol(_function, Decl(declarationEmitKeywordDestructuring.ts, 10, 13))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 10, 34))
+>P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
+
+    return rest;
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 10, 34))
+}
+

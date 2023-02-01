@@ -86,6 +86,7 @@ import {
     hasSyntacticModifier,
     HeritageClause,
     Identifier,
+    identifierToKeywordKind,
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportTypeNode,
@@ -695,7 +696,7 @@ export function transformDeclarations(context: TransformationContext) {
             if (elem.kind === SyntaxKind.OmittedExpression) {
                 return elem;
             }
-            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced) {
+            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced && !identifierToKeywordKind(elem.propertyName)) {
                // Unnecessary property renaming is forbidden in types, so remove renaming
                 return factory.updateBindingElement(
                     elem,

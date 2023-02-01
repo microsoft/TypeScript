@@ -1,0 +1,52 @@
+//// [declarationEmitKeywordDestructuring.ts]
+type P = {
+    enum: boolean;
+    function: boolean;
+    one: boolean;
+};
+
+function f1({ enum: _enum, ...rest }: P) {
+    return rest;
+}
+
+function f2({ function: _function, ...rest }: P) {
+    return rest;
+}
+
+
+//// [declarationEmitKeywordDestructuring.js]
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+function f1(_a) {
+    var _enum = _a.enum, rest = __rest(_a, ["enum"]);
+    return rest;
+}
+function f2(_a) {
+    var _function = _a.function, rest = __rest(_a, ["function"]);
+    return rest;
+}
+
+
+//// [declarationEmitKeywordDestructuring.d.ts]
+type P = {
+    enum: boolean;
+    function: boolean;
+    one: boolean;
+};
+declare function f1({ enum: _enum, ...rest }: P): {
+    function: boolean;
+    one: boolean;
+};
+declare function f2({ function: _function, ...rest }: P): {
+    enum: boolean;
+    one: boolean;
+};
