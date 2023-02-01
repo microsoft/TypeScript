@@ -948,9 +948,14 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
             const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
             const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
             if (getResolvePackageJsonExports(options)) {
+                // The package name that we found in node_modules could be different from the package
+                // name in the package.json content via url/filepath dependency specifiers. We need to
+                // use the actual directory name, so don't look at `packageJsonContent.name` here.
+                const nodeModulesDirectoryName = packageRootPath.substring(parts.topLevelPackageNameIndex + 1);
+                const packageName = getPackageNameFromTypesPackageName(nodeModulesDirectoryName);
                 const conditions = getConditions(options, importMode === ModuleKind.ESNext);
-                const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string"
-                    ? tryGetModuleNameFromExports(options, path, packageRootPath, getPackageNameFromTypesPackageName(packageJsonContent.name), packageJsonContent.exports, conditions)
+                const fromExports = packageJsonContent.exports
+                    ? tryGetModuleNameFromExports(options, path, packageRootPath, packageName, packageJsonContent.exports, conditions)
                     : undefined;
                 if (fromExports) {
                     const withJsExtension = !hasTSFileExtension(fromExports.moduleFileToTry)
