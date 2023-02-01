@@ -1413,7 +1413,6 @@ namespace Parser {
     let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
     let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
     let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
-    let isInTsserver = true;
 
     function countNode(node: Node) {
         nodeCount++;
@@ -1660,10 +1659,10 @@ namespace Parser {
         IdentifierConstructor = objectAllocator.getIdentifierConstructor();
         PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor();
         SourceFileConstructor = objectAllocator.getSourceFileConstructor();
-        isInTsserver = (new NodeConstructor(0, 0, 0).constructor.name !== "Node");
 
         fileName = normalizePath(_fileName);
         sourceText = _sourceText;
+
         languageVersion = _languageVersion;
         syntaxCursor = _syntaxCursor;
         scriptKind = _scriptKind;
@@ -1764,19 +1763,17 @@ namespace Parser {
         return hasJSDoc ? addJSDocComment(node) : node;
     }
 
-    function shouldCheckJSDoc<T extends HasJSDoc>(node: T, comment: ts.CommentRange) {
-        if (isInTsserver) return true;
+    const seeLink = /@(?:see|link)/;
+    function shouldParseJSDoc<T extends HasJSDoc>(node: T, comment: ts.CommentRange) {
+        if (!(globalThis as any).isTSC) return true;
         if (node.flags & NodeFlags.JavaScriptFile) return true;
-        const link = sourceText.indexOf("@link", comment.pos);
-        const see = sourceText.indexOf("@see", comment.pos);
-        if (comment.pos < link && link < comment.end) return true;
-        if (comment.pos < see && see < comment.end) return true;
+        if (seeLink.test(sourceText.slice(comment.pos, comment.end))) return true;
     }
 
     let hasDeprecatedTag = false;
     function addJSDocComment<T extends HasJSDoc>(node: T): T {
         Debug.assert(!node.jsDoc); // Should only be called once per node
-        const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => shouldCheckJSDoc(node, comment) && JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
+        const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => shouldParseJSDoc(node, comment) && JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
         if (jsDoc.length) node.jsDoc = jsDoc;
         if (hasDeprecatedTag) {
             hasDeprecatedTag = false;

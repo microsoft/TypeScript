@@ -20,5 +20,8 @@ if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnviron
 if (ts.sys.setBlocking) {
     ts.sys.setBlocking();
 }
+declare var console: any;
+console.log("I am over here")
+;(globalThis as any)["isTSC"] = true;
 
 ts.executeCommandLine(ts.sys, ts.noop, ts.sys.args);
