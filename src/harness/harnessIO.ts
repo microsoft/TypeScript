@@ -616,7 +616,11 @@ export namespace Compiler {
             }
         }
 
-        yield [diagnosticSummaryMarker, Utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, options && options.pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
+        let topDiagnostics = minimalDiagnosticsToString(diagnostics, options && options.pretty);
+        topDiagnostics = Utils.removeTestPathPrefixes(topDiagnostics);
+        topDiagnostics = topDiagnostics.replace(/^(lib(?:.*)\.d\.ts)\(\d+,\d+\)/igm, "$1(--,--)");
+
+        yield [diagnosticSummaryMarker, topDiagnostics + IO.newLine() + IO.newLine(), diagnostics.length];
 
         // Report global errors
         const globalErrors = diagnostics.filter(err => !err.file);
