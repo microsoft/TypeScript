@@ -71,7 +71,7 @@ Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
 ======== Resolving module 'pkg1' from '/user/username/projects/myproject/index.ts'. ========
@@ -112,7 +112,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/a', target file types: TypeScript, JavaScript, Declaration.
-File '/user/username/projects/myproject/a.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/a.ts' exists - use it as a name resolution result.
 ======== Module name './a' was successfully resolved to '/user/username/projects/myproject/a.ts'. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
@@ -241,7 +241,7 @@ Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
