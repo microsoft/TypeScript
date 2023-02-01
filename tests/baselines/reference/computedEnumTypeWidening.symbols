@@ -218,41 +218,84 @@ function f4() {
 >B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
 }
 
+const c1 = E.B;
+>c1 : Symbol(c1, Decl(computedEnumTypeWidening.ts, 53, 5))
+>E.B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+>E : Symbol(E, Decl(computedEnumTypeWidening.ts, 0, 45))
+>B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+
+const c2 = E.B as const;
+>c2 : Symbol(c2, Decl(computedEnumTypeWidening.ts, 54, 5))
+>E.B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+>E : Symbol(E, Decl(computedEnumTypeWidening.ts, 0, 45))
+>B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+>const : Symbol(const)
+
+let v1 = E.B;
+>v1 : Symbol(v1, Decl(computedEnumTypeWidening.ts, 55, 3))
+>E.B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+>E : Symbol(E, Decl(computedEnumTypeWidening.ts, 0, 45))
+>B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+
+let v2 = E.B as const;
+>v2 : Symbol(v2, Decl(computedEnumTypeWidening.ts, 56, 3))
+>E.B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+>E : Symbol(E, Decl(computedEnumTypeWidening.ts, 0, 45))
+>B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+>const : Symbol(const)
+
+class C {
+>C : Symbol(C, Decl(computedEnumTypeWidening.ts, 56, 22))
+
+  p1 = E.B;
+>p1 : Symbol(C.p1, Decl(computedEnumTypeWidening.ts, 58, 9))
+>E.B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+>E : Symbol(E, Decl(computedEnumTypeWidening.ts, 0, 45))
+>B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+
+  p2 = E.B as const;
+>p2 : Symbol(C.p2, Decl(computedEnumTypeWidening.ts, 59, 11))
+>E.B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+>E : Symbol(E, Decl(computedEnumTypeWidening.ts, 0, 45))
+>B : Symbol(E.B, Decl(computedEnumTypeWidening.ts, 3, 20))
+>const : Symbol(const)
+}
+
 // Repro from #52531
 
 enum MyEnum { A, B, C }
->MyEnum : Symbol(MyEnum, Decl(computedEnumTypeWidening.ts, 51, 1))
->A : Symbol(MyEnum.A, Decl(computedEnumTypeWidening.ts, 55, 13))
->B : Symbol(MyEnum.B, Decl(computedEnumTypeWidening.ts, 55, 16))
->C : Symbol(MyEnum.C, Decl(computedEnumTypeWidening.ts, 55, 19))
+>MyEnum : Symbol(MyEnum, Decl(computedEnumTypeWidening.ts, 61, 1))
+>A : Symbol(MyEnum.A, Decl(computedEnumTypeWidening.ts, 65, 13))
+>B : Symbol(MyEnum.B, Decl(computedEnumTypeWidening.ts, 65, 16))
+>C : Symbol(MyEnum.C, Decl(computedEnumTypeWidening.ts, 65, 19))
 
 let val1 = MyEnum.A;
->val1 : Symbol(val1, Decl(computedEnumTypeWidening.ts, 57, 3))
->MyEnum.A : Symbol(MyEnum.A, Decl(computedEnumTypeWidening.ts, 55, 13))
->MyEnum : Symbol(MyEnum, Decl(computedEnumTypeWidening.ts, 51, 1))
->A : Symbol(MyEnum.A, Decl(computedEnumTypeWidening.ts, 55, 13))
+>val1 : Symbol(val1, Decl(computedEnumTypeWidening.ts, 67, 3))
+>MyEnum.A : Symbol(MyEnum.A, Decl(computedEnumTypeWidening.ts, 65, 13))
+>MyEnum : Symbol(MyEnum, Decl(computedEnumTypeWidening.ts, 61, 1))
+>A : Symbol(MyEnum.A, Decl(computedEnumTypeWidening.ts, 65, 13))
 
 val1 = MyEnum.B;
->val1 : Symbol(val1, Decl(computedEnumTypeWidening.ts, 57, 3))
->MyEnum.B : Symbol(MyEnum.B, Decl(computedEnumTypeWidening.ts, 55, 16))
->MyEnum : Symbol(MyEnum, Decl(computedEnumTypeWidening.ts, 51, 1))
->B : Symbol(MyEnum.B, Decl(computedEnumTypeWidening.ts, 55, 16))
+>val1 : Symbol(val1, Decl(computedEnumTypeWidening.ts, 67, 3))
+>MyEnum.B : Symbol(MyEnum.B, Decl(computedEnumTypeWidening.ts, 65, 16))
+>MyEnum : Symbol(MyEnum, Decl(computedEnumTypeWidening.ts, 61, 1))
+>B : Symbol(MyEnum.B, Decl(computedEnumTypeWidening.ts, 65, 16))
 
 declare enum MyDeclaredEnum { A, B, C }
->MyDeclaredEnum : Symbol(MyDeclaredEnum, Decl(computedEnumTypeWidening.ts, 58, 16))
->A : Symbol(MyDeclaredEnum.A, Decl(computedEnumTypeWidening.ts, 60, 29))
->B : Symbol(MyDeclaredEnum.B, Decl(computedEnumTypeWidening.ts, 60, 32))
->C : Symbol(MyDeclaredEnum.C, Decl(computedEnumTypeWidening.ts, 60, 35))
+>MyDeclaredEnum : Symbol(MyDeclaredEnum, Decl(computedEnumTypeWidening.ts, 68, 16))
+>A : Symbol(MyDeclaredEnum.A, Decl(computedEnumTypeWidening.ts, 70, 29))
+>B : Symbol(MyDeclaredEnum.B, Decl(computedEnumTypeWidening.ts, 70, 32))
+>C : Symbol(MyDeclaredEnum.C, Decl(computedEnumTypeWidening.ts, 70, 35))
 
 let val2 = MyDeclaredEnum.A;
->val2 : Symbol(val2, Decl(computedEnumTypeWidening.ts, 62, 3))
->MyDeclaredEnum.A : Symbol(MyDeclaredEnum.A, Decl(computedEnumTypeWidening.ts, 60, 29))
->MyDeclaredEnum : Symbol(MyDeclaredEnum, Decl(computedEnumTypeWidening.ts, 58, 16))
->A : Symbol(MyDeclaredEnum.A, Decl(computedEnumTypeWidening.ts, 60, 29))
+>val2 : Symbol(val2, Decl(computedEnumTypeWidening.ts, 72, 3))
+>MyDeclaredEnum.A : Symbol(MyDeclaredEnum.A, Decl(computedEnumTypeWidening.ts, 70, 29))
+>MyDeclaredEnum : Symbol(MyDeclaredEnum, Decl(computedEnumTypeWidening.ts, 68, 16))
+>A : Symbol(MyDeclaredEnum.A, Decl(computedEnumTypeWidening.ts, 70, 29))
 
 val2 = MyDeclaredEnum.B;
->val2 : Symbol(val2, Decl(computedEnumTypeWidening.ts, 62, 3))
->MyDeclaredEnum.B : Symbol(MyDeclaredEnum.B, Decl(computedEnumTypeWidening.ts, 60, 32))
->MyDeclaredEnum : Symbol(MyDeclaredEnum, Decl(computedEnumTypeWidening.ts, 58, 16))
->B : Symbol(MyDeclaredEnum.B, Decl(computedEnumTypeWidening.ts, 60, 32))
+>val2 : Symbol(val2, Decl(computedEnumTypeWidening.ts, 72, 3))
+>MyDeclaredEnum.B : Symbol(MyDeclaredEnum.B, Decl(computedEnumTypeWidening.ts, 70, 32))
+>MyDeclaredEnum : Symbol(MyDeclaredEnum, Decl(computedEnumTypeWidening.ts, 68, 16))
+>B : Symbol(MyDeclaredEnum.B, Decl(computedEnumTypeWidening.ts, 70, 32))
 

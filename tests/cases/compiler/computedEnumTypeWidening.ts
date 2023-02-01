@@ -54,6 +54,16 @@ function f4() {
     let v1 = E.B;  // E2
 }
 
+const c1 = E.B;
+const c2 = E.B as const;
+let v1 = E.B;
+let v2 = E.B as const;
+
+class C {
+  p1 = E.B;
+  p2 = E.B as const;
+}
+
 // Repro from #52531
 
 enum MyEnum { A, B, C }

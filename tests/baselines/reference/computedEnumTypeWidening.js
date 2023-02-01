@@ -52,6 +52,16 @@ function f4() {
     let v1 = E.B;  // E2
 }
 
+const c1 = E.B;
+const c2 = E.B as const;
+let v1 = E.B;
+let v2 = E.B as const;
+
+class C {
+  p1 = E.B;
+  p2 = E.B as const;
+}
+
 // Repro from #52531
 
 enum MyEnum { A, B, C }
@@ -112,6 +122,17 @@ function f4() {
     var c1 = E2.B; // Fresh E2.B
     var v1 = E.B; // E2
 }
+var c1 = E.B;
+var c2 = E.B;
+var v1 = E.B;
+var v2 = E.B;
+var C = /** @class */ (function () {
+    function C() {
+        this.p1 = E.B;
+        this.p2 = E.B;
+    }
+    return C;
+}());
 // Repro from #52531
 var MyEnum;
 (function (MyEnum) {
@@ -143,6 +164,14 @@ declare enum E2 {
     D
 }
 declare function f4(): void;
+declare const c1 = E.B;
+declare const c2: E.B;
+declare let v1: E;
+declare let v2: E.B;
+declare class C {
+    p1: E;
+    p2: E.B;
+}
 declare enum MyEnum {
     A = 0,
     B = 1,

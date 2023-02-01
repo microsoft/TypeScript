@@ -221,6 +221,49 @@ function f4() {
 >B : E.B
 }
 
+const c1 = E.B;
+>c1 : E.B
+>E.B : E.B
+>E : typeof E
+>B : E.B
+
+const c2 = E.B as const;
+>c2 : E.B
+>E.B as const : E.B
+>E.B : E.B
+>E : typeof E
+>B : E.B
+
+let v1 = E.B;
+>v1 : E
+>E.B : E.B
+>E : typeof E
+>B : E.B
+
+let v2 = E.B as const;
+>v2 : E.B
+>E.B as const : E.B
+>E.B : E.B
+>E : typeof E
+>B : E.B
+
+class C {
+>C : C
+
+  p1 = E.B;
+>p1 : E
+>E.B : E.B
+>E : typeof E
+>B : E.B
+
+  p2 = E.B as const;
+>p2 : E.B
+>E.B as const : E.B
+>E.B : E.B
+>E : typeof E
+>B : E.B
+}
+
 // Repro from #52531
 
 enum MyEnum { A, B, C }
