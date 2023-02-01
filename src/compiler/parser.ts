@@ -5215,6 +5215,7 @@ namespace Parser {
                         switch (fourth) {
                             case SyntaxKind.EqualsToken:
                             case SyntaxKind.GreaterThanToken:
+                            case SyntaxKind.SlashToken:
                                 return false;
                             default:
                                 return true;
