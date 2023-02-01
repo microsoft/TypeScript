@@ -20204,26 +20204,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
             }
 
-            if (target.flags & TypeFlags.TypeParameter && target !== markerSuperTypeForCheck && target !== markerSubTypeForCheck) {
-                const constraint = getBaseConstraintOfType(target);
-                let needsOriginalSource;
-                if (constraint && (isTypeAssignableTo(generalizedSource, constraint) || (needsOriginalSource = isTypeAssignableTo(source, constraint)))) {
-                    reportError(
-                        Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
-                        needsOriginalSource ? sourceType : generalizedSourceType,
-                        targetType,
-                        typeToString(constraint),
-                    );
+                // If `target` is of indexed access type (And `source` it is not), we use the object type of `target` for better error reporting
+                const targetFlags = target.flags & TypeFlags.IndexedAccess && !(source.flags & TypeFlags.IndexedAccess) ?
+                    (target as IndexedAccessType).objectType.flags :
+                    target.flags;
+
+                if (targetFlags & TypeFlags.TypeParameter && target !== markerSuperTypeForCheck && target !== markerSubTypeForCheck) {
+                    const constraint = getBaseConstraintOfType(target);
+                    let needsOriginalSource;
+                    if (constraint && (isTypeAssignableTo(generalizedSource, constraint) || (needsOriginalSource = isTypeAssignableTo(source, constraint)))) {
+                        reportError(
+                            Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
+                            needsOriginalSource ? sourceType : generalizedSourceType,
+                            targetType,
+                            typeToString(constraint),
+                        );
+                    }
+                    else {
+                        errorInfo = undefined;
+                        reportError(
+                            Diagnostics._0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1,
+                            targetType,
+                            generalizedSourceType
+                        );
+                    }
                 }
-                else {
-                    errorInfo = undefined;
-                    reportError(
-                        Diagnostics._0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1,
-                        targetType,
-                        generalizedSourceType
-                    );
-                }
-            }
 
             if (!message) {
                 if (relation === comparableRelation) {
