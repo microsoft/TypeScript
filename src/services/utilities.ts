@@ -30,7 +30,7 @@ import {
     ConditionalExpression,
     contains,
     ContextFlags,
-    createPrinter,
+    createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createRange,
     createScanner,
     createTextSpan,
@@ -2413,7 +2413,9 @@ export function getModuleSpecifierResolverHost(program: Program, host: LanguageS
 
 /** @internal */
 export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution === ModuleResolutionKind.Node10 || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    return moduleResolution === ModuleResolutionKind.Node10
+        || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
+        || moduleResolution === ModuleResolutionKind.Bundler;
 }
 
 /** @internal */
@@ -2984,7 +2986,7 @@ export function signatureToDisplayParts(typechecker: TypeChecker, signature: Sig
 export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
     const file = enclosingDeclaration.getSourceFile();
     return mapToDisplayParts(writer => {
-        const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
+        const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
         printer.writeNode(EmitHint.Unspecified, node, file, writer);
     });
 }

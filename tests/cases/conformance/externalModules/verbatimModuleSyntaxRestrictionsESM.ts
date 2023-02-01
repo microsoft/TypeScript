@@ -8,6 +8,12 @@
 declare class CJSy {}
 export = CJSy;
 
+// @Filename: /ambient.d.ts
+declare module "ambient" {
+    const _export: number;
+    export = _export;
+}
+
 // @Filename: /types.ts
 interface Typey {}
 export type { Typey };

@@ -50,17 +50,17 @@ Info 9    [00:00:56.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 10   [00:00:57.000] ======== Resolving module './feature/file2' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 11   [00:00:58.000] Module resolution kind is not specified, using 'Node10'.
 Info 12   [00:00:59.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/src/feature/file2', target file types: TypeScript, Declaration.
-Info 13   [00:01:00.000] File '/user/username/projects/myproject/product/src/feature/file2.ts' exist - use it as a name resolution result.
+Info 13   [00:01:00.000] File '/user/username/projects/myproject/product/src/feature/file2.ts' exists - use it as a name resolution result.
 Info 14   [00:01:01.000] ======== Module name './feature/file2' was successfully resolved to '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
 Info 15   [00:01:02.000] ======== Resolving module '../test/file4' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 16   [00:01:03.000] Module resolution kind is not specified, using 'Node10'.
 Info 17   [00:01:04.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/test/file4', target file types: TypeScript, Declaration.
-Info 18   [00:01:05.000] File '/user/username/projects/myproject/product/test/file4.ts' exist - use it as a name resolution result.
+Info 18   [00:01:05.000] File '/user/username/projects/myproject/product/test/file4.ts' exists - use it as a name resolution result.
 Info 19   [00:01:06.000] ======== Module name '../test/file4' was successfully resolved to '/user/username/projects/myproject/product/test/file4.ts'. ========
 Info 20   [00:01:07.000] ======== Resolving module '../test/src/file3' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 21   [00:01:08.000] Module resolution kind is not specified, using 'Node10'.
 Info 22   [00:01:09.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/test/src/file3', target file types: TypeScript, Declaration.
-Info 23   [00:01:10.000] File '/user/username/projects/myproject/product/test/src/file3.ts' exist - use it as a name resolution result.
+Info 23   [00:01:10.000] File '/user/username/projects/myproject/product/test/src/file3.ts' exists - use it as a name resolution result.
 Info 24   [00:01:11.000] ======== Module name '../test/src/file3' was successfully resolved to '/user/username/projects/myproject/product/test/src/file3.ts'. ========
 Info 25   [00:01:12.000] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 26   [00:01:13.000] Module resolution kind is not specified, using 'Node10'.
@@ -70,7 +70,7 @@ Info 29   [00:01:16.000] File '/user/username/projects/myproject/product/node_mo
 Info 30   [00:01:17.000] File '/user/username/projects/myproject/product/node_modules/module1.ts' does not exist.
 Info 31   [00:01:18.000] File '/user/username/projects/myproject/product/node_modules/module1.tsx' does not exist.
 Info 32   [00:01:19.000] File '/user/username/projects/myproject/product/node_modules/module1.d.ts' does not exist.
-Info 33   [00:01:20.000] File '/user/username/projects/myproject/product/node_modules/module1/index.ts' exist - use it as a name resolution result.
+Info 33   [00:01:20.000] File '/user/username/projects/myproject/product/node_modules/module1/index.ts' exists - use it as a name resolution result.
 Info 34   [00:01:21.000] Resolving real path for '/user/username/projects/myproject/product/node_modules/module1/index.ts', result '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
 Info 35   [00:01:22.000] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info 36   [00:01:23.000] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/src/file1.ts'. ========
@@ -85,7 +85,7 @@ Info 44   [00:01:31.000] File '/user/username/projects/myproject/node_modules/mo
 Info 45   [00:01:32.000] File '/user/username/projects/myproject/node_modules/module2.ts' does not exist.
 Info 46   [00:01:33.000] File '/user/username/projects/myproject/node_modules/module2.tsx' does not exist.
 Info 47   [00:01:34.000] File '/user/username/projects/myproject/node_modules/module2.d.ts' does not exist.
-Info 48   [00:01:35.000] File '/user/username/projects/myproject/node_modules/module2/index.ts' exist - use it as a name resolution result.
+Info 48   [00:01:35.000] File '/user/username/projects/myproject/node_modules/module2/index.ts' exists - use it as a name resolution result.
 Info 49   [00:01:36.000] Resolving real path for '/user/username/projects/myproject/node_modules/module2/index.ts', result '/user/username/projects/myproject/node_modules/module2/index.ts'.
 Info 50   [00:01:37.000] ======== Module name 'module2' was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'. ========
 Info 51   [00:01:38.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
