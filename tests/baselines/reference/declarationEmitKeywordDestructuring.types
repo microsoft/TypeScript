@@ -1,6 +1,6 @@
 === tests/cases/compiler/declarationEmitKeywordDestructuring.ts ===
 type P = {
->P : { enum: boolean; function: boolean; one: boolean; }
+>P : { enum: boolean; function: boolean; abstract: boolean; one: boolean; }
 
     enum: boolean;
 >enum : boolean
@@ -8,28 +8,41 @@ type P = {
     function: boolean;
 >function : boolean
 
+    abstract: boolean;
+>abstract : boolean
+
     one: boolean;
 >one : boolean
 
 };
 
 function f1({ enum: _enum, ...rest }: P) {
->f1 : ({ enum: _enum, ...rest }: P) => { function: boolean; one: boolean; }
+>f1 : ({ enum: _enum, ...rest }: P) => { function: boolean; abstract: boolean; one: boolean; }
 >enum : any
 >_enum : boolean
->rest : { function: boolean; one: boolean; }
+>rest : { function: boolean; abstract: boolean; one: boolean; }
 
     return rest;
->rest : { function: boolean; one: boolean; }
+>rest : { function: boolean; abstract: boolean; one: boolean; }
 }
 
 function f2({ function: _function, ...rest }: P) {
->f2 : ({ function: _function, ...rest }: P) => { enum: boolean; one: boolean; }
+>f2 : ({ function: _function, ...rest }: P) => { enum: boolean; abstract: boolean; one: boolean; }
 >function : any
 >_function : boolean
->rest : { enum: boolean; one: boolean; }
+>rest : { enum: boolean; abstract: boolean; one: boolean; }
 
     return rest;
->rest : { enum: boolean; one: boolean; }
+>rest : { enum: boolean; abstract: boolean; one: boolean; }
+}
+
+function f3({ abstract: _abstract, ...rest }: P) {
+>f3 : ({ abstract: _abstract, ...rest }: P) => { enum: boolean; function: boolean; one: boolean; }
+>abstract : any
+>_abstract : boolean
+>rest : { enum: boolean; function: boolean; one: boolean; }
+
+    return rest;
+>rest : { enum: boolean; function: boolean; one: boolean; }
 }
 

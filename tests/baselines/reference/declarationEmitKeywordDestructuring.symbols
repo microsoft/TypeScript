@@ -8,30 +8,44 @@ type P = {
     function: boolean;
 >function : Symbol(function, Decl(declarationEmitKeywordDestructuring.ts, 1, 18))
 
+    abstract: boolean;
+>abstract : Symbol(abstract, Decl(declarationEmitKeywordDestructuring.ts, 2, 22))
+
     one: boolean;
->one : Symbol(one, Decl(declarationEmitKeywordDestructuring.ts, 2, 22))
+>one : Symbol(one, Decl(declarationEmitKeywordDestructuring.ts, 3, 22))
 
 };
 
 function f1({ enum: _enum, ...rest }: P) {
->f1 : Symbol(f1, Decl(declarationEmitKeywordDestructuring.ts, 4, 2))
+>f1 : Symbol(f1, Decl(declarationEmitKeywordDestructuring.ts, 5, 2))
 >enum : Symbol(enum, Decl(declarationEmitKeywordDestructuring.ts, 0, 10))
->_enum : Symbol(_enum, Decl(declarationEmitKeywordDestructuring.ts, 6, 13))
->rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 6, 26))
+>_enum : Symbol(_enum, Decl(declarationEmitKeywordDestructuring.ts, 7, 13))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 7, 26))
 >P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
 
     return rest;
->rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 6, 26))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 7, 26))
 }
 
 function f2({ function: _function, ...rest }: P) {
->f2 : Symbol(f2, Decl(declarationEmitKeywordDestructuring.ts, 8, 1))
+>f2 : Symbol(f2, Decl(declarationEmitKeywordDestructuring.ts, 9, 1))
 >function : Symbol(function, Decl(declarationEmitKeywordDestructuring.ts, 1, 18))
->_function : Symbol(_function, Decl(declarationEmitKeywordDestructuring.ts, 10, 13))
->rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 10, 34))
+>_function : Symbol(_function, Decl(declarationEmitKeywordDestructuring.ts, 11, 13))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 11, 34))
 >P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
 
     return rest;
->rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 10, 34))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 11, 34))
+}
+
+function f3({ abstract: _abstract, ...rest }: P) {
+>f3 : Symbol(f3, Decl(declarationEmitKeywordDestructuring.ts, 13, 1))
+>abstract : Symbol(abstract, Decl(declarationEmitKeywordDestructuring.ts, 2, 22))
+>_abstract : Symbol(_abstract, Decl(declarationEmitKeywordDestructuring.ts, 15, 13))
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 15, 34))
+>P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
+
+    return rest;
+>rest : Symbol(rest, Decl(declarationEmitKeywordDestructuring.ts, 15, 34))
 }
 

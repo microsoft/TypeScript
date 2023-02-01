@@ -2,6 +2,7 @@
 type P = {
     enum: boolean;
     function: boolean;
+    abstract: boolean;
     one: boolean;
 };
 
@@ -10,6 +11,10 @@ function f1({ enum: _enum, ...rest }: P) {
 }
 
 function f2({ function: _function, ...rest }: P) {
+    return rest;
+}
+
+function f3({ abstract: _abstract, ...rest }: P) {
     return rest;
 }
 
@@ -34,19 +39,31 @@ function f2(_a) {
     var _function = _a.function, rest = __rest(_a, ["function"]);
     return rest;
 }
+function f3(_a) {
+    var _abstract = _a.abstract, rest = __rest(_a, ["abstract"]);
+    return rest;
+}
 
 
 //// [declarationEmitKeywordDestructuring.d.ts]
 type P = {
     enum: boolean;
     function: boolean;
+    abstract: boolean;
     one: boolean;
 };
 declare function f1({ enum: _enum, ...rest }: P): {
     function: boolean;
+    abstract: boolean;
     one: boolean;
 };
 declare function f2({ function: _function, ...rest }: P): {
     enum: boolean;
+    abstract: boolean;
+    one: boolean;
+};
+declare function f3({ abstract: _abstract, ...rest }: P): {
+    enum: boolean;
+    function: boolean;
     one: boolean;
 };
