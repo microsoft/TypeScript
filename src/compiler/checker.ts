@@ -16285,7 +16285,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let type = unionTypes.get(id);
         if (!type) {
             type = createType(TypeFlags.Union) as UnionType;
-            type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
+            type.objectFlags = (objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable)) & ~(ObjectFlags.IsUnknownLikeUnionComputed | ObjectFlags.IsUnknownLikeUnion);
             type.types = types;
             type.origin = origin;
             type.aliasSymbol = aliasSymbol;
