@@ -403,10 +403,10 @@ function f13() {
 >"hello" : "hello"
 
     var [a, b] = [[x, y], { x: x, y: y }];
->a : (string | number)[]
+>a : [number, string]
 >b : { x: number; y: string; }
->[[x, y], { x: x, y: y }] : [(string | number)[], { x: number; y: string; }]
->[x, y] : (string | number)[]
+>[[x, y], { x: x, y: y }] : [[number, string], { x: number; y: string; }]
+>[x, y] : [number, string]
 >x : number
 >y : string
 >{ x: x, y: y } : { x: number; y: string; }

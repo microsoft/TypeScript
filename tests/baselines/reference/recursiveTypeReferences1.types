@@ -437,7 +437,7 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]) : any
 >html : any
 >'li' : "li"
->[      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ] : any[]
+>[      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ] : [any, any]
 
       html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),
 >html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!) : any
@@ -527,18 +527,18 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >concat(hss, [concat(hs, [h])]) : any
 >concat : any
 >hss : HTMLHeadingElement[][]
->[concat(hs, [h])] : any[]
+>[concat(hs, [h])] : [any]
 >concat(hs, [h]) : any
 >concat : any
 >hs : HTMLHeadingElement[]
->[h] : HTMLHeadingElement[]
+>[h] : [HTMLHeadingElement]
 >h : HTMLHeadingElement
 
         : concat(hss, [hs, [h]]);
 >concat(hss, [hs, [h]]) : any
 >concat : any
 >hss : HTMLHeadingElement[][]
->[hs, [h]] : HTMLHeadingElement[][]
+>[hs, [h]] : [HTMLHeadingElement[], HTMLHeadingElement[]]
 >hs : HTMLHeadingElement[]
 >[h] : HTMLHeadingElement[]
 >h : HTMLHeadingElement
@@ -568,7 +568,7 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]]) : any
 >concat : any
 >node : Tree
->[[hs.shift()!, cons(hs)]] : (HTMLHeadingElement | Tree)[][]
+>[[hs.shift()!, cons(hs)]] : [(HTMLHeadingElement | Tree)[]]
 >[hs.shift()!, cons(hs)] : (HTMLHeadingElement | Tree)[]
 >hs.shift()! : HTMLHeadingElement
 >hs.shift() : HTMLHeadingElement | undefined

@@ -9,9 +9,9 @@ async function arrayLiteral0() {
 >arrayLiteral0 : () => Promise<void>
 
     x = [await y, z];
->x = [await y, z] : any[]
+>x = [await y, z] : [any, any]
 >x : any
->[await y, z] : any[]
+>[await y, z] : [any, any]
 >await y : any
 >y : any
 >z : any
@@ -21,9 +21,9 @@ async function arrayLiteral1() {
 >arrayLiteral1 : () => Promise<void>
 
     x = [y, await z];
->x = [y, await z] : any[]
+>x = [y, await z] : [any, any]
 >x : any
->[y, await z] : any[]
+>[y, await z] : [any, any]
 >y : any
 >await z : any
 >z : any
@@ -33,9 +33,9 @@ async function arrayLiteral2() {
 >arrayLiteral2 : () => Promise<void>
 
     x = [...(await y), z];
->x = [...(await y), z] : any[]
+>x = [...(await y), z] : [...any[], any]
 >x : any
->[...(await y), z] : any[]
+>[...(await y), z] : [...any[], any]
 >...(await y) : any
 >(await y) : any
 >await y : any
@@ -47,9 +47,9 @@ async function arrayLiteral3() {
 >arrayLiteral3 : () => Promise<void>
 
     x = [...y, await z];
->x = [...y, await z] : any[]
+>x = [...y, await z] : [...any[], any]
 >x : any
->[...y, await z] : any[]
+>[...y, await z] : [...any[], any]
 >...y : any
 >y : any
 >await z : any
@@ -60,9 +60,9 @@ async function arrayLiteral4() {
 >arrayLiteral4 : () => Promise<void>
 
     x = [await y, ...z];
->x = [await y, ...z] : any[]
+>x = [await y, ...z] : [any, ...any[]]
 >x : any
->[await y, ...z] : any[]
+>[await y, ...z] : [any, ...any[]]
 >await y : any
 >y : any
 >...z : any
@@ -73,9 +73,9 @@ async function arrayLiteral5() {
 >arrayLiteral5 : () => Promise<void>
 
     x = [y, ...(await z)];
->x = [y, ...(await z)] : any[]
+>x = [y, ...(await z)] : [any, ...any[]]
 >x : any
->[y, ...(await z)] : any[]
+>[y, ...(await z)] : [any, ...any[]]
 >y : any
 >...(await z) : any
 >(await z) : any
@@ -87,9 +87,9 @@ async function arrayLiteral6() {
 >arrayLiteral6 : () => Promise<void>
 
     x = [y, await z, a];
->x = [y, await z, a] : any[]
+>x = [y, await z, a] : [any, any, any]
 >x : any
->[y, await z, a] : any[]
+>[y, await z, a] : [any, any, any]
 >y : any
 >await z : any
 >z : any
@@ -100,9 +100,9 @@ async function arrayLiteral7() {
 >arrayLiteral7 : () => Promise<void>
 
     x = [await y, z, await a];
->x = [await y, z, await a] : any[]
+>x = [await y, z, await a] : [any, any, any]
 >x : any
->[await y, z, await a] : any[]
+>[await y, z, await a] : [any, any, any]
 >await y : any
 >y : any
 >z : any

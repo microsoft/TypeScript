@@ -104,25 +104,25 @@ function f2(transition: Transition): any {
 >'LEFT' : "LEFT"
 
                     return []
->[] : undefined[]
+>[] : []
 
                 case 'RIGHT':
 >'RIGHT' : "RIGHT"
 
                     return []
->[] : undefined[]
+>[] : []
 
                 case 'TOP':
 >'TOP' : "TOP"
 
                     return []
->[] : undefined[]
+>[] : []
 
                 case 'BOTTOM':
 >'BOTTOM' : "BOTTOM"
 
                     return []
->[] : undefined[]
+>[] : []
             }
         case 'SLIDE_OUT':
 >'SLIDE_OUT' : "SLIDE_OUT"
@@ -136,25 +136,25 @@ function f2(transition: Transition): any {
 >'LEFT' : "LEFT"
 
                     return []
->[] : undefined[]
+>[] : []
 
                 case 'RIGHT':
 >'RIGHT' : "RIGHT"
 
                     return []
->[] : undefined[]
+>[] : []
 
                 case 'TOP':
 >'TOP' : "TOP"
 
                     return []
->[] : undefined[]
+>[] : []
 
                 case 'BOTTOM':
 >'BOTTOM' : "BOTTOM"
 
                     return []
->[] : undefined[]
+>[] : []
             }
     }
 }

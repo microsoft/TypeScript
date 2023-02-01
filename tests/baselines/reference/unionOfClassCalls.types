@@ -77,7 +77,7 @@ arr.reduce((acc: Array<string>, a: number | string, index: number) => {
 >[] : never[]
 
 }, [])
->[] : never[]
+>[] : []
 
 arr.forEach((a: number | string, index: number) => { 
 >arr.forEach((a: number | string, index: number) => {     return index}) : void

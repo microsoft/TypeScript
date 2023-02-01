@@ -470,7 +470,7 @@ export var tests: TestRunner = (function () {
 >App.App : any
 >App : any
 >App : any
->[] : undefined[]
+>[] : []
 
             return (app.fixLines === false &&
 >(app.fixLines === false &&                   app.recurse === true &&                   app.lineEndings === "CRLF" &&                   app.matchPattern === undefined &&                   app.rootDirectory === ".\\" &&                   app.encodings[0] === "ascii" &&                   app.encodings[1] === "utf8nobom") : boolean
@@ -551,7 +551,7 @@ export var tests: TestRunner = (function () {
 >App.App : any
 >App : any
 >App : any
->["-dir=C:\\test dir", "-lineEndings=LF", "-encodings=utf16be,ascii", "-recurse=false", "-fixlines"] : string[]
+>["-dir=C:\\test dir", "-lineEndings=LF", "-encodings=utf16be,ascii", "-recurse=false", "-fixlines"] : [string, string, string, string, string]
 >"-dir=C:\\test dir" : "-dir=C:\\test dir"
 >"-lineEndings=LF" : "-lineEndings=LF"
 >"-encodings=utf16be,ascii" : "-encodings=utf16be,ascii"

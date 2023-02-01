@@ -25,7 +25,7 @@ function foo(set: any) {
 
     const bar: any = [];
 >bar : any
->[] : undefined[]
+>[] : []
 
     (() => bar);
 >(() => bar) : () => any

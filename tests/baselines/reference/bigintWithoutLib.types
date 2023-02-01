@@ -125,7 +125,7 @@ bigIntArray = new BigInt64Array([1n, 2n, 3n]);
 >bigIntArray : BigInt64Array
 >new BigInt64Array([1n, 2n, 3n]) : any
 >BigInt64Array : any
->[1n, 2n, 3n] : bigint[]
+>[1n, 2n, 3n] : [bigint, bigint, bigint]
 >1n : 1n
 >2n : 2n
 >3n : 3n
@@ -135,7 +135,7 @@ bigIntArray = new BigInt64Array([1, 2, 3]);
 >bigIntArray : BigInt64Array
 >new BigInt64Array([1, 2, 3]) : any
 >BigInt64Array : any
->[1, 2, 3] : number[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -205,7 +205,7 @@ bigUintArray = new BigUint64Array([1n, 2n, 3n]);
 >bigUintArray : BigUint64Array
 >new BigUint64Array([1n, 2n, 3n]) : any
 >BigUint64Array : any
->[1n, 2n, 3n] : bigint[]
+>[1n, 2n, 3n] : [bigint, bigint, bigint]
 >1n : 1n
 >2n : 2n
 >3n : 3n
@@ -215,7 +215,7 @@ bigUintArray = new BigUint64Array([1, 2, 3]);
 >bigUintArray : BigUint64Array
 >new BigUint64Array([1, 2, 3]) : any
 >BigUint64Array : any
->[1, 2, 3] : number[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3

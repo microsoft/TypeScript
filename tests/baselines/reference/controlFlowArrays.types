@@ -73,9 +73,9 @@ function f3() {
 >x : any
 
     x = [];
->x = [] : never[]
+>x = [] : []
 >x : any
->[] : never[]
+>[] : []
 
     x.push(5, "hello");
 >x.push(5, "hello") : number
@@ -130,9 +130,9 @@ function f5() {
 >cond : () => boolean
 
         x = [];
->x = [] : never[]
+>x = [] : []
 >x : any
->[] : never[]
+>[] : []
 
         x.push(5);
 >x.push(5) : number
@@ -143,9 +143,9 @@ function f5() {
     }
     else {
         x = [];
->x = [] : never[]
+>x = [] : []
 >x : any
->[] : never[]
+>[] : []
 
         x.push("hello");
 >x.push("hello") : number
@@ -175,9 +175,9 @@ function f6() {
     }
     else {
         x = [];
->x = [] : never[]
+>x = [] : []
 >x : any
->[] : never[]
+>[] : []
 
         x.push("hello");
 >x.push("hello") : number
@@ -202,9 +202,9 @@ function f7() {
 >cond : () => boolean
 
         x = [];
->x = [] : never[]
+>x = [] : []
 >x : any
->[] : never[]
+>[] : []
 
         while (cond()) {
 >cond() : boolean
@@ -387,9 +387,9 @@ function f12() {
 >x : any
 
     x = [];
->x = [] : never[]
+>x = [] : []
 >x : any
->[] : never[]
+>[] : []
 
     if (x.length === 0) {  // x.length ok on implicit any[]
 >x.length === 0 : boolean
@@ -513,9 +513,9 @@ function f16() {
 >(x = [], x).push : (...items: any[]) => number
 >(x = [], x) : any[]
 >x = [], x : any[]
->x = [] : never[]
+>x = [] : []
 >x : any
->[] : never[]
+>[] : []
 >x : any[]
 >push : (...items: any[]) => number
 >5 : 5

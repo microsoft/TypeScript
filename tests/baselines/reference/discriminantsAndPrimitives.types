@@ -104,7 +104,7 @@ function f4(x: Foo | Bar | string | number | null) {
 >null : null
 
     if (x && typeof x === "object") {
->x && typeof x === "object" : boolean | "" | 0 | null
+>x && typeof x === "object" : boolean | 0 | "" | null
 >x : string | number | Foo | Bar | null
 >typeof x === "object" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"

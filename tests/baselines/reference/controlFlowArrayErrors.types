@@ -32,9 +32,9 @@ function f2() {
 >x : any
 
     x = [];
->x = [] : undefined[]
+>x = [] : []
 >x : any
->[] : undefined[]
+>[] : []
 
     let y = x;   // Implicit any[] error
 >y : any[]
@@ -81,16 +81,16 @@ function f4() {
 >x : any
 
     x = [5, "hello"];  // Non-evolving array
->x = [5, "hello"] : (string | number)[]
+>x = [5, "hello"] : [number, string]
 >x : any
->[5, "hello"] : (string | number)[]
+>[5, "hello"] : [number, string]
 >5 : 5
 >"hello" : "hello"
 
     x.push(true);      // Error
 >x.push(true) : number
 >x.push : (...items: (string | number)[]) => number
->x : (string | number)[]
+>x : [number, string]
 >push : (...items: (string | number)[]) => number
 >true : true
 }
@@ -123,9 +123,9 @@ function f6() {
 >cond : () => boolean
 
         x = [];
->x = [] : undefined[]
+>x = [] : []
 >x : any
->[] : undefined[]
+>[] : []
 
         x.push(5);
 >x.push(5) : number
@@ -143,18 +143,18 @@ function f6() {
     }
     else {
         x = [true];  // Non-evolving array
->x = [true] : boolean[]
+>x = [true] : [boolean]
 >x : any
->[true] : boolean[]
+>[true] : [boolean]
 >true : true
     }
     x;           // boolean[] | (string | number)[]
->x : (string | number)[] | boolean[]
+>x : (string | number)[] | [boolean]
 
     x.push(99);  // Error
 >x.push(99) : number
 >x.push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)
->x : (string | number)[] | boolean[]
+>x : (string | number)[] | [boolean]
 >push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)
 >99 : 99
 }

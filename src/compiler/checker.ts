@@ -1949,6 +1949,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const emptyGenericType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray) as ObjectType as GenericType;
     emptyGenericType.instantiations = new Map<string, TypeReference>();
 
+    const emptyReadonlyTupleType = createTupleType(emptyArray, emptyArray, /*readonly*/ true);
+
     const anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     // The anyFunctionType contains the anyFunctionType by definition. The flag is further propagated
     // in getPropagatingFlagsOfTypes, and it is checked in inferFromTypes.
@@ -22902,7 +22904,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTupleLikeType(type: Type): boolean {
-        return isTupleType(type) || !!getPropertyOfType(type, "0" as __String);
+        return isTupleType(type) || !!getPropertyOfType(type, "0" as __String) || isTypeAssignableTo(type, emptyReadonlyTupleType);
     }
 
     function isArrayOrTupleLikeType(type: Type): boolean {

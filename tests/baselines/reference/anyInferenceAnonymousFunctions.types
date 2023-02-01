@@ -19,7 +19,7 @@ paired.reduce(function (a1, a2) {
 >{} : {}
 
 } , []);
->[] : undefined[]
+>[] : []
 
 paired.reduce((b1, b2) => {
 >paired.reduce((b1, b2) => {    return b1.concat({});} , []) : any
@@ -38,7 +38,7 @@ paired.reduce((b1, b2) => {
 >{} : {}
 
 } , []);
->[] : undefined[]
+>[] : []
 
 paired.reduce((b3, b4) => b3.concat({}), []);
 >paired.reduce((b3, b4) => b3.concat({}), []) : any
@@ -53,7 +53,7 @@ paired.reduce((b3, b4) => b3.concat({}), []);
 >b3 : any
 >concat : any
 >{} : {}
->[] : undefined[]
+>[] : []
 
 paired.map((c1) => c1.count);
 >paired.map((c1) => c1.count) : any[]

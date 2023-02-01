@@ -92,20 +92,20 @@ noError(null, []);
 >noError(null, []) : void
 >noError : (variable: any, array?: any) => void
 >null : null
->[] : undefined[]
+>[] : []
 
 noError(undefined, <any>[]);
 >noError(undefined, <any>[]) : void
 >noError : (variable: any, array?: any) => void
 >undefined : undefined
 ><any>[] : any
->[] : undefined[]
+>[] : []
 
 noError(null, [null, undefined]);
 >noError(null, [null, undefined]) : void
 >noError : (variable: any, array?: any) => void
 >null : null
->[null, undefined] : null[]
+>[null, undefined] : [null, undefined]
 >null : null
 >undefined : undefined
 
@@ -128,14 +128,14 @@ var newC = new C([], undefined);
 >newC : C
 >new C([], undefined) : C
 >C : typeof C
->[] : undefined[]
+>[] : []
 >undefined : undefined
 
 var newC1 = new C([], arg0);
 >newC1 : C
 >new C([], arg0) : C
 >C : typeof C
->[] : undefined[]
+>[] : []
 >arg0 : null
 
 var newC2 = new C(<any>[], null) 
@@ -143,6 +143,6 @@ var newC2 = new C(<any>[], null)
 >new C(<any>[], null) : C
 >C : typeof C
 ><any>[] : any
->[] : undefined[]
+>[] : []
 >null : null
 

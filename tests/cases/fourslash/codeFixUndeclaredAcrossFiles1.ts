@@ -31,7 +31,7 @@ verify.rangeIs(`
         throw new Error("Method not implemented.");
     }
     static x: any;
-    static m0(arg0: number, arg1: string, arg2: undefined[]) {
+    static m0(arg0: number, arg1: string, arg2: unknown) {
         throw new Error("Method not implemented.");
     }
 `);

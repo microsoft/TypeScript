@@ -271,12 +271,12 @@ _.invoke([[5, 1, 7], [3, 2, 1]], 'sort');
 >_.invoke : { (list: any[], methodName: string, ...args: any[]): any[]; (list: Dictionary<any>, methodName: string, ...args: any[]): any[]; }
 >_ : Underscore.Static
 >invoke : { (list: any[], methodName: string, ...args: any[]): any[]; (list: Dictionary<any>, methodName: string, ...args: any[]): any[]; }
->[[5, 1, 7], [3, 2, 1]] : number[][]
->[5, 1, 7] : number[]
+>[[5, 1, 7], [3, 2, 1]] : [number, number, number][]
+>[5, 1, 7] : [number, number, number]
 >5 : 5
 >1 : 1
 >7 : 7
->[3, 2, 1] : number[]
+>[3, 2, 1] : [number, number, number]
 >3 : 3
 >2 : 2
 >1 : 1
@@ -536,9 +536,9 @@ _.flatten([1, [2]]);
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2]] : (number | number[])[]
+>[1, [2]] : (number | [number])[]
 >1 : 1
->[2] : number[]
+>[2] : [number]
 >2 : 2
 
 // typescript doesn't like the elements being different
@@ -547,11 +547,11 @@ _.flatten([1, [2], [3, [[4]]]]);
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2], [3, [[4]]]] : (number | (number | number[][])[])[]
+>[1, [2], [3, [[4]]]] : (number | [number] | [number, number[][]])[]
 >1 : 1
->[2] : number[]
+>[2] : [number]
 >2 : 2
->[3, [[4]]] : (number | number[][])[]
+>[3, [[4]]] : [number, number[][]]
 >3 : 3
 >[[4]] : number[][]
 >[4] : number[]
@@ -562,11 +562,11 @@ _.flatten([1, [2], [3, [[4]]]], true);
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
->[1, [2], [3, [[4]]]] : (number | (number | number[][])[])[]
+>[1, [2], [3, [[4]]]] : (number | [number] | [number, number[][]])[]
 >1 : 1
->[2] : number[]
+>[2] : [number]
 >2 : 2
->[3, [[4]]] : (number | number[][])[]
+>[3, [[4]]] : [number, number[][]]
 >3 : 3
 >[[4]] : number[][]
 >[4] : number[]
@@ -1321,7 +1321,7 @@ _.isEmpty([1, 2, 3]);
 >_.isEmpty : (object: any) => boolean
 >_ : Underscore.Static
 >isEmpty : (object: any) => boolean
->[1, 2, 3] : number[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -1359,7 +1359,7 @@ _.isArray([1, 2, 3]);
 >_.isArray : (object: any) => boolean
 >_ : Underscore.Static
 >isArray : (object: any) => boolean
->[1, 2, 3] : number[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -1385,7 +1385,7 @@ _.isArguments([1, 2, 3]);
 >_.isArguments : (object: any) => boolean
 >_ : Underscore.Static
 >isArguments : (object: any) => boolean
->[1, 2, 3] : number[]
+>[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
 >3 : 3

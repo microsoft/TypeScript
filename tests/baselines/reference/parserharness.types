@@ -1764,11 +1764,11 @@ module Harness {
 
                 // Clear out bug descriptions
                 assert.bugIds = [];
->assert.bugIds = [] : undefined[]
+>assert.bugIds = [] : []
 >assert.bugIds : any
 >assert : Harness.Assert
 >bugIds : any
->[] : undefined[]
+>[] : []
 
                 async = this.runChild(index, <any>function (e) {
 >async = this.runChild(index, <any>function (e) {                    if (async) {                        that.runChildren(index + 1);                    }                }) : boolean
@@ -7714,7 +7714,7 @@ module Harness {
             // List of names that get overriden by various test code we eval
             var dangerNames: any = ['Array'];
 >dangerNames : any
->['Array'] : string[]
+>['Array'] : [string]
 >'Array' : "Array"
 
             var globalBackup: any = {};

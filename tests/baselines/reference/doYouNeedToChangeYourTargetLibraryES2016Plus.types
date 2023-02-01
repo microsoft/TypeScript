@@ -224,7 +224,7 @@ const testPromiseAllSettled = Promise.allSettled([]);
 >Promise.allSettled : any
 >Promise : PromiseConstructor
 >allSettled : any
->[] : undefined[]
+>[] : []
 
 const testStringMatchAll = "".matchAll();
 >testStringMatchAll : any
@@ -256,7 +256,7 @@ const testPromiseAny = Promise.any([]);
 >Promise.any : any
 >Promise : PromiseConstructor
 >any : any
->[] : undefined[]
+>[] : []
 
 const testStringReplaceAll = "".replaceAll();
 >testStringReplaceAll : any

@@ -63,7 +63,7 @@ var f4 = new Foo([f1,f2,f3]);
 >f4 : Foo
 >new Foo([f1,f2,f3]) : Foo
 >Foo : typeof Foo
->[f1,f2,f3] : Foo[]
+>[f1,f2,f3] : [Foo, Foo, Foo]
 >f1 : Foo
 >f2 : Foo
 >f3 : Foo

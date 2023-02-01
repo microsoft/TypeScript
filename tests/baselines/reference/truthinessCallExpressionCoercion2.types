@@ -130,7 +130,7 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >f : () => void
 >apply : (this: Function, thisArg: any, argArray?: any) => any
 >parent : Window
->[] : never[]
+>[] : []
 
     // error
     required1 && required2 && required1() && console.log('foo');

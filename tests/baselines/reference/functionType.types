@@ -8,7 +8,7 @@ salt.apply("hello", []);
 >salt : () => void
 >apply : (this: Function, thisArg: any, argArray?: any) => any
 >"hello" : "hello"
->[] : undefined[]
+>[] : []
 
 (new Function("return 5"))();
 >(new Function("return 5"))() : any

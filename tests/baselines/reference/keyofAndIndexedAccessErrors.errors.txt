@@ -65,8 +65,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(140,5): error
   'number' is assignable to the constraint of type 'T[K]', but 'T[K]' could be instantiated with a different subtype of constraint 'any'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(141,5): error TS2322: Type 'string' is not assignable to type 'T[K]'.
   'string' is assignable to the constraint of type 'T[K]', but 'T[K]' could be instantiated with a different subtype of constraint 'any'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
-  'number[]' is assignable to the constraint of type 'T[K]', but 'T[K]' could be instantiated with a different subtype of constraint 'any'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error TS2322: Type '[number, number]' is not assignable to type 'T[K]'.
+  '[number, number]' is assignable to the constraint of type 'T[K]', but 'T[K]' could be instantiated with a different subtype of constraint 'any'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(165,5): error TS2322: Type 'number' is not assignable to type 'T[keyof T]'.
   'number' is assignable to the constraint of type 'T[keyof T]', but 'T[keyof T]' could be instantiated with a different subtype of constraint 'number'.
 
@@ -324,8 +324,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(165,5): error
 !!! error TS2322:   'string' is assignable to the constraint of type 'T[K]', but 'T[K]' could be instantiated with a different subtype of constraint 'any'.
         t[k] = [10, 20];  // Error
         ~~~~
-!!! error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
-!!! error TS2322:   'number[]' is assignable to the constraint of type 'T[K]', but 'T[K]' could be instantiated with a different subtype of constraint 'any'.
+!!! error TS2322: Type '[number, number]' is not assignable to type 'T[K]'.
+!!! error TS2322:   '[number, number]' is assignable to the constraint of type 'T[K]', but 'T[K]' could be instantiated with a different subtype of constraint 'any'.
     }
     
     // Repro from #28839

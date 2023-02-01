@@ -30,7 +30,7 @@ let c, d;
 const [e,] = <any>[];
 >e : any
 ><any>[] : any
->[] : undefined[]
+>[] : []
 
 const {f,} = <any>{};
 >f : any
@@ -47,7 +47,7 @@ let g, h;
 >[g,] : [any]
 >g : any
 ><any>[] : any
->[] : undefined[]
+>[] : []
 
 ({h,} = <any>{});
 >({h,} = <any>{}) : any

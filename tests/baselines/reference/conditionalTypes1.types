@@ -410,8 +410,8 @@ function zeroOf<T extends number | string | boolean>(value: T) {
 
     return <ZeroOf<T>>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false);
 ><ZeroOf<T>>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : ZeroOf<T>
->(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : false | "" | 0
->typeof value === "number" ? 0 : typeof value === "string" ? "" : false : false | "" | 0
+>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : false | 0 | ""
+>typeof value === "number" ? 0 : typeof value === "string" ? "" : false : false | 0 | ""
 >typeof value === "number" : boolean
 >typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >value : T
@@ -476,11 +476,11 @@ function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
 
     let z1: number | string = y;
 >z1 : string | number
->y : "" | 0
+>y : 0 | ""
 
     let z2: 0 | "" = y;
->z2 : "" | 0
->y : "" | 0
+>z2 : 0 | ""
+>y : 0 | ""
 
     x = y;  // Error
 >x = y : ZeroOf<T>

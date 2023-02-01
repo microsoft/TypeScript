@@ -6,7 +6,7 @@ export class Game {
 >position : any
 >new DisplayPosition([) : any
 >DisplayPosition : any
->[ : undefined[]
+>[ : []
 >3 : any
 >3 : any
 >3 : any

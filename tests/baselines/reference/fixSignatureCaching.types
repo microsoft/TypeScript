@@ -1319,9 +1319,9 @@ define(function () {
 >values : any
 
                     values = [values];
->values = [values] : any[]
+>values = [values] : [any]
 >values : any
->[values] : any[]
+>[values] : [any]
 >values : any
                 }
                 len = values.length;

@@ -174,7 +174,7 @@ var bar3 = <any>0;
 var array = <any>[null, undefined];
 >array : any
 ><any>[null, undefined] : any
->[null, undefined] : null[]
+>[null, undefined] : [null, undefined]
 >null : null
 >undefined : undefined
 

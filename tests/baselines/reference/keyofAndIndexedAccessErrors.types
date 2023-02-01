@@ -456,11 +456,11 @@ function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 >"hello" : "hello"
 
     t[k] = [10, 20];  // Error
->t[k] = [10, 20] : number[]
+>t[k] = [10, 20] : [number, number]
 >t[k] : T[K]
 >t : T
 >k : K
->[10, 20] : number[]
+>[10, 20] : [number, number]
 >10 : 10
 >20 : 20
 }

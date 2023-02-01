@@ -20,7 +20,7 @@ for (a in b[c] = b[c] || [], d) {
 >b[c] : any
 >b : any[]
 >c : any
->[] : undefined[]
+>[] : []
 >d : any
 
 }

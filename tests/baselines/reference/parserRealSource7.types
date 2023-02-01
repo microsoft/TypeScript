@@ -258,11 +258,11 @@ module TypeScript {
 >instanceType : any
 
         signature.parameters = [];
->signature.parameters = [] : undefined[]
+>signature.parameters = [] : []
 >signature.parameters : any
 >signature : any
 >parameters : any
->[] : undefined[]
+>[] : []
 
         type.construct = new SignatureGroup();
 >type.construct = new SignatureGroup() : any
