@@ -22773,8 +22773,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!restType) {
                     return undefinedType;
                 }
-                const possibleOutOfBounds = index >= tupleType.target.fixedLength + getEndElementCount(tupleType.target, ElementFlags.Fixed);
-                return compilerOptions.noUncheckedIndexedAccess && possibleOutOfBounds ? getUnionType([restType, undefinedType]) : restType;
+                if (compilerOptions.noUncheckedIndexedAccess &&
+                    index >= tupleType.target.fixedLength + getEndElementCount(tupleType.target, ElementFlags.Fixed)) {
+                    return getUnionType([restType, undefinedType]);
+                }
+                return restType;
             });
         }
         return undefined;
