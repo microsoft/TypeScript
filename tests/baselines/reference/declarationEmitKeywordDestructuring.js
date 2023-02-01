@@ -3,6 +3,8 @@ type P = {
     enum: boolean;
     function: boolean;
     abstract: boolean;
+    async: boolean;
+    await: boolean;
     one: boolean;
 };
 
@@ -15,6 +17,14 @@ function f2({ function: _function, ...rest }: P) {
 }
 
 function f3({ abstract: _abstract, ...rest }: P) {
+    return rest;
+}
+
+function f4({ async: _async, ...rest }: P) {
+    return rest;
+}
+
+function f5({ await: _await, ...rest }: P) {
     return rest;
 }
 
@@ -43,6 +53,14 @@ function f3(_a) {
     var _abstract = _a.abstract, rest = __rest(_a, ["abstract"]);
     return rest;
 }
+function f4(_a) {
+    var _async = _a.async, rest = __rest(_a, ["async"]);
+    return rest;
+}
+function f5(_a) {
+    var _await = _a.await, rest = __rest(_a, ["await"]);
+    return rest;
+}
 
 
 //// [declarationEmitKeywordDestructuring.d.ts]
@@ -50,20 +68,42 @@ type P = {
     enum: boolean;
     function: boolean;
     abstract: boolean;
+    async: boolean;
+    await: boolean;
     one: boolean;
 };
 declare function f1({ enum: _enum, ...rest }: P): {
     function: boolean;
     abstract: boolean;
+    async: boolean;
+    await: boolean;
     one: boolean;
 };
 declare function f2({ function: _function, ...rest }: P): {
     enum: boolean;
     abstract: boolean;
+    async: boolean;
+    await: boolean;
     one: boolean;
 };
 declare function f3({ abstract: _abstract, ...rest }: P): {
     enum: boolean;
     function: boolean;
+    async: boolean;
+    await: boolean;
+    one: boolean;
+};
+declare function f4({ async: _async, ...rest }: P): {
+    enum: boolean;
+    function: boolean;
+    abstract: boolean;
+    await: boolean;
+    one: boolean;
+};
+declare function f5({ await: _await, ...rest }: P): {
+    enum: boolean;
+    function: boolean;
+    abstract: boolean;
+    async: boolean;
     one: boolean;
 };
