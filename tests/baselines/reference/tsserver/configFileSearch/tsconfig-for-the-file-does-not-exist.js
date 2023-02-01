@@ -119,7 +119,7 @@ Info 43   [00:01:10.000] 	Files (2)
 
 
 	../../../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/index.ts
 	  Matched by default include pattern '**/*'
 
@@ -184,7 +184,7 @@ Info 56   [00:01:42.000] 	Files (2)
 
 
 	../../../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/index.ts
 	  Matched by default include pattern '**/*'
 

@@ -1,63 +1,357 @@
 import {
-    __String, addEmitFlags, addSyntheticLeadingComment, addSyntheticTrailingComment, AnyImportOrRequireStatement,
-    assertType, AssignmentDeclarationKind, BinaryExpression, binarySearchKey, BindingElement, BreakOrContinueStatement,
-    CallExpression, canHaveModifiers, CaseClause, cast, CatchClause, CharacterCodes, ClassDeclaration, ClassExpression,
-    clone, codefix, combinePaths, CommentKind, CommentRange, compareTextSpans, compareValues, Comparison,
-    CompilerOptions, ConditionalExpression, contains, createPrinter, createRange, createScanner, createTextSpan,
-    createTextSpanFromBounds, Debug, Declaration, Decorator, defaultMaximumTruncationLength, DeleteExpression,
-    Diagnostic, DiagnosticMessage, DiagnosticWithLocation, directoryProbablyExists, DisplayPartsSymbolWriter,
-    DocumentPosition, DocumentSpan, DoStatement, ElementAccessExpression, EmitFlags, EmitHint, emptyArray,
-    EndOfFileToken, ensureScriptKind, EqualityOperator, escapeString, ExportAssignment, ExportDeclaration, Expression,
-    ExpressionStatement, factory, FileTextChanges, filter, find, findAncestor, findConfigFile, first, firstDefined,
-    firstOrUndefined, forEachAncestorDirectory, forEachChild, forEachLeadingCommentRange, forEachTrailingCommentRange,
-    FormatCodeSettings, formatStringFromArgs, formatting, FormattingHost, ForOfStatement, FunctionDeclaration,
-    FunctionExpression, FunctionLikeDeclaration, getAssignmentDeclarationKind, getCombinedNodeFlagsAlwaysIncludeJSDoc,
-    getDirectoryPath, getEmitScriptTarget, getExternalModuleImportEqualsDeclarationExpression, getIndentString,
-    getJSDocEnumTag, getLastChild, getLineAndCharacterOfPosition, getLineStarts, getLocaleSpecificMessage,
-    getModuleInstanceState, getNameOfDeclaration, getNodeId, getPackageNameFromTypesPackageName, getPathComponents,
-    getRootDeclaration, getSourceFileOfNode, getSpanOfTokenAtPosition, getSymbolId, getTextOfIdentifierOrLiteral,
-    getTextOfNode, getTypesPackageName, hasSyntacticModifier, HeritageClause, Identifier, identifierIsThisKeyword,
-    identity, idText, IfStatement, ImportClause, ImportDeclaration, ImportSpecifier, ImportTypeNode, indexOfNode,
-    IndexSignatureDeclaration, InternalSymbolName, isAmbientModule, isAnyImportSyntax, isArray, isArrayBindingPattern,
-    isArrayTypeNode, isAsExpression, isAwaitExpression, isBinaryExpression, isBindingElement,
-    isBreakOrContinueStatement, isCallExpression, isCallOrNewExpression, isClassDeclaration, isClassExpression,
-    isClassStaticBlockDeclaration, isConditionalTypeNode, IScriptSnapshot, isDeclaration, isDeclarationName,
-    isDecorator, isDeleteExpression, isElementAccessExpression, isEntityName, isEnumDeclaration, isExportAssignment,
-    isExportDeclaration, isExportSpecifier, isExpression, isExpressionNode, isExternalModule,
-    isExternalModuleImportEqualsDeclaration, isExternalModuleReference, isFileLevelUniqueName, isForInStatement,
-    isForOfStatement, isFunctionBlock, isFunctionDeclaration, isFunctionExpression, isFunctionLike,
-    isGetAccessorDeclaration, isGlobalScopeAugmentation, isHeritageClause, isIdentifier, isImportCall, isImportClause,
-    isImportDeclaration, isImportEqualsDeclaration, isImportOrExportSpecifier, isImportSpecifier, isInferTypeNode,
-    isInJSFile, isInterfaceDeclaration, isInternalModuleImportEqualsDeclaration, isJSDoc, isJSDocCommentContainingNode,
-    isJSDocLink, isJSDocLinkCode, isJSDocLinkLike, isJSDocMemberName, isJSDocNameReference, isJSDocTag,
-    isJSDocTemplateTag, isJSDocTypeAlias, isJsxElement, isJsxExpression, isJsxOpeningLikeElement, isJsxText, isKeyword,
-    isLabeledStatement, isLet, isLiteralTypeNode, isMappedTypeNode, isModifier, isModuleBlock, isModuleDeclaration,
-    isNamedDeclaration, isNamedExports, isNamedImports, isNamespaceExport, isNamespaceImport, isNewExpression,
-    isNumericLiteral, isObjectBindingPattern, isObjectLiteralExpression, isOptionalChain, isOptionalChainRoot,
-    isParameter, isPartOfTypeNode, isPrivateIdentifier, isPropertyAccessExpression, isPropertyNameLiteral,
-    isQualifiedName, isRequireCall, isRequireVariableStatement, isRightSideOfQualifiedNameOrPropertyAccess,
-    isRootedDiskPath, isSetAccessorDeclaration, isSourceFile, isSourceFileJS, isStringDoubleQuoted, isStringLiteral,
-    isStringLiteralLike, isStringOrNumericLiteralLike, isStringTextContainingNode, isSyntaxList,
-    isTaggedTemplateExpression, isTemplateLiteralKind, isToken, isTypeAliasDeclaration, isTypeElement, isTypeNode,
-    isTypeOfExpression, isTypeOperatorNode, isTypeParameterDeclaration, isTypeReferenceNode, isVarConst,
-    isVariableDeclarationList, isVoidExpression, isWhiteSpaceLike, isWhiteSpaceSingleLine, isYieldExpression,
-    IterationStatement, JSDocLink, JSDocLinkCode, JSDocLinkDisplayPart, JSDocLinkPlain, JSDocTypedefTag, JsTyping,
-    JsxEmit, JsxOpeningLikeElement, LabeledStatement, LanguageServiceHost, last, lastOrUndefined, LiteralExpression,
-    map, Map, maybeBind, Modifier, ModifierFlags, ModuleDeclaration, ModuleInstanceState, ModuleResolutionKind,
-    ModuleSpecifierResolutionHost, moduleSpecifiers, Mutable, NewExpression, NewLineKind, Node, NodeArray,
-    NodeBuilderFlags, NodeFlags, nodeIsMissing, nodeIsPresent, nodeIsSynthesized, noop, normalizePath,
-    NoSubstitutionTemplateLiteral, notImplemented, nullTransformationContext, NumericLiteral, or, OrganizeImports,
-    PackageJsonDependencyGroup, pathIsRelative, PrefixUnaryExpression, Program, ProjectPackageJsonInfo,
-    PropertyAccessExpression, PropertyAssignment, PropertyName, QualifiedName, RefactorContext, Scanner,
-    ScriptElementKind, ScriptElementKindModifier, ScriptKind, ScriptTarget, SemicolonPreference, setConfigFileInOptions,
-    setOriginalNode, setTextRange, Signature, SignatureDeclaration, singleOrUndefined, skipAlias, skipOuterExpressions,
-    some, SourceFile, SourceFileLike, SourceMapper, SpreadElement, stableSort, startsWith, stringContains,
-    StringLiteral, StringLiteralLike, stringToToken, stripQuotes, Symbol, SymbolAccessibility, SymbolDisplayPart,
-    SymbolDisplayPartKind, SymbolFlags, SymbolFormatFlags, SymbolTracker, SyntaxKind, SyntaxList,
-    TaggedTemplateExpression, TemplateExpression, TemplateLiteralToken, TemplateSpan, TextChange, textChanges,
-    TextRange, TextSpan, textSpanContainsPosition, textSpanContainsTextSpan, textSpanEnd, Token, tokenToString,
-    TransientSymbol, tryCast, Type, TypeChecker, TypeFormatFlags, TypeNode, TypeOfExpression, TypeQueryNode,
-    unescapeLeadingUnderscores, UserPreferences, VariableDeclaration, visitEachChild, VoidExpression, YieldExpression,
+    __String,
+    addEmitFlags,
+    addSyntheticLeadingComment,
+    addSyntheticTrailingComment,
+    AnyImportOrRequireStatement,
+    assertType,
+    AssignmentDeclarationKind,
+    BinaryExpression,
+    binarySearchKey,
+    BindingElement,
+    BreakOrContinueStatement,
+    CallExpression,
+    canHaveModifiers,
+    CaseClause,
+    cast,
+    CatchClause,
+    CharacterCodes,
+    ClassDeclaration,
+    ClassExpression,
+    clone,
+    codefix,
+    combinePaths,
+    CommentKind,
+    CommentRange,
+    compareTextSpans,
+    compareValues,
+    Comparison,
+    CompilerOptions,
+    ConditionalExpression,
+    contains,
+    ContextFlags,
+    createPrinterWithRemoveCommentsOmitTrailingSemicolon,
+    createRange,
+    createScanner,
+    createTextSpan,
+    createTextSpanFromBounds,
+    Debug,
+    Declaration,
+    Decorator,
+    defaultMaximumTruncationLength,
+    DeleteExpression,
+    Diagnostic,
+    DiagnosticMessage,
+    DiagnosticWithLocation,
+    directoryProbablyExists,
+    DisplayPartsSymbolWriter,
+    DocumentPosition,
+    DocumentSpan,
+    DoStatement,
+    ElementAccessExpression,
+    EmitFlags,
+    EmitHint,
+    emptyArray,
+    EndOfFileToken,
+    ensureScriptKind,
+    EqualityOperator,
+    escapeString,
+    ExportAssignment,
+    ExportDeclaration,
+    Expression,
+    ExpressionStatement,
+    factory,
+    FileTextChanges,
+    filter,
+    find,
+    findAncestor,
+    findConfigFile,
+    first,
+    firstDefined,
+    firstOrUndefined,
+    forEachAncestorDirectory,
+    forEachChild,
+    forEachLeadingCommentRange,
+    forEachTrailingCommentRange,
+    FormatCodeSettings,
+    formatStringFromArgs,
+    formatting,
+    FormattingHost,
+    ForOfStatement,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionLikeDeclaration,
+    getAssignmentDeclarationKind,
+    getCombinedNodeFlagsAlwaysIncludeJSDoc,
+    getDirectoryPath,
+    getEmitScriptTarget,
+    getExternalModuleImportEqualsDeclarationExpression,
+    getIndentString,
+    getJSDocEnumTag,
+    getLastChild,
+    getLineAndCharacterOfPosition,
+    getLineStarts,
+    getLocaleSpecificMessage,
+    getModuleInstanceState,
+    getNameOfDeclaration,
+    getNodeId,
+    getPackageNameFromTypesPackageName,
+    getPathComponents,
+    getRootDeclaration,
+    getSourceFileOfNode,
+    getSpanOfTokenAtPosition,
+    getSymbolId,
+    getTextOfIdentifierOrLiteral,
+    getTextOfNode,
+    getTypesPackageName,
+    hasSyntacticModifier,
+    HeritageClause,
+    Identifier,
+    identifierIsThisKeyword,
+    identity,
+    idText,
+    IfStatement,
+    ImportClause,
+    ImportDeclaration,
+    ImportSpecifier,
+    ImportTypeNode,
+    indexOfNode,
+    IndexSignatureDeclaration,
+    InternalSymbolName,
+    isAmbientModule,
+    isAnyImportSyntax,
+    isArray,
+    isArrayBindingPattern,
+    isArrayTypeNode,
+    isAsExpression,
+    isAwaitExpression,
+    isBinaryExpression,
+    isBindingElement,
+    isBreakOrContinueStatement,
+    isCallExpression,
+    isCallOrNewExpression,
+    isClassDeclaration,
+    isClassExpression,
+    isClassStaticBlockDeclaration,
+    isConditionalTypeNode,
+    IScriptSnapshot,
+    isDeclaration,
+    isDeclarationName,
+    isDecorator,
+    isDeleteExpression,
+    isElementAccessExpression,
+    isEntityName,
+    isEnumDeclaration,
+    isExportAssignment,
+    isExportDeclaration,
+    isExportSpecifier,
+    isExpression,
+    isExpressionNode,
+    isExternalModule,
+    isExternalModuleImportEqualsDeclaration,
+    isExternalModuleReference,
+    isFileLevelUniqueName,
+    isForInStatement,
+    isForOfStatement,
+    isFunctionBlock,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isFunctionLike,
+    isGetAccessorDeclaration,
+    isGlobalScopeAugmentation,
+    isHeritageClause,
+    isIdentifier,
+    isImportCall,
+    isImportClause,
+    isImportDeclaration,
+    isImportEqualsDeclaration,
+    isImportOrExportSpecifier,
+    isImportSpecifier,
+    isInferTypeNode,
+    isInJSFile,
+    isInterfaceDeclaration,
+    isInternalModuleImportEqualsDeclaration,
+    isJSDoc,
+    isJSDocCommentContainingNode,
+    isJSDocLink,
+    isJSDocLinkCode,
+    isJSDocLinkLike,
+    isJSDocMemberName,
+    isJSDocNameReference,
+    isJSDocTag,
+    isJSDocTemplateTag,
+    isJSDocTypeAlias,
+    isJsxElement,
+    isJsxExpression,
+    isJsxOpeningLikeElement,
+    isJsxText,
+    isKeyword,
+    isLabeledStatement,
+    isLet,
+    isLiteralTypeNode,
+    isMappedTypeNode,
+    isModifier,
+    isModuleBlock,
+    isModuleDeclaration,
+    isNamedDeclaration,
+    isNamedExports,
+    isNamedImports,
+    isNamespaceExport,
+    isNamespaceImport,
+    isNewExpression,
+    isNumericLiteral,
+    isObjectBindingPattern,
+    isObjectLiteralExpression,
+    isOptionalChain,
+    isOptionalChainRoot,
+    isParameter,
+    isPartOfTypeNode,
+    isPrivateIdentifier,
+    isPropertyAccessExpression,
+    isPropertyNameLiteral,
+    isQualifiedName,
+    isRequireCall,
+    isRequireVariableStatement,
+    isRightSideOfQualifiedNameOrPropertyAccess,
+    isRootedDiskPath,
+    isSetAccessorDeclaration,
+    isSourceFile,
+    isSourceFileJS,
+    isStringDoubleQuoted,
+    isStringLiteral,
+    isStringLiteralLike,
+    isStringOrNumericLiteralLike,
+    isStringTextContainingNode,
+    isSyntaxList,
+    isTaggedTemplateExpression,
+    isTemplateLiteralKind,
+    isToken,
+    isTransientSymbol,
+    isTypeAliasDeclaration,
+    isTypeElement,
+    isTypeNode,
+    isTypeOfExpression,
+    isTypeOperatorNode,
+    isTypeParameterDeclaration,
+    isTypeReferenceNode,
+    isVarConst,
+    isVariableDeclarationList,
+    isVoidExpression,
+    isWhiteSpaceLike,
+    isWhiteSpaceSingleLine,
+    isYieldExpression,
+    IterationStatement,
+    JSDocLink,
+    JSDocLinkCode,
+    JSDocLinkDisplayPart,
+    JSDocLinkPlain,
+    JSDocTypedefTag,
+    JsTyping,
+    JsxEmit,
+    JsxOpeningLikeElement,
+    LabeledStatement,
+    LanguageServiceHost,
+    last,
+    lastOrUndefined,
+    LiteralExpression,
+    map,
+    maybeBind,
+    Modifier,
+    ModifierFlags,
+    ModuleDeclaration,
+    ModuleInstanceState,
+    ModuleResolutionKind,
+    ModuleSpecifierResolutionHost,
+    moduleSpecifiers,
+    Mutable,
+    NewExpression,
+    NewLineKind,
+    Node,
+    NodeArray,
+    NodeBuilderFlags,
+    NodeFlags,
+    nodeIsMissing,
+    nodeIsPresent,
+    nodeIsSynthesized,
+    normalizePath,
+    NoSubstitutionTemplateLiteral,
+    notImplemented,
+    nullTransformationContext,
+    NumericLiteral,
+    or,
+    OrganizeImports,
+    PackageJsonDependencyGroup,
+    pathIsRelative,
+    PrefixUnaryExpression,
+    Program,
+    ProjectPackageJsonInfo,
+    PropertyAccessExpression,
+    PropertyAssignment,
+    PropertyName,
+    QualifiedName,
+    RefactorContext,
+    Scanner,
+    ScriptElementKind,
+    ScriptElementKindModifier,
+    ScriptKind,
+    ScriptTarget,
+    SemicolonPreference,
+    setConfigFileInOptions,
+    setOriginalNode,
+    setTextRange,
+    Signature,
+    SignatureDeclaration,
+    singleOrUndefined,
+    skipAlias,
+    skipOuterExpressions,
+    some,
+    SortKind,
+    SourceFile,
+    SourceFileLike,
+    SourceMapper,
+    SpreadElement,
+    stableSort,
+    startsWith,
+    stringContains,
+    StringLiteral,
+    StringLiteralLike,
+    stringToToken,
+    stripQuotes,
+    Symbol,
+    SymbolAccessibility,
+    SymbolDisplayPart,
+    SymbolDisplayPartKind,
+    SymbolFlags,
+    SymbolFormatFlags,
+    SymbolTracker,
+    SyntaxKind,
+    SyntaxList,
+    TaggedTemplateExpression,
+    TemplateExpression,
+    TemplateLiteralToken,
+    TemplateSpan,
+    TextChange,
+    textChanges,
+    TextRange,
+    TextSpan,
+    textSpanContainsPosition,
+    textSpanContainsTextSpan,
+    textSpanEnd,
+    Token,
+    tokenToString,
+    tryCast,
+    Type,
+    TypeChecker,
+    TypeFormatFlags,
+    TypeNode,
+    TypeOfExpression,
+    TypeQueryNode,
+    unescapeLeadingUnderscores,
+    UserPreferences,
+    VariableDeclaration,
+    visitEachChild,
+    VoidExpression,
+    YieldExpression,
 } from "./_namespaces/ts";
 
 // These utilities are common to multiple language service features.
@@ -2082,6 +2376,7 @@ export function programContainsModules(program: Program): boolean {
 export function programContainsEsModules(program: Program): boolean {
     return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
 }
+// TODO: this function is, at best, poorly named. Use sites are pretty suspicious.
 /** @internal */
 export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
     return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
@@ -2117,13 +2412,10 @@ export function getModuleSpecifierResolverHost(program: Program, host: LanguageS
 }
 
 /** @internal */
-export function moduleResolutionRespectsExports(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
-}
-
-/** @internal */
 export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution === ModuleResolutionKind.NodeJs || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    return moduleResolution === ModuleResolutionKind.Node10
+        || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
+        || moduleResolution === ModuleResolutionKind.Bundler;
 }
 
 /** @internal */
@@ -2245,17 +2537,20 @@ export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | und
 }
 
 /** @internal */
-export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean): void {
+export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean, preferences: UserPreferences): void {
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
-    const sortedNewImports = isArray(imports) ? stableSort(imports, OrganizeImports.compareImportsOrRequireStatements) : [imports];
+    let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
+    const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
+    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && OrganizeImports.importsAreSorted(existingImportStatements)) {
+    else if (existingImportStatements && (sortKind = OrganizeImports.detectImportDeclarationSorting(existingImportStatements, preferences))) {
+        const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
         for (const newImport of sortedNewImports) {
-            const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
+            const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
             if (insertionIndex === 0) {
                 // If the first import is top-of-file, insert after the leading comment which is likely the header.
                 const options = existingImportStatements[0] === sourceFile.statements[0] ?
@@ -2428,10 +2723,6 @@ function getDisplayPartWriter(): DisplayPartsSymbolWriter {
         increaseIndent: () => { indent++; },
         decreaseIndent: () => { indent--; },
         clear: resetWriter,
-        trackSymbol: () => false,
-        reportInaccessibleThisError: noop,
-        reportInaccessibleUniqueSymbolError: noop,
-        reportPrivateInBaseOfClassExpression: noop,
     };
 
     function writeIndent() {
@@ -2605,7 +2896,7 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
             if (text) parts.push(linkTextPart(text));
         }
         else {
-            parts.push(linkTextPart(name + (suffix || text.indexOf("://") === 0 ? "" : " ") + text));
+            parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
         }
     }
     parts.push(linkPart("}"));
@@ -2622,29 +2913,35 @@ function skipSeparatorFromLinkText(text: string) {
 }
 
 function findLinkNameEnd(text: string) {
+    let pos = text.indexOf("://");
+    if (pos === 0) {
+        while (pos < text.length && text.charCodeAt(pos) !== CharacterCodes.bar) pos++;
+        return pos;
+    }
     if (text.indexOf("()") === 0) return 2;
-    if (text[0] !== "<") return 0;
-    let brackets = 0;
-    let i = 0;
-    while (i < text.length) {
-        if (text[i] === "<") brackets++;
-        if (text[i] === ">") brackets--;
-        i++;
-        if (!brackets) return i;
+    if (text.charAt(0) === "<") {
+        let brackets = 0;
+        let i = 0;
+        while (i < text.length) {
+            if (text[i] === "<") brackets++;
+            if (text[i] === ">") brackets--;
+            i++;
+            if (!brackets) return i;
+        }
     }
     return 0;
 }
 
-const carriageReturnLineFeed = "\r\n";
+const lineFeed = "\n";
 /**
- * The default is CRLF.
+ * The default is LF.
  *
  * @internal
  */
-export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings?: FormatCodeSettings) {
+export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings: FormatCodeSettings | undefined) {
     return formatSettings?.newLineCharacter ||
         host.getNewLine?.() ||
-        carriageReturnLineFeed;
+        lineFeed;
 }
 
 /** @internal */
@@ -2689,7 +2986,7 @@ export function signatureToDisplayParts(typechecker: TypeChecker, signature: Sig
 export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
     const file = enclosingDeclaration.getSourceFile();
     return mapToDisplayParts(writer => {
-        const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
+        const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
         printer.writeNode(EmitHint.Unspecified, node, file, writer);
     });
 }
@@ -2709,19 +3006,15 @@ export function getScriptKind(fileName: string, host: LanguageServiceHost): Scri
 /** @internal */
 export function getSymbolTarget(symbol: Symbol, checker: TypeChecker): Symbol {
     let next: Symbol = symbol;
-    while (isAliasSymbol(next) || (isTransientSymbol(next) && next.target)) {
-        if (isTransientSymbol(next) && next.target) {
-            next = next.target;
+    while (isAliasSymbol(next) || (isTransientSymbol(next) && next.links.target)) {
+        if (isTransientSymbol(next) && next.links.target) {
+            next = next.links.target;
         }
         else {
             next = skipAlias(next, checker);
         }
     }
     return next;
-}
-
-function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
-    return (symbol.flags & SymbolFlags.Transient) !== 0;
 }
 
 function isAliasSymbol(symbol: Symbol): boolean {
@@ -2782,10 +3075,10 @@ export function getSynthesizedDeepCloneWithReplacements<T extends Node>(
 }
 
 function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
-    const nodeClone: (n: T) => T = replaceNode
+    const nodeClone: <T extends Node>(n: T) => T = replaceNode
         ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
         : getSynthesizedDeepClone;
-    const nodesClone: (ns: NodeArray<T>) => NodeArray<T> = replaceNode
+    const nodesClone: <T extends Node>(ns: NodeArray<T> | undefined) => NodeArray<T> | undefined = replaceNode
         ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
         : ns => ns && getSynthesizedDeepClones(ns);
     const visited =
@@ -2984,21 +3277,21 @@ export function needsParentheses(expression: Expression): boolean {
 }
 
 /** @internal */
-export function getContextualTypeFromParent(node: Expression, checker: TypeChecker): Type | undefined {
+export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
     const { parent } = node;
     switch (parent.kind) {
         case SyntaxKind.NewExpression:
-            return checker.getContextualType(parent as NewExpression);
+            return checker.getContextualType(parent as NewExpression, contextFlags);
         case SyntaxKind.BinaryExpression: {
             const { left, operatorToken, right } = parent as BinaryExpression;
             return isEqualityOperatorKind(operatorToken.kind)
                 ? checker.getTypeAtLocation(node === right ? left : right)
-                : checker.getContextualType(node);
+                : checker.getContextualType(node, contextFlags);
         }
         case SyntaxKind.CaseClause:
             return (parent as CaseClause).expression === node ? getSwitchedType(parent as CaseClause, checker) : undefined;
         default:
-            return checker.getContextualType(node);
+            return checker.getContextualType(node, contextFlags);
     }
 }
 
@@ -3677,7 +3970,7 @@ export function isNonGlobalDeclaration(declaration: Declaration) {
         return false;
     }
     // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
-    return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
+    return isInJSFile(declaration) || !findAncestor(declaration, d => isModuleDeclaration(d) && isGlobalScopeAugmentation(d));
 }
 
 /** @internal */

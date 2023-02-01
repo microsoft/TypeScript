@@ -421,3 +421,15 @@ tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2322: Type 'T' is no
     const checkIsTouchDevice = () =>
         "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
     
+    // Repro from #51501
+    
+    function isHTMLTable<T extends object | null>(table: T): boolean {
+        return !!table && 'html' in table;
+    }
+    
+    // Repro from #51549
+    
+    const f = <P extends object>(a: P & {}) => {
+        "foo" in a;
+    };
+    

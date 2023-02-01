@@ -1,3 +1,29 @@
+=== /tests/cases/fourslash/completionsOverridingMethod15.ts ===
+// declare class B {
+//     get foo(): any;
+//     set foo(value: any);
+// }
+// class A extends B {
+//     
+//     ^
+// | ----------------------------------------------------------------------
+// | abstract
+// | accessor
+// | async
+// | constructor
+// | declare
+// | get
+// | override
+// | private
+// | protected
+// | public
+// | readonly
+// | set
+// | static
+// | (property) B.foo: any
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +31,7 @@
       "position": 89,
       "name": ""
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,

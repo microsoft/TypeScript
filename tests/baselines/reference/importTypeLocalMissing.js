@@ -45,10 +45,10 @@ export let shim: typeof import("./fo2") = {
 
 //// [foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [foo2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
 var Bar = /** @class */ (function () {
     function Bar(input) {
@@ -58,7 +58,7 @@ var Bar = /** @class */ (function () {
 exports.Bar = Bar;
 //// [usage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.shim = exports.Bar2 = exports.z = exports.y = exports.x = void 0;
 exports.x = { x: 0, y: 0 };
 exports.y = { a: "", b: 0 };

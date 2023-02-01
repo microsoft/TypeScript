@@ -22,7 +22,7 @@ export type AliasType3 = typeof c
 
 //// [test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function getFoo() {
     return { foo: { test: 42 } };
 }

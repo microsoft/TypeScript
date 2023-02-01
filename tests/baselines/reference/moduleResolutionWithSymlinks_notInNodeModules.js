@@ -18,7 +18,7 @@ x + x2;
 // When symlinked files are not in node_modules, realpath is not used.
 // A symlink file acts like the real thing. So, 2 symlinks act like 2 different files.
 // See GH#10364. 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 0;
 //// [/src/bin/shared2/abc.js]
@@ -26,12 +26,12 @@ exports.x = 0;
 // When symlinked files are not in node_modules, realpath is not used.
 // A symlink file acts like the real thing. So, 2 symlinks act like 2 different files.
 // See GH#10364. 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 0;
 //// [/src/bin/app.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var abc_1 = require("./shared/abc");
 var abc_2 = require("./shared2/abc");
 abc_1.x + abc_2.x;
