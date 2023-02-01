@@ -8518,10 +8518,6 @@ namespace Parser {
             let tags: JSDocTag[];
             let tagsPos: number;
             let tagsEnd: number;
-            let linkEnd: number;
-            let commentsPos: number | undefined;
-            let comments = "";
-            const parts: JSDocComment[] = [];
 
             // + 3 for leading /**, - 5 in total for /** */
             return scanner.scanRange(start + 3, length - 5, () => {
@@ -8532,15 +8528,26 @@ namespace Parser {
                 // + 4 for leading '/** '
                 // + 1 because the last index of \n is always one index before the first character in the line and coincidentally, if there is no \n before start, it is -1, which is also one index before the first character
                 let indent = start - (content.lastIndexOf("\n", start) + 1) + 4;
-                function pushComment(text: string) {
+                let commentsPos: number | undefined;
+                let linkEnd: number | undefined; // TODO: This isn't set anywhere that I can see, so should be removed
+                const parts: JSDocComment[] = [];
+                function indentMargin() {
                     if (!margin) {
                         margin = indent;
                     }
-                    comments += text;
-                    indent += text.length;
+                    indent += scanner.getTextPos() - scanner.getTokenPos()
+                }
+                function addComment() {
+                    // TODO: addComment likely needs to be aware of indent/margin, at least when adding things after a newline
+                    comments += scanner.getText().slice(cpos, cend)
+                    cpos = cend // TODO: Most callers (I think) immediately set cpos and cend themselves
                 }
 
                 nextTokenJSDoc();
+                // TODO: These might be the same as some existing variable (specifically, maybe cend = commentsPos)
+                let comments = "";
+                let cpos = scanner.getTextPos() // -OR- 0 ? getStartPos ?
+                let cend = cpos
                 while (parseOptionalJsdoc(SyntaxKind.WhitespaceTrivia));
                 if (parseOptionalJsdoc(SyntaxKind.NewLineTrivia)) {
                     state = JSDocState.BeginningOfLine;
@@ -8550,8 +8557,12 @@ namespace Parser {
                     switch (token()) {
                         case SyntaxKind.AtToken:
                             if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
-                                if (!commentsPos) commentsPos = getNodePos();
+                                cend = scanner.getStartPos()
+                                addComment()
+                                comments = comments.trimEnd()
+                                if (!commentsPos) commentsPos = scanner.getStartPos();
                                 addTag(parseTag(indent));
+                                cend = cpos = scanner.getTokenPos()
                                 // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
                                 // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
                                 // for malformed examples like `/** @param {string} x @returns {number} the length */`
@@ -8559,44 +8570,54 @@ namespace Parser {
                                 margin = undefined;
                             }
                             else {
-                                pushComment(scanner.getTokenText());
+                                cend = scanner.getTextPos()
+                                indentMargin();
                             }
                             break;
                         case SyntaxKind.NewLineTrivia:
-                            comments += scanner.getTokenText();
+                            cend = scanner.getTextPos()
                             state = JSDocState.BeginningOfLine;
                             indent = 0;
                             break;
                         case SyntaxKind.AsteriskToken:
-                            const asterisk = scanner.getTokenText();
                             if (state === JSDocState.SawAsterisk || state === JSDocState.SavingComments) {
                                 // If we've already seen an asterisk, then we can no longer parse a tag on this line
                                 state = JSDocState.SavingComments;
-                                pushComment(asterisk);
+                                cend = scanner.getTextPos()
+                                indentMargin();
                             }
                             else {
                                 // Ignore the first asterisk on a line
+                                // cend = scanner.getTokenPos()
+                                // addComment()
+                                cpos = cend = scanner.getTextPos()
                                 state = JSDocState.SawAsterisk;
-                                indent += asterisk.length;
+                                indent += scanner.getTextPos() - scanner.getTokenPos() // asterisk.length;
                             }
                             break;
                         case SyntaxKind.WhitespaceTrivia:
                             // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
-                            const whitespace = scanner.getTokenText();
+                            const whitespaceLength = scanner.getTextPos() - scanner.getTokenPos()
                             if (state === JSDocState.SavingComments) {
-                                comments += whitespace;
+                                cend = scanner.getTextPos()
                             }
-                            else if (margin !== undefined && indent + whitespace.length > margin) {
-                                comments += whitespace.slice(margin - indent);
+                            else if (margin !== undefined && indent + whitespaceLength > margin) {
+                                cend = scanner.getTokenPos()
+                                addComment()
+                                cpos = cend = scanner.getTokenPos() + (margin - indent)
+                                // comments += whitespace.slice(margin - indent);
                             }
-                            indent += whitespace.length;
+                            indent += whitespaceLength;
                             break;
                         case SyntaxKind.EndOfFileToken:
+                            addComment()
                             break loop;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
                             const commentEnd = scanner.getStartPos();
-                            const linkStart = scanner.getTextPos() - 1;
+                            cend = scanner.getTokenPos()
+                            addComment()
+                            const linkStart = scanner.getTextPos() - 1; // TODO: SHould probably be scanner.getTokenPos()
                             const link = parseJSDocLink(linkStart);
                             if (link) {
                                 if (!linkEnd) {
@@ -8604,8 +8625,8 @@ namespace Parser {
                                 }
                                 parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? start, commentEnd));
                                 parts.push(link);
+                                cpos = cend = linkEnd ?? start // this just makes no sense
                                 comments = "";
-                                linkEnd = scanner.getTextPos();
                                 break;
                             }
                             // fallthrough if it's not a {@link sequence
@@ -8614,11 +8635,14 @@ namespace Parser {
                             // wasn't a tag, we can no longer parse a tag on this line until we hit the next
                             // line break.
                             state = JSDocState.SavingComments;
-                            pushComment(scanner.getTokenText());
+                            cend = scanner.getTextPos()
+                            indentMargin();
                             break;
                     }
                     nextTokenJSDoc();
                 }
+                addComment()
+                comments = comments.trimEnd()
                 if (parts.length && comments.length) {
                     parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? start, commentsPos));
                 }
@@ -8790,17 +8814,23 @@ namespace Parser {
                 let state = JSDocState.BeginningOfLine;
                 let previousWhitespace = true;
                 let margin: number | undefined;
-                function pushComment(text: string) {
+                let cpos = scanner.getTokenPos()
+                let cend = cpos;
+                function indentMargin() {
                     if (!margin) {
                         margin = indent;
                     }
-                    comments += text;
-                    indent += text.length;
+                    indent += scanner.getTextPos() - scanner.getTokenPos() // text.length;
+                }
+                function addComment() {
+                    comments += scanner.getText().slice(cpos, cend)
+                    cpos = cend
                 }
                 if (initialMargin !== undefined) {
                     // jump straight to saving comments if there is some initial indentation
                     if (initialMargin !== "") {
-                        pushComment(initialMargin);
+                        comments = initialMargin;
+                        indentMargin();
                     }
                     state = JSDocState.SawAsterisk;
                 }
@@ -8809,17 +8839,18 @@ namespace Parser {
                     switch (tok) {
                         case SyntaxKind.NewLineTrivia:
                             state = JSDocState.BeginningOfLine;
-                            // don't use pushComment here because we want to keep the margin unchanged
-                            comments += scanner.getTokenText();
+                            // don't indent margin here because we want to keep the margin unchanged
+                            cend = scanner.getTextPos()
                             indent = 0;
                             break;
                         case SyntaxKind.AtToken:
                             if (state === JSDocState.SavingBackticks
                                 || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
                                 // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
-                                comments += scanner.getTokenText();
+                                cend = scanner.getTextPos()
                                 break;
                             }
+                            cend--;
                             scanner.setTextPos(scanner.getTextPos() - 1);
                             // falls through
                         case SyntaxKind.EndOfFileToken:
@@ -8827,30 +8858,38 @@ namespace Parser {
                             break loop;
                         case SyntaxKind.WhitespaceTrivia:
                             if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
-                                pushComment(scanner.getTokenText());
+                                cend = scanner.getTextPos()
+                                indentMargin()
                             }
                             else {
-                                const whitespace = scanner.getTokenText();
+                                const whitespaceLength = scanner.getTextPos() - scanner.getTokenPos()
                                 // if the whitespace crosses the margin, take only the whitespace that passes the margin
-                                if (margin !== undefined && indent + whitespace.length > margin) {
-                                    comments += whitespace.slice(margin - indent);
+                                if (margin !== undefined && indent + whitespaceLength > margin) {
+                                    cend = scanner.getTokenPos()
+                                    addComment()
+                                    cpos = cend = scanner.getTokenPos() + (margin - indent)
+                                    // comments += whitespace.slice(margin - indent);
                                 }
-                                indent += whitespace.length;
+                                // TODO: Why is this only in the else branch, but in both branches for top-level comments? Seems wrong.
+                                indent += whitespaceLength;
                             }
                             break;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
                             const commentEnd = scanner.getStartPos();
-                            const linkStart = scanner.getTextPos() - 1;
+                            const linkStart = scanner.getTextPos() - 1; // TODO: Should probably be scanner.getTokenPos
+                            cend = scanner.getTokenPos();
+                            addComment()
                             const link = parseJSDocLink(linkStart);
                             if (link) {
                                 parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? commentsPos, commentEnd));
                                 parts.push(link);
                                 comments = "";
                                 linkEnd = scanner.getTextPos();
+                                cpos = cend = linkEnd
                             }
                             else {
-                                pushComment(scanner.getTokenText());
+                                cend = scanner.getTextPos()
                             }
                             break;
                         case SyntaxKind.BacktickToken:
@@ -8860,11 +8899,14 @@ namespace Parser {
                             else {
                                 state = JSDocState.SavingBackticks;
                             }
-                            pushComment(scanner.getTokenText());
+                            cend = scanner.getTextPos()
                             break;
                         case SyntaxKind.AsteriskToken:
                             if (state === JSDocState.BeginningOfLine) {
                                 // leading asterisks start recording on the *next* (non-whitespace) token
+                                // cend = scanner.getTokenPos()
+                                // addComment()
+                                cpos = cend = scanner.getTextPos()
                                 state = JSDocState.SawAsterisk;
                                 indent += 1;
                                 break;
@@ -8875,14 +8917,14 @@ namespace Parser {
                             if (state !== JSDocState.SavingBackticks) {
                                 state = JSDocState.SavingComments; // leading identifiers start recording as well
                             }
-                            pushComment(scanner.getTokenText());
+                            cend = scanner.getTextPos()
                             break;
                     }
                     previousWhitespace = token() === SyntaxKind.WhitespaceTrivia;
                     tok = nextTokenJSDoc();
                 }
-
-                comments = removeLeadingNewlines(comments);
+                addComment()
+                comments = removeLeadingNewlines(comments).trimEnd();
                 if (parts.length) {
                     if (comments.length) {
                         parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? commentsPos));
