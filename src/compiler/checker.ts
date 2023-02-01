@@ -17748,11 +17748,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeFromImportTypeNode(node: ImportTypeNode): Type {
         const links = getNodeLinks(node);
         if (!links.resolvedType) {
-            if (node.isTypeOf && node.typeArguments) { // Only the non-typeof form can make use of type arguments
-                error(node, Diagnostics.Type_arguments_cannot_be_used_here);
-                links.resolvedSymbol = unknownSymbol;
-                return links.resolvedType = errorType;
-            }
             if (!isLiteralImportTypeNode(node)) {
                 error(node.argument, Diagnostics.String_literal_expected);
                 links.resolvedSymbol = unknownSymbol;
@@ -17815,7 +17810,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const resolvedSymbol = resolveSymbol(symbol);
         links.resolvedSymbol = resolvedSymbol;
         if (meaning === SymbolFlags.Value) {
-            return getTypeOfSymbol(symbol); // intentionally doesn't use resolved symbol so type is cached as expected on the alias
+            return getInstantiationExpressionType(getTypeOfSymbol(symbol), node); // intentionally doesn't use resolved symbol so type is cached as expected on the alias
         }
         else {
             const type = tryGetDeclaredTypeOfSymbol(resolvedSymbol); // call this first to ensure typeParameters is populated (if applicable)
@@ -34055,6 +34050,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const exprType = node.kind === SyntaxKind.ExpressionWithTypeArguments ? checkExpression(node.expression) :
             isThisIdentifier(node.exprName) ? checkThisExpression(node.exprName) :
             checkExpression(node.exprName);
+        return getInstantiationExpressionType(exprType, node);
+    }
+
+    function getInstantiationExpressionType(exprType: Type, node: NodeWithTypeArguments) {
         const typeArguments = node.typeArguments;
         if (exprType === silentNeverType || isErrorType(exprType) || !some(typeArguments)) {
             return exprType;
