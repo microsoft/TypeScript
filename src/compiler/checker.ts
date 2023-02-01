@@ -45907,7 +45907,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
-        const enumResult = type.flags & TypeFlags.EnumLiteral ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
+        const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
             : type === trueType ? factory.createTrue() : type === falseType && factory.createFalse();
         if (enumResult) return enumResult;
         const literalValue = (type as LiteralType).value;
@@ -47668,7 +47668,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isSimpleLiteralEnumReference(expr: Expression) {
         if ((isPropertyAccessExpression(expr) || (isElementAccessExpression(expr) && isStringOrNumberLiteralExpression(expr.argumentExpression))) &&
             isEntityNameExpression(expr.expression)) {
-            return !!(checkExpressionCached(expr).flags & TypeFlags.EnumLiteral);
+            return !!(checkExpressionCached(expr).flags & TypeFlags.EnumLike);
         }
     }
 
