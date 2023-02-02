@@ -14456,7 +14456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         for (const tag of node.tags) {
                             if (isJSDocOverloadTag(tag)) {
                                 const jsDocSignature = tag.typeExpression;
-                                if (jsDocSignature.type === undefined) {
+                                if (jsDocSignature.type === undefined && !isConstructorDeclaration(decl)) {
                                     reportImplicitAny(jsDocSignature, anyType);
                                 }
                                 result.push(getSignatureFromDeclaration(jsDocSignature));
@@ -14581,6 +14581,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getReturnTypeFromAnnotation(declaration: SignatureDeclaration | JSDocSignature) {
         if (declaration.kind === SyntaxKind.Constructor) {
             return getDeclaredTypeOfClassOrInterface(getMergedSymbol((declaration.parent as ClassDeclaration).symbol));
+        }
+        if (isJSDocSignature(declaration)) {
+            const root = getJSDocRoot(declaration);
+            if (root && isConstructorDeclaration(root.parent)) {
+                return getDeclaredTypeOfClassOrInterface(getMergedSymbol((root.parent.parent as ClassDeclaration).symbol));
+            }
         }
         if (isJSDocConstructSignature(declaration)) {
             return getTypeFromTypeNode((declaration.parameters[0] as ParameterDeclaration).type!); // TODO: GH#18217
@@ -33771,6 +33777,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 declaration.kind !== SyntaxKind.Constructor &&
                 declaration.kind !== SyntaxKind.ConstructSignature &&
                 declaration.kind !== SyntaxKind.ConstructorType &&
+                !(isJSDocSignature(declaration) && getJSDocRoot(declaration)?.parent?.kind === SyntaxKind.Constructor) &&
                 !isJSDocConstructSignature(declaration) &&
                 !isJSConstructor(declaration)) {
 
