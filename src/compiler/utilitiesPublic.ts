@@ -1205,7 +1205,7 @@ export function getJSDocTagsNoCache(node: Node): readonly JSDocTag[] {
     return getJSDocTagsWorker(node, /*noCache*/ true);
 }
 
-/** @internal
+/**
  * Get the first JSDoc tag of a specified kind, or undefined if not present.
  */
 export function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
