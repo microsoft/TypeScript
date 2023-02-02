@@ -26,8 +26,9 @@ export function overloaded(a,b) {
   }
   throw new Error("Invalid arguments");
 }
-overloaded(1,2)
-overloaded("zero", "one")
+var o1 = overloaded(1,2)
+var o2 = overloaded("zero", "one")
+var o3 = overloaded("a",false)
 
 /**
  * @overload
