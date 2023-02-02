@@ -36170,6 +36170,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const links = getNodeLinks(node);
         if (!links.resolvedType) {
+            links.resolvedType = errorType
             // When computing a type that we're going to cache, we need to ignore any ongoing control flow
             // analysis because variables may have transient types in indeterminable states. Moving flowLoopStart
             // to the top of the stack ensures all transient types are computed from a known point.
