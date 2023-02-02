@@ -1076,10 +1076,6 @@
         "category": "Error",
         "code": 1341
     },
-    "Type arguments cannot be used here.": {
-        "category": "Error",
-        "code": 1342
-    },
     "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.": {
         "category": "Error",
         "code": 1343
@@ -3499,7 +3495,7 @@
         "category": "Error",
         "code": 2808
     },
-    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
+    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.": {
         "category": "Error",
         "code": 2809
     },
