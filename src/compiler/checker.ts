@@ -14454,7 +14454,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (isInJSFile(decl) && decl.jsDoc) {
                 let hasJSDocOverloads = false;
-               for (const node of decl.jsDoc) {
+                for (const node of decl.jsDoc) {
                     if (node.tags) {
                         for (const tag of node.tags) {
                             if (isJSDocOverloadTag(tag)) {
@@ -14466,7 +14466,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                     }
-               }
+                }
                 if (hasJSDocOverloads) {
                     continue;
                 }
