@@ -103,8 +103,8 @@ import {
     tryExtractTSExtension,
     tryGetExtensionFromPath,
     tryParsePatterns,
-    version,
     Version,
+    version,
     versionMajorMinor,
     VersionRange,
 } from "./_namespaces/ts";

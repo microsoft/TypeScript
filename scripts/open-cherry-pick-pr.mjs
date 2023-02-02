@@ -1,8 +1,9 @@
 import { Octokit } from "@octokit/rest";
-import { runSequence } from "./run-sequence.mjs";
 import fs from "fs";
 import path from "path";
 import url from "url";
+
+import { runSequence } from "./run-sequence.mjs";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
