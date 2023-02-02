@@ -14456,10 +14456,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (node.tags) {
                         for (const tag of node.tags) {
                             if (isJSDocOverloadTag(tag)) {
-                                if (tag.typeExpression.type === undefined) {
-                                    reportImplicitAny(tag.typeExpression, anyType);
+                                const jsDocSignature = tag.typeExpression;
+                                if (jsDocSignature.type === undefined) {
+                                    reportImplicitAny(jsDocSignature, anyType);
                                 }
-                                result.push(getSignatureFromDeclaration(tag.typeExpression));
+                                result.push(getSignatureFromDeclaration(jsDocSignature));
                                 hasJSDocOverloads = true;
                             }
                         }
