@@ -26,8 +26,10 @@ import {
     CompletionEntryDataUnresolved,
     CompletionEntryDetails,
     CompletionEntryLabelDetails,
+    CompletionEntryWithApiData,
     CompletionInfo,
     CompletionInfoFlags,
+    CompletionInfoWithApiData,
     CompletionsTriggerCharacter,
     CompletionTriggerKind,
     concatenate,
@@ -362,8 +364,6 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
-    CompletionEntryWithApiData,
-    CompletionInfoWithApiData,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
 
@@ -698,7 +698,7 @@ export function getCompletionsAtPosition(
             const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext, position);
             if (response && !includeApiData) {
                 for (const entry of response.entries) {
-                    delete entry.symbol
+                    delete entry.symbol;
                 }
             }
             if (response?.isIncomplete) {
