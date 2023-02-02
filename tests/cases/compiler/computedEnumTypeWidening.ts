@@ -62,6 +62,8 @@ let v2 = E.B as const;
 class C {
   p1 = E.B;
   p2 = E.B as const;
+  readonly p3 = E.B;
+  readonly p4 = E.B as const;
 }
 
 // Repro from #52531

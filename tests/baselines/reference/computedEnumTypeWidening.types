@@ -262,6 +262,19 @@ class C {
 >E.B : E.B
 >E : typeof E
 >B : E.B
+
+  readonly p3 = E.B;
+>p3 : E.B
+>E.B : E.B
+>E : typeof E
+>B : E.B
+
+  readonly p4 = E.B as const;
+>p4 : E.B
+>E.B as const : E.B
+>E.B : E.B
+>E : typeof E
+>B : E.B
 }
 
 // Repro from #52531

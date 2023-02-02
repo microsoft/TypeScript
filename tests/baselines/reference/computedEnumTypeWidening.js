@@ -60,6 +60,8 @@ let v2 = E.B as const;
 class C {
   p1 = E.B;
   p2 = E.B as const;
+  readonly p3 = E.B;
+  readonly p4 = E.B as const;
 }
 
 // Repro from #52531
@@ -130,6 +132,8 @@ var C = /** @class */ (function () {
     function C() {
         this.p1 = E.B;
         this.p2 = E.B;
+        this.p3 = E.B;
+        this.p4 = E.B;
     }
     return C;
 }());
@@ -171,6 +175,8 @@ declare let v2: E.B;
 declare class C {
     p1: E;
     p2: E.B;
+    readonly p3 = E.B;
+    readonly p4: E.B;
 }
 declare enum MyEnum {
     A = 0,
