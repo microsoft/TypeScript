@@ -1,5 +1,3 @@
-tests/cases/conformance/esDecorators/classDeclaration/file1.js(2,1): error TS8038: Decorators must come after 'export' or 'export default' in JavaScript files.
-tests/cases/conformance/esDecorators/classDeclaration/file2.js(2,1): error TS8038: Decorators must come after 'export' or 'export default' in JavaScript files.
 tests/cases/conformance/esDecorators/classDeclaration/file3.js(2,8): error TS1206: Decorators are not valid here.
 
 
@@ -7,17 +5,13 @@ tests/cases/conformance/esDecorators/classDeclaration/file3.js(2,8): error TS120
     /** @type {*} */
     var dec;
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file1.js (1 errors) ====
-    // error
+==== tests/cases/conformance/esDecorators/classDeclaration/file1.js (0 errors) ====
+    // ok
     @dec export class C1 { }
-    ~~~~
-!!! error TS8038: Decorators must come after 'export' or 'export default' in JavaScript files.
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file2.js (1 errors) ====
-    // error
+==== tests/cases/conformance/esDecorators/classDeclaration/file2.js (0 errors) ====
+    // ok
     @dec export default class C2 {}
-    ~~~~
-!!! error TS8038: Decorators must come after 'export' or 'export default' in JavaScript files.
     
 ==== tests/cases/conformance/esDecorators/classDeclaration/file3.js (1 errors) ====
     // error

@@ -2958,11 +2958,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         else if (isClassDeclaration(parent)) {
                             const exportIndex = findIndex(parent.modifiers, isExportModifier);
                             const defaultIndex = findIndex(parent.modifiers, isDefaultModifier);
-                            if (exportIndex >= 0 && decoratorIndex < exportIndex) {
-                                // report illegal decorator before `export default`
-                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_must_come_after_export_or_export_default_in_JavaScript_files));
-                            }
-                            else if (defaultIndex >= 0 && decoratorIndex < defaultIndex) {
+                            if (exportIndex >= 0 && decoratorIndex > exportIndex && defaultIndex >= 0 && decoratorIndex < defaultIndex) {
                                 // report illegal decorator before `export default`
                                 diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
                             }

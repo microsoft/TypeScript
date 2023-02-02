@@ -1,0 +1,29 @@
+tests/cases/conformance/esDecorators/classDeclaration/file3.ts(2,8): error TS1206: Decorators are not valid here.
+
+
+==== tests/cases/conformance/esDecorators/classDeclaration/global.ts (0 errors) ====
+    /** @type {*} */
+    var dec;
+    
+==== tests/cases/conformance/esDecorators/classDeclaration/file1.ts (0 errors) ====
+    // ok
+    @dec export class C1 { }
+    
+==== tests/cases/conformance/esDecorators/classDeclaration/file2.ts (0 errors) ====
+    // ok
+    @dec export default class C2 {}
+    
+==== tests/cases/conformance/esDecorators/classDeclaration/file3.ts (1 errors) ====
+    // error
+    export @dec default class C3 {}
+           ~~~~
+!!! error TS1206: Decorators are not valid here.
+    
+==== tests/cases/conformance/esDecorators/classDeclaration/file4.ts (0 errors) ====
+    // ok
+    export @dec class C4 {}
+    
+==== tests/cases/conformance/esDecorators/classDeclaration/file5.ts (0 errors) ====
+    // ok
+    export default @dec class C5 {}
+    
