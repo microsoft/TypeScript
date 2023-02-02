@@ -43324,7 +43324,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithClass;
                     }
                 }
-                if (compilerOptions.verbatimModuleSyntax && node.parent.kind === SyntaxKind.SourceFile) {
+                if (compilerOptions.verbatimModuleSyntax &&
+                    node.parent.kind === SyntaxKind.SourceFile &&
+                    (moduleKind === ModuleKind.CommonJS || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)
+                ) {
                     const exportModifier = node.modifiers?.find(m => m.kind === SyntaxKind.ExportKeyword);
                     if (exportModifier) {
                         error(exportModifier, Diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
