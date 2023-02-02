@@ -2898,7 +2898,8 @@ function getCompletionData(
                     // First case is for `<div foo={true} [||] />` or `<div foo={true} [||] ></div>`,
                     // `parent` will be `{true}` and `previousToken` will be `}`
                     // Second case is for `<div foo={true} t[||] ></div>`
-                    if (previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier || previousToken.parent.kind === SyntaxKind.JsxAttribute)) {
+                    // Second case must not match for `<div foo={undefine[||]}></div>`
+                    if (previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier && previousToken.parent.kind === SyntaxKind.JsxAttribute)) {
                         isJsxIdentifierExpected = true;
                     }
                     break;
