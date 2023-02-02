@@ -65,7 +65,7 @@ Info 15   [00:00:36.000] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	f1.ts
 	  Matched by include pattern '*.ts' in 'tsconfig.json'
 	f2.ts

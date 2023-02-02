@@ -1,5 +1,5 @@
-import * as ts from "../_namespaces/ts";
 import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
 import * as Utils from "../_namespaces/Utils";
 
 describe("unittests:: JSDocParsing", () => {
@@ -177,6 +177,10 @@ describe("unittests:: JSDocParsing", () => {
   * @type {number}
   */`);
 
+            parsesCorrectly("satisfiesTag",
+                `/**
+  * @satisfies {number}
+  */`);
 
             parsesCorrectly("returnTag1",
                 `/**
@@ -294,6 +298,35 @@ describe("unittests:: JSDocParsing", () => {
             parsesCorrectly("paramWithoutType",
                 `/**
   * @param foo
+  */`);
+            parsesCorrectly("throwsTag1",
+                `/**
+  * @throws {Error}
+  */`);
+
+            parsesCorrectly("throwsTag2",
+                `/**
+  * @throws free-form description
+  */`);
+
+            parsesCorrectly("throwsTag3",
+                `/**
+  * @throws {Error} description
+  */`);
+
+            parsesCorrectly("exceptionTag1",
+                `/**
+  * @exception {Error}
+  */`);
+
+            parsesCorrectly("exceptionTag2",
+                `/**
+  * @exception free-form description
+  */`);
+
+            parsesCorrectly("exceptionTag3",
+                `/**
+  * @exception {Error} description
   */`);
             parsesCorrectly("typedefTagWithChildrenTags",
                 `/**

@@ -82,7 +82,7 @@ Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/pack
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
 ======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1', primary: false. ========
 ======== Resolving type reference directive 'pkg1', containing file '/user/username/projects/myproject/index.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
@@ -108,7 +108,7 @@ File '/user/username/projects/myproject/node_modules/pkg/package.json' exists ac
 ======== Resolving type reference directive 'pkg2', containing file '/user/username/projects/myproject/__inferred type names__.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/user/username/projects/myproject/node_modules/@types, /user/username/projects/node_modules/@types, /user/username/node_modules/@types, /user/node_modules/@types, /node_modules/@types'.
 File '/user/username/projects/myproject/node_modules/@types/pkg2/package.json' does not exist.
-File '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts', result '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts', primary: true. ========
 File '/user/username/projects/myproject/node_modules/@types/pkg2/package.json' does not exist according to earlier cached lookups.
@@ -202,14 +202,14 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
 //// [/user/username/projects/myproject/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" resolution-mode="import"/>
 /// <reference types="pkg1" resolution-mode="require"/>
 
@@ -266,7 +266,7 @@ File '/user/username/projects/myproject/node_modules/pkg/package.json' exists ac
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
 ======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1', primary: false. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
@@ -361,7 +361,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 /// <reference types="pkg" resolution-mode="import"/>
 exports.x = 10;

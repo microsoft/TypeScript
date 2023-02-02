@@ -8,6 +8,7 @@ import {
     CharacterCodes,
     ClassLikeDeclaration,
     CodeFixContextBase,
+    combine,
     Debug,
     Diagnostics,
     emptyArray,
@@ -31,6 +32,7 @@ import {
     getSynthesizedDeepClone,
     getTokenAtPosition,
     getTsConfigObjectLiteralExpression,
+    hasAbstractModifier,
     Identifier,
     idText,
     IntersectionType,
@@ -49,6 +51,7 @@ import {
     isPropertyAssignment,
     isSetAccessorDeclaration,
     isStringLiteral,
+    isTypeNode,
     isYieldExpression,
     LanguageServiceHost,
     length,
@@ -98,6 +101,7 @@ import {
     UserPreferences,
     visitEachChild,
     visitNode,
+    visitNodes,
 } from "../_namespaces/ts";
 import { ImportAdder } from "../_namespaces/ts.codefix";
 
@@ -197,7 +201,7 @@ export function addNewNodeForMemberSymbol(
     if (declaration && isAutoAccessorPropertyDeclaration(declaration)) {
         modifierFlags |= ModifierFlags.Accessor;
     }
-    const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
+    const modifiers = createModifiers();
     const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
     const optional = !!(symbol.flags & SymbolFlags.Optional);
     const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
@@ -304,7 +308,29 @@ export function addNewNodeForMemberSymbol(
         if (method) addClassElement(method);
     }
 
+
+    function createModifiers(): NodeArray<Modifier> | undefined {
+        let modifiers: Modifier[] | undefined;
+
+        if (modifierFlags) {
+            modifiers = combine(modifiers, factory.createModifiersFromModifierFlags(modifierFlags));
+        }
+
+        if (shouldAddOverrideKeyword()) {
+            modifiers = append(modifiers, factory.createToken(SyntaxKind.OverrideKeyword));
+        }
+
+        return modifiers && factory.createNodeArray(modifiers);
+    }
+
+    function shouldAddOverrideKeyword(): boolean {
+        return !!(context.program.getCompilerOptions().noImplicitOverride && declaration && hasAbstractModifier(declaration));
+    }
+
     function createName(node: PropertyName) {
+        if (isIdentifier(node) && node.escapedText === "constructor") {
+            return factory.createComputedPropertyName(factory.createStringLiteral(idText(node), quotePreference === QuotePreference.Single));
+        }
         return getSynthesizedDeepClone(node, /*includeTrivia*/ false);
     }
 
@@ -338,6 +364,7 @@ export function createSignatureDeclarationFromSignature(
     const program = context.program;
     const checker = program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
+    const isJs = isInJSFile(enclosingDeclaration);
     const flags =
         NodeBuilderFlags.NoTruncation
         | NodeBuilderFlags.SuppressAnyReturnType
@@ -348,9 +375,9 @@ export function createSignatureDeclarationFromSignature(
         return undefined;
     }
 
-    let typeParameters = signatureDeclaration.typeParameters;
+    let typeParameters = isJs ? undefined : signatureDeclaration.typeParameters;
     let parameters = signatureDeclaration.parameters;
-    let type = signatureDeclaration.type;
+    let type = isJs ? undefined : signatureDeclaration.type;
     if (importAdder) {
         if (typeParameters) {
             const newTypeParameters = sameMap(typeParameters, typeParameterDecl => {
@@ -383,18 +410,20 @@ export function createSignatureDeclarationFromSignature(
             }
         }
         const newParameters = sameMap(parameters, parameterDecl => {
-            const importableReference = tryGetAutoImportableReferenceFromTypeNode(parameterDecl.type, scriptTarget);
-            let type = parameterDecl.type;
-            if (importableReference) {
-                type = importableReference.typeNode;
-                importSymbols(importAdder, importableReference.symbols);
+            let type = isJs ? undefined : parameterDecl.type;
+            if (type) {
+                const importableReference = tryGetAutoImportableReferenceFromTypeNode(type, scriptTarget);
+                if (importableReference) {
+                    type = importableReference.typeNode;
+                    importSymbols(importAdder, importableReference.symbols);
+                }
             }
             return factory.updateParameterDeclaration(
                 parameterDecl,
                 parameterDecl.modifiers,
                 parameterDecl.dotDotDotToken,
                 parameterDecl.name,
-                parameterDecl.questionToken,
+                isJs ? undefined : parameterDecl.questionToken,
                 type,
                 parameterDecl.initializer
             );
@@ -519,8 +548,8 @@ function createTypeParametersForArguments(checker: TypeChecker, argumentTypePara
         }
     }
 
-    return map(
-        arrayFrom(usedNames.values()),
+    return arrayFrom(
+        usedNames.values(),
         usedName => factory.createTypeParameterDeclaration(/*modifiers*/ undefined, usedName, constraintsByName.get(usedName)?.constraint),
     );
 }
@@ -825,12 +854,11 @@ export function findJsonProperty(obj: ObjectLiteralExpression, name: string): Pr
  */
 export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget) {
     let symbols: Symbol[] | undefined;
-    const typeNode = visitNode(importTypeNode, visit);
+    const typeNode = visitNode(importTypeNode, visit, isTypeNode);
     if (symbols && typeNode) {
         return { typeNode, symbols };
     }
 
-    function visit(node: TypeNode): TypeNode;
     function visit(node: Node): Node {
         if (isLiteralImportTypeNode(node) && node.qualifier) {
             // Symbol for the left-most thing after the dot
@@ -841,7 +869,7 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
                 : node.qualifier;
 
             symbols = append(symbols, firstIdentifier.symbol);
-            const typeArguments = node.typeArguments?.map(visit);
+            const typeArguments = visitNodes(node.typeArguments, visit, isTypeNode);
             return factory.createTypeReferenceNode(qualifier, typeArguments);
         }
         return visitEachChild(node, visit, nullTransformationContext);

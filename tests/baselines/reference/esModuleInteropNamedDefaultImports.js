@@ -14,14 +14,14 @@ new Foo3();
 
 //// [mod.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
-exports["default"] = Foo;
+exports.default = Foo;
 var Bar = /** @class */ (function () {
     function Bar() {
     }
@@ -56,11 +56,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var mod_1 = __importDefault(require("./mod"));
 var mod_2 = __importDefault(require("./mod"));
 var mod_3 = __importStar(require("./mod"));
-new mod_1["default"]();
-new mod_2["default"]();
+new mod_1.default();
+new mod_2.default();
 new mod_3.Bar();
-new mod_3["default"]();
+new mod_3.default();

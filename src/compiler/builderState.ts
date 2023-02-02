@@ -2,7 +2,6 @@ import {
     arrayFrom,
     CancellationToken,
     computeSignatureWithDiagnostics,
-    createGetCanonicalFileName,
     CustomTransformers,
     Debug,
     EmitOutput,
@@ -109,7 +108,7 @@ export namespace BuilderState {
     export interface ReadonlyManyToManyPathMap {
         getKeys(v: Path): ReadonlySet<Path> | undefined;
         getValues(k: Path): ReadonlySet<Path> | undefined;
-        keys(): Iterator<Path>;
+        keys(): IterableIterator<Path>;
     }
 
     export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
@@ -303,7 +302,6 @@ export namespace BuilderState {
             createManyToManyPathMap() : undefined;
         const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
         const useOldState = canReuseOldState(referencedMap, oldState);
-        const getCanonicalFileName = createGetCanonicalFileName(newProgram.useCaseSensitiveFileNames());
 
         // Ensure source files have parent pointers set
         newProgram.getTypeChecker();
@@ -316,7 +314,7 @@ export namespace BuilderState {
                 useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath)?.signature : undefined :
                 oldUncommittedSignature || undefined;
             if (referencedMap) {
-                const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
+                const newReferences = getReferencedFiles(newProgram, sourceFile, newProgram.getCanonicalFileName);
                 if (newReferences) {
                     referencedMap.set(sourceFile.resolvedPath, newReferences);
                 }
@@ -523,9 +521,8 @@ export namespace BuilderState {
                 seenMap.add(path);
                 const references = state.referencedMap.getValues(path);
                 if (references) {
-                    const iterator = references.keys();
-                    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-                        queue.push(iterResult.value);
+                    for (const key of references.keys()) {
+                        queue.push(key);
                     }
                 }
             }

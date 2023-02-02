@@ -17,7 +17,6 @@ import {
     directorySeparator,
     DirectoryWatcherCallback,
     emptyArray,
-    emptyIterator,
     endsWith,
     Extension,
     extensionIsTS,
@@ -1146,8 +1145,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
     function isInvalidatedFailedLookup(locationPath: Path) {
         return failedLookupChecks?.has(locationPath) ||
-            firstDefinedIterator(startsWithPathChecks?.keys() || emptyIterator, fileOrDirectoryPath => startsWith(locationPath, fileOrDirectoryPath) ? true : undefined) ||
-            firstDefinedIterator(isInDirectoryChecks?.keys() || emptyIterator, fileOrDirectoryPath => isInDirectoryPath(fileOrDirectoryPath, locationPath) ? true : undefined);
+            firstDefinedIterator(startsWithPathChecks?.keys() || [], fileOrDirectoryPath => startsWith(locationPath, fileOrDirectoryPath) ? true : undefined) ||
+            firstDefinedIterator(isInDirectoryChecks?.keys() || [], fileOrDirectoryPath => isInDirectoryPath(fileOrDirectoryPath, locationPath) ? true : undefined);
     }
 
     function canInvalidatedFailedLookupResolutionWithAffectingLocation(resolution: ResolutionWithFailedLookupLocations) {

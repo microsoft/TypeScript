@@ -1,8 +1,8 @@
-import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
+import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import * as vpath from "../../_namespaces/vpath";
-import * as Harness from "../../_namespaces/Harness";
 import {
     libFile,
     TestServerHost,
@@ -440,10 +440,7 @@ function addLibAndMakeReadonly(fs: vfs.FileSystem, libContentToAppend?: string) 
 
 export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: ts.ReadonlyCollection<ts.Path>; }) {
     const mapFileNames = ts.mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
-    while (true) {
-        const result = mapFileNames.next();
-        if (result.done) break;
-        const mapFile = result.value;
+    for (const mapFile of mapFileNames) {
         const text = Harness.SourceMapRecorder.getSourceMapRecordWithSystem(sys, mapFile);
         sys.writeFile(`${mapFile}.baseline.txt`, text);
     }
@@ -496,13 +493,17 @@ type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo, "impli
     impliedFormat: string | undefined;
     original: T | undefined;
 };
+type ReadableProgramBuildInfoRoot =
+    [original: ts.ProgramBuildInfoFileId, readable: string] |
+    [orginal: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
 type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo,
-    "fileIdsList" | "fileInfos" |
+    "fileIdsList" | "fileInfos" | "root" |
     "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
     "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
 > & {
     fileNamesList: readonly (readonly string[])[] | undefined;
     fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
+    root: readonly ReadableProgramBuildInfoRoot[];
     referencedMap: ts.MapLike<string[]> | undefined;
     exportedModulesMap: ts.MapLike<string[]> | undefined;
     semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
@@ -511,8 +512,9 @@ type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildIn
     emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
 };
 type ReadableProgramBuildInfoBundlePendingEmit = [emitKind: ReadableBuilderFileEmit, original: ts.ProgramBuildInfoBundlePendingEmit];
-type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "pendingEmit"> & {
+type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "root" | "pendingEmit"> & {
     fileInfos: ts.MapLike<string | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>>;
+    root: readonly ReadableProgramBuildInfoRoot[];
     pendingEmit: ReadableProgramBuildInfoBundlePendingEmit | undefined;
 };
 
@@ -536,6 +538,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         program = {
             ...buildInfo.program,
             fileInfos,
+            root: buildInfo.program.root.map(toReadableProgramBuildInfoRoot),
             pendingEmit: pendingEmit === undefined ?
                 undefined :
                 [
@@ -553,6 +556,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             fileNames: buildInfo.program.fileNames,
             fileNamesList,
             fileInfos: buildInfo.program.fileInfos ? fileInfos : undefined!,
+            root: buildInfo.program.root.map(toReadableProgramBuildInfoRoot),
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
             exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
@@ -611,6 +615,13 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             ...info,
             impliedFormat: info.impliedFormat && ts.getNameOfCompilerOptionValue(info.impliedFormat, ts.moduleOptionDeclaration.type),
         };
+    }
+
+    function toReadableProgramBuildInfoRoot(original: ts.ProgramBuildInfoRoot): ReadableProgramBuildInfoRoot {
+        if (!ts.isArray(original)) return [original, toFileName(original)];
+        const readable: string[] = [];
+        for (let index = original[0]; index <= original[1]; index++) readable.push(toFileName(index));
+        return [original, readable];
     }
 
     function toMapOfReferencedSet(referenceMap: ts.ProgramBuildInfoReferencedMap | undefined): ts.MapLike<string[]> | undefined {
@@ -707,7 +718,7 @@ function verifyTscEditDiscrepancies({
         computeDtsSignatures: true,
     });
     let headerAdded = false;
-    for (const outputFile of ts.arrayFrom(sys.writtenFiles.keys())) {
+    for (const outputFile of sys.writtenFiles.keys()) {
         const cleanBuildText = sys.readFile(outputFile);
         const incrementalBuildText = newSys.readFile(outputFile);
         if (ts.isBuildInfoFile(outputFile)) {
@@ -807,8 +818,8 @@ function verifyTscEditDiscrepancies({
     ) {
         verifyPresenceAbsence(incremental, clean, `Incremental and clean do not match:: ${message}`);
         if (!incremental || !clean) return;
-        const incrementalMap = new Map(ts.getEntries(incremental));
-        const cleanMap = new Map(ts.getEntries(clean));
+        const incrementalMap = new Map(Object.entries(incremental));
+        const cleanMap = new Map(Object.entries(clean));
         cleanMap.forEach((cleanValue, key) => {
             const result = verifyValue(key, incrementalMap.get(key), cleanValue);
             if (result) addBaseline(...result);

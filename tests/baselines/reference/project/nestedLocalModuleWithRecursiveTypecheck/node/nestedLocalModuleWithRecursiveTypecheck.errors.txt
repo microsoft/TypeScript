@@ -1,5 +1,5 @@
 test1.ts(3,23): error TS1147: Import declarations in a namespace cannot reference a module.
-test1.ts(3,23): error TS2792: Cannot find module 'test2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+test1.ts(3,23): error TS2792: Cannot find module 'test2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
 ==== test1.ts (2 errors) ====
@@ -9,7 +9,7 @@ test1.ts(3,23): error TS2792: Cannot find module 'test2'. Did you mean to set th
                           ~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
                           ~~~~~~~
-!!! error TS2792: Cannot find module 'test2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'test2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
      //console.log(foo.$);
     

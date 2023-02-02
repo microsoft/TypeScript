@@ -33,7 +33,7 @@ resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'a' from 'file1.ts'. ========
-Explicitly specified module resolution kind: 'NodeJs'.
+Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File 'node_modules/a/package.json' does not exist.
 File 'node_modules/a.ts' does not exist.
@@ -76,7 +76,8 @@ a: {
   "resolvedModule": {
     "resolvedFileName": "node_modules/a/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "node_modules/a/package.json",
@@ -97,7 +98,7 @@ resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'a' from 'file1.ts'. ========
-Explicitly specified module resolution kind: 'NodeJs'.
+Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File 'node_modules/a/package.json' does not exist.
 File 'node_modules/a.ts' does not exist.
@@ -105,7 +106,7 @@ File 'node_modules/a.tsx' does not exist.
 File 'node_modules/a.d.ts' does not exist.
 File 'node_modules/a/index.ts' does not exist.
 File 'node_modules/a/index.tsx' does not exist.
-File 'node_modules/a/index.d.ts' exist - use it as a name resolution result.
+File 'node_modules/a/index.d.ts' exists - use it as a name resolution result.
 ======== Module name 'a' was successfully resolved to 'node_modules/a/index.d.ts'. ========
 
 MissingPaths:: []

@@ -25,7 +25,7 @@ var BaseEntity = /** @class */ (function () {
     __decorate([
         d(),
         __metadata("design:type", Object)
-    ], BaseEntity.prototype, "attributes");
+    ], BaseEntity.prototype, "attributes", void 0);
     return BaseEntity;
 }());
 var C = /** @class */ (function () {
@@ -34,6 +34,6 @@ var C = /** @class */ (function () {
     __decorate([
         d(),
         __metadata("design:type", Boolean)
-    ], C.prototype, "x");
+    ], C.prototype, "x", void 0);
     return C;
 }());

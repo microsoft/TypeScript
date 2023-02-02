@@ -62,7 +62,7 @@ describe("unittests:: tsserver:: Project Errors", () => {
         const projectFileName = "/a/b/test.csproj";
         const compilerOptionsRequest: ts.server.protocol.CompilerOptionsDiagnosticsRequest = {
             type: "request",
-            command: ts.server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             seq: 2,
             arguments: { projectFileName }
         };
@@ -117,7 +117,7 @@ describe("unittests:: tsserver:: Project Errors", () => {
         const project = configuredProjectAt(projectService, 0);
         const compilerOptionsRequest: ts.server.protocol.CompilerOptionsDiagnosticsRequest = {
             type: "request",
-            command: ts.server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             seq: 2,
             arguments: { projectFileName: project.getProjectName() }
         };
@@ -262,7 +262,7 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
             const fileContent = `/// <reference path="${refPathNotFound1}" />
 /// <reference path="${refPathNotFound2}" />`;
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
-                command: ts.server.CommandNames.Open,
+                command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
                     file: untitledFile,
                     fileContent,
@@ -305,7 +305,7 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
-            command: ts.server.CommandNames.Open,
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: app.path, }
         });
         verifyGetErrRequest({ session, host, files: [app] });
@@ -325,7 +325,7 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
         const host = createServerHost([file, libFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
-            command: ts.server.CommandNames.Geterr,
+            command: ts.server.protocol.CommandTypes.Geterr,
             arguments: {
                 delay: 0,
                 files: [file.path]
@@ -624,7 +624,7 @@ describe("unittests:: tsserver:: Project Errors dont include overwrite emit erro
 
         const diags = session.executeCommand({
             type: "request",
-            command: ts.server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             seq: 2,
             arguments: { projectFileName: projectName }
         } as ts.server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly ts.server.protocol.DiagnosticWithLinePosition[];
@@ -632,13 +632,13 @@ describe("unittests:: tsserver:: Project Errors dont include overwrite emit erro
 
         session.executeCommand({
             type: "request",
-            command: ts.server.CommandNames.CompilerOptionsForInferredProjects,
+            command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
             seq: 3,
             arguments: { options: { module: ts.ModuleKind.CommonJS } }
         } as ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest);
         const diagsAfterUpdate = session.executeCommand({
             type: "request",
-            command: ts.server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             seq: 4,
             arguments: { projectFileName: projectName }
         } as ts.server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly ts.server.protocol.DiagnosticWithLinePosition[];
@@ -665,7 +665,7 @@ describe("unittests:: tsserver:: Project Errors dont include overwrite emit erro
 
         const diags = session.executeCommand({
             type: "request",
-            command: ts.server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             seq: 2,
             arguments: { projectFileName }
         } as ts.server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly ts.server.protocol.DiagnosticWithLinePosition[];
@@ -673,7 +673,7 @@ describe("unittests:: tsserver:: Project Errors dont include overwrite emit erro
 
         session.executeCommand({
             type: "request",
-            command: ts.server.CommandNames.OpenExternalProject,
+            command: ts.server.protocol.CommandTypes.OpenExternalProject,
             seq: 3,
             arguments: {
                 projectFileName,
@@ -683,7 +683,7 @@ describe("unittests:: tsserver:: Project Errors dont include overwrite emit erro
         } as ts.server.protocol.OpenExternalProjectRequest);
         const diagsAfterUpdate = session.executeCommand({
             type: "request",
-            command: ts.server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             seq: 4,
             arguments: { projectFileName }
         } as ts.server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly ts.server.protocol.DiagnosticWithLinePosition[];
@@ -723,7 +723,7 @@ describe("unittests:: tsserver:: Project Errors reports Options Diagnostic locat
 
         const diags = session.executeCommand({
             type: "request",
-            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             seq: 2,
             arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
         } as ts.server.protocol.SemanticDiagnosticsSyncRequest).response as readonly ts.server.protocol.DiagnosticWithLinePosition[];
@@ -734,7 +734,7 @@ describe("unittests:: tsserver:: Project Errors reports Options Diagnostic locat
 
         const diagsAfterEdit = session.executeCommand({
             type: "request",
-            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             seq: 2,
             arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
         } as ts.server.protocol.SemanticDiagnosticsSyncRequest).response as readonly ts.server.protocol.DiagnosticWithLinePosition[];

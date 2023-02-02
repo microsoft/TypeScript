@@ -1,6 +1,4 @@
 import * as ts from "./_namespaces/ts";
-import * as NavigateTo from "./_namespaces/ts.NavigateTo";
-import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 import {
     __String,
     ApplicableRefactorInfo,
@@ -85,7 +83,6 @@ import {
     FormatCodeSettings,
     formatting,
     FunctionLikeDeclaration,
-    GeneratedIdentifierFlags,
     getAdjustedRenameLocation,
     getAllSuperTypeNodes,
     getAssignmentDeclarationKind,
@@ -94,7 +91,6 @@ import {
     getDefaultLibFileName,
     getDirectoryPath,
     getEmitDeclarations,
-    getEntries,
     getEscapedTextOfIdentifierOrLiteral,
     getFileEmitOutput,
     getImpliedNodeFormatForFile,
@@ -183,6 +179,7 @@ import {
     isTagName,
     isTextWhiteSpaceLike,
     isThisTypeParameter,
+    isTransientSymbol,
     JSDoc,
     JsDoc,
     JSDocContainer,
@@ -304,7 +301,6 @@ import {
     toPath,
     tracing,
     TransformFlags,
-    TransientSymbol,
     Type,
     TypeChecker,
     TypeFlags,
@@ -320,6 +316,8 @@ import {
     UserPreferences,
     VariableDeclaration,
 } from "./_namespaces/ts";
+import * as NavigateTo from "./_namespaces/ts.NavigateTo";
+import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
@@ -594,7 +592,7 @@ class TokenOrIdentifierObject implements Node {
     }
 
     public getChildren(): Node[] {
-        return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
     }
 
     public getFirstToken(): Node | undefined {
@@ -615,6 +613,9 @@ class SymbolObject implements Symbol {
     escapedName: __String;
     declarations!: Declaration[];
     valueDeclaration!: Declaration;
+    id = 0;
+    mergeId = 0;
+    constEnumOnlyModule: boolean | undefined;
 
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
@@ -656,8 +657,8 @@ class SymbolObject implements Symbol {
         if (!this.documentationComment) {
             this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
 
-            if (!this.declarations && (this as Symbol as TransientSymbol).target && ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
-                const labelDecl = ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+            if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
+                const labelDecl = this.links.target.links.tupleLabelDeclaration;
                 this.documentationComment = getDocumentationComment([labelDecl], checker);
             }
             else {
@@ -721,7 +722,7 @@ class SymbolObject implements Symbol {
 }
 
 class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
-    public kind: TKind;
+    public override kind: TKind;
 
     constructor(kind: TKind, pos: number, end: number) {
         super(pos, end);
@@ -730,16 +731,17 @@ class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject impl
 }
 
 class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
-    public kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
+    public override kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
     public escapedText!: __String;
-    public autoGenerateFlags!: GeneratedIdentifierFlags;
-    _primaryExpressionBrand: any;
-    _memberExpressionBrand: any;
-    _leftHandSideExpressionBrand: any;
-    _updateExpressionBrand: any;
-    _unaryExpressionBrand: any;
-    _expressionBrand: any;
-    _declarationBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
     /** @internal */typeArguments!: NodeArray<TypeNode>;
     constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(pos, end);
@@ -751,15 +753,14 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
 }
 IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
-    public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
+    public override kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
-    // public symbol!: Symbol;
-    _primaryExpressionBrand: any;
-    _memberExpressionBrand: any;
-    _leftHandSideExpressionBrand: any;
-    _updateExpressionBrand: any;
-    _unaryExpressionBrand: any;
-    _expressionBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
     constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
         super(pos, end);
     }
@@ -991,8 +992,9 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
 }
 
 class SourceFileObject extends NodeObject implements SourceFile {
-    public kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
-    public _declarationBrand: any;
+    public override kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
     public fileName!: string;
     public path!: Path;
     public resolvedPath!: Path;
@@ -1512,7 +1514,8 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "prepareCallHierarchy",
     "provideCallHierarchyIncomingCalls",
     "provideCallHierarchyOutgoingCalls",
-    "provideInlayHints"
+    "provideInlayHints",
+    "getSupportedCodeFixes",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -1640,7 +1643,7 @@ export function createLanguageService(
             getCancellationToken: () => cancellationToken,
             getCanonicalFileName,
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-            getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
+            getNewLine: () => getNewLineCharacter(newSettings),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
             writeFile: noop,
             getCurrentDirectory: () => currentDirectory,
@@ -2320,7 +2323,7 @@ export function createLanguageService(
         return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
     }
 
-    const braceMatching = new Map(getEntries({
+    const braceMatching = new Map(Object.entries({
         [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
         [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
         [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
@@ -2433,8 +2436,9 @@ export function createLanguageService(
             : Promise.reject("Host does not implement `installPackage`");
     }
 
-    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
-        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
+    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined {
+        const formatSettings = formatOptions ? formatting.getFormatContext(formatOptions, host).options : undefined;
+        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, formatSettings), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
     }
 
     function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
@@ -3046,6 +3050,7 @@ export function createLanguageService(
         commentSelection,
         uncommentSelection,
         provideInlayHints,
+        getSupportedCodeFixes,
     };
 
     switch (languageServiceMode) {

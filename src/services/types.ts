@@ -604,7 +604,7 @@ export interface LanguageService {
     getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
     getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined;
+    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined;
 
     isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
     /**
@@ -656,6 +656,8 @@ export interface LanguageService {
     toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
     commentSelection(fileName: string, textRange: TextRange): TextChange[];
     uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
+
+    getSupportedCodeFixes(fileName?: string): readonly string[];
 
     dispose(): void;
 }

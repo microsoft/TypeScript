@@ -63,8 +63,8 @@ System.register(["file1", "file2", "file3", "file4", "file5", "file6", "file7"],
             ns.f();
             file2_1.a();
             file2_1.b();
-            file3_1["default"]();
-            file5_1["default"]();
+            file3_1.default();
+            file5_1.default();
             ns2.f();
             ns3.f();
             y = true;

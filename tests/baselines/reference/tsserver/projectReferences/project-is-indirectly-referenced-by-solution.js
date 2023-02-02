@@ -98,7 +98,7 @@ Info 31   [00:01:36.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -512,7 +512,7 @@ Info 72   [00:03:04.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -630,7 +630,7 @@ Info 109  [00:03:47.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -907,7 +907,7 @@ Info 177  [00:06:03.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -937,7 +937,7 @@ Info 189  [00:06:15.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1238,7 +1238,7 @@ Info 238  [00:07:38.000] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../target/src/helpers/functions.d.ts
 	  Imported via 'helpers/functions' from file '../target/src/main.d.ts'
 	../target/src/main.d.ts
@@ -1272,7 +1272,7 @@ Info 252  [00:07:52.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -1292,7 +1292,7 @@ Info 258  [00:07:58.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1314,7 +1314,7 @@ Info 265  [00:08:05.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1492,7 +1492,7 @@ Info 314  [00:09:00.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -1528,7 +1528,7 @@ Info 334  [00:09:20.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1556,7 +1556,7 @@ Info 345  [00:09:31.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts

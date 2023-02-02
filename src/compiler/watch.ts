@@ -172,7 +172,12 @@ function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: st
 export function getLocaleTimeString(system: System) {
     return !system.now ?
         new Date().toLocaleTimeString() :
-        system.now().toLocaleTimeString("en-US", { timeZone: "UTC" });
+        // On some systems / builds of Node, there's a non-breaking space between the time and AM/PM.
+        // This branch is solely for testing, so just switch it to a normal space for baseline stability.
+        // See:
+        //     - https://github.com/nodejs/node/issues/45171
+        //     - https://github.com/nodejs/node/issues/45753
+        system.now().toLocaleTimeString("en-US", { timeZone: "UTC" }).replace("\u202f", " ");
 }
 
 /**
@@ -229,7 +234,11 @@ export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]): (
                     if (errorDiagnostic.file === undefined) return;
                     return `${errorDiagnostic.file.fileName}`;
                 });
-    return filesInError.map((fileName: string) => {
+    return filesInError.map((fileName) => {
+        if (fileName === undefined) {
+            return undefined;
+        }
+
         const diagnosticForFileName = find(diagnostics, diagnostic =>
             diagnostic.file !== undefined && diagnostic.file.fileName === fileName
         );
@@ -344,8 +353,7 @@ export function listFiles<T extends BuilderProgram>(program: Program | T, write:
 /** @internal */
 export function explainFiles(program: Program, write: (s: string) => void) {
     const reasons = program.getFileIncludeReasons();
-    const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
-    const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), getCanonicalFileName);
+    const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), program.getCanonicalFileName);
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
         reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
@@ -411,10 +419,9 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
     const configFile = program.getCompilerOptions().configFile;
     if (!configFile?.configFileSpecs?.validatedFilesSpec) return undefined;
 
-    const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
-    const filePath = getCanonicalFileName(fileName);
+    const filePath = program.getCanonicalFileName(fileName);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
-    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
 }
 
 /** @internal */
@@ -738,7 +745,6 @@ export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { tra
 /** @internal */
 export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
-    const hostGetNewLine = memoize(() => host.getNewLine());
     const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(
             (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
@@ -755,7 +761,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
         useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
         getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
-        getNewLine: () => getNewLineCharacter(getCompilerOptions(), hostGetNewLine),
+        getNewLine: () => getNewLineCharacter(getCompilerOptions()),
         fileExists: f => host.fileExists(f),
         readFile: f => host.readFile(f),
         trace: maybeBind(host, host.trace),
@@ -860,7 +866,7 @@ function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagn
     copyProperties(result, createWatchHost(system, reportWatchStatus));
     result.afterProgramCreate = builderProgram => {
         const compilerOptions = builderProgram.getCompilerOptions();
-        const newLine = getNewLineCharacter(compilerOptions, () => system.newLine);
+        const newLine = getNewLineCharacter(compilerOptions);
 
         emitFilesAndReportErrors(
             builderProgram,

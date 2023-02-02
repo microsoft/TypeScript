@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
 import {
     createServerHost,
     File,
@@ -244,7 +244,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         verifyDynamic(projectService, "/^scriptdocument1 file1.ts");
 
         externalFiles[0].content = "let x =1;";
-        projectService.applyChangesInOpenFiles(ts.arrayIterator(externalFiles));
+        projectService.applyChangesInOpenFiles(externalFiles);
     });
 
     it("when file name starts with ^", () => {
@@ -463,7 +463,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         const host = createServerHost([file1, file2, file3]);
         const projectService = createProjectService(host);
 
-        projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ts.ModuleResolutionKind.NodeJs }, rootFiles: toExternalFiles([file1.path, file2.path]) });
+        projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ts.ModuleResolutionKind.Node10 }, rootFiles: toExternalFiles([file1.path, file2.path]) });
         checkNumberOfProjects(projectService, { externalProjects: 1 });
         checkProjectRootFiles(projectService.externalProjects[0], [file1.path, file2.path]);
         checkProjectActualFiles(projectService.externalProjects[0], [file1.path, file2.path]);

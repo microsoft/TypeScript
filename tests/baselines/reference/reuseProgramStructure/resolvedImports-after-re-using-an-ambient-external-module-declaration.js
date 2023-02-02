@@ -8,7 +8,8 @@ a: {
   "resolvedModule": {
     "resolvedFileName": "/a.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: undefined
@@ -29,7 +30,8 @@ a: {
   "resolvedModule": {
     "resolvedFileName": "/a.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: undefined

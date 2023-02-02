@@ -71,7 +71,7 @@ Info 17   [00:00:41.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	Logger.ts
 	  Matched by default include pattern '**/*'
 	  Imported via "./Logger" from file 'another.ts'

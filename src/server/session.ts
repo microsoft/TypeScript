@@ -1,7 +1,7 @@
 import {
     arrayFrom,
-    arrayIterator,
     arrayReverseIterator,
+    BufferEncoding,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
     CallHierarchyOutgoingCall,
@@ -43,6 +43,7 @@ import {
     find,
     FindAllReferences,
     first,
+    firstIterator,
     firstOrUndefined,
     flatMap,
     flatMapToMutable,
@@ -53,7 +54,6 @@ import {
     getDeclarationFromName,
     getDeclarationOfKind,
     getEmitDeclarations,
-    getEntries,
     getEntrypointsFromPackageJsonInfo,
     getLineAndCharacterOfPosition,
     getMappedContextSpan,
@@ -171,7 +171,6 @@ import {
     ProjectServiceEventHandler,
     ProjectServiceOptions,
     ProjectsUpdatedInBackgroundEvent,
-    protocol,
     ScriptInfo,
     ScriptInfoOrConfig,
     ServerHost,
@@ -179,6 +178,7 @@ import {
     toNormalizedPath,
     updateProjectIfDirty,
 } from "./_namespaces/ts.server";
+import * as protocol from "./protocol";
 
 interface StackTraceError extends Error {
     stack?: string;
@@ -195,7 +195,7 @@ export const nullCancellationToken: ServerCancellationToken = {
     resetRequest: () => void 0
 };
 
-function hrTimeToMilliseconds(time: number[]): number {
+function hrTimeToMilliseconds(time: [number, number]): number {
     const seconds = time[0];
     const nanoseconds = time[1];
     return ((1e9 * seconds) + nanoseconds) / 1000000.0;
@@ -305,10 +305,12 @@ function allEditsBeforePos(edits: readonly TextChange[], pos: number): boolean {
 // The var assignment ensures that even though CommandTypes are a const enum
 // we want to ensure the value is maintained in the out since the file is
 // built using --preseveConstEnum.
+/** @deprecated use ts.server.protocol.CommandTypes */
 export type CommandNames = protocol.CommandTypes;
+/** @deprecated use ts.server.protocol.CommandTypes */
 export const CommandNames = (protocol as any).CommandTypes;
 
-export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
+export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string {
     const verboseLogging = logger.hasLevel(LogLevel.verbose);
 
     const json = JSON.stringify(msg);
@@ -754,9 +756,7 @@ function getPerProjectReferences<TResult>(
     // In the common case where there's only one project, return a simpler result to make
     // it easier for the caller to skip post-processing.
     if (resultsMap.size === 1) {
-        const it = resultsMap.values().next();
-        Debug.assert(!it.done);
-        return it.value;
+        return firstIterator(resultsMap.values());
     }
 
     return resultsMap;
@@ -849,67 +849,67 @@ function getMappedContextSpanForProject(documentSpan: DocumentSpan, project: Pro
     return getMappedContextSpan(documentSpan, project.getSourceMapper(), p => project.projectService.fileExists(p as NormalizedPath));
 }
 
-const invalidPartialSemanticModeCommands: readonly CommandNames[] = [
-    CommandNames.OpenExternalProject,
-    CommandNames.OpenExternalProjects,
-    CommandNames.CloseExternalProject,
-    CommandNames.SynchronizeProjectList,
-    CommandNames.EmitOutput,
-    CommandNames.CompileOnSaveAffectedFileList,
-    CommandNames.CompileOnSaveEmitFile,
-    CommandNames.CompilerOptionsDiagnosticsFull,
-    CommandNames.EncodedSemanticClassificationsFull,
-    CommandNames.SemanticDiagnosticsSync,
-    CommandNames.SuggestionDiagnosticsSync,
-    CommandNames.GeterrForProject,
-    CommandNames.Reload,
-    CommandNames.ReloadProjects,
-    CommandNames.GetCodeFixes,
-    CommandNames.GetCodeFixesFull,
-    CommandNames.GetCombinedCodeFix,
-    CommandNames.GetCombinedCodeFixFull,
-    CommandNames.ApplyCodeActionCommand,
-    CommandNames.GetSupportedCodeFixes,
-    CommandNames.GetApplicableRefactors,
-    CommandNames.GetEditsForRefactor,
-    CommandNames.GetEditsForRefactorFull,
-    CommandNames.OrganizeImports,
-    CommandNames.OrganizeImportsFull,
-    CommandNames.GetEditsForFileRename,
-    CommandNames.GetEditsForFileRenameFull,
-    CommandNames.PrepareCallHierarchy,
-    CommandNames.ProvideCallHierarchyIncomingCalls,
-    CommandNames.ProvideCallHierarchyOutgoingCalls,
+const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
+    protocol.CommandTypes.OpenExternalProject,
+    protocol.CommandTypes.OpenExternalProjects,
+    protocol.CommandTypes.CloseExternalProject,
+    protocol.CommandTypes.SynchronizeProjectList,
+    protocol.CommandTypes.EmitOutput,
+    protocol.CommandTypes.CompileOnSaveAffectedFileList,
+    protocol.CommandTypes.CompileOnSaveEmitFile,
+    protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
+    protocol.CommandTypes.EncodedSemanticClassificationsFull,
+    protocol.CommandTypes.SemanticDiagnosticsSync,
+    protocol.CommandTypes.SuggestionDiagnosticsSync,
+    protocol.CommandTypes.GeterrForProject,
+    protocol.CommandTypes.Reload,
+    protocol.CommandTypes.ReloadProjects,
+    protocol.CommandTypes.GetCodeFixes,
+    protocol.CommandTypes.GetCodeFixesFull,
+    protocol.CommandTypes.GetCombinedCodeFix,
+    protocol.CommandTypes.GetCombinedCodeFixFull,
+    protocol.CommandTypes.ApplyCodeActionCommand,
+    protocol.CommandTypes.GetSupportedCodeFixes,
+    protocol.CommandTypes.GetApplicableRefactors,
+    protocol.CommandTypes.GetEditsForRefactor,
+    protocol.CommandTypes.GetEditsForRefactorFull,
+    protocol.CommandTypes.OrganizeImports,
+    protocol.CommandTypes.OrganizeImportsFull,
+    protocol.CommandTypes.GetEditsForFileRename,
+    protocol.CommandTypes.GetEditsForFileRenameFull,
+    protocol.CommandTypes.PrepareCallHierarchy,
+    protocol.CommandTypes.ProvideCallHierarchyIncomingCalls,
+    protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls,
 ];
 
-const invalidSyntacticModeCommands: readonly CommandNames[] = [
+const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
     ...invalidPartialSemanticModeCommands,
-    CommandNames.Definition,
-    CommandNames.DefinitionFull,
-    CommandNames.DefinitionAndBoundSpan,
-    CommandNames.DefinitionAndBoundSpanFull,
-    CommandNames.TypeDefinition,
-    CommandNames.Implementation,
-    CommandNames.ImplementationFull,
-    CommandNames.References,
-    CommandNames.ReferencesFull,
-    CommandNames.Rename,
-    CommandNames.RenameLocationsFull,
-    CommandNames.RenameInfoFull,
-    CommandNames.Quickinfo,
-    CommandNames.QuickinfoFull,
-    CommandNames.CompletionInfo,
-    CommandNames.Completions,
-    CommandNames.CompletionsFull,
-    CommandNames.CompletionDetails,
-    CommandNames.CompletionDetailsFull,
-    CommandNames.SignatureHelp,
-    CommandNames.SignatureHelpFull,
-    CommandNames.Navto,
-    CommandNames.NavtoFull,
-    CommandNames.Occurrences,
-    CommandNames.DocumentHighlights,
-    CommandNames.DocumentHighlightsFull,
+    protocol.CommandTypes.Definition,
+    protocol.CommandTypes.DefinitionFull,
+    protocol.CommandTypes.DefinitionAndBoundSpan,
+    protocol.CommandTypes.DefinitionAndBoundSpanFull,
+    protocol.CommandTypes.TypeDefinition,
+    protocol.CommandTypes.Implementation,
+    protocol.CommandTypes.ImplementationFull,
+    protocol.CommandTypes.References,
+    protocol.CommandTypes.ReferencesFull,
+    protocol.CommandTypes.Rename,
+    protocol.CommandTypes.RenameLocationsFull,
+    protocol.CommandTypes.RenameInfoFull,
+    protocol.CommandTypes.Quickinfo,
+    protocol.CommandTypes.QuickinfoFull,
+    protocol.CommandTypes.CompletionInfo,
+    protocol.CommandTypes.Completions,
+    protocol.CommandTypes.CompletionsFull,
+    protocol.CommandTypes.CompletionDetails,
+    protocol.CommandTypes.CompletionDetailsFull,
+    protocol.CommandTypes.SignatureHelp,
+    protocol.CommandTypes.SignatureHelpFull,
+    protocol.CommandTypes.Navto,
+    protocol.CommandTypes.NavtoFull,
+    protocol.CommandTypes.Occurrences,
+    protocol.CommandTypes.DocumentHighlights,
+    protocol.CommandTypes.DocumentHighlightsFull,
 ];
 
 export interface SessionOptions {
@@ -918,8 +918,8 @@ export interface SessionOptions {
     useSingleInferredProject: boolean;
     useInferredProjectPerProjectRoot: boolean;
     typingsInstaller: ITypingsInstaller;
-    byteLength: (buf: string, encoding?: string) => number;
-    hrtime: (start?: number[]) => number[];
+    byteLength: (buf: string, encoding?: BufferEncoding) => number;
+    hrtime: (start?: [number, number]) => [number, number];
     logger: Logger;
     /**
      * If falsy, all events are suppressed.
@@ -928,8 +928,6 @@ export interface SessionOptions {
     eventHandler?: ProjectServiceEventHandler;
     /** Has no effect if eventHandler is also specified. */
     suppressDiagnosticEvents?: boolean;
-    /** @deprecated use serverMode instead */
-    syntaxOnly?: boolean;
     serverMode?: LanguageServiceMode;
     throttleWaitMilliseconds?: number;
     noGetErrOnBackgroundUpdate?: boolean;
@@ -953,8 +951,8 @@ export class Session<TMessage = string> implements EventSender {
     protected host: ServerHost;
     private readonly cancellationToken: ServerCancellationToken;
     protected readonly typingsInstaller: ITypingsInstaller;
-    protected byteLength: (buf: string, encoding?: string) => number;
-    private hrtime: (start?: number[]) => number[];
+    protected byteLength: (buf: string, encoding?: BufferEncoding) => number;
+    private hrtime: (start?: [number, number]) => [number, number];
     protected logger: Logger;
 
     protected canUseEvents: boolean;
@@ -1001,7 +999,6 @@ export class Session<TMessage = string> implements EventSender {
             pluginProbeLocations: opts.pluginProbeLocations,
             allowLocalPluginLoads: opts.allowLocalPluginLoads,
             typesMapLocation: opts.typesMapLocation,
-            syntaxOnly: opts.syntaxOnly,
             serverMode: opts.serverMode,
             session: this
         };
@@ -1183,13 +1180,8 @@ export class Session<TMessage = string> implements EventSender {
         this.send(toEvent(eventName, body));
     }
 
-    // For backwards-compatibility only.
-    /** @deprecated */
-    public output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void {
-        this.doOutput(info, cmdName, reqSeq!, /*success*/ !errorMsg, errorMsg); // TODO: GH#18217
-    }
-
-    private doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
+    /** @internal */
+    doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
         const res: protocol.Response = {
             seq: 0,
             type: "response",
@@ -1566,7 +1558,7 @@ export class Session<TMessage = string> implements EventSender {
                 // resolved from the package root under --moduleResolution node
                 const entrypoints = getEntrypointsFromPackageJsonInfo(
                     packageJson,
-                    { moduleResolution: ModuleResolutionKind.NodeJs },
+                    { moduleResolution: ModuleResolutionKind.Node10 },
                     project,
                     project.getModuleResolutionCache());
                 // This substring is correct only because we checked for a single `/node_modules/` at the top.
@@ -2091,7 +2083,7 @@ export class Session<TMessage = string> implements EventSender {
     private getDocCommentTemplate(args: protocol.FileLocationRequestArgs) {
         const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
         const position = this.getPositionInFile(args, file);
-        return languageService.getDocCommentTemplateAtPosition(file, position, this.getPreferences(file));
+        return languageService.getDocCommentTemplateAtPosition(file, position, this.getPreferences(file), this.getFormatOptions(file));
     }
 
     private getSpanOfEnclosingComment(args: protocol.SpanOfEnclosingCommentRequestArgs) {
@@ -2458,7 +2450,7 @@ export class Session<TMessage = string> implements EventSender {
             this.changeSeq++;
             // make sure no changes happen before this one is finished
             if (info.reloadFromFile(tempFileName)) {
-                this.doOutput(/*info*/ undefined, CommandNames.Reload, reqSeq, /*success*/ true);
+                this.doOutput(/*info*/ undefined, protocol.CommandTypes.Reload, reqSeq, /*success*/ true);
             }
         }
     }
@@ -2640,8 +2632,15 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private getSupportedCodeFixes(): string[] {
-        return getSupportedCodeFixes();
+    private getSupportedCodeFixes(args: Partial<protocol.FileRequestArgs> | undefined): readonly string[] {
+        if (!args) return getSupportedCodeFixes(); // Compatibility
+        if (args.file) {
+            const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
+            return project.getLanguageService().getSupportedCodeFixes(file);
+        }
+        const project = this.getProject(args.projectFileName);
+        if (!project) Errors.ThrowNoProject();
+        return project.getLanguageService().getSupportedCodeFixes();
     }
 
     private isLocation(locationOrSpan: protocol.FileLocationOrRangeRequestArgs): locationOrSpan is protocol.FileLocationRequestArgs {
@@ -3095,27 +3094,27 @@ export class Session<TMessage = string> implements EventSender {
         return { response, responseRequired: true };
     }
 
-    private handlers = new Map(getEntries<(request: protocol.Request) => HandlerResponse>({
-        [CommandNames.Status]: () => {
+    private handlers = new Map(Object.entries<(request: any) => HandlerResponse>({ // TODO(jakebailey): correctly type the handlers
+        [protocol.CommandTypes.Status]: () => {
             const response: protocol.StatusResponseBody = { version };
             return this.requiredResponse(response);
         },
-        [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
+        [protocol.CommandTypes.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
             this.projectService.openExternalProject(request.arguments);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
-        [CommandNames.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
+        [protocol.CommandTypes.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
             this.projectService.openExternalProjects(request.arguments.projects);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
-        [CommandNames.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
+        [protocol.CommandTypes.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
             this.projectService.closeExternalProject(request.arguments.projectFileName);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
-        [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
+        [protocol.CommandTypes.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
             const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects, request.arguments.includeProjectReferenceRedirectInfo);
             if (!result.some(p => p.projectErrors && p.projectErrors.length !== 0)) {
                 return this.requiredResponse(result);
@@ -3133,16 +3132,16 @@ export class Session<TMessage = string> implements EventSender {
             });
             return this.requiredResponse(converted);
         },
-        [CommandNames.UpdateOpen]: (request: protocol.UpdateOpenRequest) => {
+        [protocol.CommandTypes.UpdateOpen]: (request: protocol.UpdateOpenRequest) => {
             this.changeSeq++;
             this.projectService.applyChangesInOpenFiles(
-                request.arguments.openFiles && mapIterator(arrayIterator(request.arguments.openFiles), file => ({
+                request.arguments.openFiles && mapIterator(request.arguments.openFiles, file => ({
                     fileName: file.file,
                     content: file.fileContent,
                     scriptKind: file.scriptKindName,
                     projectRootPath: file.projectRootPath
                 })),
-                request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
+                request.arguments.changedFiles && mapIterator(request.arguments.changedFiles, file => ({
                     fileName: file.fileName,
                     changes: mapDefinedIterator(arrayReverseIterator(file.textChanges), change => {
                         const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file.fileName));
@@ -3155,11 +3154,11 @@ export class Session<TMessage = string> implements EventSender {
             );
             return this.requiredResponse(/*response*/ true);
         },
-        [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
+        [protocol.CommandTypes.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
             this.changeSeq++;
             this.projectService.applyChangesInOpenFiles(
-                request.arguments.openFiles && arrayIterator(request.arguments.openFiles),
-                request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
+                request.arguments.openFiles,
+                request.arguments.changedFiles && mapIterator(request.arguments.changedFiles, file => ({
                     fileName: file.fileName,
                     // apply changes in reverse order
                     changes: arrayReverseIterator(file.changes)
@@ -3169,53 +3168,53 @@ export class Session<TMessage = string> implements EventSender {
             // TODO: report errors
             return this.requiredResponse(/*response*/ true);
         },
-        [CommandNames.Exit]: () => {
+        [protocol.CommandTypes.Exit]: () => {
             this.exit();
             return this.notRequired();
         },
-        [CommandNames.Definition]: (request: protocol.DefinitionRequest) => {
+        [protocol.CommandTypes.Definition]: (request: protocol.DefinitionRequest) => {
             return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.DefinitionFull]: (request: protocol.DefinitionRequest) => {
+        [protocol.CommandTypes.DefinitionFull]: (request: protocol.DefinitionRequest) => {
             return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.DefinitionAndBoundSpan]: (request: protocol.DefinitionAndBoundSpanRequest) => {
+        [protocol.CommandTypes.DefinitionAndBoundSpan]: (request: protocol.DefinitionAndBoundSpanRequest) => {
             return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionAndBoundSpanRequest) => {
+        [protocol.CommandTypes.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionAndBoundSpanRequest) => {
             return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.FindSourceDefinition]: (request: protocol.FindSourceDefinitionRequest) => {
+        [protocol.CommandTypes.FindSourceDefinition]: (request: protocol.FindSourceDefinitionRequest) => {
             return this.requiredResponse(this.findSourceDefinition(request.arguments));
         },
-        [CommandNames.EmitOutput]: (request: protocol.EmitOutputRequest) => {
+        [protocol.CommandTypes.EmitOutput]: (request: protocol.EmitOutputRequest) => {
             return this.requiredResponse(this.getEmitOutput(request.arguments));
         },
-        [CommandNames.TypeDefinition]: (request: protocol.FileLocationRequest) => {
+        [protocol.CommandTypes.TypeDefinition]: (request: protocol.FileLocationRequest) => {
             return this.requiredResponse(this.getTypeDefinition(request.arguments));
         },
-        [CommandNames.Implementation]: (request: protocol.Request) => {
+        [protocol.CommandTypes.Implementation]: (request: protocol.Request) => {
             return this.requiredResponse(this.getImplementation(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.ImplementationFull]: (request: protocol.Request) => {
+        [protocol.CommandTypes.ImplementationFull]: (request: protocol.Request) => {
             return this.requiredResponse(this.getImplementation(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.References]: (request: protocol.FileLocationRequest) => {
+        [protocol.CommandTypes.References]: (request: protocol.FileLocationRequest) => {
             return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.ReferencesFull]: (request: protocol.FileLocationRequest) => {
+        [protocol.CommandTypes.ReferencesFull]: (request: protocol.FileLocationRequest) => {
             return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.Rename]: (request: protocol.RenameRequest) => {
+        [protocol.CommandTypes.Rename]: (request: protocol.RenameRequest) => {
             return this.requiredResponse(this.getRenameLocations(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.RenameLocationsFull]: (request: protocol.RenameFullRequest) => {
+        [protocol.CommandTypes.RenameLocationsFull]: (request: protocol.RenameFullRequest) => {
             return this.requiredResponse(this.getRenameLocations(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.RenameInfoFull]: (request: protocol.FileLocationRequest) => {
+        [protocol.CommandTypes.RenameInfoFull]: (request: protocol.FileLocationRequest) => {
             return this.requiredResponse(this.getRenameInfo(request.arguments));
         },
-        [CommandNames.Open]: (request: protocol.OpenRequest) => {
+        [protocol.CommandTypes.Open]: (request: protocol.OpenRequest) => {
             this.openClientFile(
                 toNormalizedPath(request.arguments.file),
                 request.arguments.fileContent,
@@ -3223,271 +3222,271 @@ export class Session<TMessage = string> implements EventSender {
                 request.arguments.projectRootPath ? toNormalizedPath(request.arguments.projectRootPath) : undefined);
             return this.notRequired();
         },
-        [CommandNames.Quickinfo]: (request: protocol.QuickInfoRequest) => {
+        [protocol.CommandTypes.Quickinfo]: (request: protocol.QuickInfoRequest) => {
             return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
+        [protocol.CommandTypes.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
             return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.GetOutliningSpans]: (request: protocol.FileRequest) => {
+        [protocol.CommandTypes.GetOutliningSpans]: (request: protocol.FileRequest) => {
             return this.requiredResponse(this.getOutliningSpans(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.GetOutliningSpansFull]: (request: protocol.FileRequest) => {
+        [protocol.CommandTypes.GetOutliningSpansFull]: (request: protocol.FileRequest) => {
             return this.requiredResponse(this.getOutliningSpans(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.TodoComments]: (request: protocol.TodoCommentRequest) => {
+        [protocol.CommandTypes.TodoComments]: (request: protocol.TodoCommentRequest) => {
             return this.requiredResponse(this.getTodoComments(request.arguments));
         },
-        [CommandNames.Indentation]: (request: protocol.IndentationRequest) => {
+        [protocol.CommandTypes.Indentation]: (request: protocol.IndentationRequest) => {
             return this.requiredResponse(this.getIndentation(request.arguments));
         },
-        [CommandNames.NameOrDottedNameSpan]: (request: protocol.FileLocationRequest) => {
+        [protocol.CommandTypes.NameOrDottedNameSpan]: (request: protocol.FileLocationRequest) => {
             return this.requiredResponse(this.getNameOrDottedNameSpan(request.arguments));
         },
-        [CommandNames.BreakpointStatement]: (request: protocol.FileLocationRequest) => {
+        [protocol.CommandTypes.BreakpointStatement]: (request: protocol.FileLocationRequest) => {
             return this.requiredResponse(this.getBreakpointStatement(request.arguments));
         },
-        [CommandNames.BraceCompletion]: (request: protocol.BraceCompletionRequest) => {
+        [protocol.CommandTypes.BraceCompletion]: (request: protocol.BraceCompletionRequest) => {
             return this.requiredResponse(this.isValidBraceCompletion(request.arguments));
         },
-        [CommandNames.DocCommentTemplate]: (request: protocol.DocCommentTemplateRequest) => {
+        [protocol.CommandTypes.DocCommentTemplate]: (request: protocol.DocCommentTemplateRequest) => {
             return this.requiredResponse(this.getDocCommentTemplate(request.arguments));
         },
-        [CommandNames.GetSpanOfEnclosingComment]: (request: protocol.SpanOfEnclosingCommentRequest) => {
+        [protocol.CommandTypes.GetSpanOfEnclosingComment]: (request: protocol.SpanOfEnclosingCommentRequest) => {
             return this.requiredResponse(this.getSpanOfEnclosingComment(request.arguments));
         },
-        [CommandNames.FileReferences]: (request: protocol.FileReferencesRequest) => {
+        [protocol.CommandTypes.FileReferences]: (request: protocol.FileReferencesRequest) => {
             return this.requiredResponse(this.getFileReferences(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.FileReferencesFull]: (request: protocol.FileReferencesRequest) => {
+        [protocol.CommandTypes.FileReferencesFull]: (request: protocol.FileReferencesRequest) => {
             return this.requiredResponse(this.getFileReferences(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.Format]: (request: protocol.FormatRequest) => {
+        [protocol.CommandTypes.Format]: (request: protocol.FormatRequest) => {
             return this.requiredResponse(this.getFormattingEditsForRange(request.arguments));
         },
-        [CommandNames.Formatonkey]: (request: protocol.FormatOnKeyRequest) => {
+        [protocol.CommandTypes.Formatonkey]: (request: protocol.FormatOnKeyRequest) => {
             return this.requiredResponse(this.getFormattingEditsAfterKeystroke(request.arguments));
         },
-        [CommandNames.FormatFull]: (request: protocol.FormatRequest) => {
+        [protocol.CommandTypes.FormatFull]: (request: protocol.FormatRequest) => {
             return this.requiredResponse(this.getFormattingEditsForDocumentFull(request.arguments));
         },
-        [CommandNames.FormatonkeyFull]: (request: protocol.FormatOnKeyRequest) => {
+        [protocol.CommandTypes.FormatonkeyFull]: (request: protocol.FormatOnKeyRequest) => {
             return this.requiredResponse(this.getFormattingEditsAfterKeystrokeFull(request.arguments));
         },
-        [CommandNames.FormatRangeFull]: (request: protocol.FormatRequest) => {
+        [protocol.CommandTypes.FormatRangeFull]: (request: protocol.FormatRequest) => {
             return this.requiredResponse(this.getFormattingEditsForRangeFull(request.arguments));
         },
-        [CommandNames.CompletionInfo]: (request: protocol.CompletionsRequest) => {
-            return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.CompletionInfo));
+        [protocol.CommandTypes.CompletionInfo]: (request: protocol.CompletionsRequest) => {
+            return this.requiredResponse(this.getCompletions(request.arguments, protocol.CommandTypes.CompletionInfo));
         },
-        [CommandNames.Completions]: (request: protocol.CompletionsRequest) => {
-            return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.Completions));
+        [protocol.CommandTypes.Completions]: (request: protocol.CompletionsRequest) => {
+            return this.requiredResponse(this.getCompletions(request.arguments, protocol.CommandTypes.Completions));
         },
-        [CommandNames.CompletionsFull]: (request: protocol.CompletionsRequest) => {
-            return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.CompletionsFull));
+        [protocol.CommandTypes.CompletionsFull]: (request: protocol.CompletionsRequest) => {
+            return this.requiredResponse(this.getCompletions(request.arguments, protocol.CommandTypes.CompletionsFull));
         },
-        [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
+        [protocol.CommandTypes.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
             return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ false));
         },
-        [CommandNames.CompletionDetailsFull]: (request: protocol.CompletionDetailsRequest) => {
+        [protocol.CommandTypes.CompletionDetailsFull]: (request: protocol.CompletionDetailsRequest) => {
             return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ true));
         },
-        [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
+        [protocol.CommandTypes.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
             return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));
         },
-        [CommandNames.CompileOnSaveEmitFile]: (request: protocol.CompileOnSaveEmitFileRequest) => {
+        [protocol.CommandTypes.CompileOnSaveEmitFile]: (request: protocol.CompileOnSaveEmitFileRequest) => {
             return this.requiredResponse(this.emitFile(request.arguments));
         },
-        [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
+        [protocol.CommandTypes.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
             return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
+        [protocol.CommandTypes.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
             return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.CompilerOptionsDiagnosticsRequest) => {
+        [protocol.CommandTypes.CompilerOptionsDiagnosticsFull]: (request: protocol.CompilerOptionsDiagnosticsRequest) => {
             return this.requiredResponse(this.getCompilerOptionsDiagnostics(request.arguments));
         },
-        [CommandNames.EncodedSyntacticClassificationsFull]: (request: protocol.EncodedSyntacticClassificationsRequest) => {
+        [protocol.CommandTypes.EncodedSyntacticClassificationsFull]: (request: protocol.EncodedSyntacticClassificationsRequest) => {
             return this.requiredResponse(this.getEncodedSyntacticClassifications(request.arguments));
         },
-        [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.EncodedSemanticClassificationsRequest) => {
+        [protocol.CommandTypes.EncodedSemanticClassificationsFull]: (request: protocol.EncodedSemanticClassificationsRequest) => {
             return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
         },
-        [CommandNames.Cleanup]: () => {
+        [protocol.CommandTypes.Cleanup]: () => {
             this.cleanup();
             return this.requiredResponse(/*response*/ true);
         },
-        [CommandNames.SemanticDiagnosticsSync]: (request: protocol.SemanticDiagnosticsSyncRequest) => {
+        [protocol.CommandTypes.SemanticDiagnosticsSync]: (request: protocol.SemanticDiagnosticsSyncRequest) => {
             return this.requiredResponse(this.getSemanticDiagnosticsSync(request.arguments));
         },
-        [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.SyntacticDiagnosticsSyncRequest) => {
+        [protocol.CommandTypes.SyntacticDiagnosticsSync]: (request: protocol.SyntacticDiagnosticsSyncRequest) => {
             return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
         },
-        [CommandNames.SuggestionDiagnosticsSync]: (request: protocol.SuggestionDiagnosticsSyncRequest) => {
+        [protocol.CommandTypes.SuggestionDiagnosticsSync]: (request: protocol.SuggestionDiagnosticsSyncRequest) => {
             return this.requiredResponse(this.getSuggestionDiagnosticsSync(request.arguments));
         },
-        [CommandNames.Geterr]: (request: protocol.GeterrRequest) => {
+        [protocol.CommandTypes.Geterr]: (request: protocol.GeterrRequest) => {
             this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files));
             return this.notRequired();
         },
-        [CommandNames.GeterrForProject]: (request: protocol.GeterrForProjectRequest) => {
+        [protocol.CommandTypes.GeterrForProject]: (request: protocol.GeterrForProjectRequest) => {
             this.errorCheck.startNew(next => this.getDiagnosticsForProject(next, request.arguments.delay, request.arguments.file));
             return this.notRequired();
         },
-        [CommandNames.Change]: (request: protocol.ChangeRequest) => {
+        [protocol.CommandTypes.Change]: (request: protocol.ChangeRequest) => {
             this.change(request.arguments);
             return this.notRequired();
         },
-        [CommandNames.Configure]: (request: protocol.ConfigureRequest) => {
+        [protocol.CommandTypes.Configure]: (request: protocol.ConfigureRequest) => {
             this.projectService.setHostConfiguration(request.arguments);
-            this.doOutput(/*info*/ undefined, CommandNames.Configure, request.seq, /*success*/ true);
+            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Configure, request.seq, /*success*/ true);
             return this.notRequired();
         },
-        [CommandNames.Reload]: (request: protocol.ReloadRequest) => {
+        [protocol.CommandTypes.Reload]: (request: protocol.ReloadRequest) => {
             this.reload(request.arguments, request.seq);
             return this.requiredResponse({ reloadFinished: true });
         },
-        [CommandNames.Saveto]: (request: protocol.Request) => {
+        [protocol.CommandTypes.Saveto]: (request: protocol.Request) => {
             const savetoArgs = request.arguments as protocol.SavetoRequestArgs;
             this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
             return this.notRequired();
         },
-        [CommandNames.Close]: (request: protocol.Request) => {
+        [protocol.CommandTypes.Close]: (request: protocol.Request) => {
             const closeArgs = request.arguments as protocol.FileRequestArgs;
             this.closeClientFile(closeArgs.file);
             return this.notRequired();
         },
-        [CommandNames.Navto]: (request: protocol.NavtoRequest) => {
+        [protocol.CommandTypes.Navto]: (request: protocol.NavtoRequest) => {
             return this.requiredResponse(this.getNavigateToItems(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.NavtoFull]: (request: protocol.NavtoRequest) => {
+        [protocol.CommandTypes.NavtoFull]: (request: protocol.NavtoRequest) => {
             return this.requiredResponse(this.getNavigateToItems(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.Brace]: (request: protocol.FileLocationRequest) => {
+        [protocol.CommandTypes.Brace]: (request: protocol.FileLocationRequest) => {
             return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.BraceFull]: (request: protocol.FileLocationRequest) => {
+        [protocol.CommandTypes.BraceFull]: (request: protocol.FileLocationRequest) => {
             return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.NavBar]: (request: protocol.FileRequest) => {
+        [protocol.CommandTypes.NavBar]: (request: protocol.FileRequest) => {
             return this.requiredResponse(this.getNavigationBarItems(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.NavBarFull]: (request: protocol.FileRequest) => {
+        [protocol.CommandTypes.NavBarFull]: (request: protocol.FileRequest) => {
             return this.requiredResponse(this.getNavigationBarItems(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.NavTree]: (request: protocol.FileRequest) => {
+        [protocol.CommandTypes.NavTree]: (request: protocol.FileRequest) => {
             return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.NavTreeFull]: (request: protocol.FileRequest) => {
+        [protocol.CommandTypes.NavTreeFull]: (request: protocol.FileRequest) => {
             return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.Occurrences]: (request: protocol.FileLocationRequest) => {
+        [protocol.CommandTypes.Occurrences]: (request: protocol.FileLocationRequest) => {
             return this.requiredResponse(this.getOccurrences(request.arguments));
         },
-        [CommandNames.DocumentHighlights]: (request: protocol.DocumentHighlightsRequest) => {
+        [protocol.CommandTypes.DocumentHighlights]: (request: protocol.DocumentHighlightsRequest) => {
             return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.DocumentHighlightsFull]: (request: protocol.DocumentHighlightsRequest) => {
+        [protocol.CommandTypes.DocumentHighlightsFull]: (request: protocol.DocumentHighlightsRequest) => {
             return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
+        [protocol.CommandTypes.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
             this.setCompilerOptionsForInferredProjects(request.arguments);
             return this.requiredResponse(/*response*/ true);
         },
-        [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
+        [protocol.CommandTypes.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
             return this.requiredResponse(this.getProjectInfo(request.arguments));
         },
-        [CommandNames.ReloadProjects]: () => {
+        [protocol.CommandTypes.ReloadProjects]: () => {
             this.projectService.reloadProjects();
             return this.notRequired();
         },
-        [CommandNames.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
+        [protocol.CommandTypes.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
             return this.requiredResponse(this.getJsxClosingTag(request.arguments));
         },
-        [CommandNames.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
+        [protocol.CommandTypes.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
             return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
+        [protocol.CommandTypes.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
             return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.GetCombinedCodeFix]: (request: protocol.GetCombinedCodeFixRequest) => {
+        [protocol.CommandTypes.GetCombinedCodeFix]: (request: protocol.GetCombinedCodeFixRequest) => {
             return this.requiredResponse(this.getCombinedCodeFix(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.GetCombinedCodeFixFull]: (request: protocol.GetCombinedCodeFixRequest) => {
+        [protocol.CommandTypes.GetCombinedCodeFixFull]: (request: protocol.GetCombinedCodeFixRequest) => {
             return this.requiredResponse(this.getCombinedCodeFix(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
+        [protocol.CommandTypes.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
             return this.requiredResponse(this.applyCodeActionCommand(request.arguments));
         },
-        [CommandNames.GetSupportedCodeFixes]: () => {
-            return this.requiredResponse(this.getSupportedCodeFixes());
+        [protocol.CommandTypes.GetSupportedCodeFixes]: (request: protocol.GetSupportedCodeFixesRequest) => {
+            return this.requiredResponse(this.getSupportedCodeFixes(request.arguments));
         },
-        [CommandNames.GetApplicableRefactors]: (request: protocol.GetApplicableRefactorsRequest) => {
+        [protocol.CommandTypes.GetApplicableRefactors]: (request: protocol.GetApplicableRefactorsRequest) => {
             return this.requiredResponse(this.getApplicableRefactors(request.arguments));
         },
-        [CommandNames.GetEditsForRefactor]: (request: protocol.GetEditsForRefactorRequest) => {
+        [protocol.CommandTypes.GetEditsForRefactor]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
+        [protocol.CommandTypes.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.OrganizeImports]: (request: protocol.OrganizeImportsRequest) => {
+        [protocol.CommandTypes.OrganizeImports]: (request: protocol.OrganizeImportsRequest) => {
             return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.OrganizeImportsFull]: (request: protocol.OrganizeImportsRequest) => {
+        [protocol.CommandTypes.OrganizeImportsFull]: (request: protocol.OrganizeImportsRequest) => {
             return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.GetEditsForFileRename]: (request: protocol.GetEditsForFileRenameRequest) => {
+        [protocol.CommandTypes.GetEditsForFileRename]: (request: protocol.GetEditsForFileRenameRequest) => {
             return this.requiredResponse(this.getEditsForFileRename(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.GetEditsForFileRenameFull]: (request: protocol.GetEditsForFileRenameRequest) => {
+        [protocol.CommandTypes.GetEditsForFileRenameFull]: (request: protocol.GetEditsForFileRenameRequest) => {
             return this.requiredResponse(this.getEditsForFileRename(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.ConfigurePlugin]: (request: protocol.ConfigurePluginRequest) => {
+        [protocol.CommandTypes.ConfigurePlugin]: (request: protocol.ConfigurePluginRequest) => {
             this.configurePlugin(request.arguments);
-            this.doOutput(/*info*/ undefined, CommandNames.ConfigurePlugin, request.seq, /*success*/ true);
+            this.doOutput(/*info*/ undefined, protocol.CommandTypes.ConfigurePlugin, request.seq, /*success*/ true);
             return this.notRequired();
         },
-        [CommandNames.SelectionRange]: (request: protocol.SelectionRangeRequest) => {
+        [protocol.CommandTypes.SelectionRange]: (request: protocol.SelectionRangeRequest) => {
             return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.SelectionRangeFull]: (request: protocol.SelectionRangeRequest) => {
+        [protocol.CommandTypes.SelectionRangeFull]: (request: protocol.SelectionRangeRequest) => {
             return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.PrepareCallHierarchy]: (request: protocol.PrepareCallHierarchyRequest) => {
+        [protocol.CommandTypes.PrepareCallHierarchy]: (request: protocol.PrepareCallHierarchyRequest) => {
             return this.requiredResponse(this.prepareCallHierarchy(request.arguments));
         },
-        [CommandNames.ProvideCallHierarchyIncomingCalls]: (request: protocol.ProvideCallHierarchyIncomingCallsRequest) => {
+        [protocol.CommandTypes.ProvideCallHierarchyIncomingCalls]: (request: protocol.ProvideCallHierarchyIncomingCallsRequest) => {
             return this.requiredResponse(this.provideCallHierarchyIncomingCalls(request.arguments));
         },
-        [CommandNames.ProvideCallHierarchyOutgoingCalls]: (request: protocol.ProvideCallHierarchyOutgoingCallsRequest) => {
+        [protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls]: (request: protocol.ProvideCallHierarchyOutgoingCallsRequest) => {
             return this.requiredResponse(this.provideCallHierarchyOutgoingCalls(request.arguments));
         },
-        [CommandNames.ToggleLineComment]: (request: protocol.ToggleLineCommentRequest) => {
+        [protocol.CommandTypes.ToggleLineComment]: (request: protocol.ToggleLineCommentRequest) => {
             return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.ToggleLineCommentFull]: (request: protocol.ToggleLineCommentRequest) => {
+        [protocol.CommandTypes.ToggleLineCommentFull]: (request: protocol.ToggleLineCommentRequest) => {
             return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.ToggleMultilineComment]: (request: protocol.ToggleMultilineCommentRequest) => {
+        [protocol.CommandTypes.ToggleMultilineComment]: (request: protocol.ToggleMultilineCommentRequest) => {
             return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.ToggleMultilineCommentFull]: (request: protocol.ToggleMultilineCommentRequest) => {
+        [protocol.CommandTypes.ToggleMultilineCommentFull]: (request: protocol.ToggleMultilineCommentRequest) => {
             return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.CommentSelection]: (request: protocol.CommentSelectionRequest) => {
+        [protocol.CommandTypes.CommentSelection]: (request: protocol.CommentSelectionRequest) => {
             return this.requiredResponse(this.commentSelection(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.CommentSelectionFull]: (request: protocol.CommentSelectionRequest) => {
+        [protocol.CommandTypes.CommentSelectionFull]: (request: protocol.CommentSelectionRequest) => {
             return this.requiredResponse(this.commentSelection(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.UncommentSelection]: (request: protocol.UncommentSelectionRequest) => {
+        [protocol.CommandTypes.UncommentSelection]: (request: protocol.UncommentSelectionRequest) => {
             return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ true));
         },
-        [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
+        [protocol.CommandTypes.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
             return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
         },
-        [CommandNames.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
+        [protocol.CommandTypes.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
             return this.requiredResponse(this.provideInlayHints(request.arguments));
         }
     }));
@@ -3530,7 +3529,7 @@ export class Session<TMessage = string> implements EventSender {
         }
         else {
             this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
-            this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
+            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
             return { responseRequired: false };
         }
     }
@@ -3540,7 +3539,7 @@ export class Session<TMessage = string> implements EventSender {
 
         this.performanceData = undefined;
 
-        let start: number[] | undefined;
+        let start: [number, number] | undefined;
         if (this.logger.hasLevel(LogLevel.requestTime)) {
             start = this.hrtime();
             if (this.logger.hasLevel(LogLevel.verbose)) {
@@ -3599,7 +3598,7 @@ export class Session<TMessage = string> implements EventSender {
 
             this.doOutput(
                 /*info*/ undefined,
-                request ? request.command : CommandNames.Unknown,
+                request ? request.command : protocol.CommandTypes.Unknown,
                 request ? request.seq : 0,
                 /*success*/ false,
                 "Error processing request. " + (err as StackTraceError).message + "\n" + (err as StackTraceError).stack);
