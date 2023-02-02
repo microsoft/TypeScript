@@ -700,6 +700,8 @@ export interface GetCompletionsAtPositionOptions extends UserPreferences {
      */
     triggerCharacter?: CompletionsTriggerCharacter;
     triggerKind?: CompletionTriggerKind;
+    /** @default false */
+    includeApiProperties?: boolean
     /** @deprecated Use includeCompletionsForModuleExports */
     includeExternalModuleExports?: boolean;
     /** @deprecated Use includeCompletionsWithInsertText */
@@ -1331,6 +1333,10 @@ export interface CompletionInfo {
     entries: CompletionEntry[];
 }
 
+export interface CompletionInfoWithApiData extends CompletionInfo {
+    entries: CompletionEntryWithApiData[]
+}
+
 export interface CompletionEntryDataAutoImport {
     /**
      * The name of the property or export in the module's symbol table. Differs from the completion name
@@ -1388,6 +1394,10 @@ export interface CompletionEntry {
      * is an auto-import.
      */
     data?: CompletionEntryData;
+}
+
+export interface CompletionEntryWithApiData extends CompletionEntry {
+    symbol?: Symbol
 }
 
 export interface CompletionEntryLabelDetails {

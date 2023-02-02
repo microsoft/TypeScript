@@ -362,6 +362,8 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
+    CompletionEntryWithApiData,
+    CompletionInfoWithApiData,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
 
@@ -646,6 +648,7 @@ export function getCompletionsAtPosition(
     completionKind: CompletionTriggerKind | undefined,
     cancellationToken: CancellationToken,
     formatContext?: formatting.FormatContext,
+    includeApiData = false
 ): CompletionInfo | undefined {
     const { previousToken } = getRelevantTokens(position, sourceFile);
     if (triggerCharacter && !isInString(sourceFile, position, previousToken) && !isValidTrigger(sourceFile, triggerCharacter, previousToken, position)) {
@@ -693,6 +696,11 @@ export function getCompletionsAtPosition(
     switch (completionData.kind) {
         case CompletionDataKind.Data:
             const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext, position);
+            if (response && !includeApiData) {
+                for (const entry of response.entries) {
+                    delete entry.symbol
+                }
+            }
             if (response?.isIncomplete) {
                 incompleteCompletionsCache?.set(response);
             }
@@ -867,7 +875,7 @@ function completionInfoFromData(
     preferences: UserPreferences,
     formatContext: formatting.FormatContext | undefined,
     position: number
-): CompletionInfo | undefined {
+): CompletionInfoWithApiData | undefined {
     const {
         symbols,
         contextToken,
@@ -920,7 +928,7 @@ function completionInfoFromData(
         });
     }
 
-    const entries = createSortedArray<CompletionEntry>();
+    const entries = createSortedArray<CompletionEntryWithApiData>();
     const isChecked = isCheckedFile(sourceFile, compilerOptions);
     if (isChecked && !isNewIdentifierLocation && (!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
         return undefined;
@@ -1339,7 +1347,7 @@ function createCompletionEntry(
     formatContext: formatting.FormatContext | undefined,
     isJsxIdentifierExpected: boolean | undefined,
     isRightOfOpenTag: boolean | undefined,
-): CompletionEntry | undefined {
+): CompletionEntryWithApiData | undefined {
     let insertText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
     let data: CompletionEntryData | undefined;
@@ -1492,7 +1500,6 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
-        //@ts-expect-error for plugins API
         symbol
     };
 }
@@ -2097,7 +2104,7 @@ function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | und
 /** @internal */
 export function getCompletionEntriesFromSymbols(
     symbols: readonly Symbol[],
-    entries: SortedArray<CompletionEntry>,
+    entries: SortedArray<CompletionEntryWithApiData>,
     replacementToken: Node | undefined,
     contextToken: Node | undefined,
     location: Node,
