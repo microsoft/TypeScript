@@ -54,7 +54,7 @@ let A = (() => {
     __setFunctionName(_classThis, "A");
     (() => {
         _b_decorators = [dec(_outerThis)];
-        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false }, _b_initializers, _instanceExtraInitializers);
+        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false, access: { has: obj => "b" in obj, get: obj => obj.b, set: (obj, value) => { obj.b = value; } } }, _b_initializers, _instanceExtraInitializers);
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
         A = _classThis = _classDescriptor.value;
         __runInitializers(_classThis, _classExtraInitializers);
@@ -85,7 +85,7 @@ let B = (() => {
     _b = (_b_decorators = [dec(this)], f(this));
     __setFunctionName(_classThis_1, "B");
     (() => {
-        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false }, _b_initializers, _instanceExtraInitializers_1);
+        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false, access: { has: obj => "b" in obj, get: obj => obj.b, set: (obj, value) => { obj.b = value; } } }, _b_initializers, _instanceExtraInitializers_1);
         __esDecorate(null, _classDescriptor_1 = { value: _classThis_1 }, _classDecorators_1, { kind: "class", name: _classThis_1.name }, null, _classExtraInitializers_1);
         B = _classThis_1 = _classDescriptor_1.value;
         __runInitializers(_classThis_1, _classExtraInitializers_1);
@@ -114,7 +114,7 @@ let C = (() => {
     __setFunctionName(_classThis_2, "C");
     (() => {
         _b_decorators = [dec(_outerThis_1, (x) => __classPrivateFieldGet(x, _a, "f"))];
-        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false }, _b_initializers, _instanceExtraInitializers_2);
+        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false, access: { has: obj => "b" in obj, get: obj => obj.b, set: (obj, value) => { obj.b = value; } } }, _b_initializers, _instanceExtraInitializers_2);
         __esDecorate(null, _classDescriptor_2 = { value: _classThis_2 }, _classDecorators_2, { kind: "class", name: _classThis_2.name }, null, _classExtraInitializers_2);
         C = _classThis_2 = _classDescriptor_2.value;
         __runInitializers(_classThis_2, _classExtraInitializers_2);
