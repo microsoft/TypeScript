@@ -129,6 +129,7 @@ import "./unittests/tsserver/cancellationToken";
 import "./unittests/tsserver/compileOnSave";
 import "./unittests/tsserver/completions";
 import "./unittests/tsserver/completionsIncomplete";
+import "./unittests/tsserver/completionsJsxExpression";
 import "./unittests/tsserver/configFileSearch";
 import "./unittests/tsserver/configuredProjects";
 import "./unittests/tsserver/declarationFileMaps";
