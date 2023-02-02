@@ -49,11 +49,11 @@ describe("unittests:: tsserver:: completionsJsxExpression", () => {
             }
         }).response as ts.server.protocol.CompletionInfo | undefined;
         baselineTsserverLogs("completionsJsxExpression", "should not complete as jsx attribute", session);
-        ts.Debug.assertIsDefined(completion)
+        ts.Debug.assertIsDefined(completion);
         for (const entry of completion.entries) {
-            ts.Debug.assert(!entry.isSnippet)
+            ts.Debug.assert(!entry.isSnippet);
             if (entry.insertText) {
-                ts.Debug.assert(!entry.insertText.includes("="))
+                ts.Debug.assert(!entry.insertText.includes("="));
             }
         }
     });
