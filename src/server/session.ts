@@ -1973,7 +1973,7 @@ export class Session<TMessage = string> implements EventSender {
 
     private getReferences(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.ReferencesResponseBody | readonly ReferencedSymbol[] {
         const file = toNormalizedPath(args.file);
-        const projects = this.getProjects(args);
+        const projects = this.getProjects(args, /*getScriptInfoEnsuringProjectsUptoDate*/ true);
         const position = this.getPositionInFile(args, file);
         const references = getReferencesWorker(
             projects,
