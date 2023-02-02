@@ -6310,6 +6310,7 @@ declare namespace ts {
     }
     interface TypeChecker {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
+        getTypeOfSymbol(symbol: Symbol): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
@@ -6400,6 +6401,21 @@ declare namespace ts {
         getApparentType(type: Type): Type;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
+        /**
+         * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
+         * This function will _not_ return true if passed a type which
+         * extends `Array` (for example, the TypeScript AST's `NodeArray` type).
+         */
+        isArrayType(type: Type): boolean;
+        /**
+         * True if this type is a tuple type. This function will _not_ return true if
+         * passed a type which extends from a tuple.
+         */
+        isTupleType(type: Type): boolean;
+        /**
+         * True if this type is assignable to `ReadonlyArray<any>`.
+         */
+        isArrayLikeType(type: Type): boolean;
         getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
         /**
          * Depending on the operation performed, it may be appropriate to throw away the checker
