@@ -3,8 +3,7 @@
 
 // @Filename: bar.js
 //// module.exports = function () {};
-//// var v = exports.unknown
-//// exports.blah = v
+//// exports.blah = exports.unknown;
 
 // @Filename: foo.js
 //// var bar = require("./bar");

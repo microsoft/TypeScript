@@ -407,50 +407,6 @@
           "sortText": "11",
           "displayParts": [
             {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "alias",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "blah",
-              "kind": "aliasName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
               "text": "import",
               "kind": "keyword"
             },
