@@ -1,4 +1,5 @@
 import {
+    ArrayLiteralExpression,
     ArrowFunction,
     AssignmentDeclarationKind,
     BinaryExpression,
@@ -105,6 +106,8 @@ import {
     SpreadAssignment,
     SyntaxKind,
     TextSpan,
+    TupleTypeNode,
+    TypeAliasDeclaration,
     TypeElement,
     unescapeLeadingUnderscores,
     VariableDeclaration,
@@ -458,13 +461,24 @@ function addChildrenRecursively(node: Node | undefined): void {
             }
             break;
         }
+        case SyntaxKind.TupleType:
+        case SyntaxKind.ArrayLiteralExpression:
+            const { elements } = node as ArrayLiteralExpression | TupleTypeNode;
+            for (const [i, element] of elements.entries()) {
+                addNodeWithRecursiveChild(element, element, setTextRange(factory.createIdentifier(i.toString()), element));
+            }
+            break;
+
         case SyntaxKind.ExportSpecifier:
         case SyntaxKind.ImportEqualsDeclaration:
         case SyntaxKind.IndexSignature:
         case SyntaxKind.CallSignature:
         case SyntaxKind.ConstructSignature:
-        case SyntaxKind.TypeAliasDeclaration:
             addLeafNode(node);
+            break;
+
+        case SyntaxKind.TypeAliasDeclaration:
+            addNodeWithRecursiveChild(node, (node as TypeAliasDeclaration).type);
             break;
 
         case SyntaxKind.CallExpression:
