@@ -29,7 +29,7 @@
     "Trying substitution 'node_modules/*', candidate module location: 'node_modules/foo/bar/foobar.json'.",
     "Loading module as file / folder, candidate module location '/node_modules/foo/bar/foobar.json', target file types: JavaScript, JSON.",
     "File name '/node_modules/foo/bar/foobar.json' has a '.json' extension - stripping it.",
-    "File '/node_modules/foo/bar/foobar.json' exist - use it as a name resolution result.",
+    "File '/node_modules/foo/bar/foobar.json' exists - use it as a name resolution result.",
     "File '/node_modules/foo/package.json' does not exist according to earlier cached lookups.",
     "======== Module name 'foo/bar/foobar.json' was successfully resolved to '/node_modules/foo/bar/foobar.json'. ========"
 ]

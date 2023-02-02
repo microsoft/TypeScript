@@ -60,12 +60,12 @@ Info 11   [00:00:40.000] Starting updateGraphWorker: Project: /user/username/pro
 Info 12   [00:00:41.000] ======== Resolving module './module1' from '/user/username/projects/myproject/src/file1.ts'. ========
 Info 13   [00:00:42.000] Module resolution kind is not specified, using 'Node10'.
 Info 14   [00:00:43.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/module1', target file types: TypeScript, Declaration.
-Info 15   [00:00:44.000] File '/user/username/projects/myproject/src/module1.ts' exist - use it as a name resolution result.
+Info 15   [00:00:44.000] File '/user/username/projects/myproject/src/module1.ts' exists - use it as a name resolution result.
 Info 16   [00:00:45.000] ======== Module name './module1' was successfully resolved to '/user/username/projects/myproject/src/module1.ts'. ========
 Info 17   [00:00:46.000] ======== Resolving module '../module2' from '/user/username/projects/myproject/src/file1.ts'. ========
 Info 18   [00:00:47.000] Module resolution kind is not specified, using 'Node10'.
 Info 19   [00:00:48.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/module2', target file types: TypeScript, Declaration.
-Info 20   [00:00:49.000] File '/user/username/projects/myproject/module2.ts' exist - use it as a name resolution result.
+Info 20   [00:00:49.000] File '/user/username/projects/myproject/module2.ts' exists - use it as a name resolution result.
 Info 21   [00:00:50.000] ======== Module name '../module2' was successfully resolved to '/user/username/projects/myproject/module2.ts'. ========
 Info 22   [00:00:51.000] ======== Resolving module './module1' from '/user/username/projects/myproject/src/file2.ts'. ========
 Info 23   [00:00:52.000] Resolution for module './module1' was found in cache from location '/user/username/projects/myproject/src'.

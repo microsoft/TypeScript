@@ -106,7 +106,7 @@ File 'node_modules/a.tsx' does not exist.
 File 'node_modules/a.d.ts' does not exist.
 File 'node_modules/a/index.ts' does not exist.
 File 'node_modules/a/index.tsx' does not exist.
-File 'node_modules/a/index.d.ts' exist - use it as a name resolution result.
+File 'node_modules/a/index.d.ts' exists - use it as a name resolution result.
 ======== Module name 'a' was successfully resolved to 'node_modules/a/index.d.ts'. ========
 
 MissingPaths:: []

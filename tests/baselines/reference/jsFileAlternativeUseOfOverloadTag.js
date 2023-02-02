@@ -105,15 +105,14 @@ var example3 = {
 
 //// [jsFileAlternativeUseOfOverloadTag.d.ts]
 declare namespace example1 {
-    function constructor(value: any): any;
+    function constructor(value: any, options: any): void;
 }
 declare namespace example2 {
-    export function constructor_1(value: any, secretAccessKey: any, sessionToken: any): any;
-    export function constructor_1(): any;
+    export function constructor_1(): void;
     export { constructor_1 as constructor };
 }
 declare namespace example3 {
-    function evaluate(): any;
+    function evaluate(options: any, callback: any): void;
 }
 /**
  * function (error, result)

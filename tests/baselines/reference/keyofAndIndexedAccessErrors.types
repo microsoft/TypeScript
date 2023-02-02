@@ -483,3 +483,44 @@ function f31<T, K extends keyof T>() {
 >"hello" : "hello"
 }
 
+// Repro from #51069
+
+class Test<T extends Record<string, number>> {
+>Test : Test<T>
+
+  testy: T;
+>testy : T
+
+  constructor(t: T) {
+>t : T
+
+    this.testy = t;
+>this.testy = t : T
+>this.testy : T
+>this : this
+>testy : T
+>t : T
+  }
+
+  public t(key: keyof T): number {
+>t : (key: keyof T) => number
+>key : keyof T
+
+    this.testy[key] += 1; // Error
+>this.testy[key] += 1 : number
+>this.testy[key] : T[keyof T]
+>this.testy : T
+>this : this
+>testy : T
+>key : keyof T
+>1 : 1
+
+    return this.testy[key];
+>this.testy[key] : T[keyof T]
+>this.testy : T
+>this : this
+>testy : T
+>key : keyof T
+  }
+}
+

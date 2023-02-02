@@ -4927,7 +4927,7 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 
 export interface TypeChecker {
     getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
-    /** @internal */ getTypeOfSymbol(symbol: Symbol): Type;
+    getTypeOfSymbol(symbol: Symbol): Type;
     getDeclaredTypeOfSymbol(symbol: Symbol): Type;
     getPropertiesOfType(type: Type): Symbol[];
     getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
@@ -5153,9 +5153,21 @@ export interface TypeChecker {
     /** @internal */ getRecursionIdentity(type: Type): object | undefined;
     /** @internal */ getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol>;
 
-    /** @internal */ isArrayType(type: Type): boolean;
-    /** @internal */ isTupleType(type: Type): boolean;
-    /** @internal */ isArrayLikeType(type: Type): boolean;
+    /**
+     * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
+     * This function will _not_ return true if passed a type which
+     * extends `Array` (for example, the TypeScript AST's `NodeArray` type).
+     */
+    isArrayType(type: Type): boolean;
+    /**
+     * True if this type is a tuple type. This function will _not_ return true if
+     * passed a type which extends from a tuple.
+     */
+    isTupleType(type: Type): boolean;
+    /**
+     * True if this type is assignable to `ReadonlyArray<any>`.
+     */
+    isArrayLikeType(type: Type): boolean;
 
     /**
      * True if `contextualType` should not be considered for completions because
@@ -6409,7 +6421,7 @@ export interface AnonymousType extends ObjectType {
 
 /** @internal */
 export interface InstantiationExpressionType extends AnonymousType {
-    node: ExpressionWithTypeArguments | TypeQueryNode;
+    node: NodeWithTypeArguments;
 }
 
 /** @internal */

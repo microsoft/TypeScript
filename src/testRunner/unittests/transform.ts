@@ -669,5 +669,31 @@ const MyClass = class {
         }).outputText;
     });
 
+    testBaseline("jsxExpression", () => {
+        function doNothing(context: ts.TransformationContext) {
+            const visitor = (node: ts.Node): ts.Node => {
+                return ts.visitEachChild(node, visitor, context);
+            };
+            return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
+        }
+
+        return ts.transpileModule(`
+function test () {
+    return <>
+        {/* This comment breaks the transformer */}
+    </>
+}
+`, {
+            transformers: {
+                before: [doNothing],
+            },
+            compilerOptions: {
+                jsx: ts.JsxEmit.React,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
+            }
+        }).outputText;
+    });
 });
 
