@@ -41,7 +41,9 @@
         "NODE_ENV": "testing"
       },
       "outFiles": [
-        "${workspaceFolder}/built/**/*.{js,mjs,cjs}",
+        "${workspaceFolder}/built/**/*.js",
+        "${workspaceFolder}/built/**/*.mjs",
+        "${workspaceFolder}/built/**/*.cjs",
         "!**/node_modules/**"
       ],
       "sourceMaps": true,
