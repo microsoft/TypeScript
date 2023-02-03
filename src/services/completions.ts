@@ -1498,7 +1498,7 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
-        ...includeApiData ? { symbol } : {}
+        ...includeApiData ? { symbol } : undefined
     };
 }
 
