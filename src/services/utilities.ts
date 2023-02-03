@@ -2156,7 +2156,7 @@ export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): 
 }
 
 /** @internal */
-export const isStringAndEmptyAnonymousObjectIntersection = (type: Type) => {
+export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
     if (!type.isIntersection()) {
         return false;
     }
