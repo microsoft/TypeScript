@@ -1,5 +1,6 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
@@ -9,7 +10,6 @@ import {
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
 } from "../virtualFileSystemWithWatch";
-import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 
 const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
 export function mapOutputToJson(s: string) {

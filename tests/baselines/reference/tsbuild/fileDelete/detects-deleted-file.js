@@ -54,7 +54,7 @@ Output::
 ======== Resolving module '../child/child2' from '/src/child/child.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/src/child/child2', target file types: TypeScript, Declaration.
-File '/src/child/child2.ts' exist - use it as a name resolution result.
+File '/src/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/src/child/child2.ts'. ========
 lib/lib.d.ts
   Default library for target 'es5'
@@ -70,7 +70,7 @@ src/child/child.ts
 ======== Resolving module '../child/child' from '/src/main/main.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/src/child/child', target file types: TypeScript, Declaration.
-File '/src/child/child.ts' exist - use it as a name resolution result.
+File '/src/child/child.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child' was successfully resolved to '/src/child/child.ts'. ========
 lib/lib.d.ts
   Default library for target 'es5'

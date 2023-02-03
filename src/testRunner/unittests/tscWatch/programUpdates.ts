@@ -1,5 +1,9 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import {
+    commandLineCallbacks,
+    compilerOptionsToConfigJson,
+} from "../tsc/helpers";
 import {
     createWatchedSystem,
     File,
@@ -18,10 +22,6 @@ import {
     verifyTscWatch,
     watchBaseline,
 } from "./helpers";
-import {
-    commandLineCallbacks,
-    compilerOptionsToConfigJson,
-} from "../tsc/helpers";
 
 describe("unittests:: tsc-watch:: program updates", () => {
     const scenario = "programUpdates";

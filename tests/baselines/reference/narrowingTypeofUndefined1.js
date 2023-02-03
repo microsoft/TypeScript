@@ -1,4 +1,4 @@
-//// [narrowingTypeofUndefined.ts]
+//// [narrowingTypeofUndefined1.ts]
 declare const a: { error: { prop: string }, result: undefined } | { error: undefined, result: { prop: number } }
 
 if (typeof a.error === 'undefined') {
@@ -16,7 +16,7 @@ else {
 }
 
 
-//// [narrowingTypeofUndefined.js]
+//// [narrowingTypeofUndefined1.js]
 if (typeof a.error === 'undefined') {
     a.result.prop; // number
 }
