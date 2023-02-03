@@ -34,6 +34,12 @@ function foo(x: A | B | C, A: AA, B: BB, AB: AA | BB) {
     }
 }
 
+function bar(target: any, Promise: any) {
+    if (target instanceof Promise) {
+        target.__then();
+    }
+}
+
 // Repro from #52571
 
 class PersonMixin extends Function {

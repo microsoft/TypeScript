@@ -67,6 +67,24 @@ function foo(x: A | B | C, A: AA, B: BB, AB: AA | BB) {
     }
 }
 
+function bar(target: any, Promise: any) {
+>bar : (target: any, Promise: any) => void
+>target : any
+>Promise : any
+
+    if (target instanceof Promise) {
+>target instanceof Promise : boolean
+>target : any
+>Promise : any
+
+        target.__then();
+>target.__then() : any
+>target.__then : any
+>target : any
+>__then : any
+    }
+}
+
 // Repro from #52571
 
 class PersonMixin extends Function {
