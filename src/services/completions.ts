@@ -678,7 +678,7 @@ export function getCompletionsAtPosition(
         incompleteCompletionsCache?.clear();
     }
 
-    const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, compilerOptions, host, program, log, preferences);
+    const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, compilerOptions, host, program, log, preferences, includeApiData);
     if (stringCompletions) {
         return stringCompletions;
     }
@@ -695,12 +695,7 @@ export function getCompletionsAtPosition(
 
     switch (completionData.kind) {
         case CompletionDataKind.Data:
-            const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext, position);
-            if (response && !includeApiData) {
-                for (const entry of response.entries) {
-                    delete entry.symbol;
-                }
-            }
+            const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext, position, includeApiData);
             if (response?.isIncomplete) {
                 incompleteCompletionsCache?.set(response);
             }
@@ -874,7 +869,8 @@ function completionInfoFromData(
     completionData: CompletionData,
     preferences: UserPreferences,
     formatContext: formatting.FormatContext | undefined,
-    position: number
+    position: number,
+    includeApiData: boolean | undefined,
 ): CompletionInfoWithApiData | undefined {
     const {
         symbols,
@@ -959,6 +955,7 @@ function completionInfoFromData(
         symbolToSortTextMap,
         isJsxIdentifierExpected,
         isRightOfOpenTag,
+        includeApiData
     );
 
     if (keywordFilters !== KeywordCompletionFilters.None) {
@@ -1347,6 +1344,7 @@ function createCompletionEntry(
     formatContext: formatting.FormatContext | undefined,
     isJsxIdentifierExpected: boolean | undefined,
     isRightOfOpenTag: boolean | undefined,
+    includeApiData: boolean
 ): CompletionEntryWithApiData | undefined {
     let insertText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
@@ -1500,7 +1498,7 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
-        symbol
+        ...includeApiData ? { symbol } : {}
     };
 }
 
@@ -2128,6 +2126,7 @@ export function getCompletionEntriesFromSymbols(
     symbolToSortTextMap?: SymbolSortTextMap,
     isJsxIdentifierExpected?: boolean,
     isRightOfOpenTag?: boolean,
+    includeApiData = false
 ): UniqueNameSet {
     const start = timestamp();
     const variableDeclaration = getVariableDeclaration(location);
@@ -2173,6 +2172,7 @@ export function getCompletionEntriesFromSymbols(
             formatContext,
             isJsxIdentifierExpected,
             isRightOfOpenTag,
+            includeApiData
         );
         if (!entry) {
             continue;
