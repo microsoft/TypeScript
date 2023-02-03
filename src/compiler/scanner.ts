@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import {
     append,
     arraysEqual,
@@ -10,6 +9,7 @@ import {
     isWhiteSpaceSingleLine,
     trimStringStart,
 } from "./core";
+import * as Debug from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import { textToKeyword, textToToken } from "./scannerKeywords";
 import {

@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import { readJson } from "../compiler/commandLineParserUtilities";
 import {
     arrayFrom,
@@ -33,6 +32,15 @@ import {
     Comparison,
     MapLike,
 } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
+import {
+    changeExtension,
+    getSupportedExtensions,
+    getSupportedExtensionsWithJsonIfResolveJsonModule,
+    removeFileExtension,
+    supportedTSImplementationExtensions,
+    tryGetExtensionFromPath,
+} from "../compiler/extension";
 import {
     isCallExpression,
     isIdentifier,
@@ -172,14 +180,6 @@ import {
     tryGetDirectories,
     tryReadDirectory,
 } from "./utilities";
-import {
-    changeExtension,
-    getSupportedExtensions,
-    getSupportedExtensionsWithJsonIfResolveJsonModule,
-    removeFileExtension,
-    supportedTSImplementationExtensions,
-    tryGetExtensionFromPath,
-} from "../compiler/extension";
 
 interface NameAndKindSet {
     add(value: NameAndKind): void;
@@ -564,7 +564,7 @@ function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile
 }
 
 interface ExtensionOptions {
-    readonly extensionsToSearch: readonly Extension[];
+    readonly extensionsToSearch: readonly string[];
     readonly referenceKind: ReferenceKind;
     readonly importingSourceFile: SourceFile;
     readonly endingPreference?: UserPreferences["importModuleSpecifierEnding"];
@@ -590,7 +590,7 @@ function getCompletionEntriesForRelativeModules(literalValue: string, scriptDire
     }
 }
 
-function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions, typeChecker?: TypeChecker): readonly Extension[][] {
+function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions, typeChecker?: TypeChecker): readonly string[][] {
     /** file extensions from ambient modules declarations e.g. *.css */
     const ambientModulesExtensions = !typeChecker ? [] : mapDefined(typeChecker.getAmbientModules(),
         module => {
@@ -598,7 +598,7 @@ function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOpti
             if (!name.startsWith("*.") || name.includes("/")) return;
             return name.slice(1);
         }
-    ) as Extension[];
+    );
 
     const extensions = [...getSupportedExtensions(compilerOptions), ambientModulesExtensions];
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);

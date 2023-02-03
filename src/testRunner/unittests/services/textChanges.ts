@@ -1,10 +1,10 @@
-import * as ts from "../../_namespaces/ts";
-import * as Harness from "../../_namespaces/Harness";
-import { notImplementedHost } from "./extract/helpers";
+import { getNewLineCharacter } from "../../../compiler/utilities";
+import { getFormatContext } from "../../../services/formatting/formatting";
 import { applyChanges, ChangeTracker, deleteNode, LeadingTriviaOption, TrailingTriviaOption } from "../../../services/textChanges";
 import { FormatContext } from "../../../services/types";
-import { getFormatContext } from "../../../services/formatting/formatting";
-import { getNewLineCharacter } from "../../../compiler/utilities";
+import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import { notImplementedHost } from "./extract/helpers";
 
 // Some tests have trailing whitespace
 

@@ -1,9 +1,9 @@
-import * as Debug from "../../compiler/debug";
 import {
     emptyArray,
     first,
     length,
 } from "../../compiler/core";
+import * as Debug from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { factory } from "../../compiler/factory/nodeFactory";
 import {
@@ -16,6 +16,7 @@ import {
     isVariableDeclarationList,
     isVariableStatement,
 } from "../../compiler/factory/nodeTests";
+import { setTextRange } from "../../compiler/factory/utilitiesPublic";
 import { forEachChild } from "../../compiler/parser";
 import {
     ArrowFunction,
@@ -247,6 +248,7 @@ function convertToBlock(body: ConciseBody): Block {
     if (isExpression(body)) {
         const returnStatement = factory.createReturnStatement(body);
         const file = body.getSourceFile();
+        setTextRange(returnStatement, body);
         suppressLeadingAndTrailingTrivia(returnStatement);
         copyTrailingAsLeadingComments(body, returnStatement, file, /* commentKind */ undefined, /* hasTrailingNewLine */ true);
         return factory.createBlock([returnStatement], /* multiLine */ true);

@@ -1,4 +1,3 @@
-import * as Debug from "../debug";
 import {
     addRange,
     append,
@@ -9,6 +8,8 @@ import {
     some,
     tryCast,
 } from "../core";
+import * as Debug from "../debug";
+import { isCallToHelper } from "../factory/emitHelpers";
 import {
     addEmitFlags,
     addEmitHelpers,
@@ -233,7 +234,6 @@ import {
     PrivateEnvironment,
     setPrivateIdentifier,
 } from "./utilities";
-import { isCallToHelper } from "../factory/emitHelpers";
 
 const enum ClassPropertySubstitutionFlags {
     /**

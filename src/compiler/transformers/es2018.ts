@@ -1,4 +1,3 @@
-import * as Debug from "../debug";
 import { getNodeId } from "../checkerUtilities";
 import {
     addRange,
@@ -6,6 +5,7 @@ import {
     concatenate,
     some,
 } from "../core";
+import * as Debug from "../debug";
 import {
     advancedAsyncSuperHelper,
     asyncSuperHelper,

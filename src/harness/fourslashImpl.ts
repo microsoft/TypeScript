@@ -1,12 +1,12 @@
+import { regExpEscape } from "../compiler/fileMatcher";
+import { applyChanges } from "../services/textChanges";
+import * as fakes from "./_namespaces/fakes";
 import * as FourSlashInterface from "./_namespaces/FourSlashInterface";
 import * as Harness from "./_namespaces/Harness";
-import * as vfs from "./_namespaces/vfs";
 import * as ts from "./_namespaces/ts";
-import * as fakes from "./_namespaces/fakes";
-import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
-import { applyChanges } from "../services/textChanges";
-import { regExpEscape } from "../compiler/fileMatcher";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 

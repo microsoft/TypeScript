@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import { getSymbolId } from "../../compiler/checkerUtilities";
 import {
     append,
@@ -19,7 +18,9 @@ import {
     takeWhile,
     tryCast,
 } from "../../compiler/core";
+import * as Debug from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { extensionFromPath } from "../../compiler/extension";
 import { factory } from "../../compiler/factory/nodeFactory";
 import {
     isArrayLiteralExpression,
@@ -145,7 +146,6 @@ import {
     rangeContainsRange,
     symbolNameNoDefault,
 } from "../utilities";
-import { extensionFromPath } from "../../compiler/extension";
 
 const refactorName = "Move to a new file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);

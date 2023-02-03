@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     contains,
     countWhere,
@@ -13,6 +12,8 @@ import {
     map,
     tryCast,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
+import { createPrinterWithRemoveComments } from "../compiler/emitter";
 import { factory } from "../compiler/factory/nodeFactory";
 import {
     isBinaryExpression,
@@ -94,7 +95,6 @@ import {
     spacePart,
     symbolToDisplayParts,
 } from "./utilities";
-import { createPrinterWithRemoveComments } from "../compiler/emitter";
 
 const enum InvocationKind { Call, TypeArgs, Contextual }
 interface CallInvocation { readonly kind: InvocationKind.Call; readonly node: CallLikeExpression; }

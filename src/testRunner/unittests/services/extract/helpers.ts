@@ -1,12 +1,12 @@
-import * as ts from "../../../_namespaces/ts";
+import { getFormatContext } from "../../../../services/formatting/formatting";
+import { applyChanges } from "../../../../services/textChanges";
 import * as Harness from "../../../_namespaces/Harness";
+import * as ts from "../../../_namespaces/ts";
+import { createProjectService } from "../../tsserver/helpers";
 import {
     createServerHost,
     libFile,
 } from "../../virtualFileSystemWithWatch";
-import { createProjectService } from "../../tsserver/helpers";
-import { applyChanges } from "../../../../services/textChanges";
-import { getFormatContext } from "../../../../services/formatting/formatting";
 
 interface Range {
     pos: number;

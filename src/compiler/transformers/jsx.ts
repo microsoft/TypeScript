@@ -1,4 +1,3 @@
-import * as Debug from "../debug";
 import {
     arrayFrom,
     emptyArray,
@@ -13,6 +12,7 @@ import {
     singleOrUndefined,
     spanMap,
 } from "../core";
+import * as Debug from "../debug";
 import {
     addEmitHelpers,
     setIdentifierGeneratedImportReference,

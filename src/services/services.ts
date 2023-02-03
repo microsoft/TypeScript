@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import { getFileEmitOutput } from "../compiler/builderState";
 import {
     ParseConfigFileHost,
@@ -36,6 +35,8 @@ import {
     Push,
     SortedArray,
 } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
+import { getSnippetElement } from "../compiler/factory/emitNode";
 import {
     isComputedPropertyName,
     isIdentifier,
@@ -53,7 +54,6 @@ import {
     isPrivateIdentifier,
     isPropertyAccessExpression,
 } from "../compiler/factory/nodeTests";
-import { getSnippetElement } from "../compiler/factory/emitNode";
 import { ModeAwareCache } from "../compiler/moduleNameResolver";
 import {
     ObjectAllocator,

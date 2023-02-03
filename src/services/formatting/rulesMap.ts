@@ -1,5 +1,5 @@
-import * as Debug from "../../compiler/debug";
 import { every } from "../../compiler/core";
+import * as Debug from "../../compiler/debug";
 import { SyntaxKind } from "../../compiler/types";
 import { FormattingContext } from "./formattingContext";
 import {

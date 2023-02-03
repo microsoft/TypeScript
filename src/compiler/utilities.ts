@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import { getSymbolId } from "./checkerUtilities";
 import {
     addRange,
@@ -57,6 +56,7 @@ import {
     SortedArray,
     version,
 } from "./corePublic";
+import * as Debug from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
     isArrayLiteralExpression,

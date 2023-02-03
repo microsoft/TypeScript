@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     addRange,
     append,
@@ -8,6 +7,7 @@ import {
     forEach,
     pushIfUnique,
 } from "../../compiler/core";
+import * as Debug from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import {
     ignoreSourceNewlines,

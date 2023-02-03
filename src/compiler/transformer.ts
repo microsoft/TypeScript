@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import {
     addRange,
     append,
@@ -10,6 +9,7 @@ import {
     returnUndefined,
     some,
 } from "./core";
+import * as Debug from "./debug";
 import { createEmitHelperFactory } from "./factory/emitHelpers";
 import {
     disposeEmitNodes,
@@ -24,6 +24,7 @@ import * as performance from "./performance";
 import { tracing } from "./tracing";
 import { transformClassFields } from "./transformers/classFields";
 import { transformDeclarations } from "./transformers/declarations";
+import { transformES5 } from "./transformers/es5";
 import { transformES2015 } from "./transformers/es2015";
 import { transformES2016 } from "./transformers/es2016";
 import { transformES2017 } from "./transformers/es2017";
@@ -31,7 +32,7 @@ import { transformES2018 } from "./transformers/es2018";
 import { transformES2019 } from "./transformers/es2019";
 import { transformES2020 } from "./transformers/es2020";
 import { transformES2021 } from "./transformers/es2021";
-import { transformES5 } from "./transformers/es5";
+import { transformESDecorators } from "./transformers/esDecorators";
 import { transformESNext } from "./transformers/esnext";
 import { transformGenerators } from "./transformers/generators";
 import { transformJsx } from "./transformers/jsx";
@@ -82,7 +83,6 @@ import {
     getUseDefineForClassFields,
 } from "./utilities";
 import { getParseTreeNode } from "./utilitiesPublic";
-import { transformESDecorators } from "./transformers/esDecorators";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {

@@ -1,10 +1,10 @@
-import * as Debug from "../../compiler/debug";
 import {
     contains,
     find,
     isWhiteSpaceLike,
     isWhiteSpaceSingleLine,
 } from "../../compiler/core";
+import * as Debug from "../../compiler/debug";
 import {
     isCallExpression,
     isConditionalExpression,

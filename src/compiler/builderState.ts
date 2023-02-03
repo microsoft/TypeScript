@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import { computeSignatureWithDiagnostics } from "./builder";
 import { HostForComputeHash } from "./builderPublic";
 import {
@@ -13,6 +12,7 @@ import {
     mapDefinedIterator,
     some,
 } from "./core";
+import * as Debug from "./debug";
 import { isStringLiteral } from "./factory/nodeTests";
 import { isDeclarationFileName } from "./parser";
 import {

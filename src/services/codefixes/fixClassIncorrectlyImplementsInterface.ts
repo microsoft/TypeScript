@@ -1,10 +1,10 @@
-import * as Debug from "../../compiler/debug";
 import { getNodeId } from "../../compiler/checkerUtilities";
 import {
     and,
     find,
     mapDefined,
 } from "../../compiler/core";
+import * as Debug from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { isConstructorDeclaration } from "../../compiler/factory/nodeTests";
 import {

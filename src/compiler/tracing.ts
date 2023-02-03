@@ -1,6 +1,6 @@
-import * as performance from "./performance";
 import * as Debug from "./debug";
 import { combinePaths } from "./path";
+import * as performance from "./performance";
 import { timestamp } from "./performanceCore";
 import { getLineAndCharacterOfPosition } from "./scanner";
 import {

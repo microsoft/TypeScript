@@ -1,10 +1,10 @@
-import * as Debug from "../debug";
 import {
     forEach,
     lastOrUndefined,
     map,
     reduceLeft,
 } from "../core";
+import * as Debug from "../debug";
 import {
     addEmitHelpers,
     addSyntheticTrailingComment,

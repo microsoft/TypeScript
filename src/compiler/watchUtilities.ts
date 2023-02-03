@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import { BuilderProgram } from "./builderPublic";
 import {
     ExtendedConfigCacheEntry,
@@ -24,6 +23,13 @@ import {
     SortedArray,
     SortedReadonlyArray,
 } from "./corePublic";
+import * as Debug from "./debug";
+import {
+    getSupportedExtensions,
+    getSupportedExtensionsWithJsonIfResolveJsonModule,
+    removeFileExtension,
+    supportedJSExtensionsFlat,
+} from "./extension";
 import {
     emptyFileSystemEntries,
     FileSystemEntries,
@@ -67,12 +73,6 @@ import {
     outFile,
 } from "./utilities";
 import { returnNoopFileWatcher } from "./watch";
-import {
-    getSupportedExtensions,
-    getSupportedExtensionsWithJsonIfResolveJsonModule,
-    removeFileExtension,
-    supportedJSExtensionsFlat,
-} from "./extension";
 
 /**
  * Partial interface of the System thats needed to support the caching of directory structure

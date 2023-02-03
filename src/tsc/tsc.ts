@@ -1,5 +1,5 @@
-import * as Debug from "../compiler/debug";
 import { noop } from "../compiler/core";
+import * as Debug from "../compiler/debug";
 import { sys } from "../compiler/sys";
 import { executeCommandLine } from "../executeCommandLine/executeCommandLine";
 

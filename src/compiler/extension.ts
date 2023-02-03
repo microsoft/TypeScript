@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import {
     endsWith,
     find,
@@ -7,6 +6,7 @@ import {
     some,
     startsWith,
 } from "./core";
+import * as Debug from "./debug";
 import {
     changeAnyExtension,
     fileExtensionIs,

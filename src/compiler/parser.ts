@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import { convertToObjectWorker } from "./commandLineParser";
 import {
     addRange,
@@ -21,7 +20,9 @@ import {
     toArray,
     trimString,
 } from "./core";
+import * as Debug from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
+import { supportedDeclarationExtensions } from "./extension";
 import { BaseNodeFactory } from "./factory/baseNodeFactory";
 import {
     createNodeFactory,
@@ -408,7 +409,6 @@ import {
     textChangeRangeNewSpan,
     textSpanEnd,
 } from "./utilitiesPublic";
-import { supportedDeclarationExtensions } from "./extension";
 
 const enum SignatureFlags {
     None = 0,

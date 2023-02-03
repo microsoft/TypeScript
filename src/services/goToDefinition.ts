@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     concatenate,
     emptyArray,
@@ -14,6 +13,7 @@ import {
     some,
     tryCast,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
 import {
     isBindingElement,
     isClassExpression,

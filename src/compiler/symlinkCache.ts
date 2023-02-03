@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import {
     createMultiMap,
     emptyArray,
@@ -6,6 +5,7 @@ import {
     MultiMap,
     startsWith,
 } from "./core";
+import * as Debug from "./debug";
 import { ModeAwareCache } from "./moduleNameResolver";
 import {
     ensureTrailingDirectorySeparator,

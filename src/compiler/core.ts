@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import {
     Comparer,
     Comparison,
@@ -8,6 +7,7 @@ import {
     SortedArray,
     SortedReadonlyArray,
 } from "./corePublic";
+import * as Debug from "./debug";
 import {
     __String,
     CharacterCodes,

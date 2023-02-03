@@ -1,5 +1,6 @@
-import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { append } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { isJSDocNullableType } from "../../compiler/factory/nodeTests";
 import {
     AsExpression,
     CallSignatureDeclaration,
@@ -35,7 +36,6 @@ import {
 import { ChangeTracker } from "../textChanges";
 import { CodeFixAction } from "../types";
 import { getTokenAtPosition } from "../utilities";
-import { isJSDocNullableType } from "../../compiler/factory/nodeTests";
 
 const fixIdPlain = "fixJSDocTypes_plain";
 const fixIdNullable = "fixJSDocTypes_nullable";

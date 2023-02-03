@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import {
     bindSourceFile,
     getModuleInstanceState,
@@ -81,7 +80,15 @@ import {
     tryCast,
 } from "./core";
 import { Comparison } from "./corePublic";
+import * as Debug from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
+import { createPrinterWithDefaults, createPrinterWithRemoveComments, createPrinterWithRemoveCommentsNeverAsciiEscape, createPrinterWithRemoveCommentsOmitTrailingSemicolon } from "./emitter";
+import {
+    removeExtension,
+    resolutionExtensionIsTSOrJson,
+    tryExtractTSExtension,
+    tryGetExtensionFromPath,
+} from "./extension";
 import {
     createBinaryExpressionTrampoline,
 } from "./factory/binaryExpressionStateMachine";
@@ -238,6 +245,7 @@ import {
     nodeModulesPathPart,
     shouldAllowImportingTsExtension,
 } from "./moduleNameResolver";
+import { getResolvedExternalModuleName } from "./moduleNameResolverUtilities";
 import {
     countPathComponents,
     getModuleSpecifiers,
@@ -287,6 +295,7 @@ import {
     TracingNode,
 } from "./tracing";
 import { nullTransformationContext } from "./transformer";
+import { isInitializedProperty } from "./transformers/utilities";
 import {
     __String,
     AccessExpression,
@@ -1100,15 +1109,6 @@ import {
     visitNode,
     visitNodes,
 } from "./visitorPublic";
-import {
-    removeExtension,
-    resolutionExtensionIsTSOrJson,
-    tryExtractTSExtension,
-    tryGetExtensionFromPath,
-} from "./extension";
-import { getResolvedExternalModuleName } from "./moduleNameResolverUtilities";
-import { isInitializedProperty } from "./transformers/utilities";
-import { createPrinterWithDefaults, createPrinterWithRemoveComments, createPrinterWithRemoveCommentsNeverAsciiEscape, createPrinterWithRemoveCommentsOmitTrailingSemicolon } from "./emitter";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;
@@ -14372,7 +14372,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         for (const tag of node.tags) {
                             if (isJSDocOverloadTag(tag)) {
                                 const jsDocSignature = tag.typeExpression;
-                                if (jsDocSignature.type === undefined) {
+                                if (jsDocSignature.type === undefined && !isConstructorDeclaration(decl)) {
                                     reportImplicitAny(jsDocSignature, anyType);
                                 }
                                 result.push(getSignatureFromDeclaration(jsDocSignature));
@@ -14497,6 +14497,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getReturnTypeFromAnnotation(declaration: SignatureDeclaration | JSDocSignature) {
         if (declaration.kind === SyntaxKind.Constructor) {
             return getDeclaredTypeOfClassOrInterface(getMergedSymbol((declaration.parent as ClassDeclaration).symbol));
+        }
+        if (isJSDocSignature(declaration)) {
+            const root = getJSDocRoot(declaration);
+            if (root && isConstructorDeclaration(root.parent)) {
+                return getDeclaredTypeOfClassOrInterface(getMergedSymbol((root.parent.parent as ClassDeclaration).symbol));
+            }
         }
         if (isJSDocConstructSignature(declaration)) {
             return getTypeFromTypeNode((declaration.parameters[0] as ParameterDeclaration).type!); // TODO: GH#18217
@@ -33687,6 +33693,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 declaration.kind !== SyntaxKind.Constructor &&
                 declaration.kind !== SyntaxKind.ConstructSignature &&
                 declaration.kind !== SyntaxKind.ConstructorType &&
+                !(isJSDocSignature(declaration) && getJSDocRoot(declaration)?.parent?.kind === SyntaxKind.Constructor) &&
                 !isJSDocConstructSignature(declaration) &&
                 !isJSConstructor(declaration)) {
 

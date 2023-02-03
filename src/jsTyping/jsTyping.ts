@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import { readConfigFile } from "../compiler/commandLineParser";
 import {
     compareStringsCaseSensitive,
@@ -17,6 +16,11 @@ import {
     MapLike,
     versionMajorMinor,
 } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
+import {
+    hasJSFileExtension,
+    removeFileExtension,
+} from "../compiler/extension";
 import {
     combinePaths,
     fileExtensionIs,
@@ -34,10 +38,6 @@ import {
     Path,
     TypeAcquisition,
 } from "../compiler/types";
-import {
-    hasJSFileExtension,
-    removeFileExtension,
-} from "../compiler/extension";
 
 /** @internal */
 export interface TypingResolutionHost {

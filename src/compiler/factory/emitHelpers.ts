@@ -1,10 +1,10 @@
-import * as Debug from "../debug";
 import {
     arrayToMap,
     compareValues,
     memoize,
 } from "../core";
 import { Comparison } from "../corePublic";
+import * as Debug from "../debug";
 import {
     __String,
     ArrayLiteralExpression,

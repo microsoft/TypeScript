@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     sourceFileAffectingCompilerOptions,
 } from "../compiler/commandLineParser";
@@ -9,6 +8,7 @@ import {
     getOrUpdate,
     identity,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
 import { getKeyForCompilerOptions } from "../compiler/moduleNameResolver";
 import {
     CreateSourceFileOptions,

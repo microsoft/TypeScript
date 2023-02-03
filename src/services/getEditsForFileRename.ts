@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import { getOptionFromName } from "../compiler/commandLineParser";
 import {
     createGetCanonicalFileName,
@@ -10,6 +9,7 @@ import {
     last,
     mapDefined,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
 import { factory } from "../compiler/factory/nodeFactory";
 import {
     isArrayLiteralExpression,

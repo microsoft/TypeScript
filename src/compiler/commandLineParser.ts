@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import {
     append,
     arrayFrom,
@@ -35,7 +34,13 @@ import {
     MapLike,
     Push,
 } from "./corePublic";
+import * as Debug from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
+import {
+    changeExtension,
+    getSupportedExtensions,
+    getSupportedExtensionsWithJsonIfResolveJsonModule,
+} from "./extension";
 import {
     isArrayLiteralExpression,
     isObjectLiteralExpression,
@@ -129,11 +134,6 @@ import {
     isStringDoubleQuoted,
 } from "./utilities";
 import { unescapeLeadingUnderscores } from "./utilitiesPublic";
-import {
-    changeExtension,
-    getSupportedExtensions,
-    getSupportedExtensionsWithJsonIfResolveJsonModule,
-} from "./extension";
 
 /** @internal */
 export const compileOnSaveCommandLineOption: CommandLineOption = {

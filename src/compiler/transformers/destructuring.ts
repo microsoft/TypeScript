@@ -1,4 +1,3 @@
-import * as Debug from "../debug";
 import {
     addRange,
     append,
@@ -8,6 +7,7 @@ import {
     map,
     some,
 } from "../core";
+import * as Debug from "../debug";
 import { factory } from "../factory/nodeFactory";
 import {
     isBindingElement,

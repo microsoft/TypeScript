@@ -1,4 +1,3 @@
-import * as Debug from "../debug";
 import { getNodeId } from "../checkerUtilities";
 import {
     addRange,
@@ -22,6 +21,7 @@ import {
     startsWith,
 } from "../core";
 import { Push } from "../corePublic";
+import * as Debug from "../debug";
 import { getBuildInfo } from "../emitter";
 import { objectAllocator } from "../objectAllocator";
 import { parseNodeFactory } from "../parser";

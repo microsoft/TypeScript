@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as Debug from "../compiler/debug";
+
 import {
     createGetCanonicalFileName,
     stringContains,
@@ -9,6 +9,7 @@ import {
     MapLike,
     version,
 } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
 import {
     combinePaths,
     forEachAncestorDirectory,

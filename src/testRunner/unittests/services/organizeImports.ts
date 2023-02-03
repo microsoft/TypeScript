@@ -1,12 +1,12 @@
-import * as ts from "../../_namespaces/ts";
+import { applyChanges } from "../../../services/textChanges";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import { createProjectService } from "../tsserver/helpers";
 import {
     createServerHost,
     File,
 } from "../virtualFileSystemWithWatch";
-import { createProjectService } from "../tsserver/helpers";
 import { newLineCharacter } from "./extract/helpers";
-import { applyChanges } from "../../../services/textChanges";
 
 describe("unittests:: services:: organizeImports", () => {
     describe("Sort imports", () => {

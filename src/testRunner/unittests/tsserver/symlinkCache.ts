@@ -1,3 +1,6 @@
+import {
+    createSymlinkCache,
+} from "../../../compiler/symlinkCache";
 import * as ts from "../../_namespaces/ts";
 import {
     createServerHost,
@@ -8,9 +11,6 @@ import {
     createSession,
     openFilesForSession,
 } from "./helpers";
-import {
-    createSymlinkCache,
-} from "../../../compiler/symlinkCache";
 
 const appTsconfigJson: File = {
     path: "/packages/app/tsconfig.json",

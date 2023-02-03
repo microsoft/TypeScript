@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import { EmitOutput } from "../compiler/builderStatePublic";
 import {
     arrayFrom,
@@ -33,6 +32,8 @@ import {
     toFileNameLowerCase,
 } from "../compiler/core";
 import { version } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
+import { removeFileExtension } from "../compiler/extension";
 import { isIdentifier } from "../compiler/factory/nodeTests";
 import {
     getEntrypointsFromPackageJsonInfo,
@@ -202,7 +203,6 @@ import {
     NormalizedPath,
     toNormalizedPath,
 } from "./utilitiesPublic";
-import { removeFileExtension } from "../compiler/extension";
 
 interface StackTraceError extends Error {
     stack?: string;

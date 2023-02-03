@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import { getSymbolId } from "../compiler/checkerUtilities";
 import {
     arrayIsEqualTo,
@@ -12,6 +11,7 @@ import {
     stringContains,
     tryCast,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
 import {
     isExportAssignment,
     isExportSpecifier,

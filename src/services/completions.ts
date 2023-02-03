@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import { getSymbolId } from "../compiler/checkerUtilities";
 import {
     append,
@@ -34,6 +33,7 @@ import {
     Comparison,
     SortedArray,
 } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
 import { Diagnostics } from "../compiler/diagnosticInformationMap.generated";
 import { createPrinter } from "../compiler/emitter";
 import { setSnippetElement } from "../compiler/factory/emitNode";
@@ -300,6 +300,7 @@ import {
     unescapeLeadingUnderscores,
 } from "../compiler/utilitiesPublic";
 import * as JsTyping from "../jsTyping/jsTyping";
+import { codefix } from "./_namespaces/ts";
 import {
     addNewNodeForMemberSymbol,
     getNoopSymbolTrackerWithResolver,
@@ -412,7 +413,6 @@ import {
     shouldUseUriStyleNodeCoreModules,
     textPart,
 } from "./utilities";
-import { codefix } from "./_namespaces/ts";
 
 // Exported only for tests
 /** @internal */

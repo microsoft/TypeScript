@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     cast,
     createMultiMap,
@@ -16,6 +15,7 @@ import {
     singleOrUndefined,
     tryCast,
 } from "../../compiler/core";
+import * as Debug from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { setEmitFlags } from "../../compiler/factory/emitNode";
 import { factory } from "../../compiler/factory/nodeFactory";
@@ -124,8 +124,8 @@ import {
     findChildOfKind,
     getTokenAtPosition,
     getTypeNodeIfAccessible,
-    nodeSeenTracker,
     NodeSeenTracker,
+    nodeSeenTracker,
 } from "../utilities";
 import { tryGetAutoImportableReferenceFromTypeNode } from "./helpers";
 import {

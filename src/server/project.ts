@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import { BuilderState } from "../compiler/builderState";
 import { updateErrorForNoInputFiles } from "../compiler/commandLineParser";
 import {
@@ -29,6 +28,8 @@ import {
     startsWith,
 } from "../compiler/core";
 import { SortedReadonlyArray } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
+import { getDeclarationEmitOutputFilePathWorker } from "../compiler/emitterUtilities";
 import {
     getAutomaticTypeDirectiveNames,
     getEffectiveTypeRoots,
@@ -51,10 +52,15 @@ import {
 import { perfLogger } from "../compiler/perfLogger";
 import { timestamp } from "../compiler/performanceCore";
 import { inferredTypesContainingFile } from "../compiler/program";
+import { changesAffectModuleResolution } from "../compiler/programUtilities";
 import {
     createResolutionCache,
     ResolutionCache,
 } from "../compiler/resolutionCache";
+import {
+    createSymlinkCache,
+    SymlinkCache,
+} from "../compiler/symlinkCache";
 import {
     generateDjb2Hash,
     PollingInterval,
@@ -143,6 +149,7 @@ import {
     isInsideNodeModules,
 } from "../services/utilities";
 import * as ts from "./_namespaces/ts";
+import { removeFileExtension, resolutionExtensionIsTSOrJson } from "./_namespaces/ts";
 import {
     FileStats,
     forEachResolvedProjectReferenceProject,
@@ -170,13 +177,6 @@ import {
     ProjectOptions,
     toNormalizedPath,
 } from "./utilitiesPublic";
-import {
-    createSymlinkCache,
-    SymlinkCache,
-} from "../compiler/symlinkCache";
-import { changesAffectModuleResolution } from "../compiler/programUtilities";
-import { removeFileExtension, resolutionExtensionIsTSOrJson } from "./_namespaces/ts";
-import { getDeclarationEmitOutputFilePathWorker } from "../compiler/emitterUtilities";
 
 export enum ProjectKind {
     Inferred,

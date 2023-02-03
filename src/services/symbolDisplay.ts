@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     addRange,
     arrayFrom,
@@ -11,6 +10,8 @@ import {
     length,
     some,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
+import { createPrinterWithRemoveComments } from "../compiler/emitter";
 import {
     isArrowFunction,
     isBindingElement,
@@ -118,7 +119,6 @@ import {
     textPart,
     typeToDisplayParts,
 } from "./utilities";
-import { createPrinterWithRemoveComments } from "../compiler/emitter";
 
 const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 

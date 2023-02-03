@@ -1,5 +1,5 @@
-import * as Debug from "../../debug";
 import { map } from "../../core";
+import * as Debug from "../../debug";
 import { isSourceFile } from "../../factory/nodeTests";
 import {
     Bundle,

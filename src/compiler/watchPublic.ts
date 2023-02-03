@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import { createBuilderProgramUsingProgramBuildInfo } from "./builder";
 import {
     BuilderProgram,
@@ -26,6 +25,7 @@ import {
     MapLike,
     version,
 } from "./corePublic";
+import * as Debug from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
     getBuildInfo,

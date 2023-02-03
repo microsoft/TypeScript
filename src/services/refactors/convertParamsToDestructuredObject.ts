@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     compareValues,
     contains,
@@ -13,6 +12,7 @@ import {
     sortAndDeduplicate,
     tryCast,
 } from "../../compiler/core";
+import * as Debug from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { addEmitFlags } from "../../compiler/factory/emitNode";
 import { factory } from "../../compiler/factory/nodeFactory";

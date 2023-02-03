@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     cast,
     first,
@@ -6,6 +5,7 @@ import {
     map,
     tryCast,
 } from "../../compiler/core";
+import * as Debug from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import { factory } from "../../compiler/factory/nodeFactory";
 import {

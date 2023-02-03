@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     getModuleInstanceState,
     ModuleInstanceState,
@@ -8,6 +7,7 @@ import {
     forEach,
     lastOrUndefined,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
 import {
     isDecorator,
     isVariableDeclarationList,

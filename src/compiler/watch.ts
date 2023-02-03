@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import {
     BuilderProgram,
     createEmitAndSemanticDiagnosticsBuilderProgram,
@@ -30,6 +29,7 @@ import {
     noop,
 } from "./core";
 import { SortedReadonlyArray } from "./corePublic";
+import * as Debug from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
     getPatternFromSpec,

@@ -1,9 +1,9 @@
-import * as Debug from "../debug";
 import {
     cast,
     map,
     notImplemented,
 } from "../core";
+import * as Debug from "../debug";
 import {
     ArrayBindingOrAssignmentElement,
     ArrayBindingOrAssignmentPattern,

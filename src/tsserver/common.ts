@@ -1,4 +1,3 @@
-import { LanguageServiceMode } from "../services/types";
 import {
     ServerCancellationToken,
     SessionOptions,
@@ -7,6 +6,7 @@ import {
     Logger,
     LogLevel,
 } from "../server/utilitiesPublic";
+import { LanguageServiceMode } from "../services/types";
 
 /** @internal */
 export function getLogLevel(level: string | undefined) {

@@ -1,5 +1,3 @@
-import * as Debug from "./debug";
-import * as performance from "./performance";
 import {
     arrayFrom,
     binarySearchKey,
@@ -14,12 +12,14 @@ import {
     trimStringEnd,
 } from "./core";
 import { SortedReadonlyArray } from "./corePublic";
+import * as Debug from "./debug";
 import {
     combinePaths,
     getDirectoryPath,
     getNormalizedAbsolutePath,
     getRelativePathToDirectoryOrUrl,
 } from "./path";
+import * as performance from "./performance";
 import { getPositionOfLineAndCharacter } from "./scanner";
 import {
     CharacterCodes,

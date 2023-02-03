@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     compareStringsCaseSensitiveUI,
     compareValues,
@@ -10,6 +9,8 @@ import {
     map,
     mapDefined,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
+import { removeFileExtension } from "../compiler/extension";
 import { factory } from "../compiler/factory/nodeFactory";
 import {
     isArrowFunction,
@@ -122,7 +123,6 @@ import {
     getNodeKind,
     getNodeModifiers,
 } from "./utilities";
-import { removeFileExtension } from "../compiler/extension";
 
 /**
  * Matches all whitespace characters in a string. Eg:

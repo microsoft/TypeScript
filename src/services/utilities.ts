@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     getModuleInstanceState,
     ModuleInstanceState,
@@ -42,6 +41,8 @@ import {
     tryCast,
 } from "../compiler/core";
 import { Comparison } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
+import { createPrinterWithRemoveCommentsOmitTrailingSemicolon } from "../compiler/emitter";
 import {
     addEmitFlags,
     addSyntheticLeadingComment,
@@ -403,7 +404,6 @@ import {
     TextChange,
     TextRangeWithKind,
 } from "./types";
-import { createPrinterWithRemoveCommentsOmitTrailingSemicolon } from "../compiler/emitter";
 
 // These utilities are common to multiple language service features.
 //#region

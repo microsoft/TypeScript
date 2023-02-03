@@ -1,8 +1,9 @@
-import * as Debug from "../compiler/debug";
 import {
     equateStringsCaseInsensitive,
     some,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
+import { createPrinterWithRemoveComments } from "../compiler/emitter";
 import {
     isArrowFunction,
     isCallExpression,
@@ -79,7 +80,6 @@ import {
     InlayHintsContext,
 } from "./types";
 import { findChildOfKind } from "./utilities";
-import { createPrinterWithRemoveComments } from "../compiler/emitter";
 
 const maxHintsLength = 30;
 

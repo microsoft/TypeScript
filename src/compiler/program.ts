@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import { BuilderProgram } from "./builderPublic";
 import { createTypeChecker } from "./checker";
 import {
@@ -62,6 +61,7 @@ import {
     SortedReadonlyArray,
     versionMajorMinor,
 } from "./corePublic";
+import * as Debug from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
     emitFiles,
@@ -74,6 +74,16 @@ import {
     isBuildInfoFile,
     notImplementedResolver,
 } from "./emitter";
+import {
+    changeExtension,
+    extensionFromPath,
+    getSupportedExtensions,
+    getSupportedExtensionsWithJsonIfResolveJsonModule,
+    hasJSFileExtension,
+    removeFileExtension,
+    resolutionExtensionIsTSOrJson,
+    supportedJSExtensionsFlat,
+} from "./extension";
 import { addInternalEmitFlags } from "./factory/emitNode";
 import {
     createInputFilesWithFilePaths,
@@ -359,16 +369,6 @@ import {
 } from "./watch";
 import { ProgramHost } from "./watchPublic";
 import { DirectoryStructureHost } from "./watchUtilities";
-import {
-    changeExtension,
-    extensionFromPath,
-    getSupportedExtensions,
-    getSupportedExtensionsWithJsonIfResolveJsonModule,
-    hasJSFileExtension,
-    removeFileExtension,
-    resolutionExtensionIsTSOrJson,
-    supportedJSExtensionsFlat,
-} from "./extension";
 
 export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
     return forEachAncestorDirectory(searchPath, ancestor => {

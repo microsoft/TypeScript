@@ -1,6 +1,4 @@
-import * as Debug from "./debug";
 import { matchesExclude } from "./commandLineParser";
-import { isNodeLikeSystem } from "./platform";
 import {
     contains,
     createGetCanonicalFileName,
@@ -21,6 +19,7 @@ import {
     unorderedRemoveItem,
 } from "./core";
 import { Comparison } from "./corePublic";
+import * as Debug from "./debug";
 import {
     emptyFileSystemEntries,
     FileSystemEntries,
@@ -40,6 +39,7 @@ import {
 } from "./path";
 import { perfLogger } from "./perfLogger";
 import { timestamp } from "./performanceCore";
+import { isNodeLikeSystem } from "./platform";
 import { ignoredPaths } from "./sysUtilities";
 import {
     DirectoryWatcherCallback,

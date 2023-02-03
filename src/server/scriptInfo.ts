@@ -1,5 +1,3 @@
-import * as Debug from "../compiler/debug";
-import * as protocol from "./protocol";
 import {
     assign,
     clear,
@@ -10,6 +8,8 @@ import {
     stringContains,
     unorderedRemoveItem,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
+import { hasTSFileExtension } from "../compiler/extension";
 import {
     directorySeparator,
     getBaseFileName,
@@ -58,6 +58,7 @@ import {
     Project,
     ProjectKind,
 } from "./project";
+import * as protocol from "./protocol";
 import {
     AbsolutePositionAndLineText,
     ScriptVersionCache,
@@ -67,7 +68,6 @@ import {
     Errors,
     NormalizedPath,
 } from "./utilitiesPublic";
-import { hasTSFileExtension } from "../compiler/extension";
 
 export interface ScriptInfoVersion {
     svc: number;

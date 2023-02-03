@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     canJsonReportNoInputFiles,
     convertCompilerOptionsForTelemetry,
@@ -42,6 +41,11 @@ import {
     ReadonlyCollection,
     version,
 } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
+import {
+    hasTSFileExtension,
+    removeFileExtension,
+} from "../compiler/extension";
 import { parsePackageName } from "../compiler/moduleNameResolver";
 import { parseJsonText } from "../compiler/parser";
 import {
@@ -217,10 +221,6 @@ import {
     ProjectOptions,
     toNormalizedPath,
 } from "./utilitiesPublic";
-import {
-    hasTSFileExtension,
-    removeFileExtension,
-} from "../compiler/extension";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 /** @internal */

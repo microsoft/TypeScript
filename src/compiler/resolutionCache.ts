@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import {
     arrayToMap,
     createMultiMap,
@@ -13,7 +12,12 @@ import {
     startsWith,
     stringContains,
 } from "./core";
+import * as Debug from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
+import {
+    extensionIsTS,
+    resolutionExtensionIsTSOrJson,
+} from "./extension";
 import {
     createModeAwareCache,
     createModuleResolutionCache,
@@ -83,10 +87,6 @@ import {
     closeFileWatcherOf,
     isEmittedFileOfProgram,
 } from "./watchUtilities";
-import {
-    extensionIsTS,
-    resolutionExtensionIsTSOrJson,
-} from "./extension";
 
 /**
  * This is the cache of module/typedirectives resolution that can be retained across program

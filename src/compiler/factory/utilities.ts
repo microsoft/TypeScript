@@ -1,4 +1,3 @@
-import * as Debug from "../debug";
 import {
     compareStringsCaseSensitive,
     first,
@@ -7,6 +6,8 @@ import {
     pushIfUnique,
     some,
 } from "../core";
+import * as Debug from "../debug";
+import { getExternalModuleNameFromPath } from "../moduleNameResolverUtilities";
 import { parseNodeFactory } from "../parser";
 import { setParent } from "../parserUtilities";
 import { isIdentifierText } from "../scanner";
@@ -181,7 +182,6 @@ import {
     setOriginalNode,
     setTextRange,
 } from "./utilitiesPublic";
-import { getExternalModuleNameFromPath } from "../moduleNameResolverUtilities";
 
 // Compound nodes
 

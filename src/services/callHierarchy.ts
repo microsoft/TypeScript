@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import { getNodeId } from "../compiler/checkerUtilities";
 import {
     append,
@@ -11,6 +10,8 @@ import {
     isArray,
     map,
 } from "../compiler/core";
+import * as Debug from "../compiler/debug";
+import { createPrinterWithRemoveCommentsOmitTrailingSemicolon } from "../compiler/emitter";
 import {
     isArrowFunction,
     isClassDeclaration,
@@ -121,7 +122,6 @@ import {
     isRightSideOfPropertyAccess,
     isTaggedTemplateTag,
 } from "./utilities";
-import { createPrinterWithRemoveCommentsOmitTrailingSemicolon } from "../compiler/emitter";
 
 /** @internal */
 export type NamedExpression =

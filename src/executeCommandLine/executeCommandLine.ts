@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     BuilderProgram,
     EmitAndSemanticDiagnosticsBuilderProgram,
@@ -33,7 +32,12 @@ import {
     stringContains,
 } from "../compiler/core";
 import { version } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
 import { Diagnostics } from "../compiler/diagnosticInformationMap.generated";
+import {
+    supportedJSExtensionsFlat,
+    supportedTSExtensionsFlat,
+} from "../compiler/extension";
 import {
     combinePaths,
     fileExtensionIs,
@@ -107,10 +111,6 @@ import {
     createWatchProgram,
     WatchCompilerHost,
 } from "../compiler/watchPublic";
-import {
-    supportedJSExtensionsFlat,
-    supportedTSExtensionsFlat,
-} from "../compiler/extension";
 
 interface Statistic {
     name: string;

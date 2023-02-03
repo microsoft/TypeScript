@@ -1,4 +1,3 @@
-import * as Debug from "../debug";
 import {
     addRange,
     append,
@@ -9,6 +8,8 @@ import {
     singleOrMany,
     some,
 } from "../core";
+import * as Debug from "../debug";
+import { isCallToHelper } from "../factory/emitHelpers";
 import {
     addEmitHelpers,
     setCommentRange,
@@ -96,7 +97,6 @@ import {
     getOriginalNodeId,
     isSimpleInlineableExpression,
 } from "./utilities";
-import { isCallToHelper } from "../factory/emitHelpers";
 
 /** @internal */
 export function transformLegacyDecorators(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

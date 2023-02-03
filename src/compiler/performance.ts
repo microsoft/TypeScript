@@ -1,5 +1,5 @@
-import * as Debug from "./debug";
 import { noop } from "./core";
+import * as Debug from "./debug";
 import {
     Performance,
     PerformanceHooks,

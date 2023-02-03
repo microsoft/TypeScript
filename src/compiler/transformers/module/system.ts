@@ -1,4 +1,3 @@
-import * as Debug from "../../debug";
 import { getNodeId } from "../../checkerUtilities";
 import {
     addRange,
@@ -9,6 +8,7 @@ import {
     singleOrMany,
     some,
 } from "../../core";
+import * as Debug from "../../debug";
 import {
     moveEmitHelpers,
     setCommentRange,

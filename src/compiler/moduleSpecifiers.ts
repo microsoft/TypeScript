@@ -1,4 +1,3 @@
-import * as Debug from "./debug";
 import {
     append,
     arrayFrom,
@@ -26,6 +25,16 @@ import {
     Comparison,
     MapLike,
 } from "./corePublic";
+import * as Debug from "./debug";
+import {
+    extensionFromPath,
+    getSupportedExtensions,
+    hasJSFileExtension,
+    hasTSFileExtension,
+    removeExtension,
+    removeFileExtension,
+    tryGetExtensionFromPath,
+} from "./extension";
 import {
     isModuleBlock,
     isModuleDeclaration,
@@ -118,15 +127,6 @@ import {
     tryParsePatterns,
 } from "./utilities";
 import { isExternalModuleNameRelative } from "./utilitiesPublic";
-import {
-    extensionFromPath,
-    getSupportedExtensions,
-    hasJSFileExtension,
-    hasTSFileExtension,
-    removeExtension,
-    removeFileExtension,
-    tryGetExtensionFromPath,
-} from "./extension";
 
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 

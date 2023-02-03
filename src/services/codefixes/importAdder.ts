@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     getNodeId,
     getSymbolId,
@@ -30,7 +29,9 @@ import {
     tryCast,
 } from "../../compiler/core";
 import { Comparison } from "../../compiler/corePublic";
+import * as Debug from "../../compiler/debug";
 import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { removeFileExtension } from "../../compiler/extension";
 import { factory } from "../../compiler/factory/nodeFactory";
 import {
     isExternalModuleReference,
@@ -167,7 +168,6 @@ import {
     SemanticMeaning,
     shouldUseUriStyleNodeCoreModules,
 } from "../utilities";
-import { removeFileExtension } from "../../compiler/extension";
 
 /** @internal */
 export const fixName = "import";

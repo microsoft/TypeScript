@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     arrayFrom,
     arrayToMultiMap,
@@ -15,6 +14,7 @@ import {
     tryCast,
 } from "../compiler/core";
 import { Push } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
 import {
     isAwaitExpression,
     isBlock,

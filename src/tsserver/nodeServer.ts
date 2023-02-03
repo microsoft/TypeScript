@@ -1,13 +1,47 @@
-import * as Debug from "../compiler/debug";
-import * as protocol from "../server/protocol";
 import {
-    Event,
-    formatMessage,
-    nullCancellationToken,
-    ServerCancellationToken,
-    Session,
-    toEvent,
-} from "../server/session";
+    assertType,
+    createQueue,
+    noop,
+    toFileNameLowerCase,
+} from "../compiler/core";
+import {
+    MapLike,
+    SortedReadonlyArray,
+    versionMajorMinor,
+} from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
+import { resolveJSModule } from "../compiler/moduleNameResolver";
+import {
+    combinePaths,
+    directorySeparator,
+    getDirectoryPath,
+    getRootLength,
+    normalizePath,
+    normalizeSlashes,
+} from "../compiler/path";
+import { perfLogger } from "../compiler/perfLogger";
+import {
+    getNodeMajorVersion,
+    sys as system,
+} from "../compiler/sys";
+import {
+    startTracing,
+    tracing,
+} from "../compiler/tracing";
+import {
+    CharacterCodes,
+    DirectoryWatcherCallback,
+    FileWatcher,
+    TypeAcquisition,
+    WatchOptions,
+} from "../compiler/types";
+import { stripQuotes } from "../compiler/utilities";
+import { validateLocaleAndSetLanguage } from "../compiler/utilitiesPublic";
+import { noopFileWatcher } from "../compiler/watch";
+import {
+    NameValidationResult,
+    validatePackageName,
+} from "../jsTyping/jsTyping";
 import {
     ActionInvalidate,
     ActionPackageInstalled,
@@ -32,31 +66,36 @@ import {
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
 } from "../jsTyping/types";
+import { ProjectService } from "../server/editorServices";
+import { Project } from "../server/project";
+import * as protocol from "../server/protocol";
 import {
-    NameValidationResult,
-    validatePackageName,
-} from "../jsTyping/jsTyping";
+    Event,
+    formatMessage,
+    nullCancellationToken,
+    ServerCancellationToken,
+    Session,
+    toEvent,
+} from "../server/session";
+import {
+    ModuleImportResult,
+    ServerHost,
+} from "../server/types";
+import {
+    InstallPackageOptionsWithProject,
+    ITypingsInstaller,
+    nullTypingsInstaller,
+} from "../server/typingsCache";
+import {
+    indent,
+    stringifyIndented,
+} from "../server/utilities";
 import {
     createInstallTypingsRequest,
     Logger,
     LogLevel,
     Msg,
 } from "../server/utilitiesPublic";
-import {
-    indent,
-    stringifyIndented,
-} from "../server/utilities";
-import {
-    InstallPackageOptionsWithProject,
-    ITypingsInstaller,
-    nullTypingsInstaller,
-} from "../server/typingsCache";
-import { Project } from "../server/project";
-import {
-    ModuleImportResult,
-    ServerHost,
-} from "../server/types";
-import { ProjectService } from "../server/editorServices";
 import {
     ApplyCodeActionCommandResult,
     LanguageServiceMode,
@@ -66,45 +105,6 @@ import {
     StartInput,
     StartSessionOptions,
 } from "./common";
-import {
-    assertType,
-    createQueue,
-    noop,
-    toFileNameLowerCase,
-} from "../compiler/core";
-import {
-    MapLike,
-    SortedReadonlyArray,
-    versionMajorMinor,
-} from "../compiler/corePublic";
-import { resolveJSModule } from "../compiler/moduleNameResolver";
-import {
-    combinePaths,
-    directorySeparator,
-    getDirectoryPath,
-    getRootLength,
-    normalizePath,
-    normalizeSlashes,
-} from "../compiler/path";
-import { perfLogger } from "../compiler/perfLogger";
-import {
-    getNodeMajorVersion,
-    sys as system,
-} from "../compiler/sys";
-import {
-    CharacterCodes,
-    DirectoryWatcherCallback,
-    FileWatcher,
-    TypeAcquisition,
-    WatchOptions,
-} from "../compiler/types";
-import {
-    startTracing,
-    tracing,
-} from "../compiler/tracing";
-import { stripQuotes } from "../compiler/utilities";
-import { validateLocaleAndSetLanguage } from "../compiler/utilitiesPublic";
-import { noopFileWatcher } from "../compiler/watch";
 
 interface LogOptions {
     file?: string;

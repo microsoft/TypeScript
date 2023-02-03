@@ -1,4 +1,3 @@
-import * as Debug from "../debug";
 import {
     append,
     arrayFrom,
@@ -23,6 +22,7 @@ import {
     toFileNameLowerCase,
     tryCast,
 } from "../core";
+import * as Debug from "../debug";
 import { Diagnostics } from "../diagnosticInformationMap.generated";
 import { getOutputPathsFor } from "../emitter";
 import {
@@ -74,6 +74,10 @@ import {
     setTextRange,
 } from "../factory/utilitiesPublic";
 import { pathContainsNodeModules } from "../moduleNameResolver";
+import {
+    getExternalModuleNameFromDeclaration,
+    getResolvedExternalModuleName,
+} from "../moduleNameResolverUtilities";
 import { getModuleSpecifier } from "../moduleSpecifiers";
 import { parseNodeFactory } from "../parser";
 import { setParent } from "../parserUtilities";
@@ -240,10 +244,6 @@ import {
     GetSymbolAccessibilityDiagnostic,
 } from "./declarations/diagnostics";
 import { getOriginalNodeId } from "./utilities";
-import {
-    getExternalModuleNameFromDeclaration,
-    getResolvedExternalModuleName,
-} from "../moduleNameResolverUtilities";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {

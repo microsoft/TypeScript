@@ -1,5 +1,5 @@
-import * as Debug from "../compiler/debug";
 import { version } from "../compiler/corePublic";
+import * as Debug from "../compiler/debug";
 import {
     getNodeMajorVersion,
     setStackTraceLimit,

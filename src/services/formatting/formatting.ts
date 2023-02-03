@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     find,
     findIndex,
@@ -7,6 +6,7 @@ import {
     isWhiteSpaceSingleLine,
     last,
 } from "../../compiler/core";
+import * as Debug from "../../compiler/debug";
 import { isDecorator } from "../../compiler/factory/nodeTests";
 import { canHaveModifiers } from "../../compiler/factory/utilitiesPublic";
 import { forEachChild } from "../../compiler/parser";
