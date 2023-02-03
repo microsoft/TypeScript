@@ -808,7 +808,9 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     `;
                     assert.isTrue(context.access.has(C));
-                    assert.isTrue(context.access.has({ get x() { return 2; } }));
+                    assert.isTrue(context.access.has({
+                        get x() { return 2; }
+                    }));
                     assert.isFalse(context.access.has({ }));
                 });
                 it("test private element presence via .has", () => {

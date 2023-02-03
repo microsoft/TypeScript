@@ -256,7 +256,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         const accessor = elementName.computed ?
             factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name) :
             factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
-    
+
         return factory.createPropertyAssignment(
             "get",
             factory.createArrowFunction(
@@ -273,12 +273,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             )
         );
     }
-    
+
     function createESDecorateClassElementAccessSetMethod(elementName: ESDecorateName) {
         const accessor = elementName.computed ?
             factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name) :
             factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
-    
+
         return factory.createPropertyAssignment(
             "set",
             factory.createArrowFunction(
@@ -307,13 +307,13 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             )
         );
     }
-    
+
     function createESDecorateClassElementAccessHasMethod(elementName: ESDecorateName) {
         const propertyName =
             elementName.computed ? elementName.name :
             isIdentifier(elementName.name) ? factory.createStringLiteralFromNode(elementName.name) :
             elementName.name;
-    
+
         return factory.createPropertyAssignment(
             "has",
             factory.createArrowFunction(
@@ -334,7 +334,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             )
         );
     }
-    
+
     function createESDecorateClassElementAccessObject(name: ESDecorateName, access: ESDecorateClassElementAccess) {
         const properties: ObjectLiteralElementLike[] = [];
         properties.push(createESDecorateClassElementAccessHasMethod(name));
