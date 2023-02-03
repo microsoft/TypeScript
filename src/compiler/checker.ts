@@ -28962,6 +28962,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getContextualTypeForObjectLiteralMethod(node, contextFlags) :
             getContextualType(node, contextFlags);
         const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
+        if (instantiatedType && contextFlags && contextFlags & ContextFlags.DeferGenericIndexedAccess && shouldDeferIndexType(instantiatedType)) {
+             return instantiatedType;
+        }
         if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
             const apparentType = mapType(instantiatedType, getApparentType, /*noReductions*/ true);
             return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
@@ -29669,7 +29672,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let propertiesArray: Symbol[] = [];
         let spread: Type = emptyObjectType;
 
-        pushContextualType(node, getContextualType(node, /*contextFlags*/ undefined));
+        pushContextualType(node, getContextualType(node, checkMode && checkMode & CheckMode.Inferential ? ContextFlags.DeferGenericIndexedAccess : undefined));
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
         const contextualTypeHasPattern = contextualType && contextualType.pattern &&
             (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
