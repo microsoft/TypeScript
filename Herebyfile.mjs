@@ -1,21 +1,22 @@
 // @ts-check
-import path from "path";
-import fs from "fs";
-import del from "del";
-import { task } from "hereby";
-import _glob from "glob";
-import util from "util";
+import { CancelToken } from "@esfx/canceltoken";
 import chalk from "chalk";
+import chokidar from "chokidar";
+import del from "del";
+import esbuild from "esbuild";
+import { EventEmitter } from "events";
+import fs from "fs";
 import fsExtra from "fs-extra";
-import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
-import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
-import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import _glob from "glob";
+import { task } from "hereby";
+import path from "path";
+import util from "util";
+
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
-import esbuild from "esbuild";
-import chokidar from "chokidar";
-import { EventEmitter } from "events";
-import { CancelToken } from "@esfx/canceltoken";
+import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
+import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
 
@@ -59,10 +60,7 @@ export const generateLibs = task({
 
             for (const source of lib.sources) {
                 const contents = await fs.promises.readFile(source, "utf-8");
-                // TODO(jakebailey): "\n\n" is for compatibility with our current tests; our test baselines
-                // are sensitive to the positions of things in the lib files. Eventually remove this,
-                // or remove lib.d.ts line numbers from our baselines.
-                output += "\n\n" + contents.replace(/\r\n/g, "\n");
+                output += "\n" + contents.replace(/\r\n/g, "\n");
             }
 
             await fs.promises.writeFile(lib.target, output);
@@ -182,28 +180,6 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             packages: "external",
             logLevel: "warning",
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
-            plugins: [
-                {
-                    name: "fix-require",
-                    setup: (build) => {
-                        build.onEnd(async () => {
-                            // esbuild converts calls to "require" to "__require"; this function
-                            // calls the real require if it exists, or throws if it does not (rather than
-                            // throwing an error like "require not defined"). But, since we want typescript
-                            // to be consumable by other bundlers, we need to convert these calls back to
-                            // require so our imports are visible again.
-                            //
-                            // The leading spaces are to keep the offsets the same within the files to keep
-                            // source maps working (though this only really matters for the line the require is on).
-                            //
-                            // See: https://github.com/evanw/esbuild/issues/1905
-                            let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(/__require\(/g, "  require(");
-                            await fs.promises.writeFile(outfile, contents);
-                        });
-                    },
-                }
-            ]
         };
 
         if (taskOptions.exportIsTsObject) {
@@ -213,6 +189,30 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             options.globalName = "ts";
             // If we are in a CJS context, export the ts namespace.
             options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }` };
+
+            // esbuild converts calls to "require" to "__require"; this function
+            // calls the real require if it exists, or throws if it does not (rather than
+            // throwing an error like "require not defined"). But, since we want typescript
+            // to be consumable by other bundlers, we need to convert these calls back to
+            // require so our imports are visible again.
+            //
+            // The leading spaces are to keep the offsets the same within the files to keep
+            // source maps working (though this only really matters for the line the require is on).
+            //
+            // See: https://github.com/evanw/esbuild/issues/1905
+            options.define = { require: "$$require" };
+            options.plugins = [
+                {
+                    name: "fix-require",
+                    setup: (build) => {
+                        build.onEnd(async () => {
+                            let contents = await fs.promises.readFile(outfile, "utf-8");
+                            contents = contents.replace(/\$\$require/g, "  require");
+                            await fs.promises.writeFile(outfile, contents);
+                        });
+                    },
+                }
+            ];
         }
 
         return options;
