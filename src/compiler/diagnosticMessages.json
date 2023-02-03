@@ -3026,10 +3026,6 @@
         "category": "Error",
         "code": 2690
     },
-    "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
-        "category": "Error",
-        "code": 2691
-    },
     "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
         "category": "Error",
         "code": 2692
