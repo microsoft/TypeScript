@@ -122,7 +122,7 @@ describe("unittests:: services:: findAllReferences", () => {
                 ]
             }
         });
-        let loadingIndicatorScriptInfo = session.getProjectService().getScriptInfo(files[3].path)!;
+        const loadingIndicatorScriptInfo = session.getProjectService().getScriptInfo(files[3].path)!;
         // At this point, we haven't updated `babel-loader` project yet,
         // so `babel-loader` is still a containing project of `loading-indicator` file.
         assert(loadingIndicatorScriptInfo.containingProjects.find(p => p.projectName === "/packages/babel-loader/tsconfig.json"));
@@ -131,10 +131,10 @@ describe("unittests:: services:: findAllReferences", () => {
         assert.doesNotThrow(() => session.executeCommandSeq<protocol.ReferencesRequest>({
             command: protocol.CommandTypes.References,
             arguments: {
-                file: files[3].path,
+                file: files[3].path, // core/src/index.ts
                 line: 5,
                 offset: 5,
             }
         }));
-    })
+    });
 });
