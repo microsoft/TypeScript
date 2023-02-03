@@ -2164,7 +2164,7 @@ export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
     const { types, checker } = type;
     return types.length === 2
         && (types[0].flags & TypeFlags.String) && checker.isEmptyAnonymousObjectType(types[1]);
-};
+}
 
 /** @internal */
 export function isPunctuation(kind: SyntaxKind): boolean {
