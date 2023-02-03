@@ -4961,14 +4961,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
             }
             else {
-                const tsExtension = tryExtractTSExtension(moduleReference);
                 const isExtensionlessRelativePathImport = pathIsRelative(moduleReference) && !hasExtension(moduleReference);
                 const resolutionIsNode16OrNext = moduleResolutionKind === ModuleResolutionKind.Node16 ||
                     moduleResolutionKind === ModuleResolutionKind.NodeNext;
-                if (tsExtension) {
-                    errorOnTSExtensionImport(tsExtension);
-                }
-                else if (!getResolveJsonModule(compilerOptions) &&
+                if (!getResolveJsonModule(compilerOptions) &&
                     fileExtensionIs(moduleReference, Extension.Json) &&
                     moduleResolutionKind !== ModuleResolutionKind.Classic &&
                     hasJsonModuleEmitEnabled(compilerOptions)) {
@@ -4992,11 +4988,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return undefined;
-
-        function errorOnTSExtensionImport(tsExtension: string) {
-            const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
-            error(errorNode, diag, tsExtension, getSuggestedImportSource(tsExtension));
-        }
 
         function getSuggestedImportSource(tsExtension: string) {
             const importSourceWithoutExtension = removeExtension(moduleReference, tsExtension);
