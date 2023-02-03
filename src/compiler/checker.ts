@@ -28838,8 +28838,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // it is the type of the numeric index signature in T. Otherwise, in ES6 and higher, the contextual type is the iterated
     // type of T.
     function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
+        const hasIterable = getGlobalIterableType(/* reportErrors */ false) !== emptyGenericType;
         return arrayContextualType && (
-            getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String)
+            getTypeOfPropertyOfContextualType(filterType(arrayContextualType, t => isArrayOrTupleLikeType(t) || !!getIndexTypeOfType(t, numberType) || hasIterable && isTypeAssignableTo(t, createIterableType(anyType))), "" + index as __String)
             || mapType(
                 arrayContextualType,
                 t => getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false),
