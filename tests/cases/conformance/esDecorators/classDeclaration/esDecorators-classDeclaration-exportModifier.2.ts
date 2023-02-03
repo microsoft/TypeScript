@@ -29,3 +29,13 @@ export @dec class C4 {}
 
 // ok
 export default @dec class C5 {}
+
+// @filename: file6.ts
+
+// error
+@dec export @dec class C6 {}
+
+// @filename: file7.ts
+
+// error
+@dec export default @dec class C7 {}

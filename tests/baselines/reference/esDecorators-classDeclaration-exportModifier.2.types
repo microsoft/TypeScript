@@ -33,3 +33,17 @@ export default @dec class C5 {}
 >dec : any
 >C5 : C5
 
+=== tests/cases/conformance/esDecorators/classDeclaration/file6.ts ===
+// error
+@dec export @dec class C6 {}
+>dec : any
+>dec : any
+>C6 : C6
+
+=== tests/cases/conformance/esDecorators/classDeclaration/file7.ts ===
+// error
+@dec export default @dec class C7 {}
+>dec : any
+>dec : any
+>C7 : C7
+

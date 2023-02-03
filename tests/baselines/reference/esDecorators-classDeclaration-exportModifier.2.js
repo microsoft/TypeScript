@@ -24,6 +24,14 @@ export @dec class C4 {}
 // ok
 export default @dec class C5 {}
 
+//// [file6.ts]
+// error
+@dec export @dec class C6 {}
+
+//// [file7.ts]
+// error
+@dec export default @dec class C7 {}
+
 
 //// [global.js]
 /** @type {*} */
@@ -55,4 +63,18 @@ class C4 {
 export default 
 @dec
 class C5 {
+}
+//// [file6.js]
+// error
+@dec
+export 
+@dec
+class C6 {
+}
+//// [file7.js]
+// error
+@dec
+export default 
+@dec
+class C7 {
 }

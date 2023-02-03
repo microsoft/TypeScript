@@ -46440,6 +46440,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let lastStatic: Node | undefined, lastDeclare: Node | undefined, lastAsync: Node | undefined, lastOverride: Node | undefined, firstDecorator: Decorator | undefined;
         let flags = ModifierFlags.None;
         let sawExportBeforeDecorators = false;
+        // We parse decorators and modifiers in four contiguous chunks:
+        // [...leadingDecorators, ...leadingModifiers, ...trailingDecorators, ...trailingModifiers]. It is an error to
+        // have both leading and trailing decorators.
+        let hasLeadingDecorators = false;
         for (const modifier of (node as HasModifiers).modifiers!) {
             if (isDecorator(modifier)) {
                 if (!nodeCanBeDecorated(legacyDecorators, node, node.parent, node.parent.parent)) {
@@ -46456,13 +46460,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return grammarErrorOnFirstToken(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
                     }
                 }
+
+                // if we've seen any modifiers aside from `export`, `default`, or another decorator, then this is an invalid position
                 if (flags & ~(ModifierFlags.ExportDefault | ModifierFlags.Decorator)) {
                     return grammarErrorOnNode(modifier, Diagnostics.Decorators_are_not_valid_here);
                 }
+
+                // if we've already seen leading decorators and leading modifiers, then trailing decorators are an invalid position
+                if (hasLeadingDecorators && flags & ModifierFlags.Modifier) {
+                    Debug.assertIsDefined(firstDecorator);
+                    const sourceFile = getSourceFileOfNode(modifier);
+                    if (!hasParseDiagnostics(sourceFile)) {
+                        addRelatedInfo(
+                            error(modifier, Diagnostics.Decorators_may_not_appear_after_export_or_export_default_if_they_also_appear_before_export),
+                            createDiagnosticForNode(firstDecorator, Diagnostics.Decorator_used_before_export_here));
+                        return true;
+                    }
+                    return false;
+                }
+
                 flags |= ModifierFlags.Decorator;
-                if (flags & ModifierFlags.Export) {
+
+                // if we have not yet seen a modifier, then these are leading decorators
+                if (!(flags & ModifierFlags.Modifier)) {
+                    hasLeadingDecorators = true;
+                }
+                else if (flags & ModifierFlags.Export) {
                     sawExportBeforeDecorators = true;
                 }
+
                 firstDecorator ??= modifier;
             }
             else {

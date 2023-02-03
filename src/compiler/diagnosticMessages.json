@@ -1589,6 +1589,10 @@
         "category": "Error",
         "code": 1485
     },
+    "Decorator used before 'export' here.": {
+        "category": "Error",
+        "code": 1486
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -6547,6 +6551,10 @@
     "Type satisfaction expressions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8037
+    },
+    "Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.": {
+        "category": "Error",
+        "code": 8038
     },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
