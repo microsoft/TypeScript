@@ -342,6 +342,7 @@ import {
     tryCast,
     Type,
     TypeChecker,
+    TypeFlags,
     TypeFormatFlags,
     TypeNode,
     TypeOfExpression,
@@ -2152,6 +2153,17 @@ export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): 
         return true;
     }
     return false;
+}
+
+/** @internal */
+export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
+    if (!type.isIntersection()) {
+        return false;
+    }
+
+    const { types, checker } = type;
+    return types.length === 2
+        && (types[0].flags & TypeFlags.String) && checker.isEmptyAnonymousObjectType(types[1]);
 }
 
 /** @internal */
