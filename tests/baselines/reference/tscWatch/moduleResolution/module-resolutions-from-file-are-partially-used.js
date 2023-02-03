@@ -91,6 +91,7 @@ File name '/user/username/projects/myproject/node_modules/pkg1/require.js' has a
 File '/user/username/projects/myproject/node_modules/pkg1/require.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.d.ts' does not exist.
+Failed to resolve under condition 'require'.
 Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
@@ -103,6 +104,7 @@ Using 'exports' subpath '.' with target './require.js'.
 File name '/user/username/projects/myproject/node_modules/pkg1/require.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg1/require.js' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.jsx' does not exist.
+Failed to resolve under condition 'require'.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/node_modules' does not exist, skipping all lookups in it.

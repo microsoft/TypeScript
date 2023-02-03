@@ -2592,6 +2592,9 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                         if (result) {
                             return result;
                         }
+                        else {
+                            traceIfEnabled(state, Diagnostics.Failed_to_resolve_under_condition_0, condition);
+                        }
                     }
                     else {
                         traceIfEnabled(state, Diagnostics.Saw_non_matching_condition_0, condition);

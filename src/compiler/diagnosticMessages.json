@@ -5558,6 +5558,10 @@
         "category": "Message",
         "code": 6412
     },
+    "Failed to resolve under condition '{0}'.": {
+        "category": "Message",
+        "code": 6413
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
