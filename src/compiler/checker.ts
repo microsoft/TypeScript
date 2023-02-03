@@ -27033,7 +27033,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return type;
             }
-            const instanceType = mapType(getTypeOfExpression(expr.right), getInstanceType);
+            const rightType = getTypeOfExpression(expr.right);
+            if (!isTypeDerivedFrom(rightType, globalFunctionType)) {
+                return type;
+            }
+            const instanceType = mapType(rightType, getInstanceType);
             // Don't narrow from `any` if the target type is exactly `Object` or `Function`, and narrow
             // in the false branch only if the target is a non-empty object type.
             if (isTypeAny(type) && (instanceType === globalObjectType || instanceType === globalFunctionType) ||
@@ -27044,15 +27048,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getInstanceType(constructorType: Type) {
-            if (isTypeDerivedFrom(constructorType, globalFunctionType)) {
-                const prototypePropertyType = getTypeOfPropertyOfType(constructorType, "prototype" as __String);
-                if (prototypePropertyType && !isTypeAny(prototypePropertyType)) {
-                    return prototypePropertyType;
-                }
-                const constructSignatures = getSignaturesOfType(constructorType, SignatureKind.Construct);
-                if (constructSignatures.length) {
-                    return getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
-                }
+            const prototypePropertyType = getTypeOfPropertyOfType(constructorType, "prototype" as __String);
+            if (prototypePropertyType && !isTypeAny(prototypePropertyType)) {
+                return prototypePropertyType;
+            }
+            const constructSignatures = getSignaturesOfType(constructorType, SignatureKind.Construct);
+            if (constructSignatures.length) {
+                return getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
             }
             // We use the empty object type to indicate we don't know the type of objects created by
             // this constructor function.
