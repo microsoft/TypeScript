@@ -4714,7 +4714,6 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
-    function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean;
     /** @deprecated */
     function createUnparsedSourceFile(text: string): UnparsedSource;
     /** @deprecated */
