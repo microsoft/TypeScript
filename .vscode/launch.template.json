@@ -40,6 +40,10 @@
       "env": {
         "NODE_ENV": "testing"
       },
+      "outFiles": [
+        "${workspaceFolder}/built/**/*.js",
+        "!**/node_modules/**"
+      ],
       "sourceMaps": true,
       "smartStep": true,
       "preLaunchTask": "npm: build:tests",
