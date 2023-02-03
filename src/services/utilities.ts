@@ -342,6 +342,7 @@ import {
     tryCast,
     Type,
     TypeChecker,
+    TypeFlags,
     TypeFormatFlags,
     TypeNode,
     TypeOfExpression,
@@ -2153,6 +2154,17 @@ export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): 
     }
     return false;
 }
+
+export const isStringAndEmptyAnonymousObjectIntersection = (type: Type) => {
+    if (!type.isIntersection()) {
+        return false;
+    }
+
+    const { types, checker } = type;
+    return types.length === 2
+        && (((types[0].flags & TypeFlags.String) && checker.isEmptyAnonymousObjectType(types[1]))
+        || ((types[1].flags & TypeFlags.String) && checker.isEmptyAnonymousObjectType(types[0])));
+};
 
 /** @internal */
 export function isPunctuation(kind: SyntaxKind): boolean {

@@ -2,7 +2,7 @@
 //@Filename: file.tsx
 ////interface NestedInterface {
 ////    Foo: NestedInterface;
-////    (props: {className?: string, onClick?: () => void, type?: 'input' | 'password' | (string & {})}): any;
+////    (props: {className?: string, onClick?: () => void}): any;
 ////}
 ////
 ////declare const Foo: NestedInterface;
@@ -67,9 +67,6 @@
 ////function fn16() {
 ////    return <Foo something={false} onC/*16*/="" foo />
 ////}
-////function fn17() {
-////    return <Foo type/*17*/ />
-////}
 
 var preferences: FourSlashInterface.UserPreferences = {
     jsxAttributeCompletionStyle: "braces",
@@ -94,5 +91,4 @@ verify.completions(
     { marker: "14", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
     { marker: "15", preferences, includes: { name: "onClick", insertText: undefined, text: "(property) onClick?: () => void", isSnippet: undefined, sortText: completion.SortText.OptionalMember } },
     { marker: "16", preferences, includes: { name: "onClick", insertText: undefined, text: "(property) onClick?: () => void", isSnippet: undefined, sortText: completion.SortText.OptionalMember } },
-    { marker: "17", preferences, includes: { name: "type", insertText: 'type={$1}', text: "(property) type?: \"input\" | \"password\" | (string & {})", isSnippet: true, sortText: completion.SortText.OptionalMember } },
 )

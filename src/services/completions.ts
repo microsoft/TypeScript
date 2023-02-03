@@ -218,6 +218,7 @@ import {
     isStatement,
     isStatic,
     isString,
+    isStringAndEmptyAnonymousObjectIntersection,
     isStringANonContextualKeyword,
     isStringLiteralLike,
     isStringLiteralOrTemplate,
@@ -1442,7 +1443,7 @@ function createCompletionEntry(
             && !(type.flags & TypeFlags.BooleanLike)
             && !(type.flags & TypeFlags.Union && find((type as UnionType).types, type => !!(type.flags & TypeFlags.BooleanLike)))
         ) {
-            if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!((type.flags & (TypeFlags.StringLike | TypeFlags.Undefined)) || (type.isIntersection() && type.types.length === 2 && (type.types[0]!.flags & TypeFlags.String) && (type.types[1]!.flags & TypeFlags.Object) && (type.types[1] as ObjectType).members?.size === 0))))) {
+            if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type))))) {
                 // If is string like or undefined use quotes
                 insertText = `${escapeSnippetText(name)}=${quote(sourceFile, preferences, "$1")}`;
                 isSnippet = true;
