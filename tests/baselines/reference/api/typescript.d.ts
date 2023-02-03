@@ -7004,6 +7004,7 @@ declare namespace ts {
         span: TextSpan;
         preferences: UserPreferences;
     }
+    const isStringAndEmptyAnonymousObjectIntersection: (type: Type) => boolean | 0;
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
     function createClassifier(): Classifier;
     interface DocumentHighlights {
