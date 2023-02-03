@@ -1991,7 +1991,7 @@ export function createLanguageService(
             options.triggerKind,
             cancellationToken,
             formattingSettings && formatting.getFormatContext(formattingSettings, host),
-            options.includeApiProperties);
+            options.includeApiData);
     }
 
     function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {

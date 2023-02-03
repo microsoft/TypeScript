@@ -518,6 +518,7 @@ export interface LanguageService {
      * of code actions can be returned with the completions.
      * @param formattingSettings settings needed for calling formatting functions.
      */
+    getCompletionsAtPosition(fileName: string, position: number, options: { includeApiData: true } & GetCompletionsAtPositionOptions, formattingSettings?: FormatCodeSettings): WithMetadata<CompletionInfoWithApiData> | undefined;
     getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, formattingSettings?: FormatCodeSettings): WithMetadata<CompletionInfo> | undefined;
 
     /**
@@ -700,8 +701,13 @@ export interface GetCompletionsAtPositionOptions extends UserPreferences {
      */
     triggerCharacter?: CompletionsTriggerCharacter;
     triggerKind?: CompletionTriggerKind;
-    /** @default false */
-    includeApiProperties?: boolean
+    /**
+     * Include `symbol` with each completion entry.
+     * Caveats:
+     * - The `symbol` of completions may retain a whole `TypeChecker` in it, so don’t store it longer than you need it!)
+     * @default false
+     */
+    includeApiData?: boolean
     /** @deprecated Use includeCompletionsForModuleExports */
     includeExternalModuleExports?: boolean;
     /** @deprecated Use includeCompletionsWithInsertText */
