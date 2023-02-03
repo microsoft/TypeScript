@@ -987,6 +987,7 @@ import {
     tokenToString,
     tracing,
     TracingNode,
+    TrackedSymbol,
     TransientSymbol,
     TransientSymbolLinks,
     tryAddToSet,
@@ -6256,7 +6257,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 visitedTypes: undefined,
                 symbolDepth: undefined,
                 inferTypeParameters: undefined,
-                approximateLength: 0
+                approximateLength: 0,
+                trackedSymbols: undefined!,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -6709,6 +6711,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const cachedResult = links?.serializedTypes?.get(key);
                 if (cachedResult) {
+                    // TODO:: check if we instead store late painted statements associated with this?
+                    cachedResult.trackedSymbols?.forEach(
+                        ([symbol, enclosingDeclaration, meaning]) =>
+                            context.tracker.trackSymbol(symbol, enclosingDeclaration, meaning)
+                    );
                     if (cachedResult.truncating) {
                         context.truncating = true;
                     }
@@ -6729,7 +6736,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const result = transform(type);
                 const addedLength = context.approximateLength - startLength;
                 if (!context.reportedDiagnostic && !context.encounteredError) {
-                    links?.serializedTypes?.set(key, { node: result, truncating: context.truncating, addedLength });
+                    links?.serializedTypes?.set(key, { node: result, truncating: context.truncating, addedLength, trackedSymbols: context.trackedSymbols });
                 }
                 context.visitedTypes.delete(typeId);
                 if (id) {
@@ -8476,6 +8483,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
                     if (context.reportedDiagnostic) {
                         oldcontext.reportedDiagnostic = context.reportedDiagnostic; // hoist diagnostic result into outer context
+                    }
+                    if (context.trackedSymbols) {
+                        if (!oldContext.trackedSymbols) oldContext.trackedSymbols = context.trackedSymbols;
+                        else oldContext.trackedSymbols.push(...context.trackedSymbols);
                     }
                     context = oldContext;
                 }
@@ -48352,6 +48363,7 @@ interface NodeBuilderContext {
     // State
     encounteredError: boolean;
     reportedDiagnostic: boolean;
+    trackedSymbols: TrackedSymbol[] | undefined;
     visitedTypes: Set<number> | undefined;
     symbolDepth: Map<string, number> | undefined;
     inferTypeParameters: TypeParameter[] | undefined;
@@ -48386,6 +48398,7 @@ class SymbolTrackerImpl implements SymbolTracker {
     }
 
     trackSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags): boolean {
+        (this.context.trackedSymbols ??= []).push([symbol, enclosingDeclaration, meaning]);
         if (this.inner?.trackSymbol && !this.disableTrackSymbol) {
             if (this.inner.trackSymbol(symbol, enclosingDeclaration, meaning)) {
                 this.onDiagnosticReported();

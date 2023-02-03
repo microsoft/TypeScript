@@ -5998,10 +5998,13 @@ export interface NodeLinks {
 }
 
 /** @internal */
+export type TrackedSymbol = [symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags];
+/** @internal */
 export interface SerializedTypeEntry {
     node: TypeNode;
     truncating?: boolean;
     addedLength: number;
+    trackedSymbols: readonly TrackedSymbol[] | undefined;
 }
 
 export const enum TypeFlags {
