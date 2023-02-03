@@ -300,12 +300,36 @@ FsWatchesRecursive::
 /b:
   {}
 
-Info 39   [00:01:19.000] Finding references to /b/b.ts position 0 in project /b/tsconfig.json
-Info 40   [00:01:20.000] Search path: /a
-Info 41   [00:01:21.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
-Info 42   [00:01:22.000] Search path: /a
-Info 43   [00:01:23.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
-Info 44   [00:01:24.000] Finding references to /a/a.ts position 9 in project /a/tsconfig.json
+Info 39   [00:01:19.000] Before ensureProjectForOpenFiles:
+Info 40   [00:01:20.000] Project '/a/tsconfig.json' (Configured)
+Info 40   [00:01:21.000] 	Files (1)
+
+Info 40   [00:01:22.000] -----------------------------------------------
+Info 40   [00:01:23.000] Project '/b/tsconfig.json' (Configured)
+Info 40   [00:01:24.000] 	Files (2)
+
+Info 40   [00:01:25.000] -----------------------------------------------
+Info 40   [00:01:26.000] Open files: 
+Info 40   [00:01:27.000] 	FileName: /b/b.ts ProjectRootPath: undefined
+Info 40   [00:01:28.000] 		Projects: /b/tsconfig.json
+Info 40   [00:01:29.000] After ensureProjectForOpenFiles:
+Info 41   [00:01:30.000] Project '/a/tsconfig.json' (Configured)
+Info 41   [00:01:31.000] 	Files (1)
+
+Info 41   [00:01:32.000] -----------------------------------------------
+Info 41   [00:01:33.000] Project '/b/tsconfig.json' (Configured)
+Info 41   [00:01:34.000] 	Files (2)
+
+Info 41   [00:01:35.000] -----------------------------------------------
+Info 41   [00:01:36.000] Open files: 
+Info 41   [00:01:37.000] 	FileName: /b/b.ts ProjectRootPath: undefined
+Info 41   [00:01:38.000] 		Projects: /b/tsconfig.json
+Info 41   [00:01:39.000] Finding references to /b/b.ts position 0 in project /b/tsconfig.json
+Info 42   [00:01:40.000] Search path: /a
+Info 43   [00:01:41.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
+Info 44   [00:01:42.000] Search path: /a
+Info 45   [00:01:43.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
+Info 46   [00:01:44.000] Finding references to /a/a.ts position 9 in project /a/tsconfig.json
 After request
 
 PolledWatches::
@@ -330,7 +354,7 @@ FsWatchesRecursive::
 /b:
   {}
 
-Info 45   [00:01:25.000] response:
+Info 47   [00:01:45.000] response:
     {
       "response": [
         {

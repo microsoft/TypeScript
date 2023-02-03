@@ -1148,16 +1148,32 @@ FsWatchesRecursive::
 /user/username/projects/myproject/target:
   {}
 
-Info 233  [00:07:19.000] Finding references to /user/username/projects/myproject/indirect3/main.ts position 9 in project /user/username/projects/myproject/indirect3/tsconfig.json
-Info 234  [00:07:20.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/target/src/main.d.ts.map 500 undefined WatchType: Closed Script info
-Info 235  [00:07:21.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
-Info 236  [00:07:22.000] Search path: /user/username/projects/myproject/src
-Info 237  [00:07:23.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 238  [00:07:24.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
-Info 239  [00:07:25.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 240  [00:07:26.000] event:
+Info 233  [00:07:19.000] Before ensureProjectForOpenFiles:
+Info 234  [00:07:20.000] Project '/user/username/projects/myproject/indirect3/tsconfig.json' (Configured)
+Info 234  [00:07:21.000] 	Files (4)
+
+Info 234  [00:07:22.000] -----------------------------------------------
+Info 234  [00:07:23.000] Open files: 
+Info 234  [00:07:24.000] 	FileName: /user/username/projects/myproject/indirect3/main.ts ProjectRootPath: undefined
+Info 234  [00:07:25.000] 		Projects: /user/username/projects/myproject/indirect3/tsconfig.json
+Info 234  [00:07:26.000] After ensureProjectForOpenFiles:
+Info 235  [00:07:27.000] Project '/user/username/projects/myproject/indirect3/tsconfig.json' (Configured)
+Info 235  [00:07:28.000] 	Files (4)
+
+Info 235  [00:07:29.000] -----------------------------------------------
+Info 235  [00:07:30.000] Open files: 
+Info 235  [00:07:31.000] 	FileName: /user/username/projects/myproject/indirect3/main.ts ProjectRootPath: undefined
+Info 235  [00:07:32.000] 		Projects: /user/username/projects/myproject/indirect3/tsconfig.json
+Info 235  [00:07:33.000] Finding references to /user/username/projects/myproject/indirect3/main.ts position 9 in project /user/username/projects/myproject/indirect3/tsconfig.json
+Info 236  [00:07:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/target/src/main.d.ts.map 500 undefined WatchType: Closed Script info
+Info 237  [00:07:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
+Info 238  [00:07:36.000] Search path: /user/username/projects/myproject/src
+Info 239  [00:07:37.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 240  [00:07:38.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
+Info 241  [00:07:39.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 242  [00:07:40.000] event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/tsconfig.json","reason":"Creating project for original file: /user/username/projects/myproject/src/main.ts for location: /user/username/projects/myproject/target/src/main.d.ts"}}
-Info 241  [00:07:27.000] Config: /user/username/projects/myproject/tsconfig.json : {
+Info 243  [00:07:41.000] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/own/main.ts"
  ],
@@ -1173,9 +1189,9 @@ Info 241  [00:07:27.000] Config: /user/username/projects/myproject/tsconfig.json
   }
  ]
 }
-Info 242  [00:07:28.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/own/main.ts 500 undefined WatchType: Closed Script info
-Info 243  [00:07:29.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 244  [00:07:30.000] Config: /user/username/projects/myproject/tsconfig-src.json : {
+Info 244  [00:07:42.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/own/main.ts 500 undefined WatchType: Closed Script info
+Info 245  [00:07:43.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 246  [00:07:44.000] Config: /user/username/projects/myproject/tsconfig-src.json : {
  "rootNames": [
   "/user/username/projects/myproject/src/main.ts",
   "/user/username/projects/myproject/src/helpers/functions.ts"
@@ -1187,14 +1203,14 @@ Info 244  [00:07:30.000] Config: /user/username/projects/myproject/tsconfig-src.
   "configFilePath": "/user/username/projects/myproject/tsconfig-src.json"
  }
 }
-Info 245  [00:07:31.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 246  [00:07:32.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
-Info 247  [00:07:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
-Info 248  [00:07:34.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 249  [00:07:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 250  [00:07:36.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 251  [00:07:37.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 252  [00:07:38.000] 	Files (4)
+Info 247  [00:07:45.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 248  [00:07:46.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
+Info 249  [00:07:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
+Info 250  [00:07:48.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 251  [00:07:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 252  [00:07:50.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 253  [00:07:51.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 254  [00:07:52.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/src/helpers/functions.ts
 	/user/username/projects/myproject/src/main.ts
@@ -1210,18 +1226,18 @@ Info 252  [00:07:38.000] 	Files (4)
 	own/main.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 253  [00:07:39.000] -----------------------------------------------
-Info 254  [00:07:40.000] event:
+Info 255  [00:07:53.000] -----------------------------------------------
+Info 256  [00:07:54.000] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig.json"}}
-Info 255  [00:07:41.000] Creating configuration project /user/username/projects/myproject/tsconfig-src.json
-Info 256  [00:07:42.000] event:
+Info 257  [00:07:55.000] Creating configuration project /user/username/projects/myproject/tsconfig-src.json
+Info 258  [00:07:56.000] event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/tsconfig-src.json","reason":"Creating project referenced in solution /user/username/projects/myproject/tsconfig.json to find possible configured project for original file: /user/username/projects/myproject/src/main.ts for location: /user/username/projects/myproject/target/src/main.d.ts"}}
-Info 257  [00:07:43.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json
-Info 258  [00:07:44.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
-Info 259  [00:07:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
-Info 260  [00:07:46.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 261  [00:07:47.000] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
-Info 262  [00:07:48.000] 	Files (3)
+Info 259  [00:07:57.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json
+Info 260  [00:07:58.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
+Info 261  [00:07:59.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
+Info 262  [00:08:00.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 263  [00:08:01.000] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
+Info 264  [00:08:02.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/src/helpers/functions.ts
 	/user/username/projects/myproject/src/main.ts
@@ -1235,29 +1251,29 @@ Info 262  [00:07:48.000] 	Files (3)
 	src/main.ts
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
 
-Info 263  [00:07:49.000] -----------------------------------------------
-Info 264  [00:07:50.000] event:
+Info 265  [00:08:03.000] -----------------------------------------------
+Info 266  [00:08:04.000] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig-src.json"}}
-Info 265  [00:07:51.000] Search path: /user/username/projects/myproject/src
-Info 266  [00:07:52.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 267  [00:07:53.000] Search path: /user/username/projects/myproject/src
-Info 268  [00:07:54.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 269  [00:07:55.000] Search path: /user/username/projects/myproject/src/helpers
-Info 270  [00:07:56.000] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 271  [00:07:57.000] Search path: /user/username/projects/myproject/src/helpers
-Info 272  [00:07:58.000] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 273  [00:07:59.000] Finding references to /user/username/projects/myproject/src/main.ts position 9 in project /user/username/projects/myproject/tsconfig.json
-Info 274  [00:08:00.000] Search path: /user/username/projects/myproject/src
-Info 275  [00:08:01.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 276  [00:08:02.000] Search path: /user/username/projects/myproject/src
-Info 277  [00:08:03.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 278  [00:08:04.000] Search path: /user/username/projects/myproject/src
-Info 279  [00:08:05.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 280  [00:08:06.000] Search path: /user/username/projects/myproject/src/helpers
-Info 281  [00:08:07.000] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 282  [00:08:08.000] Search path: /user/username/projects/myproject/src/helpers
-Info 283  [00:08:09.000] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 284  [00:08:10.000] Finding references to /user/username/projects/myproject/src/main.ts position 9 in project /user/username/projects/myproject/tsconfig-src.json
+Info 267  [00:08:05.000] Search path: /user/username/projects/myproject/src
+Info 268  [00:08:06.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 269  [00:08:07.000] Search path: /user/username/projects/myproject/src
+Info 270  [00:08:08.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 271  [00:08:09.000] Search path: /user/username/projects/myproject/src/helpers
+Info 272  [00:08:10.000] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 273  [00:08:11.000] Search path: /user/username/projects/myproject/src/helpers
+Info 274  [00:08:12.000] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 275  [00:08:13.000] Finding references to /user/username/projects/myproject/src/main.ts position 9 in project /user/username/projects/myproject/tsconfig.json
+Info 276  [00:08:14.000] Search path: /user/username/projects/myproject/src
+Info 277  [00:08:15.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 278  [00:08:16.000] Search path: /user/username/projects/myproject/src
+Info 279  [00:08:17.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 280  [00:08:18.000] Search path: /user/username/projects/myproject/src
+Info 281  [00:08:19.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 282  [00:08:20.000] Search path: /user/username/projects/myproject/src/helpers
+Info 283  [00:08:21.000] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 284  [00:08:22.000] Search path: /user/username/projects/myproject/src/helpers
+Info 285  [00:08:23.000] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 286  [00:08:24.000] Finding references to /user/username/projects/myproject/src/main.ts position 9 in project /user/username/projects/myproject/tsconfig-src.json
 After request
 
 PolledWatches::
@@ -1298,7 +1314,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 285  [00:08:11.000] response:
+Info 287  [00:08:25.000] response:
     {
       "response": {
         "refs": [

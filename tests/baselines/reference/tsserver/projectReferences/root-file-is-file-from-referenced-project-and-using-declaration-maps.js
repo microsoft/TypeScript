@@ -528,13 +528,41 @@ FsWatchesRecursive::
 /user/username/projects/project/src:
   {}
 
-Info 50   [00:02:27.000] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
-Info 51   [00:02:28.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts.map 500 undefined WatchType: Closed Script info
-Info 52   [00:02:29.000] Finding references to /user/username/projects/project/out/input/keyboard.d.ts position 24 in project /user/username/projects/project/src/tsconfig.json
-Info 53   [00:02:30.000] Search path: /user/username/projects/project/src/common/input
-Info 54   [00:02:31.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-Info 55   [00:02:32.000] Search path: /user/username/projects/project/src/common/input
-Info 56   [00:02:33.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
+Info 50   [00:02:27.000] Before ensureProjectForOpenFiles:
+Info 51   [00:02:28.000] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
+Info 51   [00:02:29.000] 	Files (3)
+
+Info 51   [00:02:30.000] -----------------------------------------------
+Info 51   [00:02:31.000] Project '/user/username/projects/project/src/tsconfig.json' (Configured)
+Info 51   [00:02:32.000] 	Files (4)
+
+Info 51   [00:02:33.000] -----------------------------------------------
+Info 51   [00:02:34.000] Open files: 
+Info 51   [00:02:35.000] 	FileName: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined
+Info 51   [00:02:36.000] 		Projects: /user/username/projects/project/src/common/tsconfig.json,/user/username/projects/project/src/tsconfig.json
+Info 51   [00:02:37.000] 	FileName: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined
+Info 51   [00:02:38.000] 		Projects: /user/username/projects/project/src/tsconfig.json
+Info 51   [00:02:39.000] After ensureProjectForOpenFiles:
+Info 52   [00:02:40.000] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
+Info 52   [00:02:41.000] 	Files (3)
+
+Info 52   [00:02:42.000] -----------------------------------------------
+Info 52   [00:02:43.000] Project '/user/username/projects/project/src/tsconfig.json' (Configured)
+Info 52   [00:02:44.000] 	Files (4)
+
+Info 52   [00:02:45.000] -----------------------------------------------
+Info 52   [00:02:46.000] Open files: 
+Info 52   [00:02:47.000] 	FileName: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined
+Info 52   [00:02:48.000] 		Projects: /user/username/projects/project/src/common/tsconfig.json,/user/username/projects/project/src/tsconfig.json
+Info 52   [00:02:49.000] 	FileName: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined
+Info 52   [00:02:50.000] 		Projects: /user/username/projects/project/src/tsconfig.json
+Info 52   [00:02:51.000] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
+Info 53   [00:02:52.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts.map 500 undefined WatchType: Closed Script info
+Info 54   [00:02:53.000] Finding references to /user/username/projects/project/out/input/keyboard.d.ts position 24 in project /user/username/projects/project/src/tsconfig.json
+Info 55   [00:02:54.000] Search path: /user/username/projects/project/src/common/input
+Info 56   [00:02:55.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
+Info 57   [00:02:56.000] Search path: /user/username/projects/project/src/common/input
+Info 58   [00:02:57.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 After request
 
 PolledWatches::
@@ -565,7 +593,7 @@ FsWatchesRecursive::
 /user/username/projects/project/src:
   {}
 
-Info 57   [00:02:34.000] response:
+Info 59   [00:02:58.000] response:
     {
       "response": {
         "refs": [

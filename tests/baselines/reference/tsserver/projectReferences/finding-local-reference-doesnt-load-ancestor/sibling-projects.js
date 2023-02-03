@@ -171,7 +171,69 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 26   [00:01:09.000] Finding references to /user/username/projects/solution/compiler/program.ts position 133 in project /user/username/projects/solution/compiler/tsconfig.json
+Info 26   [00:01:09.000] Loading configured project /user/username/projects/solution/tsconfig.json
+Info 27   [00:01:10.000] Config: /user/username/projects/solution/tsconfig.json : {
+ "rootNames": [],
+ "options": {
+  "configFilePath": "/user/username/projects/solution/tsconfig.json"
+ },
+ "projectReferences": [
+  {
+   "path": "/user/username/projects/solution/compiler",
+   "originalPath": "./compiler"
+  },
+  {
+   "path": "/user/username/projects/solution/services",
+   "originalPath": "./services"
+  }
+ ]
+}
+Info 28   [00:01:11.000] Starting updateGraphWorker: Project: /user/username/projects/solution/tsconfig.json
+Info 29   [00:01:12.000] Config: /user/username/projects/solution/services/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/solution/services/services.ts"
+ ],
+ "options": {
+  "composite": true,
+  "configFilePath": "/user/username/projects/solution/services/tsconfig.json"
+ },
+ "projectReferences": [
+  {
+   "path": "/user/username/projects/solution/compiler",
+   "originalPath": "../compiler"
+  }
+ ]
+}
+Info 30   [00:01:13.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/services/tsconfig.json 2000 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Config file
+Info 31   [00:01:14.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Type roots
+Info 32   [00:01:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Type roots
+Info 33   [00:01:16.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 34   [00:01:17.000] Different program with same set of files
+Info 35   [00:01:18.000] Before ensureProjectForOpenFiles:
+Info 36   [00:01:19.000] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
+Info 36   [00:01:20.000] 	Files (3)
+
+Info 36   [00:01:21.000] -----------------------------------------------
+Info 36   [00:01:22.000] Project '/user/username/projects/solution/tsconfig.json' (Configured)
+Info 36   [00:01:23.000] 	Files (0)
+
+Info 36   [00:01:24.000] -----------------------------------------------
+Info 36   [00:01:25.000] Open files: 
+Info 36   [00:01:26.000] 	FileName: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined
+Info 36   [00:01:27.000] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
+Info 36   [00:01:28.000] After ensureProjectForOpenFiles:
+Info 37   [00:01:29.000] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
+Info 37   [00:01:30.000] 	Files (3)
+
+Info 37   [00:01:31.000] -----------------------------------------------
+Info 37   [00:01:32.000] Project '/user/username/projects/solution/tsconfig.json' (Configured)
+Info 37   [00:01:33.000] 	Files (0)
+
+Info 37   [00:01:34.000] -----------------------------------------------
+Info 37   [00:01:35.000] Open files: 
+Info 37   [00:01:36.000] 	FileName: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined
+Info 37   [00:01:37.000] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
+Info 37   [00:01:38.000] Finding references to /user/username/projects/solution/compiler/program.ts position 133 in project /user/username/projects/solution/compiler/tsconfig.json
 After request
 
 PolledWatches::
@@ -189,10 +251,12 @@ FsWatches::
   {}
 /user/username/projects/solution/tsconfig.json:
   {}
+/user/username/projects/solution/services/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 
-Info 27   [00:01:10.000] response:
+Info 38   [00:01:39.000] response:
     {
       "response": {
         "refs": [
@@ -237,7 +301,7 @@ Info 27   [00:01:10.000] response:
       },
       "responseRequired": true
     }
-Info 28   [00:01:11.000] request:
+Info 39   [00:01:40.000] request:
     {
       "command": "references",
       "arguments": {
@@ -265,58 +329,22 @@ FsWatches::
   {}
 /user/username/projects/solution/tsconfig.json:
   {}
+/user/username/projects/solution/services/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 
-Info 29   [00:01:12.000] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
-Info 30   [00:01:13.000] Loading configured project /user/username/projects/solution/tsconfig.json
-Info 31   [00:01:14.000] Config: /user/username/projects/solution/tsconfig.json : {
- "rootNames": [],
- "options": {
-  "configFilePath": "/user/username/projects/solution/tsconfig.json"
- },
- "projectReferences": [
-  {
-   "path": "/user/username/projects/solution/compiler",
-   "originalPath": "./compiler"
-  },
-  {
-   "path": "/user/username/projects/solution/services",
-   "originalPath": "./services"
-  }
- ]
-}
-Info 32   [00:01:15.000] Starting updateGraphWorker: Project: /user/username/projects/solution/tsconfig.json
-Info 33   [00:01:16.000] Config: /user/username/projects/solution/services/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/solution/services/services.ts"
- ],
- "options": {
-  "composite": true,
-  "configFilePath": "/user/username/projects/solution/services/tsconfig.json"
- },
- "projectReferences": [
-  {
-   "path": "/user/username/projects/solution/compiler",
-   "originalPath": "../compiler"
-  }
- ]
-}
-Info 34   [00:01:17.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/services/tsconfig.json 2000 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Config file
-Info 35   [00:01:18.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Type roots
-Info 36   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Type roots
-Info 37   [00:01:20.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 38   [00:01:21.000] Different program with same set of files
-Info 39   [00:01:22.000] Creating configuration project /user/username/projects/solution/services/tsconfig.json
-Info 40   [00:01:23.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/services/services.ts 500 undefined WatchType: Closed Script info
-Info 41   [00:01:24.000] Starting updateGraphWorker: Project: /user/username/projects/solution/services/tsconfig.json
-Info 42   [00:01:25.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/services/node_modules/@types 1 undefined Project: /user/username/projects/solution/services/tsconfig.json WatchType: Type roots
-Info 43   [00:01:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/services/node_modules/@types 1 undefined Project: /user/username/projects/solution/services/tsconfig.json WatchType: Type roots
-Info 44   [00:01:27.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/services/tsconfig.json WatchType: Type roots
-Info 45   [00:01:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/services/tsconfig.json WatchType: Type roots
-Info 46   [00:01:29.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/services/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 47   [00:01:30.000] Project '/user/username/projects/solution/services/tsconfig.json' (Configured)
-Info 48   [00:01:31.000] 	Files (4)
+Info 40   [00:01:41.000] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
+Info 41   [00:01:42.000] Creating configuration project /user/username/projects/solution/services/tsconfig.json
+Info 42   [00:01:43.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/services/services.ts 500 undefined WatchType: Closed Script info
+Info 43   [00:01:44.000] Starting updateGraphWorker: Project: /user/username/projects/solution/services/tsconfig.json
+Info 44   [00:01:45.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/services/node_modules/@types 1 undefined Project: /user/username/projects/solution/services/tsconfig.json WatchType: Type roots
+Info 45   [00:01:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/services/node_modules/@types 1 undefined Project: /user/username/projects/solution/services/tsconfig.json WatchType: Type roots
+Info 46   [00:01:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/services/tsconfig.json WatchType: Type roots
+Info 47   [00:01:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/services/tsconfig.json WatchType: Type roots
+Info 48   [00:01:49.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/services/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 49   [00:01:50.000] Project '/user/username/projects/solution/services/tsconfig.json' (Configured)
+Info 50   [00:01:51.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/user/username/projects/solution/compiler/types.ts
 	/user/username/projects/solution/compiler/program.ts
@@ -332,15 +360,15 @@ Info 48   [00:01:31.000] 	Files (4)
 	services.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 49   [00:01:32.000] -----------------------------------------------
-Info 50   [00:01:33.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/compiler/types.d.ts 2000 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Missing generated file
-Info 51   [00:01:34.000] Finding references to /user/username/projects/solution/compiler/types.ts position 103 in project /user/username/projects/solution/services/tsconfig.json
-Info 52   [00:01:35.000] Search path: /user/username/projects/solution/compiler
-Info 53   [00:01:36.000] For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
-Info 54   [00:01:37.000] Search path: /user/username/projects/solution/compiler
-Info 55   [00:01:38.000] For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
-Info 56   [00:01:39.000] Search path: /user/username/projects/solution/compiler
-Info 57   [00:01:40.000] For info: /user/username/projects/solution/compiler/program.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
+Info 51   [00:01:52.000] -----------------------------------------------
+Info 52   [00:01:53.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/compiler/types.d.ts 2000 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Missing generated file
+Info 53   [00:01:54.000] Finding references to /user/username/projects/solution/compiler/types.ts position 103 in project /user/username/projects/solution/services/tsconfig.json
+Info 54   [00:01:55.000] Search path: /user/username/projects/solution/compiler
+Info 55   [00:01:56.000] For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
+Info 56   [00:01:57.000] Search path: /user/username/projects/solution/compiler
+Info 57   [00:01:58.000] For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
+Info 58   [00:01:59.000] Search path: /user/username/projects/solution/compiler
+Info 59   [00:02:00.000] For info: /user/username/projects/solution/compiler/program.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
 After request
 
 PolledWatches::
@@ -369,7 +397,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 58   [00:01:41.000] response:
+Info 60   [00:02:01.000] response:
     {
       "response": {
         "refs": [
