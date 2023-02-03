@@ -500,6 +500,13 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
         defaultValueDescription: Diagnostics.Platform_specific
     },
+    {
+        name: "skipJSDoc",
+        type: "boolean",
+        category: Diagnostics.Completeness,
+        description: Diagnostics.Skip_parsing_JSDoc_comments_in_ts_files,
+        defaultValueDescription: false,
+    },
 ];
 
 /** @internal */
@@ -803,7 +810,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "boolean",
         // Though this affects semantic diagnostics, affectsSemanticDiagnostics is not set here
         // The value of each strictFlag depends on own strictFlag value or this and never accessed directly.
-        // But we need to store `strict` in builf info, even though it won't be examined directly, so that the
+        // But we need to store `strict` in build info, even though it won't be examined directly, so that the
         // flags it controls (e.g. `strictNullChecks`) will be retrieved correctly
         affectsBuildInfo: true,
         showInSimplifiedHelpView: true,

@@ -407,7 +407,7 @@ export function createGetSourceFile(
             }
             text = "";
         }
-        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes) : undefined;
+        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined, getCompilerOptions().skipJSDoc) : undefined;
     };
 }
 

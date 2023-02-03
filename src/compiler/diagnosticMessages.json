@@ -5967,6 +5967,10 @@
         "category": "Message",
         "code": 6695
     },
+    "Skip parsing JSDoc comments in .ts files": {
+        "category": "Message",
+        "code": 6696
+    },
     "Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.": {
         "category": "Message",
         "code": 6697

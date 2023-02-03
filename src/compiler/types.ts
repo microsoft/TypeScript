@@ -7095,6 +7095,7 @@ export interface CompilerOptions {
     resolvePackageJsonImports?: boolean;
     rootDir?: string;
     rootDirs?: string[];
+    skipJSDoc?: boolean;
     skipLibCheck?: boolean;
     skipDefaultLibCheck?: boolean;
     sourceMap?: boolean;

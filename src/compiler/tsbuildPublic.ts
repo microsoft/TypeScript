@@ -158,6 +158,7 @@ export interface BuildOptions {
     /** @internal */ locale?: string;
     /** @internal */ generateCpuProfile?: string;
     /** @internal */ generateTrace?: string;
+    skipJSDoc?: boolean;
 
     [option: string]: CompilerOptionsValue | undefined;
 }
