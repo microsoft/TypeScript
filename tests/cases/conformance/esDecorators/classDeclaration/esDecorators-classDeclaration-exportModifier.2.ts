@@ -39,3 +39,43 @@ export default @dec class C5 {}
 
 // error
 @dec export default @dec class C7 {}
+
+// @filename: file8.ts
+
+// ok
+@dec abstract class C8 {}
+
+// @filename: file9.ts
+
+// ok
+@dec export abstract class C9 {}
+
+// @filename: file10.ts
+
+// ok
+@dec export default abstract class C10 {}
+
+// @filename: file11.ts
+
+// ok
+export @dec abstract class C11 {}
+
+// @filename: file12.ts
+
+// ok
+export default @dec abstract class C12 {}
+
+// @filename: file13.ts
+
+// error
+abstract @dec class C13 {}
+
+// @filename: file14.ts
+
+// error
+export abstract @dec class C14 {}
+
+// @filename: file15.ts
+
+// error
+export default abstract @dec class C15 {}

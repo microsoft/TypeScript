@@ -32,6 +32,38 @@ export default @dec class C5 {}
 // error
 @dec export default @dec class C7 {}
 
+//// [file8.ts]
+// ok
+@dec abstract class C8 {}
+
+//// [file9.ts]
+// ok
+@dec export abstract class C9 {}
+
+//// [file10.ts]
+// ok
+@dec export default abstract class C10 {}
+
+//// [file11.ts]
+// ok
+export @dec abstract class C11 {}
+
+//// [file12.ts]
+// ok
+export default @dec abstract class C12 {}
+
+//// [file13.ts]
+// error
+abstract @dec class C13 {}
+
+//// [file14.ts]
+// error
+export abstract @dec class C14 {}
+
+//// [file15.ts]
+// error
+export default abstract @dec class C15 {}
+
 
 //// [global.js]
 /** @type {*} */
@@ -77,4 +109,48 @@ class C6 {
 export default 
 @dec
 class C7 {
+}
+//// [file8.js]
+// ok
+@dec
+class C8 {
+}
+//// [file9.js]
+// ok
+@dec
+export class C9 {
+}
+//// [file10.js]
+// ok
+@dec
+export default class C10 {
+}
+//// [file11.js]
+// ok
+export 
+@dec
+class C11 {
+}
+//// [file12.js]
+// ok
+export default 
+@dec
+class C12 {
+}
+//// [file13.js]
+// error
+abstract;
+@dec
+class C13 {
+}
+//// [file14.js]
+abstract;
+@dec
+class C14 {
+}
+//// [file15.js]
+// error
+export default abstract;
+@dec
+class C15 {
 }
