@@ -1,14 +1,14 @@
-import * as ts from "./_namespaces/ts";
-import * as fakes from "./_namespaces/fakes";
-import * as vfs from "./_namespaces/vfs";
 import * as collections from "./_namespaces/collections";
-import * as vpath from "./_namespaces/vpath";
+import * as fakes from "./_namespaces/fakes";
 import {
     Compiler,
     mockHash,
     virtualFileSystemRoot,
 } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
 import { getNewLineCharacter } from "./_namespaces/ts";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null

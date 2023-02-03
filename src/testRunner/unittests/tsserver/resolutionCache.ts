@@ -1,14 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
+    compilerOptionsToConfigJson,
+} from "../tsc/helpers";
+import {
     createServerHost,
     File,
     libFile,
     TestServerHost,
 } from "../virtualFileSystemWithWatch";
-import {
-    compilerOptionsToConfigJson,
-} from "../tsc/helpers";
 import {
     baselineTsserverLogs,
     checkNumberOfProjects,

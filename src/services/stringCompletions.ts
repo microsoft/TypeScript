@@ -539,7 +539,7 @@ function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile
 }
 
 interface ExtensionOptions {
-    readonly extensionsToSearch: readonly Extension[];
+    readonly extensionsToSearch: readonly string[];
     readonly referenceKind: ReferenceKind;
     readonly importingSourceFile: SourceFile;
     readonly endingPreference?: UserPreferences["importModuleSpecifierEnding"];
@@ -565,7 +565,7 @@ function getCompletionEntriesForRelativeModules(literalValue: string, scriptDire
     }
 }
 
-function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions, typeChecker?: TypeChecker): readonly Extension[][] {
+function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions, typeChecker?: TypeChecker): readonly string[][] {
     /** file extensions from ambient modules declarations e.g. *.css */
     const ambientModulesExtensions = !typeChecker ? [] : mapDefined(typeChecker.getAmbientModules(),
         module => {
@@ -573,7 +573,7 @@ function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOpti
             if (!name.startsWith("*.") || name.includes("/")) return;
             return name.slice(1);
         }
-    ) as Extension[];
+    );
 
     const extensions = [...getSupportedExtensions(compilerOptions), ambientModulesExtensions];
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
