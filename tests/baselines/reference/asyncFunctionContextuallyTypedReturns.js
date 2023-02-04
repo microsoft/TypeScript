@@ -12,6 +12,25 @@ declare function h(cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>): vo
 h(v => v ? (abc) => { } : Promise.reject());
 h(async v => v ? (def) => { } : Promise.reject());
 
+// repro from #29196
+const increment: (
+  num: number,
+  str: string
+) => Promise<((s: string) => any) | string> | string = async (num, str) => {
+  return a => {
+    return a.length
+  }
+}
+
+const increment2: (
+  num: number,
+  str: string
+) => Promise<((s: string) => any) | string> = async (num, str) => {
+  return a => {
+    return a.length
+  }
+}
+
 
 //// [asyncFunctionContextuallyTypedReturns.js]
 "use strict";
@@ -30,3 +49,14 @@ g(v => v ? "contextuallyTypable" : Promise.reject());
 g((v) => __awaiter(void 0, void 0, void 0, function* () { return v ? "contextuallyTypable" : Promise.reject(); }));
 h(v => v ? (abc) => { } : Promise.reject());
 h((v) => __awaiter(void 0, void 0, void 0, function* () { return v ? (def) => { } : Promise.reject(); }));
+// repro from #29196
+const increment = (num, str) => __awaiter(void 0, void 0, void 0, function* () {
+    return a => {
+        return a.length;
+    };
+});
+const increment2 = (num, str) => __awaiter(void 0, void 0, void 0, function* () {
+    return a => {
+        return a.length;
+    };
+});
