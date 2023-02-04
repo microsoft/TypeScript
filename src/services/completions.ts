@@ -300,7 +300,7 @@ import {
     unescapeLeadingUnderscores,
 } from "../compiler/utilitiesPublic";
 import * as JsTyping from "../jsTyping/jsTyping";
-import { codefix } from "./_namespaces/ts";
+import { codefix, isStringAndEmptyAnonymousObjectIntersection } from "./_namespaces/ts";
 import {
     addNewNodeForMemberSymbol,
     getNoopSymbolTrackerWithResolver,
@@ -1491,7 +1491,7 @@ function createCompletionEntry(
             && !(type.flags & TypeFlags.BooleanLike)
             && !(type.flags & TypeFlags.Union && find((type as UnionType).types, type => !!(type.flags & TypeFlags.BooleanLike)))
         ) {
-            if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined))))) {
+            if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type))))) {
                 // If is string like or undefined use quotes
                 insertText = `${escapeSnippetText(name)}=${quote(sourceFile, preferences, "$1")}`;
                 isSnippet = true;
@@ -2945,7 +2945,8 @@ function getCompletionData(
                     // First case is for `<div foo={true} [||] />` or `<div foo={true} [||] ></div>`,
                     // `parent` will be `{true}` and `previousToken` will be `}`
                     // Second case is for `<div foo={true} t[||] ></div>`
-                    if (previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier || previousToken.parent.kind === SyntaxKind.JsxAttribute)) {
+                    // Second case must not match for `<div foo={undefine[||]}></div>`
+                    if (previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier && previousToken.parent.kind === SyntaxKind.JsxAttribute)) {
                         isJsxIdentifierExpected = true;
                     }
                     break;
