@@ -12073,8 +12073,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function addInheritedMembers(symbols: SymbolTable, baseSymbols: Symbol[]) {
         for (const s of baseSymbols) {
-            if (!symbols.has(s.escapedName) && !isStaticPrivateIdentifierProperty(s)) {
-                symbols.set(s.escapedName, s);
+            const nonStaticPrivate = !isStaticPrivateIdentifierProperty(s);
+            if (nonStaticPrivate) {
+                const derived = symbols.get(s.escapedName);
+                if (derived) {
+                    // non-constructor/static-block assignment declarations are ignored here; they're not treated as overrides
+                    if (derived.valueDeclaration
+                        && isBinaryExpression(derived.valueDeclaration)
+                        && !isConstructorDeclaredProperty(derived)
+                        && !findAncestor(derived.valueDeclaration, n => isClassLike(n) ? "quit" : isClassStaticBlockDeclaration(n))) {
+                        symbols.set(s.escapedName, s);
+                    }
+                    // otherwise let the derived property override the base property
+                }
+                else {
+                    symbols.set(s.escapedName, s);
+                }
             }
         }
     }
