@@ -44385,6 +44385,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links.deferredNodes ||= new Set();
             links.deferredNodes.add(node);
         }
+        else {
+            Debug.assert(!links.deferredNodes, "A type-checked file should have no deferred nodes.");
+        }
     }
 
     function checkDeferredNodes(context: SourceFile) {
@@ -44392,6 +44395,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (links.deferredNodes) {
             links.deferredNodes.forEach(checkDeferredNode);
         }
+        links.deferredNodes = undefined;
     }
 
     function checkDeferredNode(node: Node) {
