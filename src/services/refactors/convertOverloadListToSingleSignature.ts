@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     ApplicableRefactorInfo,
     CallSignatureDeclaration,
@@ -39,7 +40,6 @@ import {
     TupleTypeNode,
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
-import * as Debug from "../../compiler/debug";
 
 const refactorName = "Convert overload list to single signature";
 const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;

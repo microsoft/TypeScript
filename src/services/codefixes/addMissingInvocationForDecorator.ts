@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     Diagnostics,
     factory,
@@ -12,7 +13,6 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
-import * as Debug from "../../compiler/debug";
 
 const fixId = "addMissingInvocationForDecorator";
 const errorCodes = [Diagnostics._0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write_0.code];

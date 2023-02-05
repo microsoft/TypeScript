@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     AccessExpression,
     append,
@@ -104,7 +105,6 @@ import {
     usingSingleLineStringWriter,
     VariableDeclaration,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 /** @internal */
 export type NamedExpression =

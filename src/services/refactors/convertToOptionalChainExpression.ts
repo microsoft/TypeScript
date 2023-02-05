@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     ApplicableRefactorInfo,
     BinaryExpression,
@@ -45,7 +46,6 @@ import {
     RefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
-import * as Debug from "../../compiler/debug";
 
 const refactorName = "Convert to optional chain expression";
 const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);

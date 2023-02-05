@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     BindingElement,
     CancellationToken,
@@ -43,7 +44,6 @@ import {
     TypeChecker,
     VariableDeclaration,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 /** @internal */
 export const enum TokenEncodingConsts {

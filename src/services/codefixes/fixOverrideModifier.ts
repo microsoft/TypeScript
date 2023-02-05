@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     CodeFixAllContext,
     CodeFixContext,
@@ -36,7 +37,6 @@ import {
     createCodeFixActionMaybeFixAll,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
-import * as Debug from "../../compiler/debug";
 
 const fixName = "fixOverrideModifier";
 const fixAddOverrideId = "fixAddOverrideModifier";

@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
 import * as Debug from "../compiler/debug";
+import * as ts from "./_namespaces/ts";
 
 // enable deprecation logging
 declare const console: any;

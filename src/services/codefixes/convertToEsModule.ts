@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     __String,
     arrayFrom,
@@ -75,7 +76,6 @@ import {
     TypeChecker,
     VariableStatement,
 } from "../_namespaces/ts";
-import * as Debug from "../../compiler/debug";
 import {
     createCodeFixActionWithoutFixAll,
     moduleSpecifierToValidIdentifier,

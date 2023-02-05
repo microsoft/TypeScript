@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     Block,
     CallExpression,
@@ -75,7 +76,6 @@ import {
     RulesMap,
     SmartIndenter,
 } from "../_namespaces/ts.formatting";
-import * as Debug from "../../compiler/debug";
 
 /** @internal */
 export interface FormatContext {

@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     Diagnostics,
     emptyArray,
@@ -18,7 +19,6 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
-import * as Debug from "../../compiler/debug";
 
 const fixId = "fixUnreachableCode";
 const errorCodes = [Diagnostics.Unreachable_code_detected.code];

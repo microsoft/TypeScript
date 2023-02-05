@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     AccessorDeclaration,
     append,
@@ -103,7 +104,6 @@ import {
     visitNodes,
 } from "../_namespaces/ts";
 import { ImportAdder } from "../_namespaces/ts.codefix";
-import * as Debug from "../../compiler/debug";
 
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl

@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     arrayFrom,
     cast,
@@ -23,7 +24,6 @@ import {
     TextChange,
     textChanges,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();

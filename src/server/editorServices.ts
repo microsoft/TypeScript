@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     addToSeen,
     arrayFrom,
@@ -129,7 +130,6 @@ import {
     WatchType,
     WildcardDirectoryWatcher,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 import {
     ActionInvalidate,
     ActionSet,

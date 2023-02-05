@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     DeprecationOptions,
     formatStringFromArgs,
@@ -5,7 +6,6 @@ import {
     Version,
     version,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 export let enableDeprecationWarnings = true;
 

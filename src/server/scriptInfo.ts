@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     assign,
     clear,
@@ -34,7 +35,6 @@ import {
     TextSpan,
     unorderedRemoveItem,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 import {
     AbsolutePositionAndLineText,
     ConfiguredProject,

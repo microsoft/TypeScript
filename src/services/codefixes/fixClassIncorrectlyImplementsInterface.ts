@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     addToSeen,
     and,
@@ -36,7 +37,6 @@ import {
     registerCodeFix,
     TypeConstructionContext,
 } from "../_namespaces/ts.codefix";
-import * as Debug from "../../compiler/debug";
 
 const errorCodes = [
     Diagnostics.Class_0_incorrectly_implements_interface_1.code,

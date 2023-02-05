@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     ApplicableRefactorInfo,
     ArrowFunction,
@@ -56,7 +57,6 @@ import {
     refactorKindBeginsWith,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
-import * as Debug from "../../compiler/debug";
 
 const refactorName = "Convert arrow function or function expression";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);

@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     AssignmentDeclarationKind,
     AssignmentExpression,
@@ -96,7 +97,6 @@ import {
     TypeFlags,
     unescapeLeadingUnderscores,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {

@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     addRange,
     addToSeen,
@@ -68,7 +69,6 @@ import {
     RefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
-import * as Debug from "../../compiler/debug";
 
 const refactorName = "Extract type";
 

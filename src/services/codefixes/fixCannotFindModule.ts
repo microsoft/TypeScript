@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     Diagnostics,
     getTokenAtPosition,
@@ -16,7 +17,6 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
-import * as Debug from "../../compiler/debug";
 
 const fixName = "fixCannotFindModule";
 const fixIdInstallTypesPackage = "installTypesPackage";

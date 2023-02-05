@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     ApplicableRefactorInfo,
     codefix,
@@ -12,7 +13,6 @@ import {
     isRefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
-import * as Debug from "../../compiler/debug";
 
 const actionName = "Generate 'get' and 'set' accessors";
 const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;

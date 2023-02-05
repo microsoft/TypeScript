@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     addToSeen,
     ArrowFunction,
@@ -167,7 +168,6 @@ import {
     visitNodes,
     Visitor,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 /**
  * Currently for simplicity we store recovered positions on the node itself.

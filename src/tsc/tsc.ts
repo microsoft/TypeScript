@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
 import * as Debug from "../compiler/debug";
+import * as ts from "./_namespaces/ts";
 
 // This file actually uses arguments passed on commandline and executes it
 

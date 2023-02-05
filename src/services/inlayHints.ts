@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     __String,
     ArrowFunction,
@@ -67,7 +68,6 @@ import {
     usingSingleLineStringWriter,
     VariableDeclaration,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 const maxHintsLength = 30;
 

@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     addToSeen,
     altDirectorySeparator,
@@ -154,7 +155,6 @@ import {
     Log,
     SortText,
 } from "./_namespaces/ts.Completions";
-import * as Debug from "../compiler/debug";
 
 interface NameAndKindSet {
     add(value: NameAndKind): void;

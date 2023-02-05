@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     findChildOfKind,
     FormatCodeSettings,
@@ -5,7 +6,6 @@ import {
     SourceFileLike,
     SyntaxKind,
 } from "../_namespaces/ts";
-import * as Debug from "../../compiler/debug";
 import { TextRangeWithKind } from "../_namespaces/ts.formatting";
 
 /** @internal */

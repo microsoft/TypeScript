@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     collapseTextChangeRangesAcrossMultipleVersions,
     computeLineStarts,
@@ -11,7 +12,6 @@ import {
 import {
     emptyArray,
 } from "./_namespaces/ts.server";
-import * as Debug from "../compiler/debug";
 import * as protocol from "./protocol";
 
 const lineCollectionCapacity = 4;

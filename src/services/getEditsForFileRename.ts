@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     combinePaths,
     createGetCanonicalFileName,
@@ -50,7 +51,6 @@ import {
     tryRemoveDirectoryPrefix,
     UserPreferences,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 /** @internal */
 export function getEditsForFileRename(

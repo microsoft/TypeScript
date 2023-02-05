@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import * as ts from "./_namespaces/ts";
 import {
     addRange,
@@ -124,7 +125,6 @@ import {
     WatchOptions,
     WatchType,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 import {
     asNormalizedPath,
     createModuleSpecifierCache,

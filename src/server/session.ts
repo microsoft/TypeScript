@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     arrayFrom,
     arrayReverseIterator,
@@ -177,7 +178,6 @@ import {
     toNormalizedPath,
     updateProjectIfDirty,
 } from "./_namespaces/ts.server";
-import * as Debug from "../compiler/debug";
 import * as protocol from "./protocol";
 
 interface StackTraceError extends Error {

@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     __String,
     arrayToNumericMap,
@@ -76,7 +77,6 @@ import {
     TypeChecker,
     TypeParameterDeclaration,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 /** The classifier is used for syntactic highlighting in editors via the TSServer */
 export function createClassifier(): Classifier {

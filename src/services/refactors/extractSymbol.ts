@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     __String,
     ANONYMOUS,
@@ -162,7 +163,6 @@ import {
     refactorKindBeginsWith,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
-import * as Debug from "../../compiler/debug";
 
 const refactorName = "Extract Symbol";
 

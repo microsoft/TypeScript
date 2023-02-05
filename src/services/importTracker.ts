@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     __String,
     AnyImportOrReExport,
@@ -80,7 +81,6 @@ import {
     VariableDeclaration,
     walkUpBindingElementsAndPatterns,
 } from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 /* Code for finding imports of an exported symbol. Used only by FindAllReferences. */
 

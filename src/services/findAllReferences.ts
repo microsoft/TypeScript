@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     __String,
     addToSeen,
@@ -251,7 +252,6 @@ import {
     ImportTracker,
     ModuleReference,
 } from "./_namespaces/ts.FindAllReferences";
-import * as Debug from "../compiler/debug";
 
 /** @internal */
 export interface SymbolAndEntries {

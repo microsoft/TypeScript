@@ -1,3 +1,4 @@
+import * as Debug from "../compiler/debug";
 import {
     __String,
     addToSeen,
@@ -364,7 +365,6 @@ import {
     walkUpParenthesizedExpressions,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
-import * as Debug from "../compiler/debug";
 
 // Exported only for tests
 /** @internal */

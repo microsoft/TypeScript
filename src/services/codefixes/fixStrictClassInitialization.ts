@@ -1,3 +1,4 @@
+import * as Debug from "../../compiler/debug";
 import {
     append,
     BigIntLiteralType,
@@ -32,7 +33,6 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
-import * as Debug from "../../compiler/debug";
 
 const fixName = "strictClassInitialization";
 const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";
