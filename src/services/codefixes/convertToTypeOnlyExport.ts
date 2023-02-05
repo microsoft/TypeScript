@@ -24,7 +24,7 @@ import {
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
 
-const errorCodes = [Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type.code];
+const errorCodes = [Diagnostics.Re_exporting_a_type_when_0_is_enabled_requires_using_export_type.code];
 const fixId = "convertToTypeOnlyExport";
 registerCodeFix({
     errorCodes,

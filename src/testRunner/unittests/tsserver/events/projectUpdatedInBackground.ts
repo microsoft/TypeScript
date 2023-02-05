@@ -29,7 +29,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
     function createVerifyInitialOpen(session: TestSession, verifyProjectsUpdatedInBackgroundEventHandler: (events: ts.server.ProjectsUpdatedInBackgroundEvent[]) => void) {
         return (file: File) => {
             session.executeCommandSeq({
-                command: ts.server.CommandNames.Open,
+                command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
                     file: file.path
                 }
@@ -237,7 +237,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 function updateContentOfOpenFile(file: File, newContent: string) {
                     session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
-                        command: ts.server.CommandNames.Change,
+                        command: ts.server.protocol.CommandTypes.Change,
                         arguments: {
                             file: file.path,
                             insertString: newContent,

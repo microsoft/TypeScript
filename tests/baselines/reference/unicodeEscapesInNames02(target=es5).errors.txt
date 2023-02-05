@@ -14,7 +14,7 @@ tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(9,8): error TS
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(12,5): error TS1127: Invalid character.
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(12,6): error TS1434: Unexpected keyword or identifier.
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(12,11): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
-tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(12,15): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(12,15): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(16,5): error TS1127: Invalid character.
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(16,6): error TS1434: Unexpected keyword or identifier.
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(16,7): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
@@ -26,7 +26,7 @@ tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,9): error T
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,14): error TS1127: Invalid character.
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,15): error TS1434: Unexpected keyword or identifier.
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,20): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
-tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,24): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(18,24): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(20,5): error TS2304: Cannot find name 'methodA'.
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(20,15): error TS1005: ';' expected.
 tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(21,21): error TS1127: Invalid character.
@@ -78,7 +78,7 @@ tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(27,12): error 
               ~~
 !!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
                   ~
-!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
     }
     
     class Foo {
@@ -108,7 +108,7 @@ tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts(27,12): error 
                        ~~
 !!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
                            ~
-!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
         }
         methodA() {
         ~~~~~~~

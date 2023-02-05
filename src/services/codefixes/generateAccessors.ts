@@ -213,7 +213,7 @@ function generateGetAccessor(fieldName: AcceptedNameType, accessorName: Accepted
     return factory.createGetAccessorDeclaration(
         modifiers,
         accessorName,
-        /*parameters*/ undefined!, // TODO: GH#18217
+        [],
         type,
         factory.createBlock([
             factory.createReturnStatement(

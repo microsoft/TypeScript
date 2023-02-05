@@ -4,10 +4,10 @@ export class A {}
 
 === tests/cases/conformance/externalModules/typeOnly/b.ts ===
 
-export type * from './a'; // Grammar error
+export type * from './a';
 
 === tests/cases/conformance/externalModules/typeOnly/c.ts ===
-export type * as ns from './a'; // Grammar error
+export type * as ns from './a';
 >ns : Symbol(ns, Decl(c.ts, 0, 11))
 
 === tests/cases/conformance/externalModules/typeOnly/d.ts ===

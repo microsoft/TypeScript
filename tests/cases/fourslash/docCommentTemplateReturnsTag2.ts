@@ -5,7 +5,7 @@
 ////    return 1;
 ////}
 
-verify.docCommentTemplateAt("0", 8,
+verify.docCommentTemplateAt("0", 7,
    `/**
  * 
  * @param x
@@ -13,7 +13,7 @@ verify.docCommentTemplateAt("0", 8,
  * @returns
  */`, { generateReturnInDocTemplate: true });
 
-verify.docCommentTemplateAt("0", 8,
+verify.docCommentTemplateAt("0", 7,
    `/**
  * 
  * @param x

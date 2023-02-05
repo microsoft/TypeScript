@@ -7,7 +7,7 @@
 
 const noIndentScaffolding = "/**\n * \n * @param x\n * @param y\n */";
 const oneIndentScaffolding = "/**\n     * \n     * @param x\n     * @param y\n     */";
-const noIndentOffset = 8;
+const noIndentOffset = 7;
 const oneIndentOffset = noIndentOffset + 4;
 
 goTo.marker("0");

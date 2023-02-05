@@ -4,7 +4,6 @@ interface Comparable {}
 
 class A extends Comparable {}
 >A : Symbol(A, Decl(classExtendsInterface.ts, 0, 23))
->Comparable : Symbol(Comparable, Decl(classExtendsInterface.ts, 0, 0))
 
 class B implements Comparable {}
 >B : Symbol(B, Decl(classExtendsInterface.ts, 1, 29))
@@ -17,7 +16,6 @@ interface Comparable2<T> {}
 class A2<T> extends Comparable2<T> {}
 >A2 : Symbol(A2, Decl(classExtendsInterface.ts, 4, 27))
 >T : Symbol(T, Decl(classExtendsInterface.ts, 5, 9))
->Comparable2 : Symbol(Comparable2, Decl(classExtendsInterface.ts, 2, 32))
 >T : Symbol(T, Decl(classExtendsInterface.ts, 5, 9))
 
 class B2<T> implements Comparable2<T> {}

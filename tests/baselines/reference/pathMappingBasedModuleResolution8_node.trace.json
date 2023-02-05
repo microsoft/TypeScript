@@ -5,6 +5,6 @@
     "'paths' option is specified, looking for a pattern to match module name '@speedy/folder1/testing'.",
     "Module name '@speedy/folder1/testing', matched pattern '@speedy/*/testing'.",
     "Trying substitution '*/dist/index.ts', candidate module location: 'folder1/dist/index.ts'.",
-    "File 'c:/root/folder1/dist/index.ts' exist - use it as a name resolution result.",
+    "File 'c:/root/folder1/dist/index.ts' exists - use it as a name resolution result.",
     "======== Module name '@speedy/folder1/testing' was successfully resolved to 'c:/root/folder1/dist/index.ts'. ========"
 ]

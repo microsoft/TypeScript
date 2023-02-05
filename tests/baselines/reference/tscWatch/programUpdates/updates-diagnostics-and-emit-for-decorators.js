@@ -31,17 +31,13 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+[96mtsconfig.json[0m:[93m1[0m:[93m36[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
 
-[7m1[0m import {B} from './b'
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m1[0m {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error"}}
+[7m [0m [91m                                   ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[96ma.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS1219: [0mExperimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
-
-[7m3[0m export class A {
-[7m [0m [91m             ~[0m
-
-[[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -53,10 +49,7 @@ Program files::
 /a.ts
 /a/lib/lib.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /b.ts (used version)
@@ -87,20 +80,61 @@ export class B {
 
 
 //// [/a.js]
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
+var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
+    function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
+    var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
+    var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
+    var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
+    var _, done = false;
+    for (var i = decorators.length - 1; i >= 0; i--) {
+        var context = {};
+        for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
+        for (var p in contextIn.access) context.access[p] = contextIn.access[p];
+        context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
+        var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
+        if (kind === "accessor") {
+            if (result === void 0) continue;
+            if (result === null || typeof result !== "object") throw new TypeError("Object expected");
+            if (_ = accept(result.get)) descriptor.get = _;
+            if (_ = accept(result.set)) descriptor.set = _;
+            if (_ = accept(result.init)) initializers.push(_);
+        }
+        else if (_ = accept(result)) {
+            if (kind === "field") initializers.push(_);
+            else descriptor[key] = _;
+        }
+    }
+    if (target) Object.defineProperty(target, contextIn.name, descriptor);
+    done = true;
+};
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
+};
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 import './b';
-let A = class A {
-    constructor(p) { }
-};
-A = __decorate([
-    ((_) => { })
-], A);
-export { A };
+export let A = (() => {
+    let _classDecorators = [((_) => { })];
+    let _classDescriptor;
+    let _classExtraInitializers = [];
+    let _classThis;
+    var A = _classThis = class {
+        constructor(p) { }
+    };
+    __setFunctionName(_classThis, "A");
+    (() => {
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        A = _classThis = _classDescriptor.value;
+        __runInitializers(_classThis, _classExtraInitializers);
+    })();
+    return A = _classThis;
+})();
 
 
 
@@ -115,12 +149,13 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+[96mtsconfig.json[0m:[93m1[0m:[93m36[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
 
-[7m1[0m import {B} from './b'
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m1[0m {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true}}
+[7m [0m [91m                                   ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -132,10 +167,7 @@ Program files::
 /a.ts
 /a/lib/lib.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -157,6 +189,24 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/b.js] file written with same contents
+//// [/a.js]
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+import './b';
+let A = class A {
+    constructor(p) { }
+};
+A = __decorate([
+    ((_) => { })
+], A);
+export { A };
+
+
 
 Change:: Enable emitDecoratorMetadata
 
@@ -167,9 +217,15 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m1[0m:[93m36[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
+
+[7m1[0m {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true,"emitDecoratorMetadata":true}}
+[7m [0m [91m                                   ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -181,10 +237,7 @@ Program files::
 /a.ts
 /a/lib/lib.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

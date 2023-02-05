@@ -12,7 +12,7 @@
     "File '/a/b/c/foo.d.ts' does not exist.",
     "File '/a/b/foo.ts' does not exist.",
     "File '/a/b/foo.tsx' does not exist.",
-    "File '/a/b/foo.d.ts' exist - use it as a name resolution result.",
+    "File '/a/b/foo.d.ts' exists - use it as a name resolution result.",
     "======== Module name 'foo' was successfully resolved to '/a/b/foo.d.ts'. ========",
     "======== Resolving module 'foo' from '/a/b/c/lib.ts'. ========",
     "Explicitly specified module resolution kind: 'Classic'.",

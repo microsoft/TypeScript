@@ -1,4 +1,38 @@
+import * as Debug from "../compiler/debug";
+import * as protocol from "../server/protocol";
 import * as ts from "./_namespaces/ts";
+import {
+    ApplyCodeActionCommandResult,
+    assertType,
+    CharacterCodes,
+    combinePaths,
+    createQueue,
+    directorySeparator,
+    DirectoryWatcherCallback,
+    FileWatcher,
+    getDirectoryPath,
+    getNodeMajorVersion,
+    getRootLength,
+    JsTyping,
+    LanguageServiceMode,
+    MapLike,
+    noop,
+    noopFileWatcher,
+    normalizePath,
+    normalizeSlashes,
+    perfLogger,
+    resolveJSModule,
+    SortedReadonlyArray,
+    startTracing,
+    stripQuotes,
+    sys,
+    toFileNameLowerCase,
+    tracing,
+    TypeAcquisition,
+    validateLocaleAndSetLanguage,
+    versionMajorMinor,
+    WatchOptions,
+} from "./_namespaces/ts";
 import * as server from "./_namespaces/ts.server";
 import {
     ActionInvalidate,
@@ -32,7 +66,6 @@ import {
     PackageInstalledResponse,
     Project,
     ProjectService,
-    protocol,
     ServerCancellationToken,
     ServerHost,
     Session,
@@ -44,39 +77,6 @@ import {
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
 } from "./_namespaces/ts.server";
-import {
-    ApplyCodeActionCommandResult,
-    assertType,
-    CharacterCodes,
-    combinePaths,
-    createQueue,
-    directorySeparator,
-    DirectoryWatcherCallback,
-    FileWatcher,
-    getDirectoryPath,
-    getNodeMajorVersion,
-    getRootLength,
-    JsTyping,
-    LanguageServiceMode,
-    MapLike,
-    noop,
-    noopFileWatcher,
-    normalizePath,
-    normalizeSlashes,
-    perfLogger,
-    resolveJSModule,
-    SortedReadonlyArray,
-    startTracing,
-    stripQuotes,
-    sys,
-    toFileNameLowerCase,
-    tracing,
-    TypeAcquisition,
-    validateLocaleAndSetLanguage,
-    versionMajorMinor,
-    WatchOptions,
-} from "./_namespaces/ts";
-import * as Debug from "../compiler/debug";
 
 interface LogOptions {
     file?: string;

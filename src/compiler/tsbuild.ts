@@ -2,6 +2,7 @@ import {
     combinePaths,
     Extension,
     fileExtensionIs,
+    Path,
     ResolvedConfigFileName,
 } from "./_namespaces/ts";
 
@@ -16,6 +17,7 @@ export enum UpToDateStatusType {
      */
     UpToDateWithUpstreamTypes,
     /**
+     * @deprecated
      * The project appears out of date because its upstream inputs are newer than its outputs,
      * but all of its outputs are actually newer than the previous identical outputs of its (.d.ts) inputs.
      * This means we can Pseudo-build (just manipulate outputs), as if we had actually built this project.
@@ -27,6 +29,7 @@ export enum UpToDateStatusType {
     OutOfDateWithUpstream,
     OutOfDateBuildInfo,
     OutOfDateOptions,
+    OutOfDateRoots,
     UpstreamOutOfDate,
     UpstreamBlocked,
     ComputingUpstream,
@@ -50,6 +53,7 @@ export type UpToDateStatus =
     | Status.OutOfDateWithSelf
     | Status.OutOfDateWithUpstream
     | Status.OutOfDateBuildInfo
+    | Status.OutOfDateRoots
     | Status.UpstreamOutOfDate
     | Status.UpstreamBlocked
     | Status.ComputingUpstream
@@ -87,6 +91,7 @@ export namespace Status {
     }
 
     /**
+     * @deprecated
      * The project is up to date with respect to its inputs except for prepend output changed (no declaration file change in prepend).
      */
     export interface OutOfDateWithPrepend {
@@ -125,8 +130,14 @@ export namespace Status {
      * Buildinfo indicates that build is out of date
      */
     export interface OutOfDateBuildInfo {
-        type: UpToDateStatusType.OutOfDateBuildInfo | UpToDateStatusType.OutOfDateOptions,
+        type: UpToDateStatusType.OutOfDateBuildInfo | UpToDateStatusType.OutOfDateOptions;
         buildInfoFile: string;
+    }
+
+    export interface OutOfDateRoots {
+        type: UpToDateStatusType.OutOfDateRoots,
+        buildInfoFile: string;
+        inputFile: Path;
     }
 
     /**

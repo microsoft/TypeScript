@@ -11,5 +11,5 @@ export
 >dec : Symbol(dec, Decl(decoratorOnClass3.ts, 0, 0))
 
 class C {
->C : Symbol(C, Decl(decoratorOnClass3.ts, 2, 6))
+>C : Symbol(C, Decl(decoratorOnClass3.ts, 0, 38))
 }

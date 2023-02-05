@@ -13,6 +13,14 @@
     //     ".git-blame-ignore-revs"
     // ]
 
+    // Match eslint-plugin-simple-import-sort in organize/auto-imports.
+    "typescript.unstable": {
+        "organizeImportsCollation": "unicode",
+        "organizeImportsCaseFirst": "upper",
+        "organizeImportsIgnoreCase": false,
+        "organizeImportsNumericCollation": true
+    },
+
     // These options search the repo recursively and slow down
     // the build task menu. We define our own in tasks.json.
     "typescript.tsc.autoDetect": "off",

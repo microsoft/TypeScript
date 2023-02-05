@@ -1,13 +1,13 @@
 /* eslint-disable no-restricted-globals */
 
-import fs from "fs";
-import path from "path";
-import chalk from "chalk";
-import which from "which";
-import { spawn } from "child_process";
-import assert from "assert";
-import JSONC from "jsonc-parser";
 import { CancelError } from "@esfx/canceltoken";
+import assert from "assert";
+import chalk from "chalk";
+import { spawn } from "child_process";
+import fs from "fs";
+import JSONC from "jsonc-parser";
+import path from "path";
+import which from "which";
 
 /**
  * Executes the provided command once with the supplied arguments.

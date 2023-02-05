@@ -2,8 +2,8 @@ import {
     DeprecationOptions,
     formatStringFromArgs,
     noop,
-    version,
     Version,
+    version,
 } from "./_namespaces/ts";
 import * as Debug from "../compiler/debug";
 

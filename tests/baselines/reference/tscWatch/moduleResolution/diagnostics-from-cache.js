@@ -41,7 +41,7 @@ Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 Matched 'exports' condition 'default'.
 Using 'exports' subpath '.' with target './dist/index.js'.
-File '/user/username/projects/myproject/index.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/index.ts', result '/user/username/projects/myproject/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
@@ -143,7 +143,7 @@ Explicitly specified module resolution kind: 'NodeNext'.
 Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/index.js', target file types: TypeScript, JavaScript, Declaration.
 File name '/user/username/projects/myproject/index.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/index.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
 ======== Module name './index.js' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.

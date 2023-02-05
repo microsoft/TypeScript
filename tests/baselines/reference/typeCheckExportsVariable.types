@@ -1,0 +1,9 @@
+=== tests/cases/compiler/typeCheckExportsVariable.ts ===
+let exports: number;
+>exports : number
+
+exports = '';
+>exports = '' : ""
+>exports : number
+>'' : ""
+

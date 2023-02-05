@@ -7,8 +7,10 @@ import {
     factory,
     firstDefined,
     getHostSignatureFromJSDoc,
+    getJSDocHost,
     getJSDocTags,
     getTokenAtPosition,
+    HasJSDoc,
     Identifier,
     isIdentifier,
     isJSDocParameterTag,
@@ -69,9 +71,9 @@ registerCodeFix({
     }
 });
 
-function getDeleteAction(context: CodeFixContext, { name, signature, jsDocParameterTag }: Info) {
+function getDeleteAction(context: CodeFixContext, { name, jsDocHost, jsDocParameterTag }: Info) {
     const changes = textChanges.ChangeTracker.with(context, changeTracker =>
-        changeTracker.filterJSDocTags(context.sourceFile, signature, t => t !== jsDocParameterTag));
+        changeTracker.filterJSDocTags(context.sourceFile, jsDocHost, t => t !== jsDocParameterTag));
     return createCodeFixAction(
         deleteUnmatchedParameter,
         changes,
@@ -81,7 +83,7 @@ function getDeleteAction(context: CodeFixContext, { name, signature, jsDocParame
     );
 }
 
-function getRenameAction(context: CodeFixContext, { name, signature, jsDocParameterTag }: Info) {
+function getRenameAction(context: CodeFixContext, { name, jsDocHost, signature, jsDocParameterTag }: Info) {
     if (!length(signature.parameters)) return undefined;
 
     const sourceFile = context.sourceFile;
@@ -108,11 +110,12 @@ function getRenameAction(context: CodeFixContext, { name, signature, jsDocParame
         jsDocParameterTag.comment
     );
     const changes = textChanges.ChangeTracker.with(context, changeTracker =>
-        changeTracker.replaceJSDocComment(sourceFile, signature, map(tags, t => t === jsDocParameterTag ? newJSDocParameterTag : t)));
+        changeTracker.replaceJSDocComment(sourceFile, jsDocHost, map(tags, t => t === jsDocParameterTag ? newJSDocParameterTag : t)));
     return createCodeFixActionWithoutFixAll(renameUnmatchedParameter, changes, [Diagnostics.Rename_param_tag_name_0_to_1, name.getText(sourceFile), parameterName]);
 }
 
 interface Info {
+    readonly jsDocHost: HasJSDoc;
     readonly signature: SignatureDeclaration;
     readonly jsDocParameterTag: JSDocParameterTag;
     readonly name: Identifier;
@@ -122,9 +125,10 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     if (token.parent && isJSDocParameterTag(token.parent) && isIdentifier(token.parent.name)) {
         const jsDocParameterTag = token.parent;
+        const jsDocHost = getJSDocHost(jsDocParameterTag);
         const signature = getHostSignatureFromJSDoc(jsDocParameterTag);
-        if (signature) {
-            return { signature, name: token.parent.name, jsDocParameterTag };
+        if (jsDocHost && signature) {
+            return { jsDocHost, signature, name: token.parent.name, jsDocParameterTag };
         }
     }
     return undefined;

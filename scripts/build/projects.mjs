@@ -1,7 +1,8 @@
-import { Debouncer, exec } from "./utils.mjs";
 import { resolve } from "path";
+
 import { findUpRoot } from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
+import { Debouncer, exec } from "./utils.mjs";
 
 class ProjectQueue {
     /**

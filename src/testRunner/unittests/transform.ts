@@ -1,9 +1,10 @@
-import * as ts from "../_namespaces/ts";
-import * as Harness from "../_namespaces/Harness";
-import * as evaluator from "../_namespaces/evaluator";
-import * as vfs from "../_namespaces/vfs";
 import * as documents from "../_namespaces/documents";
+import * as evaluator from "../_namespaces/evaluator";
 import * as fakes from "../_namespaces/fakes";
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+import { NewLineKind, ScriptTarget, transpileModule } from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
 
 describe("unittests:: TransformAPI", () => {
     function replaceUndefinedWithVoid0(context: ts.TransformationContext) {
@@ -328,13 +329,14 @@ describe("unittests:: TransformAPI", () => {
 
     // https://github.com/Microsoft/TypeScript/issues/17384
     testBaseline("transformAddDecoratedNode", () => {
-        return ts.transpileModule("", {
+        return transpileModule("", {
             transformers: {
                 before: [transformAddDecoratedNode],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES5,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES5,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
 
@@ -366,13 +368,14 @@ describe("unittests:: TransformAPI", () => {
 
     // https://github.com/microsoft/TypeScript/issues/33295
     testBaseline("transformParameterProperty", () => {
-        return ts.transpileModule("", {
+        return transpileModule("", {
             transformers: {
                 before: [transformAddParameterProperty],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES5,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES5,
+                newLine: NewLineKind.CarriageReturnLineFeed,
+                experimentalDecorators: true,
             }
         }).outputText;
 
@@ -643,8 +646,9 @@ class MyClass {
                 before: [addStaticFieldWithComment],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES2015,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
@@ -658,11 +662,38 @@ const MyClass = class {
                 before: [addStaticFieldWithComment],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES2015,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
+    testBaseline("jsxExpression", () => {
+        function doNothing(context: ts.TransformationContext) {
+            const visitor = (node: ts.Node): ts.Node => {
+                return ts.visitEachChild(node, visitor, context);
+            };
+            return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
+        }
+
+        return ts.transpileModule(`
+function test () {
+    return <>
+        {/* This comment breaks the transformer */}
+    </>
+}
+`, {
+            transformers: {
+                before: [doNothing],
+            },
+            compilerOptions: {
+                jsx: ts.JsxEmit.React,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
+            }
+        }).outputText;
+    });
 });
 

@@ -23,6 +23,17 @@ function f2(b: B, c: C) {
     consume(c, c, useA);  // consume<C, C>
 }
 
+declare function every<T, U extends T>(array: readonly T[], f: (x: T) => x is U): array is readonly U[];
+
+function f3(arr: readonly B[] | readonly C[]) {
+    if (every(arr, isC)) {
+        arr; // readonly C[]
+    }
+    else {
+        arr; // readonly B[]
+    }
+}
+
 // Repro from #52111
 
 enum SyntaxKind {
@@ -119,6 +130,14 @@ function f2(b, c) {
     consume(c, b, useA); // consume<A, B>
     consume(b, b, useA); // consume<B, B>
     consume(c, c, useA); // consume<C, C>
+}
+function f3(arr) {
+    if (every(arr, isC)) {
+        arr; // readonly C[]
+    }
+    else {
+        arr; // readonly B[]
+    }
 }
 // Repro from #52111
 var SyntaxKind;

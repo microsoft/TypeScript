@@ -71,7 +71,7 @@ Info 16   [00:01:05.000] File '/user/username/projects/myproject/product/node_mo
 Info 17   [00:01:06.000] File '/user/username/projects/myproject/product/node_modules/module1.ts' does not exist.
 Info 18   [00:01:07.000] File '/user/username/projects/myproject/product/node_modules/module1.tsx' does not exist.
 Info 19   [00:01:08.000] File '/user/username/projects/myproject/product/node_modules/module1.d.ts' does not exist.
-Info 20   [00:01:09.000] File '/user/username/projects/myproject/product/node_modules/module1/index.ts' exist - use it as a name resolution result.
+Info 20   [00:01:09.000] File '/user/username/projects/myproject/product/node_modules/module1/index.ts' exists - use it as a name resolution result.
 Info 21   [00:01:10.000] Resolving real path for '/user/username/projects/myproject/product/node_modules/module1/index.ts', result '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
 Info 22   [00:01:11.000] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info 23   [00:01:12.000] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/src/file1.ts'. ========
@@ -86,7 +86,7 @@ Info 31   [00:01:20.000] File '/user/username/projects/myproject/node_modules/mo
 Info 32   [00:01:21.000] File '/user/username/projects/myproject/node_modules/module2.ts' does not exist.
 Info 33   [00:01:22.000] File '/user/username/projects/myproject/node_modules/module2.tsx' does not exist.
 Info 34   [00:01:23.000] File '/user/username/projects/myproject/node_modules/module2.d.ts' does not exist.
-Info 35   [00:01:24.000] File '/user/username/projects/myproject/node_modules/module2/index.ts' exist - use it as a name resolution result.
+Info 35   [00:01:24.000] File '/user/username/projects/myproject/node_modules/module2/index.ts' exists - use it as a name resolution result.
 Info 36   [00:01:25.000] Resolving real path for '/user/username/projects/myproject/node_modules/module2/index.ts', result '/user/username/projects/myproject/node_modules/module2/index.ts'.
 Info 37   [00:01:26.000] ======== Module name 'module2' was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'. ========
 Info 38   [00:01:27.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache

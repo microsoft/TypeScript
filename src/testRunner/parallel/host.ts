@@ -1,5 +1,3 @@
-import * as Utils from "../_namespaces/Utils";
-import * as ts from "../_namespaces/ts";
 import {
     configOption,
     globalTimeout,
@@ -24,6 +22,8 @@ import {
     TaskTimeout,
     TestInfo,
 } from "../_namespaces/Harness.Parallel";
+import * as ts from "../_namespaces/ts";
+import * as Utils from "../_namespaces/Utils";
 
 export function start() {
     const Mocha = require("mocha") as typeof import("mocha");

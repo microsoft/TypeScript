@@ -75,7 +75,7 @@ Info 7    [00:00:44.000] response:
     }
 Info 8    [00:00:45.000] request:
     {
-      "command": "completions",
+      "command": "completionInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/a.ts",
         "line": 3,
@@ -92,7 +92,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 9    [00:00:46.000] Request: completions not allowed in LanguageServiceMode.Syntactic
+Info 9    [00:00:46.000] Request: completionInfo not allowed in LanguageServiceMode.Syntactic
 Info 10   [00:00:47.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -159,7 +159,7 @@ Info 18   [00:01:03.000] response:
     }
 Info 19   [00:01:04.000] request:
     {
-      "command": "completions",
+      "command": "completionInfo",
       "arguments": {
         "file": "/user/username/projects/myproject/a.ts",
         "line": 3,
@@ -176,7 +176,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 20   [00:01:05.000] Request: completions not allowed in LanguageServiceMode.Syntactic
+Info 20   [00:01:05.000] Request: completionInfo not allowed in LanguageServiceMode.Syntactic
 Info 21   [00:01:06.000] request:
     {
       "command": "definitionAndBoundSpan",

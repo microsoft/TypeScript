@@ -58,7 +58,7 @@ Matched 'exports' condition 'types'.
 Saw non-matching condition 'import'.
 Matched 'exports' condition 'default'.
 Using 'exports' subpath '.' with target './index.d.ts'.
-File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.
+File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Module name 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12'. ========
 File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
@@ -69,7 +69,7 @@ File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists ac
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' does not have a 'main' field.
-File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.
+File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Type reference directive 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12', primary: true. ========
 File '/a/lib/package.json' does not exist.

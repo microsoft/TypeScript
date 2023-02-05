@@ -1,9 +1,9 @@
-import * as vpath from "./_namespaces/vpath";
-import * as vfs from "./_namespaces/vfs";
-import * as ts from "./_namespaces/ts";
-import * as Harness from "./_namespaces/Harness";
-import * as fakes from "./_namespaces/fakes";
 import * as compiler from "./_namespaces/compiler";
+import * as fakes from "./_namespaces/fakes";
+import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 declare let Symbol: SymbolConstructor;
 

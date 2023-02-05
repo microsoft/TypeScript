@@ -745,7 +745,6 @@ export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { tra
 /** @internal */
 export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
-    const hostGetNewLine = memoize(() => host.getNewLine());
     const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(
             (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
@@ -762,7 +761,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
         useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
         getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
-        getNewLine: () => getNewLineCharacter(getCompilerOptions(), hostGetNewLine),
+        getNewLine: () => getNewLineCharacter(getCompilerOptions()),
         fileExists: f => host.fileExists(f),
         readFile: f => host.readFile(f),
         trace: maybeBind(host, host.trace),
@@ -867,7 +866,7 @@ function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagn
     copyProperties(result, createWatchHost(system, reportWatchStatus));
     result.afterProgramCreate = builderProgram => {
         const compilerOptions = builderProgram.getCompilerOptions();
-        const newLine = getNewLineCharacter(compilerOptions, () => system.newLine);
+        const newLine = getNewLineCharacter(compilerOptions);
 
         emitFilesAndReportErrors(
             builderProgram,

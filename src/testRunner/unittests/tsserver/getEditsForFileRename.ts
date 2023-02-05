@@ -82,7 +82,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         openFilesForSession([aUserTs, bUserTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
-            command: ts.server.CommandNames.GetEditsForFileRename,
+            command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
                 oldFilePath: aOldTs.path,
                 newFilePath: "/a/new.ts",
@@ -101,7 +101,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         openFilesForSession([aTs, cTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
-            command: ts.server.CommandNames.GetEditsForFileRename,
+            command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
                 oldFilePath: "/b.ts",
                 newFilePath: cTs.path,

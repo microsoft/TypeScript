@@ -1,3 +1,33 @@
+=== /tests/cases/fourslash/jsDocDontBreakWithNamespaces.js ===
+// /**
+//  * @returns {module:@nodefuel/web~Webserver~wsServer#hello} Websocket server object
+//  */
+// function foo() { }
+// foo('');
+//       ^
+// | ----------------------------------------------------------------------
+// | foo(): any
+// | @returns Websocket server object
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * @type {module:xxxxx} */
+//  */
+// function bar() { }
+// bar('');
+//       ^
+// | ----------------------------------------------------------------------
+// | bar(): void
+// | ----------------------------------------------------------------------
+// 
+// /** @type {function(module:xxxx, module:xxxx): module:xxxxx} */
+// function zee() { }
+// zee('');
+//       ^
+// | ----------------------------------------------------------------------
+// | zee(**arg0: any**, arg1: any, arg2: any): any
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +35,7 @@
       "position": 117,
       "name": "foo"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -77,7 +107,7 @@
       "position": 181,
       "name": "bar"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -139,7 +169,7 @@
       "position": 274,
       "name": "zee"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

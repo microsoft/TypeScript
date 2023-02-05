@@ -16,7 +16,6 @@ interface Base<T, U> {
 // Error, no Base constructor function
 class D0 extends Base<string, string> {
 >D0 : Symbol(D0, Decl(classExtendingClassLikeType.ts, 3, 1))
->Base : Symbol(Base, Decl(classExtendingClassLikeType.ts, 0, 0))
 }
 
 interface BaseConstructor {

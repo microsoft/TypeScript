@@ -68,7 +68,7 @@ Found 'package.json' at '/src/projects/node_modules/@types/pg/package.json'.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/src/projects/node_modules/@types/pg/index.d.ts'.
-File '/src/projects/node_modules/@types/pg/index.d.ts' exist - use it as a name resolution result.
+File '/src/projects/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts', primary: true. ========
 lib/lib.d.ts
@@ -94,7 +94,7 @@ Directory '/src/projects/b/node_modules' does not exist, skipping all lookups in
 File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/src/projects/node_modules/@types/pg/index.d.ts'.
-File '/src/projects/node_modules/@types/pg/index.d.ts' exist - use it as a name resolution result.
+File '/src/projects/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
 ======== Module name 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts'. ========
 File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
@@ -103,7 +103,7 @@ Resolving with primary search path '/src/projects/node_modules/@types'.
 File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/src/projects/node_modules/@types/pg/index.d.ts'.
-File '/src/projects/node_modules/@types/pg/index.d.ts' exist - use it as a name resolution result.
+File '/src/projects/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts', primary: true. ========
 File '/lib/package.json' does not exist.

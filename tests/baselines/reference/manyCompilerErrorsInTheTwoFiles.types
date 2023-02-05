@@ -1,23 +1,18 @@
 === tests/cases/compiler/a.ts ===
 const a =!@#!@$
 >a : boolean
->! : boolean
+>!@ : boolean
 > : any
-> : any
->! : boolean
-> : any
+>!@$ : boolean
 >$ : any
 
 const b = !@#!@#!@#!
 >b : boolean
->! : boolean
+>!@ : boolean
 > : any
+>!@ : boolean
 > : any
->! : boolean
-> : any
-> : any
->! : boolean
-> : any
+>!@ : boolean
 > : any
 >!OK! : boolean
 

@@ -5576,9 +5576,9 @@ module Harness {
 >getHostSettings : Symbol(TypeScriptLS.getHostSettings, Decl(parserharness.ts, 1836, 9))
 
             return JSON.stringify({ usePullLanguageService: usePull });
->JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >usePullLanguageService : Symbol(usePullLanguageService, Decl(parserharness.ts, 1839, 35))
 >usePull : Symbol(usePull, Decl(parserharness.ts, 58, 14))
         }

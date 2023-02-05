@@ -441,7 +441,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
     reportWatchDiagnostic(Diagnostics.Starting_compilation_in_watch_mode);
     if (configFileName && !host.configFileParsingResult) {
-        newLine = getNewLineCharacter(optionsToExtendForConfigFile, () => host.getNewLine());
+        newLine = getNewLineCharacter(optionsToExtendForConfigFile);
         Debug.assert(!rootFileNames);
         parseConfigFile();
         newLine = updateNewLine();
@@ -668,7 +668,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function updateNewLine() {
-        return getNewLineCharacter(compilerOptions || optionsToExtendForConfigFile, () => host.getNewLine());
+        return getNewLineCharacter(compilerOptions || optionsToExtendForConfigFile);
     }
 
     function toPath(fileName: string) {

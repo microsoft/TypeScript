@@ -6,7 +6,7 @@ export class C {}
 import {C} from './a'; import * as A from './A';
 
 //// [/tsconfig.json]
-{"compilerOptions":{}}
+{"compilerOptions":{"forceConsistentCasingInFileNames":false}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,7 +32,7 @@ Output::
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"watch":true,"configFilePath":"/tsconfig.json"}
+Program options: {"forceConsistentCasingInFileNames":false,"watch":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a.ts

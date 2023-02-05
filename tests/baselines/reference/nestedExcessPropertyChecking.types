@@ -106,3 +106,55 @@ const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
     }
 };
 
+// Simplified repro from #52252
+
+type T1 = {
+>T1 : { primary: {    __typename?: 'Feature';} & {    colors: {        light: number;        dark: number;    };}; }
+
+    primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
+>primary : { __typename?: "Feature" | undefined; } & { colors: {    light: number;    dark: number;}; }
+>__typename : "Feature" | undefined
+>colors : { light: number; dark: number; }
+>light : number
+>dark : number
+
+};
+
+type T2 = {
+>T2 : { primary: {    __typename?: 'Feature';} & {    colors: {        light: number;    };}; }
+
+    primary: { __typename?: 'Feature' } & { colors: { light: number } },
+>primary : { __typename?: "Feature" | undefined; } & { colors: {    light: number;}; }
+>__typename : "Feature" | undefined
+>colors : { light: number; }
+>light : number
+
+};
+
+type Query = T1 & T2;
+>Query : T1 & T2
+
+const response: Query = {
+>response : Query
+>{    primary: {        colors: {            light: 1,            dark: 3,        },    },} : { primary: { colors: { light: number; dark: number; }; }; }
+
+    primary: {
+>primary : { colors: { light: number; dark: number; }; }
+>{        colors: {            light: 1,            dark: 3,        },    } : { colors: { light: number; dark: number; }; }
+
+        colors: {
+>colors : { light: number; dark: number; }
+>{            light: 1,            dark: 3,        } : { light: number; dark: number; }
+
+            light: 1,
+>light : number
+>1 : 1
+
+            dark: 3,
+>dark : number
+>3 : 3
+
+        },
+    },
+};
+

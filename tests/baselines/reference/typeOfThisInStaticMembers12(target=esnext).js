@@ -14,10 +14,10 @@ class C {
     static { this.c = "foo"; }
     static { this.bar = (_c = () => { _a = this.c, _b = this.c; },
         class Inner {
-            constructor() {
-                this[_b] = 123;
-            }
-            static { _c(); }
-            static { this[_a] = 123; }
-        }); }
+                constructor() {
+                    this[_b] = 123;
+                }
+                static { _c(); }
+                static { this[_a] = 123; }
+            }); }
 }

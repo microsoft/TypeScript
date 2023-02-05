@@ -21,17 +21,17 @@ describe("unittests:: tsserver:: occurrence highlight on string", () => {
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.FileLocationRequest>({
-            command: ts.server.CommandNames.Occurrences,
+            command: ts.server.protocol.CommandTypes.Occurrences,
             arguments: { file: file1.path, line: 1, offset: 11 }
         });
 
         session.executeCommandSeq<ts.server.protocol.FileLocationRequest>({
-            command: ts.server.CommandNames.Occurrences,
+            command: ts.server.protocol.CommandTypes.Occurrences,
             arguments: { file: file1.path, line: 3, offset: 13 }
         });
 
         session.executeCommandSeq<ts.server.protocol.FileLocationRequest>({
-            command: ts.server.CommandNames.Occurrences,
+            command: ts.server.protocol.CommandTypes.Occurrences,
             arguments: { file: file1.path, line: 4, offset: 14 }
         });
         baselineTsserverLogs("occurences", "should be marked if only on string values", session);

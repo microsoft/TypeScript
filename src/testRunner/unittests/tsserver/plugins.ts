@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
 import {
     createServerHost,
     File,
@@ -194,7 +194,8 @@ describe("unittests:: tsserver:: plugins overriding getSupportedCodeFixes", () =
                                 case "/b.ts":
                                     return ["b"];
                                 default:
-                                    return info.languageService.getSupportedCodeFixes(fileName);
+                                    // Make this stable list of single item so we dont have to update the baseline for every additional error
+                                    return [info.languageService.getSupportedCodeFixes(fileName)[0]];
                             }
                         };
                         return proxy;

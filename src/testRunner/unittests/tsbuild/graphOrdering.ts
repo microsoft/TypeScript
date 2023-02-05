@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
+import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 
 describe("unittests:: tsbuild - graph-ordering", () => {

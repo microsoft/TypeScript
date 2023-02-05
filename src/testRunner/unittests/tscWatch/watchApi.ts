@@ -1,5 +1,6 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import { commandLineCallbacks } from "../tsc/helpers";
 import {
     createWatchedSystem,
     File,
@@ -13,7 +14,6 @@ import {
     runWatchBaseline,
     watchBaseline,
 } from "./helpers";
-import { commandLineCallbacks } from "../tsc/helpers";
 
 describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
     it("verify that module resolution with json extension works when returned without extension", () => {

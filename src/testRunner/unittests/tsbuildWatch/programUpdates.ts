@@ -1,13 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createWatchedSystem,
-    File,
-    getTsBuildProjectFile,
-    getTsBuildProjectFilePath,
-    libFile,
-    TestServerHost,
-} from "../virtualFileSystemWithWatch";
-import {
     commonFile1,
     commonFile2,
     createBaseline,
@@ -17,6 +9,14 @@ import {
     TscWatchCompileChange,
     verifyTscWatch,
 } from "../tscWatch/helpers";
+import {
+    createWatchedSystem,
+    File,
+    getTsBuildProjectFile,
+    getTsBuildProjectFilePath,
+    libFile,
+    TestServerHost,
+} from "../virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     const enum SubProject {
@@ -274,7 +274,7 @@ export class someClass2 { }`),
                 const logicTsConfig: File = {
                     path: logic[0].path,
                     content: JSON.stringify({
-                        compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
+                        compilerOptions: { ignoreDeprecations: "5.0", composite: true, declaration: true, outFile: "index.js" },
                         references: [{ path: "../core", prepend: true }]
                     })
                 };

@@ -1,3 +1,20 @@
+=== /tests/cases/fourslash/quickInfoDisplayPartsVarWithStringTypes01.ts ===
+// let hello: "hello" | 'hello' = "hello";
+//     ^^^^^
+// | ----------------------------------------------------------------------
+// | let hello: "hello"
+// | ----------------------------------------------------------------------
+// let world: 'world' = "world";
+//     ^^^^^
+// | ----------------------------------------------------------------------
+// | let world: "world"
+// | ----------------------------------------------------------------------
+// let helloOrWorld: "hello" | 'world';
+//     ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | let helloOrWorld: "hello" | "world"
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +22,7 @@
       "position": 4,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "let",
       "kindModifiers": "",
       "textSpan": {
@@ -47,7 +64,7 @@
       "position": 44,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "let",
       "kindModifiers": "",
       "textSpan": {
@@ -89,7 +106,7 @@
       "position": 74,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "let",
       "kindModifiers": "",
       "textSpan": {

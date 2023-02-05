@@ -1,3 +1,12 @@
+=== /a.js ===
+// /** @satisfies {number} comment */
+// const a = 1;
+//       ^
+// | ----------------------------------------------------------------------
+// | const a: 1
+// | @satisfies {number} comment
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +14,7 @@
       "position": 41,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {

@@ -178,6 +178,11 @@ interface ChannelSplitterOptions extends AudioNodeOptions {
     numberOfOutputs?: number;
 }
 
+interface CheckVisibilityOptions {
+    checkOpacity?: boolean;
+    checkVisibilityCSS?: boolean;
+}
+
 interface ClientQueryOptions {
     includeUncontrolled?: boolean;
     type?: ClientTypes;
@@ -487,8 +492,11 @@ interface FocusOptions {
 }
 
 interface FontFaceDescriptors {
-    display?: string;
+    ascentOverride?: string;
+    descentOverride?: string;
+    display?: FontDisplay;
     featureSettings?: string;
+    lineGapOverride?: string;
     stretch?: string;
     style?: string;
     unicodeRange?: string;
@@ -604,6 +612,11 @@ interface ImageDataSettings {
     colorSpace?: PredefinedColorSpace;
 }
 
+interface ImageEncodeOptions {
+    quality?: number;
+    type?: string;
+}
+
 interface ImportMeta {
     url: string;
 }
@@ -702,6 +715,19 @@ interface LockOptions {
     mode?: LockMode;
     signal?: AbortSignal;
     steal?: boolean;
+}
+
+interface MIDIConnectionEventInit extends EventInit {
+    port?: MIDIPort;
+}
+
+interface MIDIMessageEventInit extends EventInit {
+    data?: Uint8Array;
+}
+
+interface MIDIOptions {
+    software?: boolean;
+    sysex?: boolean;
 }
 
 interface MediaCapabilitiesDecodingInfo extends MediaCapabilitiesInfo {
@@ -818,7 +844,6 @@ interface MediaTrackCapabilities {
     aspectRatio?: DoubleRange;
     autoGainControl?: boolean[];
     channelCount?: ULongRange;
-    cursor?: string[];
     deviceId?: string;
     displaySurface?: string;
     echoCancellation?: boolean[];
@@ -826,10 +851,7 @@ interface MediaTrackCapabilities {
     frameRate?: DoubleRange;
     groupId?: string;
     height?: ULongRange;
-    latency?: DoubleRange;
-    logicalSurface?: boolean;
     noiseSuppression?: boolean[];
-    resizeMode?: string[];
     sampleRate?: ULongRange;
     sampleSize?: ULongRange;
     width?: ULongRange;
@@ -840,16 +862,15 @@ interface MediaTrackConstraintSet {
     autoGainControl?: ConstrainBoolean;
     channelCount?: ConstrainULong;
     deviceId?: ConstrainDOMString;
+    displaySurface?: ConstrainDOMString;
     echoCancellation?: ConstrainBoolean;
     facingMode?: ConstrainDOMString;
     frameRate?: ConstrainDouble;
     groupId?: ConstrainDOMString;
     height?: ConstrainULong;
-    latency?: ConstrainDouble;
     noiseSuppression?: ConstrainBoolean;
     sampleRate?: ConstrainULong;
     sampleSize?: ConstrainULong;
-    suppressLocalAudioPlayback?: ConstrainBoolean;
     width?: ConstrainULong;
 }
 
@@ -860,14 +881,15 @@ interface MediaTrackConstraints extends MediaTrackConstraintSet {
 interface MediaTrackSettings {
     aspectRatio?: number;
     autoGainControl?: boolean;
+    channelCount?: number;
     deviceId?: string;
+    displaySurface?: string;
     echoCancellation?: boolean;
     facingMode?: string;
     frameRate?: number;
     groupId?: string;
     height?: number;
     noiseSuppression?: boolean;
-    restrictOwnAudio?: boolean;
     sampleRate?: number;
     sampleSize?: number;
     width?: number;
@@ -876,7 +898,9 @@ interface MediaTrackSettings {
 interface MediaTrackSupportedConstraints {
     aspectRatio?: boolean;
     autoGainControl?: boolean;
+    channelCount?: boolean;
     deviceId?: boolean;
+    displaySurface?: boolean;
     echoCancellation?: boolean;
     facingMode?: boolean;
     frameRate?: boolean;
@@ -885,7 +909,6 @@ interface MediaTrackSupportedConstraints {
     noiseSuppression?: boolean;
     sampleRate?: boolean;
     sampleSize?: boolean;
-    suppressLocalAudioPlayback?: boolean;
     width?: boolean;
 }
 
@@ -1947,22 +1970,22 @@ interface WorkletOptions {
 type NodeFilter = ((node: Node) => number) | { acceptNode(node: Node): number; };
 
 declare var NodeFilter: {
-    readonly FILTER_ACCEPT: number;
-    readonly FILTER_REJECT: number;
-    readonly FILTER_SKIP: number;
-    readonly SHOW_ALL: number;
-    readonly SHOW_ATTRIBUTE: number;
-    readonly SHOW_CDATA_SECTION: number;
-    readonly SHOW_COMMENT: number;
-    readonly SHOW_DOCUMENT: number;
-    readonly SHOW_DOCUMENT_FRAGMENT: number;
-    readonly SHOW_DOCUMENT_TYPE: number;
-    readonly SHOW_ELEMENT: number;
-    readonly SHOW_ENTITY: number;
-    readonly SHOW_ENTITY_REFERENCE: number;
-    readonly SHOW_NOTATION: number;
-    readonly SHOW_PROCESSING_INSTRUCTION: number;
-    readonly SHOW_TEXT: number;
+    readonly FILTER_ACCEPT: 1;
+    readonly FILTER_REJECT: 2;
+    readonly FILTER_SKIP: 3;
+    readonly SHOW_ALL: 0xFFFFFFFF;
+    readonly SHOW_ELEMENT: 0x1;
+    readonly SHOW_ATTRIBUTE: 0x2;
+    readonly SHOW_TEXT: 0x4;
+    readonly SHOW_CDATA_SECTION: 0x8;
+    readonly SHOW_ENTITY_REFERENCE: 0x10;
+    readonly SHOW_ENTITY: 0x20;
+    readonly SHOW_PROCESSING_INSTRUCTION: 0x40;
+    readonly SHOW_COMMENT: 0x80;
+    readonly SHOW_DOCUMENT: 0x100;
+    readonly SHOW_DOCUMENT_TYPE: 0x200;
+    readonly SHOW_DOCUMENT_FRAGMENT: 0x400;
+    readonly SHOW_NOTATION: 0x800;
 };
 
 type XPathNSResolver = ((prefix: string | null) => string | null) | { lookupNamespaceURI(prefix: string | null): string | null; };
@@ -1972,7 +1995,7 @@ interface ANGLE_instanced_arrays {
     drawArraysInstancedANGLE(mode: GLenum, first: GLint, count: GLsizei, primcount: GLsizei): void;
     drawElementsInstancedANGLE(mode: GLenum, count: GLsizei, type: GLenum, offset: GLintptr, primcount: GLsizei): void;
     vertexAttribDivisorANGLE(index: GLuint, divisor: GLuint): void;
-    readonly VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE: GLenum;
+    readonly VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE: 0x88FE;
 }
 
 interface ARIAMixin {
@@ -1982,7 +2005,6 @@ interface ARIAMixin {
     ariaChecked: string | null;
     ariaColCount: string | null;
     ariaColIndex: string | null;
-    ariaColIndexText: string | null;
     ariaColSpan: string | null;
     ariaCurrent: string | null;
     ariaDisabled: string | null;
@@ -2006,7 +2028,6 @@ interface ARIAMixin {
     ariaRoleDescription: string | null;
     ariaRowCount: string | null;
     ariaRowIndex: string | null;
-    ariaRowIndexText: string | null;
     ariaRowSpan: string | null;
     ariaSelected: string | null;
     ariaSetSize: string | null;
@@ -2187,7 +2208,7 @@ declare var AnimationPlaybackEvent: {
 };
 
 interface AnimationTimeline {
-    readonly currentTime: CSSNumberish | null;
+    readonly currentTime: number | null;
 }
 
 declare var AnimationTimeline: {
@@ -2677,6 +2698,15 @@ declare var CSSFontFaceRule: {
     new(): CSSFontFaceRule;
 };
 
+interface CSSFontFeatureValuesRule extends CSSRule {
+    fontFamily: string;
+}
+
+declare var CSSFontFeatureValuesRule: {
+    prototype: CSSFontFeatureValuesRule;
+    new(): CSSFontFeatureValuesRule;
+};
+
 interface CSSFontPaletteValuesRule extends CSSRule {
     readonly basePalette: string;
     readonly fontFamily: string;
@@ -2731,6 +2761,7 @@ interface CSSKeyframesRule extends CSSRule {
     appendRule(rule: string): void;
     deleteRule(select: string): void;
     findRule(select: string): CSSKeyframeRule | null;
+    [index: number]: CSSKeyframeRule;
 }
 
 declare var CSSKeyframesRule: {
@@ -2795,31 +2826,31 @@ interface CSSRule {
     readonly parentStyleSheet: CSSStyleSheet | null;
     /** @deprecated */
     readonly type: number;
-    readonly CHARSET_RULE: number;
-    readonly FONT_FACE_RULE: number;
-    readonly IMPORT_RULE: number;
-    readonly KEYFRAMES_RULE: number;
-    readonly KEYFRAME_RULE: number;
-    readonly MEDIA_RULE: number;
-    readonly NAMESPACE_RULE: number;
-    readonly PAGE_RULE: number;
-    readonly STYLE_RULE: number;
-    readonly SUPPORTS_RULE: number;
+    readonly STYLE_RULE: 1;
+    readonly CHARSET_RULE: 2;
+    readonly IMPORT_RULE: 3;
+    readonly MEDIA_RULE: 4;
+    readonly FONT_FACE_RULE: 5;
+    readonly PAGE_RULE: 6;
+    readonly NAMESPACE_RULE: 10;
+    readonly KEYFRAMES_RULE: 7;
+    readonly KEYFRAME_RULE: 8;
+    readonly SUPPORTS_RULE: 12;
 }
 
 declare var CSSRule: {
     prototype: CSSRule;
     new(): CSSRule;
-    readonly CHARSET_RULE: number;
-    readonly FONT_FACE_RULE: number;
-    readonly IMPORT_RULE: number;
-    readonly KEYFRAMES_RULE: number;
-    readonly KEYFRAME_RULE: number;
-    readonly MEDIA_RULE: number;
-    readonly NAMESPACE_RULE: number;
-    readonly PAGE_RULE: number;
-    readonly STYLE_RULE: number;
-    readonly SUPPORTS_RULE: number;
+    readonly STYLE_RULE: 1;
+    readonly CHARSET_RULE: 2;
+    readonly IMPORT_RULE: 3;
+    readonly MEDIA_RULE: 4;
+    readonly FONT_FACE_RULE: 5;
+    readonly PAGE_RULE: 6;
+    readonly NAMESPACE_RULE: 10;
+    readonly KEYFRAMES_RULE: 7;
+    readonly KEYFRAME_RULE: 8;
+    readonly SUPPORTS_RULE: 12;
 };
 
 /** A CSSRuleList is an (indirect-modify only) array-like object containing an ordered collection of CSSRule objects. */
@@ -2958,10 +2989,16 @@ interface CSSStyleDeclaration {
     columnWidth: string;
     columns: string;
     contain: string;
+    containIntrinsicBlockSize: string;
+    containIntrinsicHeight: string;
+    containIntrinsicInlineSize: string;
+    containIntrinsicSize: string;
+    containIntrinsicWidth: string;
     container: string;
     containerName: string;
     containerType: string;
     content: string;
+    contentVisibility: string;
     counterIncrement: string;
     counterReset: string;
     counterSet: string;
@@ -3081,6 +3118,7 @@ interface CSSStyleDeclaration {
     maskRepeat: string;
     maskSize: string;
     maskType: string;
+    mathStyle: string;
     maxBlockSize: string;
     maxHeight: string;
     maxInlineSize: string;
@@ -3734,6 +3772,7 @@ declare var ClipboardEvent: {
 
 /** Available only in secure contexts. */
 interface ClipboardItem {
+    readonly presentationStyle: PresentationStyle;
     readonly types: ReadonlyArray<string>;
     getType(type: string): Promise<Blob>;
 }
@@ -3844,7 +3883,7 @@ interface Crypto {
     readonly subtle: SubtleCrypto;
     getRandomValues<T extends ArrayBufferView | null>(array: T): T;
     /** Available only in secure contexts. */
-    randomUUID(): string;
+    randomUUID(): `${string}-${string}-${string}-${string}-${string}`;
 }
 
 declare var Crypto: {
@@ -3898,61 +3937,61 @@ interface DOMException extends Error {
     readonly code: number;
     readonly message: string;
     readonly name: string;
-    readonly ABORT_ERR: number;
-    readonly DATA_CLONE_ERR: number;
-    readonly DOMSTRING_SIZE_ERR: number;
-    readonly HIERARCHY_REQUEST_ERR: number;
-    readonly INDEX_SIZE_ERR: number;
-    readonly INUSE_ATTRIBUTE_ERR: number;
-    readonly INVALID_ACCESS_ERR: number;
-    readonly INVALID_CHARACTER_ERR: number;
-    readonly INVALID_MODIFICATION_ERR: number;
-    readonly INVALID_NODE_TYPE_ERR: number;
-    readonly INVALID_STATE_ERR: number;
-    readonly NAMESPACE_ERR: number;
-    readonly NETWORK_ERR: number;
-    readonly NOT_FOUND_ERR: number;
-    readonly NOT_SUPPORTED_ERR: number;
-    readonly NO_DATA_ALLOWED_ERR: number;
-    readonly NO_MODIFICATION_ALLOWED_ERR: number;
-    readonly QUOTA_EXCEEDED_ERR: number;
-    readonly SECURITY_ERR: number;
-    readonly SYNTAX_ERR: number;
-    readonly TIMEOUT_ERR: number;
-    readonly TYPE_MISMATCH_ERR: number;
-    readonly URL_MISMATCH_ERR: number;
-    readonly VALIDATION_ERR: number;
-    readonly WRONG_DOCUMENT_ERR: number;
+    readonly INDEX_SIZE_ERR: 1;
+    readonly DOMSTRING_SIZE_ERR: 2;
+    readonly HIERARCHY_REQUEST_ERR: 3;
+    readonly WRONG_DOCUMENT_ERR: 4;
+    readonly INVALID_CHARACTER_ERR: 5;
+    readonly NO_DATA_ALLOWED_ERR: 6;
+    readonly NO_MODIFICATION_ALLOWED_ERR: 7;
+    readonly NOT_FOUND_ERR: 8;
+    readonly NOT_SUPPORTED_ERR: 9;
+    readonly INUSE_ATTRIBUTE_ERR: 10;
+    readonly INVALID_STATE_ERR: 11;
+    readonly SYNTAX_ERR: 12;
+    readonly INVALID_MODIFICATION_ERR: 13;
+    readonly NAMESPACE_ERR: 14;
+    readonly INVALID_ACCESS_ERR: 15;
+    readonly VALIDATION_ERR: 16;
+    readonly TYPE_MISMATCH_ERR: 17;
+    readonly SECURITY_ERR: 18;
+    readonly NETWORK_ERR: 19;
+    readonly ABORT_ERR: 20;
+    readonly URL_MISMATCH_ERR: 21;
+    readonly QUOTA_EXCEEDED_ERR: 22;
+    readonly TIMEOUT_ERR: 23;
+    readonly INVALID_NODE_TYPE_ERR: 24;
+    readonly DATA_CLONE_ERR: 25;
 }
 
 declare var DOMException: {
     prototype: DOMException;
     new(message?: string, name?: string): DOMException;
-    readonly ABORT_ERR: number;
-    readonly DATA_CLONE_ERR: number;
-    readonly DOMSTRING_SIZE_ERR: number;
-    readonly HIERARCHY_REQUEST_ERR: number;
-    readonly INDEX_SIZE_ERR: number;
-    readonly INUSE_ATTRIBUTE_ERR: number;
-    readonly INVALID_ACCESS_ERR: number;
-    readonly INVALID_CHARACTER_ERR: number;
-    readonly INVALID_MODIFICATION_ERR: number;
-    readonly INVALID_NODE_TYPE_ERR: number;
-    readonly INVALID_STATE_ERR: number;
-    readonly NAMESPACE_ERR: number;
-    readonly NETWORK_ERR: number;
-    readonly NOT_FOUND_ERR: number;
-    readonly NOT_SUPPORTED_ERR: number;
-    readonly NO_DATA_ALLOWED_ERR: number;
-    readonly NO_MODIFICATION_ALLOWED_ERR: number;
-    readonly QUOTA_EXCEEDED_ERR: number;
-    readonly SECURITY_ERR: number;
-    readonly SYNTAX_ERR: number;
-    readonly TIMEOUT_ERR: number;
-    readonly TYPE_MISMATCH_ERR: number;
-    readonly URL_MISMATCH_ERR: number;
-    readonly VALIDATION_ERR: number;
-    readonly WRONG_DOCUMENT_ERR: number;
+    readonly INDEX_SIZE_ERR: 1;
+    readonly DOMSTRING_SIZE_ERR: 2;
+    readonly HIERARCHY_REQUEST_ERR: 3;
+    readonly WRONG_DOCUMENT_ERR: 4;
+    readonly INVALID_CHARACTER_ERR: 5;
+    readonly NO_DATA_ALLOWED_ERR: 6;
+    readonly NO_MODIFICATION_ALLOWED_ERR: 7;
+    readonly NOT_FOUND_ERR: 8;
+    readonly NOT_SUPPORTED_ERR: 9;
+    readonly INUSE_ATTRIBUTE_ERR: 10;
+    readonly INVALID_STATE_ERR: 11;
+    readonly SYNTAX_ERR: 12;
+    readonly INVALID_MODIFICATION_ERR: 13;
+    readonly NAMESPACE_ERR: 14;
+    readonly INVALID_ACCESS_ERR: 15;
+    readonly VALIDATION_ERR: 16;
+    readonly TYPE_MISMATCH_ERR: 17;
+    readonly SECURITY_ERR: 18;
+    readonly NETWORK_ERR: 19;
+    readonly ABORT_ERR: 20;
+    readonly URL_MISMATCH_ERR: 21;
+    readonly QUOTA_EXCEEDED_ERR: 22;
+    readonly TIMEOUT_ERR: 23;
+    readonly INVALID_NODE_TYPE_ERR: 24;
+    readonly DATA_CLONE_ERR: 25;
 };
 
 /** An object providing methods which are not dependent on any particular document. Such an object is returned by the Document.implementation property. */
@@ -4410,7 +4449,7 @@ declare var DeviceOrientationEvent: {
     new(type: string, eventInitDict?: DeviceOrientationEventInit): DeviceOrientationEvent;
 };
 
-interface DocumentEventMap extends DocumentAndElementEventHandlersEventMap, GlobalEventHandlersEventMap {
+interface DocumentEventMap extends GlobalEventHandlersEventMap {
     "DOMContentLoaded": Event;
     "fullscreenchange": Event;
     "fullscreenerror": Event;
@@ -4421,7 +4460,7 @@ interface DocumentEventMap extends DocumentAndElementEventHandlersEventMap, Glob
 }
 
 /** Any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree. */
-interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShadowRoot, FontFaceSource, GlobalEventHandlers, NonElementParentNode, ParentNode, XPathEvaluatorBase {
+interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEventHandlers, NonElementParentNode, ParentNode, XPathEvaluatorBase {
     /** Sets or gets the URL for the current document. */
     readonly URL: string;
     /**
@@ -4617,6 +4656,8 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createElementNS(namespaceURI: "http://www.w3.org/1999/xhtml", qualifiedName: string): HTMLElement;
     createElementNS<K extends keyof SVGElementTagNameMap>(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: K): SVGElementTagNameMap[K];
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: string): SVGElement;
+    createElementNS<K extends keyof MathMLElementTagNameMap>(namespaceURI: "http://www.w3.org/1998/Math/MathML", qualifiedName: K): MathMLElementTagNameMap[K];
+    createElementNS(namespaceURI: "http://www.w3.org/1998/Math/MathML", qualifiedName: string): MathMLElement;
     createElementNS(namespaceURI: string | null, qualifiedName: string, options?: ElementCreationOptions): Element;
     createElementNS(namespace: string | null, qualifiedName: string, options?: string | ElementCreationOptions): Element;
     createEvent(eventInterface: "AnimationEvent"): AnimationEvent;
@@ -4642,6 +4683,8 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createEvent(eventInterface: "IDBVersionChangeEvent"): IDBVersionChangeEvent;
     createEvent(eventInterface: "InputEvent"): InputEvent;
     createEvent(eventInterface: "KeyboardEvent"): KeyboardEvent;
+    createEvent(eventInterface: "MIDIConnectionEvent"): MIDIConnectionEvent;
+    createEvent(eventInterface: "MIDIMessageEvent"): MIDIMessageEvent;
     createEvent(eventInterface: "MediaEncryptedEvent"): MediaEncryptedEvent;
     createEvent(eventInterface: "MediaKeyMessageEvent"): MediaKeyMessageEvent;
     createEvent(eventInterface: "MediaQueryListEvent"): MediaQueryListEvent;
@@ -4732,6 +4775,9 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
      */
     getElementsByTagName<K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>;
     getElementsByTagName<K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>;
+    getElementsByTagName<K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>;
+    /** @deprecated */
+    getElementsByTagName<K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>;
     getElementsByTagName(qualifiedName: string): HTMLCollectionOf<Element>;
     /**
      * If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
@@ -4744,6 +4790,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
      */
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1998/Math/MathML", localName: string): HTMLCollectionOf<MathMLElement>;
     getElementsByTagNameNS(namespace: string | null, localName: string): HTMLCollectionOf<Element>;
     /** Returns an object representing the current selection of the document that is loaded into the object displaying a webpage. */
     getSelection(): Selection | null;
@@ -4818,22 +4865,6 @@ declare var Document: {
     prototype: Document;
     new(): Document;
 };
-
-interface DocumentAndElementEventHandlersEventMap {
-    "copy": ClipboardEvent;
-    "cut": ClipboardEvent;
-    "paste": ClipboardEvent;
-}
-
-interface DocumentAndElementEventHandlers {
-    oncopy: ((this: DocumentAndElementEventHandlers, ev: ClipboardEvent) => any) | null;
-    oncut: ((this: DocumentAndElementEventHandlers, ev: ClipboardEvent) => any) | null;
-    onpaste: ((this: DocumentAndElementEventHandlers, ev: ClipboardEvent) => any) | null;
-    addEventListener<K extends keyof DocumentAndElementEventHandlersEventMap>(type: K, listener: (this: DocumentAndElementEventHandlers, ev: DocumentAndElementEventHandlersEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof DocumentAndElementEventHandlersEventMap>(type: K, listener: (this: DocumentAndElementEventHandlers, ev: DocumentAndElementEventHandlersEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
 
 /** A minimal document object that has no parent. It is used as a lightweight version of Document that stores a segment of a document structure comprised of nodes just like a standard document. The key difference is that because the document fragment isn't part of the active document tree structure, changes made to the fragment don't affect the document, cause reflow, or incur any performance impact that can occur when changes are made. */
 interface DocumentFragment extends Node, NonElementParentNode, ParentNode {
@@ -4920,18 +4951,18 @@ declare var DynamicsCompressorNode: {
 };
 
 interface EXT_blend_minmax {
-    readonly MAX_EXT: GLenum;
-    readonly MIN_EXT: GLenum;
+    readonly MIN_EXT: 0x8007;
+    readonly MAX_EXT: 0x8008;
 }
 
 interface EXT_color_buffer_float {
 }
 
 interface EXT_color_buffer_half_float {
-    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: GLenum;
-    readonly RGB16F_EXT: GLenum;
-    readonly RGBA16F_EXT: GLenum;
-    readonly UNSIGNED_NORMALIZED_EXT: GLenum;
+    readonly RGBA16F_EXT: 0x881A;
+    readonly RGB16F_EXT: 0x881B;
+    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: 0x8211;
+    readonly UNSIGNED_NORMALIZED_EXT: 0x8C17;
 }
 
 interface EXT_float_blend {
@@ -4942,44 +4973,44 @@ interface EXT_frag_depth {
 }
 
 interface EXT_sRGB {
-    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT: GLenum;
-    readonly SRGB8_ALPHA8_EXT: GLenum;
-    readonly SRGB_ALPHA_EXT: GLenum;
-    readonly SRGB_EXT: GLenum;
+    readonly SRGB_EXT: 0x8C40;
+    readonly SRGB_ALPHA_EXT: 0x8C42;
+    readonly SRGB8_ALPHA8_EXT: 0x8C43;
+    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT: 0x8210;
 }
 
 interface EXT_shader_texture_lod {
 }
 
 interface EXT_texture_compression_bptc {
-    readonly COMPRESSED_RGBA_BPTC_UNORM_EXT: GLenum;
-    readonly COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT: GLenum;
-    readonly COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT: GLenum;
-    readonly COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT: GLenum;
+    readonly COMPRESSED_RGBA_BPTC_UNORM_EXT: 0x8E8C;
+    readonly COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT: 0x8E8D;
+    readonly COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT: 0x8E8E;
+    readonly COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT: 0x8E8F;
 }
 
 interface EXT_texture_compression_rgtc {
-    readonly COMPRESSED_RED_GREEN_RGTC2_EXT: GLenum;
-    readonly COMPRESSED_RED_RGTC1_EXT: GLenum;
-    readonly COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT: GLenum;
-    readonly COMPRESSED_SIGNED_RED_RGTC1_EXT: GLenum;
+    readonly COMPRESSED_RED_RGTC1_EXT: 0x8DBB;
+    readonly COMPRESSED_SIGNED_RED_RGTC1_EXT: 0x8DBC;
+    readonly COMPRESSED_RED_GREEN_RGTC2_EXT: 0x8DBD;
+    readonly COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT: 0x8DBE;
 }
 
 /** The EXT_texture_filter_anisotropic extension is part of the WebGL API and exposes two constants for anisotropic filtering (AF). */
 interface EXT_texture_filter_anisotropic {
-    readonly MAX_TEXTURE_MAX_ANISOTROPY_EXT: GLenum;
-    readonly TEXTURE_MAX_ANISOTROPY_EXT: GLenum;
+    readonly TEXTURE_MAX_ANISOTROPY_EXT: 0x84FE;
+    readonly MAX_TEXTURE_MAX_ANISOTROPY_EXT: 0x84FF;
 }
 
 interface EXT_texture_norm16 {
-    readonly R16_EXT: GLenum;
-    readonly R16_SNORM_EXT: GLenum;
-    readonly RG16_EXT: GLenum;
-    readonly RG16_SNORM_EXT: GLenum;
-    readonly RGB16_EXT: GLenum;
-    readonly RGB16_SNORM_EXT: GLenum;
-    readonly RGBA16_EXT: GLenum;
-    readonly RGBA16_SNORM_EXT: GLenum;
+    readonly R16_EXT: 0x822A;
+    readonly RG16_EXT: 0x822C;
+    readonly RGB16_EXT: 0x8054;
+    readonly RGBA16_EXT: 0x805B;
+    readonly R16_SNORM_EXT: 0x8F98;
+    readonly RG16_SNORM_EXT: 0x8F99;
+    readonly RGB16_SNORM_EXT: 0x8F9A;
+    readonly RGBA16_SNORM_EXT: 0x8F9B;
 }
 
 interface ElementEventMap {
@@ -5023,9 +5054,11 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, Non
     readonly tagName: string;
     /** Creates a shadow root for element and returns it. */
     attachShadow(init: ShadowRootInit): ShadowRoot;
+    checkVisibility(options?: CheckVisibilityOptions): boolean;
     /** Returns the first (starting at element) inclusive ancestor that matches selectors, and null otherwise. */
     closest<K extends keyof HTMLElementTagNameMap>(selector: K): HTMLElementTagNameMap[K] | null;
     closest<K extends keyof SVGElementTagNameMap>(selector: K): SVGElementTagNameMap[K] | null;
+    closest<K extends keyof MathMLElementTagNameMap>(selector: K): MathMLElementTagNameMap[K] | null;
     closest<E extends Element = Element>(selectors: string): E | null;
     /** Returns element's first attribute whose qualified name is qualifiedName, and null if there is no such attribute otherwise. */
     getAttribute(qualifiedName: string): string | null;
@@ -5041,9 +5074,13 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, Non
     getElementsByClassName(classNames: string): HTMLCollectionOf<Element>;
     getElementsByTagName<K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>;
     getElementsByTagName<K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>;
+    getElementsByTagName<K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>;
+    /** @deprecated */
+    getElementsByTagName<K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>;
     getElementsByTagName(qualifiedName: string): HTMLCollectionOf<Element>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1998/Math/MathML", localName: string): HTMLCollectionOf<MathMLElement>;
     getElementsByTagNameNS(namespace: string | null, localName: string): HTMLCollectionOf<Element>;
     /** Returns true if element has an attribute whose qualified name is qualifiedName, and false otherwise. */
     hasAttribute(qualifiedName: string): boolean;
@@ -5198,19 +5235,19 @@ interface Event {
     stopImmediatePropagation(): void;
     /** When dispatched in a tree, invoking this method prevents event from reaching any objects other than the current object. */
     stopPropagation(): void;
-    readonly AT_TARGET: number;
-    readonly BUBBLING_PHASE: number;
-    readonly CAPTURING_PHASE: number;
-    readonly NONE: number;
+    readonly NONE: 0;
+    readonly CAPTURING_PHASE: 1;
+    readonly AT_TARGET: 2;
+    readonly BUBBLING_PHASE: 3;
 }
 
 declare var Event: {
     prototype: Event;
     new(type: string, eventInitDict?: EventInit): Event;
-    readonly AT_TARGET: number;
-    readonly BUBBLING_PHASE: number;
-    readonly CAPTURING_PHASE: number;
-    readonly NONE: number;
+    readonly NONE: 0;
+    readonly CAPTURING_PHASE: 1;
+    readonly AT_TARGET: 2;
+    readonly BUBBLING_PHASE: 3;
 };
 
 interface EventCounts {
@@ -5248,9 +5285,9 @@ interface EventSource extends EventTarget {
     readonly withCredentials: boolean;
     /** Aborts any instances of the fetch algorithm started for this EventSource object, and sets the readyState attribute to CLOSED. */
     close(): void;
-    readonly CLOSED: number;
-    readonly CONNECTING: number;
-    readonly OPEN: number;
+    readonly CONNECTING: 0;
+    readonly OPEN: 1;
+    readonly CLOSED: 2;
     addEventListener<K extends keyof EventSourceEventMap>(type: K, listener: (this: EventSource, ev: EventSourceEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: (this: EventSource, event: MessageEvent) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -5262,9 +5299,9 @@ interface EventSource extends EventTarget {
 declare var EventSource: {
     prototype: EventSource;
     new(url: string | URL, eventSourceInitDict?: EventSourceInit): EventSource;
-    readonly CLOSED: number;
-    readonly CONNECTING: number;
-    readonly OPEN: number;
+    readonly CONNECTING: 0;
+    readonly OPEN: 1;
+    readonly CLOSED: 2;
 };
 
 /** EventTarget is a DOM interface implemented by objects that can receive events and may have listeners for them. */
@@ -5352,16 +5389,16 @@ interface FileReader extends EventTarget {
     onloadend: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
     onloadstart: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
     onprogress: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
-    readonly readyState: number;
+    readonly readyState: typeof FileReader.EMPTY | typeof FileReader.LOADING | typeof FileReader.DONE;
     readonly result: string | ArrayBuffer | null;
     abort(): void;
     readAsArrayBuffer(blob: Blob): void;
     readAsBinaryString(blob: Blob): void;
     readAsDataURL(blob: Blob): void;
     readAsText(blob: Blob, encoding?: string): void;
-    readonly DONE: number;
-    readonly EMPTY: number;
-    readonly LOADING: number;
+    readonly EMPTY: 0;
+    readonly LOADING: 1;
+    readonly DONE: 2;
     addEventListener<K extends keyof FileReaderEventMap>(type: K, listener: (this: FileReader, ev: FileReaderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof FileReaderEventMap>(type: K, listener: (this: FileReader, ev: FileReaderEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -5371,9 +5408,9 @@ interface FileReader extends EventTarget {
 declare var FileReader: {
     prototype: FileReader;
     new(): FileReader;
-    readonly DONE: number;
-    readonly EMPTY: number;
-    readonly LOADING: number;
+    readonly EMPTY: 0;
+    readonly LOADING: 1;
+    readonly DONE: 2;
 };
 
 interface FileSystem {
@@ -5479,7 +5516,7 @@ declare var FocusEvent: {
 interface FontFace {
     ascentOverride: string;
     descentOverride: string;
-    display: string;
+    display: FontDisplay;
     family: string;
     featureSettings: string;
     lineGapOverride: string;
@@ -5489,7 +5526,6 @@ interface FontFace {
     style: string;
     unicodeRange: string;
     variant: string;
-    variationSettings: string;
     weight: string;
     load(): Promise<FontFace>;
 }
@@ -5679,17 +5715,17 @@ declare var GeolocationPosition: {
 interface GeolocationPositionError {
     readonly code: number;
     readonly message: string;
-    readonly PERMISSION_DENIED: number;
-    readonly POSITION_UNAVAILABLE: number;
-    readonly TIMEOUT: number;
+    readonly PERMISSION_DENIED: 1;
+    readonly POSITION_UNAVAILABLE: 2;
+    readonly TIMEOUT: 3;
 }
 
 declare var GeolocationPositionError: {
     prototype: GeolocationPositionError;
     new(): GeolocationPositionError;
-    readonly PERMISSION_DENIED: number;
-    readonly POSITION_UNAVAILABLE: number;
-    readonly TIMEOUT: number;
+    readonly PERMISSION_DENIED: 1;
+    readonly POSITION_UNAVAILABLE: 2;
+    readonly TIMEOUT: 3;
 };
 
 interface GlobalEventHandlersEventMap {
@@ -5711,7 +5747,9 @@ interface GlobalEventHandlersEventMap {
     "compositionstart": CompositionEvent;
     "compositionupdate": CompositionEvent;
     "contextmenu": MouseEvent;
+    "copy": ClipboardEvent;
     "cuechange": Event;
+    "cut": ClipboardEvent;
     "dblclick": MouseEvent;
     "drag": DragEvent;
     "dragend": DragEvent;
@@ -5746,6 +5784,7 @@ interface GlobalEventHandlersEventMap {
     "mouseout": MouseEvent;
     "mouseover": MouseEvent;
     "mouseup": MouseEvent;
+    "paste": ClipboardEvent;
     "pause": Event;
     "play": Event;
     "playing": Event;
@@ -5831,7 +5870,9 @@ interface GlobalEventHandlers {
      * @param ev The mouse event.
      */
     oncontextmenu: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null;
+    oncopy: ((this: GlobalEventHandlers, ev: ClipboardEvent) => any) | null;
     oncuechange: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    oncut: ((this: GlobalEventHandlers, ev: ClipboardEvent) => any) | null;
     /**
      * Fires when the user double-clicks the object.
      * @param ev The mouse event.
@@ -5961,6 +6002,7 @@ interface GlobalEventHandlers {
      * @param ev The mouse event.
      */
     onmouseup: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null;
+    onpaste: ((this: GlobalEventHandlers, ev: ClipboardEvent) => any) | null;
     /**
      * Occurs when playback is paused.
      * @param ev The event.
@@ -6487,11 +6529,11 @@ declare var HTMLDocument: {
     new(): HTMLDocument;
 };
 
-interface HTMLElementEventMap extends ElementEventMap, DocumentAndElementEventHandlersEventMap, GlobalEventHandlersEventMap {
+interface HTMLElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap {
 }
 
 /** Any HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it. */
-interface HTMLElement extends Element, DocumentAndElementEventHandlers, ElementCSSInlineStyle, ElementContentEditable, GlobalEventHandlers, HTMLOrSVGElement {
+interface HTMLElement extends Element, ElementCSSInlineStyle, ElementContentEditable, GlobalEventHandlers, HTMLOrSVGElement {
     accessKey: string;
     readonly accessKeyLabel: string;
     autocapitalize: string;
@@ -6649,6 +6691,8 @@ interface HTMLFormElement extends HTMLElement {
     name: string;
     /** Designates a form that is not validated when submitted. */
     noValidate: boolean;
+    rel: string;
+    readonly relList: DOMTokenList;
     /** Sets or retrieves the window or frame at which to target content. */
     target: string;
     /** Returns whether a form will validate when it is submitted, without having to submit it. */
@@ -7091,7 +7135,7 @@ interface HTMLInputElement extends HTMLElement {
     indeterminate: boolean;
     readonly labels: NodeListOf<HTMLLabelElement> | null;
     /** Specifies the ID of a pre-defined datalist of options for an input element. */
-    readonly list: HTMLElement | null;
+    readonly list: HTMLDataListElement | null;
     /** Defines the maximum acceptable value for an input element with type="number".When used with the min and step attributes, lets you control the range and increment (such as only even numbers) that the user can enter into an input field. */
     max: string;
     /** Sets or retrieves the maximum number of characters that the user can enter in a text control. */
@@ -7415,15 +7459,15 @@ interface HTMLMediaElement extends HTMLElement {
     play(): Promise<void>;
     /** Available only in secure contexts. */
     setMediaKeys(mediaKeys: MediaKeys | null): Promise<void>;
-    readonly HAVE_CURRENT_DATA: number;
-    readonly HAVE_ENOUGH_DATA: number;
-    readonly HAVE_FUTURE_DATA: number;
-    readonly HAVE_METADATA: number;
-    readonly HAVE_NOTHING: number;
-    readonly NETWORK_EMPTY: number;
-    readonly NETWORK_IDLE: number;
-    readonly NETWORK_LOADING: number;
-    readonly NETWORK_NO_SOURCE: number;
+    readonly NETWORK_EMPTY: 0;
+    readonly NETWORK_IDLE: 1;
+    readonly NETWORK_LOADING: 2;
+    readonly NETWORK_NO_SOURCE: 3;
+    readonly HAVE_NOTHING: 0;
+    readonly HAVE_METADATA: 1;
+    readonly HAVE_CURRENT_DATA: 2;
+    readonly HAVE_FUTURE_DATA: 3;
+    readonly HAVE_ENOUGH_DATA: 4;
     addEventListener<K extends keyof HTMLMediaElementEventMap>(type: K, listener: (this: HTMLMediaElement, ev: HTMLMediaElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLMediaElementEventMap>(type: K, listener: (this: HTMLMediaElement, ev: HTMLMediaElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -7433,15 +7477,15 @@ interface HTMLMediaElement extends HTMLElement {
 declare var HTMLMediaElement: {
     prototype: HTMLMediaElement;
     new(): HTMLMediaElement;
-    readonly HAVE_CURRENT_DATA: number;
-    readonly HAVE_ENOUGH_DATA: number;
-    readonly HAVE_FUTURE_DATA: number;
-    readonly HAVE_METADATA: number;
-    readonly HAVE_NOTHING: number;
-    readonly NETWORK_EMPTY: number;
-    readonly NETWORK_IDLE: number;
-    readonly NETWORK_LOADING: number;
-    readonly NETWORK_NO_SOURCE: number;
+    readonly NETWORK_EMPTY: 0;
+    readonly NETWORK_IDLE: 1;
+    readonly NETWORK_LOADING: 2;
+    readonly NETWORK_NO_SOURCE: 3;
+    readonly HAVE_NOTHING: 0;
+    readonly HAVE_METADATA: 1;
+    readonly HAVE_CURRENT_DATA: 2;
+    readonly HAVE_FUTURE_DATA: 3;
+    readonly HAVE_ENOUGH_DATA: 4;
 };
 
 interface HTMLMenuElement extends HTMLElement {
@@ -8468,10 +8512,10 @@ interface HTMLTrackElement extends HTMLElement {
     srclang: string;
     /** Returns the TextTrack object corresponding to the text track of the track element. */
     readonly track: TextTrack;
-    readonly ERROR: number;
-    readonly LOADED: number;
-    readonly LOADING: number;
-    readonly NONE: number;
+    readonly NONE: 0;
+    readonly LOADING: 1;
+    readonly LOADED: 2;
+    readonly ERROR: 3;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTrackElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTrackElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -8481,10 +8525,10 @@ interface HTMLTrackElement extends HTMLElement {
 declare var HTMLTrackElement: {
     prototype: HTMLTrackElement;
     new(): HTMLTrackElement;
-    readonly ERROR: number;
-    readonly LOADED: number;
-    readonly LOADING: number;
-    readonly NONE: number;
+    readonly NONE: 0;
+    readonly LOADING: 1;
+    readonly LOADED: 2;
+    readonly ERROR: 3;
 };
 
 /** Provides special properties (beyond those defined on the regular HTMLElement interface it also has available to it by inheritance) for manipulating unordered list elements. */
@@ -9123,7 +9167,7 @@ declare var IntersectionObserverEntry: {
 };
 
 interface KHR_parallel_shader_compile {
-    readonly COMPLETION_STATUS_KHR: GLenum;
+    readonly COMPLETION_STATUS_KHR: 0x91B1;
 }
 
 /** KeyboardEvent objects describe a user interaction with the keyboard; each event describes a single interaction between the user and a key (or combination of a key with modifier keys) on the keyboard. */
@@ -9144,19 +9188,19 @@ interface KeyboardEvent extends UIEvent {
     getModifierState(keyArg: string): boolean;
     /** @deprecated */
     initKeyboardEvent(typeArg: string, bubblesArg?: boolean, cancelableArg?: boolean, viewArg?: Window | null, keyArg?: string, locationArg?: number, ctrlKey?: boolean, altKey?: boolean, shiftKey?: boolean, metaKey?: boolean): void;
-    readonly DOM_KEY_LOCATION_LEFT: number;
-    readonly DOM_KEY_LOCATION_NUMPAD: number;
-    readonly DOM_KEY_LOCATION_RIGHT: number;
-    readonly DOM_KEY_LOCATION_STANDARD: number;
+    readonly DOM_KEY_LOCATION_STANDARD: 0x00;
+    readonly DOM_KEY_LOCATION_LEFT: 0x01;
+    readonly DOM_KEY_LOCATION_RIGHT: 0x02;
+    readonly DOM_KEY_LOCATION_NUMPAD: 0x03;
 }
 
 declare var KeyboardEvent: {
     prototype: KeyboardEvent;
     new(type: string, eventInitDict?: KeyboardEventInit): KeyboardEvent;
-    readonly DOM_KEY_LOCATION_LEFT: number;
-    readonly DOM_KEY_LOCATION_NUMPAD: number;
-    readonly DOM_KEY_LOCATION_RIGHT: number;
-    readonly DOM_KEY_LOCATION_STANDARD: number;
+    readonly DOM_KEY_LOCATION_STANDARD: 0x00;
+    readonly DOM_KEY_LOCATION_LEFT: 0x01;
+    readonly DOM_KEY_LOCATION_RIGHT: 0x02;
+    readonly DOM_KEY_LOCATION_NUMPAD: 0x03;
 };
 
 interface KeyframeEffect extends AnimationEffect {
@@ -9269,10 +9313,130 @@ declare var LockManager: {
     new(): LockManager;
 };
 
-interface MathMLElementEventMap extends ElementEventMap, DocumentAndElementEventHandlersEventMap, GlobalEventHandlersEventMap {
+interface MIDIAccessEventMap {
+    "statechange": Event;
 }
 
-interface MathMLElement extends Element, DocumentAndElementEventHandlers, ElementCSSInlineStyle, GlobalEventHandlers, HTMLOrSVGElement {
+/** Available only in secure contexts. */
+interface MIDIAccess extends EventTarget {
+    readonly inputs: MIDIInputMap;
+    onstatechange: ((this: MIDIAccess, ev: Event) => any) | null;
+    readonly outputs: MIDIOutputMap;
+    readonly sysexEnabled: boolean;
+    addEventListener<K extends keyof MIDIAccessEventMap>(type: K, listener: (this: MIDIAccess, ev: MIDIAccessEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof MIDIAccessEventMap>(type: K, listener: (this: MIDIAccess, ev: MIDIAccessEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var MIDIAccess: {
+    prototype: MIDIAccess;
+    new(): MIDIAccess;
+};
+
+/** Available only in secure contexts. */
+interface MIDIConnectionEvent extends Event {
+    readonly port: MIDIPort;
+}
+
+declare var MIDIConnectionEvent: {
+    prototype: MIDIConnectionEvent;
+    new(type: string, eventInitDict?: MIDIConnectionEventInit): MIDIConnectionEvent;
+};
+
+interface MIDIInputEventMap extends MIDIPortEventMap {
+    "midimessage": Event;
+}
+
+/** Available only in secure contexts. */
+interface MIDIInput extends MIDIPort {
+    onmidimessage: ((this: MIDIInput, ev: Event) => any) | null;
+    addEventListener<K extends keyof MIDIInputEventMap>(type: K, listener: (this: MIDIInput, ev: MIDIInputEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof MIDIInputEventMap>(type: K, listener: (this: MIDIInput, ev: MIDIInputEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var MIDIInput: {
+    prototype: MIDIInput;
+    new(): MIDIInput;
+};
+
+/** Available only in secure contexts. */
+interface MIDIInputMap {
+    forEach(callbackfn: (value: MIDIInput, key: string, parent: MIDIInputMap) => void, thisArg?: any): void;
+}
+
+declare var MIDIInputMap: {
+    prototype: MIDIInputMap;
+    new(): MIDIInputMap;
+};
+
+/** Available only in secure contexts. */
+interface MIDIMessageEvent extends Event {
+    readonly data: Uint8Array;
+}
+
+declare var MIDIMessageEvent: {
+    prototype: MIDIMessageEvent;
+    new(type: string, eventInitDict?: MIDIMessageEventInit): MIDIMessageEvent;
+};
+
+/** Available only in secure contexts. */
+interface MIDIOutput extends MIDIPort {
+    send(data: number[], timestamp?: DOMHighResTimeStamp): void;
+    addEventListener<K extends keyof MIDIPortEventMap>(type: K, listener: (this: MIDIOutput, ev: MIDIPortEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof MIDIPortEventMap>(type: K, listener: (this: MIDIOutput, ev: MIDIPortEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var MIDIOutput: {
+    prototype: MIDIOutput;
+    new(): MIDIOutput;
+};
+
+/** Available only in secure contexts. */
+interface MIDIOutputMap {
+    forEach(callbackfn: (value: MIDIOutput, key: string, parent: MIDIOutputMap) => void, thisArg?: any): void;
+}
+
+declare var MIDIOutputMap: {
+    prototype: MIDIOutputMap;
+    new(): MIDIOutputMap;
+};
+
+interface MIDIPortEventMap {
+    "statechange": Event;
+}
+
+/** Available only in secure contexts. */
+interface MIDIPort extends EventTarget {
+    readonly connection: MIDIPortConnectionState;
+    readonly id: string;
+    readonly manufacturer: string | null;
+    readonly name: string | null;
+    onstatechange: ((this: MIDIPort, ev: Event) => any) | null;
+    readonly state: MIDIPortDeviceState;
+    readonly type: MIDIPortType;
+    readonly version: string | null;
+    close(): Promise<MIDIPort>;
+    open(): Promise<MIDIPort>;
+    addEventListener<K extends keyof MIDIPortEventMap>(type: K, listener: (this: MIDIPort, ev: MIDIPortEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof MIDIPortEventMap>(type: K, listener: (this: MIDIPort, ev: MIDIPortEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var MIDIPort: {
+    prototype: MIDIPort;
+    new(): MIDIPort;
+};
+
+interface MathMLElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap {
+}
+
+interface MathMLElement extends Element, ElementCSSInlineStyle, GlobalEventHandlers, HTMLOrSVGElement {
     addEventListener<K extends keyof MathMLElementEventMap>(type: K, listener: (this: MathMLElement, ev: MathMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof MathMLElementEventMap>(type: K, listener: (this: MathMLElement, ev: MathMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -9360,19 +9524,19 @@ declare var MediaEncryptedEvent: {
 interface MediaError {
     readonly code: number;
     readonly message: string;
-    readonly MEDIA_ERR_ABORTED: number;
-    readonly MEDIA_ERR_DECODE: number;
-    readonly MEDIA_ERR_NETWORK: number;
-    readonly MEDIA_ERR_SRC_NOT_SUPPORTED: number;
+    readonly MEDIA_ERR_ABORTED: 1;
+    readonly MEDIA_ERR_NETWORK: 2;
+    readonly MEDIA_ERR_DECODE: 3;
+    readonly MEDIA_ERR_SRC_NOT_SUPPORTED: 4;
 }
 
 declare var MediaError: {
     prototype: MediaError;
     new(): MediaError;
-    readonly MEDIA_ERR_ABORTED: number;
-    readonly MEDIA_ERR_DECODE: number;
-    readonly MEDIA_ERR_NETWORK: number;
-    readonly MEDIA_ERR_SRC_NOT_SUPPORTED: number;
+    readonly MEDIA_ERR_ABORTED: 1;
+    readonly MEDIA_ERR_NETWORK: 2;
+    readonly MEDIA_ERR_DECODE: 3;
+    readonly MEDIA_ERR_SRC_NOT_SUPPORTED: 4;
 };
 
 /**
@@ -9870,18 +10034,18 @@ interface MutationEvent extends Event {
     readonly relatedNode: Node | null;
     /** @deprecated */
     initMutationEvent(typeArg: string, bubblesArg?: boolean, cancelableArg?: boolean, relatedNodeArg?: Node | null, prevValueArg?: string, newValueArg?: string, attrNameArg?: string, attrChangeArg?: number): void;
-    readonly ADDITION: number;
-    readonly MODIFICATION: number;
-    readonly REMOVAL: number;
+    readonly MODIFICATION: 1;
+    readonly ADDITION: 2;
+    readonly REMOVAL: 3;
 }
 
 /** @deprecated */
 declare var MutationEvent: {
     prototype: MutationEvent;
     new(): MutationEvent;
-    readonly ADDITION: number;
-    readonly MODIFICATION: number;
-    readonly REMOVAL: number;
+    readonly MODIFICATION: 1;
+    readonly ADDITION: 2;
+    readonly REMOVAL: 3;
 };
 
 /** Provides the ability to watch for changes being made to the DOM tree. It is designed as a replacement for the older Mutation Events feature which was part of the DOM3 Events specification. */
@@ -9980,6 +10144,8 @@ interface Navigator extends NavigatorAutomationInformation, NavigatorConcurrentH
     /** Available only in secure contexts. */
     canShare(data?: ShareData): boolean;
     getGamepads(): (Gamepad | null)[];
+    /** Available only in secure contexts. */
+    requestMIDIAccess(options?: MIDIOptions): Promise<MIDIAccess>;
     /** Available only in secure contexts. */
     requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: MediaKeySystemConfiguration[]): Promise<MediaKeySystemAccess>;
     sendBeacon(url: string | URL, data?: BodyInit | null): boolean;
@@ -10109,73 +10275,73 @@ interface Node extends EventTarget {
     normalize(): void;
     removeChild<T extends Node>(child: T): T;
     replaceChild<T extends Node>(node: Node, child: T): T;
-    readonly ATTRIBUTE_NODE: number;
-    /** node is a CDATASection node. */
-    readonly CDATA_SECTION_NODE: number;
-    /** node is a Comment node. */
-    readonly COMMENT_NODE: number;
-    /** node is a DocumentFragment node. */
-    readonly DOCUMENT_FRAGMENT_NODE: number;
-    /** node is a document. */
-    readonly DOCUMENT_NODE: number;
-    /** Set when other is a descendant of node. */
-    readonly DOCUMENT_POSITION_CONTAINED_BY: number;
-    /** Set when other is an ancestor of node. */
-    readonly DOCUMENT_POSITION_CONTAINS: number;
-    /** Set when node and other are not in the same tree. */
-    readonly DOCUMENT_POSITION_DISCONNECTED: number;
-    /** Set when other is following node. */
-    readonly DOCUMENT_POSITION_FOLLOWING: number;
-    readonly DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: number;
-    /** Set when other is preceding node. */
-    readonly DOCUMENT_POSITION_PRECEDING: number;
-    /** node is a doctype. */
-    readonly DOCUMENT_TYPE_NODE: number;
     /** node is an element. */
-    readonly ELEMENT_NODE: number;
-    readonly ENTITY_NODE: number;
-    readonly ENTITY_REFERENCE_NODE: number;
-    readonly NOTATION_NODE: number;
-    /** node is a ProcessingInstruction node. */
-    readonly PROCESSING_INSTRUCTION_NODE: number;
+    readonly ELEMENT_NODE: 1;
+    readonly ATTRIBUTE_NODE: 2;
     /** node is a Text node. */
-    readonly TEXT_NODE: number;
+    readonly TEXT_NODE: 3;
+    /** node is a CDATASection node. */
+    readonly CDATA_SECTION_NODE: 4;
+    readonly ENTITY_REFERENCE_NODE: 5;
+    readonly ENTITY_NODE: 6;
+    /** node is a ProcessingInstruction node. */
+    readonly PROCESSING_INSTRUCTION_NODE: 7;
+    /** node is a Comment node. */
+    readonly COMMENT_NODE: 8;
+    /** node is a document. */
+    readonly DOCUMENT_NODE: 9;
+    /** node is a doctype. */
+    readonly DOCUMENT_TYPE_NODE: 10;
+    /** node is a DocumentFragment node. */
+    readonly DOCUMENT_FRAGMENT_NODE: 11;
+    readonly NOTATION_NODE: 12;
+    /** Set when node and other are not in the same tree. */
+    readonly DOCUMENT_POSITION_DISCONNECTED: 0x01;
+    /** Set when other is preceding node. */
+    readonly DOCUMENT_POSITION_PRECEDING: 0x02;
+    /** Set when other is following node. */
+    readonly DOCUMENT_POSITION_FOLLOWING: 0x04;
+    /** Set when other is an ancestor of node. */
+    readonly DOCUMENT_POSITION_CONTAINS: 0x08;
+    /** Set when other is a descendant of node. */
+    readonly DOCUMENT_POSITION_CONTAINED_BY: 0x10;
+    readonly DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: 0x20;
 }
 
 declare var Node: {
     prototype: Node;
     new(): Node;
-    readonly ATTRIBUTE_NODE: number;
-    /** node is a CDATASection node. */
-    readonly CDATA_SECTION_NODE: number;
-    /** node is a Comment node. */
-    readonly COMMENT_NODE: number;
-    /** node is a DocumentFragment node. */
-    readonly DOCUMENT_FRAGMENT_NODE: number;
-    /** node is a document. */
-    readonly DOCUMENT_NODE: number;
-    /** Set when other is a descendant of node. */
-    readonly DOCUMENT_POSITION_CONTAINED_BY: number;
-    /** Set when other is an ancestor of node. */
-    readonly DOCUMENT_POSITION_CONTAINS: number;
-    /** Set when node and other are not in the same tree. */
-    readonly DOCUMENT_POSITION_DISCONNECTED: number;
-    /** Set when other is following node. */
-    readonly DOCUMENT_POSITION_FOLLOWING: number;
-    readonly DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: number;
-    /** Set when other is preceding node. */
-    readonly DOCUMENT_POSITION_PRECEDING: number;
-    /** node is a doctype. */
-    readonly DOCUMENT_TYPE_NODE: number;
     /** node is an element. */
-    readonly ELEMENT_NODE: number;
-    readonly ENTITY_NODE: number;
-    readonly ENTITY_REFERENCE_NODE: number;
-    readonly NOTATION_NODE: number;
-    /** node is a ProcessingInstruction node. */
-    readonly PROCESSING_INSTRUCTION_NODE: number;
+    readonly ELEMENT_NODE: 1;
+    readonly ATTRIBUTE_NODE: 2;
     /** node is a Text node. */
-    readonly TEXT_NODE: number;
+    readonly TEXT_NODE: 3;
+    /** node is a CDATASection node. */
+    readonly CDATA_SECTION_NODE: 4;
+    readonly ENTITY_REFERENCE_NODE: 5;
+    readonly ENTITY_NODE: 6;
+    /** node is a ProcessingInstruction node. */
+    readonly PROCESSING_INSTRUCTION_NODE: 7;
+    /** node is a Comment node. */
+    readonly COMMENT_NODE: 8;
+    /** node is a document. */
+    readonly DOCUMENT_NODE: 9;
+    /** node is a doctype. */
+    readonly DOCUMENT_TYPE_NODE: 10;
+    /** node is a DocumentFragment node. */
+    readonly DOCUMENT_FRAGMENT_NODE: 11;
+    readonly NOTATION_NODE: 12;
+    /** Set when node and other are not in the same tree. */
+    readonly DOCUMENT_POSITION_DISCONNECTED: 0x01;
+    /** Set when other is preceding node. */
+    readonly DOCUMENT_POSITION_PRECEDING: 0x02;
+    /** Set when other is following node. */
+    readonly DOCUMENT_POSITION_FOLLOWING: 0x04;
+    /** Set when other is an ancestor of node. */
+    readonly DOCUMENT_POSITION_CONTAINS: 0x08;
+    /** Set when other is a descendant of node. */
+    readonly DOCUMENT_POSITION_CONTAINED_BY: 0x10;
+    readonly DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: 0x20;
 };
 
 /** An iterator over the members of a list of the nodes in a subtree of the DOM. The nodes will be returned in document order. */
@@ -10292,7 +10458,7 @@ interface OES_fbo_render_mipmap {
 
 /** The OES_standard_derivatives extension is part of the WebGL API and adds the GLSL derivative functions dFdx, dFdy, and fwidth. */
 interface OES_standard_derivatives {
-    readonly FRAGMENT_SHADER_DERIVATIVE_HINT_OES: GLenum;
+    readonly FRAGMENT_SHADER_DERIVATIVE_HINT_OES: 0x8B8B;
 }
 
 /** The OES_texture_float extension is part of the WebGL API and exposes floating-point pixel types for textures. */
@@ -10305,7 +10471,7 @@ interface OES_texture_float_linear {
 
 /** The OES_texture_half_float extension is part of the WebGL API and adds texture formats with 16- (aka half float) and 32-bit floating-point components. */
 interface OES_texture_half_float {
-    readonly HALF_FLOAT_OES: GLenum;
+    readonly HALF_FLOAT_OES: 0x8D61;
 }
 
 /** The OES_texture_half_float_linear extension is part of the WebGL API and allows linear filtering with half floating-point pixel types for textures. */
@@ -10317,15 +10483,15 @@ interface OES_vertex_array_object {
     createVertexArrayOES(): WebGLVertexArrayObjectOES | null;
     deleteVertexArrayOES(arrayObject: WebGLVertexArrayObjectOES | null): void;
     isVertexArrayOES(arrayObject: WebGLVertexArrayObjectOES | null): GLboolean;
-    readonly VERTEX_ARRAY_BINDING_OES: GLenum;
+    readonly VERTEX_ARRAY_BINDING_OES: 0x85B5;
 }
 
 interface OVR_multiview2 {
     framebufferTextureMultiviewOVR(target: GLenum, attachment: GLenum, texture: WebGLTexture | null, level: GLint, baseViewIndex: GLint, numViews: GLsizei): void;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_BASE_VIEW_INDEX_OVR: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_NUM_VIEWS_OVR: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR: GLenum;
-    readonly MAX_VIEWS_OVR: GLenum;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_NUM_VIEWS_OVR: 0x9630;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_BASE_VIEW_INDEX_OVR: 0x9632;
+    readonly MAX_VIEWS_OVR: 0x9631;
+    readonly FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR: 0x9633;
 }
 
 /** The Web Audio API OfflineAudioCompletionEvent interface represents events that occur when the processing of an OfflineAudioContext is terminated. The complete event implements this interface. */
@@ -10382,12 +10548,22 @@ interface OffscreenCanvas extends EventTarget {
      */
     width: number;
     /**
+     * Returns a promise that will fulfill with a new Blob object representing a file containing the image in the OffscreenCanvas object.
+     *
+     * The argument, if provided, is a dictionary that controls the encoding options of the image file to be created. The type field specifies the file format and has a default value of "image/png"; that type is also used if the requested type isn't supported. If the image format supports variable quality (such as "image/jpeg"), then the quality field is a number in the range 0.0 to 1.0 inclusive indicating the desired quality level for the resulting image.
+     */
+    convertToBlob(options?: ImageEncodeOptions): Promise<Blob>;
+    /**
      * Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "bitmaprenderer", "webgl", or "webgl2". options is handled by that API.
      *
      * This specification defines the "2d" context below, which is similar but distinct from the "2d" context that is created from a canvas element. The WebGL specifications define the "webgl" and "webgl2" contexts. [WEBGL]
      *
      * Returns null if the canvas has already been initialized with another context type (e.g., trying to get a "2d" context after getting a "webgl" context).
      */
+    getContext(contextId: "2d", options?: any): OffscreenCanvasRenderingContext2D | null;
+    getContext(contextId: "bitmaprenderer", options?: any): ImageBitmapRenderingContext | null;
+    getContext(contextId: "webgl", options?: any): WebGLRenderingContext | null;
+    getContext(contextId: "webgl2", options?: any): WebGL2RenderingContext | null;
     getContext(contextId: OffscreenRenderingContextId, options?: any): OffscreenRenderingContext | null;
     /** Returns a newly created ImageBitmap object with the image in the OffscreenCanvas object. The image in the OffscreenCanvas object is replaced with a new blank image. */
     transferToImageBitmap(): ImageBitmap;
@@ -10510,10 +10686,16 @@ interface ParentNode extends Node {
     /** Returns the first element that is a descendant of node that matches selectors. */
     querySelector<K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null;
     querySelector<K extends keyof SVGElementTagNameMap>(selectors: K): SVGElementTagNameMap[K] | null;
+    querySelector<K extends keyof MathMLElementTagNameMap>(selectors: K): MathMLElementTagNameMap[K] | null;
+    /** @deprecated */
+    querySelector<K extends keyof HTMLElementDeprecatedTagNameMap>(selectors: K): HTMLElementDeprecatedTagNameMap[K] | null;
     querySelector<E extends Element = Element>(selectors: string): E | null;
     /** Returns all element descendants of node that match selectors. */
     querySelectorAll<K extends keyof HTMLElementTagNameMap>(selectors: K): NodeListOf<HTMLElementTagNameMap[K]>;
     querySelectorAll<K extends keyof SVGElementTagNameMap>(selectors: K): NodeListOf<SVGElementTagNameMap[K]>;
+    querySelectorAll<K extends keyof MathMLElementTagNameMap>(selectors: K): NodeListOf<MathMLElementTagNameMap[K]>;
+    /** @deprecated */
+    querySelectorAll<K extends keyof HTMLElementDeprecatedTagNameMap>(selectors: K): NodeListOf<HTMLElementDeprecatedTagNameMap[K]>;
     querySelectorAll<E extends Element = Element>(selectors: string): NodeListOf<E>;
     /**
      * Replace all children of node with nodes, while replacing strings in nodes with equivalent Text nodes.
@@ -10694,20 +10876,20 @@ interface PerformanceNavigation {
     readonly type: number;
     /** @deprecated */
     toJSON(): any;
-    readonly TYPE_BACK_FORWARD: number;
-    readonly TYPE_NAVIGATE: number;
-    readonly TYPE_RELOAD: number;
-    readonly TYPE_RESERVED: number;
+    readonly TYPE_NAVIGATE: 0;
+    readonly TYPE_RELOAD: 1;
+    readonly TYPE_BACK_FORWARD: 2;
+    readonly TYPE_RESERVED: 255;
 }
 
 /** @deprecated */
 declare var PerformanceNavigation: {
     prototype: PerformanceNavigation;
     new(): PerformanceNavigation;
-    readonly TYPE_BACK_FORWARD: number;
-    readonly TYPE_NAVIGATE: number;
-    readonly TYPE_RELOAD: number;
-    readonly TYPE_RESERVED: number;
+    readonly TYPE_NAVIGATE: 0;
+    readonly TYPE_RELOAD: 1;
+    readonly TYPE_BACK_FORWARD: 2;
+    readonly TYPE_RESERVED: 255;
 };
 
 /** Provides methods and properties to store and retrieve metrics regarding the browser's document navigation events. For example, this interface can be used to determine how much time it takes to load or unload a document. */
@@ -11064,6 +11246,7 @@ interface PublicKeyCredential extends Credential {
 declare var PublicKeyCredential: {
     prototype: PublicKeyCredential;
     new(): PublicKeyCredential;
+    isConditionalMediationAvailable(): Promise<boolean>;
     isUserVerifyingPlatformAuthenticatorAvailable(): Promise<boolean>;
 };
 
@@ -11556,19 +11739,19 @@ interface Range extends AbstractRange {
     setStartBefore(node: Node): void;
     surroundContents(newParent: Node): void;
     toString(): string;
-    readonly END_TO_END: number;
-    readonly END_TO_START: number;
-    readonly START_TO_END: number;
-    readonly START_TO_START: number;
+    readonly START_TO_START: 0;
+    readonly START_TO_END: 1;
+    readonly END_TO_END: 2;
+    readonly END_TO_START: 3;
 }
 
 declare var Range: {
     prototype: Range;
     new(): Range;
-    readonly END_TO_END: number;
-    readonly END_TO_START: number;
-    readonly START_TO_END: number;
-    readonly START_TO_START: number;
+    readonly START_TO_START: 0;
+    readonly START_TO_END: 1;
+    readonly END_TO_END: 2;
+    readonly END_TO_START: 3;
     toString(): string;
 };
 
@@ -11790,21 +11973,21 @@ interface SVGAngle {
     valueInSpecifiedUnits: number;
     convertToSpecifiedUnits(unitType: number): void;
     newValueSpecifiedUnits(unitType: number, valueInSpecifiedUnits: number): void;
-    readonly SVG_ANGLETYPE_DEG: number;
-    readonly SVG_ANGLETYPE_GRAD: number;
-    readonly SVG_ANGLETYPE_RAD: number;
-    readonly SVG_ANGLETYPE_UNKNOWN: number;
-    readonly SVG_ANGLETYPE_UNSPECIFIED: number;
+    readonly SVG_ANGLETYPE_UNKNOWN: 0;
+    readonly SVG_ANGLETYPE_UNSPECIFIED: 1;
+    readonly SVG_ANGLETYPE_DEG: 2;
+    readonly SVG_ANGLETYPE_RAD: 3;
+    readonly SVG_ANGLETYPE_GRAD: 4;
 }
 
 declare var SVGAngle: {
     prototype: SVGAngle;
     new(): SVGAngle;
-    readonly SVG_ANGLETYPE_DEG: number;
-    readonly SVG_ANGLETYPE_GRAD: number;
-    readonly SVG_ANGLETYPE_RAD: number;
-    readonly SVG_ANGLETYPE_UNKNOWN: number;
-    readonly SVG_ANGLETYPE_UNSPECIFIED: number;
+    readonly SVG_ANGLETYPE_UNKNOWN: 0;
+    readonly SVG_ANGLETYPE_UNSPECIFIED: 1;
+    readonly SVG_ANGLETYPE_DEG: 2;
+    readonly SVG_ANGLETYPE_RAD: 3;
+    readonly SVG_ANGLETYPE_GRAD: 4;
 };
 
 interface SVGAnimateElement extends SVGAnimationElement {
@@ -12040,12 +12223,12 @@ interface SVGComponentTransferFunctionElement extends SVGElement {
     readonly slope: SVGAnimatedNumber;
     readonly tableValues: SVGAnimatedNumberList;
     readonly type: SVGAnimatedEnumeration;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: number;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: number;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY: number;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: number;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_TABLE: number;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: 0;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY: 1;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_TABLE: 2;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: 3;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: 4;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: 5;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGComponentTransferFunctionElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGComponentTransferFunctionElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12055,12 +12238,12 @@ interface SVGComponentTransferFunctionElement extends SVGElement {
 declare var SVGComponentTransferFunctionElement: {
     prototype: SVGComponentTransferFunctionElement;
     new(): SVGComponentTransferFunctionElement;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: number;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: number;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY: number;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: number;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_TABLE: number;
-    readonly SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: 0;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY: 1;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_TABLE: 2;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: 3;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: 4;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: 5;
 };
 
 /** Corresponds to the <defs> element. */
@@ -12089,11 +12272,11 @@ declare var SVGDescElement: {
     new(): SVGDescElement;
 };
 
-interface SVGElementEventMap extends ElementEventMap, DocumentAndElementEventHandlersEventMap, GlobalEventHandlersEventMap {
+interface SVGElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap {
 }
 
 /** All of the SVG DOM interfaces that correspond directly to elements in the SVG language derive from the SVGElement interface. */
-interface SVGElement extends Element, DocumentAndElementEventHandlers, ElementCSSInlineStyle, GlobalEventHandlers, HTMLOrSVGElement {
+interface SVGElement extends Element, ElementCSSInlineStyle, GlobalEventHandlers, HTMLOrSVGElement {
     /** @deprecated */
     readonly className: any;
     readonly ownerSVGElement: SVGSVGElement | null;
@@ -12131,23 +12314,23 @@ interface SVGFEBlendElement extends SVGElement, SVGFilterPrimitiveStandardAttrib
     readonly in1: SVGAnimatedString;
     readonly in2: SVGAnimatedString;
     readonly mode: SVGAnimatedEnumeration;
-    readonly SVG_FEBLEND_MODE_COLOR: number;
-    readonly SVG_FEBLEND_MODE_COLOR_BURN: number;
-    readonly SVG_FEBLEND_MODE_COLOR_DODGE: number;
-    readonly SVG_FEBLEND_MODE_DARKEN: number;
-    readonly SVG_FEBLEND_MODE_DIFFERENCE: number;
-    readonly SVG_FEBLEND_MODE_EXCLUSION: number;
-    readonly SVG_FEBLEND_MODE_HARD_LIGHT: number;
-    readonly SVG_FEBLEND_MODE_HUE: number;
-    readonly SVG_FEBLEND_MODE_LIGHTEN: number;
-    readonly SVG_FEBLEND_MODE_LUMINOSITY: number;
-    readonly SVG_FEBLEND_MODE_MULTIPLY: number;
-    readonly SVG_FEBLEND_MODE_NORMAL: number;
-    readonly SVG_FEBLEND_MODE_OVERLAY: number;
-    readonly SVG_FEBLEND_MODE_SATURATION: number;
-    readonly SVG_FEBLEND_MODE_SCREEN: number;
-    readonly SVG_FEBLEND_MODE_SOFT_LIGHT: number;
-    readonly SVG_FEBLEND_MODE_UNKNOWN: number;
+    readonly SVG_FEBLEND_MODE_UNKNOWN: 0;
+    readonly SVG_FEBLEND_MODE_NORMAL: 1;
+    readonly SVG_FEBLEND_MODE_MULTIPLY: 2;
+    readonly SVG_FEBLEND_MODE_SCREEN: 3;
+    readonly SVG_FEBLEND_MODE_DARKEN: 4;
+    readonly SVG_FEBLEND_MODE_LIGHTEN: 5;
+    readonly SVG_FEBLEND_MODE_OVERLAY: 6;
+    readonly SVG_FEBLEND_MODE_COLOR_DODGE: 7;
+    readonly SVG_FEBLEND_MODE_COLOR_BURN: 8;
+    readonly SVG_FEBLEND_MODE_HARD_LIGHT: 9;
+    readonly SVG_FEBLEND_MODE_SOFT_LIGHT: 10;
+    readonly SVG_FEBLEND_MODE_DIFFERENCE: 11;
+    readonly SVG_FEBLEND_MODE_EXCLUSION: 12;
+    readonly SVG_FEBLEND_MODE_HUE: 13;
+    readonly SVG_FEBLEND_MODE_SATURATION: 14;
+    readonly SVG_FEBLEND_MODE_COLOR: 15;
+    readonly SVG_FEBLEND_MODE_LUMINOSITY: 16;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEBlendElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEBlendElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12157,23 +12340,23 @@ interface SVGFEBlendElement extends SVGElement, SVGFilterPrimitiveStandardAttrib
 declare var SVGFEBlendElement: {
     prototype: SVGFEBlendElement;
     new(): SVGFEBlendElement;
-    readonly SVG_FEBLEND_MODE_COLOR: number;
-    readonly SVG_FEBLEND_MODE_COLOR_BURN: number;
-    readonly SVG_FEBLEND_MODE_COLOR_DODGE: number;
-    readonly SVG_FEBLEND_MODE_DARKEN: number;
-    readonly SVG_FEBLEND_MODE_DIFFERENCE: number;
-    readonly SVG_FEBLEND_MODE_EXCLUSION: number;
-    readonly SVG_FEBLEND_MODE_HARD_LIGHT: number;
-    readonly SVG_FEBLEND_MODE_HUE: number;
-    readonly SVG_FEBLEND_MODE_LIGHTEN: number;
-    readonly SVG_FEBLEND_MODE_LUMINOSITY: number;
-    readonly SVG_FEBLEND_MODE_MULTIPLY: number;
-    readonly SVG_FEBLEND_MODE_NORMAL: number;
-    readonly SVG_FEBLEND_MODE_OVERLAY: number;
-    readonly SVG_FEBLEND_MODE_SATURATION: number;
-    readonly SVG_FEBLEND_MODE_SCREEN: number;
-    readonly SVG_FEBLEND_MODE_SOFT_LIGHT: number;
-    readonly SVG_FEBLEND_MODE_UNKNOWN: number;
+    readonly SVG_FEBLEND_MODE_UNKNOWN: 0;
+    readonly SVG_FEBLEND_MODE_NORMAL: 1;
+    readonly SVG_FEBLEND_MODE_MULTIPLY: 2;
+    readonly SVG_FEBLEND_MODE_SCREEN: 3;
+    readonly SVG_FEBLEND_MODE_DARKEN: 4;
+    readonly SVG_FEBLEND_MODE_LIGHTEN: 5;
+    readonly SVG_FEBLEND_MODE_OVERLAY: 6;
+    readonly SVG_FEBLEND_MODE_COLOR_DODGE: 7;
+    readonly SVG_FEBLEND_MODE_COLOR_BURN: 8;
+    readonly SVG_FEBLEND_MODE_HARD_LIGHT: 9;
+    readonly SVG_FEBLEND_MODE_SOFT_LIGHT: 10;
+    readonly SVG_FEBLEND_MODE_DIFFERENCE: 11;
+    readonly SVG_FEBLEND_MODE_EXCLUSION: 12;
+    readonly SVG_FEBLEND_MODE_HUE: 13;
+    readonly SVG_FEBLEND_MODE_SATURATION: 14;
+    readonly SVG_FEBLEND_MODE_COLOR: 15;
+    readonly SVG_FEBLEND_MODE_LUMINOSITY: 16;
 };
 
 /** Corresponds to the <feColorMatrix> element. */
@@ -12181,11 +12364,11 @@ interface SVGFEColorMatrixElement extends SVGElement, SVGFilterPrimitiveStandard
     readonly in1: SVGAnimatedString;
     readonly type: SVGAnimatedEnumeration;
     readonly values: SVGAnimatedNumberList;
-    readonly SVG_FECOLORMATRIX_TYPE_HUEROTATE: number;
-    readonly SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: number;
-    readonly SVG_FECOLORMATRIX_TYPE_MATRIX: number;
-    readonly SVG_FECOLORMATRIX_TYPE_SATURATE: number;
-    readonly SVG_FECOLORMATRIX_TYPE_UNKNOWN: number;
+    readonly SVG_FECOLORMATRIX_TYPE_UNKNOWN: 0;
+    readonly SVG_FECOLORMATRIX_TYPE_MATRIX: 1;
+    readonly SVG_FECOLORMATRIX_TYPE_SATURATE: 2;
+    readonly SVG_FECOLORMATRIX_TYPE_HUEROTATE: 3;
+    readonly SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: 4;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEColorMatrixElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEColorMatrixElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12195,11 +12378,11 @@ interface SVGFEColorMatrixElement extends SVGElement, SVGFilterPrimitiveStandard
 declare var SVGFEColorMatrixElement: {
     prototype: SVGFEColorMatrixElement;
     new(): SVGFEColorMatrixElement;
-    readonly SVG_FECOLORMATRIX_TYPE_HUEROTATE: number;
-    readonly SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: number;
-    readonly SVG_FECOLORMATRIX_TYPE_MATRIX: number;
-    readonly SVG_FECOLORMATRIX_TYPE_SATURATE: number;
-    readonly SVG_FECOLORMATRIX_TYPE_UNKNOWN: number;
+    readonly SVG_FECOLORMATRIX_TYPE_UNKNOWN: 0;
+    readonly SVG_FECOLORMATRIX_TYPE_MATRIX: 1;
+    readonly SVG_FECOLORMATRIX_TYPE_SATURATE: 2;
+    readonly SVG_FECOLORMATRIX_TYPE_HUEROTATE: 3;
+    readonly SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: 4;
 };
 
 /** Corresponds to the <feComponentTransfer> element. */
@@ -12225,13 +12408,13 @@ interface SVGFECompositeElement extends SVGElement, SVGFilterPrimitiveStandardAt
     readonly k3: SVGAnimatedNumber;
     readonly k4: SVGAnimatedNumber;
     readonly operator: SVGAnimatedEnumeration;
-    readonly SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_ATOP: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_IN: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_OUT: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_OVER: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_UNKNOWN: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_XOR: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_UNKNOWN: 0;
+    readonly SVG_FECOMPOSITE_OPERATOR_OVER: 1;
+    readonly SVG_FECOMPOSITE_OPERATOR_IN: 2;
+    readonly SVG_FECOMPOSITE_OPERATOR_OUT: 3;
+    readonly SVG_FECOMPOSITE_OPERATOR_ATOP: 4;
+    readonly SVG_FECOMPOSITE_OPERATOR_XOR: 5;
+    readonly SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: 6;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFECompositeElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFECompositeElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12241,13 +12424,13 @@ interface SVGFECompositeElement extends SVGElement, SVGFilterPrimitiveStandardAt
 declare var SVGFECompositeElement: {
     prototype: SVGFECompositeElement;
     new(): SVGFECompositeElement;
-    readonly SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_ATOP: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_IN: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_OUT: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_OVER: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_UNKNOWN: number;
-    readonly SVG_FECOMPOSITE_OPERATOR_XOR: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_UNKNOWN: 0;
+    readonly SVG_FECOMPOSITE_OPERATOR_OVER: 1;
+    readonly SVG_FECOMPOSITE_OPERATOR_IN: 2;
+    readonly SVG_FECOMPOSITE_OPERATOR_OUT: 3;
+    readonly SVG_FECOMPOSITE_OPERATOR_ATOP: 4;
+    readonly SVG_FECOMPOSITE_OPERATOR_XOR: 5;
+    readonly SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: 6;
 };
 
 /** Corresponds to the <feConvolveMatrix> element. */
@@ -12264,10 +12447,10 @@ interface SVGFEConvolveMatrixElement extends SVGElement, SVGFilterPrimitiveStand
     readonly preserveAlpha: SVGAnimatedBoolean;
     readonly targetX: SVGAnimatedInteger;
     readonly targetY: SVGAnimatedInteger;
-    readonly SVG_EDGEMODE_DUPLICATE: number;
-    readonly SVG_EDGEMODE_NONE: number;
-    readonly SVG_EDGEMODE_UNKNOWN: number;
-    readonly SVG_EDGEMODE_WRAP: number;
+    readonly SVG_EDGEMODE_UNKNOWN: 0;
+    readonly SVG_EDGEMODE_DUPLICATE: 1;
+    readonly SVG_EDGEMODE_WRAP: 2;
+    readonly SVG_EDGEMODE_NONE: 3;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEConvolveMatrixElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEConvolveMatrixElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12277,10 +12460,10 @@ interface SVGFEConvolveMatrixElement extends SVGElement, SVGFilterPrimitiveStand
 declare var SVGFEConvolveMatrixElement: {
     prototype: SVGFEConvolveMatrixElement;
     new(): SVGFEConvolveMatrixElement;
-    readonly SVG_EDGEMODE_DUPLICATE: number;
-    readonly SVG_EDGEMODE_NONE: number;
-    readonly SVG_EDGEMODE_UNKNOWN: number;
-    readonly SVG_EDGEMODE_WRAP: number;
+    readonly SVG_EDGEMODE_UNKNOWN: 0;
+    readonly SVG_EDGEMODE_DUPLICATE: 1;
+    readonly SVG_EDGEMODE_WRAP: 2;
+    readonly SVG_EDGEMODE_NONE: 3;
 };
 
 /** Corresponds to the <feDiffuseLighting> element. */
@@ -12308,11 +12491,11 @@ interface SVGFEDisplacementMapElement extends SVGElement, SVGFilterPrimitiveStan
     readonly scale: SVGAnimatedNumber;
     readonly xChannelSelector: SVGAnimatedEnumeration;
     readonly yChannelSelector: SVGAnimatedEnumeration;
-    readonly SVG_CHANNEL_A: number;
-    readonly SVG_CHANNEL_B: number;
-    readonly SVG_CHANNEL_G: number;
-    readonly SVG_CHANNEL_R: number;
-    readonly SVG_CHANNEL_UNKNOWN: number;
+    readonly SVG_CHANNEL_UNKNOWN: 0;
+    readonly SVG_CHANNEL_R: 1;
+    readonly SVG_CHANNEL_G: 2;
+    readonly SVG_CHANNEL_B: 3;
+    readonly SVG_CHANNEL_A: 4;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEDisplacementMapElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEDisplacementMapElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12322,11 +12505,11 @@ interface SVGFEDisplacementMapElement extends SVGElement, SVGFilterPrimitiveStan
 declare var SVGFEDisplacementMapElement: {
     prototype: SVGFEDisplacementMapElement;
     new(): SVGFEDisplacementMapElement;
-    readonly SVG_CHANNEL_A: number;
-    readonly SVG_CHANNEL_B: number;
-    readonly SVG_CHANNEL_G: number;
-    readonly SVG_CHANNEL_R: number;
-    readonly SVG_CHANNEL_UNKNOWN: number;
+    readonly SVG_CHANNEL_UNKNOWN: 0;
+    readonly SVG_CHANNEL_R: 1;
+    readonly SVG_CHANNEL_G: 2;
+    readonly SVG_CHANNEL_B: 3;
+    readonly SVG_CHANNEL_A: 4;
 };
 
 /** Corresponds to the <feDistantLight> element. */
@@ -12491,9 +12674,9 @@ interface SVGFEMorphologyElement extends SVGElement, SVGFilterPrimitiveStandardA
     readonly operator: SVGAnimatedEnumeration;
     readonly radiusX: SVGAnimatedNumber;
     readonly radiusY: SVGAnimatedNumber;
-    readonly SVG_MORPHOLOGY_OPERATOR_DILATE: number;
-    readonly SVG_MORPHOLOGY_OPERATOR_ERODE: number;
-    readonly SVG_MORPHOLOGY_OPERATOR_UNKNOWN: number;
+    readonly SVG_MORPHOLOGY_OPERATOR_UNKNOWN: 0;
+    readonly SVG_MORPHOLOGY_OPERATOR_ERODE: 1;
+    readonly SVG_MORPHOLOGY_OPERATOR_DILATE: 2;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEMorphologyElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEMorphologyElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12503,9 +12686,9 @@ interface SVGFEMorphologyElement extends SVGElement, SVGFilterPrimitiveStandardA
 declare var SVGFEMorphologyElement: {
     prototype: SVGFEMorphologyElement;
     new(): SVGFEMorphologyElement;
-    readonly SVG_MORPHOLOGY_OPERATOR_DILATE: number;
-    readonly SVG_MORPHOLOGY_OPERATOR_ERODE: number;
-    readonly SVG_MORPHOLOGY_OPERATOR_UNKNOWN: number;
+    readonly SVG_MORPHOLOGY_OPERATOR_UNKNOWN: 0;
+    readonly SVG_MORPHOLOGY_OPERATOR_ERODE: 1;
+    readonly SVG_MORPHOLOGY_OPERATOR_DILATE: 2;
 };
 
 /** Corresponds to the <feOffset> element. */
@@ -12602,12 +12785,12 @@ interface SVGFETurbulenceElement extends SVGElement, SVGFilterPrimitiveStandardA
     readonly seed: SVGAnimatedNumber;
     readonly stitchTiles: SVGAnimatedEnumeration;
     readonly type: SVGAnimatedEnumeration;
-    readonly SVG_STITCHTYPE_NOSTITCH: number;
-    readonly SVG_STITCHTYPE_STITCH: number;
-    readonly SVG_STITCHTYPE_UNKNOWN: number;
-    readonly SVG_TURBULENCE_TYPE_FRACTALNOISE: number;
-    readonly SVG_TURBULENCE_TYPE_TURBULENCE: number;
-    readonly SVG_TURBULENCE_TYPE_UNKNOWN: number;
+    readonly SVG_TURBULENCE_TYPE_UNKNOWN: 0;
+    readonly SVG_TURBULENCE_TYPE_FRACTALNOISE: 1;
+    readonly SVG_TURBULENCE_TYPE_TURBULENCE: 2;
+    readonly SVG_STITCHTYPE_UNKNOWN: 0;
+    readonly SVG_STITCHTYPE_STITCH: 1;
+    readonly SVG_STITCHTYPE_NOSTITCH: 2;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFETurbulenceElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFETurbulenceElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12617,12 +12800,12 @@ interface SVGFETurbulenceElement extends SVGElement, SVGFilterPrimitiveStandardA
 declare var SVGFETurbulenceElement: {
     prototype: SVGFETurbulenceElement;
     new(): SVGFETurbulenceElement;
-    readonly SVG_STITCHTYPE_NOSTITCH: number;
-    readonly SVG_STITCHTYPE_STITCH: number;
-    readonly SVG_STITCHTYPE_UNKNOWN: number;
-    readonly SVG_TURBULENCE_TYPE_FRACTALNOISE: number;
-    readonly SVG_TURBULENCE_TYPE_TURBULENCE: number;
-    readonly SVG_TURBULENCE_TYPE_UNKNOWN: number;
+    readonly SVG_TURBULENCE_TYPE_UNKNOWN: 0;
+    readonly SVG_TURBULENCE_TYPE_FRACTALNOISE: 1;
+    readonly SVG_TURBULENCE_TYPE_TURBULENCE: 2;
+    readonly SVG_STITCHTYPE_UNKNOWN: 0;
+    readonly SVG_STITCHTYPE_STITCH: 1;
+    readonly SVG_STITCHTYPE_NOSTITCH: 2;
 };
 
 /** Provides access to the properties of <filter> elements, as well as methods to manipulate them. */
@@ -12709,10 +12892,10 @@ interface SVGGradientElement extends SVGElement, SVGURIReference {
     readonly gradientTransform: SVGAnimatedTransformList;
     readonly gradientUnits: SVGAnimatedEnumeration;
     readonly spreadMethod: SVGAnimatedEnumeration;
-    readonly SVG_SPREADMETHOD_PAD: number;
-    readonly SVG_SPREADMETHOD_REFLECT: number;
-    readonly SVG_SPREADMETHOD_REPEAT: number;
-    readonly SVG_SPREADMETHOD_UNKNOWN: number;
+    readonly SVG_SPREADMETHOD_UNKNOWN: 0;
+    readonly SVG_SPREADMETHOD_PAD: 1;
+    readonly SVG_SPREADMETHOD_REFLECT: 2;
+    readonly SVG_SPREADMETHOD_REPEAT: 3;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGGradientElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGGradientElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12722,10 +12905,10 @@ interface SVGGradientElement extends SVGElement, SVGURIReference {
 declare var SVGGradientElement: {
     prototype: SVGGradientElement;
     new(): SVGGradientElement;
-    readonly SVG_SPREADMETHOD_PAD: number;
-    readonly SVG_SPREADMETHOD_REFLECT: number;
-    readonly SVG_SPREADMETHOD_REPEAT: number;
-    readonly SVG_SPREADMETHOD_UNKNOWN: number;
+    readonly SVG_SPREADMETHOD_UNKNOWN: 0;
+    readonly SVG_SPREADMETHOD_PAD: 1;
+    readonly SVG_SPREADMETHOD_REFLECT: 2;
+    readonly SVG_SPREADMETHOD_REPEAT: 3;
 };
 
 /** SVG elements whose primary purpose is to directly render graphics into a group. */
@@ -12771,33 +12954,33 @@ interface SVGLength {
     valueInSpecifiedUnits: number;
     convertToSpecifiedUnits(unitType: number): void;
     newValueSpecifiedUnits(unitType: number, valueInSpecifiedUnits: number): void;
-    readonly SVG_LENGTHTYPE_CM: number;
-    readonly SVG_LENGTHTYPE_EMS: number;
-    readonly SVG_LENGTHTYPE_EXS: number;
-    readonly SVG_LENGTHTYPE_IN: number;
-    readonly SVG_LENGTHTYPE_MM: number;
-    readonly SVG_LENGTHTYPE_NUMBER: number;
-    readonly SVG_LENGTHTYPE_PC: number;
-    readonly SVG_LENGTHTYPE_PERCENTAGE: number;
-    readonly SVG_LENGTHTYPE_PT: number;
-    readonly SVG_LENGTHTYPE_PX: number;
-    readonly SVG_LENGTHTYPE_UNKNOWN: number;
+    readonly SVG_LENGTHTYPE_UNKNOWN: 0;
+    readonly SVG_LENGTHTYPE_NUMBER: 1;
+    readonly SVG_LENGTHTYPE_PERCENTAGE: 2;
+    readonly SVG_LENGTHTYPE_EMS: 3;
+    readonly SVG_LENGTHTYPE_EXS: 4;
+    readonly SVG_LENGTHTYPE_PX: 5;
+    readonly SVG_LENGTHTYPE_CM: 6;
+    readonly SVG_LENGTHTYPE_MM: 7;
+    readonly SVG_LENGTHTYPE_IN: 8;
+    readonly SVG_LENGTHTYPE_PT: 9;
+    readonly SVG_LENGTHTYPE_PC: 10;
 }
 
 declare var SVGLength: {
     prototype: SVGLength;
     new(): SVGLength;
-    readonly SVG_LENGTHTYPE_CM: number;
-    readonly SVG_LENGTHTYPE_EMS: number;
-    readonly SVG_LENGTHTYPE_EXS: number;
-    readonly SVG_LENGTHTYPE_IN: number;
-    readonly SVG_LENGTHTYPE_MM: number;
-    readonly SVG_LENGTHTYPE_NUMBER: number;
-    readonly SVG_LENGTHTYPE_PC: number;
-    readonly SVG_LENGTHTYPE_PERCENTAGE: number;
-    readonly SVG_LENGTHTYPE_PT: number;
-    readonly SVG_LENGTHTYPE_PX: number;
-    readonly SVG_LENGTHTYPE_UNKNOWN: number;
+    readonly SVG_LENGTHTYPE_UNKNOWN: 0;
+    readonly SVG_LENGTHTYPE_NUMBER: 1;
+    readonly SVG_LENGTHTYPE_PERCENTAGE: 2;
+    readonly SVG_LENGTHTYPE_EMS: 3;
+    readonly SVG_LENGTHTYPE_EXS: 4;
+    readonly SVG_LENGTHTYPE_PX: 5;
+    readonly SVG_LENGTHTYPE_CM: 6;
+    readonly SVG_LENGTHTYPE_MM: 7;
+    readonly SVG_LENGTHTYPE_IN: 8;
+    readonly SVG_LENGTHTYPE_PT: 9;
+    readonly SVG_LENGTHTYPE_PC: 10;
 };
 
 /** The SVGLengthList defines a list of SVGLength objects. */
@@ -12875,12 +13058,12 @@ interface SVGMarkerElement extends SVGElement, SVGFitToViewBox {
     readonly refY: SVGAnimatedLength;
     setOrientToAngle(angle: SVGAngle): void;
     setOrientToAuto(): void;
-    readonly SVG_MARKERUNITS_STROKEWIDTH: number;
-    readonly SVG_MARKERUNITS_UNKNOWN: number;
-    readonly SVG_MARKERUNITS_USERSPACEONUSE: number;
-    readonly SVG_MARKER_ORIENT_ANGLE: number;
-    readonly SVG_MARKER_ORIENT_AUTO: number;
-    readonly SVG_MARKER_ORIENT_UNKNOWN: number;
+    readonly SVG_MARKERUNITS_UNKNOWN: 0;
+    readonly SVG_MARKERUNITS_USERSPACEONUSE: 1;
+    readonly SVG_MARKERUNITS_STROKEWIDTH: 2;
+    readonly SVG_MARKER_ORIENT_UNKNOWN: 0;
+    readonly SVG_MARKER_ORIENT_AUTO: 1;
+    readonly SVG_MARKER_ORIENT_ANGLE: 2;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGMarkerElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGMarkerElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12890,12 +13073,12 @@ interface SVGMarkerElement extends SVGElement, SVGFitToViewBox {
 declare var SVGMarkerElement: {
     prototype: SVGMarkerElement;
     new(): SVGMarkerElement;
-    readonly SVG_MARKERUNITS_STROKEWIDTH: number;
-    readonly SVG_MARKERUNITS_UNKNOWN: number;
-    readonly SVG_MARKERUNITS_USERSPACEONUSE: number;
-    readonly SVG_MARKER_ORIENT_ANGLE: number;
-    readonly SVG_MARKER_ORIENT_AUTO: number;
-    readonly SVG_MARKER_ORIENT_UNKNOWN: number;
+    readonly SVG_MARKERUNITS_UNKNOWN: 0;
+    readonly SVG_MARKERUNITS_USERSPACEONUSE: 1;
+    readonly SVG_MARKERUNITS_STROKEWIDTH: 2;
+    readonly SVG_MARKER_ORIENT_UNKNOWN: 0;
+    readonly SVG_MARKER_ORIENT_AUTO: 1;
+    readonly SVG_MARKER_ORIENT_ANGLE: 2;
 };
 
 /** Provides access to the properties of <mask> elements, as well as methods to manipulate them. */
@@ -13040,39 +13223,39 @@ declare var SVGPolylineElement: {
 interface SVGPreserveAspectRatio {
     align: number;
     meetOrSlice: number;
-    readonly SVG_MEETORSLICE_MEET: number;
-    readonly SVG_MEETORSLICE_SLICE: number;
-    readonly SVG_MEETORSLICE_UNKNOWN: number;
-    readonly SVG_PRESERVEASPECTRATIO_NONE: number;
-    readonly SVG_PRESERVEASPECTRATIO_UNKNOWN: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMAXYMAX: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMAXYMID: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMAXYMIN: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMIDYMAX: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMIDYMID: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMIDYMIN: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMINYMAX: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMINYMID: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMINYMIN: number;
+    readonly SVG_PRESERVEASPECTRATIO_UNKNOWN: 0;
+    readonly SVG_PRESERVEASPECTRATIO_NONE: 1;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMIN: 2;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMIN: 3;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMIN: 4;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMID: 5;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMID: 6;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMID: 7;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMAX: 8;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMAX: 9;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMAX: 10;
+    readonly SVG_MEETORSLICE_UNKNOWN: 0;
+    readonly SVG_MEETORSLICE_MEET: 1;
+    readonly SVG_MEETORSLICE_SLICE: 2;
 }
 
 declare var SVGPreserveAspectRatio: {
     prototype: SVGPreserveAspectRatio;
     new(): SVGPreserveAspectRatio;
-    readonly SVG_MEETORSLICE_MEET: number;
-    readonly SVG_MEETORSLICE_SLICE: number;
-    readonly SVG_MEETORSLICE_UNKNOWN: number;
-    readonly SVG_PRESERVEASPECTRATIO_NONE: number;
-    readonly SVG_PRESERVEASPECTRATIO_UNKNOWN: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMAXYMAX: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMAXYMID: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMAXYMIN: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMIDYMAX: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMIDYMID: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMIDYMIN: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMINYMAX: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMINYMID: number;
-    readonly SVG_PRESERVEASPECTRATIO_XMINYMIN: number;
+    readonly SVG_PRESERVEASPECTRATIO_UNKNOWN: 0;
+    readonly SVG_PRESERVEASPECTRATIO_NONE: 1;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMIN: 2;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMIN: 3;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMIN: 4;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMID: 5;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMID: 6;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMID: 7;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMAX: 8;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMAX: 9;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMAX: 10;
+    readonly SVG_MEETORSLICE_UNKNOWN: 0;
+    readonly SVG_MEETORSLICE_MEET: 1;
+    readonly SVG_MEETORSLICE_SLICE: 2;
 };
 
 /** Corresponds to the <RadialGradient> element. */
@@ -13297,9 +13480,9 @@ interface SVGTextContentElement extends SVGGraphicsElement {
     getSubStringLength(charnum: number, nchars: number): number;
     /** @deprecated */
     selectSubString(charnum: number, nchars: number): void;
-    readonly LENGTHADJUST_SPACING: number;
-    readonly LENGTHADJUST_SPACINGANDGLYPHS: number;
-    readonly LENGTHADJUST_UNKNOWN: number;
+    readonly LENGTHADJUST_UNKNOWN: 0;
+    readonly LENGTHADJUST_SPACING: 1;
+    readonly LENGTHADJUST_SPACINGANDGLYPHS: 2;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGTextContentElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGTextContentElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -13309,9 +13492,9 @@ interface SVGTextContentElement extends SVGGraphicsElement {
 declare var SVGTextContentElement: {
     prototype: SVGTextContentElement;
     new(): SVGTextContentElement;
-    readonly LENGTHADJUST_SPACING: number;
-    readonly LENGTHADJUST_SPACINGANDGLYPHS: number;
-    readonly LENGTHADJUST_UNKNOWN: number;
+    readonly LENGTHADJUST_UNKNOWN: 0;
+    readonly LENGTHADJUST_SPACING: 1;
+    readonly LENGTHADJUST_SPACINGANDGLYPHS: 2;
 };
 
 /** Corresponds to the <text> elements. */
@@ -13332,12 +13515,12 @@ interface SVGTextPathElement extends SVGTextContentElement, SVGURIReference {
     readonly method: SVGAnimatedEnumeration;
     readonly spacing: SVGAnimatedEnumeration;
     readonly startOffset: SVGAnimatedLength;
-    readonly TEXTPATH_METHODTYPE_ALIGN: number;
-    readonly TEXTPATH_METHODTYPE_STRETCH: number;
-    readonly TEXTPATH_METHODTYPE_UNKNOWN: number;
-    readonly TEXTPATH_SPACINGTYPE_AUTO: number;
-    readonly TEXTPATH_SPACINGTYPE_EXACT: number;
-    readonly TEXTPATH_SPACINGTYPE_UNKNOWN: number;
+    readonly TEXTPATH_METHODTYPE_UNKNOWN: 0;
+    readonly TEXTPATH_METHODTYPE_ALIGN: 1;
+    readonly TEXTPATH_METHODTYPE_STRETCH: 2;
+    readonly TEXTPATH_SPACINGTYPE_UNKNOWN: 0;
+    readonly TEXTPATH_SPACINGTYPE_AUTO: 1;
+    readonly TEXTPATH_SPACINGTYPE_EXACT: 2;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGTextPathElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGTextPathElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -13347,12 +13530,12 @@ interface SVGTextPathElement extends SVGTextContentElement, SVGURIReference {
 declare var SVGTextPathElement: {
     prototype: SVGTextPathElement;
     new(): SVGTextPathElement;
-    readonly TEXTPATH_METHODTYPE_ALIGN: number;
-    readonly TEXTPATH_METHODTYPE_STRETCH: number;
-    readonly TEXTPATH_METHODTYPE_UNKNOWN: number;
-    readonly TEXTPATH_SPACINGTYPE_AUTO: number;
-    readonly TEXTPATH_SPACINGTYPE_EXACT: number;
-    readonly TEXTPATH_SPACINGTYPE_UNKNOWN: number;
+    readonly TEXTPATH_METHODTYPE_UNKNOWN: 0;
+    readonly TEXTPATH_METHODTYPE_ALIGN: 1;
+    readonly TEXTPATH_METHODTYPE_STRETCH: 2;
+    readonly TEXTPATH_SPACINGTYPE_UNKNOWN: 0;
+    readonly TEXTPATH_SPACINGTYPE_AUTO: 1;
+    readonly TEXTPATH_SPACINGTYPE_EXACT: 2;
 };
 
 /** Implemented by elements that support attributes that position individual text glyphs. It is inherited by SVGTextElement, SVGTSpanElement, SVGTRefElement and SVGAltGlyphElement. */
@@ -13397,25 +13580,25 @@ interface SVGTransform {
     setSkewX(angle: number): void;
     setSkewY(angle: number): void;
     setTranslate(tx: number, ty: number): void;
-    readonly SVG_TRANSFORM_MATRIX: number;
-    readonly SVG_TRANSFORM_ROTATE: number;
-    readonly SVG_TRANSFORM_SCALE: number;
-    readonly SVG_TRANSFORM_SKEWX: number;
-    readonly SVG_TRANSFORM_SKEWY: number;
-    readonly SVG_TRANSFORM_TRANSLATE: number;
-    readonly SVG_TRANSFORM_UNKNOWN: number;
+    readonly SVG_TRANSFORM_UNKNOWN: 0;
+    readonly SVG_TRANSFORM_MATRIX: 1;
+    readonly SVG_TRANSFORM_TRANSLATE: 2;
+    readonly SVG_TRANSFORM_SCALE: 3;
+    readonly SVG_TRANSFORM_ROTATE: 4;
+    readonly SVG_TRANSFORM_SKEWX: 5;
+    readonly SVG_TRANSFORM_SKEWY: 6;
 }
 
 declare var SVGTransform: {
     prototype: SVGTransform;
     new(): SVGTransform;
-    readonly SVG_TRANSFORM_MATRIX: number;
-    readonly SVG_TRANSFORM_ROTATE: number;
-    readonly SVG_TRANSFORM_SCALE: number;
-    readonly SVG_TRANSFORM_SKEWX: number;
-    readonly SVG_TRANSFORM_SKEWY: number;
-    readonly SVG_TRANSFORM_TRANSLATE: number;
-    readonly SVG_TRANSFORM_UNKNOWN: number;
+    readonly SVG_TRANSFORM_UNKNOWN: 0;
+    readonly SVG_TRANSFORM_MATRIX: 1;
+    readonly SVG_TRANSFORM_TRANSLATE: 2;
+    readonly SVG_TRANSFORM_SCALE: 3;
+    readonly SVG_TRANSFORM_ROTATE: 4;
+    readonly SVG_TRANSFORM_SKEWX: 5;
+    readonly SVG_TRANSFORM_SKEWY: 6;
 };
 
 /** The SVGTransformList defines a list of SVGTransform objects. */
@@ -13445,17 +13628,17 @@ interface SVGURIReference {
 
 /** A commonly used set of constants used for reflecting gradientUnits, patternContentUnits and other similar attributes. */
 interface SVGUnitTypes {
-    readonly SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: number;
-    readonly SVG_UNIT_TYPE_UNKNOWN: number;
-    readonly SVG_UNIT_TYPE_USERSPACEONUSE: number;
+    readonly SVG_UNIT_TYPE_UNKNOWN: 0;
+    readonly SVG_UNIT_TYPE_USERSPACEONUSE: 1;
+    readonly SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: 2;
 }
 
 declare var SVGUnitTypes: {
     prototype: SVGUnitTypes;
     new(): SVGUnitTypes;
-    readonly SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: number;
-    readonly SVG_UNIT_TYPE_UNKNOWN: number;
-    readonly SVG_UNIT_TYPE_USERSPACEONUSE: number;
+    readonly SVG_UNIT_TYPE_UNKNOWN: 0;
+    readonly SVG_UNIT_TYPE_USERSPACEONUSE: 1;
+    readonly SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: 2;
 };
 
 /** Corresponds to the <use> element. */
@@ -14641,79 +14824,79 @@ declare var VisualViewport: {
 };
 
 interface WEBGL_color_buffer_float {
-    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: GLenum;
-    readonly RGBA32F_EXT: GLenum;
-    readonly UNSIGNED_NORMALIZED_EXT: GLenum;
+    readonly RGBA32F_EXT: 0x8814;
+    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: 0x8211;
+    readonly UNSIGNED_NORMALIZED_EXT: 0x8C17;
 }
 
 interface WEBGL_compressed_texture_astc {
     getSupportedProfiles(): string[];
-    readonly COMPRESSED_RGBA_ASTC_10x10_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_10x5_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_10x6_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_10x8_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_12x10_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_12x12_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_4x4_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_5x4_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_5x5_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_6x5_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_6x6_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_8x5_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_8x6_KHR: GLenum;
-    readonly COMPRESSED_RGBA_ASTC_8x8_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR: GLenum;
+    readonly COMPRESSED_RGBA_ASTC_4x4_KHR: 0x93B0;
+    readonly COMPRESSED_RGBA_ASTC_5x4_KHR: 0x93B1;
+    readonly COMPRESSED_RGBA_ASTC_5x5_KHR: 0x93B2;
+    readonly COMPRESSED_RGBA_ASTC_6x5_KHR: 0x93B3;
+    readonly COMPRESSED_RGBA_ASTC_6x6_KHR: 0x93B4;
+    readonly COMPRESSED_RGBA_ASTC_8x5_KHR: 0x93B5;
+    readonly COMPRESSED_RGBA_ASTC_8x6_KHR: 0x93B6;
+    readonly COMPRESSED_RGBA_ASTC_8x8_KHR: 0x93B7;
+    readonly COMPRESSED_RGBA_ASTC_10x5_KHR: 0x93B8;
+    readonly COMPRESSED_RGBA_ASTC_10x6_KHR: 0x93B9;
+    readonly COMPRESSED_RGBA_ASTC_10x8_KHR: 0x93BA;
+    readonly COMPRESSED_RGBA_ASTC_10x10_KHR: 0x93BB;
+    readonly COMPRESSED_RGBA_ASTC_12x10_KHR: 0x93BC;
+    readonly COMPRESSED_RGBA_ASTC_12x12_KHR: 0x93BD;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR: 0x93D0;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR: 0x93D1;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR: 0x93D2;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR: 0x93D3;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR: 0x93D4;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR: 0x93D5;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR: 0x93D6;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR: 0x93D7;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR: 0x93D8;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR: 0x93D9;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR: 0x93DA;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR: 0x93DB;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR: 0x93DC;
+    readonly COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR: 0x93DD;
 }
 
 interface WEBGL_compressed_texture_etc {
-    readonly COMPRESSED_R11_EAC: GLenum;
-    readonly COMPRESSED_RG11_EAC: GLenum;
-    readonly COMPRESSED_RGB8_ETC2: GLenum;
-    readonly COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2: GLenum;
-    readonly COMPRESSED_RGBA8_ETC2_EAC: GLenum;
-    readonly COMPRESSED_SIGNED_R11_EAC: GLenum;
-    readonly COMPRESSED_SIGNED_RG11_EAC: GLenum;
-    readonly COMPRESSED_SRGB8_ALPHA8_ETC2_EAC: GLenum;
-    readonly COMPRESSED_SRGB8_ETC2: GLenum;
-    readonly COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2: GLenum;
+    readonly COMPRESSED_R11_EAC: 0x9270;
+    readonly COMPRESSED_SIGNED_R11_EAC: 0x9271;
+    readonly COMPRESSED_RG11_EAC: 0x9272;
+    readonly COMPRESSED_SIGNED_RG11_EAC: 0x9273;
+    readonly COMPRESSED_RGB8_ETC2: 0x9274;
+    readonly COMPRESSED_SRGB8_ETC2: 0x9275;
+    readonly COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2: 0x9276;
+    readonly COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2: 0x9277;
+    readonly COMPRESSED_RGBA8_ETC2_EAC: 0x9278;
+    readonly COMPRESSED_SRGB8_ALPHA8_ETC2_EAC: 0x9279;
 }
 
 interface WEBGL_compressed_texture_etc1 {
-    readonly COMPRESSED_RGB_ETC1_WEBGL: GLenum;
+    readonly COMPRESSED_RGB_ETC1_WEBGL: 0x8D64;
 }
 
 /** The WEBGL_compressed_texture_s3tc extension is part of the WebGL API and exposes four S3TC compressed texture formats. */
 interface WEBGL_compressed_texture_s3tc {
-    readonly COMPRESSED_RGBA_S3TC_DXT1_EXT: GLenum;
-    readonly COMPRESSED_RGBA_S3TC_DXT3_EXT: GLenum;
-    readonly COMPRESSED_RGBA_S3TC_DXT5_EXT: GLenum;
-    readonly COMPRESSED_RGB_S3TC_DXT1_EXT: GLenum;
+    readonly COMPRESSED_RGB_S3TC_DXT1_EXT: 0x83F0;
+    readonly COMPRESSED_RGBA_S3TC_DXT1_EXT: 0x83F1;
+    readonly COMPRESSED_RGBA_S3TC_DXT3_EXT: 0x83F2;
+    readonly COMPRESSED_RGBA_S3TC_DXT5_EXT: 0x83F3;
 }
 
 interface WEBGL_compressed_texture_s3tc_srgb {
-    readonly COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT: GLenum;
-    readonly COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT: GLenum;
-    readonly COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT: GLenum;
-    readonly COMPRESSED_SRGB_S3TC_DXT1_EXT: GLenum;
+    readonly COMPRESSED_SRGB_S3TC_DXT1_EXT: 0x8C4C;
+    readonly COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT: 0x8C4D;
+    readonly COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT: 0x8C4E;
+    readonly COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT: 0x8C4F;
 }
 
 /** The WEBGL_debug_renderer_info extension is part of the WebGL API and exposes two constants with information about the graphics driver for debugging purposes. */
 interface WEBGL_debug_renderer_info {
-    readonly UNMASKED_RENDERER_WEBGL: GLenum;
-    readonly UNMASKED_VENDOR_WEBGL: GLenum;
+    readonly UNMASKED_VENDOR_WEBGL: 0x9245;
+    readonly UNMASKED_RENDERER_WEBGL: 0x9246;
 }
 
 interface WEBGL_debug_shaders {
@@ -14722,45 +14905,45 @@ interface WEBGL_debug_shaders {
 
 /** The WEBGL_depth_texture extension is part of the WebGL API and defines 2D depth and depth-stencil textures. */
 interface WEBGL_depth_texture {
-    readonly UNSIGNED_INT_24_8_WEBGL: GLenum;
+    readonly UNSIGNED_INT_24_8_WEBGL: 0x84FA;
 }
 
 interface WEBGL_draw_buffers {
     drawBuffersWEBGL(buffers: GLenum[]): void;
-    readonly COLOR_ATTACHMENT0_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT10_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT11_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT12_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT13_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT14_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT15_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT1_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT2_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT3_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT4_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT5_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT6_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT7_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT8_WEBGL: GLenum;
-    readonly COLOR_ATTACHMENT9_WEBGL: GLenum;
-    readonly DRAW_BUFFER0_WEBGL: GLenum;
-    readonly DRAW_BUFFER10_WEBGL: GLenum;
-    readonly DRAW_BUFFER11_WEBGL: GLenum;
-    readonly DRAW_BUFFER12_WEBGL: GLenum;
-    readonly DRAW_BUFFER13_WEBGL: GLenum;
-    readonly DRAW_BUFFER14_WEBGL: GLenum;
-    readonly DRAW_BUFFER15_WEBGL: GLenum;
-    readonly DRAW_BUFFER1_WEBGL: GLenum;
-    readonly DRAW_BUFFER2_WEBGL: GLenum;
-    readonly DRAW_BUFFER3_WEBGL: GLenum;
-    readonly DRAW_BUFFER4_WEBGL: GLenum;
-    readonly DRAW_BUFFER5_WEBGL: GLenum;
-    readonly DRAW_BUFFER6_WEBGL: GLenum;
-    readonly DRAW_BUFFER7_WEBGL: GLenum;
-    readonly DRAW_BUFFER8_WEBGL: GLenum;
-    readonly DRAW_BUFFER9_WEBGL: GLenum;
-    readonly MAX_COLOR_ATTACHMENTS_WEBGL: GLenum;
-    readonly MAX_DRAW_BUFFERS_WEBGL: GLenum;
+    readonly COLOR_ATTACHMENT0_WEBGL: 0x8CE0;
+    readonly COLOR_ATTACHMENT1_WEBGL: 0x8CE1;
+    readonly COLOR_ATTACHMENT2_WEBGL: 0x8CE2;
+    readonly COLOR_ATTACHMENT3_WEBGL: 0x8CE3;
+    readonly COLOR_ATTACHMENT4_WEBGL: 0x8CE4;
+    readonly COLOR_ATTACHMENT5_WEBGL: 0x8CE5;
+    readonly COLOR_ATTACHMENT6_WEBGL: 0x8CE6;
+    readonly COLOR_ATTACHMENT7_WEBGL: 0x8CE7;
+    readonly COLOR_ATTACHMENT8_WEBGL: 0x8CE8;
+    readonly COLOR_ATTACHMENT9_WEBGL: 0x8CE9;
+    readonly COLOR_ATTACHMENT10_WEBGL: 0x8CEA;
+    readonly COLOR_ATTACHMENT11_WEBGL: 0x8CEB;
+    readonly COLOR_ATTACHMENT12_WEBGL: 0x8CEC;
+    readonly COLOR_ATTACHMENT13_WEBGL: 0x8CED;
+    readonly COLOR_ATTACHMENT14_WEBGL: 0x8CEE;
+    readonly COLOR_ATTACHMENT15_WEBGL: 0x8CEF;
+    readonly DRAW_BUFFER0_WEBGL: 0x8825;
+    readonly DRAW_BUFFER1_WEBGL: 0x8826;
+    readonly DRAW_BUFFER2_WEBGL: 0x8827;
+    readonly DRAW_BUFFER3_WEBGL: 0x8828;
+    readonly DRAW_BUFFER4_WEBGL: 0x8829;
+    readonly DRAW_BUFFER5_WEBGL: 0x882A;
+    readonly DRAW_BUFFER6_WEBGL: 0x882B;
+    readonly DRAW_BUFFER7_WEBGL: 0x882C;
+    readonly DRAW_BUFFER8_WEBGL: 0x882D;
+    readonly DRAW_BUFFER9_WEBGL: 0x882E;
+    readonly DRAW_BUFFER10_WEBGL: 0x882F;
+    readonly DRAW_BUFFER11_WEBGL: 0x8830;
+    readonly DRAW_BUFFER12_WEBGL: 0x8831;
+    readonly DRAW_BUFFER13_WEBGL: 0x8832;
+    readonly DRAW_BUFFER14_WEBGL: 0x8833;
+    readonly DRAW_BUFFER15_WEBGL: 0x8834;
+    readonly MAX_COLOR_ATTACHMENTS_WEBGL: 0x8CDF;
+    readonly MAX_DRAW_BUFFERS_WEBGL: 0x8824;
 }
 
 interface WEBGL_lose_context {
@@ -14792,565 +14975,565 @@ interface WebGL2RenderingContext extends WebGL2RenderingContextBase, WebGL2Rende
 declare var WebGL2RenderingContext: {
     prototype: WebGL2RenderingContext;
     new(): WebGL2RenderingContext;
-    readonly ACTIVE_UNIFORM_BLOCKS: GLenum;
-    readonly ALREADY_SIGNALED: GLenum;
-    readonly ANY_SAMPLES_PASSED: GLenum;
-    readonly ANY_SAMPLES_PASSED_CONSERVATIVE: GLenum;
-    readonly COLOR: GLenum;
-    readonly COLOR_ATTACHMENT1: GLenum;
-    readonly COLOR_ATTACHMENT10: GLenum;
-    readonly COLOR_ATTACHMENT11: GLenum;
-    readonly COLOR_ATTACHMENT12: GLenum;
-    readonly COLOR_ATTACHMENT13: GLenum;
-    readonly COLOR_ATTACHMENT14: GLenum;
-    readonly COLOR_ATTACHMENT15: GLenum;
-    readonly COLOR_ATTACHMENT2: GLenum;
-    readonly COLOR_ATTACHMENT3: GLenum;
-    readonly COLOR_ATTACHMENT4: GLenum;
-    readonly COLOR_ATTACHMENT5: GLenum;
-    readonly COLOR_ATTACHMENT6: GLenum;
-    readonly COLOR_ATTACHMENT7: GLenum;
-    readonly COLOR_ATTACHMENT8: GLenum;
-    readonly COLOR_ATTACHMENT9: GLenum;
-    readonly COMPARE_REF_TO_TEXTURE: GLenum;
-    readonly CONDITION_SATISFIED: GLenum;
-    readonly COPY_READ_BUFFER: GLenum;
-    readonly COPY_READ_BUFFER_BINDING: GLenum;
-    readonly COPY_WRITE_BUFFER: GLenum;
-    readonly COPY_WRITE_BUFFER_BINDING: GLenum;
-    readonly CURRENT_QUERY: GLenum;
-    readonly DEPTH: GLenum;
-    readonly DEPTH24_STENCIL8: GLenum;
-    readonly DEPTH32F_STENCIL8: GLenum;
-    readonly DEPTH_COMPONENT24: GLenum;
-    readonly DEPTH_COMPONENT32F: GLenum;
-    readonly DRAW_BUFFER0: GLenum;
-    readonly DRAW_BUFFER1: GLenum;
-    readonly DRAW_BUFFER10: GLenum;
-    readonly DRAW_BUFFER11: GLenum;
-    readonly DRAW_BUFFER12: GLenum;
-    readonly DRAW_BUFFER13: GLenum;
-    readonly DRAW_BUFFER14: GLenum;
-    readonly DRAW_BUFFER15: GLenum;
-    readonly DRAW_BUFFER2: GLenum;
-    readonly DRAW_BUFFER3: GLenum;
-    readonly DRAW_BUFFER4: GLenum;
-    readonly DRAW_BUFFER5: GLenum;
-    readonly DRAW_BUFFER6: GLenum;
-    readonly DRAW_BUFFER7: GLenum;
-    readonly DRAW_BUFFER8: GLenum;
-    readonly DRAW_BUFFER9: GLenum;
-    readonly DRAW_FRAMEBUFFER: GLenum;
-    readonly DRAW_FRAMEBUFFER_BINDING: GLenum;
-    readonly DYNAMIC_COPY: GLenum;
-    readonly DYNAMIC_READ: GLenum;
-    readonly FLOAT_32_UNSIGNED_INT_24_8_REV: GLenum;
-    readonly FLOAT_MAT2x3: GLenum;
-    readonly FLOAT_MAT2x4: GLenum;
-    readonly FLOAT_MAT3x2: GLenum;
-    readonly FLOAT_MAT3x4: GLenum;
-    readonly FLOAT_MAT4x2: GLenum;
-    readonly FLOAT_MAT4x3: GLenum;
-    readonly FRAGMENT_SHADER_DERIVATIVE_HINT: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_RED_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: GLenum;
-    readonly FRAMEBUFFER_DEFAULT: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: GLenum;
-    readonly HALF_FLOAT: GLenum;
-    readonly INTERLEAVED_ATTRIBS: GLenum;
-    readonly INT_2_10_10_10_REV: GLenum;
-    readonly INT_SAMPLER_2D: GLenum;
-    readonly INT_SAMPLER_2D_ARRAY: GLenum;
-    readonly INT_SAMPLER_3D: GLenum;
-    readonly INT_SAMPLER_CUBE: GLenum;
-    readonly INVALID_INDEX: GLenum;
-    readonly MAX: GLenum;
-    readonly MAX_3D_TEXTURE_SIZE: GLenum;
-    readonly MAX_ARRAY_TEXTURE_LAYERS: GLenum;
-    readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
-    readonly MAX_COLOR_ATTACHMENTS: GLenum;
-    readonly MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_COMBINED_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_DRAW_BUFFERS: GLenum;
-    readonly MAX_ELEMENTS_INDICES: GLenum;
-    readonly MAX_ELEMENTS_VERTICES: GLenum;
-    readonly MAX_ELEMENT_INDEX: GLenum;
-    readonly MAX_FRAGMENT_INPUT_COMPONENTS: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_PROGRAM_TEXEL_OFFSET: GLenum;
-    readonly MAX_SAMPLES: GLenum;
-    readonly MAX_SERVER_WAIT_TIMEOUT: GLenum;
-    readonly MAX_TEXTURE_LOD_BIAS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: GLenum;
-    readonly MAX_UNIFORM_BLOCK_SIZE: GLenum;
-    readonly MAX_UNIFORM_BUFFER_BINDINGS: GLenum;
-    readonly MAX_VARYING_COMPONENTS: GLenum;
-    readonly MAX_VERTEX_OUTPUT_COMPONENTS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_COMPONENTS: GLenum;
-    readonly MIN: GLenum;
-    readonly MIN_PROGRAM_TEXEL_OFFSET: GLenum;
-    readonly OBJECT_TYPE: GLenum;
-    readonly PACK_ROW_LENGTH: GLenum;
-    readonly PACK_SKIP_PIXELS: GLenum;
-    readonly PACK_SKIP_ROWS: GLenum;
-    readonly PIXEL_PACK_BUFFER: GLenum;
-    readonly PIXEL_PACK_BUFFER_BINDING: GLenum;
-    readonly PIXEL_UNPACK_BUFFER: GLenum;
-    readonly PIXEL_UNPACK_BUFFER_BINDING: GLenum;
-    readonly QUERY_RESULT: GLenum;
-    readonly QUERY_RESULT_AVAILABLE: GLenum;
-    readonly R11F_G11F_B10F: GLenum;
-    readonly R16F: GLenum;
-    readonly R16I: GLenum;
-    readonly R16UI: GLenum;
-    readonly R32F: GLenum;
-    readonly R32I: GLenum;
-    readonly R32UI: GLenum;
-    readonly R8: GLenum;
-    readonly R8I: GLenum;
-    readonly R8UI: GLenum;
-    readonly R8_SNORM: GLenum;
-    readonly RASTERIZER_DISCARD: GLenum;
-    readonly READ_BUFFER: GLenum;
-    readonly READ_FRAMEBUFFER: GLenum;
-    readonly READ_FRAMEBUFFER_BINDING: GLenum;
-    readonly RED: GLenum;
-    readonly RED_INTEGER: GLenum;
-    readonly RENDERBUFFER_SAMPLES: GLenum;
-    readonly RG: GLenum;
-    readonly RG16F: GLenum;
-    readonly RG16I: GLenum;
-    readonly RG16UI: GLenum;
-    readonly RG32F: GLenum;
-    readonly RG32I: GLenum;
-    readonly RG32UI: GLenum;
-    readonly RG8: GLenum;
-    readonly RG8I: GLenum;
-    readonly RG8UI: GLenum;
-    readonly RG8_SNORM: GLenum;
-    readonly RGB10_A2: GLenum;
-    readonly RGB10_A2UI: GLenum;
-    readonly RGB16F: GLenum;
-    readonly RGB16I: GLenum;
-    readonly RGB16UI: GLenum;
-    readonly RGB32F: GLenum;
-    readonly RGB32I: GLenum;
-    readonly RGB32UI: GLenum;
-    readonly RGB8: GLenum;
-    readonly RGB8I: GLenum;
-    readonly RGB8UI: GLenum;
-    readonly RGB8_SNORM: GLenum;
-    readonly RGB9_E5: GLenum;
-    readonly RGBA16F: GLenum;
-    readonly RGBA16I: GLenum;
-    readonly RGBA16UI: GLenum;
-    readonly RGBA32F: GLenum;
-    readonly RGBA32I: GLenum;
-    readonly RGBA32UI: GLenum;
-    readonly RGBA8: GLenum;
-    readonly RGBA8I: GLenum;
-    readonly RGBA8UI: GLenum;
-    readonly RGBA8_SNORM: GLenum;
-    readonly RGBA_INTEGER: GLenum;
-    readonly RGB_INTEGER: GLenum;
-    readonly RG_INTEGER: GLenum;
-    readonly SAMPLER_2D_ARRAY: GLenum;
-    readonly SAMPLER_2D_ARRAY_SHADOW: GLenum;
-    readonly SAMPLER_2D_SHADOW: GLenum;
-    readonly SAMPLER_3D: GLenum;
-    readonly SAMPLER_BINDING: GLenum;
-    readonly SAMPLER_CUBE_SHADOW: GLenum;
-    readonly SEPARATE_ATTRIBS: GLenum;
-    readonly SIGNALED: GLenum;
-    readonly SIGNED_NORMALIZED: GLenum;
-    readonly SRGB: GLenum;
-    readonly SRGB8: GLenum;
-    readonly SRGB8_ALPHA8: GLenum;
-    readonly STATIC_COPY: GLenum;
-    readonly STATIC_READ: GLenum;
-    readonly STENCIL: GLenum;
-    readonly STREAM_COPY: GLenum;
-    readonly STREAM_READ: GLenum;
-    readonly SYNC_CONDITION: GLenum;
-    readonly SYNC_FENCE: GLenum;
-    readonly SYNC_FLAGS: GLenum;
-    readonly SYNC_FLUSH_COMMANDS_BIT: GLenum;
-    readonly SYNC_GPU_COMMANDS_COMPLETE: GLenum;
-    readonly SYNC_STATUS: GLenum;
-    readonly TEXTURE_2D_ARRAY: GLenum;
-    readonly TEXTURE_3D: GLenum;
-    readonly TEXTURE_BASE_LEVEL: GLenum;
-    readonly TEXTURE_BINDING_2D_ARRAY: GLenum;
-    readonly TEXTURE_BINDING_3D: GLenum;
-    readonly TEXTURE_COMPARE_FUNC: GLenum;
-    readonly TEXTURE_COMPARE_MODE: GLenum;
-    readonly TEXTURE_IMMUTABLE_FORMAT: GLenum;
-    readonly TEXTURE_IMMUTABLE_LEVELS: GLenum;
-    readonly TEXTURE_MAX_LEVEL: GLenum;
-    readonly TEXTURE_MAX_LOD: GLenum;
-    readonly TEXTURE_MIN_LOD: GLenum;
-    readonly TEXTURE_WRAP_R: GLenum;
-    readonly TIMEOUT_EXPIRED: GLenum;
-    readonly TIMEOUT_IGNORED: GLint64;
-    readonly TRANSFORM_FEEDBACK: GLenum;
-    readonly TRANSFORM_FEEDBACK_ACTIVE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BINDING: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_BINDING: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_MODE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_SIZE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_START: GLenum;
-    readonly TRANSFORM_FEEDBACK_PAUSED: GLenum;
-    readonly TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: GLenum;
-    readonly TRANSFORM_FEEDBACK_VARYINGS: GLenum;
-    readonly UNIFORM_ARRAY_STRIDE: GLenum;
-    readonly UNIFORM_BLOCK_ACTIVE_UNIFORMS: GLenum;
-    readonly UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: GLenum;
-    readonly UNIFORM_BLOCK_BINDING: GLenum;
-    readonly UNIFORM_BLOCK_DATA_SIZE: GLenum;
-    readonly UNIFORM_BLOCK_INDEX: GLenum;
-    readonly UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: GLenum;
-    readonly UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: GLenum;
-    readonly UNIFORM_BUFFER: GLenum;
-    readonly UNIFORM_BUFFER_BINDING: GLenum;
-    readonly UNIFORM_BUFFER_OFFSET_ALIGNMENT: GLenum;
-    readonly UNIFORM_BUFFER_SIZE: GLenum;
-    readonly UNIFORM_BUFFER_START: GLenum;
-    readonly UNIFORM_IS_ROW_MAJOR: GLenum;
-    readonly UNIFORM_MATRIX_STRIDE: GLenum;
-    readonly UNIFORM_OFFSET: GLenum;
-    readonly UNIFORM_SIZE: GLenum;
-    readonly UNIFORM_TYPE: GLenum;
-    readonly UNPACK_IMAGE_HEIGHT: GLenum;
-    readonly UNPACK_ROW_LENGTH: GLenum;
-    readonly UNPACK_SKIP_IMAGES: GLenum;
-    readonly UNPACK_SKIP_PIXELS: GLenum;
-    readonly UNPACK_SKIP_ROWS: GLenum;
-    readonly UNSIGNALED: GLenum;
-    readonly UNSIGNED_INT_10F_11F_11F_REV: GLenum;
-    readonly UNSIGNED_INT_24_8: GLenum;
-    readonly UNSIGNED_INT_2_10_10_10_REV: GLenum;
-    readonly UNSIGNED_INT_5_9_9_9_REV: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_2D: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_2D_ARRAY: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_3D: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_CUBE: GLenum;
-    readonly UNSIGNED_INT_VEC2: GLenum;
-    readonly UNSIGNED_INT_VEC3: GLenum;
-    readonly UNSIGNED_INT_VEC4: GLenum;
-    readonly UNSIGNED_NORMALIZED: GLenum;
-    readonly VERTEX_ARRAY_BINDING: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_DIVISOR: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_INTEGER: GLenum;
-    readonly WAIT_FAILED: GLenum;
-    readonly ACTIVE_ATTRIBUTES: GLenum;
-    readonly ACTIVE_TEXTURE: GLenum;
-    readonly ACTIVE_UNIFORMS: GLenum;
-    readonly ALIASED_LINE_WIDTH_RANGE: GLenum;
-    readonly ALIASED_POINT_SIZE_RANGE: GLenum;
-    readonly ALPHA: GLenum;
-    readonly ALPHA_BITS: GLenum;
-    readonly ALWAYS: GLenum;
-    readonly ARRAY_BUFFER: GLenum;
-    readonly ARRAY_BUFFER_BINDING: GLenum;
-    readonly ATTACHED_SHADERS: GLenum;
-    readonly BACK: GLenum;
-    readonly BLEND: GLenum;
-    readonly BLEND_COLOR: GLenum;
-    readonly BLEND_DST_ALPHA: GLenum;
-    readonly BLEND_DST_RGB: GLenum;
-    readonly BLEND_EQUATION: GLenum;
-    readonly BLEND_EQUATION_ALPHA: GLenum;
-    readonly BLEND_EQUATION_RGB: GLenum;
-    readonly BLEND_SRC_ALPHA: GLenum;
-    readonly BLEND_SRC_RGB: GLenum;
-    readonly BLUE_BITS: GLenum;
-    readonly BOOL: GLenum;
-    readonly BOOL_VEC2: GLenum;
-    readonly BOOL_VEC3: GLenum;
-    readonly BOOL_VEC4: GLenum;
-    readonly BROWSER_DEFAULT_WEBGL: GLenum;
-    readonly BUFFER_SIZE: GLenum;
-    readonly BUFFER_USAGE: GLenum;
-    readonly BYTE: GLenum;
-    readonly CCW: GLenum;
-    readonly CLAMP_TO_EDGE: GLenum;
-    readonly COLOR_ATTACHMENT0: GLenum;
-    readonly COLOR_BUFFER_BIT: GLenum;
-    readonly COLOR_CLEAR_VALUE: GLenum;
-    readonly COLOR_WRITEMASK: GLenum;
-    readonly COMPILE_STATUS: GLenum;
-    readonly COMPRESSED_TEXTURE_FORMATS: GLenum;
-    readonly CONSTANT_ALPHA: GLenum;
-    readonly CONSTANT_COLOR: GLenum;
-    readonly CONTEXT_LOST_WEBGL: GLenum;
-    readonly CULL_FACE: GLenum;
-    readonly CULL_FACE_MODE: GLenum;
-    readonly CURRENT_PROGRAM: GLenum;
-    readonly CURRENT_VERTEX_ATTRIB: GLenum;
-    readonly CW: GLenum;
-    readonly DECR: GLenum;
-    readonly DECR_WRAP: GLenum;
-    readonly DELETE_STATUS: GLenum;
-    readonly DEPTH_ATTACHMENT: GLenum;
-    readonly DEPTH_BITS: GLenum;
-    readonly DEPTH_BUFFER_BIT: GLenum;
-    readonly DEPTH_CLEAR_VALUE: GLenum;
-    readonly DEPTH_COMPONENT: GLenum;
-    readonly DEPTH_COMPONENT16: GLenum;
-    readonly DEPTH_FUNC: GLenum;
-    readonly DEPTH_RANGE: GLenum;
-    readonly DEPTH_STENCIL: GLenum;
-    readonly DEPTH_STENCIL_ATTACHMENT: GLenum;
-    readonly DEPTH_TEST: GLenum;
-    readonly DEPTH_WRITEMASK: GLenum;
-    readonly DITHER: GLenum;
-    readonly DONT_CARE: GLenum;
-    readonly DST_ALPHA: GLenum;
-    readonly DST_COLOR: GLenum;
-    readonly DYNAMIC_DRAW: GLenum;
-    readonly ELEMENT_ARRAY_BUFFER: GLenum;
-    readonly ELEMENT_ARRAY_BUFFER_BINDING: GLenum;
-    readonly EQUAL: GLenum;
-    readonly FASTEST: GLenum;
-    readonly FLOAT: GLenum;
-    readonly FLOAT_MAT2: GLenum;
-    readonly FLOAT_MAT3: GLenum;
-    readonly FLOAT_MAT4: GLenum;
-    readonly FLOAT_VEC2: GLenum;
-    readonly FLOAT_VEC3: GLenum;
-    readonly FLOAT_VEC4: GLenum;
-    readonly FRAGMENT_SHADER: GLenum;
-    readonly FRAMEBUFFER: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: GLenum;
-    readonly FRAMEBUFFER_BINDING: GLenum;
-    readonly FRAMEBUFFER_COMPLETE: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: GLenum;
-    readonly FRAMEBUFFER_UNSUPPORTED: GLenum;
-    readonly FRONT: GLenum;
-    readonly FRONT_AND_BACK: GLenum;
-    readonly FRONT_FACE: GLenum;
-    readonly FUNC_ADD: GLenum;
-    readonly FUNC_REVERSE_SUBTRACT: GLenum;
-    readonly FUNC_SUBTRACT: GLenum;
-    readonly GENERATE_MIPMAP_HINT: GLenum;
-    readonly GEQUAL: GLenum;
-    readonly GREATER: GLenum;
-    readonly GREEN_BITS: GLenum;
-    readonly HIGH_FLOAT: GLenum;
-    readonly HIGH_INT: GLenum;
-    readonly IMPLEMENTATION_COLOR_READ_FORMAT: GLenum;
-    readonly IMPLEMENTATION_COLOR_READ_TYPE: GLenum;
-    readonly INCR: GLenum;
-    readonly INCR_WRAP: GLenum;
-    readonly INT: GLenum;
-    readonly INT_VEC2: GLenum;
-    readonly INT_VEC3: GLenum;
-    readonly INT_VEC4: GLenum;
-    readonly INVALID_ENUM: GLenum;
-    readonly INVALID_FRAMEBUFFER_OPERATION: GLenum;
-    readonly INVALID_OPERATION: GLenum;
-    readonly INVALID_VALUE: GLenum;
-    readonly INVERT: GLenum;
-    readonly KEEP: GLenum;
-    readonly LEQUAL: GLenum;
-    readonly LESS: GLenum;
-    readonly LINEAR: GLenum;
-    readonly LINEAR_MIPMAP_LINEAR: GLenum;
-    readonly LINEAR_MIPMAP_NEAREST: GLenum;
-    readonly LINES: GLenum;
-    readonly LINE_LOOP: GLenum;
-    readonly LINE_STRIP: GLenum;
-    readonly LINE_WIDTH: GLenum;
-    readonly LINK_STATUS: GLenum;
-    readonly LOW_FLOAT: GLenum;
-    readonly LOW_INT: GLenum;
-    readonly LUMINANCE: GLenum;
-    readonly LUMINANCE_ALPHA: GLenum;
-    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_CUBE_MAP_TEXTURE_SIZE: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_VECTORS: GLenum;
-    readonly MAX_RENDERBUFFER_SIZE: GLenum;
-    readonly MAX_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_TEXTURE_SIZE: GLenum;
-    readonly MAX_VARYING_VECTORS: GLenum;
-    readonly MAX_VERTEX_ATTRIBS: GLenum;
-    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_VECTORS: GLenum;
-    readonly MAX_VIEWPORT_DIMS: GLenum;
-    readonly MEDIUM_FLOAT: GLenum;
-    readonly MEDIUM_INT: GLenum;
-    readonly MIRRORED_REPEAT: GLenum;
-    readonly NEAREST: GLenum;
-    readonly NEAREST_MIPMAP_LINEAR: GLenum;
-    readonly NEAREST_MIPMAP_NEAREST: GLenum;
-    readonly NEVER: GLenum;
-    readonly NICEST: GLenum;
-    readonly NONE: GLenum;
-    readonly NOTEQUAL: GLenum;
-    readonly NO_ERROR: GLenum;
-    readonly ONE: GLenum;
-    readonly ONE_MINUS_CONSTANT_ALPHA: GLenum;
-    readonly ONE_MINUS_CONSTANT_COLOR: GLenum;
-    readonly ONE_MINUS_DST_ALPHA: GLenum;
-    readonly ONE_MINUS_DST_COLOR: GLenum;
-    readonly ONE_MINUS_SRC_ALPHA: GLenum;
-    readonly ONE_MINUS_SRC_COLOR: GLenum;
-    readonly OUT_OF_MEMORY: GLenum;
-    readonly PACK_ALIGNMENT: GLenum;
-    readonly POINTS: GLenum;
-    readonly POLYGON_OFFSET_FACTOR: GLenum;
-    readonly POLYGON_OFFSET_FILL: GLenum;
-    readonly POLYGON_OFFSET_UNITS: GLenum;
-    readonly RED_BITS: GLenum;
-    readonly RENDERBUFFER: GLenum;
-    readonly RENDERBUFFER_ALPHA_SIZE: GLenum;
-    readonly RENDERBUFFER_BINDING: GLenum;
-    readonly RENDERBUFFER_BLUE_SIZE: GLenum;
-    readonly RENDERBUFFER_DEPTH_SIZE: GLenum;
-    readonly RENDERBUFFER_GREEN_SIZE: GLenum;
-    readonly RENDERBUFFER_HEIGHT: GLenum;
-    readonly RENDERBUFFER_INTERNAL_FORMAT: GLenum;
-    readonly RENDERBUFFER_RED_SIZE: GLenum;
-    readonly RENDERBUFFER_STENCIL_SIZE: GLenum;
-    readonly RENDERBUFFER_WIDTH: GLenum;
-    readonly RENDERER: GLenum;
-    readonly REPEAT: GLenum;
-    readonly REPLACE: GLenum;
-    readonly RGB: GLenum;
-    readonly RGB565: GLenum;
-    readonly RGB5_A1: GLenum;
-    readonly RGBA: GLenum;
-    readonly RGBA4: GLenum;
-    readonly SAMPLER_2D: GLenum;
-    readonly SAMPLER_CUBE: GLenum;
-    readonly SAMPLES: GLenum;
-    readonly SAMPLE_ALPHA_TO_COVERAGE: GLenum;
-    readonly SAMPLE_BUFFERS: GLenum;
-    readonly SAMPLE_COVERAGE: GLenum;
-    readonly SAMPLE_COVERAGE_INVERT: GLenum;
-    readonly SAMPLE_COVERAGE_VALUE: GLenum;
-    readonly SCISSOR_BOX: GLenum;
-    readonly SCISSOR_TEST: GLenum;
-    readonly SHADER_TYPE: GLenum;
-    readonly SHADING_LANGUAGE_VERSION: GLenum;
-    readonly SHORT: GLenum;
-    readonly SRC_ALPHA: GLenum;
-    readonly SRC_ALPHA_SATURATE: GLenum;
-    readonly SRC_COLOR: GLenum;
-    readonly STATIC_DRAW: GLenum;
-    readonly STENCIL_ATTACHMENT: GLenum;
-    readonly STENCIL_BACK_FAIL: GLenum;
-    readonly STENCIL_BACK_FUNC: GLenum;
-    readonly STENCIL_BACK_PASS_DEPTH_FAIL: GLenum;
-    readonly STENCIL_BACK_PASS_DEPTH_PASS: GLenum;
-    readonly STENCIL_BACK_REF: GLenum;
-    readonly STENCIL_BACK_VALUE_MASK: GLenum;
-    readonly STENCIL_BACK_WRITEMASK: GLenum;
-    readonly STENCIL_BITS: GLenum;
-    readonly STENCIL_BUFFER_BIT: GLenum;
-    readonly STENCIL_CLEAR_VALUE: GLenum;
-    readonly STENCIL_FAIL: GLenum;
-    readonly STENCIL_FUNC: GLenum;
-    readonly STENCIL_INDEX8: GLenum;
-    readonly STENCIL_PASS_DEPTH_FAIL: GLenum;
-    readonly STENCIL_PASS_DEPTH_PASS: GLenum;
-    readonly STENCIL_REF: GLenum;
-    readonly STENCIL_TEST: GLenum;
-    readonly STENCIL_VALUE_MASK: GLenum;
-    readonly STENCIL_WRITEMASK: GLenum;
-    readonly STREAM_DRAW: GLenum;
-    readonly SUBPIXEL_BITS: GLenum;
-    readonly TEXTURE: GLenum;
-    readonly TEXTURE0: GLenum;
-    readonly TEXTURE1: GLenum;
-    readonly TEXTURE10: GLenum;
-    readonly TEXTURE11: GLenum;
-    readonly TEXTURE12: GLenum;
-    readonly TEXTURE13: GLenum;
-    readonly TEXTURE14: GLenum;
-    readonly TEXTURE15: GLenum;
-    readonly TEXTURE16: GLenum;
-    readonly TEXTURE17: GLenum;
-    readonly TEXTURE18: GLenum;
-    readonly TEXTURE19: GLenum;
-    readonly TEXTURE2: GLenum;
-    readonly TEXTURE20: GLenum;
-    readonly TEXTURE21: GLenum;
-    readonly TEXTURE22: GLenum;
-    readonly TEXTURE23: GLenum;
-    readonly TEXTURE24: GLenum;
-    readonly TEXTURE25: GLenum;
-    readonly TEXTURE26: GLenum;
-    readonly TEXTURE27: GLenum;
-    readonly TEXTURE28: GLenum;
-    readonly TEXTURE29: GLenum;
-    readonly TEXTURE3: GLenum;
-    readonly TEXTURE30: GLenum;
-    readonly TEXTURE31: GLenum;
-    readonly TEXTURE4: GLenum;
-    readonly TEXTURE5: GLenum;
-    readonly TEXTURE6: GLenum;
-    readonly TEXTURE7: GLenum;
-    readonly TEXTURE8: GLenum;
-    readonly TEXTURE9: GLenum;
-    readonly TEXTURE_2D: GLenum;
-    readonly TEXTURE_BINDING_2D: GLenum;
-    readonly TEXTURE_BINDING_CUBE_MAP: GLenum;
-    readonly TEXTURE_CUBE_MAP: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_X: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: GLenum;
-    readonly TEXTURE_MAG_FILTER: GLenum;
-    readonly TEXTURE_MIN_FILTER: GLenum;
-    readonly TEXTURE_WRAP_S: GLenum;
-    readonly TEXTURE_WRAP_T: GLenum;
-    readonly TRIANGLES: GLenum;
-    readonly TRIANGLE_FAN: GLenum;
-    readonly TRIANGLE_STRIP: GLenum;
-    readonly UNPACK_ALIGNMENT: GLenum;
-    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: GLenum;
-    readonly UNPACK_FLIP_Y_WEBGL: GLenum;
-    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: GLenum;
-    readonly UNSIGNED_BYTE: GLenum;
-    readonly UNSIGNED_INT: GLenum;
-    readonly UNSIGNED_SHORT: GLenum;
-    readonly UNSIGNED_SHORT_4_4_4_4: GLenum;
-    readonly UNSIGNED_SHORT_5_5_5_1: GLenum;
-    readonly UNSIGNED_SHORT_5_6_5: GLenum;
-    readonly VALIDATE_STATUS: GLenum;
-    readonly VENDOR: GLenum;
-    readonly VERSION: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_ENABLED: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_POINTER: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_SIZE: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_STRIDE: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_TYPE: GLenum;
-    readonly VERTEX_SHADER: GLenum;
-    readonly VIEWPORT: GLenum;
-    readonly ZERO: GLenum;
+    readonly READ_BUFFER: 0x0C02;
+    readonly UNPACK_ROW_LENGTH: 0x0CF2;
+    readonly UNPACK_SKIP_ROWS: 0x0CF3;
+    readonly UNPACK_SKIP_PIXELS: 0x0CF4;
+    readonly PACK_ROW_LENGTH: 0x0D02;
+    readonly PACK_SKIP_ROWS: 0x0D03;
+    readonly PACK_SKIP_PIXELS: 0x0D04;
+    readonly COLOR: 0x1800;
+    readonly DEPTH: 0x1801;
+    readonly STENCIL: 0x1802;
+    readonly RED: 0x1903;
+    readonly RGB8: 0x8051;
+    readonly RGBA8: 0x8058;
+    readonly RGB10_A2: 0x8059;
+    readonly TEXTURE_BINDING_3D: 0x806A;
+    readonly UNPACK_SKIP_IMAGES: 0x806D;
+    readonly UNPACK_IMAGE_HEIGHT: 0x806E;
+    readonly TEXTURE_3D: 0x806F;
+    readonly TEXTURE_WRAP_R: 0x8072;
+    readonly MAX_3D_TEXTURE_SIZE: 0x8073;
+    readonly UNSIGNED_INT_2_10_10_10_REV: 0x8368;
+    readonly MAX_ELEMENTS_VERTICES: 0x80E8;
+    readonly MAX_ELEMENTS_INDICES: 0x80E9;
+    readonly TEXTURE_MIN_LOD: 0x813A;
+    readonly TEXTURE_MAX_LOD: 0x813B;
+    readonly TEXTURE_BASE_LEVEL: 0x813C;
+    readonly TEXTURE_MAX_LEVEL: 0x813D;
+    readonly MIN: 0x8007;
+    readonly MAX: 0x8008;
+    readonly DEPTH_COMPONENT24: 0x81A6;
+    readonly MAX_TEXTURE_LOD_BIAS: 0x84FD;
+    readonly TEXTURE_COMPARE_MODE: 0x884C;
+    readonly TEXTURE_COMPARE_FUNC: 0x884D;
+    readonly CURRENT_QUERY: 0x8865;
+    readonly QUERY_RESULT: 0x8866;
+    readonly QUERY_RESULT_AVAILABLE: 0x8867;
+    readonly STREAM_READ: 0x88E1;
+    readonly STREAM_COPY: 0x88E2;
+    readonly STATIC_READ: 0x88E5;
+    readonly STATIC_COPY: 0x88E6;
+    readonly DYNAMIC_READ: 0x88E9;
+    readonly DYNAMIC_COPY: 0x88EA;
+    readonly MAX_DRAW_BUFFERS: 0x8824;
+    readonly DRAW_BUFFER0: 0x8825;
+    readonly DRAW_BUFFER1: 0x8826;
+    readonly DRAW_BUFFER2: 0x8827;
+    readonly DRAW_BUFFER3: 0x8828;
+    readonly DRAW_BUFFER4: 0x8829;
+    readonly DRAW_BUFFER5: 0x882A;
+    readonly DRAW_BUFFER6: 0x882B;
+    readonly DRAW_BUFFER7: 0x882C;
+    readonly DRAW_BUFFER8: 0x882D;
+    readonly DRAW_BUFFER9: 0x882E;
+    readonly DRAW_BUFFER10: 0x882F;
+    readonly DRAW_BUFFER11: 0x8830;
+    readonly DRAW_BUFFER12: 0x8831;
+    readonly DRAW_BUFFER13: 0x8832;
+    readonly DRAW_BUFFER14: 0x8833;
+    readonly DRAW_BUFFER15: 0x8834;
+    readonly MAX_FRAGMENT_UNIFORM_COMPONENTS: 0x8B49;
+    readonly MAX_VERTEX_UNIFORM_COMPONENTS: 0x8B4A;
+    readonly SAMPLER_3D: 0x8B5F;
+    readonly SAMPLER_2D_SHADOW: 0x8B62;
+    readonly FRAGMENT_SHADER_DERIVATIVE_HINT: 0x8B8B;
+    readonly PIXEL_PACK_BUFFER: 0x88EB;
+    readonly PIXEL_UNPACK_BUFFER: 0x88EC;
+    readonly PIXEL_PACK_BUFFER_BINDING: 0x88ED;
+    readonly PIXEL_UNPACK_BUFFER_BINDING: 0x88EF;
+    readonly FLOAT_MAT2x3: 0x8B65;
+    readonly FLOAT_MAT2x4: 0x8B66;
+    readonly FLOAT_MAT3x2: 0x8B67;
+    readonly FLOAT_MAT3x4: 0x8B68;
+    readonly FLOAT_MAT4x2: 0x8B69;
+    readonly FLOAT_MAT4x3: 0x8B6A;
+    readonly SRGB: 0x8C40;
+    readonly SRGB8: 0x8C41;
+    readonly SRGB8_ALPHA8: 0x8C43;
+    readonly COMPARE_REF_TO_TEXTURE: 0x884E;
+    readonly RGBA32F: 0x8814;
+    readonly RGB32F: 0x8815;
+    readonly RGBA16F: 0x881A;
+    readonly RGB16F: 0x881B;
+    readonly VERTEX_ATTRIB_ARRAY_INTEGER: 0x88FD;
+    readonly MAX_ARRAY_TEXTURE_LAYERS: 0x88FF;
+    readonly MIN_PROGRAM_TEXEL_OFFSET: 0x8904;
+    readonly MAX_PROGRAM_TEXEL_OFFSET: 0x8905;
+    readonly MAX_VARYING_COMPONENTS: 0x8B4B;
+    readonly TEXTURE_2D_ARRAY: 0x8C1A;
+    readonly TEXTURE_BINDING_2D_ARRAY: 0x8C1D;
+    readonly R11F_G11F_B10F: 0x8C3A;
+    readonly UNSIGNED_INT_10F_11F_11F_REV: 0x8C3B;
+    readonly RGB9_E5: 0x8C3D;
+    readonly UNSIGNED_INT_5_9_9_9_REV: 0x8C3E;
+    readonly TRANSFORM_FEEDBACK_BUFFER_MODE: 0x8C7F;
+    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: 0x8C80;
+    readonly TRANSFORM_FEEDBACK_VARYINGS: 0x8C83;
+    readonly TRANSFORM_FEEDBACK_BUFFER_START: 0x8C84;
+    readonly TRANSFORM_FEEDBACK_BUFFER_SIZE: 0x8C85;
+    readonly TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: 0x8C88;
+    readonly RASTERIZER_DISCARD: 0x8C89;
+    readonly MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: 0x8C8A;
+    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: 0x8C8B;
+    readonly INTERLEAVED_ATTRIBS: 0x8C8C;
+    readonly SEPARATE_ATTRIBS: 0x8C8D;
+    readonly TRANSFORM_FEEDBACK_BUFFER: 0x8C8E;
+    readonly TRANSFORM_FEEDBACK_BUFFER_BINDING: 0x8C8F;
+    readonly RGBA32UI: 0x8D70;
+    readonly RGB32UI: 0x8D71;
+    readonly RGBA16UI: 0x8D76;
+    readonly RGB16UI: 0x8D77;
+    readonly RGBA8UI: 0x8D7C;
+    readonly RGB8UI: 0x8D7D;
+    readonly RGBA32I: 0x8D82;
+    readonly RGB32I: 0x8D83;
+    readonly RGBA16I: 0x8D88;
+    readonly RGB16I: 0x8D89;
+    readonly RGBA8I: 0x8D8E;
+    readonly RGB8I: 0x8D8F;
+    readonly RED_INTEGER: 0x8D94;
+    readonly RGB_INTEGER: 0x8D98;
+    readonly RGBA_INTEGER: 0x8D99;
+    readonly SAMPLER_2D_ARRAY: 0x8DC1;
+    readonly SAMPLER_2D_ARRAY_SHADOW: 0x8DC4;
+    readonly SAMPLER_CUBE_SHADOW: 0x8DC5;
+    readonly UNSIGNED_INT_VEC2: 0x8DC6;
+    readonly UNSIGNED_INT_VEC3: 0x8DC7;
+    readonly UNSIGNED_INT_VEC4: 0x8DC8;
+    readonly INT_SAMPLER_2D: 0x8DCA;
+    readonly INT_SAMPLER_3D: 0x8DCB;
+    readonly INT_SAMPLER_CUBE: 0x8DCC;
+    readonly INT_SAMPLER_2D_ARRAY: 0x8DCF;
+    readonly UNSIGNED_INT_SAMPLER_2D: 0x8DD2;
+    readonly UNSIGNED_INT_SAMPLER_3D: 0x8DD3;
+    readonly UNSIGNED_INT_SAMPLER_CUBE: 0x8DD4;
+    readonly UNSIGNED_INT_SAMPLER_2D_ARRAY: 0x8DD7;
+    readonly DEPTH_COMPONENT32F: 0x8CAC;
+    readonly DEPTH32F_STENCIL8: 0x8CAD;
+    readonly FLOAT_32_UNSIGNED_INT_24_8_REV: 0x8DAD;
+    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: 0x8210;
+    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: 0x8211;
+    readonly FRAMEBUFFER_ATTACHMENT_RED_SIZE: 0x8212;
+    readonly FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: 0x8213;
+    readonly FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: 0x8214;
+    readonly FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: 0x8215;
+    readonly FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: 0x8216;
+    readonly FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: 0x8217;
+    readonly FRAMEBUFFER_DEFAULT: 0x8218;
+    readonly UNSIGNED_INT_24_8: 0x84FA;
+    readonly DEPTH24_STENCIL8: 0x88F0;
+    readonly UNSIGNED_NORMALIZED: 0x8C17;
+    readonly DRAW_FRAMEBUFFER_BINDING: 0x8CA6;
+    readonly READ_FRAMEBUFFER: 0x8CA8;
+    readonly DRAW_FRAMEBUFFER: 0x8CA9;
+    readonly READ_FRAMEBUFFER_BINDING: 0x8CAA;
+    readonly RENDERBUFFER_SAMPLES: 0x8CAB;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: 0x8CD4;
+    readonly MAX_COLOR_ATTACHMENTS: 0x8CDF;
+    readonly COLOR_ATTACHMENT1: 0x8CE1;
+    readonly COLOR_ATTACHMENT2: 0x8CE2;
+    readonly COLOR_ATTACHMENT3: 0x8CE3;
+    readonly COLOR_ATTACHMENT4: 0x8CE4;
+    readonly COLOR_ATTACHMENT5: 0x8CE5;
+    readonly COLOR_ATTACHMENT6: 0x8CE6;
+    readonly COLOR_ATTACHMENT7: 0x8CE7;
+    readonly COLOR_ATTACHMENT8: 0x8CE8;
+    readonly COLOR_ATTACHMENT9: 0x8CE9;
+    readonly COLOR_ATTACHMENT10: 0x8CEA;
+    readonly COLOR_ATTACHMENT11: 0x8CEB;
+    readonly COLOR_ATTACHMENT12: 0x8CEC;
+    readonly COLOR_ATTACHMENT13: 0x8CED;
+    readonly COLOR_ATTACHMENT14: 0x8CEE;
+    readonly COLOR_ATTACHMENT15: 0x8CEF;
+    readonly FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: 0x8D56;
+    readonly MAX_SAMPLES: 0x8D57;
+    readonly HALF_FLOAT: 0x140B;
+    readonly RG: 0x8227;
+    readonly RG_INTEGER: 0x8228;
+    readonly R8: 0x8229;
+    readonly RG8: 0x822B;
+    readonly R16F: 0x822D;
+    readonly R32F: 0x822E;
+    readonly RG16F: 0x822F;
+    readonly RG32F: 0x8230;
+    readonly R8I: 0x8231;
+    readonly R8UI: 0x8232;
+    readonly R16I: 0x8233;
+    readonly R16UI: 0x8234;
+    readonly R32I: 0x8235;
+    readonly R32UI: 0x8236;
+    readonly RG8I: 0x8237;
+    readonly RG8UI: 0x8238;
+    readonly RG16I: 0x8239;
+    readonly RG16UI: 0x823A;
+    readonly RG32I: 0x823B;
+    readonly RG32UI: 0x823C;
+    readonly VERTEX_ARRAY_BINDING: 0x85B5;
+    readonly R8_SNORM: 0x8F94;
+    readonly RG8_SNORM: 0x8F95;
+    readonly RGB8_SNORM: 0x8F96;
+    readonly RGBA8_SNORM: 0x8F97;
+    readonly SIGNED_NORMALIZED: 0x8F9C;
+    readonly COPY_READ_BUFFER: 0x8F36;
+    readonly COPY_WRITE_BUFFER: 0x8F37;
+    readonly COPY_READ_BUFFER_BINDING: 0x8F36;
+    readonly COPY_WRITE_BUFFER_BINDING: 0x8F37;
+    readonly UNIFORM_BUFFER: 0x8A11;
+    readonly UNIFORM_BUFFER_BINDING: 0x8A28;
+    readonly UNIFORM_BUFFER_START: 0x8A29;
+    readonly UNIFORM_BUFFER_SIZE: 0x8A2A;
+    readonly MAX_VERTEX_UNIFORM_BLOCKS: 0x8A2B;
+    readonly MAX_FRAGMENT_UNIFORM_BLOCKS: 0x8A2D;
+    readonly MAX_COMBINED_UNIFORM_BLOCKS: 0x8A2E;
+    readonly MAX_UNIFORM_BUFFER_BINDINGS: 0x8A2F;
+    readonly MAX_UNIFORM_BLOCK_SIZE: 0x8A30;
+    readonly MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: 0x8A31;
+    readonly MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: 0x8A33;
+    readonly UNIFORM_BUFFER_OFFSET_ALIGNMENT: 0x8A34;
+    readonly ACTIVE_UNIFORM_BLOCKS: 0x8A36;
+    readonly UNIFORM_TYPE: 0x8A37;
+    readonly UNIFORM_SIZE: 0x8A38;
+    readonly UNIFORM_BLOCK_INDEX: 0x8A3A;
+    readonly UNIFORM_OFFSET: 0x8A3B;
+    readonly UNIFORM_ARRAY_STRIDE: 0x8A3C;
+    readonly UNIFORM_MATRIX_STRIDE: 0x8A3D;
+    readonly UNIFORM_IS_ROW_MAJOR: 0x8A3E;
+    readonly UNIFORM_BLOCK_BINDING: 0x8A3F;
+    readonly UNIFORM_BLOCK_DATA_SIZE: 0x8A40;
+    readonly UNIFORM_BLOCK_ACTIVE_UNIFORMS: 0x8A42;
+    readonly UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: 0x8A43;
+    readonly UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: 0x8A44;
+    readonly UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: 0x8A46;
+    readonly INVALID_INDEX: 0xFFFFFFFF;
+    readonly MAX_VERTEX_OUTPUT_COMPONENTS: 0x9122;
+    readonly MAX_FRAGMENT_INPUT_COMPONENTS: 0x9125;
+    readonly MAX_SERVER_WAIT_TIMEOUT: 0x9111;
+    readonly OBJECT_TYPE: 0x9112;
+    readonly SYNC_CONDITION: 0x9113;
+    readonly SYNC_STATUS: 0x9114;
+    readonly SYNC_FLAGS: 0x9115;
+    readonly SYNC_FENCE: 0x9116;
+    readonly SYNC_GPU_COMMANDS_COMPLETE: 0x9117;
+    readonly UNSIGNALED: 0x9118;
+    readonly SIGNALED: 0x9119;
+    readonly ALREADY_SIGNALED: 0x911A;
+    readonly TIMEOUT_EXPIRED: 0x911B;
+    readonly CONDITION_SATISFIED: 0x911C;
+    readonly WAIT_FAILED: 0x911D;
+    readonly SYNC_FLUSH_COMMANDS_BIT: 0x00000001;
+    readonly VERTEX_ATTRIB_ARRAY_DIVISOR: 0x88FE;
+    readonly ANY_SAMPLES_PASSED: 0x8C2F;
+    readonly ANY_SAMPLES_PASSED_CONSERVATIVE: 0x8D6A;
+    readonly SAMPLER_BINDING: 0x8919;
+    readonly RGB10_A2UI: 0x906F;
+    readonly INT_2_10_10_10_REV: 0x8D9F;
+    readonly TRANSFORM_FEEDBACK: 0x8E22;
+    readonly TRANSFORM_FEEDBACK_PAUSED: 0x8E23;
+    readonly TRANSFORM_FEEDBACK_ACTIVE: 0x8E24;
+    readonly TRANSFORM_FEEDBACK_BINDING: 0x8E25;
+    readonly TEXTURE_IMMUTABLE_FORMAT: 0x912F;
+    readonly MAX_ELEMENT_INDEX: 0x8D6B;
+    readonly TEXTURE_IMMUTABLE_LEVELS: 0x82DF;
+    readonly TIMEOUT_IGNORED: -1;
+    readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: 0x9247;
+    readonly DEPTH_BUFFER_BIT: 0x00000100;
+    readonly STENCIL_BUFFER_BIT: 0x00000400;
+    readonly COLOR_BUFFER_BIT: 0x00004000;
+    readonly POINTS: 0x0000;
+    readonly LINES: 0x0001;
+    readonly LINE_LOOP: 0x0002;
+    readonly LINE_STRIP: 0x0003;
+    readonly TRIANGLES: 0x0004;
+    readonly TRIANGLE_STRIP: 0x0005;
+    readonly TRIANGLE_FAN: 0x0006;
+    readonly ZERO: 0;
+    readonly ONE: 1;
+    readonly SRC_COLOR: 0x0300;
+    readonly ONE_MINUS_SRC_COLOR: 0x0301;
+    readonly SRC_ALPHA: 0x0302;
+    readonly ONE_MINUS_SRC_ALPHA: 0x0303;
+    readonly DST_ALPHA: 0x0304;
+    readonly ONE_MINUS_DST_ALPHA: 0x0305;
+    readonly DST_COLOR: 0x0306;
+    readonly ONE_MINUS_DST_COLOR: 0x0307;
+    readonly SRC_ALPHA_SATURATE: 0x0308;
+    readonly FUNC_ADD: 0x8006;
+    readonly BLEND_EQUATION: 0x8009;
+    readonly BLEND_EQUATION_RGB: 0x8009;
+    readonly BLEND_EQUATION_ALPHA: 0x883D;
+    readonly FUNC_SUBTRACT: 0x800A;
+    readonly FUNC_REVERSE_SUBTRACT: 0x800B;
+    readonly BLEND_DST_RGB: 0x80C8;
+    readonly BLEND_SRC_RGB: 0x80C9;
+    readonly BLEND_DST_ALPHA: 0x80CA;
+    readonly BLEND_SRC_ALPHA: 0x80CB;
+    readonly CONSTANT_COLOR: 0x8001;
+    readonly ONE_MINUS_CONSTANT_COLOR: 0x8002;
+    readonly CONSTANT_ALPHA: 0x8003;
+    readonly ONE_MINUS_CONSTANT_ALPHA: 0x8004;
+    readonly BLEND_COLOR: 0x8005;
+    readonly ARRAY_BUFFER: 0x8892;
+    readonly ELEMENT_ARRAY_BUFFER: 0x8893;
+    readonly ARRAY_BUFFER_BINDING: 0x8894;
+    readonly ELEMENT_ARRAY_BUFFER_BINDING: 0x8895;
+    readonly STREAM_DRAW: 0x88E0;
+    readonly STATIC_DRAW: 0x88E4;
+    readonly DYNAMIC_DRAW: 0x88E8;
+    readonly BUFFER_SIZE: 0x8764;
+    readonly BUFFER_USAGE: 0x8765;
+    readonly CURRENT_VERTEX_ATTRIB: 0x8626;
+    readonly FRONT: 0x0404;
+    readonly BACK: 0x0405;
+    readonly FRONT_AND_BACK: 0x0408;
+    readonly CULL_FACE: 0x0B44;
+    readonly BLEND: 0x0BE2;
+    readonly DITHER: 0x0BD0;
+    readonly STENCIL_TEST: 0x0B90;
+    readonly DEPTH_TEST: 0x0B71;
+    readonly SCISSOR_TEST: 0x0C11;
+    readonly POLYGON_OFFSET_FILL: 0x8037;
+    readonly SAMPLE_ALPHA_TO_COVERAGE: 0x809E;
+    readonly SAMPLE_COVERAGE: 0x80A0;
+    readonly NO_ERROR: 0;
+    readonly INVALID_ENUM: 0x0500;
+    readonly INVALID_VALUE: 0x0501;
+    readonly INVALID_OPERATION: 0x0502;
+    readonly OUT_OF_MEMORY: 0x0505;
+    readonly CW: 0x0900;
+    readonly CCW: 0x0901;
+    readonly LINE_WIDTH: 0x0B21;
+    readonly ALIASED_POINT_SIZE_RANGE: 0x846D;
+    readonly ALIASED_LINE_WIDTH_RANGE: 0x846E;
+    readonly CULL_FACE_MODE: 0x0B45;
+    readonly FRONT_FACE: 0x0B46;
+    readonly DEPTH_RANGE: 0x0B70;
+    readonly DEPTH_WRITEMASK: 0x0B72;
+    readonly DEPTH_CLEAR_VALUE: 0x0B73;
+    readonly DEPTH_FUNC: 0x0B74;
+    readonly STENCIL_CLEAR_VALUE: 0x0B91;
+    readonly STENCIL_FUNC: 0x0B92;
+    readonly STENCIL_FAIL: 0x0B94;
+    readonly STENCIL_PASS_DEPTH_FAIL: 0x0B95;
+    readonly STENCIL_PASS_DEPTH_PASS: 0x0B96;
+    readonly STENCIL_REF: 0x0B97;
+    readonly STENCIL_VALUE_MASK: 0x0B93;
+    readonly STENCIL_WRITEMASK: 0x0B98;
+    readonly STENCIL_BACK_FUNC: 0x8800;
+    readonly STENCIL_BACK_FAIL: 0x8801;
+    readonly STENCIL_BACK_PASS_DEPTH_FAIL: 0x8802;
+    readonly STENCIL_BACK_PASS_DEPTH_PASS: 0x8803;
+    readonly STENCIL_BACK_REF: 0x8CA3;
+    readonly STENCIL_BACK_VALUE_MASK: 0x8CA4;
+    readonly STENCIL_BACK_WRITEMASK: 0x8CA5;
+    readonly VIEWPORT: 0x0BA2;
+    readonly SCISSOR_BOX: 0x0C10;
+    readonly COLOR_CLEAR_VALUE: 0x0C22;
+    readonly COLOR_WRITEMASK: 0x0C23;
+    readonly UNPACK_ALIGNMENT: 0x0CF5;
+    readonly PACK_ALIGNMENT: 0x0D05;
+    readonly MAX_TEXTURE_SIZE: 0x0D33;
+    readonly MAX_VIEWPORT_DIMS: 0x0D3A;
+    readonly SUBPIXEL_BITS: 0x0D50;
+    readonly RED_BITS: 0x0D52;
+    readonly GREEN_BITS: 0x0D53;
+    readonly BLUE_BITS: 0x0D54;
+    readonly ALPHA_BITS: 0x0D55;
+    readonly DEPTH_BITS: 0x0D56;
+    readonly STENCIL_BITS: 0x0D57;
+    readonly POLYGON_OFFSET_UNITS: 0x2A00;
+    readonly POLYGON_OFFSET_FACTOR: 0x8038;
+    readonly TEXTURE_BINDING_2D: 0x8069;
+    readonly SAMPLE_BUFFERS: 0x80A8;
+    readonly SAMPLES: 0x80A9;
+    readonly SAMPLE_COVERAGE_VALUE: 0x80AA;
+    readonly SAMPLE_COVERAGE_INVERT: 0x80AB;
+    readonly COMPRESSED_TEXTURE_FORMATS: 0x86A3;
+    readonly DONT_CARE: 0x1100;
+    readonly FASTEST: 0x1101;
+    readonly NICEST: 0x1102;
+    readonly GENERATE_MIPMAP_HINT: 0x8192;
+    readonly BYTE: 0x1400;
+    readonly UNSIGNED_BYTE: 0x1401;
+    readonly SHORT: 0x1402;
+    readonly UNSIGNED_SHORT: 0x1403;
+    readonly INT: 0x1404;
+    readonly UNSIGNED_INT: 0x1405;
+    readonly FLOAT: 0x1406;
+    readonly DEPTH_COMPONENT: 0x1902;
+    readonly ALPHA: 0x1906;
+    readonly RGB: 0x1907;
+    readonly RGBA: 0x1908;
+    readonly LUMINANCE: 0x1909;
+    readonly LUMINANCE_ALPHA: 0x190A;
+    readonly UNSIGNED_SHORT_4_4_4_4: 0x8033;
+    readonly UNSIGNED_SHORT_5_5_5_1: 0x8034;
+    readonly UNSIGNED_SHORT_5_6_5: 0x8363;
+    readonly FRAGMENT_SHADER: 0x8B30;
+    readonly VERTEX_SHADER: 0x8B31;
+    readonly MAX_VERTEX_ATTRIBS: 0x8869;
+    readonly MAX_VERTEX_UNIFORM_VECTORS: 0x8DFB;
+    readonly MAX_VARYING_VECTORS: 0x8DFC;
+    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: 0x8B4D;
+    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: 0x8B4C;
+    readonly MAX_TEXTURE_IMAGE_UNITS: 0x8872;
+    readonly MAX_FRAGMENT_UNIFORM_VECTORS: 0x8DFD;
+    readonly SHADER_TYPE: 0x8B4F;
+    readonly DELETE_STATUS: 0x8B80;
+    readonly LINK_STATUS: 0x8B82;
+    readonly VALIDATE_STATUS: 0x8B83;
+    readonly ATTACHED_SHADERS: 0x8B85;
+    readonly ACTIVE_UNIFORMS: 0x8B86;
+    readonly ACTIVE_ATTRIBUTES: 0x8B89;
+    readonly SHADING_LANGUAGE_VERSION: 0x8B8C;
+    readonly CURRENT_PROGRAM: 0x8B8D;
+    readonly NEVER: 0x0200;
+    readonly LESS: 0x0201;
+    readonly EQUAL: 0x0202;
+    readonly LEQUAL: 0x0203;
+    readonly GREATER: 0x0204;
+    readonly NOTEQUAL: 0x0205;
+    readonly GEQUAL: 0x0206;
+    readonly ALWAYS: 0x0207;
+    readonly KEEP: 0x1E00;
+    readonly REPLACE: 0x1E01;
+    readonly INCR: 0x1E02;
+    readonly DECR: 0x1E03;
+    readonly INVERT: 0x150A;
+    readonly INCR_WRAP: 0x8507;
+    readonly DECR_WRAP: 0x8508;
+    readonly VENDOR: 0x1F00;
+    readonly RENDERER: 0x1F01;
+    readonly VERSION: 0x1F02;
+    readonly NEAREST: 0x2600;
+    readonly LINEAR: 0x2601;
+    readonly NEAREST_MIPMAP_NEAREST: 0x2700;
+    readonly LINEAR_MIPMAP_NEAREST: 0x2701;
+    readonly NEAREST_MIPMAP_LINEAR: 0x2702;
+    readonly LINEAR_MIPMAP_LINEAR: 0x2703;
+    readonly TEXTURE_MAG_FILTER: 0x2800;
+    readonly TEXTURE_MIN_FILTER: 0x2801;
+    readonly TEXTURE_WRAP_S: 0x2802;
+    readonly TEXTURE_WRAP_T: 0x2803;
+    readonly TEXTURE_2D: 0x0DE1;
+    readonly TEXTURE: 0x1702;
+    readonly TEXTURE_CUBE_MAP: 0x8513;
+    readonly TEXTURE_BINDING_CUBE_MAP: 0x8514;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_X: 0x8515;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: 0x8516;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: 0x8517;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: 0x8518;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: 0x8519;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: 0x851A;
+    readonly MAX_CUBE_MAP_TEXTURE_SIZE: 0x851C;
+    readonly TEXTURE0: 0x84C0;
+    readonly TEXTURE1: 0x84C1;
+    readonly TEXTURE2: 0x84C2;
+    readonly TEXTURE3: 0x84C3;
+    readonly TEXTURE4: 0x84C4;
+    readonly TEXTURE5: 0x84C5;
+    readonly TEXTURE6: 0x84C6;
+    readonly TEXTURE7: 0x84C7;
+    readonly TEXTURE8: 0x84C8;
+    readonly TEXTURE9: 0x84C9;
+    readonly TEXTURE10: 0x84CA;
+    readonly TEXTURE11: 0x84CB;
+    readonly TEXTURE12: 0x84CC;
+    readonly TEXTURE13: 0x84CD;
+    readonly TEXTURE14: 0x84CE;
+    readonly TEXTURE15: 0x84CF;
+    readonly TEXTURE16: 0x84D0;
+    readonly TEXTURE17: 0x84D1;
+    readonly TEXTURE18: 0x84D2;
+    readonly TEXTURE19: 0x84D3;
+    readonly TEXTURE20: 0x84D4;
+    readonly TEXTURE21: 0x84D5;
+    readonly TEXTURE22: 0x84D6;
+    readonly TEXTURE23: 0x84D7;
+    readonly TEXTURE24: 0x84D8;
+    readonly TEXTURE25: 0x84D9;
+    readonly TEXTURE26: 0x84DA;
+    readonly TEXTURE27: 0x84DB;
+    readonly TEXTURE28: 0x84DC;
+    readonly TEXTURE29: 0x84DD;
+    readonly TEXTURE30: 0x84DE;
+    readonly TEXTURE31: 0x84DF;
+    readonly ACTIVE_TEXTURE: 0x84E0;
+    readonly REPEAT: 0x2901;
+    readonly CLAMP_TO_EDGE: 0x812F;
+    readonly MIRRORED_REPEAT: 0x8370;
+    readonly FLOAT_VEC2: 0x8B50;
+    readonly FLOAT_VEC3: 0x8B51;
+    readonly FLOAT_VEC4: 0x8B52;
+    readonly INT_VEC2: 0x8B53;
+    readonly INT_VEC3: 0x8B54;
+    readonly INT_VEC4: 0x8B55;
+    readonly BOOL: 0x8B56;
+    readonly BOOL_VEC2: 0x8B57;
+    readonly BOOL_VEC3: 0x8B58;
+    readonly BOOL_VEC4: 0x8B59;
+    readonly FLOAT_MAT2: 0x8B5A;
+    readonly FLOAT_MAT3: 0x8B5B;
+    readonly FLOAT_MAT4: 0x8B5C;
+    readonly SAMPLER_2D: 0x8B5E;
+    readonly SAMPLER_CUBE: 0x8B60;
+    readonly VERTEX_ATTRIB_ARRAY_ENABLED: 0x8622;
+    readonly VERTEX_ATTRIB_ARRAY_SIZE: 0x8623;
+    readonly VERTEX_ATTRIB_ARRAY_STRIDE: 0x8624;
+    readonly VERTEX_ATTRIB_ARRAY_TYPE: 0x8625;
+    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: 0x886A;
+    readonly VERTEX_ATTRIB_ARRAY_POINTER: 0x8645;
+    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: 0x889F;
+    readonly IMPLEMENTATION_COLOR_READ_TYPE: 0x8B9A;
+    readonly IMPLEMENTATION_COLOR_READ_FORMAT: 0x8B9B;
+    readonly COMPILE_STATUS: 0x8B81;
+    readonly LOW_FLOAT: 0x8DF0;
+    readonly MEDIUM_FLOAT: 0x8DF1;
+    readonly HIGH_FLOAT: 0x8DF2;
+    readonly LOW_INT: 0x8DF3;
+    readonly MEDIUM_INT: 0x8DF4;
+    readonly HIGH_INT: 0x8DF5;
+    readonly FRAMEBUFFER: 0x8D40;
+    readonly RENDERBUFFER: 0x8D41;
+    readonly RGBA4: 0x8056;
+    readonly RGB5_A1: 0x8057;
+    readonly RGB565: 0x8D62;
+    readonly DEPTH_COMPONENT16: 0x81A5;
+    readonly STENCIL_INDEX8: 0x8D48;
+    readonly DEPTH_STENCIL: 0x84F9;
+    readonly RENDERBUFFER_WIDTH: 0x8D42;
+    readonly RENDERBUFFER_HEIGHT: 0x8D43;
+    readonly RENDERBUFFER_INTERNAL_FORMAT: 0x8D44;
+    readonly RENDERBUFFER_RED_SIZE: 0x8D50;
+    readonly RENDERBUFFER_GREEN_SIZE: 0x8D51;
+    readonly RENDERBUFFER_BLUE_SIZE: 0x8D52;
+    readonly RENDERBUFFER_ALPHA_SIZE: 0x8D53;
+    readonly RENDERBUFFER_DEPTH_SIZE: 0x8D54;
+    readonly RENDERBUFFER_STENCIL_SIZE: 0x8D55;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: 0x8CD0;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: 0x8CD1;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: 0x8CD2;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: 0x8CD3;
+    readonly COLOR_ATTACHMENT0: 0x8CE0;
+    readonly DEPTH_ATTACHMENT: 0x8D00;
+    readonly STENCIL_ATTACHMENT: 0x8D20;
+    readonly DEPTH_STENCIL_ATTACHMENT: 0x821A;
+    readonly NONE: 0;
+    readonly FRAMEBUFFER_COMPLETE: 0x8CD5;
+    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: 0x8CD6;
+    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: 0x8CD7;
+    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: 0x8CD9;
+    readonly FRAMEBUFFER_UNSUPPORTED: 0x8CDD;
+    readonly FRAMEBUFFER_BINDING: 0x8CA6;
+    readonly RENDERBUFFER_BINDING: 0x8CA7;
+    readonly MAX_RENDERBUFFER_SIZE: 0x84E8;
+    readonly INVALID_FRAMEBUFFER_OPERATION: 0x0506;
+    readonly UNPACK_FLIP_Y_WEBGL: 0x9240;
+    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: 0x9241;
+    readonly CONTEXT_LOST_WEBGL: 0x9242;
+    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: 0x9243;
+    readonly BROWSER_DEFAULT_WEBGL: 0x9244;
 };
 
 interface WebGL2RenderingContextBase {
@@ -15449,269 +15632,269 @@ interface WebGL2RenderingContextBase {
     vertexAttribI4uiv(index: GLuint, values: Uint32List): void;
     vertexAttribIPointer(index: GLuint, size: GLint, type: GLenum, stride: GLsizei, offset: GLintptr): void;
     waitSync(sync: WebGLSync, flags: GLbitfield, timeout: GLint64): void;
-    readonly ACTIVE_UNIFORM_BLOCKS: GLenum;
-    readonly ALREADY_SIGNALED: GLenum;
-    readonly ANY_SAMPLES_PASSED: GLenum;
-    readonly ANY_SAMPLES_PASSED_CONSERVATIVE: GLenum;
-    readonly COLOR: GLenum;
-    readonly COLOR_ATTACHMENT1: GLenum;
-    readonly COLOR_ATTACHMENT10: GLenum;
-    readonly COLOR_ATTACHMENT11: GLenum;
-    readonly COLOR_ATTACHMENT12: GLenum;
-    readonly COLOR_ATTACHMENT13: GLenum;
-    readonly COLOR_ATTACHMENT14: GLenum;
-    readonly COLOR_ATTACHMENT15: GLenum;
-    readonly COLOR_ATTACHMENT2: GLenum;
-    readonly COLOR_ATTACHMENT3: GLenum;
-    readonly COLOR_ATTACHMENT4: GLenum;
-    readonly COLOR_ATTACHMENT5: GLenum;
-    readonly COLOR_ATTACHMENT6: GLenum;
-    readonly COLOR_ATTACHMENT7: GLenum;
-    readonly COLOR_ATTACHMENT8: GLenum;
-    readonly COLOR_ATTACHMENT9: GLenum;
-    readonly COMPARE_REF_TO_TEXTURE: GLenum;
-    readonly CONDITION_SATISFIED: GLenum;
-    readonly COPY_READ_BUFFER: GLenum;
-    readonly COPY_READ_BUFFER_BINDING: GLenum;
-    readonly COPY_WRITE_BUFFER: GLenum;
-    readonly COPY_WRITE_BUFFER_BINDING: GLenum;
-    readonly CURRENT_QUERY: GLenum;
-    readonly DEPTH: GLenum;
-    readonly DEPTH24_STENCIL8: GLenum;
-    readonly DEPTH32F_STENCIL8: GLenum;
-    readonly DEPTH_COMPONENT24: GLenum;
-    readonly DEPTH_COMPONENT32F: GLenum;
-    readonly DRAW_BUFFER0: GLenum;
-    readonly DRAW_BUFFER1: GLenum;
-    readonly DRAW_BUFFER10: GLenum;
-    readonly DRAW_BUFFER11: GLenum;
-    readonly DRAW_BUFFER12: GLenum;
-    readonly DRAW_BUFFER13: GLenum;
-    readonly DRAW_BUFFER14: GLenum;
-    readonly DRAW_BUFFER15: GLenum;
-    readonly DRAW_BUFFER2: GLenum;
-    readonly DRAW_BUFFER3: GLenum;
-    readonly DRAW_BUFFER4: GLenum;
-    readonly DRAW_BUFFER5: GLenum;
-    readonly DRAW_BUFFER6: GLenum;
-    readonly DRAW_BUFFER7: GLenum;
-    readonly DRAW_BUFFER8: GLenum;
-    readonly DRAW_BUFFER9: GLenum;
-    readonly DRAW_FRAMEBUFFER: GLenum;
-    readonly DRAW_FRAMEBUFFER_BINDING: GLenum;
-    readonly DYNAMIC_COPY: GLenum;
-    readonly DYNAMIC_READ: GLenum;
-    readonly FLOAT_32_UNSIGNED_INT_24_8_REV: GLenum;
-    readonly FLOAT_MAT2x3: GLenum;
-    readonly FLOAT_MAT2x4: GLenum;
-    readonly FLOAT_MAT3x2: GLenum;
-    readonly FLOAT_MAT3x4: GLenum;
-    readonly FLOAT_MAT4x2: GLenum;
-    readonly FLOAT_MAT4x3: GLenum;
-    readonly FRAGMENT_SHADER_DERIVATIVE_HINT: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_RED_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: GLenum;
-    readonly FRAMEBUFFER_DEFAULT: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: GLenum;
-    readonly HALF_FLOAT: GLenum;
-    readonly INTERLEAVED_ATTRIBS: GLenum;
-    readonly INT_2_10_10_10_REV: GLenum;
-    readonly INT_SAMPLER_2D: GLenum;
-    readonly INT_SAMPLER_2D_ARRAY: GLenum;
-    readonly INT_SAMPLER_3D: GLenum;
-    readonly INT_SAMPLER_CUBE: GLenum;
-    readonly INVALID_INDEX: GLenum;
-    readonly MAX: GLenum;
-    readonly MAX_3D_TEXTURE_SIZE: GLenum;
-    readonly MAX_ARRAY_TEXTURE_LAYERS: GLenum;
-    readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
-    readonly MAX_COLOR_ATTACHMENTS: GLenum;
-    readonly MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_COMBINED_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_DRAW_BUFFERS: GLenum;
-    readonly MAX_ELEMENTS_INDICES: GLenum;
-    readonly MAX_ELEMENTS_VERTICES: GLenum;
-    readonly MAX_ELEMENT_INDEX: GLenum;
-    readonly MAX_FRAGMENT_INPUT_COMPONENTS: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_PROGRAM_TEXEL_OFFSET: GLenum;
-    readonly MAX_SAMPLES: GLenum;
-    readonly MAX_SERVER_WAIT_TIMEOUT: GLenum;
-    readonly MAX_TEXTURE_LOD_BIAS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: GLenum;
-    readonly MAX_UNIFORM_BLOCK_SIZE: GLenum;
-    readonly MAX_UNIFORM_BUFFER_BINDINGS: GLenum;
-    readonly MAX_VARYING_COMPONENTS: GLenum;
-    readonly MAX_VERTEX_OUTPUT_COMPONENTS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_COMPONENTS: GLenum;
-    readonly MIN: GLenum;
-    readonly MIN_PROGRAM_TEXEL_OFFSET: GLenum;
-    readonly OBJECT_TYPE: GLenum;
-    readonly PACK_ROW_LENGTH: GLenum;
-    readonly PACK_SKIP_PIXELS: GLenum;
-    readonly PACK_SKIP_ROWS: GLenum;
-    readonly PIXEL_PACK_BUFFER: GLenum;
-    readonly PIXEL_PACK_BUFFER_BINDING: GLenum;
-    readonly PIXEL_UNPACK_BUFFER: GLenum;
-    readonly PIXEL_UNPACK_BUFFER_BINDING: GLenum;
-    readonly QUERY_RESULT: GLenum;
-    readonly QUERY_RESULT_AVAILABLE: GLenum;
-    readonly R11F_G11F_B10F: GLenum;
-    readonly R16F: GLenum;
-    readonly R16I: GLenum;
-    readonly R16UI: GLenum;
-    readonly R32F: GLenum;
-    readonly R32I: GLenum;
-    readonly R32UI: GLenum;
-    readonly R8: GLenum;
-    readonly R8I: GLenum;
-    readonly R8UI: GLenum;
-    readonly R8_SNORM: GLenum;
-    readonly RASTERIZER_DISCARD: GLenum;
-    readonly READ_BUFFER: GLenum;
-    readonly READ_FRAMEBUFFER: GLenum;
-    readonly READ_FRAMEBUFFER_BINDING: GLenum;
-    readonly RED: GLenum;
-    readonly RED_INTEGER: GLenum;
-    readonly RENDERBUFFER_SAMPLES: GLenum;
-    readonly RG: GLenum;
-    readonly RG16F: GLenum;
-    readonly RG16I: GLenum;
-    readonly RG16UI: GLenum;
-    readonly RG32F: GLenum;
-    readonly RG32I: GLenum;
-    readonly RG32UI: GLenum;
-    readonly RG8: GLenum;
-    readonly RG8I: GLenum;
-    readonly RG8UI: GLenum;
-    readonly RG8_SNORM: GLenum;
-    readonly RGB10_A2: GLenum;
-    readonly RGB10_A2UI: GLenum;
-    readonly RGB16F: GLenum;
-    readonly RGB16I: GLenum;
-    readonly RGB16UI: GLenum;
-    readonly RGB32F: GLenum;
-    readonly RGB32I: GLenum;
-    readonly RGB32UI: GLenum;
-    readonly RGB8: GLenum;
-    readonly RGB8I: GLenum;
-    readonly RGB8UI: GLenum;
-    readonly RGB8_SNORM: GLenum;
-    readonly RGB9_E5: GLenum;
-    readonly RGBA16F: GLenum;
-    readonly RGBA16I: GLenum;
-    readonly RGBA16UI: GLenum;
-    readonly RGBA32F: GLenum;
-    readonly RGBA32I: GLenum;
-    readonly RGBA32UI: GLenum;
-    readonly RGBA8: GLenum;
-    readonly RGBA8I: GLenum;
-    readonly RGBA8UI: GLenum;
-    readonly RGBA8_SNORM: GLenum;
-    readonly RGBA_INTEGER: GLenum;
-    readonly RGB_INTEGER: GLenum;
-    readonly RG_INTEGER: GLenum;
-    readonly SAMPLER_2D_ARRAY: GLenum;
-    readonly SAMPLER_2D_ARRAY_SHADOW: GLenum;
-    readonly SAMPLER_2D_SHADOW: GLenum;
-    readonly SAMPLER_3D: GLenum;
-    readonly SAMPLER_BINDING: GLenum;
-    readonly SAMPLER_CUBE_SHADOW: GLenum;
-    readonly SEPARATE_ATTRIBS: GLenum;
-    readonly SIGNALED: GLenum;
-    readonly SIGNED_NORMALIZED: GLenum;
-    readonly SRGB: GLenum;
-    readonly SRGB8: GLenum;
-    readonly SRGB8_ALPHA8: GLenum;
-    readonly STATIC_COPY: GLenum;
-    readonly STATIC_READ: GLenum;
-    readonly STENCIL: GLenum;
-    readonly STREAM_COPY: GLenum;
-    readonly STREAM_READ: GLenum;
-    readonly SYNC_CONDITION: GLenum;
-    readonly SYNC_FENCE: GLenum;
-    readonly SYNC_FLAGS: GLenum;
-    readonly SYNC_FLUSH_COMMANDS_BIT: GLenum;
-    readonly SYNC_GPU_COMMANDS_COMPLETE: GLenum;
-    readonly SYNC_STATUS: GLenum;
-    readonly TEXTURE_2D_ARRAY: GLenum;
-    readonly TEXTURE_3D: GLenum;
-    readonly TEXTURE_BASE_LEVEL: GLenum;
-    readonly TEXTURE_BINDING_2D_ARRAY: GLenum;
-    readonly TEXTURE_BINDING_3D: GLenum;
-    readonly TEXTURE_COMPARE_FUNC: GLenum;
-    readonly TEXTURE_COMPARE_MODE: GLenum;
-    readonly TEXTURE_IMMUTABLE_FORMAT: GLenum;
-    readonly TEXTURE_IMMUTABLE_LEVELS: GLenum;
-    readonly TEXTURE_MAX_LEVEL: GLenum;
-    readonly TEXTURE_MAX_LOD: GLenum;
-    readonly TEXTURE_MIN_LOD: GLenum;
-    readonly TEXTURE_WRAP_R: GLenum;
-    readonly TIMEOUT_EXPIRED: GLenum;
-    readonly TIMEOUT_IGNORED: GLint64;
-    readonly TRANSFORM_FEEDBACK: GLenum;
-    readonly TRANSFORM_FEEDBACK_ACTIVE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BINDING: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_BINDING: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_MODE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_SIZE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_START: GLenum;
-    readonly TRANSFORM_FEEDBACK_PAUSED: GLenum;
-    readonly TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: GLenum;
-    readonly TRANSFORM_FEEDBACK_VARYINGS: GLenum;
-    readonly UNIFORM_ARRAY_STRIDE: GLenum;
-    readonly UNIFORM_BLOCK_ACTIVE_UNIFORMS: GLenum;
-    readonly UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: GLenum;
-    readonly UNIFORM_BLOCK_BINDING: GLenum;
-    readonly UNIFORM_BLOCK_DATA_SIZE: GLenum;
-    readonly UNIFORM_BLOCK_INDEX: GLenum;
-    readonly UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: GLenum;
-    readonly UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: GLenum;
-    readonly UNIFORM_BUFFER: GLenum;
-    readonly UNIFORM_BUFFER_BINDING: GLenum;
-    readonly UNIFORM_BUFFER_OFFSET_ALIGNMENT: GLenum;
-    readonly UNIFORM_BUFFER_SIZE: GLenum;
-    readonly UNIFORM_BUFFER_START: GLenum;
-    readonly UNIFORM_IS_ROW_MAJOR: GLenum;
-    readonly UNIFORM_MATRIX_STRIDE: GLenum;
-    readonly UNIFORM_OFFSET: GLenum;
-    readonly UNIFORM_SIZE: GLenum;
-    readonly UNIFORM_TYPE: GLenum;
-    readonly UNPACK_IMAGE_HEIGHT: GLenum;
-    readonly UNPACK_ROW_LENGTH: GLenum;
-    readonly UNPACK_SKIP_IMAGES: GLenum;
-    readonly UNPACK_SKIP_PIXELS: GLenum;
-    readonly UNPACK_SKIP_ROWS: GLenum;
-    readonly UNSIGNALED: GLenum;
-    readonly UNSIGNED_INT_10F_11F_11F_REV: GLenum;
-    readonly UNSIGNED_INT_24_8: GLenum;
-    readonly UNSIGNED_INT_2_10_10_10_REV: GLenum;
-    readonly UNSIGNED_INT_5_9_9_9_REV: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_2D: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_2D_ARRAY: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_3D: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_CUBE: GLenum;
-    readonly UNSIGNED_INT_VEC2: GLenum;
-    readonly UNSIGNED_INT_VEC3: GLenum;
-    readonly UNSIGNED_INT_VEC4: GLenum;
-    readonly UNSIGNED_NORMALIZED: GLenum;
-    readonly VERTEX_ARRAY_BINDING: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_DIVISOR: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_INTEGER: GLenum;
-    readonly WAIT_FAILED: GLenum;
+    readonly READ_BUFFER: 0x0C02;
+    readonly UNPACK_ROW_LENGTH: 0x0CF2;
+    readonly UNPACK_SKIP_ROWS: 0x0CF3;
+    readonly UNPACK_SKIP_PIXELS: 0x0CF4;
+    readonly PACK_ROW_LENGTH: 0x0D02;
+    readonly PACK_SKIP_ROWS: 0x0D03;
+    readonly PACK_SKIP_PIXELS: 0x0D04;
+    readonly COLOR: 0x1800;
+    readonly DEPTH: 0x1801;
+    readonly STENCIL: 0x1802;
+    readonly RED: 0x1903;
+    readonly RGB8: 0x8051;
+    readonly RGBA8: 0x8058;
+    readonly RGB10_A2: 0x8059;
+    readonly TEXTURE_BINDING_3D: 0x806A;
+    readonly UNPACK_SKIP_IMAGES: 0x806D;
+    readonly UNPACK_IMAGE_HEIGHT: 0x806E;
+    readonly TEXTURE_3D: 0x806F;
+    readonly TEXTURE_WRAP_R: 0x8072;
+    readonly MAX_3D_TEXTURE_SIZE: 0x8073;
+    readonly UNSIGNED_INT_2_10_10_10_REV: 0x8368;
+    readonly MAX_ELEMENTS_VERTICES: 0x80E8;
+    readonly MAX_ELEMENTS_INDICES: 0x80E9;
+    readonly TEXTURE_MIN_LOD: 0x813A;
+    readonly TEXTURE_MAX_LOD: 0x813B;
+    readonly TEXTURE_BASE_LEVEL: 0x813C;
+    readonly TEXTURE_MAX_LEVEL: 0x813D;
+    readonly MIN: 0x8007;
+    readonly MAX: 0x8008;
+    readonly DEPTH_COMPONENT24: 0x81A6;
+    readonly MAX_TEXTURE_LOD_BIAS: 0x84FD;
+    readonly TEXTURE_COMPARE_MODE: 0x884C;
+    readonly TEXTURE_COMPARE_FUNC: 0x884D;
+    readonly CURRENT_QUERY: 0x8865;
+    readonly QUERY_RESULT: 0x8866;
+    readonly QUERY_RESULT_AVAILABLE: 0x8867;
+    readonly STREAM_READ: 0x88E1;
+    readonly STREAM_COPY: 0x88E2;
+    readonly STATIC_READ: 0x88E5;
+    readonly STATIC_COPY: 0x88E6;
+    readonly DYNAMIC_READ: 0x88E9;
+    readonly DYNAMIC_COPY: 0x88EA;
+    readonly MAX_DRAW_BUFFERS: 0x8824;
+    readonly DRAW_BUFFER0: 0x8825;
+    readonly DRAW_BUFFER1: 0x8826;
+    readonly DRAW_BUFFER2: 0x8827;
+    readonly DRAW_BUFFER3: 0x8828;
+    readonly DRAW_BUFFER4: 0x8829;
+    readonly DRAW_BUFFER5: 0x882A;
+    readonly DRAW_BUFFER6: 0x882B;
+    readonly DRAW_BUFFER7: 0x882C;
+    readonly DRAW_BUFFER8: 0x882D;
+    readonly DRAW_BUFFER9: 0x882E;
+    readonly DRAW_BUFFER10: 0x882F;
+    readonly DRAW_BUFFER11: 0x8830;
+    readonly DRAW_BUFFER12: 0x8831;
+    readonly DRAW_BUFFER13: 0x8832;
+    readonly DRAW_BUFFER14: 0x8833;
+    readonly DRAW_BUFFER15: 0x8834;
+    readonly MAX_FRAGMENT_UNIFORM_COMPONENTS: 0x8B49;
+    readonly MAX_VERTEX_UNIFORM_COMPONENTS: 0x8B4A;
+    readonly SAMPLER_3D: 0x8B5F;
+    readonly SAMPLER_2D_SHADOW: 0x8B62;
+    readonly FRAGMENT_SHADER_DERIVATIVE_HINT: 0x8B8B;
+    readonly PIXEL_PACK_BUFFER: 0x88EB;
+    readonly PIXEL_UNPACK_BUFFER: 0x88EC;
+    readonly PIXEL_PACK_BUFFER_BINDING: 0x88ED;
+    readonly PIXEL_UNPACK_BUFFER_BINDING: 0x88EF;
+    readonly FLOAT_MAT2x3: 0x8B65;
+    readonly FLOAT_MAT2x4: 0x8B66;
+    readonly FLOAT_MAT3x2: 0x8B67;
+    readonly FLOAT_MAT3x4: 0x8B68;
+    readonly FLOAT_MAT4x2: 0x8B69;
+    readonly FLOAT_MAT4x3: 0x8B6A;
+    readonly SRGB: 0x8C40;
+    readonly SRGB8: 0x8C41;
+    readonly SRGB8_ALPHA8: 0x8C43;
+    readonly COMPARE_REF_TO_TEXTURE: 0x884E;
+    readonly RGBA32F: 0x8814;
+    readonly RGB32F: 0x8815;
+    readonly RGBA16F: 0x881A;
+    readonly RGB16F: 0x881B;
+    readonly VERTEX_ATTRIB_ARRAY_INTEGER: 0x88FD;
+    readonly MAX_ARRAY_TEXTURE_LAYERS: 0x88FF;
+    readonly MIN_PROGRAM_TEXEL_OFFSET: 0x8904;
+    readonly MAX_PROGRAM_TEXEL_OFFSET: 0x8905;
+    readonly MAX_VARYING_COMPONENTS: 0x8B4B;
+    readonly TEXTURE_2D_ARRAY: 0x8C1A;
+    readonly TEXTURE_BINDING_2D_ARRAY: 0x8C1D;
+    readonly R11F_G11F_B10F: 0x8C3A;
+    readonly UNSIGNED_INT_10F_11F_11F_REV: 0x8C3B;
+    readonly RGB9_E5: 0x8C3D;
+    readonly UNSIGNED_INT_5_9_9_9_REV: 0x8C3E;
+    readonly TRANSFORM_FEEDBACK_BUFFER_MODE: 0x8C7F;
+    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: 0x8C80;
+    readonly TRANSFORM_FEEDBACK_VARYINGS: 0x8C83;
+    readonly TRANSFORM_FEEDBACK_BUFFER_START: 0x8C84;
+    readonly TRANSFORM_FEEDBACK_BUFFER_SIZE: 0x8C85;
+    readonly TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: 0x8C88;
+    readonly RASTERIZER_DISCARD: 0x8C89;
+    readonly MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: 0x8C8A;
+    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: 0x8C8B;
+    readonly INTERLEAVED_ATTRIBS: 0x8C8C;
+    readonly SEPARATE_ATTRIBS: 0x8C8D;
+    readonly TRANSFORM_FEEDBACK_BUFFER: 0x8C8E;
+    readonly TRANSFORM_FEEDBACK_BUFFER_BINDING: 0x8C8F;
+    readonly RGBA32UI: 0x8D70;
+    readonly RGB32UI: 0x8D71;
+    readonly RGBA16UI: 0x8D76;
+    readonly RGB16UI: 0x8D77;
+    readonly RGBA8UI: 0x8D7C;
+    readonly RGB8UI: 0x8D7D;
+    readonly RGBA32I: 0x8D82;
+    readonly RGB32I: 0x8D83;
+    readonly RGBA16I: 0x8D88;
+    readonly RGB16I: 0x8D89;
+    readonly RGBA8I: 0x8D8E;
+    readonly RGB8I: 0x8D8F;
+    readonly RED_INTEGER: 0x8D94;
+    readonly RGB_INTEGER: 0x8D98;
+    readonly RGBA_INTEGER: 0x8D99;
+    readonly SAMPLER_2D_ARRAY: 0x8DC1;
+    readonly SAMPLER_2D_ARRAY_SHADOW: 0x8DC4;
+    readonly SAMPLER_CUBE_SHADOW: 0x8DC5;
+    readonly UNSIGNED_INT_VEC2: 0x8DC6;
+    readonly UNSIGNED_INT_VEC3: 0x8DC7;
+    readonly UNSIGNED_INT_VEC4: 0x8DC8;
+    readonly INT_SAMPLER_2D: 0x8DCA;
+    readonly INT_SAMPLER_3D: 0x8DCB;
+    readonly INT_SAMPLER_CUBE: 0x8DCC;
+    readonly INT_SAMPLER_2D_ARRAY: 0x8DCF;
+    readonly UNSIGNED_INT_SAMPLER_2D: 0x8DD2;
+    readonly UNSIGNED_INT_SAMPLER_3D: 0x8DD3;
+    readonly UNSIGNED_INT_SAMPLER_CUBE: 0x8DD4;
+    readonly UNSIGNED_INT_SAMPLER_2D_ARRAY: 0x8DD7;
+    readonly DEPTH_COMPONENT32F: 0x8CAC;
+    readonly DEPTH32F_STENCIL8: 0x8CAD;
+    readonly FLOAT_32_UNSIGNED_INT_24_8_REV: 0x8DAD;
+    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: 0x8210;
+    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: 0x8211;
+    readonly FRAMEBUFFER_ATTACHMENT_RED_SIZE: 0x8212;
+    readonly FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: 0x8213;
+    readonly FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: 0x8214;
+    readonly FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: 0x8215;
+    readonly FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: 0x8216;
+    readonly FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: 0x8217;
+    readonly FRAMEBUFFER_DEFAULT: 0x8218;
+    readonly UNSIGNED_INT_24_8: 0x84FA;
+    readonly DEPTH24_STENCIL8: 0x88F0;
+    readonly UNSIGNED_NORMALIZED: 0x8C17;
+    readonly DRAW_FRAMEBUFFER_BINDING: 0x8CA6;
+    readonly READ_FRAMEBUFFER: 0x8CA8;
+    readonly DRAW_FRAMEBUFFER: 0x8CA9;
+    readonly READ_FRAMEBUFFER_BINDING: 0x8CAA;
+    readonly RENDERBUFFER_SAMPLES: 0x8CAB;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: 0x8CD4;
+    readonly MAX_COLOR_ATTACHMENTS: 0x8CDF;
+    readonly COLOR_ATTACHMENT1: 0x8CE1;
+    readonly COLOR_ATTACHMENT2: 0x8CE2;
+    readonly COLOR_ATTACHMENT3: 0x8CE3;
+    readonly COLOR_ATTACHMENT4: 0x8CE4;
+    readonly COLOR_ATTACHMENT5: 0x8CE5;
+    readonly COLOR_ATTACHMENT6: 0x8CE6;
+    readonly COLOR_ATTACHMENT7: 0x8CE7;
+    readonly COLOR_ATTACHMENT8: 0x8CE8;
+    readonly COLOR_ATTACHMENT9: 0x8CE9;
+    readonly COLOR_ATTACHMENT10: 0x8CEA;
+    readonly COLOR_ATTACHMENT11: 0x8CEB;
+    readonly COLOR_ATTACHMENT12: 0x8CEC;
+    readonly COLOR_ATTACHMENT13: 0x8CED;
+    readonly COLOR_ATTACHMENT14: 0x8CEE;
+    readonly COLOR_ATTACHMENT15: 0x8CEF;
+    readonly FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: 0x8D56;
+    readonly MAX_SAMPLES: 0x8D57;
+    readonly HALF_FLOAT: 0x140B;
+    readonly RG: 0x8227;
+    readonly RG_INTEGER: 0x8228;
+    readonly R8: 0x8229;
+    readonly RG8: 0x822B;
+    readonly R16F: 0x822D;
+    readonly R32F: 0x822E;
+    readonly RG16F: 0x822F;
+    readonly RG32F: 0x8230;
+    readonly R8I: 0x8231;
+    readonly R8UI: 0x8232;
+    readonly R16I: 0x8233;
+    readonly R16UI: 0x8234;
+    readonly R32I: 0x8235;
+    readonly R32UI: 0x8236;
+    readonly RG8I: 0x8237;
+    readonly RG8UI: 0x8238;
+    readonly RG16I: 0x8239;
+    readonly RG16UI: 0x823A;
+    readonly RG32I: 0x823B;
+    readonly RG32UI: 0x823C;
+    readonly VERTEX_ARRAY_BINDING: 0x85B5;
+    readonly R8_SNORM: 0x8F94;
+    readonly RG8_SNORM: 0x8F95;
+    readonly RGB8_SNORM: 0x8F96;
+    readonly RGBA8_SNORM: 0x8F97;
+    readonly SIGNED_NORMALIZED: 0x8F9C;
+    readonly COPY_READ_BUFFER: 0x8F36;
+    readonly COPY_WRITE_BUFFER: 0x8F37;
+    readonly COPY_READ_BUFFER_BINDING: 0x8F36;
+    readonly COPY_WRITE_BUFFER_BINDING: 0x8F37;
+    readonly UNIFORM_BUFFER: 0x8A11;
+    readonly UNIFORM_BUFFER_BINDING: 0x8A28;
+    readonly UNIFORM_BUFFER_START: 0x8A29;
+    readonly UNIFORM_BUFFER_SIZE: 0x8A2A;
+    readonly MAX_VERTEX_UNIFORM_BLOCKS: 0x8A2B;
+    readonly MAX_FRAGMENT_UNIFORM_BLOCKS: 0x8A2D;
+    readonly MAX_COMBINED_UNIFORM_BLOCKS: 0x8A2E;
+    readonly MAX_UNIFORM_BUFFER_BINDINGS: 0x8A2F;
+    readonly MAX_UNIFORM_BLOCK_SIZE: 0x8A30;
+    readonly MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: 0x8A31;
+    readonly MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: 0x8A33;
+    readonly UNIFORM_BUFFER_OFFSET_ALIGNMENT: 0x8A34;
+    readonly ACTIVE_UNIFORM_BLOCKS: 0x8A36;
+    readonly UNIFORM_TYPE: 0x8A37;
+    readonly UNIFORM_SIZE: 0x8A38;
+    readonly UNIFORM_BLOCK_INDEX: 0x8A3A;
+    readonly UNIFORM_OFFSET: 0x8A3B;
+    readonly UNIFORM_ARRAY_STRIDE: 0x8A3C;
+    readonly UNIFORM_MATRIX_STRIDE: 0x8A3D;
+    readonly UNIFORM_IS_ROW_MAJOR: 0x8A3E;
+    readonly UNIFORM_BLOCK_BINDING: 0x8A3F;
+    readonly UNIFORM_BLOCK_DATA_SIZE: 0x8A40;
+    readonly UNIFORM_BLOCK_ACTIVE_UNIFORMS: 0x8A42;
+    readonly UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: 0x8A43;
+    readonly UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: 0x8A44;
+    readonly UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: 0x8A46;
+    readonly INVALID_INDEX: 0xFFFFFFFF;
+    readonly MAX_VERTEX_OUTPUT_COMPONENTS: 0x9122;
+    readonly MAX_FRAGMENT_INPUT_COMPONENTS: 0x9125;
+    readonly MAX_SERVER_WAIT_TIMEOUT: 0x9111;
+    readonly OBJECT_TYPE: 0x9112;
+    readonly SYNC_CONDITION: 0x9113;
+    readonly SYNC_STATUS: 0x9114;
+    readonly SYNC_FLAGS: 0x9115;
+    readonly SYNC_FENCE: 0x9116;
+    readonly SYNC_GPU_COMMANDS_COMPLETE: 0x9117;
+    readonly UNSIGNALED: 0x9118;
+    readonly SIGNALED: 0x9119;
+    readonly ALREADY_SIGNALED: 0x911A;
+    readonly TIMEOUT_EXPIRED: 0x911B;
+    readonly CONDITION_SATISFIED: 0x911C;
+    readonly WAIT_FAILED: 0x911D;
+    readonly SYNC_FLUSH_COMMANDS_BIT: 0x00000001;
+    readonly VERTEX_ATTRIB_ARRAY_DIVISOR: 0x88FE;
+    readonly ANY_SAMPLES_PASSED: 0x8C2F;
+    readonly ANY_SAMPLES_PASSED_CONSERVATIVE: 0x8D6A;
+    readonly SAMPLER_BINDING: 0x8919;
+    readonly RGB10_A2UI: 0x906F;
+    readonly INT_2_10_10_10_REV: 0x8D9F;
+    readonly TRANSFORM_FEEDBACK: 0x8E22;
+    readonly TRANSFORM_FEEDBACK_PAUSED: 0x8E23;
+    readonly TRANSFORM_FEEDBACK_ACTIVE: 0x8E24;
+    readonly TRANSFORM_FEEDBACK_BINDING: 0x8E25;
+    readonly TEXTURE_IMMUTABLE_FORMAT: 0x912F;
+    readonly MAX_ELEMENT_INDEX: 0x8D6B;
+    readonly TEXTURE_IMMUTABLE_LEVELS: 0x82DF;
+    readonly TIMEOUT_IGNORED: -1;
+    readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: 0x9247;
 }
 
 interface WebGL2RenderingContextOverloads {
@@ -15823,302 +16006,302 @@ interface WebGLRenderingContext extends WebGLRenderingContextBase, WebGLRenderin
 declare var WebGLRenderingContext: {
     prototype: WebGLRenderingContext;
     new(): WebGLRenderingContext;
-    readonly ACTIVE_ATTRIBUTES: GLenum;
-    readonly ACTIVE_TEXTURE: GLenum;
-    readonly ACTIVE_UNIFORMS: GLenum;
-    readonly ALIASED_LINE_WIDTH_RANGE: GLenum;
-    readonly ALIASED_POINT_SIZE_RANGE: GLenum;
-    readonly ALPHA: GLenum;
-    readonly ALPHA_BITS: GLenum;
-    readonly ALWAYS: GLenum;
-    readonly ARRAY_BUFFER: GLenum;
-    readonly ARRAY_BUFFER_BINDING: GLenum;
-    readonly ATTACHED_SHADERS: GLenum;
-    readonly BACK: GLenum;
-    readonly BLEND: GLenum;
-    readonly BLEND_COLOR: GLenum;
-    readonly BLEND_DST_ALPHA: GLenum;
-    readonly BLEND_DST_RGB: GLenum;
-    readonly BLEND_EQUATION: GLenum;
-    readonly BLEND_EQUATION_ALPHA: GLenum;
-    readonly BLEND_EQUATION_RGB: GLenum;
-    readonly BLEND_SRC_ALPHA: GLenum;
-    readonly BLEND_SRC_RGB: GLenum;
-    readonly BLUE_BITS: GLenum;
-    readonly BOOL: GLenum;
-    readonly BOOL_VEC2: GLenum;
-    readonly BOOL_VEC3: GLenum;
-    readonly BOOL_VEC4: GLenum;
-    readonly BROWSER_DEFAULT_WEBGL: GLenum;
-    readonly BUFFER_SIZE: GLenum;
-    readonly BUFFER_USAGE: GLenum;
-    readonly BYTE: GLenum;
-    readonly CCW: GLenum;
-    readonly CLAMP_TO_EDGE: GLenum;
-    readonly COLOR_ATTACHMENT0: GLenum;
-    readonly COLOR_BUFFER_BIT: GLenum;
-    readonly COLOR_CLEAR_VALUE: GLenum;
-    readonly COLOR_WRITEMASK: GLenum;
-    readonly COMPILE_STATUS: GLenum;
-    readonly COMPRESSED_TEXTURE_FORMATS: GLenum;
-    readonly CONSTANT_ALPHA: GLenum;
-    readonly CONSTANT_COLOR: GLenum;
-    readonly CONTEXT_LOST_WEBGL: GLenum;
-    readonly CULL_FACE: GLenum;
-    readonly CULL_FACE_MODE: GLenum;
-    readonly CURRENT_PROGRAM: GLenum;
-    readonly CURRENT_VERTEX_ATTRIB: GLenum;
-    readonly CW: GLenum;
-    readonly DECR: GLenum;
-    readonly DECR_WRAP: GLenum;
-    readonly DELETE_STATUS: GLenum;
-    readonly DEPTH_ATTACHMENT: GLenum;
-    readonly DEPTH_BITS: GLenum;
-    readonly DEPTH_BUFFER_BIT: GLenum;
-    readonly DEPTH_CLEAR_VALUE: GLenum;
-    readonly DEPTH_COMPONENT: GLenum;
-    readonly DEPTH_COMPONENT16: GLenum;
-    readonly DEPTH_FUNC: GLenum;
-    readonly DEPTH_RANGE: GLenum;
-    readonly DEPTH_STENCIL: GLenum;
-    readonly DEPTH_STENCIL_ATTACHMENT: GLenum;
-    readonly DEPTH_TEST: GLenum;
-    readonly DEPTH_WRITEMASK: GLenum;
-    readonly DITHER: GLenum;
-    readonly DONT_CARE: GLenum;
-    readonly DST_ALPHA: GLenum;
-    readonly DST_COLOR: GLenum;
-    readonly DYNAMIC_DRAW: GLenum;
-    readonly ELEMENT_ARRAY_BUFFER: GLenum;
-    readonly ELEMENT_ARRAY_BUFFER_BINDING: GLenum;
-    readonly EQUAL: GLenum;
-    readonly FASTEST: GLenum;
-    readonly FLOAT: GLenum;
-    readonly FLOAT_MAT2: GLenum;
-    readonly FLOAT_MAT3: GLenum;
-    readonly FLOAT_MAT4: GLenum;
-    readonly FLOAT_VEC2: GLenum;
-    readonly FLOAT_VEC3: GLenum;
-    readonly FLOAT_VEC4: GLenum;
-    readonly FRAGMENT_SHADER: GLenum;
-    readonly FRAMEBUFFER: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: GLenum;
-    readonly FRAMEBUFFER_BINDING: GLenum;
-    readonly FRAMEBUFFER_COMPLETE: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: GLenum;
-    readonly FRAMEBUFFER_UNSUPPORTED: GLenum;
-    readonly FRONT: GLenum;
-    readonly FRONT_AND_BACK: GLenum;
-    readonly FRONT_FACE: GLenum;
-    readonly FUNC_ADD: GLenum;
-    readonly FUNC_REVERSE_SUBTRACT: GLenum;
-    readonly FUNC_SUBTRACT: GLenum;
-    readonly GENERATE_MIPMAP_HINT: GLenum;
-    readonly GEQUAL: GLenum;
-    readonly GREATER: GLenum;
-    readonly GREEN_BITS: GLenum;
-    readonly HIGH_FLOAT: GLenum;
-    readonly HIGH_INT: GLenum;
-    readonly IMPLEMENTATION_COLOR_READ_FORMAT: GLenum;
-    readonly IMPLEMENTATION_COLOR_READ_TYPE: GLenum;
-    readonly INCR: GLenum;
-    readonly INCR_WRAP: GLenum;
-    readonly INT: GLenum;
-    readonly INT_VEC2: GLenum;
-    readonly INT_VEC3: GLenum;
-    readonly INT_VEC4: GLenum;
-    readonly INVALID_ENUM: GLenum;
-    readonly INVALID_FRAMEBUFFER_OPERATION: GLenum;
-    readonly INVALID_OPERATION: GLenum;
-    readonly INVALID_VALUE: GLenum;
-    readonly INVERT: GLenum;
-    readonly KEEP: GLenum;
-    readonly LEQUAL: GLenum;
-    readonly LESS: GLenum;
-    readonly LINEAR: GLenum;
-    readonly LINEAR_MIPMAP_LINEAR: GLenum;
-    readonly LINEAR_MIPMAP_NEAREST: GLenum;
-    readonly LINES: GLenum;
-    readonly LINE_LOOP: GLenum;
-    readonly LINE_STRIP: GLenum;
-    readonly LINE_WIDTH: GLenum;
-    readonly LINK_STATUS: GLenum;
-    readonly LOW_FLOAT: GLenum;
-    readonly LOW_INT: GLenum;
-    readonly LUMINANCE: GLenum;
-    readonly LUMINANCE_ALPHA: GLenum;
-    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_CUBE_MAP_TEXTURE_SIZE: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_VECTORS: GLenum;
-    readonly MAX_RENDERBUFFER_SIZE: GLenum;
-    readonly MAX_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_TEXTURE_SIZE: GLenum;
-    readonly MAX_VARYING_VECTORS: GLenum;
-    readonly MAX_VERTEX_ATTRIBS: GLenum;
-    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_VECTORS: GLenum;
-    readonly MAX_VIEWPORT_DIMS: GLenum;
-    readonly MEDIUM_FLOAT: GLenum;
-    readonly MEDIUM_INT: GLenum;
-    readonly MIRRORED_REPEAT: GLenum;
-    readonly NEAREST: GLenum;
-    readonly NEAREST_MIPMAP_LINEAR: GLenum;
-    readonly NEAREST_MIPMAP_NEAREST: GLenum;
-    readonly NEVER: GLenum;
-    readonly NICEST: GLenum;
-    readonly NONE: GLenum;
-    readonly NOTEQUAL: GLenum;
-    readonly NO_ERROR: GLenum;
-    readonly ONE: GLenum;
-    readonly ONE_MINUS_CONSTANT_ALPHA: GLenum;
-    readonly ONE_MINUS_CONSTANT_COLOR: GLenum;
-    readonly ONE_MINUS_DST_ALPHA: GLenum;
-    readonly ONE_MINUS_DST_COLOR: GLenum;
-    readonly ONE_MINUS_SRC_ALPHA: GLenum;
-    readonly ONE_MINUS_SRC_COLOR: GLenum;
-    readonly OUT_OF_MEMORY: GLenum;
-    readonly PACK_ALIGNMENT: GLenum;
-    readonly POINTS: GLenum;
-    readonly POLYGON_OFFSET_FACTOR: GLenum;
-    readonly POLYGON_OFFSET_FILL: GLenum;
-    readonly POLYGON_OFFSET_UNITS: GLenum;
-    readonly RED_BITS: GLenum;
-    readonly RENDERBUFFER: GLenum;
-    readonly RENDERBUFFER_ALPHA_SIZE: GLenum;
-    readonly RENDERBUFFER_BINDING: GLenum;
-    readonly RENDERBUFFER_BLUE_SIZE: GLenum;
-    readonly RENDERBUFFER_DEPTH_SIZE: GLenum;
-    readonly RENDERBUFFER_GREEN_SIZE: GLenum;
-    readonly RENDERBUFFER_HEIGHT: GLenum;
-    readonly RENDERBUFFER_INTERNAL_FORMAT: GLenum;
-    readonly RENDERBUFFER_RED_SIZE: GLenum;
-    readonly RENDERBUFFER_STENCIL_SIZE: GLenum;
-    readonly RENDERBUFFER_WIDTH: GLenum;
-    readonly RENDERER: GLenum;
-    readonly REPEAT: GLenum;
-    readonly REPLACE: GLenum;
-    readonly RGB: GLenum;
-    readonly RGB565: GLenum;
-    readonly RGB5_A1: GLenum;
-    readonly RGBA: GLenum;
-    readonly RGBA4: GLenum;
-    readonly SAMPLER_2D: GLenum;
-    readonly SAMPLER_CUBE: GLenum;
-    readonly SAMPLES: GLenum;
-    readonly SAMPLE_ALPHA_TO_COVERAGE: GLenum;
-    readonly SAMPLE_BUFFERS: GLenum;
-    readonly SAMPLE_COVERAGE: GLenum;
-    readonly SAMPLE_COVERAGE_INVERT: GLenum;
-    readonly SAMPLE_COVERAGE_VALUE: GLenum;
-    readonly SCISSOR_BOX: GLenum;
-    readonly SCISSOR_TEST: GLenum;
-    readonly SHADER_TYPE: GLenum;
-    readonly SHADING_LANGUAGE_VERSION: GLenum;
-    readonly SHORT: GLenum;
-    readonly SRC_ALPHA: GLenum;
-    readonly SRC_ALPHA_SATURATE: GLenum;
-    readonly SRC_COLOR: GLenum;
-    readonly STATIC_DRAW: GLenum;
-    readonly STENCIL_ATTACHMENT: GLenum;
-    readonly STENCIL_BACK_FAIL: GLenum;
-    readonly STENCIL_BACK_FUNC: GLenum;
-    readonly STENCIL_BACK_PASS_DEPTH_FAIL: GLenum;
-    readonly STENCIL_BACK_PASS_DEPTH_PASS: GLenum;
-    readonly STENCIL_BACK_REF: GLenum;
-    readonly STENCIL_BACK_VALUE_MASK: GLenum;
-    readonly STENCIL_BACK_WRITEMASK: GLenum;
-    readonly STENCIL_BITS: GLenum;
-    readonly STENCIL_BUFFER_BIT: GLenum;
-    readonly STENCIL_CLEAR_VALUE: GLenum;
-    readonly STENCIL_FAIL: GLenum;
-    readonly STENCIL_FUNC: GLenum;
-    readonly STENCIL_INDEX8: GLenum;
-    readonly STENCIL_PASS_DEPTH_FAIL: GLenum;
-    readonly STENCIL_PASS_DEPTH_PASS: GLenum;
-    readonly STENCIL_REF: GLenum;
-    readonly STENCIL_TEST: GLenum;
-    readonly STENCIL_VALUE_MASK: GLenum;
-    readonly STENCIL_WRITEMASK: GLenum;
-    readonly STREAM_DRAW: GLenum;
-    readonly SUBPIXEL_BITS: GLenum;
-    readonly TEXTURE: GLenum;
-    readonly TEXTURE0: GLenum;
-    readonly TEXTURE1: GLenum;
-    readonly TEXTURE10: GLenum;
-    readonly TEXTURE11: GLenum;
-    readonly TEXTURE12: GLenum;
-    readonly TEXTURE13: GLenum;
-    readonly TEXTURE14: GLenum;
-    readonly TEXTURE15: GLenum;
-    readonly TEXTURE16: GLenum;
-    readonly TEXTURE17: GLenum;
-    readonly TEXTURE18: GLenum;
-    readonly TEXTURE19: GLenum;
-    readonly TEXTURE2: GLenum;
-    readonly TEXTURE20: GLenum;
-    readonly TEXTURE21: GLenum;
-    readonly TEXTURE22: GLenum;
-    readonly TEXTURE23: GLenum;
-    readonly TEXTURE24: GLenum;
-    readonly TEXTURE25: GLenum;
-    readonly TEXTURE26: GLenum;
-    readonly TEXTURE27: GLenum;
-    readonly TEXTURE28: GLenum;
-    readonly TEXTURE29: GLenum;
-    readonly TEXTURE3: GLenum;
-    readonly TEXTURE30: GLenum;
-    readonly TEXTURE31: GLenum;
-    readonly TEXTURE4: GLenum;
-    readonly TEXTURE5: GLenum;
-    readonly TEXTURE6: GLenum;
-    readonly TEXTURE7: GLenum;
-    readonly TEXTURE8: GLenum;
-    readonly TEXTURE9: GLenum;
-    readonly TEXTURE_2D: GLenum;
-    readonly TEXTURE_BINDING_2D: GLenum;
-    readonly TEXTURE_BINDING_CUBE_MAP: GLenum;
-    readonly TEXTURE_CUBE_MAP: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_X: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: GLenum;
-    readonly TEXTURE_MAG_FILTER: GLenum;
-    readonly TEXTURE_MIN_FILTER: GLenum;
-    readonly TEXTURE_WRAP_S: GLenum;
-    readonly TEXTURE_WRAP_T: GLenum;
-    readonly TRIANGLES: GLenum;
-    readonly TRIANGLE_FAN: GLenum;
-    readonly TRIANGLE_STRIP: GLenum;
-    readonly UNPACK_ALIGNMENT: GLenum;
-    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: GLenum;
-    readonly UNPACK_FLIP_Y_WEBGL: GLenum;
-    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: GLenum;
-    readonly UNSIGNED_BYTE: GLenum;
-    readonly UNSIGNED_INT: GLenum;
-    readonly UNSIGNED_SHORT: GLenum;
-    readonly UNSIGNED_SHORT_4_4_4_4: GLenum;
-    readonly UNSIGNED_SHORT_5_5_5_1: GLenum;
-    readonly UNSIGNED_SHORT_5_6_5: GLenum;
-    readonly VALIDATE_STATUS: GLenum;
-    readonly VENDOR: GLenum;
-    readonly VERSION: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_ENABLED: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_POINTER: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_SIZE: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_STRIDE: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_TYPE: GLenum;
-    readonly VERTEX_SHADER: GLenum;
-    readonly VIEWPORT: GLenum;
-    readonly ZERO: GLenum;
+    readonly DEPTH_BUFFER_BIT: 0x00000100;
+    readonly STENCIL_BUFFER_BIT: 0x00000400;
+    readonly COLOR_BUFFER_BIT: 0x00004000;
+    readonly POINTS: 0x0000;
+    readonly LINES: 0x0001;
+    readonly LINE_LOOP: 0x0002;
+    readonly LINE_STRIP: 0x0003;
+    readonly TRIANGLES: 0x0004;
+    readonly TRIANGLE_STRIP: 0x0005;
+    readonly TRIANGLE_FAN: 0x0006;
+    readonly ZERO: 0;
+    readonly ONE: 1;
+    readonly SRC_COLOR: 0x0300;
+    readonly ONE_MINUS_SRC_COLOR: 0x0301;
+    readonly SRC_ALPHA: 0x0302;
+    readonly ONE_MINUS_SRC_ALPHA: 0x0303;
+    readonly DST_ALPHA: 0x0304;
+    readonly ONE_MINUS_DST_ALPHA: 0x0305;
+    readonly DST_COLOR: 0x0306;
+    readonly ONE_MINUS_DST_COLOR: 0x0307;
+    readonly SRC_ALPHA_SATURATE: 0x0308;
+    readonly FUNC_ADD: 0x8006;
+    readonly BLEND_EQUATION: 0x8009;
+    readonly BLEND_EQUATION_RGB: 0x8009;
+    readonly BLEND_EQUATION_ALPHA: 0x883D;
+    readonly FUNC_SUBTRACT: 0x800A;
+    readonly FUNC_REVERSE_SUBTRACT: 0x800B;
+    readonly BLEND_DST_RGB: 0x80C8;
+    readonly BLEND_SRC_RGB: 0x80C9;
+    readonly BLEND_DST_ALPHA: 0x80CA;
+    readonly BLEND_SRC_ALPHA: 0x80CB;
+    readonly CONSTANT_COLOR: 0x8001;
+    readonly ONE_MINUS_CONSTANT_COLOR: 0x8002;
+    readonly CONSTANT_ALPHA: 0x8003;
+    readonly ONE_MINUS_CONSTANT_ALPHA: 0x8004;
+    readonly BLEND_COLOR: 0x8005;
+    readonly ARRAY_BUFFER: 0x8892;
+    readonly ELEMENT_ARRAY_BUFFER: 0x8893;
+    readonly ARRAY_BUFFER_BINDING: 0x8894;
+    readonly ELEMENT_ARRAY_BUFFER_BINDING: 0x8895;
+    readonly STREAM_DRAW: 0x88E0;
+    readonly STATIC_DRAW: 0x88E4;
+    readonly DYNAMIC_DRAW: 0x88E8;
+    readonly BUFFER_SIZE: 0x8764;
+    readonly BUFFER_USAGE: 0x8765;
+    readonly CURRENT_VERTEX_ATTRIB: 0x8626;
+    readonly FRONT: 0x0404;
+    readonly BACK: 0x0405;
+    readonly FRONT_AND_BACK: 0x0408;
+    readonly CULL_FACE: 0x0B44;
+    readonly BLEND: 0x0BE2;
+    readonly DITHER: 0x0BD0;
+    readonly STENCIL_TEST: 0x0B90;
+    readonly DEPTH_TEST: 0x0B71;
+    readonly SCISSOR_TEST: 0x0C11;
+    readonly POLYGON_OFFSET_FILL: 0x8037;
+    readonly SAMPLE_ALPHA_TO_COVERAGE: 0x809E;
+    readonly SAMPLE_COVERAGE: 0x80A0;
+    readonly NO_ERROR: 0;
+    readonly INVALID_ENUM: 0x0500;
+    readonly INVALID_VALUE: 0x0501;
+    readonly INVALID_OPERATION: 0x0502;
+    readonly OUT_OF_MEMORY: 0x0505;
+    readonly CW: 0x0900;
+    readonly CCW: 0x0901;
+    readonly LINE_WIDTH: 0x0B21;
+    readonly ALIASED_POINT_SIZE_RANGE: 0x846D;
+    readonly ALIASED_LINE_WIDTH_RANGE: 0x846E;
+    readonly CULL_FACE_MODE: 0x0B45;
+    readonly FRONT_FACE: 0x0B46;
+    readonly DEPTH_RANGE: 0x0B70;
+    readonly DEPTH_WRITEMASK: 0x0B72;
+    readonly DEPTH_CLEAR_VALUE: 0x0B73;
+    readonly DEPTH_FUNC: 0x0B74;
+    readonly STENCIL_CLEAR_VALUE: 0x0B91;
+    readonly STENCIL_FUNC: 0x0B92;
+    readonly STENCIL_FAIL: 0x0B94;
+    readonly STENCIL_PASS_DEPTH_FAIL: 0x0B95;
+    readonly STENCIL_PASS_DEPTH_PASS: 0x0B96;
+    readonly STENCIL_REF: 0x0B97;
+    readonly STENCIL_VALUE_MASK: 0x0B93;
+    readonly STENCIL_WRITEMASK: 0x0B98;
+    readonly STENCIL_BACK_FUNC: 0x8800;
+    readonly STENCIL_BACK_FAIL: 0x8801;
+    readonly STENCIL_BACK_PASS_DEPTH_FAIL: 0x8802;
+    readonly STENCIL_BACK_PASS_DEPTH_PASS: 0x8803;
+    readonly STENCIL_BACK_REF: 0x8CA3;
+    readonly STENCIL_BACK_VALUE_MASK: 0x8CA4;
+    readonly STENCIL_BACK_WRITEMASK: 0x8CA5;
+    readonly VIEWPORT: 0x0BA2;
+    readonly SCISSOR_BOX: 0x0C10;
+    readonly COLOR_CLEAR_VALUE: 0x0C22;
+    readonly COLOR_WRITEMASK: 0x0C23;
+    readonly UNPACK_ALIGNMENT: 0x0CF5;
+    readonly PACK_ALIGNMENT: 0x0D05;
+    readonly MAX_TEXTURE_SIZE: 0x0D33;
+    readonly MAX_VIEWPORT_DIMS: 0x0D3A;
+    readonly SUBPIXEL_BITS: 0x0D50;
+    readonly RED_BITS: 0x0D52;
+    readonly GREEN_BITS: 0x0D53;
+    readonly BLUE_BITS: 0x0D54;
+    readonly ALPHA_BITS: 0x0D55;
+    readonly DEPTH_BITS: 0x0D56;
+    readonly STENCIL_BITS: 0x0D57;
+    readonly POLYGON_OFFSET_UNITS: 0x2A00;
+    readonly POLYGON_OFFSET_FACTOR: 0x8038;
+    readonly TEXTURE_BINDING_2D: 0x8069;
+    readonly SAMPLE_BUFFERS: 0x80A8;
+    readonly SAMPLES: 0x80A9;
+    readonly SAMPLE_COVERAGE_VALUE: 0x80AA;
+    readonly SAMPLE_COVERAGE_INVERT: 0x80AB;
+    readonly COMPRESSED_TEXTURE_FORMATS: 0x86A3;
+    readonly DONT_CARE: 0x1100;
+    readonly FASTEST: 0x1101;
+    readonly NICEST: 0x1102;
+    readonly GENERATE_MIPMAP_HINT: 0x8192;
+    readonly BYTE: 0x1400;
+    readonly UNSIGNED_BYTE: 0x1401;
+    readonly SHORT: 0x1402;
+    readonly UNSIGNED_SHORT: 0x1403;
+    readonly INT: 0x1404;
+    readonly UNSIGNED_INT: 0x1405;
+    readonly FLOAT: 0x1406;
+    readonly DEPTH_COMPONENT: 0x1902;
+    readonly ALPHA: 0x1906;
+    readonly RGB: 0x1907;
+    readonly RGBA: 0x1908;
+    readonly LUMINANCE: 0x1909;
+    readonly LUMINANCE_ALPHA: 0x190A;
+    readonly UNSIGNED_SHORT_4_4_4_4: 0x8033;
+    readonly UNSIGNED_SHORT_5_5_5_1: 0x8034;
+    readonly UNSIGNED_SHORT_5_6_5: 0x8363;
+    readonly FRAGMENT_SHADER: 0x8B30;
+    readonly VERTEX_SHADER: 0x8B31;
+    readonly MAX_VERTEX_ATTRIBS: 0x8869;
+    readonly MAX_VERTEX_UNIFORM_VECTORS: 0x8DFB;
+    readonly MAX_VARYING_VECTORS: 0x8DFC;
+    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: 0x8B4D;
+    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: 0x8B4C;
+    readonly MAX_TEXTURE_IMAGE_UNITS: 0x8872;
+    readonly MAX_FRAGMENT_UNIFORM_VECTORS: 0x8DFD;
+    readonly SHADER_TYPE: 0x8B4F;
+    readonly DELETE_STATUS: 0x8B80;
+    readonly LINK_STATUS: 0x8B82;
+    readonly VALIDATE_STATUS: 0x8B83;
+    readonly ATTACHED_SHADERS: 0x8B85;
+    readonly ACTIVE_UNIFORMS: 0x8B86;
+    readonly ACTIVE_ATTRIBUTES: 0x8B89;
+    readonly SHADING_LANGUAGE_VERSION: 0x8B8C;
+    readonly CURRENT_PROGRAM: 0x8B8D;
+    readonly NEVER: 0x0200;
+    readonly LESS: 0x0201;
+    readonly EQUAL: 0x0202;
+    readonly LEQUAL: 0x0203;
+    readonly GREATER: 0x0204;
+    readonly NOTEQUAL: 0x0205;
+    readonly GEQUAL: 0x0206;
+    readonly ALWAYS: 0x0207;
+    readonly KEEP: 0x1E00;
+    readonly REPLACE: 0x1E01;
+    readonly INCR: 0x1E02;
+    readonly DECR: 0x1E03;
+    readonly INVERT: 0x150A;
+    readonly INCR_WRAP: 0x8507;
+    readonly DECR_WRAP: 0x8508;
+    readonly VENDOR: 0x1F00;
+    readonly RENDERER: 0x1F01;
+    readonly VERSION: 0x1F02;
+    readonly NEAREST: 0x2600;
+    readonly LINEAR: 0x2601;
+    readonly NEAREST_MIPMAP_NEAREST: 0x2700;
+    readonly LINEAR_MIPMAP_NEAREST: 0x2701;
+    readonly NEAREST_MIPMAP_LINEAR: 0x2702;
+    readonly LINEAR_MIPMAP_LINEAR: 0x2703;
+    readonly TEXTURE_MAG_FILTER: 0x2800;
+    readonly TEXTURE_MIN_FILTER: 0x2801;
+    readonly TEXTURE_WRAP_S: 0x2802;
+    readonly TEXTURE_WRAP_T: 0x2803;
+    readonly TEXTURE_2D: 0x0DE1;
+    readonly TEXTURE: 0x1702;
+    readonly TEXTURE_CUBE_MAP: 0x8513;
+    readonly TEXTURE_BINDING_CUBE_MAP: 0x8514;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_X: 0x8515;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: 0x8516;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: 0x8517;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: 0x8518;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: 0x8519;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: 0x851A;
+    readonly MAX_CUBE_MAP_TEXTURE_SIZE: 0x851C;
+    readonly TEXTURE0: 0x84C0;
+    readonly TEXTURE1: 0x84C1;
+    readonly TEXTURE2: 0x84C2;
+    readonly TEXTURE3: 0x84C3;
+    readonly TEXTURE4: 0x84C4;
+    readonly TEXTURE5: 0x84C5;
+    readonly TEXTURE6: 0x84C6;
+    readonly TEXTURE7: 0x84C7;
+    readonly TEXTURE8: 0x84C8;
+    readonly TEXTURE9: 0x84C9;
+    readonly TEXTURE10: 0x84CA;
+    readonly TEXTURE11: 0x84CB;
+    readonly TEXTURE12: 0x84CC;
+    readonly TEXTURE13: 0x84CD;
+    readonly TEXTURE14: 0x84CE;
+    readonly TEXTURE15: 0x84CF;
+    readonly TEXTURE16: 0x84D0;
+    readonly TEXTURE17: 0x84D1;
+    readonly TEXTURE18: 0x84D2;
+    readonly TEXTURE19: 0x84D3;
+    readonly TEXTURE20: 0x84D4;
+    readonly TEXTURE21: 0x84D5;
+    readonly TEXTURE22: 0x84D6;
+    readonly TEXTURE23: 0x84D7;
+    readonly TEXTURE24: 0x84D8;
+    readonly TEXTURE25: 0x84D9;
+    readonly TEXTURE26: 0x84DA;
+    readonly TEXTURE27: 0x84DB;
+    readonly TEXTURE28: 0x84DC;
+    readonly TEXTURE29: 0x84DD;
+    readonly TEXTURE30: 0x84DE;
+    readonly TEXTURE31: 0x84DF;
+    readonly ACTIVE_TEXTURE: 0x84E0;
+    readonly REPEAT: 0x2901;
+    readonly CLAMP_TO_EDGE: 0x812F;
+    readonly MIRRORED_REPEAT: 0x8370;
+    readonly FLOAT_VEC2: 0x8B50;
+    readonly FLOAT_VEC3: 0x8B51;
+    readonly FLOAT_VEC4: 0x8B52;
+    readonly INT_VEC2: 0x8B53;
+    readonly INT_VEC3: 0x8B54;
+    readonly INT_VEC4: 0x8B55;
+    readonly BOOL: 0x8B56;
+    readonly BOOL_VEC2: 0x8B57;
+    readonly BOOL_VEC3: 0x8B58;
+    readonly BOOL_VEC4: 0x8B59;
+    readonly FLOAT_MAT2: 0x8B5A;
+    readonly FLOAT_MAT3: 0x8B5B;
+    readonly FLOAT_MAT4: 0x8B5C;
+    readonly SAMPLER_2D: 0x8B5E;
+    readonly SAMPLER_CUBE: 0x8B60;
+    readonly VERTEX_ATTRIB_ARRAY_ENABLED: 0x8622;
+    readonly VERTEX_ATTRIB_ARRAY_SIZE: 0x8623;
+    readonly VERTEX_ATTRIB_ARRAY_STRIDE: 0x8624;
+    readonly VERTEX_ATTRIB_ARRAY_TYPE: 0x8625;
+    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: 0x886A;
+    readonly VERTEX_ATTRIB_ARRAY_POINTER: 0x8645;
+    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: 0x889F;
+    readonly IMPLEMENTATION_COLOR_READ_TYPE: 0x8B9A;
+    readonly IMPLEMENTATION_COLOR_READ_FORMAT: 0x8B9B;
+    readonly COMPILE_STATUS: 0x8B81;
+    readonly LOW_FLOAT: 0x8DF0;
+    readonly MEDIUM_FLOAT: 0x8DF1;
+    readonly HIGH_FLOAT: 0x8DF2;
+    readonly LOW_INT: 0x8DF3;
+    readonly MEDIUM_INT: 0x8DF4;
+    readonly HIGH_INT: 0x8DF5;
+    readonly FRAMEBUFFER: 0x8D40;
+    readonly RENDERBUFFER: 0x8D41;
+    readonly RGBA4: 0x8056;
+    readonly RGB5_A1: 0x8057;
+    readonly RGB565: 0x8D62;
+    readonly DEPTH_COMPONENT16: 0x81A5;
+    readonly STENCIL_INDEX8: 0x8D48;
+    readonly DEPTH_STENCIL: 0x84F9;
+    readonly RENDERBUFFER_WIDTH: 0x8D42;
+    readonly RENDERBUFFER_HEIGHT: 0x8D43;
+    readonly RENDERBUFFER_INTERNAL_FORMAT: 0x8D44;
+    readonly RENDERBUFFER_RED_SIZE: 0x8D50;
+    readonly RENDERBUFFER_GREEN_SIZE: 0x8D51;
+    readonly RENDERBUFFER_BLUE_SIZE: 0x8D52;
+    readonly RENDERBUFFER_ALPHA_SIZE: 0x8D53;
+    readonly RENDERBUFFER_DEPTH_SIZE: 0x8D54;
+    readonly RENDERBUFFER_STENCIL_SIZE: 0x8D55;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: 0x8CD0;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: 0x8CD1;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: 0x8CD2;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: 0x8CD3;
+    readonly COLOR_ATTACHMENT0: 0x8CE0;
+    readonly DEPTH_ATTACHMENT: 0x8D00;
+    readonly STENCIL_ATTACHMENT: 0x8D20;
+    readonly DEPTH_STENCIL_ATTACHMENT: 0x821A;
+    readonly NONE: 0;
+    readonly FRAMEBUFFER_COMPLETE: 0x8CD5;
+    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: 0x8CD6;
+    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: 0x8CD7;
+    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: 0x8CD9;
+    readonly FRAMEBUFFER_UNSUPPORTED: 0x8CDD;
+    readonly FRAMEBUFFER_BINDING: 0x8CA6;
+    readonly RENDERBUFFER_BINDING: 0x8CA7;
+    readonly MAX_RENDERBUFFER_SIZE: 0x84E8;
+    readonly INVALID_FRAMEBUFFER_OPERATION: 0x0506;
+    readonly UNPACK_FLIP_Y_WEBGL: 0x9240;
+    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: 0x9241;
+    readonly CONTEXT_LOST_WEBGL: 0x9242;
+    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: 0x9243;
+    readonly BROWSER_DEFAULT_WEBGL: 0x9244;
 };
 
 interface WebGLRenderingContextBase {
@@ -16276,302 +16459,302 @@ interface WebGLRenderingContextBase {
     vertexAttrib4fv(index: GLuint, values: Float32List): void;
     vertexAttribPointer(index: GLuint, size: GLint, type: GLenum, normalized: GLboolean, stride: GLsizei, offset: GLintptr): void;
     viewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei): void;
-    readonly ACTIVE_ATTRIBUTES: GLenum;
-    readonly ACTIVE_TEXTURE: GLenum;
-    readonly ACTIVE_UNIFORMS: GLenum;
-    readonly ALIASED_LINE_WIDTH_RANGE: GLenum;
-    readonly ALIASED_POINT_SIZE_RANGE: GLenum;
-    readonly ALPHA: GLenum;
-    readonly ALPHA_BITS: GLenum;
-    readonly ALWAYS: GLenum;
-    readonly ARRAY_BUFFER: GLenum;
-    readonly ARRAY_BUFFER_BINDING: GLenum;
-    readonly ATTACHED_SHADERS: GLenum;
-    readonly BACK: GLenum;
-    readonly BLEND: GLenum;
-    readonly BLEND_COLOR: GLenum;
-    readonly BLEND_DST_ALPHA: GLenum;
-    readonly BLEND_DST_RGB: GLenum;
-    readonly BLEND_EQUATION: GLenum;
-    readonly BLEND_EQUATION_ALPHA: GLenum;
-    readonly BLEND_EQUATION_RGB: GLenum;
-    readonly BLEND_SRC_ALPHA: GLenum;
-    readonly BLEND_SRC_RGB: GLenum;
-    readonly BLUE_BITS: GLenum;
-    readonly BOOL: GLenum;
-    readonly BOOL_VEC2: GLenum;
-    readonly BOOL_VEC3: GLenum;
-    readonly BOOL_VEC4: GLenum;
-    readonly BROWSER_DEFAULT_WEBGL: GLenum;
-    readonly BUFFER_SIZE: GLenum;
-    readonly BUFFER_USAGE: GLenum;
-    readonly BYTE: GLenum;
-    readonly CCW: GLenum;
-    readonly CLAMP_TO_EDGE: GLenum;
-    readonly COLOR_ATTACHMENT0: GLenum;
-    readonly COLOR_BUFFER_BIT: GLenum;
-    readonly COLOR_CLEAR_VALUE: GLenum;
-    readonly COLOR_WRITEMASK: GLenum;
-    readonly COMPILE_STATUS: GLenum;
-    readonly COMPRESSED_TEXTURE_FORMATS: GLenum;
-    readonly CONSTANT_ALPHA: GLenum;
-    readonly CONSTANT_COLOR: GLenum;
-    readonly CONTEXT_LOST_WEBGL: GLenum;
-    readonly CULL_FACE: GLenum;
-    readonly CULL_FACE_MODE: GLenum;
-    readonly CURRENT_PROGRAM: GLenum;
-    readonly CURRENT_VERTEX_ATTRIB: GLenum;
-    readonly CW: GLenum;
-    readonly DECR: GLenum;
-    readonly DECR_WRAP: GLenum;
-    readonly DELETE_STATUS: GLenum;
-    readonly DEPTH_ATTACHMENT: GLenum;
-    readonly DEPTH_BITS: GLenum;
-    readonly DEPTH_BUFFER_BIT: GLenum;
-    readonly DEPTH_CLEAR_VALUE: GLenum;
-    readonly DEPTH_COMPONENT: GLenum;
-    readonly DEPTH_COMPONENT16: GLenum;
-    readonly DEPTH_FUNC: GLenum;
-    readonly DEPTH_RANGE: GLenum;
-    readonly DEPTH_STENCIL: GLenum;
-    readonly DEPTH_STENCIL_ATTACHMENT: GLenum;
-    readonly DEPTH_TEST: GLenum;
-    readonly DEPTH_WRITEMASK: GLenum;
-    readonly DITHER: GLenum;
-    readonly DONT_CARE: GLenum;
-    readonly DST_ALPHA: GLenum;
-    readonly DST_COLOR: GLenum;
-    readonly DYNAMIC_DRAW: GLenum;
-    readonly ELEMENT_ARRAY_BUFFER: GLenum;
-    readonly ELEMENT_ARRAY_BUFFER_BINDING: GLenum;
-    readonly EQUAL: GLenum;
-    readonly FASTEST: GLenum;
-    readonly FLOAT: GLenum;
-    readonly FLOAT_MAT2: GLenum;
-    readonly FLOAT_MAT3: GLenum;
-    readonly FLOAT_MAT4: GLenum;
-    readonly FLOAT_VEC2: GLenum;
-    readonly FLOAT_VEC3: GLenum;
-    readonly FLOAT_VEC4: GLenum;
-    readonly FRAGMENT_SHADER: GLenum;
-    readonly FRAMEBUFFER: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: GLenum;
-    readonly FRAMEBUFFER_BINDING: GLenum;
-    readonly FRAMEBUFFER_COMPLETE: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: GLenum;
-    readonly FRAMEBUFFER_UNSUPPORTED: GLenum;
-    readonly FRONT: GLenum;
-    readonly FRONT_AND_BACK: GLenum;
-    readonly FRONT_FACE: GLenum;
-    readonly FUNC_ADD: GLenum;
-    readonly FUNC_REVERSE_SUBTRACT: GLenum;
-    readonly FUNC_SUBTRACT: GLenum;
-    readonly GENERATE_MIPMAP_HINT: GLenum;
-    readonly GEQUAL: GLenum;
-    readonly GREATER: GLenum;
-    readonly GREEN_BITS: GLenum;
-    readonly HIGH_FLOAT: GLenum;
-    readonly HIGH_INT: GLenum;
-    readonly IMPLEMENTATION_COLOR_READ_FORMAT: GLenum;
-    readonly IMPLEMENTATION_COLOR_READ_TYPE: GLenum;
-    readonly INCR: GLenum;
-    readonly INCR_WRAP: GLenum;
-    readonly INT: GLenum;
-    readonly INT_VEC2: GLenum;
-    readonly INT_VEC3: GLenum;
-    readonly INT_VEC4: GLenum;
-    readonly INVALID_ENUM: GLenum;
-    readonly INVALID_FRAMEBUFFER_OPERATION: GLenum;
-    readonly INVALID_OPERATION: GLenum;
-    readonly INVALID_VALUE: GLenum;
-    readonly INVERT: GLenum;
-    readonly KEEP: GLenum;
-    readonly LEQUAL: GLenum;
-    readonly LESS: GLenum;
-    readonly LINEAR: GLenum;
-    readonly LINEAR_MIPMAP_LINEAR: GLenum;
-    readonly LINEAR_MIPMAP_NEAREST: GLenum;
-    readonly LINES: GLenum;
-    readonly LINE_LOOP: GLenum;
-    readonly LINE_STRIP: GLenum;
-    readonly LINE_WIDTH: GLenum;
-    readonly LINK_STATUS: GLenum;
-    readonly LOW_FLOAT: GLenum;
-    readonly LOW_INT: GLenum;
-    readonly LUMINANCE: GLenum;
-    readonly LUMINANCE_ALPHA: GLenum;
-    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_CUBE_MAP_TEXTURE_SIZE: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_VECTORS: GLenum;
-    readonly MAX_RENDERBUFFER_SIZE: GLenum;
-    readonly MAX_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_TEXTURE_SIZE: GLenum;
-    readonly MAX_VARYING_VECTORS: GLenum;
-    readonly MAX_VERTEX_ATTRIBS: GLenum;
-    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_VECTORS: GLenum;
-    readonly MAX_VIEWPORT_DIMS: GLenum;
-    readonly MEDIUM_FLOAT: GLenum;
-    readonly MEDIUM_INT: GLenum;
-    readonly MIRRORED_REPEAT: GLenum;
-    readonly NEAREST: GLenum;
-    readonly NEAREST_MIPMAP_LINEAR: GLenum;
-    readonly NEAREST_MIPMAP_NEAREST: GLenum;
-    readonly NEVER: GLenum;
-    readonly NICEST: GLenum;
-    readonly NONE: GLenum;
-    readonly NOTEQUAL: GLenum;
-    readonly NO_ERROR: GLenum;
-    readonly ONE: GLenum;
-    readonly ONE_MINUS_CONSTANT_ALPHA: GLenum;
-    readonly ONE_MINUS_CONSTANT_COLOR: GLenum;
-    readonly ONE_MINUS_DST_ALPHA: GLenum;
-    readonly ONE_MINUS_DST_COLOR: GLenum;
-    readonly ONE_MINUS_SRC_ALPHA: GLenum;
-    readonly ONE_MINUS_SRC_COLOR: GLenum;
-    readonly OUT_OF_MEMORY: GLenum;
-    readonly PACK_ALIGNMENT: GLenum;
-    readonly POINTS: GLenum;
-    readonly POLYGON_OFFSET_FACTOR: GLenum;
-    readonly POLYGON_OFFSET_FILL: GLenum;
-    readonly POLYGON_OFFSET_UNITS: GLenum;
-    readonly RED_BITS: GLenum;
-    readonly RENDERBUFFER: GLenum;
-    readonly RENDERBUFFER_ALPHA_SIZE: GLenum;
-    readonly RENDERBUFFER_BINDING: GLenum;
-    readonly RENDERBUFFER_BLUE_SIZE: GLenum;
-    readonly RENDERBUFFER_DEPTH_SIZE: GLenum;
-    readonly RENDERBUFFER_GREEN_SIZE: GLenum;
-    readonly RENDERBUFFER_HEIGHT: GLenum;
-    readonly RENDERBUFFER_INTERNAL_FORMAT: GLenum;
-    readonly RENDERBUFFER_RED_SIZE: GLenum;
-    readonly RENDERBUFFER_STENCIL_SIZE: GLenum;
-    readonly RENDERBUFFER_WIDTH: GLenum;
-    readonly RENDERER: GLenum;
-    readonly REPEAT: GLenum;
-    readonly REPLACE: GLenum;
-    readonly RGB: GLenum;
-    readonly RGB565: GLenum;
-    readonly RGB5_A1: GLenum;
-    readonly RGBA: GLenum;
-    readonly RGBA4: GLenum;
-    readonly SAMPLER_2D: GLenum;
-    readonly SAMPLER_CUBE: GLenum;
-    readonly SAMPLES: GLenum;
-    readonly SAMPLE_ALPHA_TO_COVERAGE: GLenum;
-    readonly SAMPLE_BUFFERS: GLenum;
-    readonly SAMPLE_COVERAGE: GLenum;
-    readonly SAMPLE_COVERAGE_INVERT: GLenum;
-    readonly SAMPLE_COVERAGE_VALUE: GLenum;
-    readonly SCISSOR_BOX: GLenum;
-    readonly SCISSOR_TEST: GLenum;
-    readonly SHADER_TYPE: GLenum;
-    readonly SHADING_LANGUAGE_VERSION: GLenum;
-    readonly SHORT: GLenum;
-    readonly SRC_ALPHA: GLenum;
-    readonly SRC_ALPHA_SATURATE: GLenum;
-    readonly SRC_COLOR: GLenum;
-    readonly STATIC_DRAW: GLenum;
-    readonly STENCIL_ATTACHMENT: GLenum;
-    readonly STENCIL_BACK_FAIL: GLenum;
-    readonly STENCIL_BACK_FUNC: GLenum;
-    readonly STENCIL_BACK_PASS_DEPTH_FAIL: GLenum;
-    readonly STENCIL_BACK_PASS_DEPTH_PASS: GLenum;
-    readonly STENCIL_BACK_REF: GLenum;
-    readonly STENCIL_BACK_VALUE_MASK: GLenum;
-    readonly STENCIL_BACK_WRITEMASK: GLenum;
-    readonly STENCIL_BITS: GLenum;
-    readonly STENCIL_BUFFER_BIT: GLenum;
-    readonly STENCIL_CLEAR_VALUE: GLenum;
-    readonly STENCIL_FAIL: GLenum;
-    readonly STENCIL_FUNC: GLenum;
-    readonly STENCIL_INDEX8: GLenum;
-    readonly STENCIL_PASS_DEPTH_FAIL: GLenum;
-    readonly STENCIL_PASS_DEPTH_PASS: GLenum;
-    readonly STENCIL_REF: GLenum;
-    readonly STENCIL_TEST: GLenum;
-    readonly STENCIL_VALUE_MASK: GLenum;
-    readonly STENCIL_WRITEMASK: GLenum;
-    readonly STREAM_DRAW: GLenum;
-    readonly SUBPIXEL_BITS: GLenum;
-    readonly TEXTURE: GLenum;
-    readonly TEXTURE0: GLenum;
-    readonly TEXTURE1: GLenum;
-    readonly TEXTURE10: GLenum;
-    readonly TEXTURE11: GLenum;
-    readonly TEXTURE12: GLenum;
-    readonly TEXTURE13: GLenum;
-    readonly TEXTURE14: GLenum;
-    readonly TEXTURE15: GLenum;
-    readonly TEXTURE16: GLenum;
-    readonly TEXTURE17: GLenum;
-    readonly TEXTURE18: GLenum;
-    readonly TEXTURE19: GLenum;
-    readonly TEXTURE2: GLenum;
-    readonly TEXTURE20: GLenum;
-    readonly TEXTURE21: GLenum;
-    readonly TEXTURE22: GLenum;
-    readonly TEXTURE23: GLenum;
-    readonly TEXTURE24: GLenum;
-    readonly TEXTURE25: GLenum;
-    readonly TEXTURE26: GLenum;
-    readonly TEXTURE27: GLenum;
-    readonly TEXTURE28: GLenum;
-    readonly TEXTURE29: GLenum;
-    readonly TEXTURE3: GLenum;
-    readonly TEXTURE30: GLenum;
-    readonly TEXTURE31: GLenum;
-    readonly TEXTURE4: GLenum;
-    readonly TEXTURE5: GLenum;
-    readonly TEXTURE6: GLenum;
-    readonly TEXTURE7: GLenum;
-    readonly TEXTURE8: GLenum;
-    readonly TEXTURE9: GLenum;
-    readonly TEXTURE_2D: GLenum;
-    readonly TEXTURE_BINDING_2D: GLenum;
-    readonly TEXTURE_BINDING_CUBE_MAP: GLenum;
-    readonly TEXTURE_CUBE_MAP: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_X: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: GLenum;
-    readonly TEXTURE_MAG_FILTER: GLenum;
-    readonly TEXTURE_MIN_FILTER: GLenum;
-    readonly TEXTURE_WRAP_S: GLenum;
-    readonly TEXTURE_WRAP_T: GLenum;
-    readonly TRIANGLES: GLenum;
-    readonly TRIANGLE_FAN: GLenum;
-    readonly TRIANGLE_STRIP: GLenum;
-    readonly UNPACK_ALIGNMENT: GLenum;
-    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: GLenum;
-    readonly UNPACK_FLIP_Y_WEBGL: GLenum;
-    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: GLenum;
-    readonly UNSIGNED_BYTE: GLenum;
-    readonly UNSIGNED_INT: GLenum;
-    readonly UNSIGNED_SHORT: GLenum;
-    readonly UNSIGNED_SHORT_4_4_4_4: GLenum;
-    readonly UNSIGNED_SHORT_5_5_5_1: GLenum;
-    readonly UNSIGNED_SHORT_5_6_5: GLenum;
-    readonly VALIDATE_STATUS: GLenum;
-    readonly VENDOR: GLenum;
-    readonly VERSION: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_ENABLED: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_POINTER: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_SIZE: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_STRIDE: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_TYPE: GLenum;
-    readonly VERTEX_SHADER: GLenum;
-    readonly VIEWPORT: GLenum;
-    readonly ZERO: GLenum;
+    readonly DEPTH_BUFFER_BIT: 0x00000100;
+    readonly STENCIL_BUFFER_BIT: 0x00000400;
+    readonly COLOR_BUFFER_BIT: 0x00004000;
+    readonly POINTS: 0x0000;
+    readonly LINES: 0x0001;
+    readonly LINE_LOOP: 0x0002;
+    readonly LINE_STRIP: 0x0003;
+    readonly TRIANGLES: 0x0004;
+    readonly TRIANGLE_STRIP: 0x0005;
+    readonly TRIANGLE_FAN: 0x0006;
+    readonly ZERO: 0;
+    readonly ONE: 1;
+    readonly SRC_COLOR: 0x0300;
+    readonly ONE_MINUS_SRC_COLOR: 0x0301;
+    readonly SRC_ALPHA: 0x0302;
+    readonly ONE_MINUS_SRC_ALPHA: 0x0303;
+    readonly DST_ALPHA: 0x0304;
+    readonly ONE_MINUS_DST_ALPHA: 0x0305;
+    readonly DST_COLOR: 0x0306;
+    readonly ONE_MINUS_DST_COLOR: 0x0307;
+    readonly SRC_ALPHA_SATURATE: 0x0308;
+    readonly FUNC_ADD: 0x8006;
+    readonly BLEND_EQUATION: 0x8009;
+    readonly BLEND_EQUATION_RGB: 0x8009;
+    readonly BLEND_EQUATION_ALPHA: 0x883D;
+    readonly FUNC_SUBTRACT: 0x800A;
+    readonly FUNC_REVERSE_SUBTRACT: 0x800B;
+    readonly BLEND_DST_RGB: 0x80C8;
+    readonly BLEND_SRC_RGB: 0x80C9;
+    readonly BLEND_DST_ALPHA: 0x80CA;
+    readonly BLEND_SRC_ALPHA: 0x80CB;
+    readonly CONSTANT_COLOR: 0x8001;
+    readonly ONE_MINUS_CONSTANT_COLOR: 0x8002;
+    readonly CONSTANT_ALPHA: 0x8003;
+    readonly ONE_MINUS_CONSTANT_ALPHA: 0x8004;
+    readonly BLEND_COLOR: 0x8005;
+    readonly ARRAY_BUFFER: 0x8892;
+    readonly ELEMENT_ARRAY_BUFFER: 0x8893;
+    readonly ARRAY_BUFFER_BINDING: 0x8894;
+    readonly ELEMENT_ARRAY_BUFFER_BINDING: 0x8895;
+    readonly STREAM_DRAW: 0x88E0;
+    readonly STATIC_DRAW: 0x88E4;
+    readonly DYNAMIC_DRAW: 0x88E8;
+    readonly BUFFER_SIZE: 0x8764;
+    readonly BUFFER_USAGE: 0x8765;
+    readonly CURRENT_VERTEX_ATTRIB: 0x8626;
+    readonly FRONT: 0x0404;
+    readonly BACK: 0x0405;
+    readonly FRONT_AND_BACK: 0x0408;
+    readonly CULL_FACE: 0x0B44;
+    readonly BLEND: 0x0BE2;
+    readonly DITHER: 0x0BD0;
+    readonly STENCIL_TEST: 0x0B90;
+    readonly DEPTH_TEST: 0x0B71;
+    readonly SCISSOR_TEST: 0x0C11;
+    readonly POLYGON_OFFSET_FILL: 0x8037;
+    readonly SAMPLE_ALPHA_TO_COVERAGE: 0x809E;
+    readonly SAMPLE_COVERAGE: 0x80A0;
+    readonly NO_ERROR: 0;
+    readonly INVALID_ENUM: 0x0500;
+    readonly INVALID_VALUE: 0x0501;
+    readonly INVALID_OPERATION: 0x0502;
+    readonly OUT_OF_MEMORY: 0x0505;
+    readonly CW: 0x0900;
+    readonly CCW: 0x0901;
+    readonly LINE_WIDTH: 0x0B21;
+    readonly ALIASED_POINT_SIZE_RANGE: 0x846D;
+    readonly ALIASED_LINE_WIDTH_RANGE: 0x846E;
+    readonly CULL_FACE_MODE: 0x0B45;
+    readonly FRONT_FACE: 0x0B46;
+    readonly DEPTH_RANGE: 0x0B70;
+    readonly DEPTH_WRITEMASK: 0x0B72;
+    readonly DEPTH_CLEAR_VALUE: 0x0B73;
+    readonly DEPTH_FUNC: 0x0B74;
+    readonly STENCIL_CLEAR_VALUE: 0x0B91;
+    readonly STENCIL_FUNC: 0x0B92;
+    readonly STENCIL_FAIL: 0x0B94;
+    readonly STENCIL_PASS_DEPTH_FAIL: 0x0B95;
+    readonly STENCIL_PASS_DEPTH_PASS: 0x0B96;
+    readonly STENCIL_REF: 0x0B97;
+    readonly STENCIL_VALUE_MASK: 0x0B93;
+    readonly STENCIL_WRITEMASK: 0x0B98;
+    readonly STENCIL_BACK_FUNC: 0x8800;
+    readonly STENCIL_BACK_FAIL: 0x8801;
+    readonly STENCIL_BACK_PASS_DEPTH_FAIL: 0x8802;
+    readonly STENCIL_BACK_PASS_DEPTH_PASS: 0x8803;
+    readonly STENCIL_BACK_REF: 0x8CA3;
+    readonly STENCIL_BACK_VALUE_MASK: 0x8CA4;
+    readonly STENCIL_BACK_WRITEMASK: 0x8CA5;
+    readonly VIEWPORT: 0x0BA2;
+    readonly SCISSOR_BOX: 0x0C10;
+    readonly COLOR_CLEAR_VALUE: 0x0C22;
+    readonly COLOR_WRITEMASK: 0x0C23;
+    readonly UNPACK_ALIGNMENT: 0x0CF5;
+    readonly PACK_ALIGNMENT: 0x0D05;
+    readonly MAX_TEXTURE_SIZE: 0x0D33;
+    readonly MAX_VIEWPORT_DIMS: 0x0D3A;
+    readonly SUBPIXEL_BITS: 0x0D50;
+    readonly RED_BITS: 0x0D52;
+    readonly GREEN_BITS: 0x0D53;
+    readonly BLUE_BITS: 0x0D54;
+    readonly ALPHA_BITS: 0x0D55;
+    readonly DEPTH_BITS: 0x0D56;
+    readonly STENCIL_BITS: 0x0D57;
+    readonly POLYGON_OFFSET_UNITS: 0x2A00;
+    readonly POLYGON_OFFSET_FACTOR: 0x8038;
+    readonly TEXTURE_BINDING_2D: 0x8069;
+    readonly SAMPLE_BUFFERS: 0x80A8;
+    readonly SAMPLES: 0x80A9;
+    readonly SAMPLE_COVERAGE_VALUE: 0x80AA;
+    readonly SAMPLE_COVERAGE_INVERT: 0x80AB;
+    readonly COMPRESSED_TEXTURE_FORMATS: 0x86A3;
+    readonly DONT_CARE: 0x1100;
+    readonly FASTEST: 0x1101;
+    readonly NICEST: 0x1102;
+    readonly GENERATE_MIPMAP_HINT: 0x8192;
+    readonly BYTE: 0x1400;
+    readonly UNSIGNED_BYTE: 0x1401;
+    readonly SHORT: 0x1402;
+    readonly UNSIGNED_SHORT: 0x1403;
+    readonly INT: 0x1404;
+    readonly UNSIGNED_INT: 0x1405;
+    readonly FLOAT: 0x1406;
+    readonly DEPTH_COMPONENT: 0x1902;
+    readonly ALPHA: 0x1906;
+    readonly RGB: 0x1907;
+    readonly RGBA: 0x1908;
+    readonly LUMINANCE: 0x1909;
+    readonly LUMINANCE_ALPHA: 0x190A;
+    readonly UNSIGNED_SHORT_4_4_4_4: 0x8033;
+    readonly UNSIGNED_SHORT_5_5_5_1: 0x8034;
+    readonly UNSIGNED_SHORT_5_6_5: 0x8363;
+    readonly FRAGMENT_SHADER: 0x8B30;
+    readonly VERTEX_SHADER: 0x8B31;
+    readonly MAX_VERTEX_ATTRIBS: 0x8869;
+    readonly MAX_VERTEX_UNIFORM_VECTORS: 0x8DFB;
+    readonly MAX_VARYING_VECTORS: 0x8DFC;
+    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: 0x8B4D;
+    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: 0x8B4C;
+    readonly MAX_TEXTURE_IMAGE_UNITS: 0x8872;
+    readonly MAX_FRAGMENT_UNIFORM_VECTORS: 0x8DFD;
+    readonly SHADER_TYPE: 0x8B4F;
+    readonly DELETE_STATUS: 0x8B80;
+    readonly LINK_STATUS: 0x8B82;
+    readonly VALIDATE_STATUS: 0x8B83;
+    readonly ATTACHED_SHADERS: 0x8B85;
+    readonly ACTIVE_UNIFORMS: 0x8B86;
+    readonly ACTIVE_ATTRIBUTES: 0x8B89;
+    readonly SHADING_LANGUAGE_VERSION: 0x8B8C;
+    readonly CURRENT_PROGRAM: 0x8B8D;
+    readonly NEVER: 0x0200;
+    readonly LESS: 0x0201;
+    readonly EQUAL: 0x0202;
+    readonly LEQUAL: 0x0203;
+    readonly GREATER: 0x0204;
+    readonly NOTEQUAL: 0x0205;
+    readonly GEQUAL: 0x0206;
+    readonly ALWAYS: 0x0207;
+    readonly KEEP: 0x1E00;
+    readonly REPLACE: 0x1E01;
+    readonly INCR: 0x1E02;
+    readonly DECR: 0x1E03;
+    readonly INVERT: 0x150A;
+    readonly INCR_WRAP: 0x8507;
+    readonly DECR_WRAP: 0x8508;
+    readonly VENDOR: 0x1F00;
+    readonly RENDERER: 0x1F01;
+    readonly VERSION: 0x1F02;
+    readonly NEAREST: 0x2600;
+    readonly LINEAR: 0x2601;
+    readonly NEAREST_MIPMAP_NEAREST: 0x2700;
+    readonly LINEAR_MIPMAP_NEAREST: 0x2701;
+    readonly NEAREST_MIPMAP_LINEAR: 0x2702;
+    readonly LINEAR_MIPMAP_LINEAR: 0x2703;
+    readonly TEXTURE_MAG_FILTER: 0x2800;
+    readonly TEXTURE_MIN_FILTER: 0x2801;
+    readonly TEXTURE_WRAP_S: 0x2802;
+    readonly TEXTURE_WRAP_T: 0x2803;
+    readonly TEXTURE_2D: 0x0DE1;
+    readonly TEXTURE: 0x1702;
+    readonly TEXTURE_CUBE_MAP: 0x8513;
+    readonly TEXTURE_BINDING_CUBE_MAP: 0x8514;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_X: 0x8515;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: 0x8516;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: 0x8517;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: 0x8518;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: 0x8519;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: 0x851A;
+    readonly MAX_CUBE_MAP_TEXTURE_SIZE: 0x851C;
+    readonly TEXTURE0: 0x84C0;
+    readonly TEXTURE1: 0x84C1;
+    readonly TEXTURE2: 0x84C2;
+    readonly TEXTURE3: 0x84C3;
+    readonly TEXTURE4: 0x84C4;
+    readonly TEXTURE5: 0x84C5;
+    readonly TEXTURE6: 0x84C6;
+    readonly TEXTURE7: 0x84C7;
+    readonly TEXTURE8: 0x84C8;
+    readonly TEXTURE9: 0x84C9;
+    readonly TEXTURE10: 0x84CA;
+    readonly TEXTURE11: 0x84CB;
+    readonly TEXTURE12: 0x84CC;
+    readonly TEXTURE13: 0x84CD;
+    readonly TEXTURE14: 0x84CE;
+    readonly TEXTURE15: 0x84CF;
+    readonly TEXTURE16: 0x84D0;
+    readonly TEXTURE17: 0x84D1;
+    readonly TEXTURE18: 0x84D2;
+    readonly TEXTURE19: 0x84D3;
+    readonly TEXTURE20: 0x84D4;
+    readonly TEXTURE21: 0x84D5;
+    readonly TEXTURE22: 0x84D6;
+    readonly TEXTURE23: 0x84D7;
+    readonly TEXTURE24: 0x84D8;
+    readonly TEXTURE25: 0x84D9;
+    readonly TEXTURE26: 0x84DA;
+    readonly TEXTURE27: 0x84DB;
+    readonly TEXTURE28: 0x84DC;
+    readonly TEXTURE29: 0x84DD;
+    readonly TEXTURE30: 0x84DE;
+    readonly TEXTURE31: 0x84DF;
+    readonly ACTIVE_TEXTURE: 0x84E0;
+    readonly REPEAT: 0x2901;
+    readonly CLAMP_TO_EDGE: 0x812F;
+    readonly MIRRORED_REPEAT: 0x8370;
+    readonly FLOAT_VEC2: 0x8B50;
+    readonly FLOAT_VEC3: 0x8B51;
+    readonly FLOAT_VEC4: 0x8B52;
+    readonly INT_VEC2: 0x8B53;
+    readonly INT_VEC3: 0x8B54;
+    readonly INT_VEC4: 0x8B55;
+    readonly BOOL: 0x8B56;
+    readonly BOOL_VEC2: 0x8B57;
+    readonly BOOL_VEC3: 0x8B58;
+    readonly BOOL_VEC4: 0x8B59;
+    readonly FLOAT_MAT2: 0x8B5A;
+    readonly FLOAT_MAT3: 0x8B5B;
+    readonly FLOAT_MAT4: 0x8B5C;
+    readonly SAMPLER_2D: 0x8B5E;
+    readonly SAMPLER_CUBE: 0x8B60;
+    readonly VERTEX_ATTRIB_ARRAY_ENABLED: 0x8622;
+    readonly VERTEX_ATTRIB_ARRAY_SIZE: 0x8623;
+    readonly VERTEX_ATTRIB_ARRAY_STRIDE: 0x8624;
+    readonly VERTEX_ATTRIB_ARRAY_TYPE: 0x8625;
+    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: 0x886A;
+    readonly VERTEX_ATTRIB_ARRAY_POINTER: 0x8645;
+    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: 0x889F;
+    readonly IMPLEMENTATION_COLOR_READ_TYPE: 0x8B9A;
+    readonly IMPLEMENTATION_COLOR_READ_FORMAT: 0x8B9B;
+    readonly COMPILE_STATUS: 0x8B81;
+    readonly LOW_FLOAT: 0x8DF0;
+    readonly MEDIUM_FLOAT: 0x8DF1;
+    readonly HIGH_FLOAT: 0x8DF2;
+    readonly LOW_INT: 0x8DF3;
+    readonly MEDIUM_INT: 0x8DF4;
+    readonly HIGH_INT: 0x8DF5;
+    readonly FRAMEBUFFER: 0x8D40;
+    readonly RENDERBUFFER: 0x8D41;
+    readonly RGBA4: 0x8056;
+    readonly RGB5_A1: 0x8057;
+    readonly RGB565: 0x8D62;
+    readonly DEPTH_COMPONENT16: 0x81A5;
+    readonly STENCIL_INDEX8: 0x8D48;
+    readonly DEPTH_STENCIL: 0x84F9;
+    readonly RENDERBUFFER_WIDTH: 0x8D42;
+    readonly RENDERBUFFER_HEIGHT: 0x8D43;
+    readonly RENDERBUFFER_INTERNAL_FORMAT: 0x8D44;
+    readonly RENDERBUFFER_RED_SIZE: 0x8D50;
+    readonly RENDERBUFFER_GREEN_SIZE: 0x8D51;
+    readonly RENDERBUFFER_BLUE_SIZE: 0x8D52;
+    readonly RENDERBUFFER_ALPHA_SIZE: 0x8D53;
+    readonly RENDERBUFFER_DEPTH_SIZE: 0x8D54;
+    readonly RENDERBUFFER_STENCIL_SIZE: 0x8D55;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: 0x8CD0;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: 0x8CD1;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: 0x8CD2;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: 0x8CD3;
+    readonly COLOR_ATTACHMENT0: 0x8CE0;
+    readonly DEPTH_ATTACHMENT: 0x8D00;
+    readonly STENCIL_ATTACHMENT: 0x8D20;
+    readonly DEPTH_STENCIL_ATTACHMENT: 0x821A;
+    readonly NONE: 0;
+    readonly FRAMEBUFFER_COMPLETE: 0x8CD5;
+    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: 0x8CD6;
+    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: 0x8CD7;
+    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: 0x8CD9;
+    readonly FRAMEBUFFER_UNSUPPORTED: 0x8CDD;
+    readonly FRAMEBUFFER_BINDING: 0x8CA6;
+    readonly RENDERBUFFER_BINDING: 0x8CA7;
+    readonly MAX_RENDERBUFFER_SIZE: 0x84E8;
+    readonly INVALID_FRAMEBUFFER_OPERATION: 0x0506;
+    readonly UNPACK_FLIP_Y_WEBGL: 0x9240;
+    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: 0x9241;
+    readonly CONTEXT_LOST_WEBGL: 0x9242;
+    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: 0x9243;
+    readonly BROWSER_DEFAULT_WEBGL: 0x9244;
 }
 
 interface WebGLRenderingContextOverloads {
@@ -16709,10 +16892,10 @@ interface WebSocket extends EventTarget {
     close(code?: number, reason?: string): void;
     /** Transmits data using the WebSocket connection. data can be a string, a Blob, an ArrayBuffer, or an ArrayBufferView. */
     send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void;
-    readonly CLOSED: number;
-    readonly CLOSING: number;
-    readonly CONNECTING: number;
-    readonly OPEN: number;
+    readonly CONNECTING: 0;
+    readonly OPEN: 1;
+    readonly CLOSING: 2;
+    readonly CLOSED: 3;
     addEventListener<K extends keyof WebSocketEventMap>(type: K, listener: (this: WebSocket, ev: WebSocketEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof WebSocketEventMap>(type: K, listener: (this: WebSocket, ev: WebSocketEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -16722,10 +16905,10 @@ interface WebSocket extends EventTarget {
 declare var WebSocket: {
     prototype: WebSocket;
     new(url: string | URL, protocols?: string | string[]): WebSocket;
-    readonly CLOSED: number;
-    readonly CLOSING: number;
-    readonly CONNECTING: number;
-    readonly OPEN: number;
+    readonly CONNECTING: 0;
+    readonly OPEN: 1;
+    readonly CLOSING: 2;
+    readonly CLOSED: 3;
 };
 
 /** Events that occur due to the user moving a mouse wheel or similar input device. */
@@ -16734,17 +16917,17 @@ interface WheelEvent extends MouseEvent {
     readonly deltaX: number;
     readonly deltaY: number;
     readonly deltaZ: number;
-    readonly DOM_DELTA_LINE: number;
-    readonly DOM_DELTA_PAGE: number;
-    readonly DOM_DELTA_PIXEL: number;
+    readonly DOM_DELTA_PIXEL: 0x00;
+    readonly DOM_DELTA_LINE: 0x01;
+    readonly DOM_DELTA_PAGE: 0x02;
 }
 
 declare var WheelEvent: {
     prototype: WheelEvent;
     new(type: string, eventInitDict?: WheelEventInit): WheelEvent;
-    readonly DOM_DELTA_LINE: number;
-    readonly DOM_DELTA_PAGE: number;
-    readonly DOM_DELTA_PIXEL: number;
+    readonly DOM_DELTA_PIXEL: 0x00;
+    readonly DOM_DELTA_LINE: 0x01;
+    readonly DOM_DELTA_PAGE: 0x02;
 };
 
 interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandlersEventMap {
@@ -17142,11 +17325,11 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
      * Throws a "SyntaxError" DOMException if name is not a header name or if value is not a header value.
      */
     setRequestHeader(name: string, value: string): void;
-    readonly DONE: number;
-    readonly HEADERS_RECEIVED: number;
-    readonly LOADING: number;
-    readonly OPENED: number;
-    readonly UNSENT: number;
+    readonly UNSENT: 0;
+    readonly OPENED: 1;
+    readonly HEADERS_RECEIVED: 2;
+    readonly LOADING: 3;
+    readonly DONE: 4;
     addEventListener<K extends keyof XMLHttpRequestEventMap>(type: K, listener: (this: XMLHttpRequest, ev: XMLHttpRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof XMLHttpRequestEventMap>(type: K, listener: (this: XMLHttpRequest, ev: XMLHttpRequestEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -17156,11 +17339,11 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
 declare var XMLHttpRequest: {
     prototype: XMLHttpRequest;
     new(): XMLHttpRequest;
-    readonly DONE: number;
-    readonly HEADERS_RECEIVED: number;
-    readonly LOADING: number;
-    readonly OPENED: number;
-    readonly UNSENT: number;
+    readonly UNSENT: 0;
+    readonly OPENED: 1;
+    readonly HEADERS_RECEIVED: 2;
+    readonly LOADING: 3;
+    readonly DONE: 4;
 };
 
 interface XMLHttpRequestEventTargetEventMap {
@@ -17250,31 +17433,31 @@ interface XPathResult {
     readonly stringValue: string;
     iterateNext(): Node | null;
     snapshotItem(index: number): Node | null;
-    readonly ANY_TYPE: number;
-    readonly ANY_UNORDERED_NODE_TYPE: number;
-    readonly BOOLEAN_TYPE: number;
-    readonly FIRST_ORDERED_NODE_TYPE: number;
-    readonly NUMBER_TYPE: number;
-    readonly ORDERED_NODE_ITERATOR_TYPE: number;
-    readonly ORDERED_NODE_SNAPSHOT_TYPE: number;
-    readonly STRING_TYPE: number;
-    readonly UNORDERED_NODE_ITERATOR_TYPE: number;
-    readonly UNORDERED_NODE_SNAPSHOT_TYPE: number;
+    readonly ANY_TYPE: 0;
+    readonly NUMBER_TYPE: 1;
+    readonly STRING_TYPE: 2;
+    readonly BOOLEAN_TYPE: 3;
+    readonly UNORDERED_NODE_ITERATOR_TYPE: 4;
+    readonly ORDERED_NODE_ITERATOR_TYPE: 5;
+    readonly UNORDERED_NODE_SNAPSHOT_TYPE: 6;
+    readonly ORDERED_NODE_SNAPSHOT_TYPE: 7;
+    readonly ANY_UNORDERED_NODE_TYPE: 8;
+    readonly FIRST_ORDERED_NODE_TYPE: 9;
 }
 
 declare var XPathResult: {
     prototype: XPathResult;
     new(): XPathResult;
-    readonly ANY_TYPE: number;
-    readonly ANY_UNORDERED_NODE_TYPE: number;
-    readonly BOOLEAN_TYPE: number;
-    readonly FIRST_ORDERED_NODE_TYPE: number;
-    readonly NUMBER_TYPE: number;
-    readonly ORDERED_NODE_ITERATOR_TYPE: number;
-    readonly ORDERED_NODE_SNAPSHOT_TYPE: number;
-    readonly STRING_TYPE: number;
-    readonly UNORDERED_NODE_ITERATOR_TYPE: number;
-    readonly UNORDERED_NODE_SNAPSHOT_TYPE: number;
+    readonly ANY_TYPE: 0;
+    readonly NUMBER_TYPE: 1;
+    readonly STRING_TYPE: 2;
+    readonly BOOLEAN_TYPE: 3;
+    readonly UNORDERED_NODE_ITERATOR_TYPE: 4;
+    readonly ORDERED_NODE_ITERATOR_TYPE: 5;
+    readonly UNORDERED_NODE_SNAPSHOT_TYPE: 6;
+    readonly ORDERED_NODE_SNAPSHOT_TYPE: 7;
+    readonly ANY_UNORDERED_NODE_TYPE: 8;
+    readonly FIRST_ORDERED_NODE_TYPE: 9;
 };
 
 /** An XSLTProcessor applies an XSLT stylesheet transformation to an XML document to produce a new XML document as output. It has methods to load the XSLT stylesheet, to manipulate <xsl:param> parameter values, and to apply the transformation to documents. */
@@ -17819,6 +18002,39 @@ interface SVGElementTagNameMap {
     "view": SVGViewElement;
 }
 
+interface MathMLElementTagNameMap {
+    "annotation": MathMLElement;
+    "annotation-xml": MathMLElement;
+    "maction": MathMLElement;
+    "math": MathMLElement;
+    "merror": MathMLElement;
+    "mfrac": MathMLElement;
+    "mi": MathMLElement;
+    "mmultiscripts": MathMLElement;
+    "mn": MathMLElement;
+    "mo": MathMLElement;
+    "mover": MathMLElement;
+    "mpadded": MathMLElement;
+    "mphantom": MathMLElement;
+    "mprescripts": MathMLElement;
+    "mroot": MathMLElement;
+    "mrow": MathMLElement;
+    "ms": MathMLElement;
+    "mspace": MathMLElement;
+    "msqrt": MathMLElement;
+    "mstyle": MathMLElement;
+    "msub": MathMLElement;
+    "msubsup": MathMLElement;
+    "msup": MathMLElement;
+    "mtable": MathMLElement;
+    "mtd": MathMLElement;
+    "mtext": MathMLElement;
+    "mtr": MathMLElement;
+    "munder": MathMLElement;
+    "munderover": MathMLElement;
+    "semantics": MathMLElement;
+}
+
 /** @deprecated Directly use HTMLElementTagNameMap or SVGElementTagNameMap as appropriate, instead. */
 type ElementTagNameMap = HTMLElementTagNameMap & Pick<SVGElementTagNameMap, Exclude<keyof SVGElementTagNameMap, keyof HTMLElementTagNameMap>>;
 
@@ -17988,7 +18204,9 @@ declare var onclose: ((this: Window, ev: Event) => any) | null;
  * @param ev The mouse event.
  */
 declare var oncontextmenu: ((this: Window, ev: MouseEvent) => any) | null;
+declare var oncopy: ((this: Window, ev: ClipboardEvent) => any) | null;
 declare var oncuechange: ((this: Window, ev: Event) => any) | null;
+declare var oncut: ((this: Window, ev: ClipboardEvent) => any) | null;
 /**
  * Fires when the user double-clicks the object.
  * @param ev The mouse event.
@@ -18118,6 +18336,7 @@ declare var onmouseover: ((this: Window, ev: MouseEvent) => any) | null;
  * @param ev The mouse event.
  */
 declare var onmouseup: ((this: Window, ev: MouseEvent) => any) | null;
+declare var onpaste: ((this: Window, ev: ClipboardEvent) => any) | null;
 /**
  * Occurs when playback is paused.
  * @param ev The event.
@@ -18307,7 +18526,6 @@ type HashAlgorithmIdentifier = AlgorithmIdentifier;
 type HeadersInit = [string, string][] | Record<string, string> | Headers;
 type IDBValidKey = number | string | Date | BufferSource | IDBValidKey[];
 type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
-type InsertPosition = "beforebegin" | "afterbegin" | "beforeend" | "afterend";
 type Int32List = Int32Array | GLint[];
 type LineAndPositionSetting = number | AutoKeyword;
 type MediaProvider = MediaStream | MediaSource | Blob;
@@ -18372,6 +18590,7 @@ type EndOfStreamError = "decode" | "network";
 type EndingType = "native" | "transparent";
 type FileSystemHandleKind = "directory" | "file";
 type FillMode = "auto" | "backwards" | "both" | "forwards" | "none";
+type FontDisplay = "auto" | "block" | "fallback" | "optional" | "swap";
 type FontFaceLoadStatus = "error" | "loaded" | "loading" | "unloaded";
 type FontFaceSetLoadStatus = "loaded" | "loading";
 type FullscreenNavigationUI = "auto" | "hide" | "show";
@@ -18383,14 +18602,18 @@ type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "done" | "pending";
 type IDBTransactionDurability = "default" | "relaxed" | "strict";
 type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
-type ImageOrientation = "flipY" | "none";
+type ImageOrientation = "flipY" | "from-image";
 type ImageSmoothingQuality = "high" | "low" | "medium";
+type InsertPosition = "afterbegin" | "afterend" | "beforebegin" | "beforeend";
 type IterationCompositeOperation = "accumulate" | "replace";
 type KeyFormat = "jwk" | "pkcs8" | "raw" | "spki";
 type KeyType = "private" | "public" | "secret";
 type KeyUsage = "decrypt" | "deriveBits" | "deriveKey" | "encrypt" | "sign" | "unwrapKey" | "verify" | "wrapKey";
 type LineAlignSetting = "center" | "end" | "start";
 type LockMode = "exclusive" | "shared";
+type MIDIPortConnectionState = "closed" | "open" | "pending";
+type MIDIPortDeviceState = "connected" | "disconnected";
+type MIDIPortType = "input" | "output";
 type MediaDecodingType = "file" | "media-source" | "webrtc";
 type MediaDeviceKind = "audioinput" | "audiooutput" | "videoinput";
 type MediaEncodingType = "record" | "webrtc";

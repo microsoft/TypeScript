@@ -17,7 +17,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
+var A = exports.A = /** @class */ (function () {
     function A() {
     }
     __decorate([
@@ -26,4 +26,3 @@ var A = /** @class */ (function () {
     ], A.prototype, "b", void 0);
     return A;
 }());
-exports.A = A;

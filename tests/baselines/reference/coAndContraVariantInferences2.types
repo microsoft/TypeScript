@@ -83,6 +83,31 @@ function f2(b: B, c: C) {
 >useA : (a: A) => void
 }
 
+declare function every<T, U extends T>(array: readonly T[], f: (x: T) => x is U): array is readonly U[];
+>every : <T, U extends T>(array: readonly T[], f: (x: T) => x is U) => array is readonly U[]
+>array : readonly T[]
+>f : (x: T) => x is U
+>x : T
+
+function f3(arr: readonly B[] | readonly C[]) {
+>f3 : (arr: readonly B[] | readonly C[]) => void
+>arr : readonly B[] | readonly C[]
+
+    if (every(arr, isC)) {
+>every(arr, isC) : boolean
+>every : <T, U extends T>(array: readonly T[], f: (x: T) => x is U) => array is readonly U[]
+>arr : readonly B[] | readonly C[]
+>isC : (x: A) => x is C
+
+        arr; // readonly C[]
+>arr : readonly C[]
+    }
+    else {
+        arr; // readonly B[]
+>arr : readonly B[]
+    }
+}
+
 // Repro from #52111
 
 enum SyntaxKind {

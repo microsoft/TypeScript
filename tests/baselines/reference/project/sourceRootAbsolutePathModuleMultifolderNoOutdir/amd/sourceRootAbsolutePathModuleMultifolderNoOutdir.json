@@ -11,6 +11,8 @@
     "resolveSourceRoot": true,
     "resolvedInputFiles": [
         "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
         "ref/m1.ts",
         "../outputdir_module_multifolder_ref/m2.ts",
         "test.ts"

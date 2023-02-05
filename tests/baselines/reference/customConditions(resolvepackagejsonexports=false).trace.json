@@ -16,7 +16,7 @@
     "File name '/node_modules/lodash/index.js' has a '.js' extension - stripping it.",
     "File '/node_modules/lodash/index.ts' does not exist.",
     "File '/node_modules/lodash/index.tsx' does not exist.",
-    "File '/node_modules/lodash/index.d.ts' exist - use it as a name resolution result.",
+    "File '/node_modules/lodash/index.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/node_modules/lodash/index.d.ts', result '/node_modules/lodash/index.d.ts'.",
     "======== Module name 'lodash' was successfully resolved to '/node_modules/lodash/index.d.ts' with Package ID 'lodash/index.d.ts@1.0.0'. ========"
 ]

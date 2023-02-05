@@ -44,7 +44,7 @@ import { something } from "something";
             content: "{}"
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, { syntaxOnly: true, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
         return { host, session, file1, file2, file3, something, configFile };
     }
 
@@ -79,7 +79,7 @@ import { something } from "something";
 
         function verifyCompletions() {
             verifySessionException<ts.server.protocol.CompletionsRequest>(session, {
-                command: ts.server.protocol.CommandTypes.Completions,
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })
             });
         }
@@ -155,7 +155,7 @@ function fooB() { }`
             content: "{}"
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, { syntaxOnly: true, useSingleInferredProject: true });
+        const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
         const service = session.getProjectService();
         openFilesForSession([file1], session);
         checkNumberOfProjects(service, { inferredProjects: 1 });

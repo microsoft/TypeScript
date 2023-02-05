@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: esnext, es2022
 
 const itemNumber: number | undefined = [0].findLast((item) => item === 0);
 const itemString: string | undefined = ["string"].findLast((item) => item === "string");

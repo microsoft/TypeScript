@@ -1,4 +1,10 @@
 import {
+    createRunner,
+    globalTimeout,
+    RunnerBase,
+    runUnitTests,
+} from "../_namespaces/Harness";
+import {
     ErrorInfo,
     ParallelClientMessage,
     ParallelHostMessage,
@@ -9,12 +15,6 @@ import {
     TestInfo,
     UnitTestTask,
 } from "../_namespaces/Harness.Parallel";
-import {
-    createRunner,
-    globalTimeout,
-    RunnerBase,
-    runUnitTests,
-} from "../_namespaces/Harness";
 
 export function start() {
     function hookUncaughtExceptions() {

@@ -1,0 +1,35 @@
+/main.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+/main.ts(3,8): error TS1259: Module '"/decl"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+
+
+==== /decl.d.ts (0 errors) ====
+    declare class CJSy {}
+    export = CJSy;
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "ambient" {
+        const _export: number;
+        export = _export;
+    }
+    
+==== /types.ts (0 errors) ====
+    interface Typey {}
+    export type { Typey };
+    
+==== /main.ts (2 errors) ====
+    import CJSy = require("./decl"); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    import type CJSy2 = require("./decl"); // ok I guess?
+    import CJSy3 from "./decl"; // ok in esModuleInterop
+           ~~~~~
+!!! error TS1259: Module '"/decl"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+!!! related TS2594 /decl.d.ts:2:1: This module is declared with 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
+    import * as types from "./types"; // ok
+    CJSy;
+    
+==== /ns.ts (0 errors) ====
+    export namespace ns {
+        export enum A {}
+    }
+    

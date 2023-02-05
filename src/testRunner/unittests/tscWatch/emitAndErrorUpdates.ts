@@ -1,10 +1,10 @@
+import { libContent } from "../tsc/helpers";
 import {
     createWatchedSystem,
     File,
     getTsBuildProjectFile,
     libFile,
 } from "../virtualFileSystemWithWatch";
-import { libContent } from "../tsc/helpers";
 import {
     TscWatchCompileChange,
     verifyTscWatch,

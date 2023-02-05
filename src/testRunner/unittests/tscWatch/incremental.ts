@@ -1,15 +1,15 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import {
+    CommandLineProgram,
+    libContent,
+} from "../tsc/helpers";
 import {
     createWatchedSystem,
     File,
     libFile,
     TestServerHost,
 } from "../virtualFileSystemWithWatch";
-import {
-    CommandLineProgram,
-    libContent,
-} from "../tsc/helpers";
 import {
     applyEdit,
     createBaseline,

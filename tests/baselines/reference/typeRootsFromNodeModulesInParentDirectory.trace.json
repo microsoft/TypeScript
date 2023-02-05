@@ -15,7 +15,7 @@
     "======== Resolving type reference directive 'foo', containing file '/src/__inferred type names__.ts', root directory '/node_modules/@types'. ========",
     "Resolving with primary search path '/node_modules/@types'.",
     "File '/node_modules/@types/foo/package.json' does not exist.",
-    "File '/node_modules/@types/foo/index.d.ts' exist - use it as a name resolution result.",
+    "File '/node_modules/@types/foo/index.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/node_modules/@types/foo/index.d.ts', result '/node_modules/@types/foo/index.d.ts'.",
     "======== Type reference directive 'foo' was successfully resolved to '/node_modules/@types/foo/index.d.ts', primary: true. ========"
 ]

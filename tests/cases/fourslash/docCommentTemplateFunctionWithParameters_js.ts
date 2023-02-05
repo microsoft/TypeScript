@@ -4,7 +4,7 @@
 /////*0*/
 ////function f(a, ...b): boolean {}
 
-verify.docCommentTemplateAt("0", 8,
+verify.docCommentTemplateAt("0", 7,
 `/**
  * 
  * @param {any} a

@@ -113,3 +113,53 @@ const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
     }
 };
 
+// Simplified repro from #52252
+
+type T1 = {
+>T1 : Symbol(T1, Decl(nestedExcessPropertyChecking.ts, 41, 2))
+
+    primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
+>primary : Symbol(primary, Decl(nestedExcessPropertyChecking.ts, 45, 11))
+>__typename : Symbol(__typename, Decl(nestedExcessPropertyChecking.ts, 46, 14))
+>colors : Symbol(colors, Decl(nestedExcessPropertyChecking.ts, 46, 43))
+>light : Symbol(light, Decl(nestedExcessPropertyChecking.ts, 46, 53))
+>dark : Symbol(dark, Decl(nestedExcessPropertyChecking.ts, 46, 68))
+
+};
+
+type T2 = {
+>T2 : Symbol(T2, Decl(nestedExcessPropertyChecking.ts, 47, 2))
+
+    primary: { __typename?: 'Feature' } & { colors: { light: number } },
+>primary : Symbol(primary, Decl(nestedExcessPropertyChecking.ts, 49, 11))
+>__typename : Symbol(__typename, Decl(nestedExcessPropertyChecking.ts, 50, 14))
+>colors : Symbol(colors, Decl(nestedExcessPropertyChecking.ts, 50, 43))
+>light : Symbol(light, Decl(nestedExcessPropertyChecking.ts, 50, 53))
+
+};
+
+type Query = T1 & T2;
+>Query : Symbol(Query, Decl(nestedExcessPropertyChecking.ts, 51, 2))
+>T1 : Symbol(T1, Decl(nestedExcessPropertyChecking.ts, 41, 2))
+>T2 : Symbol(T2, Decl(nestedExcessPropertyChecking.ts, 47, 2))
+
+const response: Query = {
+>response : Symbol(response, Decl(nestedExcessPropertyChecking.ts, 55, 5))
+>Query : Symbol(Query, Decl(nestedExcessPropertyChecking.ts, 51, 2))
+
+    primary: {
+>primary : Symbol(primary, Decl(nestedExcessPropertyChecking.ts, 55, 25))
+
+        colors: {
+>colors : Symbol(colors, Decl(nestedExcessPropertyChecking.ts, 56, 14))
+
+            light: 1,
+>light : Symbol(light, Decl(nestedExcessPropertyChecking.ts, 57, 17))
+
+            dark: 3,
+>dark : Symbol(dark, Decl(nestedExcessPropertyChecking.ts, 58, 21))
+
+        },
+    },
+};
+

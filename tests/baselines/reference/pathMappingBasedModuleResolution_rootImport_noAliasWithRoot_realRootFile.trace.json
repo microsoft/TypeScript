@@ -7,7 +7,7 @@
     "Trying substitution './src/*', candidate module location: './src//foo'.",
     "Loading module as file / folder, candidate module location '/root/src/foo', target file types: TypeScript, Declaration.",
     "Loading module as file / folder, candidate module location '/foo', target file types: TypeScript, Declaration.",
-    "File '/foo.ts' exist - use it as a name resolution result.",
+    "File '/foo.ts' exists - use it as a name resolution result.",
     "======== Module name '/foo' was successfully resolved to '/foo.ts'. ========",
     "======== Resolving module '/bar' from '/root/a.ts'. ========",
     "Module resolution kind is not specified, using 'Node10'.",
@@ -27,6 +27,6 @@
     "Trying substitution './src/*', candidate module location: './src//bar'.",
     "Loading module as file / folder, candidate module location '/root/src/bar', target file types: JavaScript.",
     "Loading module as file / folder, candidate module location '/bar', target file types: JavaScript.",
-    "File '/bar.js' exist - use it as a name resolution result.",
+    "File '/bar.js' exists - use it as a name resolution result.",
     "======== Module name '/bar' was successfully resolved to '/bar.js'. ========"
 ]

@@ -1,0 +1,44 @@
+tests/cases/conformance/jsdoc/overloadTag2.js(25,20): error TS7006: Parameter 'b' implicitly has an 'any' type.
+tests/cases/conformance/jsdoc/overloadTag2.js(30,9): error TS2554: Expected 1-2 arguments, but got 0.
+
+
+==== tests/cases/conformance/jsdoc/overloadTag2.js (2 errors) ====
+    export class Foo {
+        #a = true ? 1 : "1"
+        #b
+    
+        /**
+         * Should not have an implicit any error, because constructor's return type is always implicit
+         * @constructor
+         * @overload
+         * @param {string} a
+         * @param {number} b
+         */
+        /**
+         * @constructor
+         * @overload
+         * @param {number} a
+         */
+        /**
+         * @constructor
+         * @overload
+         * @param {string} a
+         *//**
+         * @constructor
+         * @param {number | string} a
+         */
+        constructor(a, b) {
+                       ~
+!!! error TS7006: Parameter 'b' implicitly has an 'any' type.
+            this.#a = a
+            this.#b = b
+        }
+    }
+    var a = new Foo()
+            ~~~~~~~~~
+!!! error TS2554: Expected 1-2 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/jsdoc/overloadTag2.js:15:8: An argument for 'a' was not provided.
+    var b = new Foo('str')
+    var c = new Foo(2)
+    var d = new Foo('str', 2)
+    

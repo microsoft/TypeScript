@@ -1,3 +1,10 @@
+=== /src/foo.ts ===
+// import { fooFromIndex } from "";
+//                               ^
+// | ----------------------------------------------------------------------
+// | dependency
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +12,7 @@
       "position": 30,
       "name": ""
     },
-    "completionList": {
+    "item": {
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,

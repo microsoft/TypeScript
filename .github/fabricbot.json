@@ -31,7 +31,7 @@
           {
             "name": "addReply",
             "parameters": {
-              "comment": "Thanks for the PR! It looks like you've changed the TSServer protocol in some way. Please ensure that any changes here don't break consumers of the current TSServer API. For some extra review, we'll ping @sheetalkamat, @mjbvz, and @minestarks for you. Feel free to loop in other consumers/maintainers if necessary"
+              "comment": "Thanks for the PR! It looks like you've changed the TSServer protocol in some way. Please ensure that any changes here don't break consumers of the current TSServer API. For some extra review, we'll ping @sheetalkamat, @mjbvz, @zkat, and @joj for you. Feel free to loop in other consumers/maintainers if necessary"
             }
           }
         ],
@@ -487,7 +487,7 @@
           {
             "name": "addReply",
             "parameters": {
-              "comment": "Thanks for the PR! It looks like you've changed 'preProcess.ts' in some way. Please ensure that any changes here don't break consumers with unique project systems such as Visual Studio. Pinging @sheetalkamat and @minestarks so they are aware of the changes."
+              "comment": "Thanks for the PR! It looks like you've changed 'preProcess.ts' in some way. Please ensure that any changes here don't break consumers with unique project systems such as Visual Studio. Pinging @sheetalkamat, @zkat, and @joj so they are aware of the changes."
             }
           }
         ]

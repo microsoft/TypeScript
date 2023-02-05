@@ -1,3 +1,24 @@
+=== /tests/cases/fourslash/something.js ===
+// var C = function () { }
+// /**
+//  * The prototype method.
+//  * @param {string} a Parameter definition.
+//  */
+// function f(a) {}
+// C.prototype.m = f;
+// 
+// var x = new C();
+// x.m();
+//   ^
+// | ----------------------------------------------------------------------
+// | (property) C.m: (a: string) => void
+// | (warning) a
+// | (warning) C
+// | (warning) f
+// | (warning) prototype
+// | (warning) x
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +26,7 @@
       "position": 156,
       "name": "2"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,

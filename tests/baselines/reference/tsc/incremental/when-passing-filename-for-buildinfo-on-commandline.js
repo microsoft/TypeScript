@@ -40,7 +40,7 @@ exitCode:: ExitStatus.Success
 
 
 //// [/src/project/.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"options":{"module":1,"target":1,"tsBuildInfoFile":"./.tsbuildinfo"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"options":{"module":1,"target":1,"tsBuildInfoFile":"./.tsbuildinfo"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
 
 //// [/src/project/.tsbuildinfo.readable.baseline.txt]
 {
@@ -64,6 +64,12 @@ exitCode:: ExitStatus.Success
         "signature": "-10726455937-export const x = 10;"
       }
     },
+    "root": [
+      [
+        2,
+        "./src/main.ts"
+      ]
+    ],
     "options": {
       "module": 1,
       "target": 1,
@@ -77,7 +83,7 @@ exitCode:: ExitStatus.Success
     ]
   },
   "version": "FakeTSVersion",
-  "size": 766
+  "size": 777
 }
 
 //// [/src/project/src/main.js]

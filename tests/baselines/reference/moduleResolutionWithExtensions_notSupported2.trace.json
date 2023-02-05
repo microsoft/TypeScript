@@ -8,6 +8,6 @@
     "Directory '/jsx' does not exist, skipping all lookups in it.",
     "Loading module as file / folder, candidate module location '/jsx', target file types: JavaScript.",
     "File '/jsx.js' does not exist.",
-    "File '/jsx.jsx' exist - use it as a name resolution result.",
+    "File '/jsx.jsx' exists - use it as a name resolution result.",
     "======== Module name './jsx' was successfully resolved to '/jsx.jsx'. ========"
 ]

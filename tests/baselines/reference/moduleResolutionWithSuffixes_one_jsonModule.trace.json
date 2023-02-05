@@ -10,6 +10,6 @@
     "Directory '/foo.json' does not exist, skipping all lookups in it.",
     "Loading module as file / folder, candidate module location '/foo.json', target file types: JavaScript, JSON.",
     "File name '/foo.json' has a '.json' extension - stripping it.",
-    "File '/foo.ios.json' exist - use it as a name resolution result.",
+    "File '/foo.ios.json' exists - use it as a name resolution result.",
     "======== Module name './foo.json' was successfully resolved to '/foo.ios.json'. ========"
 ]

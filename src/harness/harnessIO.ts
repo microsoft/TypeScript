@@ -1,7 +1,3 @@
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vpath from "./_namespaces/vpath";
-import * as vfs from "./_namespaces/vfs";
 import * as compiler from "./_namespaces/compiler";
 import * as documents from "./_namespaces/documents";
 import * as fakes from "./_namespaces/fakes";
@@ -10,6 +6,10 @@ import {
     TypeWriterResult,
     TypeWriterWalker,
 } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as Utils from "./_namespaces/Utils";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 export interface IO {
     newLine(): string;
@@ -596,7 +596,11 @@ export namespace Compiler {
                 .map(s => "!!! " + ts.diagnosticCategoryName(error) + " TS" + error.code + ": " + s);
             if (error.relatedInformation) {
                 for (const info of error.relatedInformation) {
-                    errLines.push(`!!! related TS${info.code}${info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : ""}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
+                    let location = info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : "";
+                    if (location && isDefaultLibraryFile(info.file!.fileName)) {
+                        location = location.replace(/(lib(?:.*)\.d\.ts):\d+:\d+/i, "$1:--:--");
+                    }
+                    errLines.push(`!!! related TS${info.code}${location}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
                 }
             }
             errLines.forEach(e => outputLines += (newLine() + e));
@@ -612,7 +616,11 @@ export namespace Compiler {
             }
         }
 
-        yield [diagnosticSummaryMarker, Utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, options && options.pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
+        let topDiagnostics = minimalDiagnosticsToString(diagnostics, options && options.pretty);
+        topDiagnostics = Utils.removeTestPathPrefixes(topDiagnostics);
+        topDiagnostics = topDiagnostics.replace(/^(lib(?:.*)\.d\.ts)\(\d+,\d+\)/igm, "$1(--,--)");
+
+        yield [diagnosticSummaryMarker, topDiagnostics + IO.newLine() + IO.newLine(), diagnostics.length];
 
         // Report global errors
         const globalErrors = diagnostics.filter(err => !err.file);
