@@ -10,7 +10,4 @@
 //// bar./**/
 
 
-
-// verify.completions({ excludes: undefined });
-
 verify.baselineCompletions();
