@@ -75,3 +75,8 @@ tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(25,1): error TS23
     type fixed1 = test1 & { length: 2 }
     let var1: fixed1 = [0, 0]
     
+    // #52551
+    type EmptyTuple = []
+    interface MyEmptyTuple extends EmptyTuple { extraInfo?: any; }
+    const withExtra: MyEmptyTuple = []
+    

@@ -140,3 +140,14 @@ let var1: fixed1 = [0, 0]
 >0 : 0
 >0 : 0
 
+// #52551
+type EmptyTuple = []
+>EmptyTuple : []
+
+interface MyEmptyTuple extends EmptyTuple { extraInfo?: any; }
+>extraInfo : any
+
+const withExtra: MyEmptyTuple = []
+>withExtra : MyEmptyTuple
+>[] : []
+

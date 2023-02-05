@@ -28,3 +28,8 @@ numStrTuple = unionTuple3;
 type test1 = [...number[]]
 type fixed1 = test1 & { length: 2 }
 let var1: fixed1 = [0, 0]
+
+// #52551
+type EmptyTuple = []
+interface MyEmptyTuple extends EmptyTuple { extraInfo?: any; }
+const withExtra: MyEmptyTuple = []
