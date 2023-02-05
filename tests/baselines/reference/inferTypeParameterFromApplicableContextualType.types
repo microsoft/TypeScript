@@ -1,0 +1,44 @@
+=== tests/cases/compiler/inferTypeParameterFromApplicableContextualType.ts ===
+declare function useCallback<T extends Function>(fn: T): T;
+>useCallback : <T extends Function>(fn: T) => T
+>fn : T
+
+declare function ex1(callback: (x: number) => void): void;
+>ex1 : (callback: (x: number) => void) => void
+>callback : (x: number) => void
+>x : number
+
+ex1(useCallback(x => {}));
+>ex1(useCallback(x => {})) : void
+>ex1 : (callback: (x: number) => void) => void
+>useCallback(x => {}) : (x: number) => void
+>useCallback : <T extends Function>(fn: T) => T
+>x => {} : (x: number) => void
+>x : number
+
+declare function ex2(callback?: (x: number) => void): void;
+>ex2 : (callback?: ((x: number) => void) | undefined) => void
+>callback : ((x: number) => void) | undefined
+>x : number
+
+ex2(useCallback(x => {}));
+>ex2(useCallback(x => {})) : void
+>ex2 : (callback?: ((x: number) => void) | undefined) => void
+>useCallback(x => {}) : (x: number) => void
+>useCallback : <T extends Function>(fn: T) => T
+>x => {} : (x: number) => void
+>x : number
+
+declare function ex3(callback: ((x: number) => void) | 5): void;
+>ex3 : (callback: ((x: number) => void) | 5) => void
+>callback : ((x: number) => void) | 5
+>x : number
+
+ex3(useCallback(x => {}));
+>ex3(useCallback(x => {})) : void
+>ex3 : (callback: ((x: number) => void) | 5) => void
+>useCallback(x => {}) : (x: number) => void
+>useCallback : <T extends Function>(fn: T) => T
+>x => {} : (x: number) => void
+>x : number
+

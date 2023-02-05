@@ -31932,9 +31932,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const contextualType = getContextualType(node, skipBindingPatterns ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
             if (contextualType) {
                 const inferenceTargetType = getReturnTypeOfSignature(signature);
+                const targetConstraint = getConstraintOfType(inferenceTargetType);
+                const applicableContextualType = targetConstraint && !isTypeAssignableTo(targetConstraint, contextualType) ?
+                    filterType(contextualType, t => isTypeAssignableTo(t, targetConstraint)) :
+                    contextualType;
                 if (couldContainTypeVariables(inferenceTargetType)) {
                     const outerContext = getInferenceContext(node);
-                    const isFromBindingPattern = !skipBindingPatterns && getContextualType(node, ContextFlags.SkipBindingPatterns) !== contextualType;
+                    const isFromBindingPattern = !skipBindingPatterns && getContextualType(node, ContextFlags.SkipBindingPatterns) !== applicableContextualType;
                     // A return type inference from a binding pattern can be used in instantiating the contextual
                     // type of an argument later in inference, but cannot stand on its own as the final return type.
                     // It is incorporated into `context.returnMapper` which is used in `instantiateContextualType`,
@@ -31950,7 +31954,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // outer call expression. Effectively we just want a snapshot of whatever has been
                         // inferred for any outer call expression so far.
                         const outerMapper = getMapperFromContext(cloneInferenceContext(outerContext, InferenceFlags.NoDefault));
-                        const instantiatedType = instantiateType(contextualType, outerMapper);
+                        const instantiatedType = instantiateType(applicableContextualType, outerMapper);
                         // If the contextual type is a generic function type with a single call signature, we
                         // instantiate the type with its own type parameters and type arguments. This ensures that
                         // the type parameters are not erased to type any during type inference such that they can
@@ -31970,7 +31974,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // the source type uses the outer context's return mapper (which excludes inferences made from
                     // outer arguments), and (b) we don't want any further inferences going into this context.
                     const returnContext = createInferenceContext(signature.typeParameters!, signature, context.flags);
-                    const returnSourceType = instantiateType(contextualType, outerContext && outerContext.returnMapper);
+                    const returnSourceType = instantiateType(applicableContextualType, outerContext && outerContext.returnMapper);
                     inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType);
                     context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(cloneInferredPartOfContext(returnContext)) : undefined;
                 }
