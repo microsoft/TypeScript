@@ -80,3 +80,16 @@ numStrTuple = unionTuple3;
 >numStrTuple : Symbol(numStrTuple, Decl(contextualTypeWithTuple.ts, 1, 3))
 >unionTuple3 : Symbol(unionTuple3, Decl(contextualTypeWithTuple.ts, 11, 3))
 
+// repro from #29311
+type test1 = [...number[]]
+>test1 : Symbol(test1, Decl(contextualTypeWithTuple.ts, 24, 26))
+
+type fixed1 = test1 & { length: 2 }
+>fixed1 : Symbol(fixed1, Decl(contextualTypeWithTuple.ts, 27, 26))
+>test1 : Symbol(test1, Decl(contextualTypeWithTuple.ts, 24, 26))
+>length : Symbol(length, Decl(contextualTypeWithTuple.ts, 28, 23))
+
+let var1: fixed1 = [0, 0]
+>var1 : Symbol(var1, Decl(contextualTypeWithTuple.ts, 29, 3))
+>fixed1 : Symbol(fixed1, Decl(contextualTypeWithTuple.ts, 27, 26))
+
