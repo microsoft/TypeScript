@@ -10519,7 +10519,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // function/class/{} initializers are themselves containers, so they won't merge in the same way as other initializers
         const container = getAssignedExpandoInitializer(symbol.valueDeclaration);
         if (container) {
-            const tag = getJSDocTypeTag(container);
+            const tag = isInJSFile(container) ? getJSDocTypeTag(container) : undefined;
             if (tag && tag.typeExpression) {
                 return getTypeFromTypeNode(tag.typeExpression);
             }

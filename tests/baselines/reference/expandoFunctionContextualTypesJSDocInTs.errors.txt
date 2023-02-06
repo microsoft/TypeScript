@@ -1,8 +1,7 @@
 tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts(2,17): error TS2307: Cannot find module 'blah' or its corresponding type declarations.
-tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts(8,1): error TS2322: Type '() => void' is not assignable to type 'never'.
 
 
-==== tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts (2 errors) ====
+==== tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts (1 errors) ====
     // GH #38532
     import Foo from "blah";
                     ~~~~~~
@@ -13,6 +12,4 @@ tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts(8,1): error TS23
     // This comment should have no effect; this is a TS file.
     /** @type {never} */
     Foo.bar = () => { };
-    ~~~~~~~
-!!! error TS2322: Type '() => void' is not assignable to type 'never'.
     

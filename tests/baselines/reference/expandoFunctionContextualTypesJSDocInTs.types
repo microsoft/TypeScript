@@ -10,8 +10,8 @@ export function Foo() { }
 /** @type {never} */
 Foo.bar = () => { };
 >Foo.bar = () => { } : () => void
->Foo.bar : never
+>Foo.bar : () => void
 >Foo : typeof import("tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs").Foo
->bar : never
+>bar : () => void
 >() => { } : () => void
 
