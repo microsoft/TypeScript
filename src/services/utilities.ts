@@ -4047,7 +4047,7 @@ export function isSourceFileFromLibrary(program: Program, node: SourceFile) {
 }
 
 /** @internal */
-interface CaseClauseTracker {
+export interface CaseClauseTracker {
     addValue(value: string | number): void;
     hasValue(value: string | number | PseudoBigInt): boolean;
 }

@@ -254,16 +254,6 @@ function convertStringLiteralCompletions(
             }));
             return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };
         }
-        case StringLiteralCompletionKind.Cases: {
-            const entries = completion.cases.map(type => ({
-                name: type.value,
-                kindModifiers: ScriptElementKindModifier.none,
-                kind: ScriptElementKind.string,
-                sortText: SortText.LocationPriority,
-                replacementSpan: getReplacementSpanForContextToken(contextToken)
-            }));
-            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };
-        }
         default:
             return Debug.assertNever(completion);
     }
@@ -288,8 +278,6 @@ function stringLiteralCompletionDetails(name: string, location: Node, completion
         }
         case StringLiteralCompletionKind.Types:
             return find(completion.types, t => t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.typeElement, [textPart(name)]) : undefined;
-        case StringLiteralCompletionKind.Cases:
-            return;
         default:
             return Debug.assertNever(completion);
     }
@@ -323,7 +311,7 @@ function kindModifiersFromExtension(extension: Extension | undefined): ScriptEle
     }
 }
 
-const enum StringLiteralCompletionKind { Paths, Properties, Types, Cases }
+const enum StringLiteralCompletionKind { Paths, Properties, Types }
 interface StringLiteralCompletionsFromProperties {
     readonly kind: StringLiteralCompletionKind.Properties;
     readonly symbols: readonly Symbol[];
@@ -334,12 +322,7 @@ interface StringLiteralCompletionsFromTypes {
     readonly types: readonly StringLiteralType[];
     readonly isNewIdentifier: boolean;
 }
-interface StringLiteralCompletionsFromCases {
-    readonly kind: StringLiteralCompletionKind.Cases;
-    readonly cases: readonly StringLiteralType[];
-    readonly isNewIdentifier: boolean;
-}
-type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: readonly PathCompletion[] } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes | StringLiteralCompletionsFromCases;
+type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: readonly PathCompletion[] } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
 function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost, preferences: UserPreferences): StringLiteralCompletion | undefined {
     const parent = walkUpParentheses(node.parent);
     switch (parent.kind) {
@@ -437,7 +420,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
         case SyntaxKind.CaseClause:
             const tracker = newCaseClauseTracker(typeChecker, (node.parent as CaseClause).parent.clauses);
             const literals = fromContextualType().types.filter(literal => !tracker.hasValue(literal.value));
-            return { kind: StringLiteralCompletionKind.Cases, cases: literals, isNewIdentifier: false }
+            return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false }
         default:
             return fromContextualType();
     }
