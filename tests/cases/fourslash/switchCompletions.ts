@@ -14,7 +14,7 @@
 ////     case /*2*/
 //// }
 //// declare const f2: 'foo' | 'bar' | 'baz';
-//// switch (f) {
+//// switch (f2) {
 ////     case 'bar':
 ////         return 1;
 ////     case '/*3*/'

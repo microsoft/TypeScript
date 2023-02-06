@@ -271,6 +271,7 @@ import {
     ModuleReference,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
+    newCaseClauseTracker,
     Node,
     NodeArray,
     NodeBuilderFlags,
@@ -357,7 +358,6 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
-    newCaseClauseTracker,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
 
