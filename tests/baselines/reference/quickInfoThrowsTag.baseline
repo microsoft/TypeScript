@@ -1,3 +1,39 @@
+=== /tests/cases/fourslash/quickInfoThrowsTag.ts ===
+// class E extends Error {}
+// 
+// /**
+//  * @throws {E}
+//  */
+// function f1() {}
+// 
+// /**
+//  * @throws {E} description
+//  */
+// function f2() {}
+// 
+// /**
+//  * @throws description
+//  */
+// function f3() {}
+// f1()
+// ^^
+// | ----------------------------------------------------------------------
+// | function f1(): void
+// | @throws {E}
+// | ----------------------------------------------------------------------
+// f2()
+// ^^
+// | ----------------------------------------------------------------------
+// | function f2(): void
+// | @throws {E} description
+// | ----------------------------------------------------------------------
+// f3()
+// ^^
+// | ----------------------------------------------------------------------
+// | function f3(): void
+// | @throws description
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +41,7 @@
       "position": 170,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -66,7 +102,7 @@
       "position": 175,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -135,7 +171,7 @@
       "position": 180,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

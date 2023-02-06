@@ -30,7 +30,7 @@ import {
     ConditionalExpression,
     contains,
     ContextFlags,
-    createPrinter,
+    createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createRange,
     createScanner,
     createTextSpan,
@@ -305,6 +305,7 @@ import {
     skipAlias,
     skipOuterExpressions,
     some,
+    SortKind,
     SourceFile,
     SourceFileLike,
     SourceMapper,
@@ -341,6 +342,7 @@ import {
     tryCast,
     Type,
     TypeChecker,
+    TypeFlags,
     TypeFormatFlags,
     TypeNode,
     TypeOfExpression,
@@ -2154,6 +2156,17 @@ export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): 
 }
 
 /** @internal */
+export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
+    if (!type.isIntersection()) {
+        return false;
+    }
+
+    const { types, checker } = type;
+    return types.length === 2
+        && (types[0].flags & TypeFlags.String) && checker.isEmptyAnonymousObjectType(types[1]);
+}
+
+/** @internal */
 export function isPunctuation(kind: SyntaxKind): boolean {
     return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
 }
@@ -2412,7 +2425,9 @@ export function getModuleSpecifierResolverHost(program: Program, host: LanguageS
 
 /** @internal */
 export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution === ModuleResolutionKind.Node10 || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    return moduleResolution === ModuleResolutionKind.Node10
+        || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
+        || moduleResolution === ModuleResolutionKind.Bundler;
 }
 
 /** @internal */
@@ -2534,17 +2549,20 @@ export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | und
 }
 
 /** @internal */
-export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean): void {
+export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean, preferences: UserPreferences): void {
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
-    const sortedNewImports = isArray(imports) ? stableSort(imports, OrganizeImports.compareImportsOrRequireStatements) : [imports];
+    let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
+    const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
+    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && OrganizeImports.detectImportDeclarationSorting(existingImportStatements)) {
+    else if (existingImportStatements && (sortKind = OrganizeImports.detectImportDeclarationSorting(existingImportStatements, preferences))) {
+        const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
         for (const newImport of sortedNewImports) {
-            const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
+            const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
             if (insertionIndex === 0) {
                 // If the first import is top-of-file, insert after the leading comment which is likely the header.
                 const options = existingImportStatements[0] === sourceFile.statements[0] ?
@@ -2926,16 +2944,16 @@ function findLinkNameEnd(text: string) {
     return 0;
 }
 
-const carriageReturnLineFeed = "\r\n";
+const lineFeed = "\n";
 /**
- * The default is CRLF.
+ * The default is LF.
  *
  * @internal
  */
-export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings?: FormatCodeSettings) {
+export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings: FormatCodeSettings | undefined) {
     return formatSettings?.newLineCharacter ||
         host.getNewLine?.() ||
-        carriageReturnLineFeed;
+        lineFeed;
 }
 
 /** @internal */
@@ -2980,7 +2998,7 @@ export function signatureToDisplayParts(typechecker: TypeChecker, signature: Sig
 export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
     const file = enclosingDeclaration.getSourceFile();
     return mapToDisplayParts(writer => {
-        const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
+        const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
         printer.writeNode(EmitHint.Unspecified, node, file, writer);
     });
 }

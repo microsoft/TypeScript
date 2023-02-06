@@ -1,4 +1,5 @@
 import {
+    __String,
     addEmitHelpers,
     addRange,
     AllDecorators,
@@ -28,13 +29,14 @@ import {
     getEmitFlags,
     getEmitScriptTarget,
     getOriginalNodeId,
+    groupBy,
     hasAccessorModifier,
-    hasDecorators,
     hasSyntacticModifier,
     Identifier,
     idText,
     isBindingName,
     isBlock,
+    isCallToHelper,
     isClassElement,
     isComputedPropertyName,
     isDecorator,
@@ -147,9 +149,11 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
     }
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-        if (!(classOrConstructorParameterIsDecorated(node) || childIsDecorated(node))) return visitEachChild(node, visitor, context);
+        if (!(classOrConstructorParameterIsDecorated(/*legacyDecorators*/ true, node) || childIsDecorated(/*legacyDecorators*/ true, node))) {
+            return visitEachChild(node, visitor, context);
+        }
 
-        const statements = hasDecorators(node) ?
+        const statements = classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ true, node) ?
             transformClassDeclarationWithClassDecorators(node, node.name) :
             transformClassDeclarationWithoutClassDecorators(node, node.name);
 
@@ -173,7 +177,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
     function hasClassElementWithDecoratorContainingPrivateIdentifierInExpression(node: ClassDeclaration) {
         for (const member of node.members) {
             if (!canHaveDecorators(member)) continue;
-            const allDecorators = getAllDecoratorsOfClassElement(member, node);
+            const allDecorators = getAllDecoratorsOfClassElement(member, node, /*useLegacyDecorators*/ true);
             if (some(allDecorators?.decorators, decoratorContainsPrivateIdentifierInExpression)) return true;
             if (some(allDecorators?.parameters, parameterDecoratorsContainPrivateIdentifierInExpression)) return true;
         }
@@ -337,7 +341,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         const classExpression = factory.createClassExpression(
             /*modifiers*/ undefined,
-            name,
+            name && isGeneratedIdentifier(name) ? undefined : name,
             /*typeParameters*/ undefined,
             heritageClauses,
             members);
@@ -469,6 +473,10 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         return updated;
     }
 
+    function isSyntheticMetadataDecorator(node: Decorator) {
+        return isCallToHelper(node.expression, "___metadata" as __String);
+    }
+
     /**
      * Transforms all of the decorators for a declaration into an array of expressions.
      *
@@ -479,9 +487,12 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
             return undefined;
         }
 
+        // ensure that metadata decorators are last
+        const { false: decorators, true: metadata } = groupBy(allDecorators.decorators, isSyntheticMetadataDecorator);
         const decoratorExpressions: Expression[] = [];
-        addRange(decoratorExpressions, map(allDecorators.decorators, transformDecorator));
+        addRange(decoratorExpressions, map(decorators, transformDecorator));
         addRange(decoratorExpressions, flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
+        addRange(decoratorExpressions, map(metadata, transformDecorator));
         return decoratorExpressions;
     }
 
@@ -504,7 +515,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * @param member The class member.
      */
     function isDecoratedClassElement(member: ClassElement, isStaticElement: boolean, parent: ClassLikeDeclaration) {
-        return nodeOrChildIsDecorated(member, parent)
+        return nodeOrChildIsDecorated(/*legacyDecorators*/ true, member, parent)
             && isStaticElement === isStatic(member);
     }
 
@@ -544,7 +555,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * @param member The class member.
      */
     function generateClassElementDecorationExpression(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-        const allDecorators = getAllDecoratorsOfClassElement(member, node);
+        const allDecorators = getAllDecoratorsOfClassElement(member, node, /*useLegacyDecorators*/ true);
         const decoratorExpressions = transformAllDecoratorsOfDeclaration(allDecorators);
         if (!decoratorExpressions) {
             return undefined;

@@ -135,16 +135,18 @@ function farr<T extends [number, string, string] | [string, number, number]>(x: 
 >tail : [string, string] | [number, number]
 >x : [number, string, string] | [string, number, number]
 
-    if (x[0] === 'number') {
->x[0] === 'number' : boolean
+    if (typeof x[0] === 'number') {
+>typeof x[0] === 'number' : boolean
+>typeof x[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x[0] : string | number
 >x : [number, string, string] | [string, number, number]
 >0 : 0
 >'number' : "number"
 
         const [head, ...tail] = x;
->head : "number"
+>head : number
 >tail : [string, string] | [number, number]
 >x : [number, string, string] | [string, number, number]
     }
 }
+

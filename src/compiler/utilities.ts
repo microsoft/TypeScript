@@ -5,8 +5,10 @@ import {
     addRange,
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
+    AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
+    AmpersandAmpersandEqualsToken,
     AnyImportOrBareOrAccessedRequire,
     AnyImportOrReExport,
     AnyImportSyntax,
@@ -22,6 +24,7 @@ import {
     AssignmentDeclarationKind,
     AssignmentExpression,
     AssignmentOperatorToken,
+    BarBarEqualsToken,
     BinaryExpression,
     binarySearch,
     BindableObjectDefinePropertyCall,
@@ -29,6 +32,7 @@ import {
     BindableStaticElementAccessExpression,
     BindableStaticNameExpression,
     BindingElement,
+    BindingElementOfBareOrAccessedRequire,
     Block,
     BundleFileSection,
     BundleFileSectionKind,
@@ -37,7 +41,6 @@ import {
     CallLikeExpression,
     CallSignatureDeclaration,
     canHaveDecorators,
-    canHaveIllegalDecorators,
     canHaveModifiers,
     CaseBlock,
     CaseClause,
@@ -48,6 +51,7 @@ import {
     CheckFlags,
     ClassDeclaration,
     ClassElement,
+    ClassExpression,
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
     combinePaths,
@@ -224,6 +228,7 @@ import {
     InitializedVariableDeclaration,
     insertSorted,
     InterfaceDeclaration,
+    InternalEmitFlags,
     isAccessor,
     isAnyDirectorySeparator,
     isArray,
@@ -231,6 +236,7 @@ import {
     isArrowFunction,
     isBigIntLiteral,
     isBinaryExpression,
+    isBindingElement,
     isBindingPattern,
     isCallExpression,
     isClassDeclaration,
@@ -292,6 +298,7 @@ import {
     isLiteralTypeNode,
     isMemberName,
     isMetaProperty,
+    isMethodDeclaration,
     isMethodOrAccessor,
     isModuleDeclaration,
     isNamedDeclaration,
@@ -431,6 +438,7 @@ import {
     PropertySignature,
     PseudoBigInt,
     QualifiedName,
+    QuestionQuestionEqualsToken,
     ReadonlyCollection,
     ReadonlyTextRange,
     removeTrailingDirectorySeparator,
@@ -482,7 +490,6 @@ import {
     SymbolTable,
     SyntaxKind,
     SyntaxList,
-    sys,
     TaggedTemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
@@ -532,6 +539,7 @@ import {
     version,
     WhileStatement,
     WithStatement,
+    WrappedExpression,
     WriteFileCallback,
     WriteFileCallbackData,
     YieldExpression,
@@ -1175,6 +1183,16 @@ export function getEmitFlags(node: Node): EmitFlags {
     return emitNode && emitNode.flags || 0;
 }
 
+/**
+ * Gets flags that control emit behavior of a node.
+ *
+ * @internal
+ */
+export function getInternalEmitFlags(node: Node): InternalEmitFlags {
+    const emitNode = node.emitNode;
+    return emitNode && emitNode.internalFlags || 0;
+}
+
 /** @internal */
 export interface ScriptTargetFeatures {
     [key: string]: { [key: string]: string[] | undefined };
@@ -1261,6 +1279,20 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
             BigUint64Array: ["at"],
             ObjectConstructor: ["hasOwn"],
             Error: ["cause"]
+        },
+        es2023: {
+            Array: ["findLastIndex", "findLast"],
+            Int8Array: ["findLastIndex", "findLast"],
+            Uint8Array: ["findLastIndex", "findLast"],
+            Uint8ClampedArray: ["findLastIndex", "findLast"],
+            Int16Array: ["findLastIndex", "findLast"],
+            Uint16Array: ["findLastIndex", "findLast"],
+            Int32Array: ["findLastIndex", "findLast"],
+            Uint32Array: ["findLastIndex", "findLast"],
+            Float32Array: ["findLastIndex", "findLast"],
+            Float64Array: ["findLastIndex", "findLast"],
+            BigInt64Array: ["findLastIndex", "findLast"],
+            BigUint64Array: ["findLastIndex", "findLast"],
         }
     };
 }
@@ -1715,10 +1747,15 @@ export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node
 }
 
 /** @internal */
-export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
-    const sourceFile = getSourceFileOfNode(node);
+export function createDiagnosticForNodeFromMessageChain(sourceFile: SourceFile, node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
     const span = getErrorSpanForNode(sourceFile, node);
     return createFileDiagnosticFromMessageChain(sourceFile, span.start, span.length, messageChain, relatedInformation);
+}
+
+/** @internal */
+export function createDiagnosticForNodeArrayFromMessageChain(sourceFile: SourceFile, nodes: NodeArray<Node>, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
+    const start = skipTrivia(sourceFile.text, nodes.pos);
+    return createFileDiagnosticFromMessageChain(sourceFile, start, nodes.end - start, messageChain, relatedInformation);
 }
 
 function assertDiagnosticLocation(file: SourceFile | undefined, start: number, length: number) {
@@ -2690,91 +2727,151 @@ export function getInvokedExpression(node: CallLikeExpression): Expression {
 }
 
 /** @internal */
-export function nodeCanBeDecorated(node: ClassDeclaration): true;
+export function nodeCanBeDecorated(useLegacyDecorators: boolean, node: ClassDeclaration): true;
 /** @internal */
-export function nodeCanBeDecorated(node: ClassElement, parent: Node): boolean;
+export function nodeCanBeDecorated(useLegacyDecorators: boolean, node: ClassExpression): boolean;
 /** @internal */
-export function nodeCanBeDecorated(node: Node, parent: Node, grandparent: Node): boolean;
+export function nodeCanBeDecorated(useLegacyDecorators: boolean, node: ClassElement, parent: Node): boolean;
 /** @internal */
-export function nodeCanBeDecorated(node: Node, parent?: Node, grandparent?: Node): boolean {
+export function nodeCanBeDecorated(useLegacyDecorators: boolean, node: Node, parent: Node, grandparent: Node): boolean;
+/** @internal */
+export function nodeCanBeDecorated(useLegacyDecorators: boolean, node: Node, parent?: Node, grandparent?: Node): boolean {
     // private names cannot be used with decorators yet
-    if (isNamedDeclaration(node) && isPrivateIdentifier(node.name)) {
+    if (useLegacyDecorators && isNamedDeclaration(node) && isPrivateIdentifier(node.name)) {
         return false;
     }
+
     switch (node.kind) {
         case SyntaxKind.ClassDeclaration:
-            // classes are valid targets
+            // class declarations are valid targets
             return true;
+
+        case SyntaxKind.ClassExpression:
+            // class expressions are valid targets for native decorators
+            return !useLegacyDecorators;
 
         case SyntaxKind.PropertyDeclaration:
             // property declarations are valid if their parent is a class declaration.
-            return parent!.kind === SyntaxKind.ClassDeclaration;
+            return parent !== undefined
+                    && (useLegacyDecorators ? isClassDeclaration(parent) : isClassLike(parent) && !hasAbstractModifier(node) && !hasAmbientModifier(node));
 
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
         case SyntaxKind.MethodDeclaration:
             // if this method has a body and its parent is a class declaration, this is a valid target.
             return (node as FunctionLikeDeclaration).body !== undefined
-                && parent!.kind === SyntaxKind.ClassDeclaration;
+                && parent !== undefined
+                && (useLegacyDecorators ? isClassDeclaration(parent) : isClassLike(parent));
 
         case SyntaxKind.Parameter:
-            // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
-            return (parent as FunctionLikeDeclaration).body !== undefined
-                && (parent!.kind === SyntaxKind.Constructor
-                    || parent!.kind === SyntaxKind.MethodDeclaration
-                    || parent!.kind === SyntaxKind.SetAccessor)
-                && grandparent!.kind === SyntaxKind.ClassDeclaration;
+            // TODO(rbuckton): Parameter decorator support for ES decorators must wait until it is standardized
+            if (!useLegacyDecorators) return false;
+            // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target.
+            return parent !== undefined
+                && (parent as FunctionLikeDeclaration).body !== undefined
+                && (parent.kind === SyntaxKind.Constructor
+                    || parent.kind === SyntaxKind.MethodDeclaration
+                    || parent.kind === SyntaxKind.SetAccessor)
+                && getThisParameter(parent as FunctionLikeDeclaration) !== node
+                    && grandparent !== undefined
+                    && grandparent.kind === SyntaxKind.ClassDeclaration;
     }
 
     return false;
 }
 
 /** @internal */
-export function nodeIsDecorated(node: ClassDeclaration): boolean;
+export function nodeIsDecorated(useLegacyDecorators: boolean, node: ClassDeclaration | ClassExpression): boolean;
 /** @internal */
-export function nodeIsDecorated(node: ClassElement, parent: Node): boolean;
+export function nodeIsDecorated(useLegacyDecorators: boolean, node: ClassElement, parent: Node): boolean;
 /** @internal */
-export function nodeIsDecorated(node: Node, parent: Node, grandparent: Node): boolean;
+export function nodeIsDecorated(useLegacyDecorators: boolean, node: Node, parent: Node, grandparent: Node): boolean;
 /** @internal */
-export function nodeIsDecorated(node: Node, parent?: Node, grandparent?: Node): boolean {
+export function nodeIsDecorated(useLegacyDecorators: boolean, node: Node, parent?: Node, grandparent?: Node): boolean {
     return hasDecorators(node)
-        && nodeCanBeDecorated(node, parent!, grandparent!); // TODO: GH#18217
+        && nodeCanBeDecorated(useLegacyDecorators, node, parent!, grandparent!);
 }
 
 /** @internal */
-export function nodeOrChildIsDecorated(node: ClassDeclaration): boolean;
+export function nodeOrChildIsDecorated(useLegacyDecorators: boolean, node: ClassDeclaration | ClassExpression): boolean;
 /** @internal */
-export function nodeOrChildIsDecorated(node: ClassElement, parent: Node): boolean;
+export function nodeOrChildIsDecorated(useLegacyDecorators: boolean, node: ClassElement, parent: Node): boolean;
 /** @internal */
-export function nodeOrChildIsDecorated(node: Node, parent: Node, grandparent: Node): boolean;
+export function nodeOrChildIsDecorated(useLegacyDecorators: boolean, node: Node, parent: Node, grandparent: Node): boolean;
 /** @internal */
-export function nodeOrChildIsDecorated(node: Node, parent?: Node, grandparent?: Node): boolean {
-    return nodeIsDecorated(node, parent!, grandparent!) || childIsDecorated(node, parent!); // TODO: GH#18217
+export function nodeOrChildIsDecorated(useLegacyDecorators: boolean, node: Node, parent?: Node, grandparent?: Node): boolean {
+    return nodeIsDecorated(useLegacyDecorators, node, parent!, grandparent!)
+        || childIsDecorated(useLegacyDecorators, node, parent!);
 }
 
 /** @internal */
-export function childIsDecorated(node: ClassDeclaration): boolean;
+export function childIsDecorated(useLegacyDecorators: boolean, node: ClassDeclaration | ClassExpression): boolean;
 /** @internal */
-export function childIsDecorated(node: Node, parent: Node): boolean;
+export function childIsDecorated(useLegacyDecorators: boolean, node: Node, parent: Node): boolean;
 /** @internal */
-export function childIsDecorated(node: Node, parent?: Node): boolean {
+export function childIsDecorated(useLegacyDecorators: boolean, node: Node, parent?: Node): boolean {
     switch (node.kind) {
         case SyntaxKind.ClassDeclaration:
-            return some((node as ClassDeclaration).members, m => nodeOrChildIsDecorated(m, node, parent!)); // TODO: GH#18217
+            return some((node as ClassDeclaration).members, m => nodeOrChildIsDecorated(useLegacyDecorators, m, node, parent!));
+            case SyntaxKind.ClassExpression:
+                return !useLegacyDecorators && some((node as ClassExpression).members, m => nodeOrChildIsDecorated(useLegacyDecorators, m, node, parent!));
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.SetAccessor:
         case SyntaxKind.Constructor:
-            return some((node as FunctionLikeDeclaration).parameters, p => nodeIsDecorated(p, node, parent!)); // TODO: GH#18217
+            return some((node as FunctionLikeDeclaration).parameters, p => nodeIsDecorated(useLegacyDecorators, p, node, parent!));
         default:
             return false;
     }
 }
 
 /** @internal */
-export function classOrConstructorParameterIsDecorated(node: ClassDeclaration): boolean {
-    if (nodeIsDecorated(node)) return true;
+export function classOrConstructorParameterIsDecorated(useLegacyDecorators: boolean, node: ClassDeclaration | ClassExpression): boolean {
+    if (nodeIsDecorated(useLegacyDecorators, node)) return true;
     const constructor = getFirstConstructorWithBody(node);
-    return !!constructor && childIsDecorated(constructor, node);
+    return !!constructor && childIsDecorated(useLegacyDecorators, constructor, node);
+}
+
+/** @internal */
+export function classElementOrClassElementParameterIsDecorated(useLegacyDecorators: boolean, node: ClassElement, parent: ClassDeclaration | ClassExpression): boolean {
+    let parameters: NodeArray<ParameterDeclaration> | undefined;
+    if (isAccessor(node)) {
+        const { firstAccessor, secondAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, node);
+        const firstAccessorWithDecorators =
+            hasDecorators(firstAccessor) ? firstAccessor :
+            secondAccessor && hasDecorators(secondAccessor) ? secondAccessor :
+            undefined;
+        if (!firstAccessorWithDecorators || node !== firstAccessorWithDecorators) {
+            return false;
+        }
+        parameters = setAccessor?.parameters;
+    }
+    else if (isMethodDeclaration(node)) {
+        parameters = node.parameters;
+    }
+    if (nodeIsDecorated(useLegacyDecorators, node, parent)) {
+        return true;
+    }
+    if (parameters) {
+        for (const parameter of parameters) {
+            if (parameterIsThisKeyword(parameter)) continue;
+            if (nodeIsDecorated(useLegacyDecorators, parameter, node, parent)) return true;
+        }
+    }
+    return false;
+}
+
+/** @internal */
+export function isEmptyStringLiteral(node: StringLiteral): boolean {
+    if (node.textSourceNode) {
+        switch (node.textSourceNode.kind) {
+            case SyntaxKind.StringLiteral:
+                return isEmptyStringLiteral(node.textSourceNode);
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return node.text === "";
+        }
+        return false;
+    }
+    return node.text === "";
 }
 
 /** @internal */
@@ -3032,6 +3129,11 @@ export function isVariableDeclarationInitializedToRequire(node: Node): node is V
  */
 export function isVariableDeclarationInitializedToBareOrAccessedRequire(node: Node): node is VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression> {
     return isVariableDeclarationInitializedWithRequireHelper(node, /*allowAccessedRequire*/ true);
+}
+
+/** @internal */
+export function isBindingElementOfBareOrAccessedRequire(node: Node): node is BindingElementOfBareOrAccessedRequire {
+    return isBindingElement(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node.parent.parent);
 }
 
 function isVariableDeclarationInitializedWithRequireHelper(node: Node, allowAccessedRequire: boolean) {
@@ -3442,7 +3544,7 @@ export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | El
 export function setValueDeclaration(symbol: Symbol, node: Declaration): void {
     const { valueDeclaration } = symbol;
     if (!valueDeclaration ||
-        !(node.flags & NodeFlags.Ambient && !(valueDeclaration.flags & NodeFlags.Ambient)) &&
+        !(node.flags & NodeFlags.Ambient && !isInJSFile(node) && !(valueDeclaration.flags & NodeFlags.Ambient)) &&
         (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
         (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
         // other kinds of value declarations take precedence over modules and assignment declarations
@@ -3460,14 +3562,23 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.BindingElement:
             return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
         case SyntaxKind.ImportDeclaration:
             return tryCast(node.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportEqualsDeclaration:
             return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
+        case SyntaxKind.ImportClause:
+        case SyntaxKind.NamespaceExport:
+            return tryCast(node.parent.moduleSpecifier, isStringLiteralLike);
+        case SyntaxKind.NamespaceImport:
+        case SyntaxKind.ExportSpecifier:
+            return tryCast(node.parent.parent.moduleSpecifier, isStringLiteralLike);
+        case SyntaxKind.ImportSpecifier:
+            return tryCast(node.parent.parent.parent.moduleSpecifier, isStringLiteralLike);
         default:
             Debug.assertNever(node);
     }
@@ -4524,6 +4635,127 @@ export function isPrivateIdentifierSymbol(symbol: Symbol): boolean {
  */
 export function isESSymbolIdentifier(node: Node): boolean {
     return node.kind === SyntaxKind.Identifier && (node as Identifier).escapedText === "Symbol";
+}
+
+/**
+ * Indicates whether a property name is the special `__proto__` property.
+ * Per the ECMA-262 spec, this only matters for property assignments whose name is
+ * the Identifier `__proto__`, or the string literal `"__proto__"`, but not for
+ * computed property names.
+ *
+ * @internal
+ */
+export function isProtoSetter(node: PropertyName) {
+    return isIdentifier(node) ? idText(node) === "__proto__" :
+        isStringLiteral(node) && node.text === "__proto__";
+}
+
+/** @internal */
+export type AnonymousFunctionDefinition =
+    | ClassExpression & { readonly name?: undefined }
+    | FunctionExpression & { readonly name?: undefined }
+    | ArrowFunction
+    ;
+
+/**
+ * Indicates whether an expression is an anonymous function definition.
+ *
+ * @see https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
+ * @internal
+ */
+export function isAnonymousFunctionDefinition(node: Expression, cb?: (node: AnonymousFunctionDefinition) => boolean): node is WrappedExpression<AnonymousFunctionDefinition> {
+    node = skipOuterExpressions(node);
+    switch (node.kind) {
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.FunctionExpression:
+            if ((node as ClassExpression | FunctionExpression).name) {
+                return false;
+            }
+            break;
+        case SyntaxKind.ArrowFunction:
+            break;
+        default:
+            return false;
+    }
+    return typeof cb === "function" ? cb(node as AnonymousFunctionDefinition) : true;
+}
+
+/** @internal */
+export type NamedEvaluationSource =
+    | PropertyAssignment & { readonly name: Identifier }
+    | ShorthandPropertyAssignment & { readonly objectAssignmentInitializer: Expression }
+    | VariableDeclaration & { readonly name: Identifier, readonly initializer: Expression }
+    | ParameterDeclaration & { readonly name: Identifier, readonly initializer: Expression, readonly dotDotDotToken: undefined }
+    | BindingElement & { readonly name: Identifier, readonly initializer: Expression, readonly dotDotDotToken: undefined }
+    | PropertyDeclaration & { readonly initializer: Expression }
+    | AssignmentExpression<EqualsToken | AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier }
+    | ExportAssignment
+    ;
+
+/**
+ * Indicates whether a node is a potential source of an assigned name for a class, function, or arrow function.
+ *
+ * @internal
+ */
+export function isNamedEvaluationSource(node: Node): node is NamedEvaluationSource {
+    switch (node.kind) {
+        case SyntaxKind.PropertyAssignment:
+            return !isProtoSetter((node as PropertyAssignment).name);
+        case SyntaxKind.ShorthandPropertyAssignment:
+            return !!(node as ShorthandPropertyAssignment).objectAssignmentInitializer;
+        case SyntaxKind.VariableDeclaration:
+            return isIdentifier((node as VariableDeclaration).name) && !!(node as VariableDeclaration).initializer;
+        case SyntaxKind.Parameter:
+            return isIdentifier((node as ParameterDeclaration).name) && !!(node as VariableDeclaration).initializer && !(node as BindingElement).dotDotDotToken;
+        case SyntaxKind.BindingElement:
+            return isIdentifier((node as BindingElement).name) && !!(node as VariableDeclaration).initializer && !(node as BindingElement).dotDotDotToken;
+        case SyntaxKind.PropertyDeclaration:
+            return !!(node as PropertyDeclaration).initializer;
+        case SyntaxKind.BinaryExpression:
+            switch ((node as BinaryExpression).operatorToken.kind) {
+                case SyntaxKind.EqualsToken:
+                case SyntaxKind.AmpersandAmpersandEqualsToken:
+                case SyntaxKind.BarBarEqualsToken:
+                case SyntaxKind.QuestionQuestionEqualsToken:
+                    return isIdentifier((node as BinaryExpression).left);
+            }
+            break;
+        case SyntaxKind.ExportAssignment:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export type NamedEvaluation =
+    | PropertyAssignment & { readonly name: Identifier, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | ShorthandPropertyAssignment & { readonly objectAssignmentInitializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | VariableDeclaration & { readonly name: Identifier, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | ParameterDeclaration & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | BindingElement & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | PropertyDeclaration & { readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | AssignmentExpression<EqualsToken | AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
+    | ExportAssignment & { readonly expression: WrappedExpression<AnonymousFunctionDefinition> }
+    ;
+
+/** @internal */
+export function isNamedEvaluation(node: Node, cb?: (node: AnonymousFunctionDefinition) => boolean): node is NamedEvaluation {
+    if (!isNamedEvaluationSource(node)) return false;
+    switch (node.kind) {
+        case SyntaxKind.PropertyAssignment:
+            return isAnonymousFunctionDefinition(node.initializer, cb);
+        case SyntaxKind.ShorthandPropertyAssignment:
+            return isAnonymousFunctionDefinition(node.objectAssignmentInitializer, cb);
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.PropertyDeclaration:
+            return isAnonymousFunctionDefinition(node.initializer, cb);
+        case SyntaxKind.BinaryExpression:
+            return isAnonymousFunctionDefinition(node.right, cb);
+        case SyntaxKind.ExportAssignment:
+            return isAnonymousFunctionDefinition(node.expression, cb);
+    }
 }
 
 /** @internal */
@@ -6651,14 +6883,14 @@ export function directoryProbablyExists(directoryName: string, host: { directory
 const carriageReturnLineFeed = "\r\n";
 const lineFeed = "\n";
 /** @internal */
-export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
+export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
     switch (options.newLine) {
         case NewLineKind.CarriageReturnLineFeed:
             return carriageReturnLineFeed;
         case NewLineKind.LineFeed:
-            return lineFeed;
+        case undefined:
+                return lineFeed;
     }
-    return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
 }
 
 /**
@@ -6716,6 +6948,10 @@ export function moveRangePastDecorators(node: Node): TextRange {
  * @internal
  */
 export function moveRangePastModifiers(node: Node): TextRange {
+    if (isPropertyDeclaration(node) || isMethodDeclaration(node)) {
+        return moveRangePos(node, node.name.pos);
+    }
+
     const lastModifier = canHaveModifiers(node) ? lastOrUndefined(node.modifiers) : undefined;
     return lastModifier && !positionIsSynthesized(lastModifier.end)
         ? moveRangePos(node, lastModifier.end)
@@ -7183,7 +7419,7 @@ export function getNameOfAccessExpression(node: AccessExpression) {
     return node.argumentExpression;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
     switch (section.kind) {
         case BundleFileSectionKind.Text:
@@ -7800,6 +8036,16 @@ export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
         default:
             return false;
     }
+}
+
+/** @internal */
+export function getIsolatedModules(options: CompilerOptions) {
+    return !!(options.isolatedModules || options.verbatimModuleSyntax);
+}
+
+/** @internal */
+export function importNameElisionDisabled(options: CompilerOptions) {
+    return options.verbatimModuleSyntax || options.isolatedModules && options.preserveValueImports;
 }
 
 /** @internal */
@@ -8833,7 +9079,7 @@ export function rangeOfNode(node: Node): TextRange {
 export function rangeOfTypeParameters(sourceFile: SourceFile, typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
     // Include the `<>`
     const pos = typeParameters.pos - 1;
-    const end = skipTrivia(sourceFile.text, typeParameters.end) + 1;
+    const end = Math.min(sourceFile.text.length, skipTrivia(sourceFile.text, typeParameters.end) + 1);
     return { pos, end };
 }
 
@@ -9241,7 +9487,6 @@ export function getContainingNodeArray(node: Node): NodeArray<Node> | undefined 
         case SyntaxKind.Decorator: {
             const { parent } = node as Decorator;
             return canHaveDecorators(parent) ? parent.modifiers :
-                canHaveIllegalDecorators(parent) ? parent.illegalDecorators :
                 undefined;
         }
         case SyntaxKind.HeritageClause:

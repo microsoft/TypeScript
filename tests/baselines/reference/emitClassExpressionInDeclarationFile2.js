@@ -46,6 +46,10 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = exports.WithTags = exports.FooItem = exports.noPrivates = void 0;
@@ -57,6 +61,7 @@ exports.noPrivates = (_a = /** @class */ (function () {
         class_1.prototype.tags = function () { };
         return class_1;
     }()),
+    __setFunctionName(_a, "noPrivates"),
     _a.ps = -1,
     _a);
 // altered repro from #15066 to add private property
