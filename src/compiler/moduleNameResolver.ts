@@ -2584,19 +2584,26 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
         }
         else if (typeof target === "object" && target !== null) { // eslint-disable-line no-null/no-null
             if (!Array.isArray(target)) {
+                traceIfEnabled(state, Diagnostics.Entering_conditional_exports);
                 for (const condition of getOwnKeys(target as MapLike<unknown>)) {
                     if (condition === "default" || state.conditions.indexOf(condition) >= 0 || isApplicableVersionedTypesKey(state.conditions, condition)) {
                         traceIfEnabled(state, Diagnostics.Matched_0_condition_1, isImports ? "imports" : "exports", condition);
                         const subTarget = (target as MapLike<unknown>)[condition];
                         const result = loadModuleFromTargetImportOrExport(subTarget, subpath, pattern, key);
                         if (result) {
+                            traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
+                            traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
                             return result;
+                        }
+                        else {
+                            traceIfEnabled(state, Diagnostics.Failed_to_resolve_under_condition_0, condition);
                         }
                     }
                     else {
                         traceIfEnabled(state, Diagnostics.Saw_non_matching_condition_0, condition);
                     }
                 }
+                traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
                 return undefined;
             }
             else {
