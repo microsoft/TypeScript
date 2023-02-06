@@ -1,0 +1,58 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/foo.js",
+      "position": 32,
+      "name": ""
+    },
+    "completionList": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "blah",
+          "kind": "alias",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "blah",
+              "kind": "aliasName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "bar",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "18",
+          "isFromUncheckedFile": true
+        },
+        {
+          "name": "require",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "18",
+          "isFromUncheckedFile": true,
+          "displayParts": [
+            {
+              "text": "require",
+              "kind": "keyword"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
