@@ -15968,6 +15968,46 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 /*readonly*/ false, target.labeledElementDeclarations && target.labeledElementDeclarations.slice(index, endIndex));
     }
 
+    function expandTupleShape(source: TupleTypeReference, target: TupleTypeReference): Type {
+        const sourceArity = getTypeReferenceArity(source);
+        const targetArity = getTypeReferenceArity(target);
+        const sourceElementTypes = getTypeArguments(source);
+        const targetElementTypes = getTypeArguments(target);
+
+        let resultTypes: Type[] | undefined;
+        let resultFlags: ElementFlags[] | undefined;
+
+        for (let i = 0; i < targetArity; i++) {
+            if (i >= sourceArity) {
+                if (!resultTypes) {
+                    resultTypes = sourceElementTypes.slice();
+                    resultFlags = source.target.elementFlags.slice();
+                }
+                const targetFlag = target.target.elementFlags[i];
+                resultTypes.push(anyType);
+                resultFlags!.push(targetFlag);
+            }
+            else if (isTupleType(sourceElementTypes[i]) && isTupleType(targetElementTypes[i])) {
+                const result = expandTupleShape(sourceElementTypes[i] as TupleTypeReference, targetElementTypes[i] as TupleTypeReference);
+                if (result === sourceElementTypes[i]) {
+                    continue;
+                }
+                if (!resultTypes) {
+                    resultTypes = sourceElementTypes.slice(0, i);
+                    resultFlags = source.target.elementFlags.slice(0, i);
+                }
+                resultTypes.push(result);
+                resultFlags!.push(source.target.elementFlags[i]);
+            }
+            else if (resultTypes) {
+                resultTypes.push(sourceElementTypes[i]);
+                resultFlags!.push(source.target.elementFlags[i]);
+            }
+        }
+
+        return resultTypes ? createTupleType(resultTypes, resultFlags) : source;
+    }
+
     function getKnownKeysOfTupleType(type: TupleTypeReference) {
         return getUnionType(append(arrayOf(type.target.fixedLength, i => getStringLiteralType("" + i)),
             getIndexType(type.target.readonly ? globalReadonlyArrayType : globalArrayType)));
@@ -31929,7 +31969,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // return type of 'wrap'.
         if (node.kind !== SyntaxKind.Decorator) {
             const skipBindingPatterns = every(signature.typeParameters, p => !!getDefaultFromTypeParameter(p));
-            const contextualType = getContextualType(node, skipBindingPatterns ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
+            let contextualType = getContextualType(node, skipBindingPatterns ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
             if (contextualType) {
                 const inferenceTargetType = getReturnTypeOfSignature(signature);
                 if (couldContainTypeVariables(inferenceTargetType)) {
@@ -31964,6 +32004,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             instantiatedType;
                         // Inferences made from return types have lower priority than all other inferences.
                         inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
+                    }
+                    // if the contextual type is a tuple and it's is coming from a binding pattern
+                    // then we might need to expand it to match the arity of the target type
+                    // this allows us to infer tuples even if the binding pattern is shorter than the target type, like here:
+                    //   declare function fn<T>(t: T) => [T, string[]];
+                    //   const [[x]] = fn(['hi']);
+                    else if (isTupleType(contextualType) && isTupleType(inferenceTargetType)) {
+                        contextualType = expandTupleShape(contextualType, inferenceTargetType);
                     }
                     // Create a type mapper for instantiating generic contextual types using the inferences made
                     // from the return type. We need a separate inference pass here because (a) instantiation of
