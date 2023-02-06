@@ -184,24 +184,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
-Info 30   [00:01:05.000] Before ensureProjectForOpenFiles:
-Info 31   [00:01:06.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
-Info 31   [00:01:07.000] 	Files (2)
-
-Info 31   [00:01:08.000] -----------------------------------------------
-Info 31   [00:01:09.000] Open files: 
-Info 31   [00:01:10.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
-Info 31   [00:01:11.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
-Info 31   [00:01:12.000] After ensureProjectForOpenFiles:
-Info 32   [00:01:13.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
-Info 32   [00:01:14.000] 	Files (2)
-
-Info 32   [00:01:15.000] -----------------------------------------------
-Info 32   [00:01:16.000] Open files: 
-Info 32   [00:01:17.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
-Info 32   [00:01:18.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
-Info 32   [00:01:19.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
-Info 33   [00:01:20.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/lib/index.d.ts.map 2000 undefined WatchType: Missing source map file
+Info 30   [00:01:05.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
+Info 31   [00:01:06.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/lib/index.d.ts.map 2000 undefined WatchType: Missing source map file
 After request
 
 PolledWatches::
@@ -228,7 +212,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
-Info 34   [00:01:21.000] response:
+Info 32   [00:01:07.000] response:
     {
       "response": {
         "refs": [

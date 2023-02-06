@@ -187,29 +187,13 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
-Info 30   [00:01:07.000] Before ensureProjectForOpenFiles:
-Info 31   [00:01:08.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
-Info 31   [00:01:09.000] 	Files (2)
-
-Info 31   [00:01:10.000] -----------------------------------------------
-Info 31   [00:01:11.000] Open files: 
-Info 31   [00:01:12.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
-Info 31   [00:01:13.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
-Info 31   [00:01:14.000] After ensureProjectForOpenFiles:
-Info 32   [00:01:15.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
-Info 32   [00:01:16.000] 	Files (2)
-
-Info 32   [00:01:17.000] -----------------------------------------------
-Info 32   [00:01:18.000] Open files: 
-Info 32   [00:01:19.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
-Info 32   [00:01:20.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
-Info 32   [00:01:21.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
-Info 33   [00:01:22.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/lib/index.d.ts.map 500 undefined WatchType: Closed Script info
-Info 34   [00:01:23.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
-Info 35   [00:01:24.000] Search path: /user/username/projects/myproject/b
-Info 36   [00:01:25.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
-Info 37   [00:01:26.000] Search path: /user/username/projects/myproject/b
-Info 38   [00:01:27.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
+Info 30   [00:01:07.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
+Info 31   [00:01:08.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/lib/index.d.ts.map 500 undefined WatchType: Closed Script info
+Info 32   [00:01:09.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
+Info 33   [00:01:10.000] Search path: /user/username/projects/myproject/b
+Info 34   [00:01:11.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
+Info 35   [00:01:12.000] Search path: /user/username/projects/myproject/b
+Info 36   [00:01:13.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
 After request
 
 PolledWatches::
@@ -238,7 +222,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
-Info 39   [00:01:28.000] response:
+Info 37   [00:01:14.000] response:
     {
       "response": {
         "refs": [

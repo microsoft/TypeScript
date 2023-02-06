@@ -590,41 +590,13 @@ FsWatchesRecursive::
 /a:
   {}
 
-Info 107  [00:03:00.000] Before ensureProjectForOpenFiles:
-Info 108  [00:03:01.000] Project '/a/tsconfig.json' (Configured)
-Info 108  [00:03:02.000] 	Files (1)
-
-Info 108  [00:03:03.000] -----------------------------------------------
-Info 108  [00:03:04.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 108  [00:03:05.000] 	Files (3)
-
-Info 108  [00:03:06.000] -----------------------------------------------
-Info 108  [00:03:07.000] Open files: 
-Info 108  [00:03:08.000] 	FileName: /user/user.ts ProjectRootPath: undefined
-Info 108  [00:03:09.000] 		Projects: /dev/null/inferredProject1*
-Info 108  [00:03:10.000] 	FileName: /a/a.ts ProjectRootPath: undefined
-Info 108  [00:03:11.000] 		Projects: /a/tsconfig.json
-Info 108  [00:03:12.000] After ensureProjectForOpenFiles:
-Info 109  [00:03:13.000] Project '/a/tsconfig.json' (Configured)
-Info 109  [00:03:14.000] 	Files (1)
-
-Info 109  [00:03:15.000] -----------------------------------------------
-Info 109  [00:03:16.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 109  [00:03:17.000] 	Files (3)
-
-Info 109  [00:03:18.000] -----------------------------------------------
-Info 109  [00:03:19.000] Open files: 
-Info 109  [00:03:20.000] 	FileName: /user/user.ts ProjectRootPath: undefined
-Info 109  [00:03:21.000] 		Projects: /dev/null/inferredProject1*
-Info 109  [00:03:22.000] 	FileName: /a/a.ts ProjectRootPath: undefined
-Info 109  [00:03:23.000] 		Projects: /a/tsconfig.json
-Info 109  [00:03:24.000] Finding references to /a/a.ts position 16 in project /a/tsconfig.json
-Info 110  [00:03:25.000] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
-Info 111  [00:03:26.000] Finding references to /a/bin/a.d.ts position 24 in project /dev/null/inferredProject1*
-Info 112  [00:03:27.000] Search path: /a
-Info 113  [00:03:28.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
-Info 114  [00:03:29.000] Search path: /a
-Info 115  [00:03:30.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
+Info 107  [00:03:00.000] Finding references to /a/a.ts position 16 in project /a/tsconfig.json
+Info 108  [00:03:01.000] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
+Info 109  [00:03:02.000] Finding references to /a/bin/a.d.ts position 24 in project /dev/null/inferredProject1*
+Info 110  [00:03:03.000] Search path: /a
+Info 111  [00:03:04.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
+Info 112  [00:03:05.000] Search path: /a
+Info 113  [00:03:06.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 After request
 
 PolledWatches::
@@ -649,7 +621,7 @@ FsWatchesRecursive::
 /a:
   {}
 
-Info 116  [00:03:31.000] response:
+Info 114  [00:03:07.000] response:
     {
       "response": {
         "refs": [
@@ -696,7 +668,7 @@ Info 116  [00:03:31.000] response:
       },
       "responseRequired": true
     }
-Info 117  [00:03:32.000] request:
+Info 115  [00:03:08.000] request:
     {
       "command": "close",
       "arguments": {
@@ -729,18 +701,18 @@ FsWatchesRecursive::
 /a:
   {}
 
-Info 118  [00:03:33.000] FileWatcher:: Added:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
-Info 119  [00:03:34.000] Project '/a/tsconfig.json' (Configured)
-Info 119  [00:03:35.000] 	Files (1)
+Info 116  [00:03:09.000] FileWatcher:: Added:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
+Info 117  [00:03:10.000] Project '/a/tsconfig.json' (Configured)
+Info 117  [00:03:11.000] 	Files (1)
 
-Info 119  [00:03:36.000] -----------------------------------------------
-Info 119  [00:03:37.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 119  [00:03:38.000] 	Files (3)
+Info 117  [00:03:12.000] -----------------------------------------------
+Info 117  [00:03:13.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 117  [00:03:14.000] 	Files (3)
 
-Info 119  [00:03:39.000] -----------------------------------------------
-Info 119  [00:03:40.000] Open files: 
-Info 119  [00:03:41.000] 	FileName: /a/a.ts ProjectRootPath: undefined
-Info 119  [00:03:42.000] 		Projects: /a/tsconfig.json
+Info 117  [00:03:15.000] -----------------------------------------------
+Info 117  [00:03:16.000] Open files: 
+Info 117  [00:03:17.000] 	FileName: /a/a.ts ProjectRootPath: undefined
+Info 117  [00:03:18.000] 		Projects: /a/tsconfig.json
 After request
 
 PolledWatches::
@@ -767,11 +739,11 @@ FsWatchesRecursive::
 /a:
   {}
 
-Info 119  [00:03:43.000] response:
+Info 117  [00:03:19.000] response:
     {
       "responseRequired": false
     }
-Info 120  [00:03:44.000] request:
+Info 118  [00:03:20.000] request:
     {
       "command": "open",
       "arguments": {
@@ -806,25 +778,25 @@ FsWatchesRecursive::
 /a:
   {}
 
-Info 121  [00:03:45.000] Search path: /dummy
-Info 122  [00:03:46.000] For info: /dummy/dummy.ts :: No config files found.
-Info 123  [00:03:47.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info 124  [00:03:48.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
-Info 125  [00:03:49.000] DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 126  [00:03:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 127  [00:03:51.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 128  [00:03:52.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 129  [00:03:53.000] 	Files (1)
+Info 119  [00:03:21.000] Search path: /dummy
+Info 120  [00:03:22.000] For info: /dummy/dummy.ts :: No config files found.
+Info 121  [00:03:23.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info 122  [00:03:24.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
+Info 123  [00:03:25.000] DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 124  [00:03:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 125  [00:03:27.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 126  [00:03:28.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 127  [00:03:29.000] 	Files (1)
 	/dummy/dummy.ts
 
 
 	dummy.ts
 	  Root file specified for compilation
 
-Info 130  [00:03:54.000] -----------------------------------------------
-Info 131  [00:03:55.000] `remove Project::
-Info 132  [00:03:56.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 133  [00:03:57.000] 	Files (3)
+Info 128  [00:03:30.000] -----------------------------------------------
+Info 129  [00:03:31.000] `remove Project::
+Info 130  [00:03:32.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 131  [00:03:33.000] 	Files (3)
 	/a/bin/a.d.ts
 	/b/bin/b.d.ts
 	/user/user.ts
@@ -837,25 +809,25 @@ Info 133  [00:03:57.000] 	Files (3)
 	user.ts
 	  Root file specified for compilation
 
-Info 134  [00:03:58.000] -----------------------------------------------
-Info 135  [00:03:59.000] DirectoryWatcher:: Close:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 136  [00:04:00.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 137  [00:04:01.000] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 138  [00:04:02.000] FileWatcher:: Close:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
-Info 139  [00:04:03.000] FileWatcher:: Close:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
-Info 140  [00:04:04.000] Project '/a/tsconfig.json' (Configured)
-Info 140  [00:04:05.000] 	Files (1)
+Info 132  [00:03:34.000] -----------------------------------------------
+Info 133  [00:03:35.000] DirectoryWatcher:: Close:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 134  [00:03:36.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 135  [00:03:37.000] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 136  [00:03:38.000] FileWatcher:: Close:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
+Info 137  [00:03:39.000] FileWatcher:: Close:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
+Info 138  [00:03:40.000] Project '/a/tsconfig.json' (Configured)
+Info 138  [00:03:41.000] 	Files (1)
 
-Info 140  [00:04:06.000] -----------------------------------------------
-Info 140  [00:04:07.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 140  [00:04:08.000] 	Files (1)
+Info 138  [00:03:42.000] -----------------------------------------------
+Info 138  [00:03:43.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 138  [00:03:44.000] 	Files (1)
 
-Info 140  [00:04:09.000] -----------------------------------------------
-Info 140  [00:04:10.000] Open files: 
-Info 140  [00:04:11.000] 	FileName: /a/a.ts ProjectRootPath: undefined
-Info 140  [00:04:12.000] 		Projects: /a/tsconfig.json
-Info 140  [00:04:13.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
-Info 140  [00:04:14.000] 		Projects: /dev/null/inferredProject2*
+Info 138  [00:03:45.000] -----------------------------------------------
+Info 138  [00:03:46.000] Open files: 
+Info 138  [00:03:47.000] 	FileName: /a/a.ts ProjectRootPath: undefined
+Info 138  [00:03:48.000] 		Projects: /a/tsconfig.json
+Info 138  [00:03:49.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
+Info 138  [00:03:50.000] 		Projects: /dev/null/inferredProject2*
 After request
 
 PolledWatches::
@@ -878,7 +850,7 @@ FsWatchesRecursive::
 /a:
   {}
 
-Info 140  [00:04:15.000] response:
+Info 138  [00:03:51.000] response:
     {
       "responseRequired": false
     }

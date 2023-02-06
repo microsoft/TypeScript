@@ -158,23 +158,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 20   [00:01:00.000] Before ensureProjectForOpenFiles:
-Info 21   [00:01:01.000] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
-Info 21   [00:01:02.000] 	Files (3)
-
-Info 21   [00:01:03.000] -----------------------------------------------
-Info 21   [00:01:04.000] Open files: 
-Info 21   [00:01:05.000] 	FileName: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined
-Info 21   [00:01:06.000] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
-Info 21   [00:01:07.000] After ensureProjectForOpenFiles:
-Info 22   [00:01:08.000] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
-Info 22   [00:01:09.000] 	Files (3)
-
-Info 22   [00:01:10.000] -----------------------------------------------
-Info 22   [00:01:11.000] Open files: 
-Info 22   [00:01:12.000] 	FileName: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined
-Info 22   [00:01:13.000] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
-Info 22   [00:01:14.000] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
+Info 20   [00:01:00.000] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
 After request
 
 PolledWatches::
@@ -193,7 +177,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 23   [00:01:15.000] response:
+Info 21   [00:01:01.000] response:
     {
       "response": {
         "refs": [

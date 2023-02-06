@@ -486,24 +486,8 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 88   [00:02:30.000] Before ensureProjectForOpenFiles:
-Info 89   [00:02:31.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 89   [00:02:32.000] 	Files (3)
-
-Info 89   [00:02:33.000] -----------------------------------------------
-Info 89   [00:02:34.000] Open files: 
-Info 89   [00:02:35.000] 	FileName: /user/user.ts ProjectRootPath: undefined
-Info 89   [00:02:36.000] 		Projects: /dev/null/inferredProject1*
-Info 89   [00:02:37.000] After ensureProjectForOpenFiles:
-Info 90   [00:02:38.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 90   [00:02:39.000] 	Files (3)
-
-Info 90   [00:02:40.000] -----------------------------------------------
-Info 90   [00:02:41.000] Open files: 
-Info 90   [00:02:42.000] 	FileName: /user/user.ts ProjectRootPath: undefined
-Info 90   [00:02:43.000] 		Projects: /dev/null/inferredProject1*
-Info 90   [00:02:44.000] Finding references to /user/user.ts position 104 in project /dev/null/inferredProject1*
-Info 91   [00:02:45.000] FileWatcher:: Added:: WatchInfo: /b/bin/b.d.ts.map 500 undefined WatchType: Closed Script info
+Info 88   [00:02:30.000] Finding references to /user/user.ts position 104 in project /dev/null/inferredProject1*
+Info 89   [00:02:31.000] FileWatcher:: Added:: WatchInfo: /b/bin/b.d.ts.map 500 undefined WatchType: Closed Script info
 After request
 
 PolledWatches::
@@ -522,7 +506,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 92   [00:02:46.000] response:
+Info 90   [00:02:32.000] response:
     {
       "response": {
         "refs": [
@@ -567,7 +551,7 @@ Info 92   [00:02:46.000] response:
       },
       "responseRequired": true
     }
-Info 93   [00:02:47.000] request:
+Info 91   [00:02:33.000] request:
     {
       "command": "close",
       "arguments": {
@@ -594,12 +578,12 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 94   [00:02:48.000] FileWatcher:: Added:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
-Info 95   [00:02:49.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 95   [00:02:50.000] 	Files (3)
+Info 92   [00:02:34.000] FileWatcher:: Added:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
+Info 93   [00:02:35.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 93   [00:02:36.000] 	Files (3)
 
-Info 95   [00:02:51.000] -----------------------------------------------
-Info 95   [00:02:52.000] Open files: 
+Info 93   [00:02:37.000] -----------------------------------------------
+Info 93   [00:02:38.000] Open files: 
 After request
 
 PolledWatches::
@@ -620,11 +604,11 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 95   [00:02:53.000] response:
+Info 93   [00:02:39.000] response:
     {
       "responseRequired": false
     }
-Info 96   [00:02:54.000] request:
+Info 94   [00:02:40.000] request:
     {
       "command": "open",
       "arguments": {
@@ -653,25 +637,25 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 97   [00:02:55.000] Search path: /dummy
-Info 98   [00:02:56.000] For info: /dummy/dummy.ts :: No config files found.
-Info 99   [00:02:57.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info 100  [00:02:58.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
-Info 101  [00:02:59.000] DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 102  [00:03:00.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 103  [00:03:01.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 104  [00:03:02.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 105  [00:03:03.000] 	Files (1)
+Info 95   [00:02:41.000] Search path: /dummy
+Info 96   [00:02:42.000] For info: /dummy/dummy.ts :: No config files found.
+Info 97   [00:02:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info 98   [00:02:44.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
+Info 99   [00:02:45.000] DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 100  [00:02:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 101  [00:02:47.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 102  [00:02:48.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 103  [00:02:49.000] 	Files (1)
 	/dummy/dummy.ts
 
 
 	dummy.ts
 	  Root file specified for compilation
 
-Info 106  [00:03:04.000] -----------------------------------------------
-Info 107  [00:03:05.000] `remove Project::
-Info 108  [00:03:06.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 109  [00:03:07.000] 	Files (3)
+Info 104  [00:02:50.000] -----------------------------------------------
+Info 105  [00:02:51.000] `remove Project::
+Info 106  [00:02:52.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 107  [00:02:53.000] 	Files (3)
 	/a/bin/a.d.ts
 	/b/bin/b.d.ts
 	/user/user.ts
@@ -684,21 +668,21 @@ Info 109  [00:03:07.000] 	Files (3)
 	user.ts
 	  Root file specified for compilation
 
-Info 110  [00:03:08.000] -----------------------------------------------
-Info 111  [00:03:09.000] DirectoryWatcher:: Close:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 112  [00:03:10.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 113  [00:03:11.000] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 114  [00:03:12.000] FileWatcher:: Close:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
-Info 115  [00:03:13.000] FileWatcher:: Close:: WatchInfo: /a/bin/a.d.ts 500 undefined WatchType: Closed Script info
-Info 116  [00:03:14.000] FileWatcher:: Close:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
-Info 117  [00:03:15.000] FileWatcher:: Close:: WatchInfo: /b/bin/b.d.ts.map 500 undefined WatchType: Closed Script info
-Info 118  [00:03:16.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 118  [00:03:17.000] 	Files (1)
+Info 108  [00:02:54.000] -----------------------------------------------
+Info 109  [00:02:55.000] DirectoryWatcher:: Close:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 110  [00:02:56.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 111  [00:02:57.000] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 112  [00:02:58.000] FileWatcher:: Close:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
+Info 113  [00:02:59.000] FileWatcher:: Close:: WatchInfo: /a/bin/a.d.ts 500 undefined WatchType: Closed Script info
+Info 114  [00:03:00.000] FileWatcher:: Close:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
+Info 115  [00:03:01.000] FileWatcher:: Close:: WatchInfo: /b/bin/b.d.ts.map 500 undefined WatchType: Closed Script info
+Info 116  [00:03:02.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 116  [00:03:03.000] 	Files (1)
 
-Info 118  [00:03:18.000] -----------------------------------------------
-Info 118  [00:03:19.000] Open files: 
-Info 118  [00:03:20.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
-Info 118  [00:03:21.000] 		Projects: /dev/null/inferredProject2*
+Info 116  [00:03:04.000] -----------------------------------------------
+Info 116  [00:03:05.000] Open files: 
+Info 116  [00:03:06.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
+Info 116  [00:03:07.000] 		Projects: /dev/null/inferredProject2*
 After request
 
 PolledWatches::
@@ -711,7 +695,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 118  [00:03:22.000] response:
+Info 116  [00:03:08.000] response:
     {
       "responseRequired": false
     }

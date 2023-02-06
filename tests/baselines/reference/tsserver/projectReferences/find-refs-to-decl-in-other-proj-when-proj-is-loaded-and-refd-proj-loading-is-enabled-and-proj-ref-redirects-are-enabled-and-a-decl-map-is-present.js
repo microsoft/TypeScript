@@ -296,40 +296,12 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
-Info 49   [00:01:37.000] Before ensureProjectForOpenFiles:
-Info 50   [00:01:38.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
-Info 50   [00:01:39.000] 	Files (2)
-
-Info 50   [00:01:40.000] -----------------------------------------------
-Info 50   [00:01:41.000] Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
-Info 50   [00:01:42.000] 	Files (2)
-
-Info 50   [00:01:43.000] -----------------------------------------------
-Info 50   [00:01:44.000] Open files: 
-Info 50   [00:01:45.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
-Info 50   [00:01:46.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
-Info 50   [00:01:47.000] 	FileName: /user/username/projects/myproject/b/helper.ts ProjectRootPath: undefined
-Info 50   [00:01:48.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
-Info 50   [00:01:49.000] After ensureProjectForOpenFiles:
-Info 51   [00:01:50.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
-Info 51   [00:01:51.000] 	Files (2)
-
-Info 51   [00:01:52.000] -----------------------------------------------
-Info 51   [00:01:53.000] Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
-Info 51   [00:01:54.000] 	Files (2)
-
-Info 51   [00:01:55.000] -----------------------------------------------
-Info 51   [00:01:56.000] Open files: 
-Info 51   [00:01:57.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
-Info 51   [00:01:58.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
-Info 51   [00:01:59.000] 	FileName: /user/username/projects/myproject/b/helper.ts ProjectRootPath: undefined
-Info 51   [00:02:00.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
-Info 51   [00:02:01.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
-Info 52   [00:02:02.000] Search path: /user/username/projects/myproject/b
-Info 53   [00:02:03.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
-Info 54   [00:02:04.000] Search path: /user/username/projects/myproject/b
-Info 55   [00:02:05.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
-Info 56   [00:02:06.000] Finding references to /user/username/projects/myproject/b/index.ts position 13 in project /user/username/projects/myproject/b/tsconfig.json
+Info 49   [00:01:37.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
+Info 50   [00:01:38.000] Search path: /user/username/projects/myproject/b
+Info 51   [00:01:39.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
+Info 52   [00:01:40.000] Search path: /user/username/projects/myproject/b
+Info 53   [00:01:41.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
+Info 54   [00:01:42.000] Finding references to /user/username/projects/myproject/b/index.ts position 13 in project /user/username/projects/myproject/b/tsconfig.json
 After request
 
 PolledWatches::
@@ -358,7 +330,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
-Info 57   [00:02:07.000] response:
+Info 55   [00:01:43.000] response:
     {
       "response": {
         "refs": [

@@ -168,27 +168,7 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 23   [00:00:46.000] Before ensureProjectForOpenFiles:
-Info 24   [00:00:47.000] Project '/tsconfig.json' (Configured)
-Info 24   [00:00:48.000] 	Files (2)
-
-Info 24   [00:00:49.000] -----------------------------------------------
-Info 24   [00:00:50.000] Open files: 
-Info 24   [00:00:51.000] 	FileName: /main.ts ProjectRootPath: undefined
-Info 24   [00:00:52.000] 		Projects: /tsconfig.json
-Info 24   [00:00:53.000] 	FileName: /mod.ts ProjectRootPath: undefined
-Info 24   [00:00:54.000] 		Projects: /tsconfig.json
-Info 24   [00:00:55.000] After ensureProjectForOpenFiles:
-Info 25   [00:00:56.000] Project '/tsconfig.json' (Configured)
-Info 25   [00:00:57.000] 	Files (2)
-
-Info 25   [00:00:58.000] -----------------------------------------------
-Info 25   [00:00:59.000] Open files: 
-Info 25   [00:01:00.000] 	FileName: /main.ts ProjectRootPath: undefined
-Info 25   [00:01:01.000] 		Projects: /tsconfig.json
-Info 25   [00:01:02.000] 	FileName: /mod.ts ProjectRootPath: undefined
-Info 25   [00:01:03.000] 		Projects: /tsconfig.json
-Info 25   [00:01:04.000] Finding references to /mod.ts position 166 in project /tsconfig.json
+Info 23   [00:00:46.000] Finding references to /mod.ts position 166 in project /tsconfig.json
 After request
 
 PolledWatches::
@@ -203,7 +183,7 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 26   [00:01:05.000] response:
+Info 24   [00:00:47.000] response:
     {
       "response": {
         "refs": [

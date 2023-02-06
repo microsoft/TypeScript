@@ -202,8 +202,33 @@ FsWatchesRecursive::
 /user/username/projects/solution/shared:
   {}
 
-Info 34   [00:01:27.000] Loading configured project /user/username/projects/solution/tsconfig.json
-Info 35   [00:01:28.000] Config: /user/username/projects/solution/tsconfig.json : {
+Info 34   [00:01:27.000] Finding references to /user/username/projects/solution/api/src/server.ts position 56 in project /user/username/projects/solution/api/tsconfig.json
+Info 35   [00:01:28.000] Search path: /user/username/projects/solution/shared/src
+Info 36   [00:01:29.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
+Info 37   [00:01:30.000] Creating configuration project /user/username/projects/solution/shared/tsconfig.json
+Info 38   [00:01:31.000] Starting updateGraphWorker: Project: /user/username/projects/solution/shared/tsconfig.json
+Info 39   [00:01:32.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/shared/node_modules/@types 1 undefined Project: /user/username/projects/solution/shared/tsconfig.json WatchType: Type roots
+Info 40   [00:01:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/shared/node_modules/@types 1 undefined Project: /user/username/projects/solution/shared/tsconfig.json WatchType: Type roots
+Info 41   [00:01:34.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/shared/tsconfig.json WatchType: Type roots
+Info 42   [00:01:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/shared/tsconfig.json WatchType: Type roots
+Info 43   [00:01:36.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/shared/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 44   [00:01:37.000] Project '/user/username/projects/solution/shared/tsconfig.json' (Configured)
+Info 45   [00:01:38.000] 	Files (2)
+	/a/lib/lib.d.ts
+	/user/username/projects/solution/shared/src/index.ts
+
+
+	../../../../../a/lib/lib.d.ts
+	  Default library for target 'es5'
+	src/index.ts
+	  Matched by include pattern 'src' in 'tsconfig.json'
+
+Info 46   [00:01:39.000] -----------------------------------------------
+Info 47   [00:01:40.000] Search path: /user/username/projects/solution/shared/src
+Info 48   [00:01:41.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
+Info 49   [00:01:42.000] Finding references to /user/username/projects/solution/shared/src/index.ts position 22 in project /user/username/projects/solution/shared/tsconfig.json
+Info 50   [00:01:43.000] Loading configured project /user/username/projects/solution/tsconfig.json
+Info 51   [00:01:44.000] Config: /user/username/projects/solution/tsconfig.json : {
  "rootNames": [],
  "options": {
   "configFilePath": "/user/username/projects/solution/tsconfig.json"
@@ -219,8 +244,8 @@ Info 35   [00:01:28.000] Config: /user/username/projects/solution/tsconfig.json 
   }
  ]
 }
-Info 36   [00:01:29.000] Starting updateGraphWorker: Project: /user/username/projects/solution/tsconfig.json
-Info 37   [00:01:30.000] Config: /user/username/projects/solution/app/tsconfig.json : {
+Info 52   [00:01:45.000] Starting updateGraphWorker: Project: /user/username/projects/solution/tsconfig.json
+Info 53   [00:01:46.000] Config: /user/username/projects/solution/app/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/solution/app/src/app.ts"
  ],
@@ -237,74 +262,25 @@ Info 37   [00:01:30.000] Config: /user/username/projects/solution/app/tsconfig.j
   }
  ]
 }
-Info 38   [00:01:31.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/tsconfig.json 2000 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Config file
-Info 39   [00:01:32.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/src 1 undefined Config: /user/username/projects/solution/app/tsconfig.json WatchType: Wild card directory
-Info 40   [00:01:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/src 1 undefined Config: /user/username/projects/solution/app/tsconfig.json WatchType: Wild card directory
-Info 41   [00:01:34.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Type roots
-Info 42   [00:01:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Type roots
-Info 43   [00:01:36.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 44   [00:01:37.000] Different program with same set of files
-Info 45   [00:01:38.000] Before ensureProjectForOpenFiles:
-Info 46   [00:01:39.000] Project '/user/username/projects/solution/api/tsconfig.json' (Configured)
-Info 46   [00:01:40.000] 	Files (3)
-
-Info 46   [00:01:41.000] -----------------------------------------------
-Info 46   [00:01:42.000] Project '/user/username/projects/solution/tsconfig.json' (Configured)
-Info 46   [00:01:43.000] 	Files (0)
-
-Info 46   [00:01:44.000] -----------------------------------------------
-Info 46   [00:01:45.000] Open files: 
-Info 46   [00:01:46.000] 	FileName: /user/username/projects/solution/api/src/server.ts ProjectRootPath: undefined
-Info 46   [00:01:47.000] 		Projects: /user/username/projects/solution/api/tsconfig.json
-Info 46   [00:01:48.000] After ensureProjectForOpenFiles:
-Info 47   [00:01:49.000] Project '/user/username/projects/solution/api/tsconfig.json' (Configured)
-Info 47   [00:01:50.000] 	Files (3)
-
-Info 47   [00:01:51.000] -----------------------------------------------
-Info 47   [00:01:52.000] Project '/user/username/projects/solution/tsconfig.json' (Configured)
-Info 47   [00:01:53.000] 	Files (0)
-
-Info 47   [00:01:54.000] -----------------------------------------------
-Info 47   [00:01:55.000] Open files: 
-Info 47   [00:01:56.000] 	FileName: /user/username/projects/solution/api/src/server.ts ProjectRootPath: undefined
-Info 47   [00:01:57.000] 		Projects: /user/username/projects/solution/api/tsconfig.json
-Info 47   [00:01:58.000] Finding references to /user/username/projects/solution/api/src/server.ts position 56 in project /user/username/projects/solution/api/tsconfig.json
-Info 48   [00:01:59.000] Search path: /user/username/projects/solution/shared/src
-Info 49   [00:02:00.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
-Info 50   [00:02:01.000] Creating configuration project /user/username/projects/solution/shared/tsconfig.json
-Info 51   [00:02:02.000] Starting updateGraphWorker: Project: /user/username/projects/solution/shared/tsconfig.json
-Info 52   [00:02:03.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/shared/node_modules/@types 1 undefined Project: /user/username/projects/solution/shared/tsconfig.json WatchType: Type roots
-Info 53   [00:02:04.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/shared/node_modules/@types 1 undefined Project: /user/username/projects/solution/shared/tsconfig.json WatchType: Type roots
-Info 54   [00:02:05.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/shared/tsconfig.json WatchType: Type roots
-Info 55   [00:02:06.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/shared/tsconfig.json WatchType: Type roots
-Info 56   [00:02:07.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/shared/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 57   [00:02:08.000] Project '/user/username/projects/solution/shared/tsconfig.json' (Configured)
-Info 58   [00:02:09.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/solution/shared/src/index.ts
-
-
-	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
-	src/index.ts
-	  Matched by include pattern 'src' in 'tsconfig.json'
-
-Info 59   [00:02:10.000] -----------------------------------------------
-Info 60   [00:02:11.000] Search path: /user/username/projects/solution/shared/src
-Info 61   [00:02:12.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
-Info 62   [00:02:13.000] Finding references to /user/username/projects/solution/shared/src/index.ts position 22 in project /user/username/projects/solution/shared/tsconfig.json
-Info 63   [00:02:14.000] Creating configuration project /user/username/projects/solution/app/tsconfig.json
-Info 64   [00:02:15.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/src/app.ts 500 undefined WatchType: Closed Script info
-Info 65   [00:02:16.000] Starting updateGraphWorker: Project: /user/username/projects/solution/app/tsconfig.json
-Info 66   [00:02:17.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/shared 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Failed Lookup Locations
-Info 67   [00:02:18.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/shared 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Failed Lookup Locations
-Info 68   [00:02:19.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/node_modules/@types 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Type roots
-Info 69   [00:02:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/node_modules/@types 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Type roots
-Info 70   [00:02:21.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Type roots
-Info 71   [00:02:22.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Type roots
-Info 72   [00:02:23.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 73   [00:02:24.000] Project '/user/username/projects/solution/app/tsconfig.json' (Configured)
-Info 74   [00:02:25.000] 	Files (3)
+Info 54   [00:01:47.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/tsconfig.json 2000 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Config file
+Info 55   [00:01:48.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/src 1 undefined Config: /user/username/projects/solution/app/tsconfig.json WatchType: Wild card directory
+Info 56   [00:01:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/src 1 undefined Config: /user/username/projects/solution/app/tsconfig.json WatchType: Wild card directory
+Info 57   [00:01:50.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Type roots
+Info 58   [00:01:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Type roots
+Info 59   [00:01:52.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 60   [00:01:53.000] Different program with same set of files
+Info 61   [00:01:54.000] Creating configuration project /user/username/projects/solution/app/tsconfig.json
+Info 62   [00:01:55.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/src/app.ts 500 undefined WatchType: Closed Script info
+Info 63   [00:01:56.000] Starting updateGraphWorker: Project: /user/username/projects/solution/app/tsconfig.json
+Info 64   [00:01:57.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/shared 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Failed Lookup Locations
+Info 65   [00:01:58.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/shared 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Failed Lookup Locations
+Info 66   [00:01:59.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/node_modules/@types 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Type roots
+Info 67   [00:02:00.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/node_modules/@types 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Type roots
+Info 68   [00:02:01.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Type roots
+Info 69   [00:02:02.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/app/tsconfig.json WatchType: Type roots
+Info 70   [00:02:03.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 71   [00:02:04.000] Project '/user/username/projects/solution/app/tsconfig.json' (Configured)
+Info 72   [00:02:05.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/solution/shared/src/index.ts
 	/user/username/projects/solution/app/src/app.ts
@@ -317,12 +293,12 @@ Info 74   [00:02:25.000] 	Files (3)
 	src/app.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 75   [00:02:26.000] -----------------------------------------------
-Info 76   [00:02:27.000] Finding references to /user/username/projects/solution/shared/src/index.ts position 22 in project /user/username/projects/solution/app/tsconfig.json
-Info 77   [00:02:28.000] Search path: /user/username/projects/solution/shared/src
-Info 78   [00:02:29.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
-Info 79   [00:02:30.000] Search path: /user/username/projects/solution/shared/src
-Info 80   [00:02:31.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
+Info 73   [00:02:06.000] -----------------------------------------------
+Info 74   [00:02:07.000] Finding references to /user/username/projects/solution/shared/src/index.ts position 22 in project /user/username/projects/solution/app/tsconfig.json
+Info 75   [00:02:08.000] Search path: /user/username/projects/solution/shared/src
+Info 76   [00:02:09.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
+Info 77   [00:02:10.000] Search path: /user/username/projects/solution/shared/src
+Info 78   [00:02:11.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
 After request
 
 PolledWatches::
@@ -361,7 +337,7 @@ FsWatchesRecursive::
 /user/username/projects/solution/app/src:
   {}
 
-Info 81   [00:02:32.000] response:
+Info 79   [00:02:12.000] response:
     {
       "response": {
         "refs": [
