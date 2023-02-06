@@ -25,7 +25,6 @@ import {
     ComputedPropertyName,
     ConstructorDeclaration,
     createAccessorPropertyBackingField,
-    Debug,
     Decorator,
     ElementAccessExpression,
     EmitFlags,
@@ -176,6 +175,8 @@ import {
     Visitor,
     VisitResult,
 } from "../_namespaces/ts";
+
+import * as Debug from "../debug";
 
 // Class/Decorator evaluation order, as it pertains to this transformer:
 //
