@@ -8,69 +8,69 @@ describe("unittests:: services:: findAllReferences", () => {
             {
                 path: "/packages/babel-loader/tsconfig.json",
                 content:
-    `
-    {
-        "compilerOptions": {
-            "target": "ES2018",
-            "module": "commonjs",
-            "strict": true,
-            "esModuleInterop": true,
-            "composite": true,
-            "rootDir": "src",
-            "outDir": "dist"
-        },
-        "include": ["src"],
-        "references": [{"path": "../core"}]
-    }
-    `
+`
+{
+    "compilerOptions": {
+        "target": "ES2018",
+        "module": "commonjs",
+        "strict": true,
+        "esModuleInterop": true,
+        "composite": true,
+        "rootDir": "src",
+        "outDir": "dist"
+    },
+    "include": ["src"],
+    "references": [{"path": "../core"}]
+}
+`
             },
             {
                 path: "/packages/babel-loader/src/index.ts",
                 content:
-    `
-    import type { Foo } from "../../core/src/index.js";
-    `
+`
+import type { Foo } from "../../core/src/index.js";
+`
             },
             {
                 path: "/packages/core/tsconfig.json",
                 content:
-    `
-    {
-        "compilerOptions": {
-            "target": "ES2018",
-            "module": "commonjs",
-            "strict": true,
-            "esModuleInterop": true,
-            "composite": true,
-            "rootDir": "./src",
-            "outDir": "./dist",
-        },
-        "include": ["./src"]
-    }
-    `
+`
+{
+    "compilerOptions": {
+        "target": "ES2018",
+        "module": "commonjs",
+        "strict": true,
+        "esModuleInterop": true,
+        "composite": true,
+        "rootDir": "./src",
+        "outDir": "./dist",
+    },
+    "include": ["./src"]
+}
+`
             },
             {
                 path: "/packages/core/src/index.ts",
                 content:
-    `
-    import { Bar } from "./loading-indicator.js";
-    export type Foo = {};
-    const bar: Bar = {
-        prop: 0
-    }
-    `
+`
+import { Bar } from "./loading-indicator.js";
+export type Foo = {};
+const bar: Bar = {
+    prop: 0
+}
+`
             },
             {
                 path: "/packages/core/src/loading-indicator.ts",
                 content:
-    `
-    export interface Bar {
-        prop: number;
-    }
-    const bar: Bar = {
-        prop: 1
-    }
-    `
+`
+export interface Bar {
+    prop: number;
+}
+const bar: Bar = {
+    prop: 1
+}
+`
             },
         ];
         const host = createServerHost(files);
@@ -132,7 +132,7 @@ describe("unittests:: services:: findAllReferences", () => {
             command: protocol.CommandTypes.References,
             arguments: {
                 file: files[3].path, // core/src/index.ts
-                line: 5,
+                line: 5,             // `prop`
                 offset: 5,
             }
         }));
