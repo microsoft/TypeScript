@@ -4,6 +4,7 @@ import {
     arrayFrom,
     CallLikeExpression,
     CancellationToken,
+    CaseClause,
     changeExtension,
     CharacterCodes,
     combinePaths,
@@ -94,6 +95,7 @@ import {
     moduleResolutionUsesNodeModules,
     ModuleSpecifierEnding,
     moduleSpecifiers,
+    newCaseClauseTracker,
     Node,
     normalizePath,
     normalizeSlashes,
@@ -252,6 +254,16 @@ function convertStringLiteralCompletions(
             }));
             return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };
         }
+        case StringLiteralCompletionKind.Cases: {
+            const entries = completion.cases.map(type => ({
+                name: type.value,
+                kindModifiers: ScriptElementKindModifier.none,
+                kind: ScriptElementKind.string,
+                sortText: SortText.LocationPriority,
+                replacementSpan: getReplacementSpanForContextToken(contextToken)
+            }));
+            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };
+        }
         default:
             return Debug.assertNever(completion);
     }
@@ -276,6 +288,8 @@ function stringLiteralCompletionDetails(name: string, location: Node, completion
         }
         case StringLiteralCompletionKind.Types:
             return find(completion.types, t => t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.typeElement, [textPart(name)]) : undefined;
+        case StringLiteralCompletionKind.Cases:
+            return;
         default:
             return Debug.assertNever(completion);
     }
@@ -309,7 +323,7 @@ function kindModifiersFromExtension(extension: Extension | undefined): ScriptEle
     }
 }
 
-const enum StringLiteralCompletionKind { Paths, Properties, Types }
+const enum StringLiteralCompletionKind { Paths, Properties, Types, Cases }
 interface StringLiteralCompletionsFromProperties {
     readonly kind: StringLiteralCompletionKind.Properties;
     readonly symbols: readonly Symbol[];
@@ -320,7 +334,12 @@ interface StringLiteralCompletionsFromTypes {
     readonly types: readonly StringLiteralType[];
     readonly isNewIdentifier: boolean;
 }
-type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: readonly PathCompletion[] } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
+interface StringLiteralCompletionsFromCases {
+    readonly kind: StringLiteralCompletionKind.Cases;
+    readonly cases: readonly StringLiteralType[];
+    readonly isNewIdentifier: boolean;
+}
+type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: readonly PathCompletion[] } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes | StringLiteralCompletionsFromCases;
 function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost, preferences: UserPreferences): StringLiteralCompletion | undefined {
     const parent = walkUpParentheses(node.parent);
     switch (parent.kind) {
@@ -415,12 +434,15 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             //      var y = require("/*completion position*/");
             //      export * from "/*completion position*/";
             return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker, preferences) };
-
+        case SyntaxKind.CaseClause:
+            const tracker = newCaseClauseTracker(typeChecker, (node.parent as CaseClause).parent.clauses);
+            const literals = fromContextualType().types.filter(literal => !tracker.hasValue(literal.value));
+            return { kind: StringLiteralCompletionKind.Cases, cases: literals, isNewIdentifier: false }
         default:
             return fromContextualType();
     }
 
-    function fromContextualType(): StringLiteralCompletion {
+    function fromContextualType(): StringLiteralCompletionsFromTypes {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
         return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, ContextFlags.Completions)), isNewIdentifier: false };
