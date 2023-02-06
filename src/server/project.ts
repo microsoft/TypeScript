@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import * as ts from "./_namespaces/ts";
 import {
     addRange,
@@ -147,6 +146,8 @@ import {
     TypingsCache,
     updateProjectIfDirty,
 } from "./_namespaces/ts.server";
+
+import * as Debug from "../compiler/debug";
 import * as protocol from "./protocol";
 
 export enum ProjectKind {

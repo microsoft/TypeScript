@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     FileWatcher,
     ModulePath,
@@ -9,6 +8,8 @@ import {
     ResolvedModuleSpecifierInfo,
     UserPreferences,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export interface ModuleSpecifierResolutionCacheHost {

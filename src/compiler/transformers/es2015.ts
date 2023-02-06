@@ -206,6 +206,7 @@ import {
     WhileStatement,
     YieldExpression,
 } from "../_namespaces/ts";
+
 import * as Debug from "../debug";
 
 const enum ES2015SubstitutionFlags {

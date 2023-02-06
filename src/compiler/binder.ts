@@ -314,6 +314,7 @@ import {
     WithStatement,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+
 import * as Debug from "./debug";
 
 /** @internal */

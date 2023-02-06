@@ -95,6 +95,7 @@ import {
     WithStatement,
     YieldExpression,
 } from "../_namespaces/ts";
+
 import * as Debug from "../debug";
 
 // Transforms generator functions into a compatible ES5 representation with similar runtime

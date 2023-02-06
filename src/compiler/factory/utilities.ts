@@ -175,6 +175,7 @@ import {
     Token,
     TypeNode,
 } from "../_namespaces/ts";
+
 import * as Debug from "../debug";
 
 // Compound nodes

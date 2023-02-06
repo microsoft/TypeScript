@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     Diagnostics,
     EmitFlags,
@@ -47,6 +46,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Debug from "../../compiler/debug";
 
 const fixId = "annotateWithTypeFromJSDoc";
 const errorCodes = [Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types.code];

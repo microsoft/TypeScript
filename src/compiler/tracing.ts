@@ -21,6 +21,7 @@ import {
     UnionType,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+
 import * as Debug from "./debug";
 
 /* Tracing events for the compiler. */

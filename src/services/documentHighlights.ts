@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     __String,
     arrayFrom,
@@ -83,6 +82,8 @@ import {
     tryCast,
     TryStatement,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 export interface DocumentHighlights {
     fileName: string;

@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     every,
     FormatCodeSettings,
@@ -14,6 +13,8 @@ import {
     RuleAction,
     RuleSpec,
 } from "../_namespaces/ts.formatting";
+
+import * as Debug from "../../compiler/debug";
 
 /** @internal */
 export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {

@@ -91,6 +91,7 @@ import {
     WatchTypeRegistry,
     WildcardDirectoryWatcher,
 } from "./_namespaces/ts";
+
 import * as Debug from "./debug";
 
 export interface ReadBuildProgramHost {

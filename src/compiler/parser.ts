@@ -389,6 +389,7 @@ import {
     YieldExpression,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+
 import * as Debug from "./debug";
 
 const enum SignatureFlags {

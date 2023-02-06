@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
@@ -57,6 +56,8 @@ import {
     getRangeOfEnclosingComment,
     TextRangeWithKind,
 } from "../_namespaces/ts.formatting";
+
+import * as Debug from "../../compiler/debug";
 
 /** @internal */
 export namespace SmartIndenter {

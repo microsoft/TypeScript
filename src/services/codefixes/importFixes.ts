@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     AnyImportOrRequire,
     AnyImportOrRequireStatement,
@@ -143,6 +142,8 @@ import {
     eachDiagnostic,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Debug from "../../compiler/debug";
 
 /** @internal */
 export const importFixName = "import";

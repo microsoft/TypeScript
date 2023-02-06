@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     assign,
     clear,
@@ -51,6 +50,8 @@ import {
     ScriptVersionCache,
     ServerHost,
 } from "./_namespaces/ts.server";
+
+import * as Debug from "../compiler/debug";
 import * as protocol from "./protocol";
 
 export interface ScriptInfoVersion {

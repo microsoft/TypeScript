@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     addToSeen,
     arrayFrom,
@@ -177,6 +176,8 @@ import {
     toNormalizedPath,
     TypingsCache,
 } from "./_namespaces/ts.server";
+
+import * as Debug from "../compiler/debug";
 import * as protocol from "./protocol";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;

@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     ArrowFunction,
     AwaitExpression,
@@ -83,6 +82,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Debug from "../../compiler/debug";
 
 const fixId = "convertToAsyncFunction";
 const errorCodes = [Diagnostics.This_may_be_converted_to_an_async_function.code];

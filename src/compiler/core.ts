@@ -13,6 +13,7 @@ import {
     TextSpan,
     UnderscoreEscapedMap,
 } from "./_namespaces/ts";
+
 import * as Debug from "./debug";
 
 /** @internal */

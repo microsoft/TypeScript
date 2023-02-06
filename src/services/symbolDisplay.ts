@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     addRange,
     arrayFrom,
@@ -107,6 +106,8 @@ import {
     typeToDisplayParts,
     VariableDeclaration,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 

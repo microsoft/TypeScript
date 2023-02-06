@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     append,
     ArrowFunction,
@@ -45,6 +44,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Debug from "../../compiler/debug";
 
 const fixId = "returnValueCorrect";
 const fixIdAddReturnStatement = "fixAddReturnStatement";

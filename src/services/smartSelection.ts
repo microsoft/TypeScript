@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     CharacterCodes,
     compact,
@@ -47,6 +46,8 @@ import {
     textSpanIntersectsWithPosition,
     textSpansEqual,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {

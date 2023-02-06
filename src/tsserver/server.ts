@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     getNodeMajorVersion,
     setStackTraceLimit,
@@ -13,6 +12,8 @@ import {
     Msg,
     StartInput,
 } from "./_namespaces/ts.server";
+
+import * as Debug from "../compiler/debug";
 
 
 export * from "./_namespaces/ts";

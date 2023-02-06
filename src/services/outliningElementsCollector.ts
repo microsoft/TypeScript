@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     ArrowFunction,
     AssertClause,
@@ -57,6 +56,8 @@ import {
     trimStringStart,
     TryStatement,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {

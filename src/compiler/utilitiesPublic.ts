@@ -279,6 +279,7 @@ import {
     UnparsedTextLike,
     VariableDeclaration,
 } from "./_namespaces/ts";
+
 import * as Debug from "./debug";
 
 export function isExternalModuleNameRelative(moduleName: string): boolean {

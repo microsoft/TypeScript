@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     __String,
     addToSeen,
@@ -124,6 +123,8 @@ import {
     ImportAdder,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Debug from "../../compiler/debug";
 
 const fixMissingMember = "fixMissingMember";
 const fixMissingProperties = "fixMissingProperties";

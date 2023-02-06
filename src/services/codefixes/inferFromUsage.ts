@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     __String,
     AnonymousType,
@@ -112,6 +111,8 @@ import {
     registerCodeFix,
     tryGetAutoImportableReferenceFromTypeNode,
 } from "../_namespaces/ts.codefix";
+
+import * as Debug from "../../compiler/debug";
 
 const fixId = "inferFromUsage";
 const errorCodes = [

@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import {
     __String,
     addEmitFlags,
@@ -354,6 +353,8 @@ import {
     VoidExpression,
     YieldExpression,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 // These utilities are common to multiple language service features.
 //#region

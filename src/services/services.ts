@@ -1,4 +1,3 @@
-import * as Debug from "../compiler/debug";
 import * as ts from "./_namespaces/ts";
 import {
     __String,
@@ -318,6 +317,8 @@ import {
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
+
+import * as Debug from "../compiler/debug";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";

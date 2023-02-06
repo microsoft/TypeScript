@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     Diagnostics,
     factory,
@@ -13,6 +12,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Debug from "../../compiler/debug";
 
 const fixId = "addNameToNamelessParameter";
 const errorCodes = [Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1.code];

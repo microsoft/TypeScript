@@ -74,6 +74,7 @@ import {
     VariableDeclaration,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+
 import * as Debug from "./debug";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {

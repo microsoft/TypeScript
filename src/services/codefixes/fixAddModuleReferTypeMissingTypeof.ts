@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     Diagnostics,
     factory,
@@ -13,6 +12,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Debug from "../../compiler/debug";
 
 const fixIdAddMissingTypeof = "fixAddModuleReferTypeMissingTypeof";
 const fixId = fixIdAddMissingTypeof;

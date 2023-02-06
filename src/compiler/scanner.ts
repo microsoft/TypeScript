@@ -25,6 +25,7 @@ import {
     TokenFlags,
     trimStringStart,
 } from "./_namespaces/ts";
+
 import * as Debug from "./debug";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;

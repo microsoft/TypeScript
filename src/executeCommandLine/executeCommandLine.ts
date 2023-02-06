@@ -1,5 +1,4 @@
 import * as performance from "../compiler/_namespaces/ts.performance";
-import * as Debug from "../compiler/debug";
 import * as ts from "./_namespaces/ts";
 import {
     arrayFrom,
@@ -88,6 +87,8 @@ import {
     WatchCompilerHost,
     WatchOptions,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 interface Statistic {
     name: string;

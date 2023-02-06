@@ -1,5 +1,3 @@
-import * as Debug from "../../compiler/debug";
-import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 import {
     AnyImportOrRequireStatement,
     append,
@@ -129,6 +127,9 @@ import {
     VariableStatement,
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
+
+import * as Debug from "../../compiler/debug";
+import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 
 const refactorName = "Move to a new file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);

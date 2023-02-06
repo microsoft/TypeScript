@@ -1,4 +1,3 @@
-import * as Debug from "../../compiler/debug";
 import {
     ApplicableRefactorInfo,
     ArrowFunction,
@@ -33,6 +32,8 @@ import {
     refactorKindBeginsWith,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+
+import * as Debug from "../../compiler/debug";
 
 const refactorName = "Add or remove braces in an arrow function";
 const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
