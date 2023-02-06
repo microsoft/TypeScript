@@ -294,6 +294,7 @@ export let isWorker: boolean;
 function startTestEnvironment() {
     // For debugging convenience.
     (globalThis as any).ts = ts;
+    (globalThis as any).Debug = ts.Debug;
 
     isWorker = handleTestConfig();
     if (isWorker) {
