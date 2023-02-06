@@ -1,5 +1,5 @@
 import { protocol } from "../../_namespaces/ts.server";
-import { createSession } from "../tsserver/helpers";
+import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession } from "../tsserver/helpers";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
 
 describe("unittests:: services:: findAllReferences", () => {
@@ -74,7 +74,7 @@ const bar: Bar = {
             },
         ];
         const host = createServerHost(files);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
             command: protocol.CommandTypes.UpdateOpen,
@@ -128,13 +128,14 @@ const bar: Bar = {
         assert(loadingIndicatorScriptInfo.containingProjects.find(p => p.projectName === "/packages/babel-loader/tsconfig.json"));
         // When calling find all references,
         // we shouldn't crash due to using outdated information on a file's containig projects.
-        assert.doesNotThrow(() => session.executeCommandSeq<protocol.ReferencesRequest>({
+        session.executeCommandSeq<protocol.ReferencesRequest>({
             command: protocol.CommandTypes.References,
             arguments: {
                 file: files[3].path, // core/src/index.ts
                 line: 5,             // `prop`
                 offset: 5,
             }
-        }));
+        });
+        baselineTsserverLogs("findAllReferences", "does not try to open a file in a project that was updated and no longer has the file", session);
     });
 });
