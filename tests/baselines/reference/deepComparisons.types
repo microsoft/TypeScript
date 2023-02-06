@@ -83,7 +83,7 @@ function g() {
 
     return f() as F<any>;
 >f() as F<any> : F<any>
->f() : F<any>
+>f() : F<T>
 >f : <T = any>() => F<T>
 }
 
