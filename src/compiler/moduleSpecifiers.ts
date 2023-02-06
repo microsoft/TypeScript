@@ -371,7 +371,9 @@ function computeModuleSpecifiers(
     let redirectPathsSpecifiers: string[] | undefined;
     let relativeSpecifiers: string[] | undefined;
     for (const modulePath of modulePaths) {
-        const specifier = tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode);
+        const specifier = modulePath.isInNodeModules
+            ? tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)
+            : undefined;
         nodeModulesSpecifiers = append(nodeModulesSpecifiers, specifier);
         if (specifier && modulePath.isRedirect) {
             // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",

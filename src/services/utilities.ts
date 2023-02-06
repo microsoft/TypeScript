@@ -3677,7 +3677,13 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
       ).filter(p => p.parseable);
 
     let usesNodeCoreModules: boolean | undefined;
-    return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier };
+    let ambientModuleCache: Map<Symbol, boolean> | undefined;
+    let sourceFileCache: Map<SourceFile, boolean> | undefined;
+    return {
+        allowsImportingAmbientModule,
+        allowsImportingSourceFile,
+        allowsImportingSpecifier,
+    };
 
     function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
         const packageName = getNodeModuleRootSpecifier(specifier);
@@ -3694,19 +3700,34 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
             return true;
         }
 
-        const declaringSourceFile = moduleSymbol.valueDeclaration.getSourceFile();
-        const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName, moduleSpecifierResolutionHost);
-        if (typeof declaringNodeModuleName === "undefined") {
-            return true;
+        if (!ambientModuleCache) {
+            ambientModuleCache = new Map();
+        }
+        else {
+            const cached = ambientModuleCache.get(moduleSymbol);
+            if (cached !== undefined) {
+                return cached;
+            }
         }
 
         const declaredModuleSpecifier = stripQuotes(moduleSymbol.getName());
         if (isAllowedCoreNodeModulesImport(declaredModuleSpecifier)) {
+            ambientModuleCache.set(moduleSymbol, true);
             return true;
         }
 
-        return moduleSpecifierIsCoveredByPackageJson(declaringNodeModuleName)
-            || moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
+        const declaringSourceFile = moduleSymbol.valueDeclaration.getSourceFile();
+        const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName, moduleSpecifierResolutionHost);
+        if (typeof declaringNodeModuleName === "undefined") {
+            ambientModuleCache.set(moduleSymbol, true);
+            return true;
+        }
+
+        const result =
+            moduleSpecifierIsCoveredByPackageJson(declaringNodeModuleName) ||
+            moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
+        ambientModuleCache.set(moduleSymbol, result);
+        return result;
     }
 
     function allowsImportingSourceFile(sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost): boolean {
@@ -3714,12 +3735,25 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
             return true;
         }
 
+        if (!sourceFileCache) {
+            sourceFileCache = new Map();
+        }
+        else {
+            const cached = sourceFileCache.get(sourceFile);
+            if (cached !== undefined) {
+                return cached;
+            }
+        }
+
         const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, moduleSpecifierResolutionHost);
         if (!moduleSpecifier) {
+            sourceFileCache.set(sourceFile, true);
             return true;
         }
 
-        return moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
+        const result = moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
+        sourceFileCache.set(sourceFile, result);
+        return result;
     }
 
     function allowsImportingSpecifier(moduleSpecifier: string) {
