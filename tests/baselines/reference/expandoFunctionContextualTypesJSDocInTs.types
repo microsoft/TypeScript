@@ -1,0 +1,17 @@
+=== tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts ===
+// GH #38532
+import Foo from "blah";
+>Foo : any
+
+export function Foo() { }
+>Foo : typeof import("tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs").Foo
+
+// This comment should have no effect; this is a TS file.
+/** @type {never} */
+Foo.bar = () => { };
+>Foo.bar = () => { } : () => void
+>Foo.bar : never
+>Foo : typeof import("tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs").Foo
+>bar : never
+>() => { } : () => void
+

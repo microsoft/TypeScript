@@ -1,0 +1,15 @@
+=== tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts ===
+// GH #38532
+import Foo from "blah";
+>Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesJSDocInTs.ts, 1, 23), Decl(expandoFunctionContextualTypesJSDocInTs.ts, 1, 6))
+
+export function Foo() { }
+>Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesJSDocInTs.ts, 1, 23), Decl(expandoFunctionContextualTypesJSDocInTs.ts, 3, 25))
+
+// This comment should have no effect; this is a TS file.
+/** @type {never} */
+Foo.bar = () => { };
+>Foo.bar : Symbol(Foo.bar, Decl(expandoFunctionContextualTypesJSDocInTs.ts, 3, 25))
+>Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesJSDocInTs.ts, 1, 23), Decl(expandoFunctionContextualTypesJSDocInTs.ts, 1, 6))
+>bar : Symbol(Foo.bar, Decl(expandoFunctionContextualTypesJSDocInTs.ts, 3, 25))
+
