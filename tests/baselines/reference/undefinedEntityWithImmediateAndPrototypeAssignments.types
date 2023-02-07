@@ -1,0 +1,21 @@
+=== tests/cases/compiler/a.js ===
+Thing.abc = 123
+>Thing.abc = 123 : 123
+>Thing.abc : number
+>Thing : typeof Thing
+>abc : number
+>123 : 123
+
+Thing.prototype.def = 456
+>Thing.prototype.def = 456 : 456
+>Thing.prototype.def : any
+>Thing.prototype : any
+>Thing : typeof Thing
+>prototype : any
+>def : any
+>456 : 456
+
+new Thing();
+>new Thing() : any
+>Thing : typeof Thing
+
