@@ -165,7 +165,6 @@ async function runDtsBundler(entrypoint, output) {
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const preBabel = `${outfile.replace(/\.js$/, "")}.preBabel.js`;
-    const postBabel = `${outfile.replace(/\.js$/, "")}.postBabel.js`;
 
     const getOptions = memoize(async () => {
         /** @type {esbuild.BuildOptions} */
@@ -227,14 +226,10 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                         "--plugins",
                         "@babel/plugin-transform-block-scoping",
                         preBabel,
+                        "--compact",
+                        "false",
                         "--out-file",
-                        postBabel,
-                    ]);
-
-                    // Reformatting the code back to reduce the load time difference from main.
-                    await exec("./node_modules/esbuild/bin/esbuild", [
-                        postBabel,
-                        `--outfile=${outfile}`,
+                        outfile,
                     ]);
                 });
             },
