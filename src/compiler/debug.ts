@@ -1,7 +1,6 @@
 import * as ts from "./_namespaces/ts";
 import {
     AnyFunction,
-    AssertionLevel,
     BigIntLiteralType,
     CheckMode,
     compareValues,
@@ -102,6 +101,14 @@ export enum LogLevel {
 /** @internal */
 export interface LoggingHost {
     log(level: LogLevel, s: string): void;
+}
+
+/** @internal */
+export const enum AssertionLevel {
+    None = 0,
+    Normal = 1,
+    Aggressive = 2,
+    VeryAggressive = 3,
 }
 
 let currentAssertionLevel = AssertionLevel.None;

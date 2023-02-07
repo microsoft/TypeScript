@@ -12,7 +12,6 @@ import {
     AsExpression,
     AssertClause,
     AssertEntry,
-    AssertionLevel,
     AsteriskToken,
     attachFileToDiagnostics,
     AwaitExpression,
@@ -9483,7 +9482,7 @@ namespace Parser {
 
 namespace IncrementalParser {
     export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean): SourceFile {
-        aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
+        aggressiveChecks = aggressiveChecks || Debug.shouldAssert(Debug.AssertionLevel.Aggressive);
 
         checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks);
         if (textChangeRangeIsUnchanged(textChangeRange)) {
@@ -9970,7 +9969,7 @@ namespace IncrementalParser {
         if (textChangeRange) {
             Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
 
-            if (aggressiveChecks || Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
+            if (aggressiveChecks || Debug.shouldAssert(Debug.AssertionLevel.VeryAggressive)) {
                 const oldTextPrefix = oldText.substr(0, textChangeRange.span.start);
                 const newTextPrefix = newText.substr(0, textChangeRange.span.start);
                 Debug.assert(oldTextPrefix === newTextPrefix);

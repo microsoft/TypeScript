@@ -2,7 +2,6 @@ import {
     addToSeen,
     arrayFrom,
     arrayToMap,
-    AssertionLevel,
     CachedDirectoryStructureHost,
     canJsonReportNoInputFiles,
     canWatchDirectoryOrFile,
@@ -1627,7 +1626,7 @@ export class ProjectService {
         project.print(/*writeProjectFileNames*/ true);
 
         project.close();
-        if (Debug.shouldAssert(AssertionLevel.Normal)) {
+        if (Debug.shouldAssert(Debug.AssertionLevel.Normal)) {
             this.filenameToScriptInfo.forEach(info => Debug.assert(
                 !info.isAttached(project),
                 "Found script Info still attached to project",

@@ -2115,13 +2115,6 @@ export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t
         return t => t;
     }
 }
-/** @internal */
-export const enum AssertionLevel {
-    None = 0,
-    Normal = 1,
-    Aggressive = 2,
-    VeryAggressive = 3,
-}
 
 /**
  * Safer version of `Function` which should not be called.
