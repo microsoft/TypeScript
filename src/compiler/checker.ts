@@ -546,6 +546,7 @@ import {
     isInitializedProperty,
     isInJSDoc,
     isInJSFile,
+    isInJsonFile,
     isInterfaceDeclaration,
     isInternalModuleImportEqualsDeclaration,
     isInTopLevelContext,
@@ -29666,7 +29667,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
         const inConstContext = isConstContext(node);
         const checkFlags = inConstContext ? CheckFlags.Readonly : 0;
-        const isInJavascript = isInJSFile(node);
+        const isInJavascript = isInJSFile(node) && !isInJsonFile(node);
         const enumTag = isInJavascript ? getJSDocEnumTag(node) : undefined;
         const isJSObjectLiteral = !contextualType && isInJavascript && !enumTag;
         let objectFlags: ObjectFlags = freshObjectLiteralFlag;
