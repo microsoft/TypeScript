@@ -2073,3 +2073,48 @@ while (arr[i]?.tag === "left") {
     }
 }
 
+
+// Repro from #51941
+
+type Test5 = {
+>Test5 : { main?: { childs: Record<string, Test5>; } | undefined; }
+
+  main?: {
+>main : { childs: Record<string, Test5>; } | undefined
+
+    childs: Record<string, Test5>;
+>childs : Record<string, Test5>
+
+  };
+};
+
+function f50(obj: Test5) {
+>f50 : (obj: Test5) => Test5 | null
+>obj : Test5
+
+   for (const key in obj.main?.childs) {
+>key : string
+>obj.main?.childs : Record<string, Test5> | undefined
+>obj.main : { childs: Record<string, Test5>; } | undefined
+>obj : Test5
+>main : { childs: Record<string, Test5>; } | undefined
+>childs : Record<string, Test5> | undefined
+
+      if (obj.main.childs[key] === obj) {
+>obj.main.childs[key] === obj : boolean
+>obj.main.childs[key] : Test5
+>obj.main.childs : Record<string, Test5>
+>obj.main : { childs: Record<string, Test5>; }
+>obj : Test5
+>main : { childs: Record<string, Test5>; }
+>childs : Record<string, Test5>
+>key : string
+>obj : Test5
+
+        return obj;
+>obj : Test5
+      }
+   }
+   return null;
+>null : null
+}
