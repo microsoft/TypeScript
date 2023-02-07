@@ -1,10 +1,10 @@
-import * as ts from "../_namespaces/ts";
-import * as Harness from "../_namespaces/Harness";
-import * as evaluator from "../_namespaces/evaluator";
-import * as vfs from "../_namespaces/vfs";
 import * as documents from "../_namespaces/documents";
+import * as evaluator from "../_namespaces/evaluator";
 import * as fakes from "../_namespaces/fakes";
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
 import { NewLineKind, ScriptTarget, transpileModule } from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
 
 describe("unittests:: TransformAPI", () => {
     function replaceUndefinedWithVoid0(context: ts.TransformationContext) {
@@ -669,5 +669,31 @@ const MyClass = class {
         }).outputText;
     });
 
+    testBaseline("jsxExpression", () => {
+        function doNothing(context: ts.TransformationContext) {
+            const visitor = (node: ts.Node): ts.Node => {
+                return ts.visitEachChild(node, visitor, context);
+            };
+            return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
+        }
+
+        return ts.transpileModule(`
+function test () {
+    return <>
+        {/* This comment breaks the transformer */}
+    </>
+}
+`, {
+            transformers: {
+                before: [doNothing],
+            },
+            compilerOptions: {
+                jsx: ts.JsxEmit.React,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
+            }
+        }).outputText;
+    });
 });
 

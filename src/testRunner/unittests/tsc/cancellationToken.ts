@@ -1,11 +1,6 @@
+import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import * as Harness from "../../_namespaces/Harness";
-import {
-    createWatchedSystem,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
 import {
     baselineBuildInfo,
     CommandLineProgram,
@@ -15,6 +10,11 @@ import {
     createBaseline,
     watchBaseline,
 } from "../tscWatch/helpers";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 
 describe("unittests:: tsc:: builder cancellationToken", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");

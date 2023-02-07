@@ -1,10 +1,10 @@
+import * as fakes from "./_namespaces/fakes";
 import * as FourSlashInterface from "./_namespaces/FourSlashInterface";
 import * as Harness from "./_namespaces/Harness";
-import * as vfs from "./_namespaces/vfs";
 import * as ts from "./_namespaces/ts";
-import * as fakes from "./_namespaces/fakes";
-import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -2046,6 +2046,22 @@ export class TestState {
                     ? entry.displayParts.map(p => p.text).join("").split("\n")
                     : [`(${entry.kindModifiers}${entry.kind}) ${entry.name}`])
         );
+        for (const r of result) {
+            for (const entry of r.item.entries ?? ts.emptyArray) {
+                for (const tag of entry.tags ?? ts.emptyArray) {
+                    for (const part of tag.text ?? ts.emptyArray) {
+                        if (part.kind === "linkName") {
+                            const link = part as ts.JSDocLinkDisplayPart;
+                            if (/lib(?:.*)\.d\.ts$/.test(link.target.fileName)) {
+                                // The object literal isn't a complete TextSpan, but we're only going to
+                                // use these results in the baseline for diffing, so just overwrite.
+                                (link.target.textSpan as any) = { start: "--", length: "--" };
+                            }
+                        }
+                    }
+                }
+            }
+        }
         Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
 
@@ -3249,7 +3265,7 @@ export class TestState {
 
     public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined, options?: ts.DocCommentTemplateOptions) {
         const name = "verifyDocCommentTemplate";
-        const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition, options || { generateReturnInDocTemplate: true })!;
+        const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition, options || { generateReturnInDocTemplate: true }, this.formatCodeSettings)!;
 
         if (expected === undefined) {
             if (actual) {

@@ -15,7 +15,7 @@
     "'package.json' does not have a 'typesVersions' field.",
     "'package.json' does not have a 'typings' field.",
     "'package.json' has 'types' field '../esm/useMergedRefs.d.ts' that references '/node_modules/@restart/hooks/esm/useMergedRefs.d.ts'.",
-    "File '/node_modules/@restart/hooks/esm/useMergedRefs.d.ts' exist - use it as a name resolution result.",
+    "File '/node_modules/@restart/hooks/esm/useMergedRefs.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/node_modules/@restart/hooks/esm/useMergedRefs.d.ts', result '/node_modules/@restart/hooks/esm/useMergedRefs.d.ts'.",
     "======== Module name '@restart/hooks/useMergedRefs' was successfully resolved to '/node_modules/@restart/hooks/esm/useMergedRefs.d.ts'. ========",
     "File 'package.json' does not exist.",

@@ -1,20 +1,4 @@
 import {
-    AbsolutePositionAndLineText,
-    ConfiguredProject,
-    Errors,
-    ExternalProject,
-    InferredProject,
-    isConfiguredProject,
-    isExternalProject,
-    isInferredProject,
-    maxFileSize,
-    NormalizedPath,
-    Project,
-    ProjectKind,
-    ScriptVersionCache,
-    ServerHost,
-} from "./_namespaces/ts.server";
-import {
     assign,
     clear,
     closeFileWatcherOf,
@@ -51,6 +35,22 @@ import {
     TextSpan,
     unorderedRemoveItem,
 } from "./_namespaces/ts";
+import {
+    AbsolutePositionAndLineText,
+    ConfiguredProject,
+    Errors,
+    ExternalProject,
+    InferredProject,
+    isConfiguredProject,
+    isExternalProject,
+    isInferredProject,
+    maxFileSize,
+    NormalizedPath,
+    Project,
+    ProjectKind,
+    ScriptVersionCache,
+    ServerHost,
+} from "./_namespaces/ts.server";
 import * as protocol from "./protocol";
 
 export interface ScriptInfoVersion {

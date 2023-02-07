@@ -199,8 +199,8 @@ import {
     HasExpressionInitializer,
     hasExtension,
     HasFlowNode,
-    hasInitializer,
     HasInitializer,
+    hasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -1279,6 +1279,20 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
             BigUint64Array: ["at"],
             ObjectConstructor: ["hasOwn"],
             Error: ["cause"]
+        },
+        es2023: {
+            Array: ["findLastIndex", "findLast"],
+            Int8Array: ["findLastIndex", "findLast"],
+            Uint8Array: ["findLastIndex", "findLast"],
+            Uint8ClampedArray: ["findLastIndex", "findLast"],
+            Int16Array: ["findLastIndex", "findLast"],
+            Uint16Array: ["findLastIndex", "findLast"],
+            Int32Array: ["findLastIndex", "findLast"],
+            Uint32Array: ["findLastIndex", "findLast"],
+            Float32Array: ["findLastIndex", "findLast"],
+            Float64Array: ["findLastIndex", "findLast"],
+            BigInt64Array: ["findLastIndex", "findLast"],
+            BigUint64Array: ["findLastIndex", "findLast"],
         }
     };
 }
@@ -7975,6 +7989,7 @@ export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["mo
         getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
 }
 
+/** @internal */
 export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
     return moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext;
 }
@@ -9065,7 +9080,7 @@ export function rangeOfNode(node: Node): TextRange {
 export function rangeOfTypeParameters(sourceFile: SourceFile, typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
     // Include the `<>`
     const pos = typeParameters.pos - 1;
-    const end = skipTrivia(sourceFile.text, typeParameters.end) + 1;
+    const end = Math.min(sourceFile.text.length, skipTrivia(sourceFile.text, typeParameters.end) + 1);
     return { pos, end };
 }
 
