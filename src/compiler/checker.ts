@@ -6651,6 +6651,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // The specified symbol flags need to be reinterpreted as type flags
                             return symbolToTypeNode(typeAlias, context, SymbolFlags.Type);
                         }
+                        else if ((type as { target?: GenericType})?.target?.thisType && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) {
+                            return factory.createThisTypeNode();
+                        }
                         else {
                             return createElidedInformationPlaceholder(context);
                         }

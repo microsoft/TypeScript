@@ -105,12 +105,12 @@ export declare var simpleExample: {
 };
 export declare var circularReference: {
     new (): {
-        tags(c: any): any;
+        tags(c: this): this;
     };
     getTags(c: {
-        tags(c: any): any;
+        tags(c: this): this;
     }): {
-        tags(c: any): any;
+        tags(c: this): this;
     };
 };
 export declare class FooItem {
@@ -137,3 +137,70 @@ declare const Test_base: {
 export declare class Test extends Test_base {
 }
 export {};
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts(9,17): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts(9,24): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts(12,17): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts(12,24): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts(14,17): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts(14,24): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+
+
+==== tests/cases/compiler/emitClassExpressionInDeclarationFile.d.ts (6 errors) ====
+    export declare var simpleExample: {
+        new (): {
+            tags(): void;
+        };
+        getTags(): void;
+    };
+    export declare var circularReference: {
+        new (): {
+            tags(c: this): this;
+                    ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+                           ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+        };
+        getTags(c: {
+            tags(c: this): this;
+                    ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+                           ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+        }): {
+            tags(c: this): this;
+                    ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+                           ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+        };
+    };
+    export declare class FooItem {
+        foo(): void;
+        name?: string;
+    }
+    export type Constructor<T> = new (...args: any[]) => T;
+    export declare function WithTags<T extends Constructor<FooItem>>(Base: T): {
+        new (...args: any[]): {
+            tags(): void;
+            foo(): void;
+            name?: string;
+        };
+        getTags(): void;
+    } & T;
+    declare const Test_base: {
+        new (...args: any[]): {
+            tags(): void;
+            foo(): void;
+            name?: string;
+        };
+        getTags(): void;
+    } & typeof FooItem;
+    export declare class Test extends Test_base {
+    }
+    export {};
+    

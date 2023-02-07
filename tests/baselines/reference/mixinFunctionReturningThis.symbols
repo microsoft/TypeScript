@@ -1,0 +1,35 @@
+=== tests/cases/compiler/mixinFunctionReturningThis.ts ===
+class A {
+>A : Symbol(A, Decl(mixinFunctionReturningThis.ts, 0, 0))
+
+  constructor(name: string) {}
+>name : Symbol(name, Decl(mixinFunctionReturningThis.ts, 1, 14))
+}
+
+type Constructor = new (...args: any[]) => {};
+>Constructor : Symbol(Constructor, Decl(mixinFunctionReturningThis.ts, 2, 1))
+>args : Symbol(args, Decl(mixinFunctionReturningThis.ts, 4, 24))
+ 
+function MixB<TBase extends Constructor>(Base: TBase) {
+>MixB : Symbol(MixB, Decl(mixinFunctionReturningThis.ts, 4, 46))
+>TBase : Symbol(TBase, Decl(mixinFunctionReturningThis.ts, 6, 14))
+>Constructor : Symbol(Constructor, Decl(mixinFunctionReturningThis.ts, 2, 1))
+>Base : Symbol(Base, Decl(mixinFunctionReturningThis.ts, 6, 41))
+>TBase : Symbol(TBase, Decl(mixinFunctionReturningThis.ts, 6, 14))
+
+  return class extends Base {
+>Base : Symbol(Base, Decl(mixinFunctionReturningThis.ts, 6, 41))
+
+    getThis(): this {
+>getThis : Symbol((Anonymous class).getThis, Decl(mixinFunctionReturningThis.ts, 7, 29))
+
+      return this;
+>this : Symbol((Anonymous class), Decl(mixinFunctionReturningThis.ts, 7, 8))
+    }
+  };
+}
+
+export default MixB(A);
+>MixB : Symbol(MixB, Decl(mixinFunctionReturningThis.ts, 4, 46))
+>A : Symbol(A, Decl(mixinFunctionReturningThis.ts, 0, 0))
+

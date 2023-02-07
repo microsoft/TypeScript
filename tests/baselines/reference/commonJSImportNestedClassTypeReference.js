@@ -41,8 +41,28 @@ function f(k) {
 //// [mod1.d.ts]
 export var K: {
     new (): {
-        values(): any;
+        values(): this;
     };
 };
 //// [main.d.ts]
 export {};
+
+
+//// [DtsFileErrors]
+
+
+out/mod1.d.ts(3,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+
+
+==== out/main.d.ts (0 errors) ====
+    export {};
+    
+==== out/mod1.d.ts (1 errors) ====
+    export var K: {
+        new (): {
+            values(): this;
+                      ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+        };
+    };
+    

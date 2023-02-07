@@ -1,0 +1,34 @@
+=== tests/cases/compiler/mixinFunctionReturningThis.ts ===
+class A {
+>A : A
+
+  constructor(name: string) {}
+>name : string
+}
+
+type Constructor = new (...args: any[]) => {};
+>Constructor : new (...args: any[]) => {}
+>args : any[]
+ 
+function MixB<TBase extends Constructor>(Base: TBase) {
+>MixB : <TBase extends Constructor>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: MixB<any>.(Anonymous class); } & TBase
+>Base : TBase
+
+  return class extends Base {
+>class extends Base {    getThis(): this {      return this;    }  } : { new (...args: any[]): (Anonymous class); prototype: MixB<any>.(Anonymous class); } & TBase
+>Base : {}
+
+    getThis(): this {
+>getThis : () => this
+
+      return this;
+>this : this
+    }
+  };
+}
+
+export default MixB(A);
+>MixB(A) : { new (...args: any[]): MixB<typeof A>.(Anonymous class); prototype: MixB<any>.(Anonymous class); } & typeof A
+>MixB : <TBase extends Constructor>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: MixB<any>.(Anonymous class); } & TBase
+>A : typeof A
+

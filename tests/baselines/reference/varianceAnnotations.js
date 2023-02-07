@@ -326,11 +326,11 @@ declare const qq: ActionObject<{
 }>;
 declare let Anon: {
     new <out T>(): {
-        foo(): any;
+        foo(): this;
     };
 };
 declare let OuterC: {
     new <out T>(): {
-        foo(): any;
+        foo(): this;
     };
 };
