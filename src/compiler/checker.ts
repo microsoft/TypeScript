@@ -13339,7 +13339,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const memberType of types) {
             for (const { escapedName } of getAugmentedPropertiesOfType(memberType)) {
                 if (!props.has(escapedName)) {
-                    const prop = createUnionOrIntersectionProperty(unionType as UnionType, escapedName);
+                    const prop = getUnionOrIntersectionProperty(unionType as UnionType, escapedName);
                     // May be undefined if the property is private
                     if (prop) props.set(escapedName, prop);
                 }
@@ -13717,6 +13717,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getReducedType(getApparentType(getReducedType(type)));
     }
 
+    /** Note: consider calling getUnionOrIntersectionProperty instead of this function directly. */
     function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
         let singleProp: Symbol | undefined;
         let propSet: Map<SymbolId, Symbol> | undefined;
