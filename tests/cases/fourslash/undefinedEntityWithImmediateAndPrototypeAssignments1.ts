@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
-// @Filename: a.js
 // @allowJs: true
 
+// @Filename: a.js
 //// Thing.abc = 123
 //// Thing.prototype.def = 456
 //// new Thing/**/();

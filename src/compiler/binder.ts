@@ -3341,6 +3341,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
             });
         }
+        if (isPrototypeProperty && namespaceSymbol && namespaceSymbol.valueDeclaration) {
+            if (isAssignmentDeclaration(namespaceSymbol.valueDeclaration)) containerIsClass = false;
+        }
         if (containerIsClass && namespaceSymbol && namespaceSymbol.valueDeclaration) {
             addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);
         }
