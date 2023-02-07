@@ -1,0 +1,40 @@
+=== tests/cases/compiler/wideningWithTopLevelTypeParameter.ts ===
+class FormControl<T> {
+>FormControl : FormControl<T>
+
+    constructor(t: T extends undefined ? never : T) {}
+>t : T extends undefined ? never : T
+}
+
+const a = new FormControl('');  // string
+>a : FormControl<string>
+>new FormControl('') : FormControl<string>
+>FormControl : typeof FormControl
+>'' : ""
+
+class FormControl2<T> {
+>FormControl2 : FormControl2<T>
+
+    constructor(t: T | string) {}
+>t : string | T
+}
+
+const b = new FormControl2('');  // string
+>b : FormControl2<string>
+>new FormControl2('') : FormControl2<string>
+>FormControl2 : typeof FormControl2
+>'' : ""
+
+class FormControl3<T> {
+>FormControl3 : FormControl3<T>
+
+    constructor(t: T extends undefined ? never : T | string) {}
+>t : T extends undefined ? never : string | T
+}
+
+const c = new FormControl3('');  // string
+>c : FormControl3<string>
+>new FormControl3('') : FormControl3<string>
+>FormControl3 : typeof FormControl3
+>'' : ""
+
