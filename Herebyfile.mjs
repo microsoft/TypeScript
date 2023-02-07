@@ -164,13 +164,16 @@ async function runDtsBundler(entrypoint, output) {
  * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
+    const preBabel = `${outfile.replace(/\.js$/, "")}.preBabel.js`;
+    const postBabel = `${outfile.replace(/\.js$/, "")}.postBabel.js`;
+
     const getOptions = memoize(async () => {
         /** @type {esbuild.BuildOptions} */
         const options = {
             entryPoints: [entrypoint],
             banner: { js: await copyright() },
             bundle: true,
-            outfile,
+            outfile: preBabel,
             platform: "node",
             target: "es2018",
             format: "cjs",
@@ -206,14 +209,36 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                     name: "fix-require",
                     setup: (build) => {
                         build.onEnd(async () => {
-                            let contents = await fs.promises.readFile(outfile, "utf-8");
+                            let contents = await fs.promises.readFile(preBabel, "utf-8");
                             contents = contents.replace(/\$\$require/g, "  require");
-                            await fs.promises.writeFile(outfile, contents);
+                            await fs.promises.writeFile(preBabel, contents);
                         });
                     },
-                }
+                },
             ];
         }
+
+        options.plugins = (options.plugins ?? []).concat({
+            name: "let-const",
+            setup: (build) => {
+                build.onEnd(async () => {
+                    await exec(process.execPath, [
+                        "./node_modules/@babel/cli/bin/babel.js",
+                        "--plugins",
+                        "@babel/plugin-transform-block-scoping",
+                        preBabel,
+                        "--out-file",
+                        postBabel,
+                    ]);
+
+                    // Reformatting the code back to reduce the load time difference from main.
+                    await exec("./node_modules/esbuild/bin/esbuild", [
+                        postBabel,
+                        `--outfile=${outfile}`,
+                    ]);
+                });
+            },
+        });
 
         return options;
     });
