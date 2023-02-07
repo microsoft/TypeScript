@@ -5,12 +5,13 @@
  * bundle as namespaces again, even though the project is modules.
  */
 
-import fs from "fs";
-import path from "path";
-import minimist from "minimist";
-import url from "url";
-import ts from "../lib/typescript.js";
 import assert, { fail } from "assert";
+import fs from "fs";
+import minimist from "minimist";
+import path from "path";
+import url from "url";
+
+import ts from "../lib/typescript.js";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);

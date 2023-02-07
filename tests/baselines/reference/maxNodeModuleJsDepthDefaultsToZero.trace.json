@@ -14,7 +14,7 @@
     "File '/node_modules/shortid/package.json' does not exist according to earlier cached lookups.",
     "File '/node_modules/shortid.js' does not exist.",
     "File '/node_modules/shortid.jsx' does not exist.",
-    "File '/node_modules/shortid/index.js' exist - use it as a name resolution result.",
+    "File '/node_modules/shortid/index.js' exists - use it as a name resolution result.",
     "Resolving real path for '/node_modules/shortid/index.js', result '/node_modules/shortid/index.js'.",
     "======== Module name 'shortid' was successfully resolved to '/node_modules/shortid/index.js'. ========"
 ]

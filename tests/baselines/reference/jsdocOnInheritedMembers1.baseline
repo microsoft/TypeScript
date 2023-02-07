@@ -1,3 +1,23 @@
+=== /a.js ===
+// /** @template T */
+// class A {
+//     /** Method documentation. */
+//     method() {}
+// }
+// 
+// /** @extends {A<number>} */
+// class B extends A {
+//     method() {}
+// }
+// 
+// const b = new B();
+// b.method;
+//   ^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) B.method(): void
+// | Method documentation.
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +25,7 @@
       "position": 175,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {

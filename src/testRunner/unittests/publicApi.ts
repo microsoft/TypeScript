@@ -1,9 +1,9 @@
-import * as Harness from "../_namespaces/Harness";
-import * as vfs from "../_namespaces/vfs";
-import * as fakes from "../_namespaces/fakes";
-import * as ts from "../_namespaces/ts";
 import * as compiler from "../_namespaces/compiler";
 import * as documents from "../_namespaces/documents";
+import * as fakes from "../_namespaces/fakes";
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
 
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
