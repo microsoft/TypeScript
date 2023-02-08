@@ -26080,10 +26080,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstantReference(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.Identifier: {
-                const symbol = getResolvedSymbol(node as Identifier);
-                return isConstVariable(symbol) || isParameterOrCatchClauseVariable(symbol) && !isSymbolAssigned(symbol);
-            }
+            case SyntaxKind.Identifier:
+                if (!isThisInTypeQuery(node)) {
+                    const symbol = getResolvedSymbol(node as Identifier);
+                    return isConstVariable(symbol) || isParameterOrCatchClauseVariable(symbol) && !isSymbolAssigned(symbol);
+                }
+                break;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 // The resolvedSymbol property is initialized by checkPropertyAccess or checkElementAccess before we get here.
