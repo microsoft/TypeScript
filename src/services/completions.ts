@@ -2907,7 +2907,7 @@ function getCompletionData(
 
     // don't include literal suggestions after <input type="text" [||] /> (#51667) and after quote (#52675)
     // for strings getStringLiteralCompletions handles completions
-    const isLiteralExpected = !isStringLiteralLike(previousToken) && !isJsxIdentifierExpected;
+    const isLiteralExpected = !tryCast(previousToken, isStringLiteralLike) && !isJsxIdentifierExpected;
     const literals = !isLiteralExpected ? [] : mapDefined(
         contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
         t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined);
