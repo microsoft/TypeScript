@@ -164,15 +164,13 @@ async function runDtsBundler(entrypoint, output) {
  * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
-    const preBabel = `${outfile.replace(/\.js$/, "")}.preBabel.js`;
-
     const getOptions = memoize(async () => {
         /** @type {esbuild.BuildOptions} */
         const options = {
             entryPoints: [entrypoint],
             banner: { js: await copyright() },
             bundle: true,
-            outfile: preBabel,
+            outfile,
             platform: "node",
             target: "es2018",
             format: "cjs",
@@ -208,32 +206,35 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                     name: "fix-require",
                     setup: (build) => {
                         build.onEnd(async () => {
-                            let contents = await fs.promises.readFile(preBabel, "utf-8");
+                            let contents = await fs.promises.readFile(outfile, "utf-8");
                             contents = contents.replace(/\$\$require/g, "  require");
-                            await fs.promises.writeFile(preBabel, contents);
+                            await fs.promises.writeFile(outfile, contents);
                         });
                     },
                 },
             ];
         }
 
-        options.plugins = (options.plugins ?? []).concat({
-            name: "let-const",
-            setup: (build) => {
-                build.onEnd(async () => {
-                    await exec(process.execPath, [
-                        "./node_modules/@babel/cli/bin/babel.js",
-                        "--plugins",
-                        "@babel/plugin-transform-block-scoping",
-                        preBabel,
-                        "--compact",
-                        "false",
-                        "--out-file",
-                        outfile,
-                    ]);
-                });
-            },
-        });
+        const downlevelLetConst = true;
+        if (downlevelLetConst) {
+            options.plugins = (options.plugins ?? []).concat({
+                name: "let-const",
+                setup: (build) => {
+                    build.onEnd(async () => {
+                        await exec(process.execPath, [
+                            "./node_modules/@babel/cli/bin/babel.js",
+                            "--plugins",
+                            "@babel/plugin-transform-block-scoping",
+                            outfile,
+                            "--compact",
+                            "false",
+                            "--out-file",
+                            outfile,
+                        ]);
+                    });
+                },
+            });
+        }
 
         return options;
     });
