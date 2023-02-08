@@ -5650,7 +5650,7 @@ namespace Parser {
             case SyntaxKind.LessThanToken:
                 // Just like in parseUpdateExpression, we need to avoid parsing type assertions when
                 // in JSX and we see an expression like "+ <foo> bar".
-                if (languageVariant === LanguageVariant.JSX && lookAhead(nextTokenIsIdentifierOrKeywordOrGreaterThan)) {
+                if (languageVariant === LanguageVariant.JSX) {
                     return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true);
                 }
                 // This is modified UnaryExpression grammar in TypeScript
