@@ -11246,7 +11246,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                 return errorType;
             }
-            
             const targetSymbol = resolveAlias(symbol);
             const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true);
             const declaredType = firstDefined(exportSymbol?.declarations, d => isExportAssignment(d) ? tryGetTypeFromEffectiveTypeNode(d) : undefined);
