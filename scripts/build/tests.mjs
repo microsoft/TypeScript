@@ -1,12 +1,13 @@
+import { CancelError } from "@esfx/canceltoken";
+import chalk from "chalk";
 import del from "del";
 import fs from "fs";
 import os from "os";
 import path from "path";
-import chalk from "chalk";
+
+import { findUpFile, findUpRoot } from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
 import { exec } from "./utils.mjs";
-import { findUpFile, findUpRoot } from "./findUpDir.mjs";
-import { CancelError } from "@esfx/canceltoken";
 
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";

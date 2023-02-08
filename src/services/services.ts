@@ -1,6 +1,4 @@
 import * as ts from "./_namespaces/ts";
-import * as NavigateTo from "./_namespaces/ts.NavigateTo";
-import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 import {
     __String,
     ApplicableRefactorInfo,
@@ -182,8 +180,8 @@ import {
     isTextWhiteSpaceLike,
     isThisTypeParameter,
     isTransientSymbol,
-    JsDoc,
     JSDoc,
+    JsDoc,
     JSDocContainer,
     JSDocTagInfo,
     JsonSourceFile,
@@ -318,6 +316,8 @@ import {
     UserPreferences,
     VariableDeclaration,
 } from "./_namespaces/ts";
+import * as NavigateTo from "./_namespaces/ts.NavigateTo";
+import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";

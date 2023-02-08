@@ -4,6 +4,7 @@
     "File '/package.json' does not exist.",
     "Loading module 'lodash' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
     "Found 'package.json' at '/node_modules/lodash/package.json'.",
+    "Entering conditional exports.",
     "Saw non-matching condition 'browser'.",
     "Matched 'exports' condition 'webpack'.",
     "Using 'exports' subpath '.' with target './webpack.js'.",
@@ -11,6 +12,8 @@
     "File '/node_modules/lodash/webpack.ts' does not exist.",
     "File '/node_modules/lodash/webpack.tsx' does not exist.",
     "File '/node_modules/lodash/webpack.d.ts' exists - use it as a name resolution result.",
+    "Resolved under condition 'webpack'.",
+    "Exiting conditional exports.",
     "Resolving real path for '/node_modules/lodash/webpack.d.ts', result '/node_modules/lodash/webpack.d.ts'.",
     "======== Module name 'lodash' was successfully resolved to '/node_modules/lodash/webpack.d.ts' with Package ID 'lodash/webpack.d.ts@1.0.0'. ========"
 ]
