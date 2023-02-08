@@ -390,3 +390,18 @@ const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) 
         }
     }
 }
+
+// Repro from #52152
+
+interface ClientEvents {
+    warn: [message: string];
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+}
+  
+declare class Client {
+    public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+}
+
+const bot = new Client();
+bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));

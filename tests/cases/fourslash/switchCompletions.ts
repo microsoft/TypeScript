@@ -13,6 +13,12 @@
 ////         return 1;
 ////     case /*2*/
 //// }
+//// declare const f2: 'foo' | 'bar' | 'baz';
+//// switch (f2) {
+////     case 'bar':
+////         return 1;
+////     case '/*3*/'
+//// }
 
 verify.completions(
     {
@@ -26,5 +32,11 @@ verify.completions(
         isNewIdentifierLocation: false,
         excludes: "1",
         includes: ["2", "3"],
+    },
+    {
+        marker: "3",
+        isNewIdentifierLocation: false,
+        includes: ["foo", "baz"],
+        excludes: "bar",
     }
 );

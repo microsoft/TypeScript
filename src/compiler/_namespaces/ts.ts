@@ -38,6 +38,7 @@ export * from "../transformers/ts";
 export * from "../transformers/classFields";
 export * from "../transformers/typeSerializer";
 export * from "../transformers/legacyDecorators";
+export * from "../transformers/esDecorators";
 export * from "../transformers/es2017";
 export * from "../transformers/es2018";
 export * from "../transformers/es2019";

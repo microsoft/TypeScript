@@ -19,4 +19,4 @@
 // @Filename: /main.ts
 //// /**/
 
-verify.baselineAutoImports("", { importModuleSpecifierEnding: "js" });
+verify.baselineAutoImports("", /*fullNamesForCodeFix*/ undefined, { importModuleSpecifierEnding: "js" });

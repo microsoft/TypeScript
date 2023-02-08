@@ -1,10 +1,10 @@
+import { LanguageServiceMode } from "./_namespaces/ts";
 import {
     Logger,
     LogLevel,
     ServerCancellationToken,
     SessionOptions,
 } from "./_namespaces/ts.server";
-import { LanguageServiceMode } from "./_namespaces/ts";
 
 /** @internal */
 export function getLogLevel(level: string | undefined) {
@@ -28,7 +28,6 @@ export interface StartSessionOptions {
     useInferredProjectPerProjectRoot: SessionOptions["useInferredProjectPerProjectRoot"];
     suppressDiagnosticEvents: SessionOptions["suppressDiagnosticEvents"];
     noGetErrOnBackgroundUpdate: SessionOptions["noGetErrOnBackgroundUpdate"];
-    syntaxOnly: SessionOptions["syntaxOnly"];
     serverMode: SessionOptions["serverMode"];
 }
 
