@@ -57,12 +57,19 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
     else {
         const importClause = declaration.importClause as ImportClause;
         if (importClause.name && importClause.namedBindings) {
-            const modifiers = getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true);
-            const moduleSpecifier = getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true);
-            const assertClause = getSynthesizedDeepClone(declaration.assertClause, /*includeTrivia*/ true);
             changes.replaceNodeWithNodes(sourceFile, declaration, [
-                factory.createImportDeclaration(modifiers, factory.createImportClause(/*isTypeOnly*/ true, getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true), /*namedBindings*/ undefined), moduleSpecifier, assertClause),
-                factory.createImportDeclaration(modifiers, factory.createImportClause(/*isTypeOnly*/ true, /*name*/ undefined, getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true)), moduleSpecifier, assertClause),
+                factory.createImportDeclaration(
+                    getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
+                    factory.createImportClause(/*isTypeOnly*/ true, getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true), /*namedBindings*/ undefined),
+                    getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
+                    getSynthesizedDeepClone(declaration.assertClause, /*includeTrivia*/ true),
+                ),
+                factory.createImportDeclaration(
+                    getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
+                    factory.createImportClause(/*isTypeOnly*/ true, /*name*/ undefined, getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true)),
+                    getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
+                    getSynthesizedDeepClone(declaration.assertClause, /*includeTrivia*/ true),
+                ),
             ]);
         }
         else {
