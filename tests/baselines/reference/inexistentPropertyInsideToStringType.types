@@ -1,19 +1,5 @@
 === tests/cases/compiler/index.js ===
-function SomeClass() {
->SomeClass : () => void
-}
-var _proto = SomeClass.prototype;
->_proto : any
->SomeClass.prototype : any
->SomeClass : () => void
->prototype : any
-
-_proto.toString = function toString() {
->_proto.toString = function toString() {    this.yadda    let someValue = "";    this.toString = () => someValue;    return someValue;} : typeof toString
->_proto.toString : any
->_proto : any
->toString : any
->function toString() {    this.yadda    let someValue = "";    this.toString = () => someValue;    return someValue;} : typeof toString
+function toString() {
 >toString : typeof toString
 
     this.yadda
@@ -21,18 +7,10 @@ _proto.toString = function toString() {
 >this : this
 >yadda : any
 
-    let someValue = "";
->someValue : string
->"" : ""
-
-    this.toString = () => someValue;
->this.toString = () => someValue : () => string
->this.toString : any
+    this.someValue = "";
+>this.someValue = "" : ""
+>this.someValue : any
 >this : this
->toString : any
->() => someValue : () => string
->someValue : string
-
-    return someValue;
->someValue : string
+>someValue : any
+>"" : ""
 }
