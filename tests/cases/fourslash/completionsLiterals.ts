@@ -2,6 +2,7 @@
 
 ////const x: 0 | "one" = /**/;
 ////const y: 0 | "one" | 1n = /*1*/;
+////const y2: 0 | "one" | 1n = 'one'/*2*/;
 
 verify.completions({
     marker: "",
@@ -19,4 +20,10 @@ verify.completions({
         { name: "1n", kind: "string", text: "1n" },
     ],
     isNewIdentifierLocation: true,
+});
+verify.completions({
+    marker: "2",
+    excludes: [
+        '"one"'
+    ],
 });
