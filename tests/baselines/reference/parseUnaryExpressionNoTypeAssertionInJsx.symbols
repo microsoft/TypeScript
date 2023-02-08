@@ -2,7 +2,6 @@
 const x = "oops";
 >x : Symbol(x, Decl(index.js, 0, 5))
 
-const y = delete <number> x;
+const y = + <number> x;
 >y : Symbol(y, Decl(index.js, 1, 5))
->x : Symbol(x, Decl(index.js, 0, 5))
 

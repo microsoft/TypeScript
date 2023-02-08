@@ -4,4 +4,4 @@
 // @filename: index.js
 
 const x = "oops";
-const y = delete <number> x;
+const y = + <number> x;
