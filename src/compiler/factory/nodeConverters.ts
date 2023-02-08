@@ -10,6 +10,7 @@ import {
     Debug,
     Expression,
     FunctionDeclaration,
+    getModifiers,
     getStartsOnNewLine,
     isArrayBindingPattern,
     isArrayLiteralExpression,
@@ -58,7 +59,7 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
     function convertToFunctionExpression(node: FunctionDeclaration) {
         if (!node.body) return Debug.fail(`Cannot convert a FunctionDeclaration without a body`);
         const updated = factory.createFunctionExpression(
-            node.modifiers,
+            getModifiers(node),
             node.asteriskToken,
             node.name,
             node.typeParameters,

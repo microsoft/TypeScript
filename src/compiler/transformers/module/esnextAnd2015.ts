@@ -116,7 +116,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         }
     }
 
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
                 // Though an error in es2020 modules, in node-flavor es2020 modules, we can helpfully transform this to a synthetic `require` call
@@ -189,7 +189,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
      *
      * @param node The node to visit.
      */
-    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
         Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
         let statements: Statement[] | undefined;
@@ -231,7 +231,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         return statements;
     }
 
-    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment> {
+    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment | undefined> {
         // Elide `export=` as it is not legal with --module ES6
         return node.isExportEquals ? undefined : node;
     }

@@ -1,9 +1,4 @@
 import {
-    createCodeFixActionWithoutFixAll,
-    moduleSpecifierToValidIdentifier,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
-import {
     __String,
     arrayFrom,
     ArrowFunction,
@@ -50,7 +45,7 @@ import {
     isExportsOrModuleExportsOrAlias,
     isFunctionExpression,
     isIdentifier,
-    isNonContextualKeyword,
+    isIdentifierANonContextualKeyword,
     isObjectLiteralExpression,
     isPropertyAccessExpression,
     isRequireCall,
@@ -81,6 +76,11 @@ import {
     TypeChecker,
     VariableStatement,
 } from "../_namespaces/ts";
+import {
+    createCodeFixActionWithoutFixAll,
+    moduleSpecifierToValidIdentifier,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 registerCodeFix({
     errorCodes: [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module.code],
@@ -161,8 +161,8 @@ type ExportRenames = ReadonlyMap<string, string>;
 function collectExportRenames(sourceFile: SourceFile, checker: TypeChecker, identifiers: Identifiers): ExportRenames {
     const res = new Map<string, string>();
     forEachExportReference(sourceFile, node => {
-        const { text, originalKeywordKind } = node.name;
-        if (!res.has(text) && (originalKeywordKind !== undefined && isNonContextualKeyword(originalKeywordKind)
+        const { text } = node.name;
+        if (!res.has(text) && (isIdentifierANonContextualKeyword(node.name)
             || checker.resolveName(text, node, SymbolFlags.Value, /*excludeGlobals*/ true))) {
             // Unconditionally add an underscore in case `text` is a keyword.
             res.set(text, makeUniqueName(`_${text}`, identifiers));

@@ -1,8 +1,7 @@
 import { expect } from "chai";
 
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import * as Utils from "../../_namespaces/Utils";
+import * as ts from "../../_namespaces/ts";
 import {
     createHasErrorMessageLogger,
     nullLogger,
@@ -53,7 +52,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
             typingsInstaller: undefined!, // TODO: GH#18217
-            byteLength: Utils.byteLength,
+            byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: nullLogger(),
             canUseEvents: true
@@ -82,7 +81,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
     describe("executeCommand", () => {
         it("should throw when commands are executed with invalid arguments", () => {
             const req: ts.server.protocol.FileRequest = {
-                command: ts.server.CommandNames.Open,
+                command: ts.server.protocol.CommandTypes.Open,
                 seq: 0,
                 type: "request",
                 arguments: {
@@ -102,7 +101,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             session.executeCommand(req);
 
             const expected: ts.server.protocol.Response = {
-                command: ts.server.CommandNames.Unknown,
+                command: ts.server.protocol.CommandTypes.Unknown,
                 type: "response",
                 seq: 0,
                 message: "Unrecognized JSON command: foobar",
@@ -114,7 +113,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
         });
         it("should return a tuple containing the response and if a response is required on success", () => {
             const req: ts.server.protocol.ConfigureRequest = {
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 seq: 0,
                 type: "request",
                 arguments: {
@@ -129,7 +128,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                 responseRequired: false
             });
             expect(lastSent).to.deep.equal({
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 type: "response",
                 success: true,
                 request_seq: 0,
@@ -140,7 +139,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
         });
         it("should handle literal types in request", () => {
             const configureRequest: ts.server.protocol.ConfigureRequest = {
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 seq: 0,
                 type: "request",
                 arguments: {
@@ -155,7 +154,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             assert.equal(session.getProjectService().getFormatCodeOptions("" as ts.server.NormalizedPath).indentStyle, ts.IndentStyle.Block);
 
             const setOptionsRequest: ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest = {
-                command: ts.server.CommandNames.CompilerOptionsForInferredProjects,
+                command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
                 seq: 1,
                 type: "request",
                 arguments: {
@@ -176,14 +175,14 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                     target: ts.ScriptTarget.ES5,
                     jsx: ts.JsxEmit.React,
                     newLine: ts.NewLineKind.LineFeed,
-                    moduleResolution: ts.ModuleResolutionKind.NodeJs,
+                    moduleResolution: ts.ModuleResolutionKind.Node10,
                     allowNonTsExtensions: true // injected by tsserver
                 } as ts.CompilerOptions);
         });
 
         it("Status request gives ts.version", () => {
             const req: ts.server.protocol.StatusRequest = {
-                command: ts.server.CommandNames.Status,
+                command: ts.server.protocol.CommandTypes.Status,
                 seq: 0,
                 type: "request"
             };
@@ -196,97 +195,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
     });
 
     describe("onMessage", () => {
-        const allCommandNames: ts.server.CommandNames[] = [
-            ts.server.CommandNames.Brace,
-            ts.server.CommandNames.BraceFull,
-            ts.server.CommandNames.BraceCompletion,
-            ts.server.CommandNames.Change,
-            ts.server.CommandNames.Close,
-            ts.server.CommandNames.Completions,
-            ts.server.CommandNames.CompletionsFull,
-            ts.server.CommandNames.CompletionDetails,
-            ts.server.CommandNames.CompileOnSaveAffectedFileList,
-            ts.server.CommandNames.Configure,
-            ts.server.CommandNames.Definition,
-            ts.server.CommandNames.DefinitionFull,
-            ts.server.CommandNames.DefinitionAndBoundSpan,
-            ts.server.CommandNames.DefinitionAndBoundSpanFull,
-            ts.server.CommandNames.Implementation,
-            ts.server.CommandNames.ImplementationFull,
-            ts.server.CommandNames.Exit,
-            ts.server.CommandNames.FileReferences,
-            ts.server.CommandNames.FileReferencesFull,
-            ts.server.CommandNames.Format,
-            ts.server.CommandNames.Formatonkey,
-            ts.server.CommandNames.FormatFull,
-            ts.server.CommandNames.FormatonkeyFull,
-            ts.server.CommandNames.FormatRangeFull,
-            ts.server.CommandNames.Geterr,
-            ts.server.CommandNames.GeterrForProject,
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            ts.server.CommandNames.SyntacticDiagnosticsSync,
-            ts.server.CommandNames.SuggestionDiagnosticsSync,
-            ts.server.CommandNames.NavBar,
-            ts.server.CommandNames.NavBarFull,
-            ts.server.CommandNames.Navto,
-            ts.server.CommandNames.NavtoFull,
-            ts.server.CommandNames.NavTree,
-            ts.server.CommandNames.NavTreeFull,
-            ts.server.CommandNames.Occurrences,
-            ts.server.CommandNames.DocumentHighlights,
-            ts.server.CommandNames.DocumentHighlightsFull,
-            ts.server.CommandNames.JsxClosingTag,
-            ts.server.CommandNames.Open,
-            ts.server.CommandNames.Quickinfo,
-            ts.server.CommandNames.QuickinfoFull,
-            ts.server.CommandNames.References,
-            ts.server.CommandNames.ReferencesFull,
-            ts.server.CommandNames.Reload,
-            ts.server.CommandNames.Rename,
-            ts.server.CommandNames.RenameInfoFull,
-            ts.server.CommandNames.RenameLocationsFull,
-            ts.server.CommandNames.Saveto,
-            ts.server.CommandNames.SignatureHelp,
-            ts.server.CommandNames.SignatureHelpFull,
-            ts.server.CommandNames.Status,
-            ts.server.CommandNames.TypeDefinition,
-            ts.server.CommandNames.ProjectInfo,
-            ts.server.CommandNames.ReloadProjects,
-            ts.server.CommandNames.Unknown,
-            ts.server.CommandNames.OpenExternalProject,
-            ts.server.CommandNames.CloseExternalProject,
-            ts.server.CommandNames.SynchronizeProjectList,
-            ts.server.CommandNames.ApplyChangedToOpenFiles,
-            ts.server.CommandNames.EncodedSemanticClassificationsFull,
-            ts.server.CommandNames.Cleanup,
-            ts.server.CommandNames.OutliningSpans,
-            ts.server.CommandNames.TodoComments,
-            ts.server.CommandNames.Indentation,
-            ts.server.CommandNames.DocCommentTemplate,
-            ts.server.CommandNames.CompilerOptionsDiagnosticsFull,
-            ts.server.CommandNames.NameOrDottedNameSpan,
-            ts.server.CommandNames.BreakpointStatement,
-            ts.server.CommandNames.CompilerOptionsForInferredProjects,
-            ts.server.CommandNames.GetCodeFixes,
-            ts.server.CommandNames.GetCodeFixesFull,
-            ts.server.CommandNames.GetSupportedCodeFixes,
-            ts.server.CommandNames.GetApplicableRefactors,
-            ts.server.CommandNames.GetEditsForRefactor,
-            ts.server.CommandNames.GetEditsForRefactorFull,
-            ts.server.CommandNames.OrganizeImports,
-            ts.server.CommandNames.OrganizeImportsFull,
-            ts.server.CommandNames.GetEditsForFileRename,
-            ts.server.CommandNames.GetEditsForFileRenameFull,
-            ts.server.CommandNames.SelectionRange,
-            ts.server.CommandNames.PrepareCallHierarchy,
-            ts.server.CommandNames.ProvideCallHierarchyIncomingCalls,
-            ts.server.CommandNames.ProvideCallHierarchyOutgoingCalls,
-            ts.server.CommandNames.ToggleLineComment,
-            ts.server.CommandNames.ToggleMultilineComment,
-            ts.server.CommandNames.CommentSelection,
-            ts.server.CommandNames.UncommentSelection,
-            ts.server.CommandNames.ProvideInlayHints
-        ];
+        const allCommandNames: ts.server.protocol.CommandTypes[] = Object.values((ts.server.protocol as any).CommandTypes);
 
         it("should not throw when commands are executed with invalid arguments", () => {
             let i = 0;
@@ -323,7 +232,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
         });
         it("should output the response for a correctly handled message", () => {
             const req: ts.server.protocol.ConfigureRequest = {
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 seq: 0,
                 type: "request",
                 arguments: {
@@ -337,7 +246,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             session.onMessage(JSON.stringify(req));
 
             expect(lastSent).to.deep.equal({
-                command: ts.server.CommandNames.Configure,
+                command: ts.server.protocol.CommandTypes.Configure,
                 type: "response",
                 success: true,
                 request_seq: 0,
@@ -352,7 +261,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
         it("is an overrideable handle which sends protocol messages over the wire", () => {
             const msg: ts.server.protocol.Request = { seq: 0, type: "request", command: "" };
             const strmsg = JSON.stringify(msg);
-            const len = 1 + Utils.byteLength(strmsg, "utf8");
+            const len = 1 + Buffer.byteLength(strmsg, "utf8");
             const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
 
             session.send = ts.server.Session.prototype.send;
@@ -425,7 +334,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             };
             const command = "test";
 
-            session.output(body, command, /*reqSeq*/ 0);
+            session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true);
 
             expect(lastSent).to.deep.equal({
                 seq: 0,
@@ -475,14 +384,14 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined!, // TODO: GH#18217
-                byteLength: Utils.byteLength,
+                byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: nullLogger(),
                 canUseEvents: true
             });
             this.addProtocolHandler(command, this.exceptionRaisingHandler);
         }
-        send(msg: ts.server.protocol.Message) {
+        override send(msg: ts.server.protocol.Message) {
             this.lastSent = msg;
         }
     }
@@ -522,7 +431,7 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined!, // TODO: GH#18217
-                byteLength: Utils.byteLength,
+                byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: createHasErrorMessageLogger(),
                 canUseEvents: true
@@ -531,7 +440,7 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
                 return { response: undefined, responseRequired: true };
             });
         }
-        send(msg: ts.server.protocol.Message) {
+        override send(msg: ts.server.protocol.Message) {
             this.lastSent = msg;
         }
     }
@@ -545,7 +454,7 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
         };
         const command = "test";
 
-        session.output(body, command, /*reqSeq*/ 0);
+        session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true);
 
         expect(session.lastSent).to.deep.equal({
             seq: 0,
@@ -590,7 +499,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined!, // TODO: GH#18217
-                byteLength: Utils.byteLength,
+                byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: createHasErrorMessageLogger(),
                 canUseEvents: true
@@ -601,7 +510,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
             }));
         }
 
-        send(msg: ts.server.protocol.Message) {
+        override send(msg: ts.server.protocol.Message) {
             this.client.handle(msg);
         }
 
@@ -615,11 +524,11 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
                 response = this.executeCommand(msg).response as ts.server.protocol.Response;
             }
             catch (e) {
-                this.output(undefined, msg.command, msg.seq, e.toString());
+                this.doOutput(/*info*/ undefined, msg.command, msg.seq, /*success*/ false, e.toString());
                 return;
             }
             if (response) {
-                this.output(response, msg.command, msg.seq);
+                this.doOutput(response, msg.command, msg.seq, /*success*/ true);
             }
         }
 

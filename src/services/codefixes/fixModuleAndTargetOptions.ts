@@ -1,10 +1,4 @@
 import {
-    createCodeFixActionWithoutFixAll,
-    registerCodeFix,
-    setJsonCompilerOptionValue,
-    setJsonCompilerOptionValues,
-} from "../_namespaces/ts.codefix";
-import {
     CodeFixAction,
     Diagnostics,
     Expression,
@@ -16,6 +10,12 @@ import {
     ScriptTarget,
     textChanges,
 } from "../_namespaces/ts";
+import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+    setJsonCompilerOptionValue,
+    setJsonCompilerOptionValues,
+} from "../_namespaces/ts.codefix";
 
 registerCodeFix({
     errorCodes: [
