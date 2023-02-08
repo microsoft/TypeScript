@@ -1,8 +1,23 @@
 import {
-    AssignmentExpression, BinaryExpression, Bundle, chainBundle, getNonAssignmentOperatorForCompoundAssignment,
-    isAccessExpression, isExpression, isLeftHandSideExpression, isLogicalOrCoalescingAssignmentExpression,
-    isPropertyAccessExpression, isSimpleCopiableExpression, LogicalOrCoalescingAssignmentOperator, Node,
-    skipParentheses, SourceFile, SyntaxKind, Token, TransformationContext, TransformFlags, visitEachChild, visitNode,
+    AssignmentExpression,
+    Bundle,
+    chainBundle,
+    getNonAssignmentOperatorForCompoundAssignment,
+    isAccessExpression,
+    isExpression,
+    isLeftHandSideExpression,
+    isLogicalOrCoalescingAssignmentExpression,
+    isPropertyAccessExpression,
+    isSimpleCopiableExpression,
+    LogicalOrCoalescingAssignmentOperator,
+    Node,
+    skipParentheses,
+    SourceFile,
+    Token,
+    TransformationContext,
+    TransformFlags,
+    visitEachChild,
+    visitNode,
     VisitResult,
 } from "../_namespaces/ts";
 
@@ -26,16 +41,10 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
         if ((node.transformFlags & TransformFlags.ContainsES2021) === 0) {
             return node;
         }
-        switch (node.kind) {
-            case SyntaxKind.BinaryExpression:
-                const binaryExpression = node as BinaryExpression;
-                if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
-                    return transformLogicalAssignment(binaryExpression);
-                }
-            // falls through
-            default:
-                return visitEachChild(node, visitor, context);
+        if (isLogicalOrCoalescingAssignmentExpression(node)) {
+            return transformLogicalAssignment(node);
         }
+        return visitEachChild(node, visitor, context);
     }
 
     function transformLogicalAssignment(binaryExpression: AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>>): VisitResult<Node> {

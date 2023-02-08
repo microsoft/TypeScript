@@ -1,12 +1,12 @@
 Info 0    [00:00:37.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:38.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/mocks/cssMock.js"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/tsconfig.json]
@@ -79,7 +79,7 @@ Info 18   [00:00:55.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	apps/editor/scripts/createConfigVariable.js
 	  Matched by default include pattern '**/*'
 	apps/editor/src/src.js
@@ -127,12 +127,12 @@ Info 23   [00:01:06.000] response:
     }
 Info 24   [00:01:07.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/mocks/cssMock.js"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -188,12 +188,12 @@ Info 26   [00:01:13.000] response:
     }
 Info 27   [00:01:14.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 
@@ -251,7 +251,7 @@ Info 47   [00:01:34.000] 	Files (2)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/src.js
 	  Matched by include pattern './src' in 'tsconfig.json'
 
@@ -270,7 +270,7 @@ Info 53   [00:01:40.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	apps/editor/scripts/createConfigVariable.js
 	  Matched by default include pattern '**/*'
 	apps/editor/src/src.js

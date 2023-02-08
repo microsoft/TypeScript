@@ -2,17 +2,39 @@ import * as fs from "fs";
 import * as path from "path";
 
 import {
-    installNpmPackages, Log, RequestCompletedAction, TypingsInstaller,
-} from "./_namespaces/ts.server.typingsInstaller";
+    combinePaths,
+    createGetCanonicalFileName,
+    Debug,
+    forEachAncestorDirectory,
+    getDirectoryPath,
+    MapLike,
+    normalizePath,
+    normalizeSlashes,
+    stringContains,
+    sys,
+    toPath,
+    version,
+} from "./_namespaces/ts";
 import {
-    ActionPackageInstalled, Arguments, EventTypesRegistry, findArgument, hasArgument, InitializationFailedResponse,
-    InstallTypingHost, nowString, PackageInstalledResponse, TypesRegistryResponse, TypingInstallerRequestUnion,
+    ActionPackageInstalled,
+    Arguments,
+    EventTypesRegistry,
+    findArgument,
+    hasArgument,
+    InitializationFailedResponse,
+    InstallTypingHost,
+    nowString,
+    PackageInstalledResponse,
+    TypesRegistryResponse,
+    TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
 } from "./_namespaces/ts.server";
 import {
-    combinePaths, createGetCanonicalFileName, Debug, ESMap, forEachAncestorDirectory, getDirectoryPath, getEntries, Map,
-    MapLike, normalizePath, normalizeSlashes, stringContains, sys, toPath, version,
-} from "./_namespaces/ts";
+    installNpmPackages,
+    Log,
+    RequestCompletedAction,
+    TypingsInstaller,
+} from "./_namespaces/ts.server.typingsInstaller";
 
 class FileLog implements Log {
     constructor(private logFile: string | undefined) {
@@ -51,7 +73,7 @@ interface TypesRegistryFile {
     entries: MapLike<MapLike<string>>;
 }
 
-function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): ESMap<string, MapLike<string>> {
+function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<string, MapLike<string>> {
     if (!host.fileExists(typesRegistryFilePath)) {
         if (log.isEnabled()) {
             log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
@@ -60,7 +82,7 @@ function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypin
     }
     try {
         const content = JSON.parse(host.readFile(typesRegistryFilePath)!) as TypesRegistryFile;
-        return new Map(getEntries(content.entries));
+        return new Map(Object.entries(content.entries));
     }
     catch (e) {
         if (log.isEnabled()) {
@@ -84,7 +106,7 @@ type ExecSync = (command: string, options: ExecSyncOptions) => string;
 export class NodeTypingsInstaller extends TypingsInstaller {
     private readonly nodeExecSync: ExecSync;
     private readonly npmPath: string;
-    readonly typesRegistry: ESMap<string, MapLike<string>>;
+    readonly typesRegistry: Map<string, MapLike<string>>;
 
     private delayedInitializationError: InitializationFailedResponse | undefined;
 

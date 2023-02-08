@@ -1,23 +1,115 @@
 import {
-    __String, AnonymousType, BinaryExpression, CallExpression, CancellationToken, CaseOrDefaultClause, cast,
-    createMultiMap, createSymbolTable, Debug, Declaration, DiagnosticMessage, Diagnostics, ElementAccessExpression,
-    EmitFlags, emptyArray, escapeLeadingUnderscores, Expression, factory, FindAllReferences, findChildOfKind, first,
-    firstOrUndefined, flatMap, forEach, forEachEntry, getContainingFunction, getEmitScriptTarget, getJSDocType,
-    getNameOfDeclaration, getObjectFlags, getSourceFileOfNode, getTextOfNode, getTokenAtPosition,
-    getTypeNodeIfAccessible, Identifier, IndexKind, isArrowFunction, isAssignmentExpression, isCallExpression,
-    isExpressionNode, isExpressionStatement, isFunctionExpression, isGetAccessorDeclaration, isIdentifier, isInJSFile,
-    isParameter, isParameterPropertyModifier, isPropertyAccessExpression, isPropertyDeclaration, isPropertySignature,
-    isRestParameter, isRightSideOfQualifiedNameOrPropertyAccess, isSetAccessorDeclaration, isVariableDeclaration,
-    isVariableStatement, LanguageServiceHost, last, length, map, Map, mapDefined, mapEntries, NewExpression, Node,
-    nodeSeenTracker, NodeSeenTracker, ObjectFlags, ParameterDeclaration, PrefixUnaryExpression, PrivateIdentifier,
-    Program, PropertyAccessExpression, PropertyAssignment, PropertyDeclaration, PropertyName, PropertySignature,
-    returnTrue, ScriptTarget, SetAccessorDeclaration, setEmitFlags, ShorthandPropertyAssignment, Signature,
-    SignatureDeclaration, SignatureFlags, SignatureKind, singleOrUndefined, SourceFile, Symbol, SymbolFlags,
-    SymbolLinks, SyntaxKind, textChanges, Token, TransientSymbol, tryCast, Type, TypeFlags, TypeNode, TypeReference,
-    UnderscoreEscapedMap, UnionOrIntersectionType, UnionReduction, UserPreferences, VariableDeclaration,
+    __String,
+    AnonymousType,
+    BinaryExpression,
+    CallExpression,
+    CancellationToken,
+    CaseOrDefaultClause,
+    cast,
+    createMultiMap,
+    createSymbolTable,
+    Debug,
+    Declaration,
+    DiagnosticMessage,
+    Diagnostics,
+    ElementAccessExpression,
+    EmitFlags,
+    emptyArray,
+    escapeLeadingUnderscores,
+    Expression,
+    factory,
+    FindAllReferences,
+    findChildOfKind,
+    first,
+    firstOrUndefined,
+    flatMap,
+    forEach,
+    forEachEntry,
+    getContainingFunction,
+    getEmitScriptTarget,
+    getJSDocType,
+    getNameOfDeclaration,
+    getObjectFlags,
+    getSourceFileOfNode,
+    getTextOfNode,
+    getTokenAtPosition,
+    getTypeNodeIfAccessible,
+    Identifier,
+    IndexKind,
+    isArrowFunction,
+    isAssignmentExpression,
+    isCallExpression,
+    isExpressionNode,
+    isExpressionStatement,
+    isFunctionExpression,
+    isGetAccessorDeclaration,
+    isIdentifier,
+    isInJSFile,
+    isParameter,
+    isParameterPropertyModifier,
+    isPropertyAccessExpression,
+    isPropertyDeclaration,
+    isPropertySignature,
+    isRestParameter,
+    isRightSideOfQualifiedNameOrPropertyAccess,
+    isSetAccessorDeclaration,
+    isTransientSymbol,
+    isVariableDeclaration,
+    isVariableStatement,
+    LanguageServiceHost,
+    last,
+    length,
+    map,
+    mapDefined,
+    mapEntries,
+    NewExpression,
+    Node,
+    NodeSeenTracker,
+    nodeSeenTracker,
+    ObjectFlags,
+    ParameterDeclaration,
+    PrefixUnaryExpression,
+    PrivateIdentifier,
+    Program,
+    PropertyAccessExpression,
+    PropertyAssignment,
+    PropertyDeclaration,
+    PropertyName,
+    PropertySignature,
+    returnTrue,
+    ScriptTarget,
+    SetAccessorDeclaration,
+    setEmitFlags,
+    ShorthandPropertyAssignment,
+    Signature,
+    SignatureDeclaration,
+    SignatureFlags,
+    SignatureKind,
+    singleOrUndefined,
+    SourceFile,
+    Symbol,
+    SymbolFlags,
+    SyntaxKind,
+    textChanges,
+    Token,
+    TransientSymbol,
+    tryCast,
+    Type,
+    TypeFlags,
+    TypeNode,
+    TypeReference,
+    UnderscoreEscapedMap,
+    UnionOrIntersectionType,
+    UnionReduction,
+    UserPreferences,
+    VariableDeclaration,
 } from "../_namespaces/ts";
 import {
-    codeFixAll, createCodeFixAction, createImportAdder, ImportAdder, registerCodeFix,
+    codeFixAll,
+    createCodeFixAction,
+    createImportAdder,
+    ImportAdder,
+    registerCodeFix,
     tryGetAutoImportableReferenceFromTypeNode,
 } from "../_namespaces/ts.codefix";
 
@@ -953,7 +1045,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         const members = mapEntries(props, (name, types) => {
             const isOptional = types.length < anons.length ? SymbolFlags.Optional : 0;
             const s = checker.createSymbol(SymbolFlags.Property | isOptional, name as __String);
-            s.type = checker.getUnionType(types);
+            s.links.type = checker.getUnionType(types);
             return [name, s];
         });
         const indexInfos = [];
@@ -988,7 +1080,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
 
         const candidateTypes = (usage.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t));
         const callsType = usage.calls?.length ? inferStructuralType(usage) : undefined;
-        if (callsType && candidateTypes) {
+        if (callsType && candidateTypes) { // TODO: should this be `some(candidateTypes)`?
             types.push(checker.getUnionType([callsType, ...candidateTypes], UnionReduction.Subtype));
         }
         else {
@@ -1009,7 +1101,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         if (usage.properties) {
             usage.properties.forEach((u, name) => {
                 const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                symbol.type = combineFromUsage(u);
+                symbol.links.type = combineFromUsage(u);
                 members.set(name, symbol);
             });
         }
@@ -1110,7 +1202,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             if (elementType) {
                 genericParamType = elementType;
             }
-            const targetType = (usageParam as SymbolLinks).type
+            const targetType = tryCast(usageParam, isTransientSymbol)?.links.type
                 || (usageParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration) : checker.getAnyType());
             types.push(...inferTypeParameters(genericParamType, targetType, typeParameter));
         }
@@ -1129,7 +1221,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         const length = Math.max(...calls.map(c => c.argumentTypes.length));
         for (let i = 0; i < length; i++) {
             const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`arg${i}`));
-            symbol.type = combineTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
+            symbol.links.type = combineTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
             if (calls.some(call => call.argumentTypes[i] === undefined)) {
                 symbol.flags |= SymbolFlags.Optional;
             }

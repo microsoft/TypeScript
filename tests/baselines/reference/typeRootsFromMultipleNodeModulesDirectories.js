@@ -24,7 +24,7 @@ x + y + z;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var xyz_1 = require("xyz");
 var pdq_1 = require("pdq");
 var abc_1 = require("abc");

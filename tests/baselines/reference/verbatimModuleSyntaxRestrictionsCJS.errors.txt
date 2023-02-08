@@ -1,0 +1,90 @@
+/main.ts(1,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(2,13): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(3,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(5,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(8,1): error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(14,1): error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main2.ts(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+/main4.ts(1,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main5.ts(1,1): error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main6.ts(2,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main7.ts(2,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+
+
+==== /decl.d.ts (0 errors) ====
+    declare function esmy(): void;
+    export default esmy;
+    export declare function funciton(): void;
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "ambient" {
+        const _default: number;
+        export default _default;
+    }
+    
+==== /main.ts (6 errors) ====
+    import esmy from "./decl"; // error
+           ~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+    import * as esmy2 from "./decl"; // error
+                ~~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+    import { funciton } from "./decl"; // error
+             ~~~~~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+    import type { funciton as funciton2 } from "./decl"; // ok I guess?
+    import("./decl"); // error
+    ~~~~~~~~~~~~~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+    type T = typeof import("./decl"); // ok
+    export {}; // error
+    export const x = 1; // error
+    ~~~~~~
+!!! error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+    export interface I {} // ok
+    export type { T }; // ok
+    export namespace JustTypes {
+        export type T = number;
+    }
+    export namespace Values { // error
+    ~~~~~~
+!!! error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+        export const x = 1;
+    }
+    export default interface Default {} // sketchy, but ok
+    
+==== /main2.ts (1 errors) ====
+    export interface I {}
+    export = { x: 1 };
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    
+==== /main3.ts (0 errors) ====
+    namespace ns {
+        export const x = 1;
+        export interface I {}
+    }
+    export = ns;
+    
+==== /main4.ts (1 errors) ====
+    export default 1; // error
+    ~~~~~~~~~~~~~~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+    
+==== /main5.ts (1 errors) ====
+    export default class C {} // error
+    ~~~~~~
+!!! error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+    
+==== /main6.ts (1 errors) ====
+    interface I {}
+    export default I; // error
+    ~~~~~~~~~~~~~~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+    
+==== /main7.ts (1 errors) ====
+    import type esmy from "./decl";
+    export default esmy; // error
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+    
