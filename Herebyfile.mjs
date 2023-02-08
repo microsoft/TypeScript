@@ -211,7 +211,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },
-                },
+                }
             ];
         }
 
