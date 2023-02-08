@@ -32,34 +32,34 @@ export default: number[];
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = 1;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 1;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = "";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = "";
 //// [c.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = {};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {};
 //// [d.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = {};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {};
 //// [e.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = [];
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = [];
 //// [f.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = [""];
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = [""];
 //// [g.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = [""];
-exports["default"] = a;
+exports.default = a;
 //// [h.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = ;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = ;

@@ -15,10 +15,10 @@ a;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = { a: 1, b: 1 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = { a: 1, b: 1 };
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
-a_1["default"];
+a_1.default;
