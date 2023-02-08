@@ -2930,11 +2930,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.Non_null_assertions_can_only_be_used_in_TypeScript_files));
                         return "skip";
                     case SyntaxKind.AsExpression:
-                    case SyntaxKind.TypeAssertionExpression:
                         diagnostics.push(createDiagnosticForNode((node as AsExpression).type, Diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files));
                         return "skip";
                     case SyntaxKind.SatisfiesExpression:
                         diagnostics.push(createDiagnosticForNode((node as SatisfiesExpression).type, Diagnostics.Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files));
+                        return "skip";
+                    case SyntaxKind.TypeAssertionExpression:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files));
                         return "skip";
                 }
             }
