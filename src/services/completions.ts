@@ -1544,10 +1544,9 @@ function getEntryForMemberCompletion(
                 requiredModifiers |= ModifierFlags.Abstract;
             }
             if (isClassElement(node)
-                && checker.getMemberOverrideModifierStatus(classLikeDeclaration, node) === MemberOverrideStatus.NeedsOverride) {
+                && checker.getMemberOverrideModifierStatus(classLikeDeclaration, node, symbol) === MemberOverrideStatus.NeedsOverride) {
                 requiredModifiers |= ModifierFlags.Override;
             }
-
             if (!completionNodes.length) {
                 // Keep track of added missing required modifiers and modifiers already present.
                 // This is needed when we have overloaded signatures,

@@ -42624,17 +42624,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Checks a member declaration node to see if has a missing or invalid `override` modifier.
      * @param node Class-like node where the member is declared.
      * @param member Member declaration node.
+     * @param symbol Member symbol.
      * Note: `member` can be a synthetic node without a parent.
      */
-    function getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideStatus {
+    function getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement, symbol: Symbol): MemberOverrideStatus {
         if (!member.name) {
             return MemberOverrideStatus.Ok;
         }
 
-        const symbol = getSymbolOfDeclaration(node);
-        const type = getDeclaredTypeOfSymbol(symbol) as InterfaceType;
+        const classSymbol = getSymbolOfDeclaration(node);
+        const type = getDeclaredTypeOfSymbol(classSymbol) as InterfaceType;
         const typeWithThis = getTypeWithThisArgument(type);
-        const staticType = getTypeOfSymbol(symbol) as ObjectType;
+        const staticType = getTypeOfSymbol(classSymbol) as ObjectType;
 
         const baseTypeNode = getEffectiveBaseTypeNode(node);
         const baseTypes = baseTypeNode && getBaseTypes(type);
@@ -42644,8 +42645,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const memberHasOverrideModifier = member.parent
             ? hasOverrideModifier(member)
             : hasSyntacticModifier(member, ModifierFlags.Override);
-
-        const memberName = unescapeLeadingUnderscores(getTextOfPropertyName(member.name));
 
         return checkMemberForOverrideModifier(
             node,
@@ -42658,7 +42657,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasAbstractModifier(member),
             isStatic(member),
             /* memberIsParameterProperty */ false,
-            memberName,
+            symbolName(symbol),
         );
     }
 
