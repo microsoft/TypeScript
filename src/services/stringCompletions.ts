@@ -87,6 +87,7 @@ import {
 import {
     CallLikeExpression,
     CancellationToken,
+    CaseClause,
     CharacterCodes,
     CompilerOptions,
     ContextFlags,
@@ -171,6 +172,7 @@ import {
     isInReferenceComment,
     isInString,
     moduleResolutionUsesNodeModules,
+    newCaseClauseTracker,
     rangeContainsPosition,
     skipConstraint,
     textPart,
@@ -300,7 +302,7 @@ function stringLiteralCompletionDetails(name: string, location: Node, completion
             return match && createCompletionDetailsForSymbol(match, checker, sourceFile, location, cancellationToken);
         }
         case StringLiteralCompletionKind.Types:
-            return find(completion.types, t => t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.typeElement, [textPart(name)]) : undefined;
+            return find(completion.types, t => t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.string, [textPart(name)]) : undefined;
         default:
             return Debug.assertNever(completion);
     }
@@ -440,12 +442,15 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             //      var y = require("/*completion position*/");
             //      export * from "/*completion position*/";
             return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker, preferences) };
-
+        case SyntaxKind.CaseClause:
+            const tracker = newCaseClauseTracker(typeChecker, (node.parent as CaseClause).parent.clauses);
+            const literals = fromContextualType().types.filter(literal => !tracker.hasValue(literal.value));
+            return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
         default:
             return fromContextualType();
     }
 
-    function fromContextualType(): StringLiteralCompletion {
+    function fromContextualType(): StringLiteralCompletionsFromTypes {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
         return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, ContextFlags.Completions)), isNewIdentifier: false };

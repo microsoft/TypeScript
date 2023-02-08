@@ -6,7 +6,6 @@ import {
     compareTextSpans,
     concatenate,
     createSortedArray,
-    endsWith,
     every,
     filter,
     find,
@@ -50,7 +49,6 @@ import {
     isClassStaticBlockDeclaration,
     isComputedPropertyName,
     isConstructorDeclaration,
-    isDefaultClause,
     isEnumMember,
     isExportAssignment,
     isExportDeclaration,
@@ -108,14 +106,12 @@ import {
     BreakOrContinueStatement,
     CancellationToken,
     CaseBlock,
-    CaseClause,
     CharacterCodes,
     ClassElement,
     CompilerOptions,
     ConstructorDeclaration,
     ContextFlags,
     Declaration,
-    DefaultClause,
     EmitHint,
     EmitTextWriter,
     EntityName,
@@ -251,7 +247,6 @@ import {
     modifierToFlag,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     nodeIsMissing,
-    parseBigInt,
     positionsAreOnSameLine,
     pseudoBigIntToString,
     rangeIsOnSingleLine,
@@ -284,7 +279,6 @@ import {
     isFunctionLikeKind,
     isJSDocTag,
     isJsxOpeningLikeElement,
-    isLiteralExpression,
     isMemberName,
     isModifier,
     isModifierKind,
@@ -300,11 +294,11 @@ import {
     unescapeLeadingUnderscores,
 } from "../compiler/utilitiesPublic";
 import * as JsTyping from "../jsTyping/jsTyping";
-import { codefix, isStringAndEmptyAnonymousObjectIntersection } from "./_namespaces/ts";
 import {
     addNewNodeForMemberSymbol,
     getNoopSymbolTrackerWithResolver,
     PreserveOptionalFlags,
+    typeToAutoImportableTypeNode,
 } from "./codefixes/helpers";
 import {
     createImportAdder,
@@ -398,9 +392,11 @@ import {
     isInRightSideOfInternalImportEqualsDeclaration,
     isInString,
     isPossiblyTypeArgumentPosition,
+    isStringAndEmptyAnonymousObjectIntersection,
     isStringLiteralOrTemplate,
     isTypeKeyword,
     isTypeKeywordTokenOrIdentifier,
+    newCaseClauseTracker,
     positionBelongsToNode,
     positionIsASICandidate,
     probablyUsesSemicolons,
@@ -1062,7 +1058,7 @@ function getExhaustiveCaseSnippets(
     options: CompilerOptions,
     host: LanguageServiceHost,
     program: Program,
-    formatContext: FormatContext | undefined): { entry: CompletionEntry, importAdder: codefix.ImportAdder } | undefined {
+    formatContext: FormatContext | undefined): { entry: CompletionEntry, importAdder: ImportAdder } | undefined {
 
     const clauses = caseBlock.clauses;
     const checker = program.getTypeChecker();
@@ -1088,7 +1084,7 @@ function getExhaustiveCaseSnippets(
                     }
                     tracker.addValue(enumValue);
                 }
-                const typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, caseBlock, target);
+                const typeNode = typeToAutoImportableTypeNode(checker, importAdder, type, caseBlock, target);
                 if (!typeNode) {
                     return undefined;
                 }
@@ -1151,75 +1147,6 @@ function getExhaustiveCaseSnippets(
     }
 
     return undefined;
-}
-
-interface CaseClauseTracker {
-    addValue(value: string | number): void;
-    hasValue(value: string | number | PseudoBigInt): boolean;
-}
-
-function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (CaseClause | DefaultClause)[]): CaseClauseTracker {
-    const existingStrings = new Set<string>();
-    const existingNumbers = new Set<number>();
-    const existingBigInts = new Set<string>();
-
-    for (const clause of clauses) {
-        if (!isDefaultClause(clause)) {
-            if (isLiteralExpression(clause.expression)) {
-                const expression = clause.expression;
-                switch (expression.kind) {
-                    case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    case SyntaxKind.StringLiteral:
-                        existingStrings.add(expression.text);
-                        break;
-                    case SyntaxKind.NumericLiteral:
-                        existingNumbers.add(parseInt(expression.text));
-                        break;
-                    case SyntaxKind.BigIntLiteral:
-                        const parsedBigInt = parseBigInt(endsWith(expression.text, "n") ? expression.text.slice(0, -1) : expression.text);
-                        if (parsedBigInt) {
-                            existingBigInts.add(pseudoBigIntToString(parsedBigInt));
-                        }
-                        break;
-                }
-            }
-            else {
-                const symbol = checker.getSymbolAtLocation(clause.expression);
-                if (symbol && symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
-                    const enumValue = checker.getConstantValue(symbol.valueDeclaration);
-                    if (enumValue !== undefined) {
-                        addValue(enumValue);
-                    }
-                }
-            }
-        }
-    }
-
-    return {
-        addValue,
-        hasValue,
-    };
-
-    function addValue(value: string | number) {
-        switch (typeof value) {
-            case "string":
-                existingStrings.add(value);
-                break;
-            case "number":
-                existingNumbers.add(value);
-        }
-    }
-
-    function hasValue(value: string | number | PseudoBigInt): boolean {
-        switch (typeof value) {
-            case "string":
-                return existingStrings.has(value);
-            case "number":
-                return existingNumbers.has(value);
-            case "object":
-                return existingBigInts.has(pseudoBigIntToString(value));
-        }
-    }
 }
 
 function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget, quotePreference: QuotePreference): Expression | undefined {
