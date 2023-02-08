@@ -118,7 +118,6 @@ import {
     isAbstractConstructorSymbol,
     isArrowFunction,
     isAssertionExpression,
-    isAwaitExpression,
     isBigIntLiteral,
     isBinaryExpression,
     isBindingElement,
@@ -1320,9 +1319,10 @@ function createCompletionEntry(
 
         awaitText += `(await ${propertyAccessToConvert.expression.getText()})`;
         insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}${insertQuestionDot ? "?." : "."}${insertText}`;
-        const isInAwaitExpression = tryCast(propertyAccessToConvert.parent, isAwaitExpression);
-        const wrapNode = isInAwaitExpression ? propertyAccessToConvert.parent : propertyAccessToConvert.expression;
-        replacementSpan = createTextSpanFromBounds(wrapNode.getStart(sourceFile), propertyAccessToConvert.end);
+        const parentNode = walkUpParenthesizedExpressions(propertyAccessToConvert.parent);
+        const isInAwaitExpression = parentNode.kind === SyntaxKind.AwaitExpression;
+        const wrapNode = isInAwaitExpression ? parentNode : propertyAccessToConvert.expression;
+        replacementSpan = createTextSpanFromBounds(wrapNode.getStart(sourceFile), isInAwaitExpression ? parentNode.end : propertyAccessToConvert.end);
     }
 
     if (originIsResolvedExport(origin)) {
