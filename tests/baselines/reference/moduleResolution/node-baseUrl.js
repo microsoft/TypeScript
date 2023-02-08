@@ -21,7 +21,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -30,7 +31,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m2/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m2.ts",
@@ -47,7 +49,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m3/dist/typings.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m3.ts",
@@ -64,7 +67,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/node_modules/m4.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m4.ts",
@@ -121,7 +125,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -130,7 +135,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m2/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m2.ts",
@@ -147,7 +153,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/m3/dist/typings.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m3.ts",
@@ -164,7 +171,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/node_modules/m4.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/m4.ts",

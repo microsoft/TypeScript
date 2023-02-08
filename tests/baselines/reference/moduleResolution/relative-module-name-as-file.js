@@ -10,7 +10,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/bar/foo.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -25,7 +26,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/bar/foo.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -40,7 +42,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/bar/foo.tsx",
     "extension": ".tsx",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo/bar/foo.ts"
@@ -58,7 +61,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/bar/foo.tsx",
     "extension": ".tsx",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo/bar/foo.ts"
@@ -76,7 +80,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/bar/foo.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo/bar/foo.ts",
@@ -95,7 +100,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/bar/foo.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo/bar/foo.ts",
@@ -116,7 +122,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/foo.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -131,7 +138,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/foo.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -146,7 +154,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/foo.tsx",
     "extension": ".tsx",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo/foo.ts"
@@ -164,7 +173,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/foo.tsx",
     "extension": ".tsx",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo/foo.ts"
@@ -182,7 +192,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/foo.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo/foo.ts",
@@ -201,7 +212,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo/foo.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo/foo.ts",
@@ -222,7 +234,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -237,7 +250,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -252,7 +266,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo.tsx",
     "extension": ".tsx",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo.ts"
@@ -270,7 +285,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo.tsx",
     "extension": ".tsx",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo.ts"
@@ -288,7 +304,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo.ts",
@@ -307,7 +324,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/foo.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/foo.ts",
@@ -328,7 +346,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "c:/foo.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -343,7 +362,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "c:/foo.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -358,7 +378,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "c:/foo.tsx",
     "extension": ".tsx",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "c:/foo.ts"
@@ -376,7 +397,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "c:/foo.tsx",
     "extension": ".tsx",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "c:/foo.ts"
@@ -394,7 +416,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "c:/foo.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "c:/foo.ts",
@@ -413,7 +436,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "c:/foo.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "c:/foo.ts",

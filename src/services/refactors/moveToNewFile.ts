@@ -10,7 +10,7 @@ import {
     CallExpression,
     canHaveDecorators,
     canHaveModifiers,
-    cast,
+    canHaveSymbol, cast,
     ClassDeclaration,
     codefix,
     combinePaths,
@@ -282,7 +282,7 @@ function getNewStatementsAndRemoveFromOldFile(
     const quotePreference = getQuotePreference(oldFile, preferences);
     const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newFilename, program, host, useEsModuleSyntax, quotePreference);
     if (importsFromNewFile) {
-        insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
+        insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true, preferences);
     }
 
     deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
@@ -505,7 +505,7 @@ function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needEx
     return flatMap(toMove, statement => {
         if (isTopLevelDeclarationStatement(statement) &&
             !isExported(sourceFile, statement, useEs6Exports) &&
-            forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(d.symbol)))) {
+            forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(tryCast(d, canHaveSymbol)?.symbol)))) {
             const exports = addExport(statement, useEs6Exports);
             if (exports) return exports;
         }

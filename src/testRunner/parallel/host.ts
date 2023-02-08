@@ -1,5 +1,3 @@
-import * as Utils from "../_namespaces/Utils";
-import * as ts from "../_namespaces/ts";
 import {
     configOption,
     globalTimeout,
@@ -24,6 +22,8 @@ import {
     TaskTimeout,
     TestInfo,
 } from "../_namespaces/Harness.Parallel";
+import * as ts from "../_namespaces/ts";
+import * as Utils from "../_namespaces/Utils";
 
 export function start() {
     const Mocha = require("mocha") as typeof import("mocha");
@@ -56,12 +56,12 @@ export function start() {
             this.pending = false;
             this.delayed = false;
         }
-        addSuite(suite: RemoteSuite) {
+        override addSuite(suite: RemoteSuite) {
             super.addSuite(suite);
             this.suiteMap.set(suite.title, suite);
             return this;
         }
-        addTest(test: RemoteTest) {
+        override addTest(test: RemoteTest) {
             return super.addTest(test);
         }
     }
