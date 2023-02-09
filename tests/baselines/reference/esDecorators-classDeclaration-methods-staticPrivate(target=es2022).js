@@ -19,7 +19,7 @@ let C = (() => {
     return class C {
         static {
             _static_private_method1_decorators = [dec];
-            __esDecorate(this, _static_private_method1_descriptor = { value: __setFunctionName(function () { }, "#method1") }, _static_private_method1_decorators, { kind: "method", name: "#method1", static: true, private: true }, null, _staticExtraInitializers);
+            __esDecorate(this, _static_private_method1_descriptor = { value: __setFunctionName(function () { }, "#method1") }, _static_private_method1_decorators, { kind: "method", name: "#method1", static: true, private: true, access: { has: obj => #method1 in obj, get: obj => obj.#method1 } }, null, _staticExtraInitializers);
             __runInitializers(this, _staticExtraInitializers);
         }
         static get #method1() { return _static_private_method1_descriptor.value; }
