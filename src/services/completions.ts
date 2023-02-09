@@ -36,7 +36,6 @@ import {
     createPackageJsonImportFilter,
     createPrinter,
     createSortedArray,
-    createTextRangeFromSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
@@ -3697,7 +3696,7 @@ function getCompletionData(
         //   2. at the end position of an unterminated token.
         //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
         return (isRegularExpressionLiteral(contextToken) || isStringTextContainingNode(contextToken)) && (
-            rangeContainsPositionExclusive(createTextRangeFromSpan(createTextSpanFromNode(contextToken)), position) ||
+            rangeContainsPositionExclusive(contextToken, position) ||
             position === contextToken.end && (!!contextToken.isUnterminated || isRegularExpressionLiteral(contextToken)));
     }
 
