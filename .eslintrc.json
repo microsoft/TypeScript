@@ -11,7 +11,7 @@
         "es6": true
     },
     "plugins": [
-        "@typescript-eslint", "no-null", "import", "eslint-plugin-local"
+        "@typescript-eslint", "no-null", "import", "eslint-plugin-local", "simple-import-sort"
     ],
     "ignorePatterns": [
         "**/node_modules/**",
@@ -25,11 +25,8 @@
         "/coverage/**"
     ],
     "rules": {
-        "sort-imports": ["error", {
-            "ignoreCase": true,
-            "ignoreDeclarationSort": true,
-            "allowSeparatedGroups": true
-        }],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
 
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": "error",
@@ -179,6 +176,14 @@
                     { "name": "module" },
                     { "name": "exports" }
                 ]
+            }
+        },
+        {
+            // These files contain imports in a specific order that are generally unsafe to modify.
+            "files": ["**/_namespaces/**"],
+            "rules": {
+                "simple-import-sort/imports": "off",
+                "simple-import-sort/exports": "off"
             }
         }
     ]

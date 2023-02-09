@@ -1,6 +1,4 @@
 import * as ts from "./_namespaces/ts";
-import * as NavigateTo from "./_namespaces/ts.NavigateTo";
-import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 import {
     __String,
     ApplicableRefactorInfo,
@@ -182,8 +180,8 @@ import {
     isTextWhiteSpaceLike,
     isThisTypeParameter,
     isTransientSymbol,
-    JsDoc,
     JSDoc,
+    JsDoc,
     JSDocContainer,
     JSDocTagInfo,
     JsonSourceFile,
@@ -318,6 +316,8 @@ import {
     UserPreferences,
     VariableDeclaration,
 } from "./_namespaces/ts";
+import * as NavigateTo from "./_namespaces/ts.NavigateTo";
+import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
@@ -1643,7 +1643,7 @@ export function createLanguageService(
             getCancellationToken: () => cancellationToken,
             getCanonicalFileName,
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-            getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
+            getNewLine: () => getNewLineCharacter(newSettings),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
             writeFile: noop,
             getCurrentDirectory: () => currentDirectory,
@@ -2436,8 +2436,9 @@ export function createLanguageService(
             : Promise.reject("Host does not implement `installPackage`");
     }
 
-    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
-        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
+    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined {
+        const formatSettings = formatOptions ? formatting.getFormatContext(formatOptions, host).options : undefined;
+        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, formatSettings), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
     }
 
     function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {

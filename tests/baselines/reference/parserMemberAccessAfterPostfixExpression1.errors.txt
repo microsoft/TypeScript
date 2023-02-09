@@ -11,4 +11,4 @@ tests/cases/conformance/parser/ecmascript5/Expressions/parserMemberAccessAfterPo
 !!! error TS1005: ';' expected.
         ~~~~~~~~
 !!! error TS2552: Cannot find name 'toString'. Did you mean 'String'?
-!!! related TS2728 /.ts/lib.es5.d.ts:533:13: 'String' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'String' is declared here.

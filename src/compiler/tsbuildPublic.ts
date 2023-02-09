@@ -237,8 +237,8 @@ export interface SolutionBuilderHostBase<T extends BuilderProgram> extends Progr
     // TODO: To do better with watch mode and normal build mode api that creates program and emits files
     // This currently helps enable --diagnostics and --extendedDiagnostics
     afterProgramEmitAndDiagnostics?(program: T): void;
-    /** @internal */ beforeEmitBundle?(config: ParsedCommandLine): void;
-    /** @internal */ afterEmitBundle?(config: ParsedCommandLine): void;
+    /** @deprecated @internal */ beforeEmitBundle?(config: ParsedCommandLine): void;
+    /** @deprecated @internal */ afterEmitBundle?(config: ParsedCommandLine): void;
 
     // For testing
     /** @internal */ now?(): Date;
@@ -795,7 +795,7 @@ function setupInitialBuild<T extends BuilderProgram>(state: SolutionBuilderState
 
 export enum InvalidatedProjectKind {
     Build,
-    UpdateBundle,
+    /** @deprecated */ UpdateBundle,
     UpdateOutputFileStamps
 }
 
@@ -847,6 +847,7 @@ export interface BuildInvalidedProject<T extends BuilderProgram> extends Invalid
     // emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
 }
 
+/** @deprecated */
 export interface UpdateBundleProject<T extends BuilderProgram> extends InvalidatedProjectBase {
     readonly kind: InvalidatedProjectKind.UpdateBundle;
     emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
@@ -898,9 +899,9 @@ enum BuildStep {
     SyntaxDiagnostics,
     SemanticDiagnostics,
     Emit,
-    EmitBundle,
+    /** @deprecated */ EmitBundle,
     EmitBuildInfo,
-    BuildInvalidatedProjectOfBundle,
+    /** @deprecated */ BuildInvalidatedProjectOfBundle,
     QueueReferencingProjects,
     Done
 }
@@ -1728,7 +1729,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     let oldestOutputFileTime = maximumDate;
     let buildInfoTime: Date | undefined;
     let buildInfoProgram: ProgramBuildInfo | undefined;
-    let buildInfoVersionMap: Map<Path, string> | undefined;
+    let buildInfoVersionMap: ReturnType<typeof getBuildInfoFileVersionMap> | undefined;
     if (buildInfoPath) {
         const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
         buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts.getModifiedTime(host, buildInfoPath);
@@ -1797,6 +1798,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     let newestInputFileTime = minimumDate;
     /** True if input file has changed timestamp but text is not changed, we can then do only timestamp updates on output to make it look up-to-date later */
     let pseudoInputUpToDate = false;
+    const seenRoots = new Set<Path>();
     // Get timestamps of input files
     for (const inputFile of project.fileNames) {
         const inputTime = getModifiedTime(state, inputFile);
@@ -1814,7 +1816,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             if (buildInfoProgram) {
                 // Read files and see if they are same, read is anyways cached
                 if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
-                version = buildInfoVersionMap.get(toPath(state, inputFile));
+                version = buildInfoVersionMap.fileInfos.get(toPath(state, inputFile));
                 const text = version ? state.readFileWithCache(inputFile) : undefined;
                 currentVersion = text !== undefined ? getSourceFileVersionAsHashFromText(host, text) : undefined;
                 if (version && version === currentVersion) pseudoInputUpToDate = true;
@@ -1832,6 +1834,22 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         if (inputTime > newestInputFileTime) {
             newestInputFileName = inputFile;
             newestInputFileTime = inputTime;
+        }
+
+        if (buildInfoProgram) seenRoots.add(toPath(state, inputFile));
+    }
+
+    if (buildInfoProgram) {
+        if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
+        for (const existingRoot of buildInfoVersionMap.roots) {
+            if (!seenRoots.has(existingRoot)) {
+                // File was root file when project was built but its not any more
+                return {
+                    type: UpToDateStatusType.OutOfDateRoots,
+                    buildInfoFile: buildInfoPath!,
+                    inputFile: existingRoot,
+                };
+            }
         }
     }
 
@@ -2559,6 +2577,14 @@ function reportUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderSt
                 Diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_there_is_change_in_compilerOptions,
                 relName(state, configFileName),
                 relName(state, status.buildInfoFile)
+            );
+        case UpToDateStatusType.OutOfDateRoots:
+            return reportStatus(
+                state,
+                Diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_file_2_was_root_file_of_compilation_but_not_any_more,
+                relName(state, configFileName),
+                relName(state, status.buildInfoFile),
+                relName(state, status.inputFile),
             );
         case UpToDateStatusType.UpToDate:
             if (status.newestInputFileTime !== undefined) {

@@ -1,10 +1,10 @@
 import * as ts from "../../_namespaces/ts";
+import { commonFile1 } from "../tscWatch/helpers";
 import {
     createServerHost,
     File,
     libFile,
 } from "../virtualFileSystemWithWatch";
-import { commonFile1 } from "../tscWatch/helpers";
 import {
     baselineTsserverLogs,
     checkNumberOfConfiguredProjects,
@@ -85,7 +85,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         };
 
         const host = createServerHost([file1]);
-        const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
+        const projectService = createProjectService(host, { useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
 
         projectService.openClientFile(file1.path, file1.content);
 

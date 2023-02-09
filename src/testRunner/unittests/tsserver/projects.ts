@@ -1,13 +1,13 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    commonFile1,
+    commonFile2,
+} from "../tscWatch/helpers";
+import {
     createServerHost,
     File,
     libFile,
 } from "../virtualFileSystemWithWatch";
-import {
-    commonFile1,
-    commonFile2,
-} from "../tscWatch/helpers";
 import {
     baselineTsserverLogs,
     checkNumberOfConfiguredProjects,
@@ -163,7 +163,7 @@ describe("unittests:: tsserver:: Projects", () => {
 
             const externalProjectName = "externalproject";
             const host = createServerHost([file1, config1]);
-            const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
             projectService.openExternalProject({
                 rootFiles: toExternalFiles([file1.path, config1.path]),
                 options: {},
@@ -193,7 +193,7 @@ describe("unittests:: tsserver:: Projects", () => {
             };
 
             const host = createServerHost([file1, config1]);
-            const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
             projectService.openClientFile(file1.path, file1.content);
 
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -219,7 +219,7 @@ describe("unittests:: tsserver:: Projects", () => {
             };
 
             const host = createServerHost([file1, config1]);
-            const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
             projectService.applyChangesInOpenFiles(ts.singleIterator({ fileName: file1.path, content: file1.content }));
 
             checkNumberOfProjects(projectService, { inferredProjects: 1 });

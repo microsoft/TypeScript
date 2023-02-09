@@ -111,8 +111,6 @@ import {
     isSpreadElement,
     isStringLiteral,
     isThisTypeNode,
-    isTypeNode,
-    isTypeParameterDeclaration,
     isVariableDeclarationList,
     JSDocNamespaceBody,
     JSDocTypeAssertion,
@@ -143,7 +141,6 @@ import {
     NumericLiteral,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
-    or,
     OuterExpression,
     OuterExpressionKinds,
     outFile,
@@ -178,7 +175,6 @@ import {
     ThisTypeNode,
     Token,
     TypeNode,
-    TypeParameterDeclaration,
 } from "../_namespaces/ts";
 
 // Compound nodes
@@ -629,7 +625,7 @@ export function isJSDocTypeAssertion(node: Node): node is JSDocTypeAssertion {
 }
 
 /** @internal */
-export function getJSDocTypeAssertionType(node: JSDocTypeAssertion) {
+export function getJSDocTypeAssertionType(node: JSDocTypeAssertion): TypeNode {
     const type = getJSDocType(node);
     Debug.assertIsDefined(type);
     return type;
@@ -1160,18 +1156,25 @@ export function canHaveIllegalModifiers(node: Node): node is HasIllegalModifiers
         || kind === SyntaxKind.NamespaceExportDeclaration;
 }
 
-/** @internal */
-export const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration) as (node: Node) => node is TypeNode | TypeParameterDeclaration;
-/** @internal */
-export const isQuestionOrExclamationToken = or(isQuestionToken, isExclamationToken) as (node: Node) => node is QuestionToken | ExclamationToken;
-/** @internal */
-export const isIdentifierOrThisTypeNode = or(isIdentifier, isThisTypeNode) as (node: Node) => node is Identifier | ThisTypeNode;
-/** @internal */
-export const isReadonlyKeywordOrPlusOrMinusToken = or(isReadonlyKeyword, isPlusToken, isMinusToken) as (node: Node) => node is ReadonlyKeyword | PlusToken | MinusToken;
-/** @internal */
-export const isQuestionOrPlusOrMinusToken = or(isQuestionToken, isPlusToken, isMinusToken) as (node: Node) => node is QuestionToken | PlusToken | MinusToken;
-/** @internal */
-export const isModuleName = or(isIdentifier, isStringLiteral) as (node: Node) => node is ModuleName;
+export function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken {
+    return isQuestionToken(node) || isExclamationToken(node);
+}
+
+export function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode {
+    return isIdentifier(node) || isThisTypeNode(node);
+}
+
+export function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken {
+    return isReadonlyKeyword(node) || isPlusToken(node) || isMinusToken(node);
+}
+
+export function isQuestionOrPlusOrMinusToken(node: Node): node is QuestionToken | PlusToken | MinusToken {
+    return isQuestionToken(node) || isPlusToken(node) || isMinusToken(node);
+}
+
+export function isModuleName(node: Node): node is ModuleName {
+    return isIdentifier(node) || isStringLiteral(node);
+}
 
 /** @internal */
 export function isLiteralTypeLikeExpression(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
@@ -1278,7 +1281,6 @@ function isBinaryOperator(kind: SyntaxKind): kind is BinaryOperator {
         || kind === SyntaxKind.CommaToken;
 }
 
-/** @internal */
 export function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken {
     return isBinaryOperator(node.kind);
 }

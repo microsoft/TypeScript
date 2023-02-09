@@ -199,8 +199,8 @@ import {
     HasExpressionInitializer,
     hasExtension,
     HasFlowNode,
-    hasInitializer,
     HasInitializer,
+    hasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -490,7 +490,6 @@ import {
     SymbolTable,
     SyntaxKind,
     SyntaxList,
-    sys,
     TaggedTemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
@@ -1221,7 +1220,11 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
             ],
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         Iterator: new Map(Object.entries({
             es2015: emptyArray,
@@ -1487,59 +1490,103 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
         Int8Array: new Map(Object.entries({
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         Uint8Array: new Map(Object.entries({
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         Uint8ClampedArray: new Map(Object.entries({
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         Int16Array: new Map(Object.entries({
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         Uint16Array: new Map(Object.entries({
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         Int32Array: new Map(Object.entries({
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         Uint32Array: new Map(Object.entries({
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         Float32Array: new Map(Object.entries({
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         Float64Array: new Map(Object.entries({
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         BigInt64Array: new Map(Object.entries({
             es2020: emptyArray,
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         BigUint64Array: new Map(Object.entries({
             es2020: emptyArray,
             es2022: [
                 "at"
-            ]
+            ],
+            es2023: [
+                "findLastIndex",
+                "findLast"
+            ],
         })),
         Error: new Map(Object.entries({
             es2022: [
@@ -3796,7 +3843,7 @@ export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | El
 export function setValueDeclaration(symbol: Symbol, node: Declaration): void {
     const { valueDeclaration } = symbol;
     if (!valueDeclaration ||
-        !(node.flags & NodeFlags.Ambient && !(valueDeclaration.flags & NodeFlags.Ambient)) &&
+        !(node.flags & NodeFlags.Ambient && !isInJSFile(node) && !(valueDeclaration.flags & NodeFlags.Ambient)) &&
         (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
         (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
         // other kinds of value declarations take precedence over modules and assignment declarations
@@ -7135,14 +7182,14 @@ export function directoryProbablyExists(directoryName: string, host: { directory
 const carriageReturnLineFeed = "\r\n";
 const lineFeed = "\n";
 /** @internal */
-export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
+export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
     switch (options.newLine) {
         case NewLineKind.CarriageReturnLineFeed:
             return carriageReturnLineFeed;
         case NewLineKind.LineFeed:
-            return lineFeed;
+        case undefined:
+                return lineFeed;
     }
-    return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
 }
 
 /**
@@ -7671,7 +7718,7 @@ export function getNameOfAccessExpression(node: AccessExpression) {
     return node.argumentExpression;
 }
 
-/** @internal */
+/** @deprecated @internal */
 export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
     switch (section.kind) {
         case BundleFileSectionKind.Text:
@@ -8241,6 +8288,7 @@ export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["mo
         getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
 }
 
+/** @internal */
 export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
     return moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext;
 }
@@ -9331,7 +9379,7 @@ export function rangeOfNode(node: Node): TextRange {
 export function rangeOfTypeParameters(sourceFile: SourceFile, typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
     // Include the `<>`
     const pos = typeParameters.pos - 1;
-    const end = skipTrivia(sourceFile.text, typeParameters.end) + 1;
+    const end = Math.min(sourceFile.text.length, skipTrivia(sourceFile.text, typeParameters.end) + 1);
     return { pos, end };
 }
 

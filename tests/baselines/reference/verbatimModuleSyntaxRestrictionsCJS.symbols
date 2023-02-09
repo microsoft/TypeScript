@@ -8,6 +8,17 @@ export default esmy;
 export declare function funciton(): void;
 >funciton : Symbol(funciton, Decl(decl.d.ts, 1, 20))
 
+=== /ambient.d.ts ===
+declare module "ambient" {
+>"ambient" : Symbol("ambient", Decl(ambient.d.ts, 0, 0))
+
+    const _default: number;
+>_default : Symbol(_default, Decl(ambient.d.ts, 1, 9))
+
+    export default _default;
+>_default : Symbol(_default, Decl(ambient.d.ts, 1, 9))
+}
+
 === /main.ts ===
 import esmy from "./decl"; // error
 >esmy : Symbol(esmy, Decl(main.ts, 0, 6))

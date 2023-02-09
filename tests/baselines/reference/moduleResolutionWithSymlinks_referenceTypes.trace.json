@@ -5,7 +5,7 @@
     "File '/node_modules/library-a.d.ts' does not exist.",
     "File '/node_modules/@types/library-a/package.json' does not exist.",
     "File '/node_modules/@types/library-a.d.ts' does not exist.",
-    "File '/node_modules/@types/library-a/index.d.ts' exist - use it as a name resolution result.",
+    "File '/node_modules/@types/library-a/index.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/node_modules/@types/library-a/index.d.ts', result '/node_modules/@types/library-a/index.d.ts'.",
     "======== Type reference directive 'library-a' was successfully resolved to '/node_modules/@types/library-a/index.d.ts', primary: false. ========",
     "======== Resolving type reference directive 'library-b', containing file '/app.ts', root directory ''. ========",
@@ -14,7 +14,7 @@
     "File '/node_modules/library-b.d.ts' does not exist.",
     "File '/node_modules/@types/library-b/package.json' does not exist.",
     "File '/node_modules/@types/library-b.d.ts' does not exist.",
-    "File '/node_modules/@types/library-b/index.d.ts' exist - use it as a name resolution result.",
+    "File '/node_modules/@types/library-b/index.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/node_modules/@types/library-b/index.d.ts', result '/node_modules/@types/library-b/index.d.ts'.",
     "======== Type reference directive 'library-b' was successfully resolved to '/node_modules/@types/library-b/index.d.ts', primary: false. ========",
     "======== Resolving type reference directive 'library-a', containing file '/node_modules/@types/library-b/index.d.ts', root directory ''. ========",
@@ -23,7 +23,7 @@
     "File '/node_modules/@types/library-b/node_modules/library-a.d.ts' does not exist.",
     "File '/node_modules/@types/library-b/node_modules/@types/library-a/package.json' does not exist.",
     "File '/node_modules/@types/library-b/node_modules/@types/library-a.d.ts' does not exist.",
-    "File '/node_modules/@types/library-b/node_modules/@types/library-a/index.d.ts' exist - use it as a name resolution result.",
+    "File '/node_modules/@types/library-b/node_modules/@types/library-a/index.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/node_modules/@types/library-b/node_modules/@types/library-a/index.d.ts', result '/node_modules/@types/library-a/index.d.ts'.",
     "======== Type reference directive 'library-a' was successfully resolved to '/node_modules/@types/library-a/index.d.ts', primary: false. ========"
 ]

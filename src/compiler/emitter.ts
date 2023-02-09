@@ -741,7 +741,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
     const sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
     const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
     const emitterDiagnostics = createDiagnosticCollection();
-    const newLine = getNewLineCharacter(compilerOptions, () => host.getNewLine());
+    const newLine = getNewLineCharacter(compilerOptions);
     const writer = createTextWriter(newLine);
     const { enter, exit } = performance.createTimer("printTime", "beforePrint", "afterPrint");
     let bundleBuildInfo: BundleBuildInfo | undefined;
@@ -1168,6 +1168,7 @@ export const notImplementedResolver: EmitResolver = {
 /**
  * File that isnt present resulting in error or output files
  *
+ * @deprecated
  * @internal
  */
 export type EmitUsingBuildInfoResult = string | readonly OutputFile[];
@@ -1199,7 +1200,7 @@ function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfo
     });
 }
 
-/** @internal */
+/** @deprecated @internal */
 export function emitUsingBuildInfo(
     config: ParsedCommandLine,
     host: CompilerHost,
@@ -1270,7 +1271,6 @@ function emitUsingBuildInfoWorker(
         getCommonSourceDirectory: () => getNormalizedAbsolutePath(buildInfo.bundle!.commonSourceDirectory, buildInfoDirectory),
         getCompilerOptions: () => config.options,
         getCurrentDirectory: () => host.getCurrentDirectory(),
-        getNewLine: () => host.getNewLine(),
         getSourceFile: returnUndefined,
         getSourceFileByPath: returnUndefined,
         getSourceFiles: () => sourceFilesForJsEmit,
@@ -1342,6 +1342,18 @@ const enum PipelinePhase {
     SourceMaps,
     Emit,
 }
+
+/** @internal */
+export const createPrinterWithDefaults = /* @__PURE__ */ memoize(() => createPrinter({}));
+
+/** @internal */
+export const createPrinterWithRemoveComments = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true }));
+
+/** @internal */
+export const createPrinterWithRemoveCommentsNeverAsciiEscape = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
+
+/** @internal */
+export const createPrinterWithRemoveCommentsOmitTrailingSemicolon = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
 
 export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
     const {

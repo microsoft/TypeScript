@@ -7,7 +7,6 @@ import {
     CancellationToken,
     canUsePropertyAccess,
     CaseBlock,
-    CaseClause,
     cast,
     CharacterCodes,
     ClassElement,
@@ -43,13 +42,11 @@ import {
     createTextSpanFromRange,
     Debug,
     Declaration,
-    DefaultClause,
     Diagnostics,
     diagnosticToString,
     displayPart,
     EmitHint,
     EmitTextWriter,
-    endsWith,
     EntityName,
     EnumMember,
     escapeSnippetText,
@@ -91,6 +88,7 @@ import {
     getNameTable,
     getNewLineCharacter,
     getNewLineKind,
+    getNewLineOrDefaultFromHost,
     getPropertyNameForPropertyNameNode,
     getQuotePreference,
     getReplacementSpanForContextToken,
@@ -139,7 +137,6 @@ import {
     isConstructorDeclaration,
     isContextualKeyword,
     isDeclarationName,
-    isDefaultClause,
     isDeprecatedDeclaration,
     isEntityName,
     isEnumMember,
@@ -184,7 +181,6 @@ import {
     isKeyword,
     isKnownSymbol,
     isLabeledStatement,
-    isLiteralExpression,
     isLiteralImportTypeNode,
     isMemberName,
     isMethodDeclaration,
@@ -217,6 +213,7 @@ import {
     isStatement,
     isStatic,
     isString,
+    isStringAndEmptyAnonymousObjectIntersection,
     isStringANonContextualKeyword,
     isStringLiteralLike,
     isStringLiteralOrTemplate,
@@ -227,6 +224,7 @@ import {
     isTypeLiteralNode,
     isTypeNode,
     isTypeOfExpression,
+    isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
@@ -261,7 +259,6 @@ import {
     LiteralTypeNode,
     map,
     mapDefined,
-    maybeBind,
     MemberOverrideStatus,
     memoize,
     memoizeOne,
@@ -274,6 +271,7 @@ import {
     ModuleReference,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
+    newCaseClauseTracker,
     Node,
     NodeArray,
     NodeBuilderFlags,
@@ -286,7 +284,6 @@ import {
     ObjectTypeDeclaration,
     or,
     ParenthesizedTypeNode,
-    parseBigInt,
     positionBelongsToNode,
     positionIsASICandidate,
     positionsAreOnSameLine,
@@ -352,7 +349,7 @@ import {
     typeHasCallOrConstructSignatures,
     TypeLiteralNode,
     TypeNode,
-    TypeOnlyAliasDeclaration,
+    TypeOnlyImportDeclaration,
     TypeQueryNode,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -467,8 +464,8 @@ interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
     moduleSpecifier: string;
 }
 
-interface SymbolOriginInfoTypeOnlyAlias extends SymbolOriginInfo {
-    declaration: TypeOnlyAliasDeclaration;
+interface SymbolOriginInfoTypeOnlyImport extends SymbolOriginInfo {
+    declaration: TypeOnlyImportDeclaration;
 }
 
 interface SymbolOriginInfoObjectLiteralMethod extends SymbolOriginInfo {
@@ -509,7 +506,7 @@ function originIsNullableMember(origin: SymbolOriginInfo): boolean {
     return !!(origin.kind & SymbolOriginInfoKind.Nullable);
 }
 
-function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoTypeOnlyAlias {
+function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoTypeOnlyImport {
     return !!(origin && origin.kind & SymbolOriginInfoKind.TypeOnlyAlias);
 }
 
@@ -1068,12 +1065,12 @@ function getExhaustiveCaseSnippets(
         }
 
         const newClauses = map(elements, element => factory.createCaseClause(element, []));
-        const newLineChar = getNewLineCharacter(options, maybeBind(host, host.getNewLine));
+        const newLineChar = getNewLineOrDefaultFromHost(host, formatContext?.options);
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
             target: options.target,
-            newLine: getNewLineKind(newLineChar),
+            newLine: getNewLineKind(newLineChar)
         });
         const printNode = formatContext
             ? (node: Node) => printer.printAndFormatNode(EmitHint.Unspecified, node, sourceFile, formatContext)
@@ -1101,75 +1098,6 @@ function getExhaustiveCaseSnippets(
     }
 
     return undefined;
-}
-
-interface CaseClauseTracker {
-    addValue(value: string | number): void;
-    hasValue(value: string | number | PseudoBigInt): boolean;
-}
-
-function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (CaseClause | DefaultClause)[]): CaseClauseTracker {
-    const existingStrings = new Set<string>();
-    const existingNumbers = new Set<number>();
-    const existingBigInts = new Set<string>();
-
-    for (const clause of clauses) {
-        if (!isDefaultClause(clause)) {
-            if (isLiteralExpression(clause.expression)) {
-                const expression = clause.expression;
-                switch (expression.kind) {
-                    case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    case SyntaxKind.StringLiteral:
-                        existingStrings.add(expression.text);
-                        break;
-                    case SyntaxKind.NumericLiteral:
-                        existingNumbers.add(parseInt(expression.text));
-                        break;
-                    case SyntaxKind.BigIntLiteral:
-                        const parsedBigInt = parseBigInt(endsWith(expression.text, "n") ? expression.text.slice(0, -1) : expression.text);
-                        if (parsedBigInt) {
-                            existingBigInts.add(pseudoBigIntToString(parsedBigInt));
-                        }
-                        break;
-                }
-            }
-            else {
-                const symbol = checker.getSymbolAtLocation(clause.expression);
-                if (symbol && symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
-                    const enumValue = checker.getConstantValue(symbol.valueDeclaration);
-                    if (enumValue !== undefined) {
-                        addValue(enumValue);
-                    }
-                }
-            }
-        }
-    }
-
-    return {
-        addValue,
-        hasValue,
-    };
-
-    function addValue(value: string | number) {
-        switch (typeof value) {
-            case "string":
-                existingStrings.add(value);
-                break;
-            case "number":
-                existingNumbers.add(value);
-        }
-    }
-
-    function hasValue(value: string | number | PseudoBigInt): boolean {
-        switch (typeof value) {
-            case "string":
-                return existingStrings.has(value);
-            case "number":
-                return existingNumbers.has(value);
-            case "object":
-                return existingBigInts.has(pseudoBigIntToString(value));
-        }
-    }
 }
 
 function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget, quotePreference: QuotePreference): Expression | undefined {
@@ -1441,7 +1369,7 @@ function createCompletionEntry(
             && !(type.flags & TypeFlags.BooleanLike)
             && !(type.flags & TypeFlags.Union && find((type as UnionType).types, type => !!(type.flags & TypeFlags.BooleanLike)))
         ) {
-            if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined))))) {
+            if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type))))) {
                 // If is string like or undefined use quotes
                 insertText = `${escapeSnippetText(name)}=${quote(sourceFile, preferences, "$1")}`;
                 isSnippet = true;
@@ -1571,7 +1499,7 @@ function getEntryForMemberCompletion(
         module: options.module,
         target: options.target,
         omitTrailingSemicolon: false,
-        newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+        newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
     });
     const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
@@ -1737,7 +1665,7 @@ function getEntryForObjectLiteralMethodCompletion(
         module: options.module,
         target: options.target,
         omitTrailingSemicolon: false,
-        newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+        newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
     });
     if (formatContext) {
         insertText = printer.printAndFormatSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile, formatContext);
@@ -2044,7 +1972,7 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
 
 function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, options: CompilerOptions, preferences: UserPreferences) {
     const replacementSpan = importStatementCompletion.replacementSpan;
-    const quotedModuleSpecifier = quote(sourceFile, preferences, origin.moduleSpecifier);
+    const quotedModuleSpecifier = quote(sourceFile, preferences, escapeSnippetText(origin.moduleSpecifier));
     const exportKind =
         origin.isDefaultExport ? ExportKind.Default :
         origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
@@ -2897,7 +2825,8 @@ function getCompletionData(
                     // First case is for `<div foo={true} [||] />` or `<div foo={true} [||] ></div>`,
                     // `parent` will be `{true}` and `previousToken` will be `}`
                     // Second case is for `<div foo={true} t[||] ></div>`
-                    if (previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier || previousToken.parent.kind === SyntaxKind.JsxAttribute)) {
+                    // Second case must not match for `<div foo={undefine[||]}></div>`
+                    if (previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier && previousToken.parent.kind === SyntaxKind.JsxAttribute)) {
                         isJsxIdentifierExpected = true;
                     }
                     break;
@@ -3351,9 +3280,9 @@ function getCompletionData(
                 symbolToSortTextMap[getSymbolId(symbol)] = SortText.GlobalsOrKeywords;
             }
             if (typeOnlyAliasNeedsPromotion && !(symbol.flags & SymbolFlags.Value)) {
-                const typeOnlyAliasDeclaration = symbol.declarations && find(symbol.declarations, isTypeOnlyImportOrExportDeclaration);
+                const typeOnlyAliasDeclaration = symbol.declarations && find(symbol.declarations, isTypeOnlyImportDeclaration);
                 if (typeOnlyAliasDeclaration) {
-                    const origin: SymbolOriginInfoTypeOnlyAlias = { kind: SymbolOriginInfoKind.TypeOnlyAlias, declaration: typeOnlyAliasDeclaration };
+                    const origin: SymbolOriginInfoTypeOnlyImport = { kind: SymbolOriginInfoKind.TypeOnlyAlias, declaration: typeOnlyAliasDeclaration };
                     symbolToOriginInfoMap[i] = origin;
                 }
             }
