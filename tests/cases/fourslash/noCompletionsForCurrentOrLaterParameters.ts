@@ -5,7 +5,8 @@
 //// function f3(a = a + /*3*/, b = a/*4*/, c = /*5*/) { }
 //// function f3(a) {
 ////     function f4(b = /*6*/, c) { }
-////}
+//// }
+//// const f5 = (a, b = (c = /*7*/, e) => { }, d = b) => { }
 
 verify.completions({
     marker: ["1", "2"],
@@ -30,4 +31,9 @@ verify.completions({
     marker: ["6"],
     excludes: ["b", "c"],
     includes: ["a"],
+})
+
+verify.completions({
+    marker: ["7"],
+    includes: ["a", "b", "d"],
 })
