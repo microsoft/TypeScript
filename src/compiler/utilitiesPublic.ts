@@ -906,9 +906,8 @@ export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expre
         case SyntaxKind.JSDocEnumTag:
             return nameForNamelessJSDocTypedef(declaration as JSDocEnumTag);
         case SyntaxKind.ExportAssignment: {
-            const { expression } = declaration as ExportAssignment;
-            const skipExpression = skipOuterExpressions(expression);
-            return isIdentifier(skipExpression) ? skipExpression : undefined;
+            const expression = skipOuterExpressions((declaration as ExportAssignment).expression);
+            return isIdentifier(expression) ? expression : undefined;
         }
         case SyntaxKind.ElementAccessExpression:
             const expr = declaration as ElementAccessExpression;
