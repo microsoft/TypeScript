@@ -5108,7 +5108,11 @@ function getVariableOrParameterDeclaration(contextToken: Node | undefined) {
 }
 
 function isArrowFunctionBody(node: Node) {
-    return node.parent && isArrowFunction(node.parent) && node.parent.body === node;
+    return node.parent && isArrowFunction(node.parent) &&
+        (node.parent.body === node ||
+        // const a = () => /**/;
+        (node.kind === SyntaxKind.EqualsGreaterThanToken && node.parent.equalsGreaterThanToken === node)
+    );
 }
 
 /** True if symbol is a type or a module containing at least one type. */
