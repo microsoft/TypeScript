@@ -11260,7 +11260,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : getAllSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                 : errorType;
 
-            popTypeResolution();
+            if (!popTypeResolution()) {
+                links.type = errorType;
+            }
         }
         return links.type;
     }
