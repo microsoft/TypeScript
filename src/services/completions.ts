@@ -2050,8 +2050,7 @@ export function getCompletionEntriesFromSymbols(
     isRightOfOpenTag?: boolean,
 ): UniqueNameSet {
     const start = timestamp();
-    const variableDeclaration = getVariableDeclaration(location);
-    const parameterDeclaration = getParameterDeclaration(contextToken);
+    const variableOrParameterDeclaration = getVariableOrParameterDeclaration(contextToken);
     const useSemicolons = probablyUsesSemicolons(sourceFile);
     const typeChecker = program.getTypeChecker();
     // Tracks unique names.
@@ -2124,17 +2123,17 @@ export function getCompletionEntriesFromSymbols(
             }
             // Filter out variables from their own initializers
             // `const a = /* no 'a' here */`
-            if (variableDeclaration && symbol.valueDeclaration === variableDeclaration) {
+            if (tryCast(variableOrParameterDeclaration, isVariableDeclaration) && symbol.valueDeclaration === variableOrParameterDeclaration) {
                 return false;
             }
 
             // Filter out parameters from their own initializers
             // `function f(a = /* no 'a' and 'b' here */, b) { }`
             const symbolDeclaration = symbol.valueDeclaration;
-            if (parameterDeclaration && tryCast(symbolDeclaration, isParameter)) {
+            if (tryCast(variableOrParameterDeclaration, isParameter) && tryCast(symbolDeclaration, isParameter)) {
                 const symbolDeclarationPos = (symbolDeclaration as ParameterDeclaration).pos;
-                const { parameters } = parameterDeclaration.parent;
-                if (symbolDeclarationPos >= parameterDeclaration.pos && symbolDeclarationPos < parameters.end) {
+                const { parameters } = (variableOrParameterDeclaration as ParameterDeclaration).parent;
+                if (symbolDeclarationPos >= variableOrParameterDeclaration!.pos && symbolDeclarationPos < parameters.end) {
                     return false;
                 }
             }
@@ -5098,20 +5097,14 @@ function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression
     return !tryCast(isExternalModuleReference(specifier) ? specifier.expression : specifier, isStringLiteralLike)?.text;
 }
 
-function getVariableDeclaration(property: Node): VariableDeclaration | undefined {
-    const variableDeclaration = findAncestor(property, node =>
-        isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
-            ? "quit"
-            : isVariableDeclaration(node));
-
-    return variableDeclaration as VariableDeclaration | undefined;
-}
-
-function getParameterDeclaration(contextToken: Node | undefined): ParameterDeclaration | undefined {
+function getVariableOrParameterDeclaration(contextToken: Node | undefined) {
     if (!contextToken) return;
-    const parameter = findAncestor(contextToken, node => isParameter(node) && !isIndexSignatureDeclaration(node.parent));
 
-    return parameter as ParameterDeclaration | undefined;
+    return findAncestor(contextToken, node =>
+        (isParameter(node) && !isIndexSignatureDeclaration(node.parent)) ||
+            (isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
+            ? "quit"
+            : isVariableDeclaration(node))) as ParameterDeclaration | VariableDeclaration | undefined;
 }
 
 function isArrowFunctionBody(node: Node) {
