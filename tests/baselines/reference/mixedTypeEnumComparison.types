@@ -37,6 +37,24 @@ if (someNumber > E.N2) {
 >N2 : E.N2
 }
 
+declare const unionOfEnum: E.N1 | E.N2;
+>unionOfEnum : E.N1 | E.N2
+>E : any
+>E : any
+
+if (someNumber > unionOfEnum) {
+>someNumber > unionOfEnum : boolean
+>someNumber : number
+>unionOfEnum : E.N1 | E.N2
+
+    someNumber = E.N2;
+>someNumber = E.N2 : E.N2
+>someNumber : number
+>E.N2 : E.N2
+>E : typeof E
+>N2 : E.N2
+}
+
 declare var someString: string
 >someString : string
 

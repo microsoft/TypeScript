@@ -22978,6 +22978,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type;
     }
 
+    function getBaseTypeOfLiteralTypeUnion(type: UnionType) {
+        const key = `B${getTypeId(type)}`;
+        return getCachedType(key) ?? setCachedType(key, mapType(type, getBaseTypeOfLiteralType));
+    }
+
     // This is the same as getBaseTypeOfLiteralType, but checks EnumLiteral last so we get
     // a specific literal's base type rather than the enum's base type.
     function getBaseTypeOfLiteralTypeForComparison(type: Type): Type {
@@ -22986,13 +22991,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.BigIntLiteral ? bigintType :
             type.flags & TypeFlags.BooleanLiteral ? booleanType :
             type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(type as LiteralType) :
-            type.flags & TypeFlags.Union ? getBaseTypeOfLiteralTypeUnion(type as UnionType) :
+            type.flags & TypeFlags.Union ? getBaseTypeOfLiteralTypeUnionForComparison(type as UnionType) :
             type;
     }
 
-    function getBaseTypeOfLiteralTypeUnion(type: UnionType) {
-        const key = `B${getTypeId(type)}`;
-        return getCachedType(key) ?? setCachedType(key, mapType(type, getBaseTypeOfLiteralType));
+    function getBaseTypeOfLiteralTypeUnionForComparison(type: UnionType) {
+        const key = `BC${getTypeId(type)}`;
+        return getCachedType(key) ?? setCachedType(key, mapType(type, getBaseTypeOfLiteralTypeForComparison));
     }
 
     function getWidenedLiteralType(type: Type): Type {

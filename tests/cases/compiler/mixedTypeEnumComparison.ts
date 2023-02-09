@@ -14,6 +14,12 @@ if (someNumber > E.N2) {
     someNumber = E.N2;
 }
 
+declare const unionOfEnum: E.N1 | E.N2;
+
+if (someNumber > unionOfEnum) {
+    someNumber = E.N2;
+}
+
 declare var someString: string
 
 if (someString > E.S1) {
