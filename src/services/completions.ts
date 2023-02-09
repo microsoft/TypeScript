@@ -461,6 +461,7 @@ interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
     symbolName: string;
     moduleSymbol: Symbol;
     exportName: string;
+    exportMapKey: string;
     moduleSpecifier: string;
 }
 
@@ -1924,6 +1925,7 @@ function originToCompletionEntryData(origin: SymbolOriginInfoExport | SymbolOrig
     if (originIsResolvedExport(origin)) {
         const resolvedData: CompletionEntryDataResolved = {
             exportName: origin.exportName,
+            exportMapKey: origin.exportMapKey,
             moduleSpecifier: origin.moduleSpecifier,
             ambientModuleName,
             fileName: origin.fileName,
@@ -1948,6 +1950,7 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
         const resolvedOrigin: SymbolOriginInfoResolvedExport = {
             kind: SymbolOriginInfoKind.ResolvedExport,
             exportName: data.exportName,
+            exportMapKey: data.exportMapKey,
             moduleSpecifier: data.moduleSpecifier,
             symbolName: completionName,
             fileName: data.fileName,
@@ -2454,6 +2457,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     const { moduleSpecifier, codeAction } = codefix.getImportCompletionAction(
         targetSymbol,
         moduleSymbol,
+        data?.exportMapKey,
         sourceFile,
         name,
         isJsxOpeningTagName,

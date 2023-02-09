@@ -490,6 +490,7 @@ interface FixAddToExistingImportInfo {
 export function getImportCompletionAction(
     targetSymbol: Symbol,
     moduleSymbol: Symbol,
+    exportMapKey: string | undefined,
     sourceFile: SourceFile,
     symbolName: string,
     isJsxTagName: boolean,
@@ -501,12 +502,22 @@ export function getImportCompletionAction(
     cancellationToken: CancellationToken,
 ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
     const compilerOptions = program.getCompilerOptions();
+    let exportInfos;
 
-    const exportInfos = pathIsBareSpecifier(stripQuotes(moduleSymbol.name))
-        ? [getSingleExportInfoForSymbol(targetSymbol, moduleSymbol, program, host)]
-        : getAllExportInfoForSymbol(sourceFile, targetSymbol, symbolName, moduleSymbol, isJsxTagName, program, host, preferences, cancellationToken);
+    if (exportMapKey) {
+        // The new way: `exportMapKey` should be in the `data` of each auto-import completion entry and
+        // sent back when asking for details.
+        exportInfos = getExportInfoMap(sourceFile, host, program, preferences, cancellationToken).get(sourceFile.path, exportMapKey);
+        Debug.assertIsDefined(exportInfos, "Some exportInfo should match the specified exportMapKey");
+    }
+    else {
+        // The old way, kept alive for super old editors that don't give us `data` back.
+        exportInfos = pathIsBareSpecifier(stripQuotes(moduleSymbol.name))
+            ? [getSingleExportInfoForSymbol(targetSymbol, symbolName, moduleSymbol, program, host)]
+            : getAllExportInfoForSymbol(sourceFile, targetSymbol, symbolName, moduleSymbol, isJsxTagName, program, host, preferences, cancellationToken);
+        Debug.assertIsDefined(exportInfos, "Some exportInfo should match the specified symbol / moduleSymbol");
+    }
 
-    Debug.assertIsDefined(exportInfos, "Some exportInfo should match the specified symbol / moduleSymbol");
     const useRequire = shouldUseRequire(sourceFile, program);
     const isValidTypeOnlyUseSite = isValidTypeOnlyAliasUseSite(getTokenAtPosition(sourceFile, position));
     const fix = Debug.checkDefined(getImportFixForSymbol(sourceFile, exportInfos, program, position, isValidTypeOnlyUseSite, useRequire, host, preferences));
@@ -551,7 +562,7 @@ function getAllExportInfoForSymbol(importingFile: SourceFile, symbol: Symbol, sy
         });
 }
 
-function getSingleExportInfoForSymbol(symbol: Symbol, moduleSymbol: Symbol, program: Program, host: LanguageServiceHost): SymbolExportInfo {
+function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, moduleSymbol: Symbol, program: Program, host: LanguageServiceHost): SymbolExportInfo {
     const compilerOptions = program.getCompilerOptions();
     const mainProgramInfo = getInfoWithChecker(program.getTypeChecker(), /*isFromPackageJson*/ false);
     if (mainProgramInfo) {
@@ -565,7 +576,7 @@ function getSingleExportInfoForSymbol(symbol: Symbol, moduleSymbol: Symbol, prog
         if (defaultInfo && skipAlias(defaultInfo.symbol, checker) === symbol) {
             return { symbol: defaultInfo.symbol, moduleSymbol, moduleFileName: undefined, exportKind: defaultInfo.exportKind, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
         }
-        const named = checker.tryGetMemberInModuleExportsAndProperties(symbol.name, moduleSymbol);
+        const named = checker.tryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol);
         if (named && skipAlias(named, checker) === symbol) {
             return { symbol: named, moduleSymbol, moduleFileName: undefined, exportKind: ExportKind.Named, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
         }
