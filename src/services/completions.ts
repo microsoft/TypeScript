@@ -2128,17 +2128,13 @@ export function getCompletionEntriesFromSymbols(
                 return false;
             }
 
-            if (parameterDeclaration) {
-                // Filter out parameters from their own initializers
-                // `function f(a = /* no 'a' here */) { }`
-                if (symbol.valueDeclaration === parameterDeclaration) {
-                    return false;
-                }
-                // Filter out parameters from other parameters' initializers
-                // `function f(a = /* no 'b' here */, b) { }`
-                const parameters = parameterDeclaration.parent.parameters;
-                const currentParamIdx = parameters.indexOf(parameterDeclaration);
-                if (parameters.slice(currentParamIdx).some((p) => symbol.valueDeclaration === p)) {
+            // Filter out parameters from their own initializers
+            // `function f(a = /* no 'a' and 'b' here */, b) { }`
+            const symbolDeclaration = symbol.valueDeclaration;
+            if (parameterDeclaration && tryCast(symbolDeclaration, isParameter)) {
+                const symbolDeclarationPos = (symbolDeclaration as ParameterDeclaration).pos;
+                const { parameters } = parameterDeclaration.parent;
+                if (symbolDeclarationPos >= parameterDeclaration.pos && symbolDeclarationPos < parameters.end) {
                     return false;
                 }
             }
