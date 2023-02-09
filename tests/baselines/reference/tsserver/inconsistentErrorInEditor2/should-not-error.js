@@ -188,7 +188,7 @@ FsWatches::
 FsWatchesRecursive::
 
 Info 16   [00:00:24.000] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[{"start":{"line":1,"offset":13},"end":{"line":1,"offset":24},"text":"'Foo' is referenced directly or indirectly in its own type annotation.","code":2502,"category":"error"},{"start":{"line":2,"offset":11},"end":{"line":2,"offset":14},"text":"Type alias 'Foo' circularly references itself.","code":2456,"category":"error"}]}}
+    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::

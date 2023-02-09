@@ -1233,6 +1233,7 @@ const enum TypeSystemPropertyName {
     ResolvedTypeArguments,
     ResolvedBaseTypes,
     WriteType,
+    IsParameterWithUndefinedInAnnotation,
 }
 
 /** @internal */
@@ -9982,6 +9983,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !!(target as InterfaceType).baseTypesResolved;
             case TypeSystemPropertyName.WriteType:
                 return !!getSymbolLinks(target as Symbol).writeType;
+            case TypeSystemPropertyName.IsParameterWithUndefinedInAnnotation:
+                return getNodeLinks(target as VariableDeclaration).isParameterWithUndefinedInAnnotation !== undefined;
         }
         return Debug.assertNever(propertyName);
     }
@@ -27294,20 +27297,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
     function removeOptionalityFromDeclaredType(declaredType: Type, declaration: VariableLikeDeclaration): Type {
-        if (pushTypeResolution(declaration.symbol, TypeSystemPropertyName.DeclaredType)) {
+        const links = getNodeLinks(declaration);
+
+        if (links.isParameterWithUndefinedInAnnotation === undefined) {
+            if (!pushTypeResolution(declaration, TypeSystemPropertyName.IsParameterWithUndefinedInAnnotation)) {
+                reportCircularityError(declaration.symbol);
+                return declaredType;
+            }
+
             const annotationIncludesUndefined = strictNullChecks &&
                 declaration.kind === SyntaxKind.Parameter &&
                 declaration.initializer &&
                 getTypeFacts(declaredType) & TypeFacts.IsUndefined &&
-                !(getTypeFacts(checkExpression(declaration.initializer)) & TypeFacts.IsUndefined);
-            popTypeResolution();
+                !(getTypeFacts(checkDeclarationInitializer(declaration, CheckMode.Normal)) & TypeFacts.IsUndefined);
 
-            return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
+            if (!popTypeResolution()) {
+                reportCircularityError(declaration.symbol);
+                return declaredType;
+            }
+
+            links.isParameterWithUndefinedInAnnotation = !!annotationIncludesUndefined;
         }
-        else {
-            reportCircularityError(declaration.symbol);
-            return declaredType;
-        }
+
+        return links.isParameterWithUndefinedInAnnotation ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
     }
 
     function isConstraintPosition(type: Type, node: Node) {

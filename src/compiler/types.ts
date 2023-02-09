@@ -5997,6 +5997,7 @@ export interface NodeLinks {
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
+    isParameterWithUndefinedInAnnotation?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
 }
 
 /** @internal */
