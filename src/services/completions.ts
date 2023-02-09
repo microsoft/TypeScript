@@ -122,6 +122,7 @@ import {
     isBinaryExpression,
     isBindingElement,
     isBindingPattern,
+    isBlock,
     isBreakOrContinueStatement,
     isCallExpression,
     isCaseBlock,
@@ -133,6 +134,7 @@ import {
     isClassMemberModifier,
     isClassOrTypeElement,
     isClassStaticBlockDeclaration,
+    isCommaToken,
     isComputedPropertyName,
     isConstructorDeclaration,
     isContextualKeyword,
@@ -226,6 +228,7 @@ import {
     isTypeOfExpression,
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
+    isTypeParameterDeclaration,
     isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
@@ -283,6 +286,7 @@ import {
     ObjectType,
     ObjectTypeDeclaration,
     or,
+    ParameterDeclaration,
     ParenthesizedTypeNode,
     positionBelongsToNode,
     positionIsASICandidate,
@@ -350,6 +354,7 @@ import {
     TypeLiteralNode,
     TypeNode,
     TypeOnlyImportDeclaration,
+    TypeParameterDeclaration,
     TypeQueryNode,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -2049,6 +2054,7 @@ export function getCompletionEntriesFromSymbols(
 ): UniqueNameSet {
     const start = timestamp();
     const variableDeclaration = getVariableDeclaration(location);
+    const parameterDeclaration = getParameterDeclaration(contextToken);
     const useSemicolons = probablyUsesSemicolons(sourceFile);
     const typeChecker = program.getTypeChecker();
     // Tracks unique names.
@@ -2123,6 +2129,21 @@ export function getCompletionEntriesFromSymbols(
             // `const a = /* no 'a' here */`
             if (variableDeclaration && symbol.valueDeclaration === variableDeclaration) {
                 return false;
+            }
+
+            if (parameterDeclaration) {
+                // Filter out parameters from their own initializers
+                // `function f(a = /* no 'a' here */) { }`
+                if (symbol.valueDeclaration === parameterDeclaration) {
+                    return false;
+                }
+                // Filter out parameters from other parameters' initializers
+                // `function f(a = /* no 'b' here */, b) { }`
+                const parameters = parameterDeclaration.parent.parameters;
+                const currentParamIdx = parameters.indexOf(parameterDeclaration);
+                if (parameters.slice(currentParamIdx).some((p) => symbol.valueDeclaration === p)) {
+                    return false;
+                }
             }
 
             // External modules can have global export declarations that will be
@@ -5091,6 +5112,13 @@ function getVariableDeclaration(property: Node): VariableDeclaration | undefined
             : isVariableDeclaration(node));
 
     return variableDeclaration as VariableDeclaration | undefined;
+}
+
+function getParameterDeclaration(contextToken: Node | undefined): ParameterDeclaration | undefined {
+    if (!contextToken) return;
+    const parameter = findAncestor(contextToken, node => isParameter(node));
+
+    return parameter as ParameterDeclaration | undefined;
 }
 
 function isArrowFunctionBody(node: Node) {
