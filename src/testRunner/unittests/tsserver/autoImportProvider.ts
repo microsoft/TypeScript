@@ -260,6 +260,41 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         const project = projectService.configuredProjects.get(tsconfig.path)!;
         assert.isUndefined(project.getPackageJsonAutoImportProvider());
     });
+
+    it("Shared source files between AutoImportProvider and main program do not cause duplicate entries in export info map", () => {
+        const files = [
+            // node_modules/memfs - AutoImportProvider only
+            { path: "/node_modules/memfs/package.json", content: `{ "name": "memfs", "version": "1.0.0", "types": "lib/index.d.ts" }` },
+            { path: "/node_modules/memfs/lib/index.d.ts", content: `/// <reference types="node" />\nexport declare class Volume {}` },
+
+            // node_modules/@types/node - AutoImportProvider and main program
+            { path: "/node_modules/@types/node/package.json", content: `{ "name": "@types/node", "version": "1.0.0" }` },
+            { path: "/node_modules/@types/node/index.d.ts", content: `export declare class Stats {}` },
+
+            // root
+            { path: "/package.json", content: `{ "dependencies": { "memfs": "*" }, "devDependencies": { "@types/node": "*" } }` },
+            { path: "/tsconfig.json", content: `{ "compilerOptions": { "types": ["node"] }` },
+            { path: "/index.ts", content: `export {};` },
+        ];
+
+        const { projectService, session, triggerCompletions } = setup(files);
+        openFilesForSession([files[files.length - 1]], session);
+        const project = projectService.configuredProjects.get("/tsconfig.json")!;
+        const autoImportProvider = project.getPackageJsonAutoImportProvider()!;
+        assert.isDefined(autoImportProvider);
+
+        // Trigger completions to ensure export info map is populated
+        triggerCompletions("/index.ts", 0, 0);
+        const exportInfoMap = project.getCachedExportInfoMap();
+        const seenSymbolNames = new Set<string>();
+        exportInfoMap.search("/index.ts" as ts.Path, /*preferCapitalized*/ false, ts.returnTrue, (info, symbolName) => {
+            assert.lengthOf(info, 1);
+            seenSymbolNames.add(symbolName);
+        });
+        assert.equal(seenSymbolNames.size, 2);
+        assert.ok(seenSymbolNames.has("Stats"));
+        assert.ok(seenSymbolNames.has("Volume"));
+    });
 });
 
 describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
@@ -333,7 +368,8 @@ function setup(files: File[]) {
         projectService,
         session,
         updateFile,
-        findAllReferences
+        findAllReferences,
+        triggerCompletions,
     };
 
     function updateFile(path: string, newText: string) {
@@ -357,6 +393,21 @@ function setup(files: File[]) {
                 file,
                 line,
                 offset
+            }
+        });
+    }
+
+    function triggerCompletions(file: string, line: number, offset: number) {
+        const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
+            file,
+            line,
+            offset,
+        };
+        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionInfo,
+            arguments: {
+                ...requestLocation,
+                includeExternalModuleExports: true,
             }
         });
     }

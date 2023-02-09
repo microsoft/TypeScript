@@ -3030,10 +3030,6 @@
         "category": "Error",
         "code": 2690
     },
-    "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
-        "category": "Error",
-        "code": 2691
-    },
     "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
         "category": "Error",
         "code": 2692
@@ -5565,6 +5561,22 @@
     "Project '{0}' is out of date because buildinfo file '{1}' indicates that file '{2}' was root file of compilation but not any more.": {
         "category": "Message",
         "code": 6412
+    },
+    "Entering conditional exports.": {
+        "category": "Message",
+        "code": 6413
+    },
+    "Resolved under condition '{0}'.": {
+        "category": "Message",
+        "code": 6414
+    },
+    "Failed to resolve under condition '{0}'.": {
+        "category": "Message",
+        "code": 6415
+    },
+    "Exiting conditional exports.": {
+        "category": "Message",
+        "code": 6416
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

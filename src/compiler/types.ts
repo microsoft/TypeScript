@@ -4946,6 +4946,8 @@ export interface TypeChecker {
     getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
     /** @internal */
     getAwaitedType(type: Type): Type | undefined;
+    /** @internal */
+    isEmptyAnonymousObjectType(type: Type): boolean;
     getReturnTypeOfSignature(signature: Signature): Type;
     /**
      * Gets the type of a parameter at a given position in a signature.
