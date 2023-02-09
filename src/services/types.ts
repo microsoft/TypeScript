@@ -1337,7 +1337,7 @@ export interface CompletionEntryDataAutoImport {
      * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
      */
     exportName: string;
-    exportMapKey: string;
+    exportMapKey?: string;
     moduleSpecifier?: string;
     /** The file name declaring the export's module symbol, if it was an external module */
     fileName?: string;
@@ -1348,6 +1348,7 @@ export interface CompletionEntryDataAutoImport {
 }
 
 export interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
+    exportMapKey: string;
 }
 
 export interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
