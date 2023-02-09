@@ -160,6 +160,7 @@ import {
     isImportKeyword,
     isImportSpecifier,
     isInComment,
+    isIndexSignatureDeclaration,
     isInitializedProperty,
     isInJSFile,
     isInRightSideOfInternalImportEqualsDeclaration,
@@ -5112,7 +5113,7 @@ function getVariableDeclaration(property: Node): VariableDeclaration | undefined
 
 function getParameterDeclaration(contextToken: Node | undefined): ParameterDeclaration | undefined {
     if (!contextToken) return;
-    const parameter = findAncestor(contextToken, node => isParameter(node));
+    const parameter = findAncestor(contextToken, node => isParameter(node) && !isIndexSignatureDeclaration(node.parent));
 
     return parameter as ParameterDeclaration | undefined;
 }
