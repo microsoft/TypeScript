@@ -3960,7 +3960,11 @@ function needsNameFromDeclaration(symbol: Symbol) {
 }
 
 function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
-    return firstDefined(symbol.declarations, d => tryCast(getNameOfDeclaration(d), isIdentifier)?.text);
+    return firstDefined(symbol.declarations, d =>
+        isExportAssignment(d)
+            ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text
+            : tryCast(getNameOfDeclaration(d), isIdentifier)?.text
+    );
 }
 
 function getSymbolParentOrFail(symbol: Symbol) {
