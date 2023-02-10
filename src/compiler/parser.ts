@@ -3087,7 +3087,6 @@ namespace Parser {
             case ParsingContext.VariableDeclarations:
             case ParsingContext.JSDocParameters:
             case ParsingContext.Parameters:
-            case ParsingContext.JSDocComment: // TODO(jakebailey): is it?
                 return true;
         }
         return false;
