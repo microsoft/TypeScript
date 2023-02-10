@@ -16,7 +16,7 @@ let C = (() => {
     return class C {
         static {
             _speak_decorators = [bound];
-            __esDecorate(this, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false, access: { has: obj => "speak" in obj, get: obj => obj.speak } }, null, _instanceExtraInitializers);
         }
         constructor(message) {
             this.message = (__runInitializers(this, _instanceExtraInitializers), message);
