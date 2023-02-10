@@ -242,14 +242,14 @@ function getModuleSpecifierWorker(
 
 /** @internal */
 export function tryGetModuleSpecifiersFromCache(
-    moduleSymbol: Symbol,
+    moduleSourceFile: SourceFile,
     importingSourceFile: SourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
 ): readonly string[] | undefined {
     return tryGetModuleSpecifiersFromCacheWorker(
-        moduleSymbol,
+        moduleSourceFile,
         importingSourceFile,
         host,
         userPreferences,
@@ -257,20 +257,15 @@ export function tryGetModuleSpecifiersFromCache(
 }
 
 function tryGetModuleSpecifiersFromCacheWorker(
-    moduleSymbol: Symbol,
+    moduleSourceFile: SourceFile,
     importingSourceFile: SourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
-): readonly [specifiers?: readonly string[], moduleFile?: SourceFile, modulePaths?: readonly ModulePath[], cache?: ModuleSpecifierCache] {
-    const moduleSourceFile = getSourceFileOfModule(moduleSymbol);
-    if (!moduleSourceFile) {
-        return emptyArray as [];
-    }
-
+): readonly [specifiers?: readonly string[], modulePaths?: readonly ModulePath[], cache?: ModuleSpecifierCache] {
     const cache = host.getModuleSpecifierCache?.();
     const cached = cache?.get(importingSourceFile.path, moduleSourceFile.path, userPreferences, options);
-    return [cached?.moduleSpecifiers, moduleSourceFile, cached?.modulePaths, cache];
+    return [cached?.moduleSpecifiers, cached?.modulePaths, cache];
 }
 
 /**
@@ -289,6 +284,7 @@ export function getModuleSpecifiers(
 ): readonly string[] {
     return getModuleSpecifiersWithCacheInfo(
         moduleSymbol,
+        getSourceFileOfModule(moduleSymbol),
         checker,
         compilerOptions,
         importingSourceFile,
@@ -301,6 +297,7 @@ export function getModuleSpecifiers(
 /** @internal */
 export function getModuleSpecifiersWithCacheInfo(
     moduleSymbol: Symbol,
+    moduleSourceFile: SourceFile | undefined,
     checker: TypeChecker,
     compilerOptions: CompilerOptions,
     importingSourceFile: SourceFile,
@@ -310,11 +307,16 @@ export function getModuleSpecifiersWithCacheInfo(
 ): { moduleSpecifiers: readonly string[], computedWithoutCache: boolean } {
     let computedWithoutCache = false;
     const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol, checker);
-    if (ambient) return { moduleSpecifiers: [ambient], computedWithoutCache };
+    if (ambient) {
+        return { moduleSpecifiers: [ambient], computedWithoutCache };
+    }
+    if (!moduleSourceFile) {
+        return { moduleSpecifiers: emptyArray, computedWithoutCache };
+    }
 
     // eslint-disable-next-line prefer-const
-    let [specifiers, moduleSourceFile, modulePaths, cache] = tryGetModuleSpecifiersFromCacheWorker(
-        moduleSymbol,
+    let [specifiers, modulePaths, cache] = tryGetModuleSpecifiersFromCacheWorker(
+        moduleSourceFile,
         importingSourceFile,
         host,
         userPreferences,

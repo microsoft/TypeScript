@@ -564,11 +564,11 @@ function getSingleExportInfoForSymbol(symbol: Symbol, moduleSymbol: Symbol, prog
     function getInfoWithChecker(checker: TypeChecker, isFromPackageJson: boolean): SymbolExportInfo | undefined {
         const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
         if (defaultInfo && skipAlias(defaultInfo.symbol, checker) === symbol) {
-            return { symbol: defaultInfo.symbol, moduleSymbol, moduleFileName: undefined, exportKind: defaultInfo.exportKind, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
+            return { symbol: defaultInfo.symbol, moduleSymbol, moduleFile: undefined, exportKind: defaultInfo.exportKind, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
         }
         const named = checker.tryGetMemberInModuleExportsAndProperties(symbol.name, moduleSymbol);
         if (named && skipAlias(named, checker) === symbol) {
-            return { symbol: named, moduleSymbol, moduleFileName: undefined, exportKind: ExportKind.Named, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
+            return { symbol: named, moduleSymbol, moduleFile: undefined, exportKind: ExportKind.Named, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
         }
     }
 }
@@ -800,13 +800,18 @@ function getNewImportFixes(
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
     const rejectNodeModulesRelativePaths = moduleResolutionUsesNodeModules(moduleResolution);
     const getModuleSpecifiers = fromCacheOnly
-        ? (moduleSymbol: Symbol) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
-        : (moduleSymbol: Symbol, checker: TypeChecker) => moduleSpecifiers.getModuleSpecifiersWithCacheInfo(moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences);
+        ? (moduleSourceFile: SourceFile | undefined) => ({
+            moduleSpecifiers: moduleSourceFile && moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSourceFile, sourceFile, moduleSpecifierResolutionHost, preferences),
+            computedWithoutCache: false,
+        })
+        : (moduleSourceFile: SourceFile | undefined, moduleSymbol: Symbol, checker: TypeChecker) => {
+            return moduleSpecifiers.getModuleSpecifiersWithCacheInfo(moduleSymbol, moduleSourceFile, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences);
+        };
 
     let computedWithoutCacheCount = 0;
     const fixes = flatMap(exportInfo, (exportInfo, i) => {
         const checker = getChecker(exportInfo.isFromPackageJson);
-        const { computedWithoutCache, moduleSpecifiers } = getModuleSpecifiers(exportInfo.moduleSymbol, checker);
+        const { computedWithoutCache, moduleSpecifiers } = getModuleSpecifiers(exportInfo.moduleFile, exportInfo.moduleSymbol, checker);
         const importedSymbolHasValueMeaning = !!(exportInfo.targetFlags & SymbolFlags.Value);
         const addAsTypeOnly = getAddAsTypeOnly(isValidTypeOnlyUseSite, /*isForNewImportDeclaration*/ true, exportInfo.symbol, exportInfo.targetFlags, checker, compilerOptions);
         computedWithoutCacheCount += computedWithoutCache ? 1 : 0;
@@ -969,11 +974,11 @@ function compareModuleSpecifiers(
 // this if we're in a resolution mode where you can't drop trailing "/index" from paths).
 function isFixPossiblyReExportingImportingFile(fix: ImportFixWithModuleSpecifier, importingFile: SourceFile, compilerOptions: CompilerOptions, toPath: (fileName: string) => Path): boolean {
     if (fix.isReExport &&
-        fix.exportInfo?.moduleFileName &&
+        fix.exportInfo?.moduleFile &&
         getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node10 &&
-        isIndexFileName(fix.exportInfo.moduleFileName)
+        isIndexFileName(fix.exportInfo.moduleFile.fileName)
     ) {
-        const reExportDir = toPath(getDirectoryPath(fix.exportInfo.moduleFileName));
+        const reExportDir = toPath(getDirectoryPath(fix.exportInfo.moduleFile.fileName));
         return startsWith((importingFile.path), reExportDir);
     }
     return false;
@@ -995,7 +1000,7 @@ function getFixesInfoForUMDImport({ sourceFile, program, host, preferences }: Co
     if (!umdSymbol) return undefined;
     const symbol = checker.getAliasedSymbol(umdSymbol);
     const symbolName = umdSymbol.name;
-    const exportInfo: readonly SymbolExportInfo[] = [{ symbol: umdSymbol, moduleSymbol: symbol, moduleFileName: undefined, exportKind: ExportKind.UMD, targetFlags: symbol.flags, isFromPackageJson: false }];
+    const exportInfo: readonly SymbolExportInfo[] = [{ symbol: umdSymbol, moduleSymbol: symbol, moduleFile: undefined, exportKind: ExportKind.UMD, targetFlags: symbol.flags, isFromPackageJson: false }];
     const useRequire = shouldUseRequire(sourceFile, program);
     // `usagePosition` is undefined because `token` may not actually be a usage of the symbol we're importing.
     // For example, we might need to import `React` in order to use an arbitrary JSX tag. We could send a position
@@ -1148,7 +1153,7 @@ function getExportInfos(
             !toFile && packageJsonFilter.allowsImportingAmbientModule(moduleSymbol, moduleSpecifierResolutionHost)
         ) {
             const checker = program.getTypeChecker();
-            originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { symbol: exportedSymbol, moduleSymbol, moduleFileName: toFile?.fileName, exportKind, targetFlags: skipAlias(exportedSymbol, checker).flags, isFromPackageJson });
+            originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { symbol: exportedSymbol, moduleSymbol, moduleFile: toFile, exportKind, targetFlags: skipAlias(exportedSymbol, checker).flags, isFromPackageJson });
         }
     }
     forEachExternalModuleToImportFrom(program, host, preferences, useAutoImportProvider, (moduleSymbol, sourceFile, program, isFromPackageJson) => {

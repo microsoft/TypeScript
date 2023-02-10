@@ -82,7 +82,7 @@ export interface SymbolExportInfo {
     readonly symbol: Symbol;
     readonly moduleSymbol: Symbol;
     /** Set if `moduleSymbol` is an external module, not an ambient module */
-    moduleFileName: string | undefined;
+    moduleFile: SourceFile | undefined;
     exportKind: ExportKind;
     targetFlags: SymbolFlags;
     /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
@@ -273,13 +273,13 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
 
     function rehydrateCachedInfo(info: CachedSymbolExportInfo): SymbolExportInfo {
         if (info.symbol && info.moduleSymbol) return info as SymbolExportInfo;
-        const { id, exportKind, targetFlags, isFromPackageJson, moduleFileName } = info;
+        const { id, exportKind, targetFlags, isFromPackageJson, moduleFile } = info;
         const [cachedSymbol, cachedModuleSymbol] = symbols.get(id) || emptyArray;
         if (cachedSymbol && cachedModuleSymbol) {
             return {
                 symbol: cachedSymbol,
                 moduleSymbol: cachedModuleSymbol,
-                moduleFileName,
+                moduleFile,
                 exportKind,
                 targetFlags,
                 isFromPackageJson,
@@ -299,7 +299,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         return {
             symbol,
             moduleSymbol,
-            moduleFileName,
+            moduleFile,
             exportKind,
             targetFlags,
             isFromPackageJson,
@@ -340,11 +340,11 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
     }
 
     function isNotShadowedByDeeperNodeModulesPackage(info: SymbolExportInfo, packageName: string | undefined) {
-        if (!packageName || !info.moduleFileName) return true;
+        if (!packageName || !info.moduleFile) return true;
         const typingsCacheLocation = host.getGlobalTypingsCacheLocation();
-        if (typingsCacheLocation && startsWith(info.moduleFileName, typingsCacheLocation)) return true;
+        if (typingsCacheLocation && startsWith(info.moduleFile.fileName, typingsCacheLocation)) return true;
         const packageDeepestNodeModulesPath = packages.get(packageName);
-        return !packageDeepestNodeModulesPath || startsWith(info.moduleFileName, packageDeepestNodeModulesPath);
+        return !packageDeepestNodeModulesPath || startsWith(info.moduleFile.fileName, packageDeepestNodeModulesPath);
     }
 }
 
@@ -444,7 +444,7 @@ function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly So
         }
     }
     for (const sourceFile of allSourceFiles) {
-        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile.fileName)) {
+        if (!sourceFile.redirectInfo && isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile.fileName)) {
             cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
         }
     }
