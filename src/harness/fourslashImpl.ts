@@ -1016,7 +1016,7 @@ export class TestState {
                 }
                 this.applyCodeActionFromCompletion(/*markerName*/ undefined, { name, source, data, description, newFileContent, newRangeContent, preferences });
             }
-        }
+        };
     }
 
     private verifyCompletionEntry(actual: ts.CompletionEntry, expected: FourSlashInterface.ExpectedCompletionEntry) {
