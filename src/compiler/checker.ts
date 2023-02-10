@@ -28838,9 +28838,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // type of T.
     function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
         return arrayContextualType && (
-            getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String)
-            || mapType(
-                arrayContextualType,
+            index >= 0 && getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String) ||
+            getIndexTypeOfType(arrayContextualType, numberType) ||
+            mapType(arrayContextualType,
                 t => getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false),
                 /*noReductions*/ true));
     }
@@ -29072,7 +29072,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ArrayLiteralExpression: {
                 const arrayLiteral = parent as ArrayLiteralExpression;
                 const type = getApparentTypeOfContextualType(arrayLiteral, contextFlags);
-                return getContextualTypeForElementExpression(type, indexOfNode(arrayLiteral.elements, node));
+                // The index of an array literal element doesn't necessarily line up with the index of the corresponding
+                // element in a contextual tuple type when there are preceding spread elements in the array literal. For
+                // this reason we only pass indices for elements that precede the first spread element.
+                const spreadIndex = getNodeLinks(arrayLiteral).firstSpreadIndex ??= findIndex(arrayLiteral.elements, isSpreadElement);
+                const elementIndex = indexOfNode(arrayLiteral.elements, node);
+                return getContextualTypeForElementExpression(type, spreadIndex < 0 || elementIndex < spreadIndex ? elementIndex : -1);
             }
             case SyntaxKind.ConditionalExpression:
                 return getContextualTypeForConditionalOperand(node, contextFlags);
