@@ -194,7 +194,7 @@
           ]
         },
         {
-          "name": "SOME_TEXT",
+          "name": "[SOME_CONSTANT]",
           "kind": "property",
           "kindModifiers": "",
           "sortText": "17",
