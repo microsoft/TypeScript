@@ -1600,6 +1600,7 @@ function getEntryForMemberCompletion(
 
     let modifiers = ModifierFlags.None;
     const { modifiers: presentModifiers, modifierList: presentModifiersList } = getPresentModifiers(contextToken, sourceFile, position);
+    presentModifiersList;
     // Whether the suggested member should be abstract.
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
     const isAbstract = presentModifiers & ModifierFlags.Abstract && classLikeDeclaration.modifierFlagsCache & ModifierFlags.Abstract;
@@ -1648,6 +1649,9 @@ function getEntryForMemberCompletion(
         if (!isMethod) {
             allowedModifiers |= ModifierFlags.Ambient | ModifierFlags.Readonly;
         }
+        else {
+            allowedModifiers |= ModifierFlags.Async;
+        }
         const allowedAndPresent = presentModifiers & allowedModifiers;
         // If the original member is protected, we allow it to change to public.
         if (modifiers & ModifierFlags.Protected && allowedAndPresent & ModifierFlags.Public) {
@@ -1659,17 +1663,21 @@ function getEntryForMemberCompletion(
         }
         modifiers |= allowedAndPresent;
         completionNodes = completionNodes.map(node => factory.updateModifiers(node, modifiers));
-        // We check if the already present modifiers are a prefix of the modifiers we are about to insert.
-        // If they are not, then we can't offer this completion.
-        const modifiersInsertList = factory.createModifiersFromModifierFlags(modifiers);
-        for (let i = 0; i < presentModifiersList.length; i++) {
-            if (presentModifiersList[i].kind !== modifiersInsertList?.[i]?.kind) {
-                return undefined;
-            }
+        // // We check if the already present modifiers are a prefix of the modifiers we are about to insert.
+        // // If they are not, then we can't offer this completion.
+        // const modifiersInsertList = factory.createModifiersFromModifierFlags(modifiers);
+        // for (let i = 0; i < presentModifiersList.length; i++) {
+        //     if (presentModifiersList[i].kind !== modifiersInsertList?.[i]?.kind) {
+        //         return undefined;
+        //     }
+        // }
+
+        if (presentModifiers & (~allowedModifiers)) {
+            return undefined;
         }
 
-        // Omit already present modifiers from the first node's modifiers list, so we don't add them twice.
-        completionNodes[0] = factory.updateModifiers(completionNodes[0], modifiers & ~presentModifiers);
+        // // Omit already present modifiers from the first node's modifiers list, so we don't add them twice.
+        // completionNodes[0] = factory.updateModifiers(completionNodes[0], modifiers & ~presentModifiers);
 
         const format = ListFormat.MultiLine | ListFormat.NoTrailingNewLine;
         // If we have access to formatting settings, we print the nodes using the emitter,
@@ -1695,7 +1703,7 @@ function getEntryForMemberCompletion(
 function getPresentModifiers(
     contextToken: Node | undefined,
     sourceFile: SourceFile,
-    position: number): { modifiers: ModifierFlags, modifierList: Modifier[] } {
+    position: number): { modifiers: ModifierFlags, modifierList: Modifier[], span: TextSpan } {
     if (!contextToken ||
         getLineAndCharacterOfPosition(sourceFile, position).line
             > getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line) {
