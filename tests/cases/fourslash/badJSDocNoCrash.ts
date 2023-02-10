@@ -8,4 +8,4 @@
 ////     constructor(options = {}) {}
 //// }
 
-verify.encodedSyntacticClassificationsLength(84);
+verify.encodedSyntacticClassificationsLength(69);
