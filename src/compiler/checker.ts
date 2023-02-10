@@ -1836,12 +1836,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode, editingArgument?: Node): Signature | undefined {
-        const node = getParseTreeNode(nodeIn, isCallLikeExpression);
+    function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode, editingArgument?: Node): Signature {
+        const node = getParseTreeNode(nodeIn, isCallLikeExpression)!;
         apparentArgumentCount = argumentCount;
-        const res =
-            !node ? undefined :
-            editingArgument ? runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignature(node, candidatesOutArray, checkMode)) :
+        const res = editingArgument ?
+            runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignature(node, candidatesOutArray, checkMode)) :
             getResolvedSignature(node, candidatesOutArray, checkMode);
         apparentArgumentCount = undefined;
         return res;
