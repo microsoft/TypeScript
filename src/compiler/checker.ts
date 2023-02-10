@@ -2111,6 +2111,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     const contextualTypeNodes: Node[] = [];
     const contextualTypes: (Type | undefined)[] = [];
+    const contextualIsCache: boolean[] = [];
     let contextualTypeCount = 0;
 
     const inferenceContextNodes: Node[] = [];
@@ -19191,7 +19192,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExpressionForMutableLocationWithContextualType(next: Expression, sourcePropType: Type) {
-        pushContextualType(next, sourcePropType);
+        pushContextualType(next, sourcePropType, /*isCache*/ false);
         const result = checkExpressionForMutableLocation(next, CheckMode.Contextual);
         popContextualType();
         return result;
@@ -19508,7 +19509,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // recreate a tuple from the elements, if possible
         // Since we're re-doing the expression type, we need to reapply the contextual type
-        pushContextualType(node, target);
+        pushContextualType(node, target, /*isCache*/ false);
         const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
         popContextualType();
         if (isTupleLikeType(tupleizedType)) {
@@ -29034,10 +29035,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We cannot answer semantic questions within a with block, do not proceed any further
             return undefined;
         }
-        const index = findContextualNode(node);
+        // Cached contextual types are obtained with no ContextFlags, so we can only consult them for
+        // requests with no ContextFlags.
+        const index = findContextualNode(node, /*includeCaches*/ !contextFlags);
         if (index >= 0) {
-            const cached = contextualTypes[index];
-            if (cached || !contextFlags) return cached;
+            return contextualTypes[index];
         }
         const { parent } = node;
         switch (parent.kind) {
@@ -29110,9 +29112,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function pushContextualType(node: Node, type: Type | undefined) {
+    function pushCachedContextualType(node: Expression) {
+        pushContextualType(node, getContextualType(node, /*contextFlags*/ undefined), /*isCache*/ true);
+    }
+
+    function pushContextualType(node: Expression, type: Type | undefined, isCache: boolean) {
         contextualTypeNodes[contextualTypeCount] = node;
         contextualTypes[contextualTypeCount] = type;
+        contextualIsCache[contextualTypeCount] = isCache;
         contextualTypeCount++;
     }
 
@@ -29120,9 +29127,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         contextualTypeCount--;
     }
 
-    function findContextualNode(node: Node) {
+    function findContextualNode(node: Node, includeCaches: boolean) {
         for (let i = contextualTypeCount - 1; i >= 0; i--) {
-            if (node === contextualTypeNodes[i]) {
+            if (node === contextualTypeNodes[i] && (includeCaches || !contextualIsCache[i])) {
                 return i;
             }
         }
@@ -29149,7 +29156,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
         if (isJsxOpeningElement(node) && contextFlags !== ContextFlags.Completions) {
-            const index = findContextualNode(node.parent);
+            const index = findContextualNode(node.parent, /*includeCaches*/ !contextFlags);
             if (index >= 0) {
                 // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
                 // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
@@ -29485,7 +29492,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const elementCount = elements.length;
         const elementTypes: Type[] = [];
         const elementFlags: ElementFlags[] = [];
-        pushContextualType(node, getContextualType(node, /*contextFlags*/ undefined));
+        pushCachedContextualType(node);
         const inDestructuringPattern = isAssignmentTarget(node);
         const inConstContext = isConstContext(node);
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
@@ -29668,7 +29675,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let propertiesArray: Symbol[] = [];
         let spread: Type = emptyObjectType;
 
-        pushContextualType(node, getContextualType(node, /*contextFlags*/ undefined));
+        pushCachedContextualType(node);
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
         const contextualTypeHasPattern = contextualType && contextualType.pattern &&
             (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
@@ -36823,8 +36830,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.InstantiableNonPrimitive && maybeTypeOfKind(getBaseConstraintOfType(type) || unknownType, TypeFlags.StringLike));
     }
 
-    function getContextNode(node: Expression): Node {
-        if (node.kind === SyntaxKind.JsxAttributes && !isJsxSelfClosingElement(node.parent)) {
+    function getContextNode(node: Expression): Expression {
+        if (isJsxAttributes(node) && !isJsxSelfClosingElement(node.parent)) {
             return node.parent.parent; // Needs to be the root JsxElement, so it encompasses the attributes _and_ the children (which are essentially part of the attributes)
         }
         return node;
@@ -36832,7 +36839,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
         const contextNode = getContextNode(node);
-        pushContextualType(contextNode, contextualType);
+        pushContextualType(contextNode, contextualType, /*isCache*/ false);
         pushInferenceContext(contextNode, inferenceContext);
         const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
         // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
@@ -37223,7 +37230,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (links.contextFreeType) {
             return links.contextFreeType;
         }
-        pushContextualType(node, anyType);
+        pushContextualType(node, anyType, /*isCache*/ false);
         const type = links.contextFreeType = checkExpression(node, CheckMode.SkipContextSensitive);
         popContextualType();
         return type;
