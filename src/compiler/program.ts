@@ -3,6 +3,7 @@ import {
     __String,
     addInternalEmitFlags,
     addRange,
+    addRelatedInfo,
     append,
     arrayFrom,
     arrayIsEqualTo,
@@ -2957,14 +2958,21 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         }
                         else if (isClassDeclaration(parent)) {
                             const exportIndex = findIndex(parent.modifiers, isExportModifier);
-                            const defaultIndex = findIndex(parent.modifiers, isDefaultModifier);
-                            if (exportIndex >= 0 && decoratorIndex < exportIndex) {
-                                // report illegal decorator before `export default`
-                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_must_come_after_export_or_export_default_in_JavaScript_files));
-                            }
-                            else if (defaultIndex >= 0 && decoratorIndex < defaultIndex) {
-                                // report illegal decorator before `export default`
-                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
+                            if (exportIndex >= 0) {
+                                const defaultIndex = findIndex(parent.modifiers, isDefaultModifier);
+                                if (decoratorIndex > exportIndex && defaultIndex >= 0 && decoratorIndex < defaultIndex) {
+                                    // report illegal decorator between `export` and `default`
+                                    diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
+                                }
+                                else if (exportIndex >= 0 && decoratorIndex < exportIndex) {
+                                    const trailingDecoratorIndex = findIndex(parent.modifiers, isDecorator, exportIndex);
+                                    if (trailingDecoratorIndex >= 0) {
+                                        diagnostics.push(addRelatedInfo(
+                                            createDiagnosticForNode(parent.modifiers[trailingDecoratorIndex], Diagnostics.Decorators_may_not_appear_after_export_or_export_default_if_they_also_appear_before_export),
+                                            createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorator_used_before_export_here),
+                                        ));
+                                    }
+                                }
                             }
                         }
                     }

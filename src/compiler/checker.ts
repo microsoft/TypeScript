@@ -187,6 +187,7 @@ import {
     findUseStrictPrologue,
     first,
     firstDefined,
+    firstIterator,
     firstOrUndefined,
     firstOrUndefinedIterator,
     flatMap,
@@ -321,7 +322,6 @@ import {
     getObjectFlags,
     getOriginalNode,
     getOrUpdate,
-    getOwnKeys,
     getParameterSymbolFromJSDoc,
     getParseTreeNode,
     getPropertyAssignmentAliasLikeExpression,
@@ -2111,6 +2111,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     const contextualTypeNodes: Node[] = [];
     const contextualTypes: (Type | undefined)[] = [];
+    const contextualIsCache: boolean[] = [];
     let contextualTypeCount = 0;
 
     const inferenceContextNodes: Node[] = [];
@@ -16124,7 +16125,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
-        const templates = filter(types, isPatternLiteralType) as TemplateLiteralType[];
+        const templates = filter(types, t => !!(t.flags & TypeFlags.TemplateLiteral) && isPatternLiteralType(t)) as TemplateLiteralType[];
         if (templates.length) {
             let i = types.length;
             while (i > 0) {
@@ -19191,7 +19192,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExpressionForMutableLocationWithContextualType(next: Expression, sourcePropType: Type) {
-        pushContextualType(next, sourcePropType);
+        pushContextualType(next, sourcePropType, /*isCache*/ false);
         const result = checkExpressionForMutableLocation(next, CheckMode.Contextual);
         popContextualType();
         return result;
@@ -19508,7 +19509,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // recreate a tuple from the elements, if possible
         // Since we're re-doing the expression type, we need to reapply the contextual type
-        pushContextualType(node, target);
+        pushContextualType(node, target, /*isCache*/ false);
         const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
         popContextualType();
         if (isTupleLikeType(tupleizedType)) {
@@ -26091,10 +26092,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstantReference(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.Identifier: {
-                const symbol = getResolvedSymbol(node as Identifier);
-                return isConstVariable(symbol) || isParameterOrCatchClauseVariable(symbol) && !isSymbolAssigned(symbol);
-            }
+            case SyntaxKind.Identifier:
+                if (!isThisInTypeQuery(node)) {
+                    const symbol = getResolvedSymbol(node as Identifier);
+                    return isConstVariable(symbol) || isParameterOrCatchClauseVariable(symbol) && !isSymbolAssigned(symbol);
+                }
+                break;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 // The resolvedSymbol property is initialized by checkPropertyAccess or checkElementAccess before we get here.
@@ -29032,10 +29035,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We cannot answer semantic questions within a with block, do not proceed any further
             return undefined;
         }
-        const index = findContextualNode(node);
+        // Cached contextual types are obtained with no ContextFlags, so we can only consult them for
+        // requests with no ContextFlags.
+        const index = findContextualNode(node, /*includeCaches*/ !contextFlags);
         if (index >= 0) {
-            const cached = contextualTypes[index];
-            if (cached || !contextFlags) return cached;
+            return contextualTypes[index];
         }
         const { parent } = node;
         switch (parent.kind) {
@@ -29108,9 +29112,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function pushContextualType(node: Node, type: Type | undefined) {
+    function pushCachedContextualType(node: Expression) {
+        pushContextualType(node, getContextualType(node, /*contextFlags*/ undefined), /*isCache*/ true);
+    }
+
+    function pushContextualType(node: Expression, type: Type | undefined, isCache: boolean) {
         contextualTypeNodes[contextualTypeCount] = node;
         contextualTypes[contextualTypeCount] = type;
+        contextualIsCache[contextualTypeCount] = isCache;
         contextualTypeCount++;
     }
 
@@ -29118,9 +29127,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         contextualTypeCount--;
     }
 
-    function findContextualNode(node: Node) {
+    function findContextualNode(node: Node, includeCaches: boolean) {
         for (let i = contextualTypeCount - 1; i >= 0; i--) {
-            if (node === contextualTypeNodes[i]) {
+            if (node === contextualTypeNodes[i] && (includeCaches || !contextualIsCache[i])) {
                 return i;
             }
         }
@@ -29147,7 +29156,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
         if (isJsxOpeningElement(node) && contextFlags !== ContextFlags.Completions) {
-            const index = findContextualNode(node.parent);
+            const index = findContextualNode(node.parent, /*includeCaches*/ !contextFlags);
             if (index >= 0) {
                 // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
                 // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
@@ -29483,7 +29492,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const elementCount = elements.length;
         const elementTypes: Type[] = [];
         const elementFlags: ElementFlags[] = [];
-        pushContextualType(node, getContextualType(node, /*contextFlags*/ undefined));
+        pushCachedContextualType(node);
         const inDestructuringPattern = isAssignmentTarget(node);
         const inConstContext = isConstContext(node);
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
@@ -29666,7 +29675,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let propertiesArray: Symbol[] = [];
         let spread: Type = emptyObjectType;
 
-        pushContextualType(node, getContextualType(node, /*contextFlags*/ undefined));
+        pushCachedContextualType(node);
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
         const contextualTypeHasPattern = contextualType && contextualType.pattern &&
             (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
@@ -31324,13 +31333,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getSuggestedLibForNonExistentName(name: __String | Identifier) {
         const missingName = diagnosticName(name);
         const allFeatures = getScriptTargetFeatures();
-        const libTargets = getOwnKeys(allFeatures);
-        for (const libTarget of libTargets) {
-            const containingTypes = getOwnKeys(allFeatures[libTarget]);
-            if (containingTypes !== undefined && contains(containingTypes, missingName)) {
-                return libTarget;
-            }
-        }
+        const typeFeatures = allFeatures.get(missingName);
+        return typeFeatures && firstIterator(typeFeatures.keys());
     }
 
     function getSuggestedLibForNonExistentProperty(missingProperty: string, containingType: Type) {
@@ -31338,13 +31342,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!container) {
             return undefined;
         }
+        const containingTypeName = symbolName(container);
         const allFeatures = getScriptTargetFeatures();
-        const libTargets = getOwnKeys(allFeatures);
-        for (const libTarget of libTargets) {
-            const featuresOfLib = allFeatures[libTarget];
-            const featuresOfContainingType = featuresOfLib[symbolName(container)];
-            if (featuresOfContainingType !== undefined && contains(featuresOfContainingType, missingProperty)) {
-                return libTarget;
+        const typeFeatures = allFeatures.get(containingTypeName);
+        if (typeFeatures) {
+            for (const [libTarget, featuresOfType] of typeFeatures) {
+                if (contains(featuresOfType, missingProperty)) {
+                    return libTarget;
+                }
             }
         }
     }
@@ -36825,8 +36830,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.InstantiableNonPrimitive && maybeTypeOfKind(getBaseConstraintOfType(type) || unknownType, TypeFlags.StringLike));
     }
 
-    function getContextNode(node: Expression): Node {
-        if (node.kind === SyntaxKind.JsxAttributes && !isJsxSelfClosingElement(node.parent)) {
+    function getContextNode(node: Expression): Expression {
+        if (isJsxAttributes(node) && !isJsxSelfClosingElement(node.parent)) {
             return node.parent.parent; // Needs to be the root JsxElement, so it encompasses the attributes _and_ the children (which are essentially part of the attributes)
         }
         return node;
@@ -36834,7 +36839,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
         const contextNode = getContextNode(node);
-        pushContextualType(contextNode, contextualType);
+        pushContextualType(contextNode, contextualType, /*isCache*/ false);
         pushInferenceContext(contextNode, inferenceContext);
         const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
         // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
@@ -37225,7 +37230,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (links.contextFreeType) {
             return links.contextFreeType;
         }
-        pushContextualType(node, anyType);
+        pushContextualType(node, anyType, /*isCache*/ false);
         const type = links.contextFreeType = checkExpression(node, CheckMode.SkipContextSensitive);
         popContextualType();
         return type;
@@ -46447,6 +46452,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let lastStatic: Node | undefined, lastDeclare: Node | undefined, lastAsync: Node | undefined, lastOverride: Node | undefined, firstDecorator: Decorator | undefined;
         let flags = ModifierFlags.None;
         let sawExportBeforeDecorators = false;
+        // We parse decorators and modifiers in four contiguous chunks:
+        // [...leadingDecorators, ...leadingModifiers, ...trailingDecorators, ...trailingModifiers]. It is an error to
+        // have both leading and trailing decorators.
+        let hasLeadingDecorators = false;
         for (const modifier of (node as HasModifiers).modifiers!) {
             if (isDecorator(modifier)) {
                 if (!nodeCanBeDecorated(legacyDecorators, node, node.parent, node.parent.parent)) {
@@ -46463,13 +46472,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return grammarErrorOnFirstToken(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
                     }
                 }
+
+                // if we've seen any modifiers aside from `export`, `default`, or another decorator, then this is an invalid position
                 if (flags & ~(ModifierFlags.ExportDefault | ModifierFlags.Decorator)) {
                     return grammarErrorOnNode(modifier, Diagnostics.Decorators_are_not_valid_here);
                 }
+
+                // if we've already seen leading decorators and leading modifiers, then trailing decorators are an invalid position
+                if (hasLeadingDecorators && flags & ModifierFlags.Modifier) {
+                    Debug.assertIsDefined(firstDecorator);
+                    const sourceFile = getSourceFileOfNode(modifier);
+                    if (!hasParseDiagnostics(sourceFile)) {
+                        addRelatedInfo(
+                            error(modifier, Diagnostics.Decorators_may_not_appear_after_export_or_export_default_if_they_also_appear_before_export),
+                            createDiagnosticForNode(firstDecorator, Diagnostics.Decorator_used_before_export_here));
+                        return true;
+                    }
+                    return false;
+                }
+
                 flags |= ModifierFlags.Decorator;
-                if (flags & ModifierFlags.Export) {
+
+                // if we have not yet seen a modifier, then these are leading decorators
+                if (!(flags & ModifierFlags.Modifier)) {
+                    hasLeadingDecorators = true;
+                }
+                else if (flags & ModifierFlags.Export) {
                     sawExportBeforeDecorators = true;
                 }
+
                 firstDecorator ??= modifier;
             }
             else {

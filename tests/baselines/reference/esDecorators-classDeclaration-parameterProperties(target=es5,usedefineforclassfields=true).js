@@ -35,7 +35,7 @@ var C = function () {
         }()),
         (function () {
             _speak_decorators = [bound];
-            __esDecorate(_a, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false, access: { has: function (obj) { return "speak" in obj; }, get: function (obj) { return obj.speak; } } }, null, _instanceExtraInitializers);
         })(),
         _a;
 }();
