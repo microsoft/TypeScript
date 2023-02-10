@@ -2826,7 +2826,7 @@ namespace Parser {
                 return tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.OpenBraceToken;
             case ParsingContext.JsxChildren:
                 return true;
-            case ParsingContext.StandaloneJSDoc:
+            case ParsingContext.JSDocComment:
                 return true;
             case ParsingContext.Count:
                 return Debug.fail("ParsingContext.Count used as a context"); // Not a real context, only a marker.
@@ -2969,7 +2969,7 @@ namespace Parser {
     // True if positioned at element or terminator of the current list or any enclosing list
     function isInSomeParsingContext(): boolean {
         // We should be in at least one parsing context, be it SourceElements while parsing
-        // a SourceFile, or StandaloneJSDoc when lazily parsing JSDoc.
+        // a SourceFile, or JSDocComment when lazily parsing JSDoc.
         Debug.assert(parsingContext, "Missing parsing context");
         for (let kind = 0; kind < ParsingContext.Count; kind++) {
             if (parsingContext & (1 << kind)) {
@@ -3087,7 +3087,7 @@ namespace Parser {
             case ParsingContext.VariableDeclarations:
             case ParsingContext.JSDocParameters:
             case ParsingContext.Parameters:
-            case ParsingContext.StandaloneJSDoc: // TODO(jakebailey): is it?
+            case ParsingContext.JSDocComment: // TODO(jakebailey): is it?
                 return true;
         }
         return false;
@@ -3347,7 +3347,7 @@ namespace Parser {
             case ParsingContext.JsxAttributes: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.JsxChildren: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.AssertEntries: return parseErrorAtCurrentToken(Diagnostics.Identifier_or_string_literal_expected); // AssertionKey.
-            case ParsingContext.StandaloneJSDoc: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
+            case ParsingContext.JSDocComment: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.Count: return Debug.fail("ParsingContext.Count used as a context"); // Not a real context, only a marker.
             default: Debug.assertNever(context);
         }
@@ -8411,7 +8411,7 @@ namespace Parser {
         HeritageClauses,           // Heritage clauses for a class or interface declaration.
         ImportOrExportSpecifiers,  // Named import clause's import specifier list,
         AssertEntries,             // Import entries list.
-        StandaloneJSDoc,           // TODO(jakebailey): describe
+        JSDocComment,              // Parsing via JSDocParser
         Count                      // Number of parsing contexts
     }
 
@@ -8518,7 +8518,7 @@ namespace Parser {
 
         function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc | undefined {
             const saveParsingContext = parsingContext;
-            parsingContext |= 1 << ParsingContext.StandaloneJSDoc;
+            parsingContext |= 1 << ParsingContext.JSDocComment;
 
             const content = sourceText;
             const end = length === undefined ? content.length : start + length;
