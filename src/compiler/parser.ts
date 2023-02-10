@@ -3347,7 +3347,7 @@ namespace Parser {
             case ParsingContext.JsxAttributes: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.JsxChildren: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.AssertEntries: return parseErrorAtCurrentToken(Diagnostics.Identifier_or_string_literal_expected); // AssertionKey.
-            case ParsingContext.StandaloneJSDoc: return; // TODO(jakebailey): any error here?
+            case ParsingContext.StandaloneJSDoc: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.Count: return Debug.fail("ParsingContext.Count used as a context"); // Not a real context, only a marker.
             default: Debug.assertNever(context);
         }
@@ -8519,13 +8519,7 @@ namespace Parser {
         function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc | undefined {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << ParsingContext.StandaloneJSDoc;
-            const jsdoc = parseJSDocCommentWorkerWorker(start, length);
-            parsingContext = saveParsingContext;
-            return jsdoc;
-        }
 
-        // TODO(jakebailey): name
-        function parseJSDocCommentWorkerWorker(start: number, length: number | undefined): JSDoc | undefined {
             const content = sourceText;
             const end = length === undefined ? content.length : start + length;
             length = end - start;
@@ -8548,7 +8542,11 @@ namespace Parser {
             const parts: JSDocComment[] = [];
 
             // + 3 for leading /**, - 5 in total for /** */
-            return scanner.scanRange(start + 3, length - 5, () => {
+            const result = scanner.scanRange(start + 3, length - 5, doJSDocScan);
+            parsingContext = saveParsingContext;
+            return result;
+
+            function doJSDocScan() {
                 // Initially we can parse out a tag.  We also have seen a starting asterisk.
                 // This is so that /** * @type */ doesn't parse.
                 let state = JSDocState.SawAsterisk;
@@ -8651,7 +8649,7 @@ namespace Parser {
                 if (parts.length && tags) Debug.assertIsDefined(commentsPos, "having parsed tags implies that the end of the comment span should be set");
                 const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
                 return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : comments.length ? comments.join("") : undefined, tagsArray), start, end);
-            });
+            }
 
             function removeLeadingNewlines(comments: string[]) {
                 while (comments.length && (comments[0] === "\n" || comments[0] === "\r")) {
