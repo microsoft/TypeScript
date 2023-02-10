@@ -2102,7 +2102,11 @@ export class TestState {
                 }
             }
         }
-        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
+        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result, (key, value) => {
+            return key === "exportMapKey"
+                ? value.replace(/\|[0-9]+/g, "|*")
+                : value;
+        }));
     }
 
     private annotateContentWithTooltips<T extends ts.QuickInfo | ts.SignatureHelpItems | {
