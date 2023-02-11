@@ -1,5 +1,6 @@
 // @strict: true
 // @noEmit: true
+// @lib: es5
 
 // repro from #52588
 

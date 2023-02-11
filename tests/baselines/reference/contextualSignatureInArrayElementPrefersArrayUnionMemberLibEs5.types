@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contextualSignatureInArrayElementPrefersArrayUnionMember.ts ===
+=== tests/cases/compiler/contextualSignatureInArrayElementPrefersArrayUnionMemberLibEs5.ts ===
 // repro from #52588
 
 declare function test(
