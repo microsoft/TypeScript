@@ -42,7 +42,7 @@ export enum Utensils { // Shouldn't error
 
 //// [moduleDuplicateIdentifiers.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Utensils = exports.Pot = exports.Kettle = exports.FooBar = exports.Foo = void 0;
 exports.Foo = 2;
 exports.Foo = 42; // Should error

@@ -9,16 +9,16 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(21,12): error TS
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(25,5): error TS2536: Type 'K' cannot be used to index type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(26,12): error TS2536: Type 'K' cannot be used to index type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(30,5): error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-  Type 'undefined' is not assignable to type 'T[keyof T]'.
+  'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'T[keyof T] | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(35,5): error TS2322: Type 'T[K] | undefined' is not assignable to type 'T[K]'.
-  Type 'undefined' is not assignable to type 'T[K]'.
+  'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'T[K] | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(40,5): error TS2322: Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-  Type 'undefined' is not assignable to type 'T[keyof T]'.
+  'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'U[keyof T] | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(41,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[keyof T] | undefined'.
     Type 'T[string]' is not assignable to type 'U[keyof T] | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(45,5): error TS2322: Type 'U[K] | undefined' is not assignable to type 'T[K]'.
-  Type 'undefined' is not assignable to type 'T[K]'.
+  'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'U[K] | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(46,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
   Type 'T[keyof T]' is not assignable to type 'U[K] | undefined'.
     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[K] | undefined'.
@@ -124,7 +124,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         x[k] = y[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'T[keyof T]'.
+!!! error TS2322:   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'T[keyof T] | undefined'.
         y[k] = x[k];
     }
     
@@ -132,7 +132,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         x[k] = y[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[K] | undefined' is not assignable to type 'T[K]'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'T[K]'.
+!!! error TS2322:   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'T[K] | undefined'.
         y[k] = x[k];
     }
     
@@ -140,7 +140,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         x[k] = y[k];  // Error
         ~~~~
 !!! error TS2322: Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'T[keyof T]'.
+!!! error TS2322:   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'U[keyof T] | undefined'.
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
@@ -152,7 +152,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         x[k] = y[k];  // Error
         ~~~~
 !!! error TS2322: Type 'U[K] | undefined' is not assignable to type 'T[K]'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'T[K]'.
+!!! error TS2322:   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'U[K] | undefined'.
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.

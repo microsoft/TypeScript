@@ -28,7 +28,7 @@ const RandomComponent: React.SFC = () => {
 //// [reactSFCAndFunctionResolvable.js]
 "use strict";
 /// <reference path="react16.d.ts" />
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var RandomComponent = function () {
     var Component = condition1

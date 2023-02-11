@@ -7,7 +7,7 @@ export const fun = (
 
 //// [declarationEmitDistributiveConditionalWithInfer.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fun = void 0;
 // This function's type is changed on declaration
 var fun = function (subFun) { };

@@ -1,12 +1,50 @@
 import {
-    append, ArrowFunction, CodeFixContext, copyComments, createSymbolTable, Debug, Diagnostics, Expression, factory,
-    findAncestor, first, FunctionLikeDeclaration, getTokenAtPosition, hasSyntacticModifier, Identifier, isArrowFunction,
-    isBlock, isCallExpression, isDeclarationName, isExpressionStatement, isFunctionLikeDeclaration, isJsxAttribute,
-    isJsxExpression, isLabeledStatement, isVariableLike, length, ModifierFlags, needsParentheses, Node,
-    probablyUsesSemicolons, rangeContainsRange, SourceFile, Statement, suppressLeadingAndTrailingTrivia, SymbolFlags,
-    SyntaxKind, textChanges, Type, TypeChecker, VariableLikeDeclaration,
+    append,
+    ArrowFunction,
+    CodeFixContext,
+    copyComments,
+    createSymbolTable,
+    Debug,
+    Diagnostics,
+    Expression,
+    factory,
+    findAncestor,
+    first,
+    FunctionLikeDeclaration,
+    getTokenAtPosition,
+    hasSyntacticModifier,
+    Identifier,
+    isArrowFunction,
+    isBlock,
+    isCallExpression,
+    isDeclarationName,
+    isExpressionStatement,
+    isFunctionLikeDeclaration,
+    isJsxAttribute,
+    isJsxExpression,
+    isLabeledStatement,
+    isVariableLike,
+    length,
+    ModifierFlags,
+    needsParentheses,
+    Node,
+    probablyUsesSemicolons,
+    rangeContainsRange,
+    SourceFile,
+    Statement,
+    suppressLeadingAndTrailingTrivia,
+    SymbolFlags,
+    SyntaxKind,
+    textChanges,
+    Type,
+    TypeChecker,
+    VariableLikeDeclaration,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "returnValueCorrect";
 const fixIdAddReturnStatement = "fixAddReturnStatement";
@@ -82,7 +120,7 @@ registerCodeFix({
 
 function createObjectTypeFromLabeledExpression(checker: TypeChecker, label: Identifier, expression: Expression) {
     const member = checker.createSymbol(SymbolFlags.Property, label.escapedText);
-    member.type = checker.getTypeAtLocation(expression);
+    member.links.type = checker.getTypeAtLocation(expression);
     const members = createSymbolTable([member]);
     return checker.createAnonymousType(/*symbol*/ undefined, members, [], [], []);
 }

@@ -1,8 +1,8 @@
 import { Octokit } from "@octokit/rest";
-import fs from "fs";
-import ado from "azure-devops-node-api";
-import fetch from "node-fetch";
 import assert from "assert";
+import ado from "azure-devops-node-api";
+import fs from "fs";
+import fetch from "node-fetch";
 
 
 async function main() {

@@ -1,11 +1,24 @@
 import {
-    ActionInvalidate, ActionPackageInstalled, ActionSet, EventBeginInstallTypes, EventEndInstallTypes,
-    EventInitializationFailed, EventTypesRegistry,
-} from "./_namespaces/ts.server";
-import {
-    CompilerOptions, DirectoryWatcherCallback, FileWatcher, FileWatcherCallback, JsTyping, MapLike, Path,
-    SortedReadonlyArray, TypeAcquisition, WatchOptions,
+    CompilerOptions,
+    DirectoryWatcherCallback,
+    FileWatcher,
+    FileWatcherCallback,
+    JsTyping,
+    MapLike,
+    Path,
+    SortedReadonlyArray,
+    TypeAcquisition,
+    WatchOptions,
 } from "./_namespaces/ts";
+import {
+    ActionInvalidate,
+    ActionPackageInstalled,
+    ActionSet,
+    EventBeginInstallTypes,
+    EventEndInstallTypes,
+    EventInitializationFailed,
+    EventTypesRegistry,
+} from "./_namespaces/ts.server";
 
 export interface TypingInstallerResponse {
     readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;

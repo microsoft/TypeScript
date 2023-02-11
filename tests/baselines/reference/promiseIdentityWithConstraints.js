@@ -12,7 +12,7 @@ var x: Promise<string, boolean>;
 
 //// [promiseIdentityWithConstraints.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 // Error because constraint V doesn't match
 var x;
 var x;

@@ -13,6 +13,6 @@ export const o: O = { b: '' }
 
 //// [indexedAccessRetainsIndexSignature.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.o = void 0;
 exports.o = { b: '' };

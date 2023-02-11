@@ -33,7 +33,7 @@ export class Test {
         return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
     }
 
-    public rangesByText(): ts.ESMap<string, FourSlash.Range[]> {
+    public rangesByText(): Map<string, FourSlash.Range[]> {
         return this.state.rangesByText();
     }
 
@@ -252,9 +252,17 @@ export class Verify extends VerifyNegatable {
     }
 
     public completions(...optionsArray: VerifyCompletionsOptions[]) {
+        if (optionsArray.length === 1) {
+            return this.state.verifyCompletions(optionsArray[0]);
+        }
         for (const options of optionsArray) {
             this.state.verifyCompletions(options);
         }
+        return {
+            andApplyCodeAction: () => {
+                throw new Error("Cannot call andApplyCodeAction on multiple completions requests");
+            },
+        };
     }
 
     public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.UserPreferences) {
@@ -354,6 +362,10 @@ export class Verify extends VerifyNegatable {
         this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
     }
 
+    public typeAtLocation(range: FourSlash.Range, expected: string) {
+        this.state.verifyTypeAtLocation(range, expected);
+    }
+
     public baselineFindAllReferences(...markerNames: string[]) {
         this.state.verifyBaselineFindAllReferences(...markerNames);
     }
@@ -448,7 +460,7 @@ export class Verify extends VerifyNegatable {
 
     public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string, options?: ts.DocCommentTemplateOptions) {
         this.state.goToMarker(marker);
-        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset }, options);
+        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, ts.testFormatSettings.newLineCharacter!), caretOffset: expectedOffset }, options);
     }
 
     public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {
@@ -476,7 +488,7 @@ export class Verify extends VerifyNegatable {
         this.state.getAndApplyCodeActions(errorCode, index);
     }
 
-    public applyCodeActionFromCompletion(markerName: string, options: VerifyCompletionActionOptions): void {
+    public applyCodeActionFromCompletion(markerName: string | undefined, options: VerifyCompletionActionOptions): void {
         this.state.applyCodeActionFromCompletion(markerName, options);
     }
 
@@ -486,6 +498,10 @@ export class Verify extends VerifyNegatable {
 
     public importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[], preferences?: ts.UserPreferences) {
         this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers, preferences);
+    }
+
+    public baselineAutoImports(marker: string, fullNamesForCodeFix?: string[], options?: ts.UserPreferences) {
+        this.state.baselineAutoImports(marker, fullNamesForCodeFix, options);
     }
 
     public navigationBar(json: any, options?: { checkSpans?: boolean }) {
@@ -626,8 +642,8 @@ export class Verify extends VerifyNegatable {
         this.state.noMoveToNewFile();
     }
 
-    public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode): void {
-        this.state.verifyOrganizeImports(newContent, mode);
+    public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: ts.UserPreferences): void {
+        this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 }
 
@@ -1166,6 +1182,16 @@ export namespace Completion {
         typeEntry("PropertyDecorator"),
         typeEntry("MethodDecorator"),
         typeEntry("ParameterDecorator"),
+        typeEntry("ClassMemberDecoratorContext"),
+        typeEntry("DecoratorContext"),
+        interfaceEntry("ClassDecoratorContext"),
+        interfaceEntry("ClassMethodDecoratorContext"),
+        interfaceEntry("ClassGetterDecoratorContext"),
+        interfaceEntry("ClassSetterDecoratorContext"),
+        interfaceEntry("ClassAccessorDecoratorContext"),
+        interfaceEntry("ClassAccessorDecoratorTarget"),
+        interfaceEntry("ClassAccessorDecoratorResult"),
+        interfaceEntry("ClassFieldDecoratorContext"),
         typeEntry("PromiseConstructorLike"),
         interfaceEntry("PromiseLike"),
         interfaceEntry("Promise"),

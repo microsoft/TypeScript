@@ -1,9 +1,28 @@
 import {
-    ANONYMOUS, Debug, DiagnosticAndArguments, Diagnostics, emptyArray, factory, FindAllReferences, findChildOfKind,
-    getThisContainer, getTokenAtPosition, isFunctionDeclaration, isFunctionExpression, isSourceFile, isThis, SourceFile,
-    SyntaxKind, textChanges, TypeChecker,
+    ANONYMOUS,
+    Debug,
+    DiagnosticAndArguments,
+    Diagnostics,
+    emptyArray,
+    factory,
+    FindAllReferences,
+    findChildOfKind,
+    getThisContainer,
+    getTokenAtPosition,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isSourceFile,
+    isThis,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
+    TypeChecker,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixImplicitThis";
 const errorCodes = [Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code];
@@ -27,10 +46,10 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
     const token = getTokenAtPosition(sourceFile, pos);
     if (!isThis(token)) return undefined;
 
-    const fn = getThisContainer(token, /*includeArrowFunctions*/ false);
+    const fn = getThisContainer(token, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
     if (!isFunctionDeclaration(fn) && !isFunctionExpression(fn)) return undefined;
 
-    if (!isSourceFile(getThisContainer(fn, /*includeArrowFunctions*/ false))) { // 'this' is defined outside, convert to arrow function
+    if (!isSourceFile(getThisContainer(fn, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false))) { // 'this' is defined outside, convert to arrow function
         const fnKeyword = Debug.checkDefined(findChildOfKind(fn, SyntaxKind.FunctionKeyword, sourceFile));
         const { name } = fn;
         const body = Debug.checkDefined(fn.body); // Should be defined because the function contained a 'this' expression

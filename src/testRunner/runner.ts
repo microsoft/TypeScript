@@ -1,13 +1,25 @@
-import * as vpath from "./_namespaces/vpath";
-import * as ts from "./_namespaces/ts";
 import * as FourSlash from "./_namespaces/FourSlash";
+import {
+    CompilerBaselineRunner,
+    CompilerTestType,
+    DefinitelyTypedRunner,
+    DockerfileRunner,
+    FourSlashRunner,
+    GeneratedFourslashRunner,
+    IO,
+    Parallel,
+    RunnerBase,
+    setLightMode,
+    setShardId,
+    setShards,
+    Test262BaselineRunner,
+    TestRunnerKind,
+    UserCodeRunner,
+} from "./_namespaces/Harness";
 import * as project from "./_namespaces/project";
 import * as RWC from "./_namespaces/RWC";
-import {
-    CompilerBaselineRunner, CompilerTestType, DefinitelyTypedRunner, DockerfileRunner, FourSlashRunner,
-    GeneratedFourslashRunner, IO, Parallel, RunnerBase, setLightMode, setShardId, setShards, Test262BaselineRunner,
-    TestRunnerKind, UserCodeRunner,
-} from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as vpath from "./_namespaces/vpath";
 
 /* eslint-disable prefer-const */
 export let runners: RunnerBase[] = [];

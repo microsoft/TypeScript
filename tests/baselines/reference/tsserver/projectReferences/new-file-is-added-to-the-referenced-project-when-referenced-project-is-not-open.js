@@ -1,12 +1,12 @@
 Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:34.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/projects/project2/class2.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
@@ -97,7 +97,7 @@ Info 24   [00:00:57.000] 	Files (3)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../project1/class1.ts
 	  Source from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
@@ -189,7 +189,7 @@ Info 38   [00:01:19.000] 	Files (4)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../project1/class1.ts
 	  Source from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	../project1/class3.ts

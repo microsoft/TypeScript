@@ -1,23 +1,30 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
+import { dedent } from "../../_namespaces/Utils";
+import {
+    appendText,
+    loadProjectFromDisk,
+    loadProjectFromFiles,
+    noChangeRun,
+    replaceText,
+    verifyTsc,
+} from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "configFileErrors",
         subScenario: "when tsconfig extends the missing file",
-        fs: () => ts.loadProjectFromDisk("tests/projects/missingExtendedConfig"),
+        fs: () => loadProjectFromDisk("tests/projects/missingExtendedConfig"),
         commandLineArgs: ["--b", "/src/tsconfig.json"],
     });
 });
 
 describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in config file", () => {
-    ts.verifyTscWithEdits({
+    verifyTsc({
         scenario: "configFileErrors",
         subScenario: "reports syntax errors in config file",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/a.ts": "export function foo() { }",
             "/src/b.ts": "export function bar() { }",
-            "/src/tsconfig.json": Utils.dedent`
+            "/src/tsconfig.json": dedent`
 {
     "compilerOptions": {
         "composite": true,
@@ -31,28 +38,28 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         commandLineArgs: ["--b", "/src/tsconfig.json"],
         edits: [
             {
-                modifyFs: fs => ts.replaceText(fs, "/src/tsconfig.json", ",", `,
+                edit: fs => replaceText(fs, "/src/tsconfig.json", ",", `,
         "declaration": true,`),
-                subScenario: "reports syntax errors after change to config file",
+                caption: "reports syntax errors after change to config file",
                 discrepancyExplanation: () => [
                     "During incremental build, tsbuildinfo is not emitted, so declaration option is not present",
                     "Clean build has declaration option in tsbuildinfo",
                 ],
             },
             {
-                modifyFs: fs => ts.appendText(fs, "/src/a.ts", "export function fooBar() { }"),
-                subScenario: "reports syntax errors after change to ts file",
+                edit: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
+                caption: "reports syntax errors after change to ts file",
             },
-            ts.noChangeRun,
+            noChangeRun,
             {
-                modifyFs: fs => fs.writeFileSync(
+                edit: fs => fs.writeFileSync(
                     "/src/tsconfig.json",
                     JSON.stringify({
                         compilerOptions: { composite: true, declaration: true },
                         files: ["a.ts", "b.ts"]
                     })
                 ),
-                subScenario: "builds after fixing config file errors"
+                caption: "builds after fixing config file errors"
             },
         ]
     });
