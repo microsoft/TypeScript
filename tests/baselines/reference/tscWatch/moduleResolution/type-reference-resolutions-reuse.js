@@ -75,21 +75,27 @@ File '/package.json' does not exist according to earlier cached lookups.
 Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
+Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
+Resolved under condition 'import'.
+Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
 ======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1', primary: false. ========
 ======== Resolving type reference directive 'pkg1', containing file '/user/username/projects/myproject/index.ts', root directory '/user/username/projects/myproject/node_modules/@types'. ========
 Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg1/package.json'.
+Entering conditional exports.
 Saw non-matching condition 'import'.
 Matched 'exports' condition 'require'.
 Using 'exports' subpath '.' with target './require.js'.
 File name '/user/username/projects/myproject/node_modules/pkg1/require.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg1/require.d.ts' does not exist.
+Failed to resolve under condition 'require'.
+Exiting conditional exports.
 File '/user/username/projects/myproject/node_modules/@types/pkg1.d.ts' does not exist.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
@@ -251,10 +257,13 @@ File '/package.json' does not exist according to earlier cached lookups.
 Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
+Resolved under condition 'import'.
+Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
 ======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1', primary: false. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.

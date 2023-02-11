@@ -7,7 +7,6 @@ import {
     CancellationToken,
     canUsePropertyAccess,
     CaseBlock,
-    CaseClause,
     cast,
     CharacterCodes,
     ClassElement,
@@ -37,19 +36,16 @@ import {
     createPackageJsonImportFilter,
     createPrinter,
     createSortedArray,
-    createTextRangeFromSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
     Debug,
     Declaration,
-    DefaultClause,
     Diagnostics,
     diagnosticToString,
     displayPart,
     EmitHint,
     EmitTextWriter,
-    endsWith,
     EntityName,
     EnumMember,
     escapeSnippetText,
@@ -140,7 +136,6 @@ import {
     isConstructorDeclaration,
     isContextualKeyword,
     isDeclarationName,
-    isDefaultClause,
     isDeprecatedDeclaration,
     isEntityName,
     isEnumMember,
@@ -185,7 +180,6 @@ import {
     isKeyword,
     isKnownSymbol,
     isLabeledStatement,
-    isLiteralExpression,
     isLiteralImportTypeNode,
     isMemberName,
     isMethodDeclaration,
@@ -218,6 +212,7 @@ import {
     isStatement,
     isStatic,
     isString,
+    isStringAndEmptyAnonymousObjectIntersection,
     isStringANonContextualKeyword,
     isStringLiteralLike,
     isStringLiteralOrTemplate,
@@ -275,6 +270,7 @@ import {
     ModuleReference,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
+    newCaseClauseTracker,
     Node,
     NodeArray,
     NodeBuilderFlags,
@@ -287,7 +283,6 @@ import {
     ObjectTypeDeclaration,
     or,
     ParenthesizedTypeNode,
-    parseBigInt,
     positionBelongsToNode,
     positionIsASICandidate,
     positionsAreOnSameLine,
@@ -465,6 +460,7 @@ interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
     symbolName: string;
     moduleSymbol: Symbol;
     exportName: string;
+    exportMapKey?: string;
     moduleSpecifier: string;
 }
 
@@ -1104,75 +1100,6 @@ function getExhaustiveCaseSnippets(
     return undefined;
 }
 
-interface CaseClauseTracker {
-    addValue(value: string | number): void;
-    hasValue(value: string | number | PseudoBigInt): boolean;
-}
-
-function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (CaseClause | DefaultClause)[]): CaseClauseTracker {
-    const existingStrings = new Set<string>();
-    const existingNumbers = new Set<number>();
-    const existingBigInts = new Set<string>();
-
-    for (const clause of clauses) {
-        if (!isDefaultClause(clause)) {
-            if (isLiteralExpression(clause.expression)) {
-                const expression = clause.expression;
-                switch (expression.kind) {
-                    case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    case SyntaxKind.StringLiteral:
-                        existingStrings.add(expression.text);
-                        break;
-                    case SyntaxKind.NumericLiteral:
-                        existingNumbers.add(parseInt(expression.text));
-                        break;
-                    case SyntaxKind.BigIntLiteral:
-                        const parsedBigInt = parseBigInt(endsWith(expression.text, "n") ? expression.text.slice(0, -1) : expression.text);
-                        if (parsedBigInt) {
-                            existingBigInts.add(pseudoBigIntToString(parsedBigInt));
-                        }
-                        break;
-                }
-            }
-            else {
-                const symbol = checker.getSymbolAtLocation(clause.expression);
-                if (symbol && symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
-                    const enumValue = checker.getConstantValue(symbol.valueDeclaration);
-                    if (enumValue !== undefined) {
-                        addValue(enumValue);
-                    }
-                }
-            }
-        }
-    }
-
-    return {
-        addValue,
-        hasValue,
-    };
-
-    function addValue(value: string | number) {
-        switch (typeof value) {
-            case "string":
-                existingStrings.add(value);
-                break;
-            case "number":
-                existingNumbers.add(value);
-        }
-    }
-
-    function hasValue(value: string | number | PseudoBigInt): boolean {
-        switch (typeof value) {
-            case "string":
-                return existingStrings.has(value);
-            case "number":
-                return existingNumbers.has(value);
-            case "object":
-                return existingBigInts.has(pseudoBigIntToString(value));
-        }
-    }
-}
-
 function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget, quotePreference: QuotePreference): Expression | undefined {
     switch (typeNode.kind) {
         case SyntaxKind.TypeReference:
@@ -1442,7 +1369,7 @@ function createCompletionEntry(
             && !(type.flags & TypeFlags.BooleanLike)
             && !(type.flags & TypeFlags.Union && find((type as UnionType).types, type => !!(type.flags & TypeFlags.BooleanLike)))
         ) {
-            if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined))))) {
+            if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type))))) {
                 // If is string like or undefined use quotes
                 insertText = `${escapeSnippetText(name)}=${quote(sourceFile, preferences, "$1")}`;
                 isSnippet = true;
@@ -1997,6 +1924,7 @@ function originToCompletionEntryData(origin: SymbolOriginInfoExport | SymbolOrig
     if (originIsResolvedExport(origin)) {
         const resolvedData: CompletionEntryDataResolved = {
             exportName: origin.exportName,
+            exportMapKey: origin.exportMapKey,
             moduleSpecifier: origin.moduleSpecifier,
             ambientModuleName,
             fileName: origin.fileName,
@@ -2021,6 +1949,7 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
         const resolvedOrigin: SymbolOriginInfoResolvedExport = {
             kind: SymbolOriginInfoKind.ResolvedExport,
             exportName: data.exportName,
+            exportMapKey: data.exportMapKey,
             moduleSpecifier: data.moduleSpecifier,
             symbolName: completionName,
             fileName: data.fileName,
@@ -2527,6 +2456,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     const { moduleSpecifier, codeAction } = codefix.getImportCompletionAction(
         targetSymbol,
         moduleSymbol,
+        data?.exportMapKey,
         sourceFile,
         name,
         isJsxOpeningTagName,
@@ -2898,7 +2828,8 @@ function getCompletionData(
                     // First case is for `<div foo={true} [||] />` or `<div foo={true} [||] ></div>`,
                     // `parent` will be `{true}` and `previousToken` will be `}`
                     // Second case is for `<div foo={true} t[||] ></div>`
-                    if (previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier || previousToken.parent.kind === SyntaxKind.JsxAttribute)) {
+                    // Second case must not match for `<div foo={undefine[||]}></div>`
+                    if (previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier && previousToken.parent.kind === SyntaxKind.JsxAttribute)) {
                         isJsxIdentifierExpected = true;
                     }
                     break;
@@ -3511,8 +3442,8 @@ function getCompletionData(
                         // module resolution modes, getting past this point guarantees that we'll be
                         // able to generate a suitable module specifier, so we can safely show a completion,
                         // even if we defer computing the module specifier.
-                        const firstImportableExportInfo = find(info, isImportableExportInfo);
-                        if (!firstImportableExportInfo) {
+                        info = filter(info, isImportableExportInfo);
+                        if (!info.length) {
                             return;
                         }
 
@@ -3529,9 +3460,9 @@ function getCompletionData(
                         // it should be identical regardless of which one is used. During the subsequent
                         // `CompletionEntryDetails` request, we'll get all the ExportInfos again and pick
                         // the best one based on the module specifier it produces.
-                        let exportInfo = firstImportableExportInfo, moduleSpecifier;
+                        let exportInfo = info[0], moduleSpecifier;
                         if (result !== "skipped") {
-                            ({ exportInfo = firstImportableExportInfo, moduleSpecifier } = result);
+                            ({ exportInfo = info[0], moduleSpecifier } = result);
                         }
 
                         const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
@@ -3769,7 +3700,7 @@ function getCompletionData(
         //   2. at the end position of an unterminated token.
         //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
         return (isRegularExpressionLiteral(contextToken) || isStringTextContainingNode(contextToken)) && (
-            rangeContainsPositionExclusive(createTextRangeFromSpan(createTextSpanFromNode(contextToken)), position) ||
+            rangeContainsPositionExclusive(contextToken, position) ||
             position === contextToken.end && (!!contextToken.isUnterminated || isRegularExpressionLiteral(contextToken)));
     }
 

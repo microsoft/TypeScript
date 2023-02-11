@@ -15,10 +15,11 @@
 ////             prop_h?: string;
 ////             prop_i?: boolean;
 ////             prop_j?: { p1: string; };
+////             prop_string_literal_union?: 'input' | 'password' | (string & {})
 ////         }
 ////     }
 //// }
-//// 
+////
 //// <foo [|prop_/**/|] />
 
 verify.completions({
@@ -71,6 +72,12 @@ verify.completions({
         {
             name: "prop_j",
             insertText: "prop_j={$1}",
+            isSnippet: true,
+            sortText: completion.SortText.OptionalMember,
+        },
+        {
+            name: "prop_string_literal_union",
+            insertText: "prop_string_literal_union=\"$1\"",
             isSnippet: true,
             sortText: completion.SortText.OptionalMember,
         }
