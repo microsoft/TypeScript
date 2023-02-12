@@ -1423,6 +1423,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     let inlineLevel = 0;
     let currentNode: Node | undefined;
     let varianceTypeParameter: TypeParameter | undefined;
+    let isInferencePartiallyBlocked = false;
 
     const emptySymbols = createSymbolTable();
     const arrayVariances = [VarianceFlags.Covariant];
@@ -1824,7 +1825,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             } while (toMarkSkip && toMarkSkip !== containingCall);
             getNodeLinks(containingCall).resolvedSignature = undefined;
         }
+        isInferencePartiallyBlocked = true;
         const result = fn();
+        isInferencePartiallyBlocked = false;
         if (containingCall) {
             let toMarkSkip = node!;
             do {
@@ -32601,7 +32604,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
         const isDecorator = node.kind === SyntaxKind.Decorator;
         const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
-        const reportErrors = !candidatesOutArray;
+        const reportErrors = !isInferencePartiallyBlocked && !candidatesOutArray;
 
         let typeArguments: NodeArray<TypeNode> | undefined;
 
