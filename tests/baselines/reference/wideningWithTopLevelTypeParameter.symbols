@@ -1,42 +1,112 @@
 === tests/cases/compiler/wideningWithTopLevelTypeParameter.ts ===
+type C1<T> = T extends unknown ? T | undefined : never;
+>C1 : Symbol(C1, Decl(wideningWithTopLevelTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 0, 8))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 0, 8))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 0, 8))
+
+type C2<T> = T extends unknown ? T | undefined : never;
+>C2 : Symbol(C2, Decl(wideningWithTopLevelTypeParameter.ts, 0, 55))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 1, 8))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 1, 8))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 1, 8))
+
+type C3<T> = T extends unknown ? T | undefined : never;
+>C3 : Symbol(C3, Decl(wideningWithTopLevelTypeParameter.ts, 1, 55))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 2, 8))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 2, 8))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 2, 8))
+
+declare function f0<T>(x: T): [T];
+>f0 : Symbol(f0, Decl(wideningWithTopLevelTypeParameter.ts, 2, 55))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 4, 20))
+>x : Symbol(x, Decl(wideningWithTopLevelTypeParameter.ts, 4, 23))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 4, 20))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 4, 20))
+
+declare function f1<T>(x: C1<T>): [T];
+>f1 : Symbol(f1, Decl(wideningWithTopLevelTypeParameter.ts, 4, 34))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 5, 20))
+>x : Symbol(x, Decl(wideningWithTopLevelTypeParameter.ts, 5, 23))
+>C1 : Symbol(C1, Decl(wideningWithTopLevelTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 5, 20))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 5, 20))
+
+declare function f2<T>(x: C1<C2<T>>): [T];
+>f2 : Symbol(f2, Decl(wideningWithTopLevelTypeParameter.ts, 5, 38))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 6, 20))
+>x : Symbol(x, Decl(wideningWithTopLevelTypeParameter.ts, 6, 23))
+>C1 : Symbol(C1, Decl(wideningWithTopLevelTypeParameter.ts, 0, 0))
+>C2 : Symbol(C2, Decl(wideningWithTopLevelTypeParameter.ts, 0, 55))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 6, 20))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 6, 20))
+
+declare function f3<T>(x: C1<C2<C3<T>>>): [T];
+>f3 : Symbol(f3, Decl(wideningWithTopLevelTypeParameter.ts, 6, 42))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 7, 20))
+>x : Symbol(x, Decl(wideningWithTopLevelTypeParameter.ts, 7, 23))
+>C1 : Symbol(C1, Decl(wideningWithTopLevelTypeParameter.ts, 0, 0))
+>C2 : Symbol(C2, Decl(wideningWithTopLevelTypeParameter.ts, 0, 55))
+>C3 : Symbol(C3, Decl(wideningWithTopLevelTypeParameter.ts, 1, 55))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 7, 20))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 7, 20))
+
+const c0 = f0(7);  // [number]
+>c0 : Symbol(c0, Decl(wideningWithTopLevelTypeParameter.ts, 9, 5))
+>f0 : Symbol(f0, Decl(wideningWithTopLevelTypeParameter.ts, 2, 55))
+
+const c1 = f1(7);  // [number]
+>c1 : Symbol(c1, Decl(wideningWithTopLevelTypeParameter.ts, 10, 5))
+>f1 : Symbol(f1, Decl(wideningWithTopLevelTypeParameter.ts, 4, 34))
+
+const c2 = f2(7);  // [number]
+>c2 : Symbol(c2, Decl(wideningWithTopLevelTypeParameter.ts, 11, 5))
+>f2 : Symbol(f2, Decl(wideningWithTopLevelTypeParameter.ts, 5, 38))
+
+const c3 = f3(7);  // [number]
+>c3 : Symbol(c3, Decl(wideningWithTopLevelTypeParameter.ts, 12, 5))
+>f3 : Symbol(f3, Decl(wideningWithTopLevelTypeParameter.ts, 6, 42))
+
+// Repro from #52620
+
 class FormControl<T> {
->FormControl : Symbol(FormControl, Decl(wideningWithTopLevelTypeParameter.ts, 0, 0))
->T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 0, 18))
+>FormControl : Symbol(FormControl, Decl(wideningWithTopLevelTypeParameter.ts, 12, 17))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 16, 18))
 
     constructor(t: T extends undefined ? never : T) {}
->t : Symbol(t, Decl(wideningWithTopLevelTypeParameter.ts, 1, 16))
->T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 0, 18))
->T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 0, 18))
+>t : Symbol(t, Decl(wideningWithTopLevelTypeParameter.ts, 17, 16))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 16, 18))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 16, 18))
 }
 
 const a = new FormControl('');  // string
->a : Symbol(a, Decl(wideningWithTopLevelTypeParameter.ts, 4, 5))
->FormControl : Symbol(FormControl, Decl(wideningWithTopLevelTypeParameter.ts, 0, 0))
+>a : Symbol(a, Decl(wideningWithTopLevelTypeParameter.ts, 20, 5))
+>FormControl : Symbol(FormControl, Decl(wideningWithTopLevelTypeParameter.ts, 12, 17))
 
 class FormControl2<T> {
->FormControl2 : Symbol(FormControl2, Decl(wideningWithTopLevelTypeParameter.ts, 4, 30))
->T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 6, 19))
+>FormControl2 : Symbol(FormControl2, Decl(wideningWithTopLevelTypeParameter.ts, 20, 30))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 22, 19))
 
     constructor(t: T | string) {}
->t : Symbol(t, Decl(wideningWithTopLevelTypeParameter.ts, 7, 16))
->T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 6, 19))
+>t : Symbol(t, Decl(wideningWithTopLevelTypeParameter.ts, 23, 16))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 22, 19))
 }
 
 const b = new FormControl2('');  // string
->b : Symbol(b, Decl(wideningWithTopLevelTypeParameter.ts, 10, 5))
->FormControl2 : Symbol(FormControl2, Decl(wideningWithTopLevelTypeParameter.ts, 4, 30))
+>b : Symbol(b, Decl(wideningWithTopLevelTypeParameter.ts, 26, 5))
+>FormControl2 : Symbol(FormControl2, Decl(wideningWithTopLevelTypeParameter.ts, 20, 30))
 
 class FormControl3<T> {
->FormControl3 : Symbol(FormControl3, Decl(wideningWithTopLevelTypeParameter.ts, 10, 31))
->T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 12, 19))
+>FormControl3 : Symbol(FormControl3, Decl(wideningWithTopLevelTypeParameter.ts, 26, 31))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 28, 19))
 
     constructor(t: T extends undefined ? never : T | string) {}
->t : Symbol(t, Decl(wideningWithTopLevelTypeParameter.ts, 13, 16))
->T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 12, 19))
->T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 12, 19))
+>t : Symbol(t, Decl(wideningWithTopLevelTypeParameter.ts, 29, 16))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 28, 19))
+>T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 28, 19))
 }
 
 const c = new FormControl3('');  // string
->c : Symbol(c, Decl(wideningWithTopLevelTypeParameter.ts, 16, 5))
->FormControl3 : Symbol(FormControl3, Decl(wideningWithTopLevelTypeParameter.ts, 10, 31))
+>c : Symbol(c, Decl(wideningWithTopLevelTypeParameter.ts, 32, 5))
+>FormControl3 : Symbol(FormControl3, Decl(wideningWithTopLevelTypeParameter.ts, 26, 31))
 

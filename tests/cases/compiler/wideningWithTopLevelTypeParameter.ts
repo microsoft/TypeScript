@@ -1,6 +1,22 @@
 // @strict: true
 // @noEmit: true
 
+type C1<T> = T extends unknown ? T | undefined : never;
+type C2<T> = T extends unknown ? T | undefined : never;
+type C3<T> = T extends unknown ? T | undefined : never;
+
+declare function f0<T>(x: T): [T];
+declare function f1<T>(x: C1<T>): [T];
+declare function f2<T>(x: C1<C2<T>>): [T];
+declare function f3<T>(x: C1<C2<C3<T>>>): [T];
+
+const c0 = f0(7);  // [number]
+const c1 = f1(7);  // [number]
+const c2 = f2(7);  // [number]
+const c3 = f3(7);  // [number]
+
+// Repro from #52620
+
 class FormControl<T> {
     constructor(t: T extends undefined ? never : T) {}
 }
