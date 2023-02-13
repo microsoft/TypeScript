@@ -23875,7 +23875,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (target.flags & TypeFlags.Any) {
             return true;
         }
-        if (target.flags & (TypeFlags.String & TypeFlags.TemplateLiteral)) {
+        if (target.flags & (TypeFlags.String | TypeFlags.TemplateLiteral)) {
             return isTypeAssignableTo(source, target);
         }
         if (target.flags & TypeFlags.StringMapping) {
