@@ -23872,10 +23872,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isMemberOfStringMapping(source: Type, target: Type): boolean {
-        if (target.flags & (TypeFlags.String | TypeFlags.Any)) {
+        if (target.flags & TypeFlags.Any) {
             return true;
         }
-        if (target.flags & TypeFlags.TemplateLiteral) {
+        if (target.flags & (TypeFlags.String & TypeFlags.TemplateLiteral)) {
             return isTypeAssignableTo(source, target);
         }
         if (target.flags & TypeFlags.StringMapping) {
