@@ -8,6 +8,9 @@ type C2<T> = T extends unknown ? T | undefined : never;
 type C3<T> = T extends unknown ? T | undefined : never;
 >C3 : C3<T>
 
+type C4<T> = T extends unknown ? T | undefined : never;
+>C4 : C4<T>
+
 declare function f0<T>(x: T): [T];
 >f0 : <T>(x: T) => [T]
 >x : T
@@ -23,6 +26,10 @@ declare function f2<T>(x: C1<C2<T>>): [T];
 declare function f3<T>(x: C1<C2<C3<T>>>): [T];
 >f3 : <T>(x: C1<C2<C3<T>>>) => [T]
 >x : C1<C2<C3<T>>>
+
+declare function f4<T>(x: C1<C2<C3<C4<T>>>>): [T];
+>f4 : <T>(x: C1<C2<C3<C4<T>>>>) => [T]
+>x : C1<C2<C3<C4<T>>>>
 
 const c0 = f0(7);  // [number]
 >c0 : [number]
@@ -46,6 +53,12 @@ const c3 = f3(7);  // [number]
 >c3 : [number]
 >f3(7) : [number]
 >f3 : <T>(x: C1<C2<C3<T>>>) => [T]
+>7 : 7
+
+const c4 = f4(7);  // [7] since we have an internal nesting limit of 3
+>c4 : [7]
+>f4(7) : [7]
+>f4 : <T>(x: C1<C2<C3<C4<T>>>>) => [T]
 >7 : 7
 
 // Repro from #52620
