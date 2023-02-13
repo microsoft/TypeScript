@@ -1,49 +1,5 @@
+import * as protocol from "../server/protocol";
 import * as ts from "./_namespaces/ts";
-import * as server from "./_namespaces/ts.server";
-import {
-    ActionInvalidate,
-    ActionPackageInstalled,
-    ActionSet,
-    Arguments,
-    BeginInstallTypes,
-    createInstallTypingsRequest,
-    EndInstallTypes,
-    EventBeginInstallTypes,
-    EventEndInstallTypes,
-    EventInitializationFailed,
-    EventTypesRegistry,
-    findArgument,
-    formatMessage,
-    getLogLevel,
-    hasArgument,
-    indent,
-    InitializationFailedResponse,
-    InstallPackageOptionsWithProject,
-    InstallPackageRequest,
-    InvalidateCachedTypings,
-    ITypingsInstaller,
-    Logger,
-    LogLevel,
-    ModuleImportResult,
-    Msg,
-    nowString,
-    nullCancellationToken,
-    nullTypingsInstaller,
-    PackageInstalledResponse,
-    Project,
-    ProjectService,
-    protocol,
-    ServerCancellationToken,
-    ServerHost,
-    Session,
-    SetTypings,
-    StartInput,
-    StartSessionOptions,
-    stringifyIndented,
-    toEvent,
-    TypesRegistryResponse,
-    TypingInstallerRequestUnion,
-} from "./_namespaces/ts.server";
 import {
     ApplyCodeActionCommandResult,
     assertType,
@@ -77,6 +33,50 @@ import {
     versionMajorMinor,
     WatchOptions,
 } from "./_namespaces/ts";
+import * as server from "./_namespaces/ts.server";
+import {
+    ActionInvalidate,
+    ActionPackageInstalled,
+    ActionSet,
+    Arguments,
+    BeginInstallTypes,
+    createInstallTypingsRequest,
+    EndInstallTypes,
+    EventBeginInstallTypes,
+    EventEndInstallTypes,
+    EventInitializationFailed,
+    EventTypesRegistry,
+    findArgument,
+    formatMessage,
+    getLogLevel,
+    hasArgument,
+    indent,
+    InitializationFailedResponse,
+    InstallPackageOptionsWithProject,
+    InstallPackageRequest,
+    InvalidateCachedTypings,
+    ITypingsInstaller,
+    Logger,
+    LogLevel,
+    ModuleImportResult,
+    Msg,
+    nowString,
+    nullCancellationToken,
+    nullTypingsInstaller,
+    PackageInstalledResponse,
+    Project,
+    ProjectService,
+    ServerCancellationToken,
+    ServerHost,
+    Session,
+    SetTypings,
+    StartInput,
+    StartSessionOptions,
+    stringifyIndented,
+    toEvent,
+    TypesRegistryResponse,
+    TypingInstallerRequestUnion,
+} from "./_namespaces/ts.server";
 
 interface LogOptions {
     file?: string;
@@ -840,7 +840,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             this.constructed = true;
         }
 
-        event<T extends object>(body: T, eventName: string): void {
+        override event<T extends object>(body: T, eventName: string): void {
             Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
 
             if (this.canUseEvents && this.eventPort) {
@@ -865,7 +865,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
         }
 
-        exit() {
+        override exit() {
             this.logger.info("Exiting...");
             this.projectService.closeLog();
             tracing?.stopTracing();
@@ -886,7 +886,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
     class IpcIOSession extends IOSession {
 
-        protected writeMessage(msg: protocol.Message): void {
+        protected override writeMessage(msg: protocol.Message): void {
             const verboseLogging = logger.hasLevel(LogLevel.verbose);
             if (verboseLogging) {
                 const json = JSON.stringify(msg);
@@ -896,15 +896,15 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             process.send!(msg);
         }
 
-        protected parseMessage(message: any): protocol.Request {
+        protected override parseMessage(message: any): protocol.Request {
             return message as protocol.Request;
         }
 
-        protected toStringMessage(message: any) {
+        protected override toStringMessage(message: any) {
             return JSON.stringify(message, undefined, 2);
         }
 
-        public listen() {
+        public override listen() {
             process.on("message", (e: any) => {
                 this.onMessage(e);
             });

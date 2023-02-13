@@ -218,7 +218,9 @@ const libEntries: [string, string][] = [
     ["esnext.bigint", "lib.es2020.bigint.d.ts"],
     ["esnext.string", "lib.es2022.string.d.ts"],
     ["esnext.promise", "lib.es2021.promise.d.ts"],
-    ["esnext.weakref", "lib.es2021.weakref.d.ts"]
+    ["esnext.weakref", "lib.es2021.weakref.d.ts"],
+    ["decorators", "lib.decorators.d.ts"],
+    ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
 
 /**
@@ -787,6 +789,13 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         transpileOptionValue: true,
         defaultValueDescription: false,
     },
+    {
+        name: "verbatimModuleSyntax",
+        type: "boolean",
+        category: Diagnostics.Interop_Constraints,
+        description: Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
+        defaultValueDescription: false,
+    },
 
     // Strict Type Checks
     {
@@ -1091,7 +1100,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "allowImportingTsExtensions",
         type: "boolean",
-        affectsModuleResolution: true,
+        affectsSemanticDiagnostics: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_bundler_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
         defaultValueDescription: false,
@@ -1157,10 +1166,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "experimentalDecorators",
         type: "boolean",
+        affectsEmit: true,
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
         category: Diagnostics.Language_and_Environment,
-        description: Diagnostics.Enable_experimental_support_for_TC39_stage_2_draft_decorators,
+        description: Diagnostics.Enable_experimental_support_for_legacy_experimental_decorators,
         defaultValueDescription: false,
     },
     {
@@ -1211,7 +1221,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "allowArbitraryExtensions",
         type: "boolean",
-        affectsModuleResolution: true,
+        affectsProgramStructure: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Enable_importing_files_with_any_extension_provided_a_declaration_file_is_present,
         defaultValueDescription: false,
@@ -1275,7 +1285,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         paramType: Diagnostics.NEWLINE,
         category: Diagnostics.Emit,
         description: Diagnostics.Set_the_newline_character_for_emitting_files,
-        defaultValueDescription: Diagnostics.Platform_specific
+        defaultValueDescription: "lf"
     },
     {
         name: "noErrorTruncation",
@@ -1451,7 +1461,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Ensure_that_casing_is_correct_in_imports,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
     {
         name: "maxNodeModuleJsDepth",
@@ -1608,14 +1618,6 @@ export const buildOpts: CommandLineOption[] = [
 /** @internal */
 export const typeAcquisitionDeclarations: CommandLineOption[] = [
     {
-        /* @deprecated typingOptions.enableAutoDiscovery
-         * Use typeAcquisition.enable instead.
-         */
-        name: "enableAutoDiscovery",
-        type: "boolean",
-        defaultValueDescription: false,
-    },
-    {
         name: "enable",
         type: "boolean",
         defaultValueDescription: false,
@@ -1684,19 +1686,6 @@ export const defaultInitCompilerOptions: CompilerOptions = {
     forceConsistentCasingInFileNames: true,
     skipLibCheck: true
 };
-
-/** @internal */
-export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
-    // Convert deprecated typingOptions.enableAutoDiscovery to typeAcquisition.enable
-    if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
-        return {
-            enable: typeAcquisition.enableAutoDiscovery,
-            include: typeAcquisition.include || [],
-            exclude: typeAcquisition.exclude || []
-        };
-    }
-    return typeAcquisition;
-}
 
 /** @internal */
 export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
@@ -2183,12 +2172,6 @@ function getTsconfigRootOptionsMap() {
                     type: "object",
                     elementOptions: getCommandLineWatchOptionsMap(),
                     extraKeyDiagnostics: watchOptionsDidYouMeanDiagnostics,
-                },
-                {
-                    name: "typingOptions",
-                    type: "object",
-                    elementOptions: getCommandLineTypeAcquisitionMap(),
-                    extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics,
                 },
                 {
                     name: "typeAcquisition",
@@ -2880,7 +2863,7 @@ export function convertToOptionsWithAbsolutePaths(options: CompilerOptions, toAb
 function convertToOptionValueWithAbsolutePaths(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
     if (option && !isNullOrUndefined(value)) {
         if (option.type === "list") {
-            const values = value as readonly (string | number)[];
+            const values = value as readonly string[];
             if (option.element.isFilePath && values.length) {
                 return values.map(toAbsolutePath);
             }
@@ -3272,14 +3255,12 @@ function parseOwnConfigOfJson(
     }
 
     const options = convertCompilerOptionsFromJsonWorker(json.compilerOptions, basePath, errors, configFileName);
-    // typingOptions has been deprecated and is only supported for backward compatibility purposes.
-    // It should be removed in future releases - use typeAcquisition instead.
-    const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition || json.typingOptions, basePath, errors, configFileName);
+    const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition, basePath, errors, configFileName);
     const watchOptions = convertWatchOptionsFromJsonWorker(json.watchOptions, basePath, errors);
     json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
     let extendedConfigPath: string | string[] | undefined;
 
-    if (json.extends) {
+    if (json.extends || json.extends === "") {
         if (!isCompilerOptionsValue(extendsOptionDeclaration, json.extends)) {
             errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration)));
         }
@@ -3293,7 +3274,7 @@ function parseOwnConfigOfJson(
                 for (const fileName of json.extends as unknown[]) {
                     if (isString(fileName)) {
                         extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(fileName, host, newBase, errors, createCompilerDiagnostic));
-                }
+                    }
                     else {
                         errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration.element)));
                     }
@@ -3312,7 +3293,7 @@ function parseOwnConfigOfJsonSourceFile(
     errors: Push<Diagnostic>
 ): ParsedTsconfig {
     const options = getDefaultCompilerOptions(configFileName);
-    let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
+    let typeAcquisition: TypeAcquisition | undefined;
     let watchOptions: WatchOptions | undefined;
     let extendedConfigPath: string | string[] | undefined;
     let rootCompilerOptions: PropertyName[] | undefined;
@@ -3329,9 +3310,6 @@ function parseOwnConfigOfJsonSourceFile(
                     break;
                 case "typeAcquisition":
                     currentOption = (typeAcquisition || (typeAcquisition = getDefaultTypeAcquisition(configFileName)));
-                    break;
-                case "typingOptions":
-                    currentOption = (typingOptionstypeAcquisition || (typingOptionstypeAcquisition = getDefaultTypeAcquisition(configFileName)));
                     break;
                 default:
                     Debug.fail("Unknown option");
@@ -3384,18 +3362,7 @@ function parseOwnConfigOfJsonSourceFile(
     const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
 
     if (!typeAcquisition) {
-        if (typingOptionstypeAcquisition) {
-            typeAcquisition = (typingOptionstypeAcquisition.enableAutoDiscovery !== undefined) ?
-                {
-                    enable: typingOptionstypeAcquisition.enableAutoDiscovery,
-                    include: typingOptionstypeAcquisition.include,
-                    exclude: typingOptionstypeAcquisition.exclude
-                } :
-                typingOptionstypeAcquisition;
-        }
-        else {
-            typeAcquisition = getDefaultTypeAcquisition(configFileName);
-        }
+        typeAcquisition = getDefaultTypeAcquisition(configFileName);
     }
 
     if (rootCompilerOptions && json && json.compilerOptions === undefined) {
@@ -3428,7 +3395,12 @@ function getExtendsConfigPath(
     if (resolved.resolvedModule) {
         return resolved.resolvedModule.resolvedFileName;
     }
-    errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
+    if (extendedConfig === "") {
+        errors.push(createDiagnostic(Diagnostics.Compiler_option_0_cannot_be_given_an_empty_string, "extends"));
+    }
+    else {
+        errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
+    }
     return undefined;
 }
 
@@ -3524,9 +3496,7 @@ function convertTypeAcquisitionFromJsonWorker(jsonOptions: any,
     basePath: string, errors: Push<Diagnostic>, configFileName?: string): TypeAcquisition {
 
     const options = getDefaultTypeAcquisition(configFileName);
-    const typeAcquisition = convertEnableAutoDiscoveryToEnable(jsonOptions);
-
-    convertOptionsFromJson(getCommandLineTypeAcquisitionMap(), typeAcquisition, basePath, options, typeAcquisitionDidYouMeanDiagnostics, errors);
+    convertOptionsFromJson(getCommandLineTypeAcquisitionMap(), jsonOptions, basePath, options, typeAcquisitionDidYouMeanDiagnostics, errors);
     return options;
 }
 
@@ -3841,7 +3811,8 @@ function validateSpecs(specs: readonly string[], errors: Push<Diagnostic>, disal
     }
 }
 
-function specToDiagnostic(spec: string, disallowTrailingRecursion?: boolean): [DiagnosticMessage, string] | undefined {
+function specToDiagnostic(spec: CompilerOptionsValue, disallowTrailingRecursion?: boolean): [DiagnosticMessage, string] | undefined {
+    Debug.assert(typeof spec === "string");
     if (disallowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
         return [Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
     }

@@ -282,7 +282,7 @@ function getNewStatementsAndRemoveFromOldFile(
     const quotePreference = getQuotePreference(oldFile, preferences);
     const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newFilename, program, host, useEsModuleSyntax, quotePreference);
     if (importsFromNewFile) {
-        insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
+        insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true, preferences);
     }
 
     deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
