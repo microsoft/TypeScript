@@ -27489,6 +27489,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
+        error(node, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(node.escapedText));
         if (isThisInTypeQuery(node)) {
             return checkThisExpression(node);
         }
