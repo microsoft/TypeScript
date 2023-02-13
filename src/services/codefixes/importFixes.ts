@@ -371,7 +371,8 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
                 quotePreference,
                 defaultImport,
                 namedImports && arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
-                namespaceLikeImport);
+                namespaceLikeImport,
+                compilerOptions);
             newDeclarations = combine(newDeclarations, declarations);
         });
         if (newDeclarations) {
@@ -1248,7 +1249,13 @@ function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: 
             const namespaceLikeImport = importKind === ImportKind.Namespace || importKind === ImportKind.CommonJS
                 ? { importKind, name: qualification?.namespacePrefix || symbolName, addAsTypeOnly }
                 : undefined;
-            insertImports(changes, sourceFile, getDeclarations(moduleSpecifier, quotePreference, defaultImport, namedImports, namespaceLikeImport), /*blankLineBetween*/ true, preferences);
+            insertImports(changes, sourceFile, getDeclarations(
+                moduleSpecifier,
+                quotePreference,
+                defaultImport,
+                namedImports,
+                namespaceLikeImport,
+                compilerOptions), /*blankLineBetween*/ true, preferences);
             if (qualification) {
                 addNamespaceQualifier(changes, sourceFile, qualification);
             }
@@ -1489,12 +1496,18 @@ function getNewImports(
     quotePreference: QuotePreference,
     defaultImport: Import | undefined,
     namedImports: readonly Import[] | undefined,
-    namespaceLikeImport: Import & { importKind: ImportKind.CommonJS | ImportKind.Namespace } | undefined
+    namespaceLikeImport: Import & { importKind: ImportKind.CommonJS | ImportKind.Namespace } | undefined,
+    compilerOptions: CompilerOptions,
 ): AnyImportSyntax | readonly AnyImportSyntax[] {
     const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
     let statements: AnyImportSyntax | readonly AnyImportSyntax[] | undefined;
     if (defaultImport !== undefined || namedImports?.length) {
-        const topLevelTypeOnly = (!defaultImport || needsTypeOnly(defaultImport)) && every(namedImports, needsTypeOnly);
+        // `verbatimModuleSyntax` should prefer top-level `import type` -
+        // even though it's not an error, it would add unnecessary runtime emit.
+        const topLevelTypeOnly = (!defaultImport || needsTypeOnly(defaultImport)) && every(namedImports, needsTypeOnly) ||
+            compilerOptions.verbatimModuleSyntax &&
+            defaultImport?.addAsTypeOnly !== AddAsTypeOnly.NotAllowed &&
+            !some(namedImports, i => i.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
         statements = combine(statements, makeImport(
             defaultImport && factory.createIdentifier(defaultImport.name),
             namedImports?.map(({ addAsTypeOnly, name }) => factory.createImportSpecifier(
