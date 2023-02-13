@@ -590,3 +590,21 @@ while (arr[i]?.tag === "left") {
         console.log("I should ALSO be reachable");
     }
 }
+
+
+// Repro from #51941
+
+type Test5 = {
+  main?: {
+    childs: Record<string, Test5>;
+  };
+};
+
+function f50(obj: Test5) {
+   for (const key in obj.main?.childs) {
+      if (obj.main.childs[key] === obj) {
+        return obj;
+      }
+   }
+   return null;
+}

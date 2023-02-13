@@ -6688,6 +6688,7 @@ declare namespace ts {
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
          */
         exportName: string;
+        exportMapKey?: string;
         moduleSpecifier?: string;
         /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
@@ -6697,7 +6698,6 @@ declare namespace ts {
         isPackageJsonImport?: true;
     }
     interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
-        /** The key in the `ExportMapCache` where the completion entry's `SymbolExportInfo[]` is found */
         exportMapKey: string;
     }
     interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {

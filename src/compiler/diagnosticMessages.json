@@ -1589,6 +1589,10 @@
         "category": "Error",
         "code": 1485
     },
+    "Decorator used before 'export' here.": {
+        "category": "Error",
+        "code": 1486
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -5558,6 +5562,22 @@
         "category": "Message",
         "code": 6412
     },
+    "Entering conditional exports.": {
+        "category": "Message",
+        "code": 6413
+    },
+    "Resolved under condition '{0}'.": {
+        "category": "Message",
+        "code": 6414
+    },
+    "Failed to resolve under condition '{0}'.": {
+        "category": "Message",
+        "code": 6415
+    },
+    "Exiting conditional exports.": {
+        "category": "Message",
+        "code": 6416
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -6544,7 +6564,7 @@
         "category": "Error",
         "code": 8037
     },
-    "Decorators must come after 'export' or 'export default' in JavaScript files.": {
+    "Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.": {
         "category": "Error",
         "code": 8038
     },
