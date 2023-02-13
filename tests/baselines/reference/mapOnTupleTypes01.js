@@ -39,7 +39,7 @@ export let g = numNumNumNumNum.map(n => n * n);
 
 let numNumNumNumNumNum: [number, number, number, number, number, number] = [1, 2, 3, 4, 5, 6];
 
-export let h = numNumNumNumNum.map(n => n * n);
+export let h = numNumNumNumNumNum.map(n => n * n);
 
 //// [mapOnTupleTypes01.js]
 "use strict";
@@ -67,16 +67,16 @@ var numNumNumNumNum = [1, 2, 3, 4, 5];
 exports.g = numNumNumNumNum.map(function (n) { return n * n; });
 // Length 6
 var numNumNumNumNumNum = [1, 2, 3, 4, 5, 6];
-exports.h = numNumNumNumNum.map(function (n) { return n * n; });
+exports.h = numNumNumNumNumNum.map(function (n) { return n * n; });
 
 
 //// [mapOnTupleTypes01.d.ts]
 export declare let mapOnLooseArrayLiteral: number[];
-export declare let a: number[];
-export declare let b: number[];
-export declare let c: number[];
-export declare let d: (string | number)[];
-export declare let e: number[];
-export declare let f: number[];
-export declare let g: number[];
-export declare let h: number[];
+export declare let a: [number];
+export declare let b: [number, number];
+export declare let c: [number, number];
+export declare let d: [string | number, string | number];
+export declare let e: [number, number, number];
+export declare let f: [number, number, number, number];
+export declare let g: [number, number, number, number, number];
+export declare let h: [number, number, number, number, number, number];

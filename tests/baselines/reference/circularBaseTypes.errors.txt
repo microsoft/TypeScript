@@ -1,10 +1,9 @@
 tests/cases/compiler/circularBaseTypes.ts(4,11): error TS2310: Type 'M2' recursively references itself as a base type.
 tests/cases/compiler/circularBaseTypes.ts(5,6): error TS2456: Type alias 'M3' circularly references itself.
-tests/cases/compiler/circularBaseTypes.ts(13,21): error TS2313: Type parameter 'K' has a circular constraint.
 tests/cases/compiler/circularBaseTypes.ts(14,11): error TS2310: Type 'Y' recursively references itself as a base type.
 
 
-==== tests/cases/compiler/circularBaseTypes.ts (4 errors) ====
+==== tests/cases/compiler/circularBaseTypes.ts (3 errors) ====
     // Repro from #38098
     
     type M<T> = { value: T };
@@ -22,9 +21,6 @@ tests/cases/compiler/circularBaseTypes.ts(14,11): error TS2310: Type 'Y' recursi
     // Repro from #32581
     
     type X<T> = { [K in keyof T]: string } & { b: string };
-                        ~~~~~~~
-!!! error TS2313: Type parameter 'K' has a circular constraint.
-!!! related TS2751 tests/cases/compiler/circularBaseTypes.ts:14:11: Circularity originates in type at this location.
     interface Y extends X<Y> {
               ~
 !!! error TS2310: Type 'Y' recursively references itself as a base type.

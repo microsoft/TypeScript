@@ -19,7 +19,7 @@ declare class MyArray<T> implements Array<T> {
     every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
     some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
     forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
-    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): Cast<{ [P in keyof this]: U }, U[]>;
     filter(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): T[];
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
     reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;

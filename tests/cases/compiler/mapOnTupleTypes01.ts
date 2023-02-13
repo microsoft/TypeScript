@@ -42,4 +42,4 @@ export let g = numNumNumNumNum.map(n => n * n);
 
 let numNumNumNumNumNum: [number, number, number, number, number, number] = [1, 2, 3, 4, 5, 6];
 
-export let h = numNumNumNumNum.map(n => n * n);
+export let h = numNumNumNumNumNum.map(n => n * n);

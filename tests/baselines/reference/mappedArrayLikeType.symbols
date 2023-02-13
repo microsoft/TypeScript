@@ -1,0 +1,176 @@
+=== tests/cases/compiler/mappedArrayLikeType.ts ===
+type Tuple<T> = [T, ...string[], T];
+>Tuple : Symbol(Tuple, Decl(mappedArrayLikeType.ts, 0, 0))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 0, 11))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 0, 11))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 0, 11))
+
+type ReadonlyTuple<T> = readonly [T, ...string[], T];
+>ReadonlyTuple : Symbol(ReadonlyTuple, Decl(mappedArrayLikeType.ts, 0, 36))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 1, 19))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 1, 19))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 1, 19))
+
+type Mapper<T extends readonly any[]> = { [P in keyof T]: `${P}_${T[P]}` };
+>Mapper : Symbol(Mapper, Decl(mappedArrayLikeType.ts, 1, 53))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 3, 12))
+>P : Symbol(P, Decl(mappedArrayLikeType.ts, 3, 43))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 3, 12))
+>P : Symbol(P, Decl(mappedArrayLikeType.ts, 3, 43))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 3, 12))
+>P : Symbol(P, Decl(mappedArrayLikeType.ts, 3, 43))
+
+type A = string[] & { foo };
+>A : Symbol(A, Decl(mappedArrayLikeType.ts, 3, 75))
+>foo : Symbol(foo, Decl(mappedArrayLikeType.ts, 5, 21))
+
+type AMapped = Mapper<A>;
+>AMapped : Symbol(AMapped, Decl(mappedArrayLikeType.ts, 5, 28))
+>Mapper : Symbol(Mapper, Decl(mappedArrayLikeType.ts, 1, 53))
+>A : Symbol(A, Decl(mappedArrayLikeType.ts, 3, 75))
+
+type RA = readonly string[] & { foo };
+>RA : Symbol(RA, Decl(mappedArrayLikeType.ts, 6, 25))
+>foo : Symbol(foo, Decl(mappedArrayLikeType.ts, 8, 31))
+
+type RAMapped = Mapper<RA>;
+>RAMapped : Symbol(RAMapped, Decl(mappedArrayLikeType.ts, 8, 38))
+>Mapper : Symbol(Mapper, Decl(mappedArrayLikeType.ts, 1, 53))
+>RA : Symbol(RA, Decl(mappedArrayLikeType.ts, 6, 25))
+
+type T = [number, ...string[], number] & { foo };
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 9, 27))
+>foo : Symbol(foo, Decl(mappedArrayLikeType.ts, 11, 42))
+
+type TMapped = Mapper<T>;
+>TMapped : Symbol(TMapped, Decl(mappedArrayLikeType.ts, 11, 49))
+>Mapper : Symbol(Mapper, Decl(mappedArrayLikeType.ts, 1, 53))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 9, 27))
+
+type RT = readonly [number, ...string[], number] & { foo };
+>RT : Symbol(RT, Decl(mappedArrayLikeType.ts, 12, 25))
+>foo : Symbol(foo, Decl(mappedArrayLikeType.ts, 14, 52))
+
+type RTMapped = Mapper<RT>;
+>RTMapped : Symbol(RTMapped, Decl(mappedArrayLikeType.ts, 14, 59))
+>Mapper : Symbol(Mapper, Decl(mappedArrayLikeType.ts, 1, 53))
+>RT : Symbol(RT, Decl(mappedArrayLikeType.ts, 12, 25))
+
+interface AX<T> extends AY<T> {
+>AX : Symbol(AX, Decl(mappedArrayLikeType.ts, 15, 27))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 17, 13))
+>AY : Symbol(AY, Decl(mappedArrayLikeType.ts, 21, 1))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 17, 13))
+
+  0: T & {};
+>0 : Symbol(AX[0], Decl(mappedArrayLikeType.ts, 17, 31))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 17, 13))
+
+  length: 1;
+>length : Symbol(AX.length, Decl(mappedArrayLikeType.ts, 18, 12))
+
+  foo: Mapper<this>;
+>foo : Symbol(AX.foo, Decl(mappedArrayLikeType.ts, 19, 12))
+>Mapper : Symbol(Mapper, Decl(mappedArrayLikeType.ts, 1, 53))
+}
+interface AY<T> extends AZ<T> { bar }
+>AY : Symbol(AY, Decl(mappedArrayLikeType.ts, 21, 1))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 22, 13))
+>AZ : Symbol(AZ, Decl(mappedArrayLikeType.ts, 22, 37))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 22, 13))
+>bar : Symbol(AY.bar, Decl(mappedArrayLikeType.ts, 22, 31))
+
+interface AZ<T> extends Array<T> { baz }
+>AZ : Symbol(AZ, Decl(mappedArrayLikeType.ts, 22, 37))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 23, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 23, 13))
+>baz : Symbol(AZ.baz, Decl(mappedArrayLikeType.ts, 23, 34))
+
+interface RAX<T> extends RAY<T>  {
+>RAX : Symbol(RAX, Decl(mappedArrayLikeType.ts, 23, 40))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 25, 14))
+>RAY : Symbol(RAY, Decl(mappedArrayLikeType.ts, 29, 1))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 25, 14))
+
+  0: T & {};
+>0 : Symbol(RAX[0], Decl(mappedArrayLikeType.ts, 25, 34))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 25, 14))
+
+  length: 1;
+>length : Symbol(RAX.length, Decl(mappedArrayLikeType.ts, 26, 12))
+
+  foo: Mapper<this>;
+>foo : Symbol(RAX.foo, Decl(mappedArrayLikeType.ts, 27, 12))
+>Mapper : Symbol(Mapper, Decl(mappedArrayLikeType.ts, 1, 53))
+}
+interface RAY<T> extends RAZ<T> { bar }
+>RAY : Symbol(RAY, Decl(mappedArrayLikeType.ts, 29, 1))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 30, 14))
+>RAZ : Symbol(RAZ, Decl(mappedArrayLikeType.ts, 30, 39))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 30, 14))
+>bar : Symbol(RAY.bar, Decl(mappedArrayLikeType.ts, 30, 33))
+
+interface RAZ<T> extends ReadonlyArray<T> { baz }
+>RAZ : Symbol(RAZ, Decl(mappedArrayLikeType.ts, 30, 39))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 31, 14))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 31, 14))
+>baz : Symbol(RAZ.baz, Decl(mappedArrayLikeType.ts, 31, 43))
+
+interface TX<T> extends TY<T>  {
+>TX : Symbol(TX, Decl(mappedArrayLikeType.ts, 31, 49))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 33, 13))
+>TY : Symbol(TY, Decl(mappedArrayLikeType.ts, 36, 1))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 33, 13))
+
+  0: T & {};
+>0 : Symbol(TX[0], Decl(mappedArrayLikeType.ts, 33, 32))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 33, 13))
+
+  foo: Mapper<this>;
+>foo : Symbol(TX.foo, Decl(mappedArrayLikeType.ts, 34, 12))
+>Mapper : Symbol(Mapper, Decl(mappedArrayLikeType.ts, 1, 53))
+}
+interface TY<T> extends TZ<T> { bar }
+>TY : Symbol(TY, Decl(mappedArrayLikeType.ts, 36, 1))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 37, 13))
+>TZ : Symbol(TZ, Decl(mappedArrayLikeType.ts, 37, 37))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 37, 13))
+>bar : Symbol(TY.bar, Decl(mappedArrayLikeType.ts, 37, 31))
+
+interface TZ<T> extends Tuple<T> { baz }
+>TZ : Symbol(TZ, Decl(mappedArrayLikeType.ts, 37, 37))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 38, 13))
+>Tuple : Symbol(Tuple, Decl(mappedArrayLikeType.ts, 0, 0))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 38, 13))
+>baz : Symbol(TZ.baz, Decl(mappedArrayLikeType.ts, 38, 34))
+
+interface RTX<T> extends RTY<T>  {
+>RTX : Symbol(RTX, Decl(mappedArrayLikeType.ts, 38, 40))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 40, 14))
+>RTY : Symbol(RTY, Decl(mappedArrayLikeType.ts, 43, 1))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 40, 14))
+
+  0: T & {};
+>0 : Symbol(RTX[0], Decl(mappedArrayLikeType.ts, 40, 34))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 40, 14))
+
+  foo: Mapper<this>;
+>foo : Symbol(RTX.foo, Decl(mappedArrayLikeType.ts, 41, 12))
+>Mapper : Symbol(Mapper, Decl(mappedArrayLikeType.ts, 1, 53))
+}
+interface RTY<T> extends RTZ<T> { bar }
+>RTY : Symbol(RTY, Decl(mappedArrayLikeType.ts, 43, 1))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 44, 14))
+>RTZ : Symbol(RTZ, Decl(mappedArrayLikeType.ts, 44, 39))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 44, 14))
+>bar : Symbol(RTY.bar, Decl(mappedArrayLikeType.ts, 44, 33))
+
+interface RTZ<T> extends ReadonlyTuple<T> { baz }
+>RTZ : Symbol(RTZ, Decl(mappedArrayLikeType.ts, 44, 39))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 45, 14))
+>ReadonlyTuple : Symbol(ReadonlyTuple, Decl(mappedArrayLikeType.ts, 0, 36))
+>T : Symbol(T, Decl(mappedArrayLikeType.ts, 45, 14))
+>baz : Symbol(RTZ.baz, Decl(mappedArrayLikeType.ts, 45, 43))
+

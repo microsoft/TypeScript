@@ -8,11 +8,20 @@ tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(10,5): error TS2532: Object
 tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(13,5): error TS18048: 'execResult.groups' is possibly 'undefined'.
 tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(13,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(14,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(17,9): error TS2375: Type 'RegExpExecArray' is not assignable to type 'RegExpMatchArray' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'every' are incompatible.
+    Type '{ <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): this is S[] & { 0: S; }; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): boolean; }' is not assignable to type '{ <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): this is S[] & { 0: S; }; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): boolean; }'. Two different types with this name exist, but they are unrelated.
+      Type predicate 'this is any[] & { 0: S; }' is not assignable to 'this is any[] & { 0: S; }'.
+        Type 'any[] & { 0: S; }' is not assignable to type 'any[] & { 0: S; }'. Two different types with this name exist, but they are unrelated.
+          Type 'any[] & { 0: S; }' is not assignable to type '{ 0: S; }'.
+            Types of property '0' are incompatible.
+              Type 'S' is not assignable to type 'S'. Two different types with this name exist, but they are unrelated.
+                'S' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint 'string'.
 tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(20,9): error TS2375: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
   Property 'index' is optional in type 'RegExpMatchArray' but required in type 'RegExpExecArray'.
 
 
-==== tests/cases/compiler/regexpExecAndMatchTypeUsages.ts (11 errors) ====
+==== tests/cases/compiler/regexpExecAndMatchTypeUsages.ts (12 errors) ====
     export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
         matchResult[0].length;
         matchResult[999].length;
@@ -50,6 +59,16 @@ tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(20,9): error TS2375: Type '
     
         if (Math.random()) {
             matchResult = execResult;
+            ~~~~~~~~~~~
+!!! error TS2375: Type 'RegExpExecArray' is not assignable to type 'RegExpMatchArray' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'every' are incompatible.
+!!! error TS2375:     Type '{ <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): this is S[] & { 0: S; }; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): boolean; }' is not assignable to type '{ <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): this is S[] & { 0: S; }; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): boolean; }'. Two different types with this name exist, but they are unrelated.
+!!! error TS2375:       Type predicate 'this is any[] & { 0: S; }' is not assignable to 'this is any[] & { 0: S; }'.
+!!! error TS2375:         Type 'any[] & { 0: S; }' is not assignable to type 'any[] & { 0: S; }'. Two different types with this name exist, but they are unrelated.
+!!! error TS2375:           Type 'any[] & { 0: S; }' is not assignable to type '{ 0: S; }'.
+!!! error TS2375:             Types of property '0' are incompatible.
+!!! error TS2375:               Type 'S' is not assignable to type 'S'. Two different types with this name exist, but they are unrelated.
+!!! error TS2375:                 'S' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint 'string'.
         }
         else {
             execResult = matchResult

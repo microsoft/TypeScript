@@ -83,10 +83,10 @@ type FilterByStringValue<O extends object> = {
 }
 
 type FilteredValuesMatchNever<O extends object>
->FilteredValuesMatchNever : FilteredValuesMatchNever<O>
+>FilteredValuesMatchNever : false
 
   = Equals<Values<FilterByStringValue<[O]>>, never>
 
 type FilteredRes1 = FilteredValuesMatchNever<[]>
->FilteredRes1 : true
+>FilteredRes1 : false
 

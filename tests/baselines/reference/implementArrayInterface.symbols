@@ -120,7 +120,7 @@ declare class MyArray<T> implements Array<T> {
 >T : Symbol(T, Decl(implementArrayInterface.ts, 0, 22))
 >thisArg : Symbol(thisArg, Decl(implementArrayInterface.ts, 20, 70))
 
-    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): Cast<{ [P in keyof this]: U }, U[]>;
 >map : Symbol(MyArray.map, Decl(implementArrayInterface.ts, 20, 92))
 >U : Symbol(U, Decl(implementArrayInterface.ts, 21, 8))
 >callbackfn : Symbol(callbackfn, Decl(implementArrayInterface.ts, 21, 11))
@@ -131,10 +131,13 @@ declare class MyArray<T> implements Array<T> {
 >T : Symbol(T, Decl(implementArrayInterface.ts, 0, 22))
 >U : Symbol(U, Decl(implementArrayInterface.ts, 21, 8))
 >thisArg : Symbol(thisArg, Decl(implementArrayInterface.ts, 21, 66))
+>Cast : Symbol(Cast, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(implementArrayInterface.ts, 21, 91))
+>U : Symbol(U, Decl(implementArrayInterface.ts, 21, 8))
 >U : Symbol(U, Decl(implementArrayInterface.ts, 21, 8))
 
     filter(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): T[];
->filter : Symbol(MyArray.filter, Decl(implementArrayInterface.ts, 21, 87))
+>filter : Symbol(MyArray.filter, Decl(implementArrayInterface.ts, 21, 119))
 >callbackfn : Symbol(callbackfn, Decl(implementArrayInterface.ts, 22, 11))
 >value : Symbol(value, Decl(implementArrayInterface.ts, 22, 24))
 >T : Symbol(T, Decl(implementArrayInterface.ts, 0, 22))
