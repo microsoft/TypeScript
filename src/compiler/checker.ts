@@ -38810,7 +38810,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return DeclarationSpaces.ExportValue;
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.PropertySignature:
-                    return getDeclarationSpaces(d.parent as any);
+                    return DeclarationSpaces.ExportType;
                 default:
                     return Debug.failBadSyntaxKind(d);
             }
