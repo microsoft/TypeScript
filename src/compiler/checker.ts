@@ -24583,6 +24583,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (getObjectFlags(target) & ObjectFlags.Mapped && !(target as MappedType).declaration.nameType) {
                 const constraintType = getConstraintTypeFromMappedType(target as MappedType);
                 if (inferToMappedType(source, target as MappedType, constraintType)) {
+                    inferFromMappedProperties(source, target as MappedType);
                     return;
                 }
             }
@@ -24695,6 +24696,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                 if (sourceProp && !some(sourceProp.declarations, hasSkipDirectInferenceFlag)) {
                     inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
+                }
+            }
+        }
+
+        function inferFromMappedProperties(source: Type, target: MappedType) {
+            const properties = getPropertiesOfObjectType(source);
+            for (const sourceProp of properties) {
+                if (!some(sourceProp.declarations, hasSkipDirectInferenceFlag)) {
+                    const targetProp = substituteIndexedMappedType(target, getStringLiteralType(unescapeLeadingUnderscores(sourceProp.escapedName)));
+                    inferFromTypes(getTypeOfSymbol(sourceProp), targetProp);
                 }
             }
         }

@@ -7,5 +7,5 @@ declare function createStructuredSelector<S, T>(
 const editable = () => ({});
 
 const mapStateToProps = createStructuredSelector({
-  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error
+  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<any, {}>'", _not_ a circularity error
 });

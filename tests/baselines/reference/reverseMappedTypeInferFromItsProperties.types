@@ -1,0 +1,28 @@
+=== tests/cases/compiler/reverseMappedTypeInferFromItsProperties.ts ===
+// repro from #29479
+
+type Selector<S, R> = (state: S) => R;
+>Selector : Selector<S, R>
+>state : S
+
+declare function createStructuredSelector<S, T>(selectors: {
+>createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
+>selectors : { [K in keyof T]: Selector<S, T[K]>; }
+
+  [K in keyof T]: Selector<S, T[K]>;
+}): Selector<S, T>;
+
+type State = { foo: number };
+>State : { foo: number; }
+>foo : number
+
+declare const mySelector: Selector<State, boolean>;
+>mySelector : Selector<State, boolean>
+
+export const result = createStructuredSelector({ mySelector });
+>result : Selector<State, { mySelector: boolean; }>
+>createStructuredSelector({ mySelector }) : Selector<State, { mySelector: boolean; }>
+>createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
+>{ mySelector } : { mySelector: Selector<State, boolean>; }
+>mySelector : Selector<State, boolean>
+

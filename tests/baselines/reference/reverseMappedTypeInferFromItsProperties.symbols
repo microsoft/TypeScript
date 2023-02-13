@@ -1,0 +1,44 @@
+=== tests/cases/compiler/reverseMappedTypeInferFromItsProperties.ts ===
+// repro from #29479
+
+type Selector<S, R> = (state: S) => R;
+>Selector : Symbol(Selector, Decl(reverseMappedTypeInferFromItsProperties.ts, 0, 0))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 14))
+>R : Symbol(R, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 16))
+>state : Symbol(state, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 23))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 14))
+>R : Symbol(R, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 16))
+
+declare function createStructuredSelector<S, T>(selectors: {
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 38))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 42))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 44))
+>selectors : Symbol(selectors, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 48))
+
+  [K in keyof T]: Selector<S, T[K]>;
+>K : Symbol(K, Decl(reverseMappedTypeInferFromItsProperties.ts, 5, 3))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 44))
+>Selector : Symbol(Selector, Decl(reverseMappedTypeInferFromItsProperties.ts, 0, 0))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 42))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 44))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromItsProperties.ts, 5, 3))
+
+}): Selector<S, T>;
+>Selector : Symbol(Selector, Decl(reverseMappedTypeInferFromItsProperties.ts, 0, 0))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 42))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 44))
+
+type State = { foo: number };
+>State : Symbol(State, Decl(reverseMappedTypeInferFromItsProperties.ts, 6, 19))
+>foo : Symbol(foo, Decl(reverseMappedTypeInferFromItsProperties.ts, 8, 14))
+
+declare const mySelector: Selector<State, boolean>;
+>mySelector : Symbol(mySelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 10, 13))
+>Selector : Symbol(Selector, Decl(reverseMappedTypeInferFromItsProperties.ts, 0, 0))
+>State : Symbol(State, Decl(reverseMappedTypeInferFromItsProperties.ts, 6, 19))
+
+export const result = createStructuredSelector({ mySelector });
+>result : Symbol(result, Decl(reverseMappedTypeInferFromItsProperties.ts, 12, 12))
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 38))
+>mySelector : Symbol(mySelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 12, 48))
+
