@@ -38808,6 +38808,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // all of which are pretty much always values, or at least imply a value meaning.
                 // It may be apprpriate to treat these as aliases in the future.
                     return DeclarationSpaces.ExportValue;
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.PropertySignature:
+                    return DeclarationSpaces.ExportType;
                 default:
                     return Debug.failBadSyntaxKind(d);
             }
