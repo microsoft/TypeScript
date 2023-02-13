@@ -24704,8 +24704,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const properties = getPropertiesOfObjectType(source);
             for (const sourceProp of properties) {
                 if (!some(sourceProp.declarations, hasSkipDirectInferenceFlag)) {
-                    const targetProp = substituteIndexedMappedType(target, getStringLiteralType(unescapeLeadingUnderscores(sourceProp.escapedName)));
-                    inferFromTypes(getTypeOfSymbol(sourceProp), targetProp);
+                    const sourcePropType = getTypeOfSymbol(sourceProp);
+                    if (!couldContainTypeVariables(sourcePropType)) {
+                        continue;
+                    }
+                    const targetPropType = substituteIndexedMappedType(target, getStringLiteralType(unescapeLeadingUnderscores(sourceProp.escapedName)));
+                    inferFromTypes(sourcePropType, targetPropType);
                 }
             }
         }
