@@ -244,6 +244,7 @@ import {
     getCombinedModifierFlags,
     getCombinedNodeFlags,
     getContainingClass,
+    getContainingClassStaticBlock,
     getContainingFunction,
     getContainingFunctionOrClassStaticBlock,
     getDeclarationModifierFlagsFromSymbol,
@@ -12083,7 +12084,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 || derived.valueDeclaration
                     && isBinaryExpression(derived.valueDeclaration)
                     && !isConstructorDeclaredProperty(derived)
-                    && !ts.getContainingClassStaticBlock(derived.valueDeclaration)) {
+                    && !getContainingClassStaticBlock(derived.valueDeclaration)) {
                     symbols.set(base.escapedName, base);
                 symbols.set(base.escapedName, base);
             }
