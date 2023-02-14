@@ -89,20 +89,38 @@ const a42 = [x41, x42];
 >x41 : { [x: string]: unknown; a: number; }
 >x42 : { a: number; }
 
-// (...args: any[]) => any is supertype of all other function types
+// (...args: A) => R, where A is any, any[], never, or never[] and R is any or unknown, is supertype of all function types.
 
-declare function isFunction(x: unknown): x is (...args: any[]) => any;
->isFunction : (x: unknown) => x is (...args: any[]) => any
+declare function isFunction<T>(x: unknown): x is T;
+>isFunction : <T>(x: unknown) => x is T
 >x : unknown
+
+type A = (...args: any) => unknown;
+>A : (...args: any) => unknown
+>args : any
+
+type B = (...args: any[]) => unknown;
+>B : (...args: any[]) => unknown
 >args : any[]
 
-function qqq(f: (() => void) | undefined) {
->qqq : (f: (() => void) | undefined) => void
+type C = (...args: never) => unknown;
+>C : (...args: never) => unknown
+>args : never
+
+type D = (...args: never[]) => unknown;
+>D : (...args: never[]) => unknown
+>args : never[]
+
+type FnTypes = A | B | C | D;
+>FnTypes : A | B | C | D
+
+function fx1(f: (() => void) | undefined) {
+>fx1 : (f: (() => void) | undefined) => void
 >f : (() => void) | undefined
 
-    if (isFunction(f)) {
->isFunction(f) : boolean
->isFunction : (x: unknown) => x is (...args: any[]) => any
+    if (isFunction<A>(f)) {
+>isFunction<A>(f) : boolean
+>isFunction : <T>(x: unknown) => x is T
 >f : (() => void) | undefined
 
         f;  // () => void
@@ -114,6 +132,146 @@ function qqq(f: (() => void) | undefined) {
     }
     f;  // (() => void) | undefined
 >f : (() => void) | undefined
+}
+
+function fx2(f: (() => void) | undefined) {
+>fx2 : (f: (() => void) | undefined) => void
+>f : (() => void) | undefined
+
+    if (isFunction<B>(f)) {
+>isFunction<B>(f) : boolean
+>isFunction : <T>(x: unknown) => x is T
+>f : (() => void) | undefined
+
+        f;  // () => void
+>f : () => void
+    }
+    else {
+        f;  // undefined
+>f : undefined
+    }
+    f;  // (() => void) | undefined
+>f : (() => void) | undefined
+}
+
+function fx3(f: (() => void) | undefined) {
+>fx3 : (f: (() => void) | undefined) => void
+>f : (() => void) | undefined
+
+    if (isFunction<C>(f)) {
+>isFunction<C>(f) : boolean
+>isFunction : <T>(x: unknown) => x is T
+>f : (() => void) | undefined
+
+        f;  // () => void
+>f : () => void
+    }
+    else {
+        f;  // undefined
+>f : undefined
+    }
+    f;  // (() => void) | undefined
+>f : (() => void) | undefined
+}
+
+function fx4(f: (() => void) | undefined) {
+>fx4 : (f: (() => void) | undefined) => void
+>f : (() => void) | undefined
+
+    if (isFunction<D>(f)) {
+>isFunction<D>(f) : boolean
+>isFunction : <T>(x: unknown) => x is T
+>f : (() => void) | undefined
+
+        f;  // () => void
+>f : () => void
+    }
+    else {
+        f;  // undefined
+>f : undefined
+    }
+    f;  // (() => void) | undefined
+>f : (() => void) | undefined
+}
+
+function checkA(f: FnTypes) {
+>checkA : (f: FnTypes) => void
+>f : FnTypes
+
+    if (isFunction<A>(f)) {
+>isFunction<A>(f) : boolean
+>isFunction : <T>(x: unknown) => x is T
+>f : FnTypes
+
+        f;  // A | B
+>f : A | B
+    }
+    else {
+        f;  // C | D
+>f : C | D
+    }
+    f;  // FnTypes
+>f : FnTypes
+}
+
+function checkB(f: FnTypes) {
+>checkB : (f: FnTypes) => void
+>f : FnTypes
+
+    if (isFunction<B>(f)) {
+>isFunction<B>(f) : boolean
+>isFunction : <T>(x: unknown) => x is T
+>f : FnTypes
+
+        f;  // A | B
+>f : A | B
+    }
+    else {
+        f;  // C | D
+>f : C | D
+    }
+    f;  // FnTypes
+>f : FnTypes
+}
+
+function checkC(f: FnTypes) {
+>checkC : (f: FnTypes) => void
+>f : FnTypes
+
+    if (isFunction<C>(f)) {
+>isFunction<C>(f) : boolean
+>isFunction : <T>(x: unknown) => x is T
+>f : FnTypes
+
+        f;  // FnTypes
+>f : FnTypes
+    }
+    else {
+        f;  // never
+>f : never
+    }
+    f;  // FnTypes
+>f : FnTypes
+}
+
+function checkD(f: FnTypes) {
+>checkD : (f: FnTypes) => void
+>f : FnTypes
+
+    if (isFunction<C>(f)) {
+>isFunction<C>(f) : boolean
+>isFunction : <T>(x: unknown) => x is T
+>f : FnTypes
+
+        f;  // FnTypes
+>f : FnTypes
+    }
+    else {
+        f;  // never
+>f : never
+    }
+    f;  // FnTypes
+>f : FnTypes
 }
 
 // Type of x = y is y with freshness preserved
@@ -166,123 +324,5 @@ function fx11(): { x?: number } {
 >1 : 1
 >y : number
 >2 : 2
-}
-
-// Narrowing preserves original type in false branch for non-identical mutual subtypes
-
-declare function isObject1(value: unknown): value is Record<string, unknown>;
->isObject1 : (value: unknown) => value is Record<string, unknown>
->value : unknown
-
-function gg(x: {}) {
->gg : (x: {}) => void
->x : {}
-
-    if (isObject1(x)) {
->isObject1(x) : boolean
->isObject1 : (value: unknown) => value is Record<string, unknown>
->x : {}
-
-        x;  // Record<string, unknown>
->x : Record<string, unknown>
-    }
-    else {
-        x;  // {}
->x : {}
-    }
-    x;  // {}
->x : {}
-}
-
-declare function isObject2(value: unknown): value is {};
->isObject2 : (value: unknown) => value is {}
->value : unknown
-
-function gg2(x: Record<string, unknown>) {
->gg2 : (x: Record<string, unknown>) => void
->x : Record<string, unknown>
-
-    if (isObject2(x)) {
->isObject2(x) : boolean
->isObject2 : (value: unknown) => value is {}
->x : Record<string, unknown>
-
-        x;  // {}
->x : {}
-    }
-    else {
-        x;  // Record<string, unknown>
->x : Record<string, unknown>
-    }
-    x;  // Record<string, unknown>
->x : Record<string, unknown>
-}
-
-// Repro from #50916
-
-type Identity<T> = {[K in keyof T]: T[K]};
->Identity : Identity<T>
-
-function is<T>(value: T): value is Identity<T> {
->is : <T>(value: T) => value is Identity<T>
->value : T
-
-    return true;
->true : true
-}
-
-type Union =  {a: number} | {b: number} | {c: number};
->Union : { a: number; } | { b: number; } | { c: number; }
->a : number
->b : number
->c : number
-
-function example(x: Union) {
->example : (x: Union) => void
->x : Union
-
-    if (is(x)) { x }
->is(x) : boolean
->is : <T>(value: T) => value is Identity<T>
->x : Union
->x : { a: number; } | { b: number; } | { c: number; }
-
-    if (is(x)) {}
->is(x) : boolean
->is : <T>(value: T) => value is Identity<T>
->x : Union
-
-    if (is(x)) {}
->is(x) : boolean
->is : <T>(value: T) => value is Identity<T>
->x : Union
-
-    if (is(x)) {}
->is(x) : boolean
->is : <T>(value: T) => value is Identity<T>
->x : Union
-
-    if (is(x)) {}
->is(x) : boolean
->is : <T>(value: T) => value is Identity<T>
->x : Union
-
-    if (is(x)) {}
->is(x) : boolean
->is : <T>(value: T) => value is Identity<T>
->x : Union
-
-    if (is(x)) {}
->is(x) : boolean
->is : <T>(value: T) => value is Identity<T>
->x : Union
-
-    if (is(x)) {}
->is(x) : boolean
->is : <T>(value: T) => value is Identity<T>
->x : Union
-
-    x;  // Union
->x : Union
 }
 

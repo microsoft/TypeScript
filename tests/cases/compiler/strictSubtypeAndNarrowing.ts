@@ -28,18 +28,95 @@ const x42 = { a: 1 };
 const a41 = [x42, x41];
 const a42 = [x41, x42];
 
-// (...args: any[]) => any is supertype of all other function types
+// (...args: A) => R, where A is any, any[], never, or never[] and R is any or unknown, is supertype of all function types.
 
-declare function isFunction(x: unknown): x is (...args: any[]) => any;
+declare function isFunction<T>(x: unknown): x is T;
 
-function qqq(f: (() => void) | undefined) {
-    if (isFunction(f)) {
+type A = (...args: any) => unknown;
+type B = (...args: any[]) => unknown;
+type C = (...args: never) => unknown;
+type D = (...args: never[]) => unknown;
+
+type FnTypes = A | B | C | D;
+
+function fx1(f: (() => void) | undefined) {
+    if (isFunction<A>(f)) {
         f;  // () => void
     }
     else {
         f;  // undefined
     }
     f;  // (() => void) | undefined
+}
+
+function fx2(f: (() => void) | undefined) {
+    if (isFunction<B>(f)) {
+        f;  // () => void
+    }
+    else {
+        f;  // undefined
+    }
+    f;  // (() => void) | undefined
+}
+
+function fx3(f: (() => void) | undefined) {
+    if (isFunction<C>(f)) {
+        f;  // () => void
+    }
+    else {
+        f;  // undefined
+    }
+    f;  // (() => void) | undefined
+}
+
+function fx4(f: (() => void) | undefined) {
+    if (isFunction<D>(f)) {
+        f;  // () => void
+    }
+    else {
+        f;  // undefined
+    }
+    f;  // (() => void) | undefined
+}
+
+function checkA(f: FnTypes) {
+    if (isFunction<A>(f)) {
+        f;  // A | B
+    }
+    else {
+        f;  // C | D
+    }
+    f;  // FnTypes
+}
+
+function checkB(f: FnTypes) {
+    if (isFunction<B>(f)) {
+        f;  // A | B
+    }
+    else {
+        f;  // C | D
+    }
+    f;  // FnTypes
+}
+
+function checkC(f: FnTypes) {
+    if (isFunction<C>(f)) {
+        f;  // FnTypes
+    }
+    else {
+        f;  // never
+    }
+    f;  // FnTypes
+}
+
+function checkD(f: FnTypes) {
+    if (isFunction<C>(f)) {
+        f;  // FnTypes
+    }
+    else {
+        f;  // never
+    }
+    f;  // FnTypes
 }
 
 // Type of x = y is y with freshness preserved
@@ -52,52 +129,4 @@ function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
 function fx11(): { x?: number } {
     let obj: { x?: number, y?: number };
     return obj = { x: 1, y: 2 };
-}
-
-// Narrowing preserves original type in false branch for non-identical mutual subtypes
-
-declare function isObject1(value: unknown): value is Record<string, unknown>;
-
-function gg(x: {}) {
-    if (isObject1(x)) {
-        x;  // Record<string, unknown>
-    }
-    else {
-        x;  // {}
-    }
-    x;  // {}
-}
-
-declare function isObject2(value: unknown): value is {};
-
-function gg2(x: Record<string, unknown>) {
-    if (isObject2(x)) {
-        x;  // {}
-    }
-    else {
-        x;  // Record<string, unknown>
-    }
-    x;  // Record<string, unknown>
-}
-
-// Repro from #50916
-
-type Identity<T> = {[K in keyof T]: T[K]};
-
-function is<T>(value: T): value is Identity<T> {
-    return true;
-}
-
-type Union =  {a: number} | {b: number} | {c: number};
-
-function example(x: Union) {
-    if (is(x)) { x }
-    if (is(x)) {}
-    if (is(x)) {}
-    if (is(x)) {}
-    if (is(x)) {}
-    if (is(x)) {}
-    if (is(x)) {}
-    if (is(x)) {}
-    x;  // Union
 }
