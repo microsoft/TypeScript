@@ -7,9 +7,9 @@ const arr = [Promise.resolve()];
 >arr : Promise<void>[]
 >[Promise.resolve()] : Promise<void>[]
 >Promise.resolve() : Promise<void>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 
 for await (const item of arr) {
 >item : void

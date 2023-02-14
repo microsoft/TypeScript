@@ -16,9 +16,17 @@ tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts(45,23): e
   Overload 2 of 2, '(x: number): Promise<string>', gave the following error.
     Argument of type 'string | number' is not assignable to parameter of type 'number'.
       Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts(50,46): error TS1055: Type 'PromiseConstructor' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+  Types of parameters 'executor' and 'executor' are incompatible.
+    Types of parameters 'resolve' and 'resolve' are incompatible.
+      Type '(value: Awaited<T> | PromiseLike<Awaited<T>>) => void' is not assignable to type '(value: T | PromiseLike<T>) => void'.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'T | PromiseLike<T>' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+            Type 'T' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts(123,26): error TS1055: Type 'PromiseConstructor' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts (4 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts (6 errors) ====
     let cond: boolean;
     
     async function len(s: string) {
@@ -91,6 +99,14 @@ tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts(45,23): e
     }
     
     async function asNumber(x: string | number): Promise<number> {
+                                                 ~~~~~~~~~~~~~~~
+!!! error TS1055: Type 'PromiseConstructor' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+!!! error TS1055:   Types of parameters 'executor' and 'executor' are incompatible.
+!!! error TS1055:     Types of parameters 'resolve' and 'resolve' are incompatible.
+!!! error TS1055:       Type '(value: Awaited<T> | PromiseLike<Awaited<T>>) => void' is not assignable to type '(value: T | PromiseLike<T>) => void'.
+!!! error TS1055:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS1055:           Type 'T | PromiseLike<T>' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+!!! error TS1055:             Type 'T' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
         return +x;
     }
     
@@ -164,6 +180,8 @@ tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts(45,23): e
     declare function myQuery(input: { lastId: number | undefined }): Promise<{ entities: number[] }>;
     
     async function myFunc(): Promise<void> {
+                             ~~~~~~~~~~~~~
+!!! error TS1055: Type 'PromiseConstructor' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
       let lastId: number | undefined = undefined;
     
       while (true) {

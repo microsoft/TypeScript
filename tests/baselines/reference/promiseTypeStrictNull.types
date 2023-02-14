@@ -104,9 +104,9 @@ async function F() {
 
         return Promise.reject(Error());
 >Promise.reject(Error()) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Error() : Error
 >Error : ErrorConstructor
     }
@@ -169,9 +169,9 @@ async function I() {
 
         return Promise.reject(Error());
 >Promise.reject(Error()) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Error() : Error
 >Error : ErrorConstructor
     }
@@ -270,9 +270,9 @@ const p18 = p.catch(() => Promise.reject(1));
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const p19 = p.catch(() => Promise.resolve(1));
@@ -283,9 +283,9 @@ const p19 = p.catch(() => Promise.resolve(1));
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const p20 = p.then(undefined);
@@ -365,9 +365,9 @@ const p28 = p.then(() => Promise.resolve(1));
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const p29 = p.then(() => Promise.reject(1));
@@ -378,9 +378,9 @@ const p29 = p.then(() => Promise.reject(1));
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const p30 = p.then(undefined, undefined);
@@ -469,9 +469,9 @@ const p38 = p.then(undefined, () => Promise.resolve(1));
 >undefined : undefined
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const p39 = p.then(undefined, () => Promise.reject(1));
@@ -483,9 +483,9 @@ const p39 = p.then(undefined, () => Promise.reject(1));
 >undefined : undefined
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const p40 = p.then(null, undefined);
@@ -574,9 +574,9 @@ const p48 = p.then(null, () => Promise.resolve(1));
 >null : null
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const p49 = p.then(null, () => Promise.reject(1));
@@ -588,9 +588,9 @@ const p49 = p.then(null, () => Promise.reject(1));
 >null : null
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const p50 = p.then(() => "1", undefined);
@@ -688,9 +688,9 @@ const p58 = p.then(() => "1", () => Promise.resolve(1));
 >"1" : "1"
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const p59 = p.then(() => "1", () => Promise.reject(1));
@@ -703,9 +703,9 @@ const p59 = p.then(() => "1", () => Promise.reject(1));
 >"1" : "1"
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const p60 = p.then(() => x, undefined);
@@ -803,9 +803,9 @@ const p68 = p.then(() => x, () => Promise.resolve(1));
 >x : any
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const p69 = p.then(() => x, () => Promise.reject(1));
@@ -818,9 +818,9 @@ const p69 = p.then(() => x, () => Promise.reject(1));
 >x : any
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const p70 = p.then(() => undefined, undefined);
@@ -918,9 +918,9 @@ const p78 = p.then(() => undefined, () => Promise.resolve(1));
 >undefined : undefined
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const p79 = p.then(() => undefined, () => Promise.reject(1));
@@ -933,9 +933,9 @@ const p79 = p.then(() => undefined, () => Promise.reject(1));
 >undefined : undefined
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const p80 = p.then(() => null, undefined);
@@ -1033,9 +1033,9 @@ const p88 = p.then(() => null, () => Promise.resolve(1));
 >null : null
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const p89 = p.then(() => null, () => Promise.reject(1));
@@ -1048,9 +1048,9 @@ const p89 = p.then(() => null, () => Promise.reject(1));
 >null : null
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const p90 = p.then(() => {}, undefined);
@@ -1139,9 +1139,9 @@ const p98 = p.then(() => {}, () => Promise.resolve(1));
 >() => {} : () => void
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const p99 = p.then(() => {}, () => Promise.reject(1));
@@ -1153,9 +1153,9 @@ const p99 = p.then(() => {}, () => Promise.reject(1));
 >() => {} : () => void
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const pa0 = p.then(() => {throw 1}, undefined);
@@ -1253,9 +1253,9 @@ const pa8 = p.then(() => {throw 1}, () => Promise.resolve(1));
 >1 : 1
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const pa9 = p.then(() => {throw 1}, () => Promise.reject(1));
@@ -1268,9 +1268,9 @@ const pa9 = p.then(() => {throw 1}, () => Promise.reject(1));
 >1 : 1
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const pb0 = p.then(() => Promise.resolve("1"), undefined);
@@ -1281,9 +1281,9 @@ const pb0 = p.then(() => Promise.resolve("1"), undefined);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve("1") : () => Promise<string>
 >Promise.resolve("1") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >"1" : "1"
 >undefined : undefined
 
@@ -1295,9 +1295,9 @@ const pb1 = p.then(() => Promise.resolve("1"), null);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve("1") : () => Promise<string>
 >Promise.resolve("1") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >"1" : "1"
 >null : null
 
@@ -1309,9 +1309,9 @@ const pb2 = p.then(() => Promise.resolve("1"), () => 1);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve("1") : () => Promise<string>
 >Promise.resolve("1") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >"1" : "1"
 >() => 1 : () => number
 >1 : 1
@@ -1324,9 +1324,9 @@ const pb3 = p.then(() => Promise.resolve("1"), () => x);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve("1") : () => Promise<string>
 >Promise.resolve("1") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >"1" : "1"
 >() => x : () => any
 >x : any
@@ -1339,9 +1339,9 @@ const pb4 = p.then(() => Promise.resolve("1"), () => undefined);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve("1") : () => Promise<string>
 >Promise.resolve("1") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >"1" : "1"
 >() => undefined : () => undefined
 >undefined : undefined
@@ -1354,9 +1354,9 @@ const pb5 = p.then(() => Promise.resolve("1"), () => null);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve("1") : () => Promise<string>
 >Promise.resolve("1") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >"1" : "1"
 >() => null : () => null
 >null : null
@@ -1369,9 +1369,9 @@ const pb6 = p.then(() => Promise.resolve("1"), () => {});
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve("1") : () => Promise<string>
 >Promise.resolve("1") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >"1" : "1"
 >() => {} : () => void
 
@@ -1383,9 +1383,9 @@ const pb7 = p.then(() => Promise.resolve("1"), () => {throw 1});
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve("1") : () => Promise<string>
 >Promise.resolve("1") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >"1" : "1"
 >() => {throw 1} : () => never
 >1 : 1
@@ -1398,15 +1398,15 @@ const pb8 = p.then(() => Promise.resolve("1"), () => Promise.resolve(1));
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve("1") : () => Promise<string>
 >Promise.resolve("1") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >"1" : "1"
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const pb9 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
@@ -1417,15 +1417,15 @@ const pb9 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.resolve("1") : () => Promise<string>
 >Promise.resolve("1") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >"1" : "1"
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 
 const pc0 = p.then(() => Promise.reject("1"), undefined);
@@ -1436,9 +1436,9 @@ const pc0 = p.then(() => Promise.reject("1"), undefined);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject("1") : () => Promise<never>
 >Promise.reject("1") : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >"1" : "1"
 >undefined : undefined
 
@@ -1450,9 +1450,9 @@ const pc1 = p.then(() => Promise.reject("1"), null);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject("1") : () => Promise<never>
 >Promise.reject("1") : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >"1" : "1"
 >null : null
 
@@ -1464,9 +1464,9 @@ const pc2 = p.then(() => Promise.reject("1"), () => 1);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject("1") : () => Promise<never>
 >Promise.reject("1") : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >"1" : "1"
 >() => 1 : () => number
 >1 : 1
@@ -1479,9 +1479,9 @@ const pc3 = p.then(() => Promise.reject("1"), () => x);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject("1") : () => Promise<never>
 >Promise.reject("1") : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >"1" : "1"
 >() => x : () => any
 >x : any
@@ -1494,9 +1494,9 @@ const pc4 = p.then(() => Promise.reject("1"), () => undefined);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject("1") : () => Promise<never>
 >Promise.reject("1") : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >"1" : "1"
 >() => undefined : () => undefined
 >undefined : undefined
@@ -1509,9 +1509,9 @@ const pc5 = p.then(() => Promise.reject("1"), () => null);
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject("1") : () => Promise<never>
 >Promise.reject("1") : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >"1" : "1"
 >() => null : () => null
 >null : null
@@ -1524,9 +1524,9 @@ const pc6 = p.then(() => Promise.reject("1"), () => {});
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject("1") : () => Promise<never>
 >Promise.reject("1") : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >"1" : "1"
 >() => {} : () => void
 
@@ -1538,9 +1538,9 @@ const pc7 = p.then(() => Promise.reject("1"), () => {throw 1});
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject("1") : () => Promise<never>
 >Promise.reject("1") : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >"1" : "1"
 >() => {throw 1} : () => never
 >1 : 1
@@ -1553,15 +1553,15 @@ const pc8 = p.then(() => Promise.reject("1"), () => Promise.resolve(1));
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject("1") : () => Promise<never>
 >Promise.reject("1") : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >"1" : "1"
 >() => Promise.resolve(1) : () => Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >1 : 1
 
 const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
@@ -1572,14 +1572,14 @@ const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => Promise.reject("1") : () => Promise<never>
 >Promise.reject("1") : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >"1" : "1"
 >() => Promise.reject(1) : () => Promise<never>
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<Awaited<T>>
 >1 : 1
 

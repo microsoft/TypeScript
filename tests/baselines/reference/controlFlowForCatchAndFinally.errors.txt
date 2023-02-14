@@ -1,0 +1,58 @@
+tests/cases/compiler/controlFlowForCatchAndFinally.ts(5,24): error TS1055: Type 'PromiseConstructor' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+  Types of parameters 'executor' and 'executor' are incompatible.
+    Types of parameters 'resolve' and 'resolve' are incompatible.
+      Type '(value: Awaited<T> | PromiseLike<Awaited<T>>) => void' is not assignable to type '(value: T | PromiseLike<T>) => void'.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'T | PromiseLike<T>' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+            Type 'T' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+
+
+==== tests/cases/compiler/controlFlowForCatchAndFinally.ts (1 errors) ====
+    type Page = {close(): Promise<void>; content(): Promise<string>};
+    type Browser = {close(): Promise<void>};
+    declare function test1(): Promise<Browser>;
+    declare function test2(obj: Browser): Promise<Page>;
+    async function test(): Promise<string> {
+                           ~~~~~~~~~~~~~~~
+!!! error TS1055: Type 'PromiseConstructor' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+!!! error TS1055:   Types of parameters 'executor' and 'executor' are incompatible.
+!!! error TS1055:     Types of parameters 'resolve' and 'resolve' are incompatible.
+!!! error TS1055:       Type '(value: Awaited<T> | PromiseLike<Awaited<T>>) => void' is not assignable to type '(value: T | PromiseLike<T>) => void'.
+!!! error TS1055:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS1055:           Type 'T | PromiseLike<T>' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+!!! error TS1055:             Type 'T' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+        let browser: Browser | undefined = undefined;
+        let page: Page | undefined = undefined;
+        try {
+            browser = await test1();
+            page = await test2(browser);
+            return await page.content();;
+        } finally {
+            if (page) {
+                await page.close(); // ok
+            }
+    
+            if (browser) {
+                await browser.close(); // ok
+            }
+        }
+    }
+    
+    declare class Aborter { abort(): void };
+    class Foo {
+        abortController: Aborter | undefined = undefined;
+    
+        async operation() {
+            if (this.abortController !== undefined) {
+                this.abortController.abort();
+                this.abortController = undefined;
+            }
+            try {
+                this.abortController = new Aborter();
+            } catch (error) {
+                if (this.abortController !== undefined) {
+                    this.abortController.abort(); // ok
+                }
+            }
+        }
+    }

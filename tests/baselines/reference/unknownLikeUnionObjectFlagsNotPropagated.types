@@ -24,9 +24,9 @@ async function myUnusedFunction() {
     const fetch1 = Promise.resolve(['hello', 'world']);
 >fetch1 : Promise<string[]>
 >Promise.resolve(['hello', 'world']) : Promise<string[]>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: Awaited<T> | PromiseLike<Awaited<T>>): Promise<Awaited<T>>; }
 >['hello', 'world'] : string[]
 >'hello' : "hello"
 >'world' : "world"

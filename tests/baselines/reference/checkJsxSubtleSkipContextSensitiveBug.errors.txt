@@ -1,0 +1,42 @@
+tests/cases/conformance/jsx/checkJsxSubtleSkipContextSensitiveBug.tsx(16,24): error TS1055: Type 'PromiseConstructor' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+  Types of parameters 'executor' and 'executor' are incompatible.
+    Types of parameters 'resolve' and 'resolve' are incompatible.
+      Type '(value: Awaited<T> | PromiseLike<Awaited<T>>) => void' is not assignable to type '(value: T | PromiseLike<T>) => void'.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'T | PromiseLike<T>' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+            Type 'T' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+
+
+==== tests/cases/conformance/jsx/checkJsxSubtleSkipContextSensitiveBug.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    interface ErrorResult { error: true }
+    
+    interface AsyncLoaderProps<TResult> {
+        readonly prop1: () => Promise<TResult>;
+    
+        readonly prop2: (result: Exclude<TResult, ErrorResult>) => any;
+    }
+    
+    class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
+        render() { return null; }
+    }
+    
+    async function load(): Promise<{ success: true } | ErrorResult> {
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1055: Type 'PromiseConstructor' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+!!! error TS1055:   Types of parameters 'executor' and 'executor' are incompatible.
+!!! error TS1055:     Types of parameters 'resolve' and 'resolve' are incompatible.
+!!! error TS1055:       Type '(value: Awaited<T> | PromiseLike<Awaited<T>>) => void' is not assignable to type '(value: T | PromiseLike<T>) => void'.
+!!! error TS1055:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS1055:           Type 'T | PromiseLike<T>' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+!!! error TS1055:             Type 'T' is not assignable to type 'Awaited<T> | PromiseLike<Awaited<T>>'.
+        return { success: true };
+    }
+    
+    const loader = <AsyncLoader
+        prop1={load}
+        prop2={result => result}
+    />;
+    
