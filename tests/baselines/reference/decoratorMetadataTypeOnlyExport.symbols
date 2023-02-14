@@ -11,7 +11,7 @@ import { Foo } from "./a";
 
 const Decorator: ClassDecorator = () => undefined;
 >Decorator : Symbol(Decorator, Decl(b.ts, 2, 5))
->ClassDecorator : Symbol(ClassDecorator, Decl(lib.es5.d.ts, --, --))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 @Decorator
