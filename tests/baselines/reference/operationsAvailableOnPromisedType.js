@@ -114,12 +114,10 @@ function fn(a, b, c, d, e, f, g) {
                     if (!(c_1_1 = _e.sent(), _b = c_1_1.done, !_b)) return [3 /*break*/, 5];
                     _d = c_1_1.value;
                     _a = false;
-                    try {
+                    {
                         s = _d;
                     }
-                    finally {
-                        _a = true;
-                    }
+                    _a = true;
                     _e.label = 4;
                 case 4: return [3 /*break*/, 2];
                 case 5: return [3 /*break*/, 12];

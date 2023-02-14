@@ -114,7 +114,7 @@ var log = console.log;
                 _loop_1 = function () {
                     _f = _c.value;
                     _a = false;
-                    try {
+                    {
                         var outer = _f;
                         log("I'm loop ".concat(outer));
                         (function () { return __awaiter(_this, void 0, void 0, function () {
@@ -137,9 +137,7 @@ var log = console.log;
                             });
                         }); })();
                     }
-                    finally {
-                        _a = true;
-                    }
+                    _a = true;
                 };
                 _a = true, _b = __asyncValues(gen());
                 _g.label = 1;

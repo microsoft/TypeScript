@@ -106,6 +106,34 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
         assert.instanceOf(result.output[2], Promise);
     });
 
+    it("call return when user code throws (es2015)", async () => {
+        const result = evaluator.evaluateTypeScript(`
+        let returnCalled = false;
+        async function f() {
+            let i = 0;
+            const iterator = {
+                [Symbol.asyncIterator](): AsyncIterableIterator<any> { return this; },
+                async next() {
+                    i++;
+                    if (i < 2) return { value: undefined, done: false };
+                    throw new Error();
+                },
+                async return() {
+                    returnCalled = true;
+                }
+            };
+            for await (const item of iterator) {
+                throw new Error();
+            }
+        }
+        export async function main() {
+            try { await f(); } catch { }
+            return returnCalled;
+        }
+        `, { target: ts.ScriptTarget.ES2015 });
+        assert.isTrue(await result.main());
+    });
+
     it("don't call return when non-user code throws (es2015)", async () => {
         const result = evaluator.evaluateTypeScript(`
         let returnCalled = false;

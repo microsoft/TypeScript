@@ -65,12 +65,10 @@ async function f1() {
         for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), _a = y_1_1.done, !_a;) {
             _c = y_1_1.value;
             _d = false;
-            try {
+            {
                 const x = _c;
             }
-            finally {
-                _d = true;
-            }
+            _d = true;
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -96,12 +94,10 @@ async function f2() {
         for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), _a = y_1_1.done, !_a;) {
             _c = y_1_1.value;
             _d = false;
-            try {
+            {
                 x = _c;
             }
-            finally {
-                _d = true;
-            }
+            _d = true;
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -140,12 +136,10 @@ function f3() {
             for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
                 _c = y_1_1.value;
                 _d = false;
-                try {
+                {
                     const x = _c;
                 }
-                finally {
-                    _d = true;
-                }
+                _d = true;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -185,12 +179,10 @@ function f4() {
             for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
                 _c = y_1_1.value;
                 _d = false;
-                try {
+                {
                     x = _c;
                 }
-                finally {
-                    _d = true;
-                }
+                _d = true;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -218,13 +210,11 @@ async function f5() {
         outer: for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), _a = y_1_1.done, !_a;) {
             _c = y_1_1.value;
             _d = false;
-            try {
+            {
                 const x = _c;
                 continue outer;
             }
-            finally {
-                _d = true;
-            }
+            _d = true;
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -264,13 +254,11 @@ function f6() {
             outer: for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
                 _c = y_1_1.value;
                 _d = false;
-                try {
+                {
                     const x = _c;
                     continue outer;
                 }
-                finally {
-                    _d = true;
-                }
+                _d = true;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -312,12 +300,10 @@ function f7() {
                 for (var _d = true, y_1 = (e_1 = void 0, __asyncValues(y)), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
                     _c = y_1_1.value;
                     _d = false;
-                    try {
+                    {
                         const x = _c;
                     }
-                    finally {
-                        _d = true;
-                    }
+                    _d = true;
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }

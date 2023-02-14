@@ -767,7 +767,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
 
         const enterNonUserCodeExpression = factory.createAssignment(nonUserCode, factory.createTrue());
         const enterNonUserCodeStatement = factory.createExpressionStatement(enterNonUserCodeExpression);
-        setSourceMapRange(exitNonUserCodeStatement, node.expression);
+        setSourceMapRange(enterNonUserCodeStatement, node.expression);
 
         const statements: Statement[] = [];
         const binding = createForOfBindingStatement(factory, node.initializer, value);
@@ -799,13 +799,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         return factory.createBlock([
             iteratorValueStatement,
             exitNonUserCodeStatement,
-            factory.createTryStatement(
-                body,
-                /*catchClause*/ undefined,
-                factory.createBlock([
-                    enterNonUserCodeStatement
-                ])
-            )
+            body,
+            enterNonUserCodeStatement
         ]);
     }
 
