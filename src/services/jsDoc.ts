@@ -145,6 +145,7 @@ const jsDocTagNames = [
     "module",
     "name",
     "namespace",
+    "overload",
     "override",
     "package",
     "param",
@@ -347,7 +348,7 @@ function getTagNameDisplayPart(kind: SyntaxKind): (text: string) => SymbolDispla
 
 /** @internal */
 export function getJSDocTagNameCompletions(): CompletionEntry[] {
-    return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = map(jsDocTagNames, tagName => {
+    return (jsDocTagNameCompletionEntries ||= map(jsDocTagNames, tagName => {
         return {
             name: tagName,
             kind: ScriptElementKind.keyword,
@@ -362,7 +363,7 @@ export const getJSDocTagNameCompletionDetails = getJSDocTagCompletionDetails;
 
 /** @internal */
 export function getJSDocTagCompletions(): CompletionEntry[] {
-    return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = map(jsDocTagNames, tagName => {
+    return (jsDocTagCompletionEntries ||= map(jsDocTagNames, tagName => {
         return {
             name: `@${tagName}`,
             kind: ScriptElementKind.keyword,
