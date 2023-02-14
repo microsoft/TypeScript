@@ -21,14 +21,12 @@ tests/cases/compiler/jsxElementType.tsx(55,2): error TS2786: 'RenderPromise' can
   Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
 tests/cases/compiler/jsxElementType.tsx(55,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(58,2): error TS2304: Cannot find name 'div'.
-tests/cases/compiler/jsxElementType.tsx(59,2): error TS2304: Cannot find name 'my-web-component'.
 tests/cases/compiler/jsxElementType.tsx(71,2): error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
   Its instance type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element.
     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
 
 
-==== tests/cases/compiler/jsxElementType.tsx (15 errors) ====
+==== tests/cases/compiler/jsxElementType.tsx (13 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -126,11 +124,7 @@ tests/cases/compiler/jsxElementType.tsx(71,2): error TS2786: 'ReactNativeFlatLis
     
     // Host element types still work
     <div />;
-     ~~~
-!!! error TS2304: Cannot find name 'div'.
     <my-web-component />;
-     ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'my-web-component'.
     
     // Highlighting various ecosystem compat issues
     // react-native-gesture-handler
