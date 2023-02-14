@@ -30521,7 +30521,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkDeprecatedSignature(sig, node);
 
             const elementTypeConstraint = getJsxElementTypeTypeAt(jsxOpeningLikeNode);
-            if (false) {
+            if (elementTypeConstraint !== undefined) {
                 const tagType = getApparentType(checkExpression(jsxOpeningLikeNode.tagName));
                 // TODO: error message
                 checkTypeRelatedTo(tagType, elementTypeConstraint, assignableRelation, jsxOpeningLikeNode.tagName, Diagnostics.Its_instance_type_0_is_not_a_valid_JSX_element, () => {
