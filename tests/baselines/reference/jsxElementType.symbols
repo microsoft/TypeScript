@@ -54,123 +54,140 @@ declare global {
     type ElementType = string | NewReactJSXElementConstructor<any>;
 >ElementType : Symbol(ElementType, Decl(jsxElementType.tsx, 20, 17))
 >NewReactJSXElementConstructor : Symbol(NewReactJSXElementConstructor, Decl(jsxElementType.tsx, 12, 14))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 21, 67))
+
+      ['my-web-component']: React.DOMAttributes<unknown>;
+>['my-web-component'] : Symbol(IntrinsicElements['my-web-component'], Decl(jsxElementType.tsx, 22, 33))
+>'my-web-component' : Symbol(IntrinsicElements['my-web-component'], Decl(jsxElementType.tsx, 22, 33))
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>DOMAttributes : Symbol(React.DOMAttributes, Decl(react16.d.ts, 844, 9))
+    }
   }
 }
 
 let Component: NewReactJSXElementConstructor<{ title: string }>;
->Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 28, 3))
 >NewReactJSXElementConstructor : Symbol(NewReactJSXElementConstructor, Decl(jsxElementType.tsx, 12, 14))
->title : Symbol(title, Decl(jsxElementType.tsx, 25, 46))
+>title : Symbol(title, Decl(jsxElementType.tsx, 28, 46))
 
 const RenderString = ({ title }: { title: string }) => title;
->RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
->title : Symbol(title, Decl(jsxElementType.tsx, 27, 23))
->title : Symbol(title, Decl(jsxElementType.tsx, 27, 34))
->title : Symbol(title, Decl(jsxElementType.tsx, 27, 23))
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 30, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 30, 23))
+>title : Symbol(title, Decl(jsxElementType.tsx, 30, 34))
+>title : Symbol(title, Decl(jsxElementType.tsx, 30, 23))
 
 Component = RenderString;
->Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
->RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 28, 3))
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 30, 5))
 
 <RenderString />;
->RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 30, 5))
 
 <RenderString title="react" />;
->RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
->title : Symbol(title, Decl(jsxElementType.tsx, 30, 13))
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 30, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 33, 13))
 
 <RenderString excessProp />;
->RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 27, 5))
->excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 31, 13))
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 30, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 34, 13))
 
 const RenderNumber = ({ title }: { title: string }) => title.length;
->RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 33, 5))
->title : Symbol(title, Decl(jsxElementType.tsx, 33, 23))
->title : Symbol(title, Decl(jsxElementType.tsx, 33, 34))
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 36, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 36, 23))
+>title : Symbol(title, Decl(jsxElementType.tsx, 36, 34))
 >title.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
->title : Symbol(title, Decl(jsxElementType.tsx, 33, 23))
+>title : Symbol(title, Decl(jsxElementType.tsx, 36, 23))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 Component = RenderNumber;
->Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
->RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 33, 5))
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 28, 3))
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 36, 5))
 
 <RenderNumber />;
->RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 33, 5))
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 36, 5))
 
 <RenderNumber title="react" />;
->RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 33, 5))
->title : Symbol(title, Decl(jsxElementType.tsx, 36, 13))
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 36, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 39, 13))
 
 <RenderNumber excessProp />;
->RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 33, 5))
->excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 37, 13))
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 36, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 40, 13))
 
 const RenderArray = ({ title }: { title: string }) => [title];
->RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 39, 5))
->title : Symbol(title, Decl(jsxElementType.tsx, 39, 22))
->title : Symbol(title, Decl(jsxElementType.tsx, 39, 33))
->title : Symbol(title, Decl(jsxElementType.tsx, 39, 22))
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 42, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 42, 22))
+>title : Symbol(title, Decl(jsxElementType.tsx, 42, 33))
+>title : Symbol(title, Decl(jsxElementType.tsx, 42, 22))
 
 Component = RenderArray;
->Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
->RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 39, 5))
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 28, 3))
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 42, 5))
 
 <RenderArray />;
->RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 39, 5))
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 42, 5))
 
 <RenderArray title="react" />;
->RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 39, 5))
->title : Symbol(title, Decl(jsxElementType.tsx, 42, 12))
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 42, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 45, 12))
 
 <RenderArray excessProp />;
->RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 39, 5))
->excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 43, 12))
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 42, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 46, 12))
 
 // Future ReactNode can be Promises.
 // But they should be rejected in React 18.0.
 const RenderPromise = async ({ title }: { title: string }) => "react";
->RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 47, 5))
->title : Symbol(title, Decl(jsxElementType.tsx, 47, 30))
->title : Symbol(title, Decl(jsxElementType.tsx, 47, 41))
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 50, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 50, 30))
+>title : Symbol(title, Decl(jsxElementType.tsx, 50, 41))
 
 Component = RenderPromise;
->Component : Symbol(Component, Decl(jsxElementType.tsx, 25, 3))
->RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 47, 5))
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 28, 3))
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 50, 5))
 
 <RenderPromise />;
->RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 47, 5))
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 50, 5))
 
 <RenderPromise title="react" />;
->RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 47, 5))
->title : Symbol(title, Decl(jsxElementType.tsx, 50, 14))
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 50, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 53, 14))
 
 <RenderPromise excessProp />;
->RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 47, 5))
->excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 51, 14))
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 50, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 54, 14))
+
+// Host element types still work
+<div />;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+<my-web-component />;
+>my-web-component : Symbol(JSX.IntrinsicElements['my-web-component'], Decl(jsxElementType.tsx, 22, 33))
 
 // Highlighting various ecosystem compat issues
 // react-native-gesture-handler
 // https://github.com/software-mansion/react-native-gesture-handler/blob/79017e5e7cc2e82e6467851f870920ff836ee04f/src/components/GestureComponents.tsx#L139-L146
 interface ReactNativeFlatListProps<Item> {}
->ReactNativeFlatListProps : Symbol(ReactNativeFlatListProps, Decl(jsxElementType.tsx, 51, 29))
->Item : Symbol(Item, Decl(jsxElementType.tsx, 56, 35))
+>ReactNativeFlatListProps : Symbol(ReactNativeFlatListProps, Decl(jsxElementType.tsx, 58, 21))
+>Item : Symbol(Item, Decl(jsxElementType.tsx, 63, 35))
 
 function ReactNativeFlatList(
->ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 56, 43))
+>ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 63, 43))
 
   props: {},
->props : Symbol(props, Decl(jsxElementType.tsx, 57, 29))
+>props : Symbol(props, Decl(jsxElementType.tsx, 64, 29))
 
   ref: React.ForwardedRef<typeof ReactNativeFlatList>
->ref : Symbol(ref, Decl(jsxElementType.tsx, 58, 12))
+>ref : Symbol(ref, Decl(jsxElementType.tsx, 65, 12))
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
 >ForwardedRef : Symbol(React.ForwardedRef, Decl(react16.d.ts, 2355, 9))
->ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 56, 43))
+>ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 63, 43))
 
 ) {
   return null;
 }
 <ReactNativeFlatList />;
->ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 56, 43))
+>ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 63, 43))
 

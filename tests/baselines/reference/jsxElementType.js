@@ -21,6 +21,9 @@ type NewReactJSXElementConstructor<P> =
 declare global {
   namespace JSX {
     type ElementType = string | NewReactJSXElementConstructor<any>;
+    interface IntrinsicElements {
+      ['my-web-component']: React.DOMAttributes<unknown>;
+    }
   }
 }
 
@@ -51,6 +54,10 @@ Component = RenderPromise;
 <RenderPromise />;
 <RenderPromise title="react" />;
 <RenderPromise excessProp />;
+
+// Host element types still work
+<div />;
+<my-web-component />;
 
 // Highlighting various ecosystem compat issues
 // react-native-gesture-handler
@@ -142,6 +149,9 @@ Component = RenderPromise;
 React.createElement(RenderPromise, null);
 React.createElement(RenderPromise, { title: "react" });
 React.createElement(RenderPromise, { excessProp: true });
+// Host element types still work
+React.createElement("div", null);
+React.createElement("my-web-component", null);
 function ReactNativeFlatList(props, ref) {
     return null;
 }

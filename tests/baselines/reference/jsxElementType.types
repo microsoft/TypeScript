@@ -41,6 +41,13 @@ declare global {
   namespace JSX {
     type ElementType = string | NewReactJSXElementConstructor<any>;
 >ElementType : string | NewReactJSXElementConstructor<any>
+
+    interface IntrinsicElements {
+      ['my-web-component']: React.DOMAttributes<unknown>;
+>['my-web-component'] : React.DOMAttributes<unknown>
+>'my-web-component' : "my-web-component"
+>React : any
+    }
   }
 }
 
@@ -156,6 +163,15 @@ Component = RenderPromise;
 ><RenderPromise excessProp /> : JSX.Element
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
 >excessProp : true
+
+// Host element types still work
+<div />;
+><div /> : JSX.Element
+>div : any
+
+<my-web-component />;
+><my-web-component /> : JSX.Element
+>my-web-component : any
 
 // Highlighting various ecosystem compat issues
 // react-native-gesture-handler
