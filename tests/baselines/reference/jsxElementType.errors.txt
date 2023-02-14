@@ -7,23 +7,26 @@ tests/cases/compiler/jsxElementType.tsx(38,15): error TS2322: Type '{ excessProp
 tests/cases/compiler/jsxElementType.tsx(42,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
 tests/cases/compiler/jsxElementType.tsx(44,14): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(49,1): error TS2322: Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type 'ElementType<{ title: string; }>'.
+tests/cases/compiler/jsxElementType.tsx(49,1): error TS2322: Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type 'NewReactJSXElementConstructor<{ title: string; }>'.
   Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type '(props: { title: string; }) => React18ReactNode'.
     Type 'Promise<string>' is not assignable to type 'React18ReactNode'.
 tests/cases/compiler/jsxElementType.tsx(50,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
 tests/cases/compiler/jsxElementType.tsx(50,2): error TS2786: 'RenderPromise' cannot be used as a JSX component.
   Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
-    Type '({ title }: { title: string; }) => Promise<string>' is not comparable to type '(props: Props) => React18ReactNode'.
-      Type 'Promise<string>' is not comparable to type 'React18ReactNode'.
+    Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type '(props: any) => React18ReactNode'.
+      Type 'Promise<string>' is not assignable to type 'React18ReactNode'.
 tests/cases/compiler/jsxElementType.tsx(51,2): error TS2786: 'RenderPromise' cannot be used as a JSX component.
   Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
 tests/cases/compiler/jsxElementType.tsx(52,2): error TS2786: 'RenderPromise' cannot be used as a JSX component.
   Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
 tests/cases/compiler/jsxElementType.tsx(52,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+tests/cases/compiler/jsxElementType.tsx(64,2): error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
+  Its instance type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element.
+    Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
 
 
-==== tests/cases/compiler/jsxElementType.tsx (12 errors) ====
+==== tests/cases/compiler/jsxElementType.tsx (13 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -45,11 +48,11 @@ tests/cases/compiler/jsxElementType.tsx(52,16): error TS2322: Type '{ excessProp
     
     declare global {
       namespace JSX {
-        type ElementType<Props extends object> = string | NewReactJSXElementConstructor<Props>;
+        type ElementType = string | NewReactJSXElementConstructor<any>;
       }
     }
     
-    let Component: JSX.ElementType<{ title: string }>;
+    let Component: NewReactJSXElementConstructor<{ title: string }>;
     
     const RenderString = ({ title }: { title: string }) => title;
     Component = RenderString;
@@ -92,7 +95,7 @@ tests/cases/compiler/jsxElementType.tsx(52,16): error TS2322: Type '{ excessProp
     const RenderPromise = async ({ title }: { title: string }) => "react";
     Component = RenderPromise;
     ~~~~~~~~~
-!!! error TS2322: Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type 'ElementType<{ title: string; }>'.
+!!! error TS2322: Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type 'NewReactJSXElementConstructor<{ title: string; }>'.
 !!! error TS2322:   Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type '(props: { title: string; }) => React18ReactNode'.
 !!! error TS2322:     Type 'Promise<string>' is not assignable to type 'React18ReactNode'.
     <RenderPromise />;
@@ -102,8 +105,8 @@ tests/cases/compiler/jsxElementType.tsx(52,16): error TS2322: Type '{ excessProp
      ~~~~~~~~~~~~~
 !!! error TS2786: 'RenderPromise' cannot be used as a JSX component.
 !!! error TS2786:   Its instance type '({ title }: { title: string; }) => Promise<string>' is not a valid JSX element.
-!!! error TS2786:     Type '({ title }: { title: string; }) => Promise<string>' is not comparable to type '(props: Props) => React18ReactNode'.
-!!! error TS2786:       Type 'Promise<string>' is not comparable to type 'React18ReactNode'.
+!!! error TS2786:     Type '({ title }: { title: string; }) => Promise<string>' is not assignable to type '(props: any) => React18ReactNode'.
+!!! error TS2786:       Type 'Promise<string>' is not assignable to type 'React18ReactNode'.
     <RenderPromise title="react" />;
      ~~~~~~~~~~~~~
 !!! error TS2786: 'RenderPromise' cannot be used as a JSX component.
@@ -116,3 +119,18 @@ tests/cases/compiler/jsxElementType.tsx(52,16): error TS2322: Type '{ excessProp
 !!! error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
 !!! error TS2322:   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
     
+    // Highlighting various ecosystem compat issues
+    // react-native-gesture-handler
+    // https://github.com/software-mansion/react-native-gesture-handler/blob/79017e5e7cc2e82e6467851f870920ff836ee04f/src/components/GestureComponents.tsx#L139-L146
+    interface ReactNativeFlatListProps<Item> {}
+    function ReactNativeFlatList(
+      props: {},
+      ref: React.ForwardedRef<typeof ReactNativeFlatList>
+    ) {
+      return null;
+    }
+    <ReactNativeFlatList />;
+     ~~~~~~~~~~~~~~~~~~~
+!!! error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
+!!! error TS2786:   Its instance type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element.
+!!! error TS2786:     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.

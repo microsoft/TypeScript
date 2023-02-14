@@ -30524,7 +30524,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (elementTypeConstraint !== undefined) {
                 const tagType = getApparentType(checkExpression(jsxOpeningLikeNode.tagName));
                 // TODO: error message
-                checkTypeRelatedTo(tagType, elementTypeConstraint, comparableRelation, jsxOpeningLikeNode.tagName, Diagnostics.Its_instance_type_0_is_not_a_valid_JSX_element, () => {
+                checkTypeRelatedTo(tagType, elementTypeConstraint, assignableRelation, jsxOpeningLikeNode.tagName, Diagnostics.Its_instance_type_0_is_not_a_valid_JSX_element, () => {
                     const componentName = getTextOfNode(jsxOpeningLikeNode.tagName);
                     return chainDiagnosticMessages(/* details */ undefined, Diagnostics._0_cannot_be_used_as_a_JSX_component, componentName);
                 });
