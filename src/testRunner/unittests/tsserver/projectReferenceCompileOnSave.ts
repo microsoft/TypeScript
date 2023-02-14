@@ -1,10 +1,10 @@
 import * as ts from "../../_namespaces/ts";
+import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 import {
     createServerHost,
     File,
     libFile,
 } from "../virtualFileSystemWithWatch";
-import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,

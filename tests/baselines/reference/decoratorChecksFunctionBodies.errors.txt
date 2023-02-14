@@ -7,12 +7,12 @@ tests/cases/conformance/decorators/class/decoratorChecksFunctionBodies.ts(8,14):
     }
     
     class A {
-        @((x, p) => {
+        @((x, p, d) => {
             var a = 3;
             func(a);
                  ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-            return x; 
+            return d;
         })
         m() {
     

@@ -2,11 +2,19 @@ import * as fs from "fs";
 import * as path from "path";
 
 import {
-    installNpmPackages,
-    Log,
-    RequestCompletedAction,
-    TypingsInstaller,
-} from "./_namespaces/ts.server.typingsInstaller";
+    combinePaths,
+    createGetCanonicalFileName,
+    Debug,
+    forEachAncestorDirectory,
+    getDirectoryPath,
+    MapLike,
+    normalizePath,
+    normalizeSlashes,
+    stringContains,
+    sys,
+    toPath,
+    version,
+} from "./_namespaces/ts";
 import {
     ActionPackageInstalled,
     Arguments,
@@ -22,19 +30,11 @@ import {
     TypingInstallerResponseUnion,
 } from "./_namespaces/ts.server";
 import {
-    combinePaths,
-    createGetCanonicalFileName,
-    Debug,
-    forEachAncestorDirectory,
-    getDirectoryPath,
-    MapLike,
-    normalizePath,
-    normalizeSlashes,
-    stringContains,
-    sys,
-    toPath,
-    version,
-} from "./_namespaces/ts";
+    installNpmPackages,
+    Log,
+    RequestCompletedAction,
+    TypingsInstaller,
+} from "./_namespaces/ts.server.typingsInstaller";
 
 class FileLog implements Log {
     constructor(private logFile: string | undefined) {

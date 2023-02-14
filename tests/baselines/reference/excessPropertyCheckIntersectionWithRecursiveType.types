@@ -1,0 +1,157 @@
+=== tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts ===
+// repro from #44750
+
+type Request = { l1: { l2: boolean } };
+>Request : { l1: {    l2: boolean;}; }
+>l1 : { l2: boolean; }
+>l2 : boolean
+
+type Example<T> = { ex?: T | null };
+>Example : Example<T>
+>ex : T | null | undefined
+>null : null
+
+type Schema1<T> = (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema1<T[P]> }; }) & Example<T>;
+>Schema1 : Schema1<T>
+>type : "boolean"
+>props : { [P in keyof T]: Schema1<T[P]>; }
+
+export const schemaObj1: Schema1<Request> = {
+>schemaObj1 : Schema1<Request>
+>{  props: {    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  },} : { props: { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }; }
+
+  props: {
+>props : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>{    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  } : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+
+    l1: {
+>l1 : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>{      props: {        l2: { type: 'boolean' },        invalid: false,      },    } : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+
+      props: {
+>props : { l2: { type: "boolean"; }; invalid: boolean; }
+>{        l2: { type: 'boolean' },        invalid: false,      } : { l2: { type: "boolean"; }; invalid: boolean; }
+
+        l2: { type: 'boolean' },
+>l2 : { type: "boolean"; }
+>{ type: 'boolean' } : { type: "boolean"; }
+>type : "boolean"
+>'boolean' : "boolean"
+
+        invalid: false,
+>invalid : boolean
+>false : false
+
+      },
+    },
+  },
+}
+
+type Schema2<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: { [P in keyof T]: Schema2<T[P]> }; } & Example<T>);
+>Schema2 : Schema2<T>
+>type : "boolean"
+>props : { [P in keyof T]: Schema2<T[P]>; }
+
+export const schemaObj2: Schema2<Request> = {
+>schemaObj2 : { props: { l1: { props: { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; } & Example<{ l2: boolean; }>; }; } & Example<Request>
+>{  props: {    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  },} : { props: { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }; }
+
+  props: {
+>props : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>{    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  } : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+
+    l1: {
+>l1 : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>{      props: {        l2: { type: 'boolean' },        invalid: false,      },    } : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+
+      props: {
+>props : { l2: { type: "boolean"; }; invalid: boolean; }
+>{        l2: { type: 'boolean' },        invalid: false,      } : { l2: { type: "boolean"; }; invalid: boolean; }
+
+        l2: { type: 'boolean' },
+>l2 : { type: "boolean"; }
+>{ type: 'boolean' } : { type: "boolean"; }
+>type : "boolean"
+>'boolean' : "boolean"
+
+        invalid: false,
+>invalid : boolean
+>false : false
+
+      },
+    },
+  },
+}
+
+type Schema3<T> = Example<T> & (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema3<T[P]> }; });
+>Schema3 : Schema3<T>
+>type : "boolean"
+>props : { [P in keyof T]: Schema3<T[P]>; }
+
+export const schemaObj3: Schema3<Request> = {
+>schemaObj3 : Schema3<Request>
+>{  props: {    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  },} : { props: { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }; }
+
+  props: {
+>props : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>{    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  } : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+
+    l1: {
+>l1 : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>{      props: {        l2: { type: 'boolean' },        invalid: false,      },    } : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+
+      props: {
+>props : { l2: { type: "boolean"; }; invalid: boolean; }
+>{        l2: { type: 'boolean' },        invalid: false,      } : { l2: { type: "boolean"; }; invalid: boolean; }
+
+        l2: { type: 'boolean' },
+>l2 : { type: "boolean"; }
+>{ type: 'boolean' } : { type: "boolean"; }
+>type : "boolean"
+>'boolean' : "boolean"
+
+        invalid: false,
+>invalid : boolean
+>false : false
+
+      },
+    },
+  },
+}
+
+type Schema4<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: Example<T> & { [P in keyof T]: Schema4<T[P]> }; });
+>Schema4 : Schema4<T>
+>type : "boolean"
+>props : Example<T> & { [P in keyof T]: Schema4<T[P]>; }
+
+export const schemaObj4: Schema4<Request> = {
+>schemaObj4 : { props: Example<Request> & { l1: { props: Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; }; }; }
+>{  props: {    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  },} : { props: { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }; }
+
+  props: {
+>props : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>{    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  } : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+
+    l1: {
+>l1 : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>{      props: {        l2: { type: 'boolean' },        invalid: false,      },    } : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+
+      props: {
+>props : { l2: { type: "boolean"; }; invalid: boolean; }
+>{        l2: { type: 'boolean' },        invalid: false,      } : { l2: { type: "boolean"; }; invalid: boolean; }
+
+        l2: { type: 'boolean' },
+>l2 : { type: "boolean"; }
+>{ type: 'boolean' } : { type: "boolean"; }
+>type : "boolean"
+>'boolean' : "boolean"
+
+        invalid: false,
+>invalid : boolean
+>false : false
+
+      },
+    },
+  },
+}
+

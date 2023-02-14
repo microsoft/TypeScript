@@ -155,10 +155,11 @@ Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
-[96mb.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+[96mtsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
 
-[7m1[0m import {C} from './a';
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m1[0m {"compilerOptions":{"importsNotUsedAsValues":"error"}}
+[7m [0m [91m                    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
 
@@ -172,10 +173,7 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -221,7 +219,13 @@ Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
+
+[7m1[0m {"compilerOptions":{"importsNotUsedAsValues":"preserve"}}
+[7m [0m [91m                    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[[90m12:01:01 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -233,10 +237,7 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
