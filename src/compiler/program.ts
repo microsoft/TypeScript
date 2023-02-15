@@ -118,6 +118,7 @@ import {
     getEmitScriptTarget,
     getErrorSpanForNode,
     getExternalModuleName,
+    getIsolatedModules,
     getJSXImplicitImportBase,
     getJSXRuntimeImport,
     getLineAndCharacterOfPosition,
@@ -3186,7 +3187,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         // If we are importing helpers, we need to add a synthetic reference to resolve the
         // helpers library.
-        if ((options.isolatedModules || isExternalModuleFile)
+        if ((getIsolatedModules(options) || isExternalModuleFile)
             && !file.isDeclarationFile) {
             if (options.importHelpers) {
                 // synthesize 'import "tslib"' declaration
@@ -3992,13 +3993,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "exactOptionalPropertyTypes", "strictNullChecks");
         }
 
-        if (options.isolatedModules) {
+        if (options.isolatedModules || options.verbatimModuleSyntax) {
             if (options.out) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "isolatedModules");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules");
             }
 
             if (options.outFile) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", "isolatedModules");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules");
             }
         }
 
