@@ -1,0 +1,64 @@
+=== tests/cases/compiler/overloadInferenceAlternativesAndConstContexts.ts ===
+declare function sfc<T1>(props: { x: T1, y: T1 }): 1;
+>sfc : Symbol(sfc, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 0), Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 53), Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 60))
+>T1 : Symbol(T1, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 21))
+>props : Symbol(props, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 25))
+>x : Symbol(x, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 33))
+>T1 : Symbol(T1, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 21))
+>y : Symbol(y, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 40))
+>T1 : Symbol(T1, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 21))
+
+declare function sfc<const T2>(props: { a: T2, b: T2 }): T2;
+>sfc : Symbol(sfc, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 0), Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 53), Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 60))
+>T2 : Symbol(T2, Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 21))
+>props : Symbol(props, Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 31))
+>a : Symbol(a, Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 39))
+>T2 : Symbol(T2, Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 21))
+>b : Symbol(b, Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 46))
+>T2 : Symbol(T2, Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 21))
+>T2 : Symbol(T2, Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 21))
+
+declare function sfc<T3>(props: { q: T3, t: T3 }): 3;
+>sfc : Symbol(sfc, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 0), Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 53), Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 60))
+>T3 : Symbol(T3, Decl(overloadInferenceAlternativesAndConstContexts.ts, 2, 21))
+>props : Symbol(props, Decl(overloadInferenceAlternativesAndConstContexts.ts, 2, 25))
+>q : Symbol(q, Decl(overloadInferenceAlternativesAndConstContexts.ts, 2, 33))
+>T3 : Symbol(T3, Decl(overloadInferenceAlternativesAndConstContexts.ts, 2, 21))
+>t : Symbol(t, Decl(overloadInferenceAlternativesAndConstContexts.ts, 2, 40))
+>T3 : Symbol(T3, Decl(overloadInferenceAlternativesAndConstContexts.ts, 2, 21))
+
+declare function factory<
+>factory : Symbol(factory, Decl(overloadInferenceAlternativesAndConstContexts.ts, 2, 53))
+
+    TProps,
+>TProps : Symbol(TProps, Decl(overloadInferenceAlternativesAndConstContexts.ts, 4, 25))
+
+    TResult
+>TResult : Symbol(TResult, Decl(overloadInferenceAlternativesAndConstContexts.ts, 5, 11))
+
+>(tag: (props: TProps) => TResult, props: TProps, key?: string): TResult;
+>tag : Symbol(tag, Decl(overloadInferenceAlternativesAndConstContexts.ts, 7, 2))
+>props : Symbol(props, Decl(overloadInferenceAlternativesAndConstContexts.ts, 7, 8))
+>TProps : Symbol(TProps, Decl(overloadInferenceAlternativesAndConstContexts.ts, 4, 25))
+>TResult : Symbol(TResult, Decl(overloadInferenceAlternativesAndConstContexts.ts, 5, 11))
+>props : Symbol(props, Decl(overloadInferenceAlternativesAndConstContexts.ts, 7, 34))
+>TProps : Symbol(TProps, Decl(overloadInferenceAlternativesAndConstContexts.ts, 4, 25))
+>key : Symbol(key, Decl(overloadInferenceAlternativesAndConstContexts.ts, 7, 49))
+>TResult : Symbol(TResult, Decl(overloadInferenceAlternativesAndConstContexts.ts, 5, 11))
+
+const result = factory(sfc, {a: 0, b: 0});
+>result : Symbol(result, Decl(overloadInferenceAlternativesAndConstContexts.ts, 9, 5))
+>factory : Symbol(factory, Decl(overloadInferenceAlternativesAndConstContexts.ts, 2, 53))
+>sfc : Symbol(sfc, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 0), Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 53), Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 60))
+>a : Symbol(a, Decl(overloadInferenceAlternativesAndConstContexts.ts, 9, 29))
+>b : Symbol(b, Decl(overloadInferenceAlternativesAndConstContexts.ts, 9, 34))
+
+const result2 = factory<{a: 0, b: 0}, 0>(sfc, {a: 0, b: 0});
+>result2 : Symbol(result2, Decl(overloadInferenceAlternativesAndConstContexts.ts, 10, 5))
+>factory : Symbol(factory, Decl(overloadInferenceAlternativesAndConstContexts.ts, 2, 53))
+>a : Symbol(a, Decl(overloadInferenceAlternativesAndConstContexts.ts, 10, 25))
+>b : Symbol(b, Decl(overloadInferenceAlternativesAndConstContexts.ts, 10, 30))
+>sfc : Symbol(sfc, Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 0), Decl(overloadInferenceAlternativesAndConstContexts.ts, 0, 53), Decl(overloadInferenceAlternativesAndConstContexts.ts, 1, 60))
+>a : Symbol(a, Decl(overloadInferenceAlternativesAndConstContexts.ts, 10, 47))
+>b : Symbol(b, Decl(overloadInferenceAlternativesAndConstContexts.ts, 10, 52))
+

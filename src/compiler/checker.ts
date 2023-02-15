@@ -17603,9 +17603,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
                     // conditional type instead of deferring resolution. Also, we always want strict function
                     // types rules (i.e. proper contravariance) for inferences.
-                    inferTypes(context.inferences, checkType, instantiateType(extendsType, freshMapper), InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                    inferTypes(context, checkType, instantiateType(extendsType, freshMapper), InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                 }
-                const innerMapper = combineTypeMappers(freshMapper, context.mapper);
+                const innerMapper = combineTypeMappers(freshMapper, getMapperFromContext(context));
                 // It's possible for 'infer T' type paramteters to be given uninstantiated constraints when the
                 // those type parameters are used in type references (see getInferredTypeParameterConstraint). For
                 // that reason we need context.mapper to be first in the combined mapper. See #42636 for examples.
@@ -18403,8 +18403,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Maps forward-references to later types parameters to the empty object type.
      * This is used during inference when instantiating type parameter defaults.
      */
-    function createBackreferenceMapper(context: InferenceContext, index: number): TypeMapper {
-        const forwardInferences = context.inferences.slice(index);
+    function createBackreferenceMapper(context: InferenceContext, inference: InferenceInfo): TypeMapper {
+        const inferences = context.inferences.indexOf(inference) >= 0 ? context.inferences : context.freeTypeVariables;
+        Debug.assert(inferences, "Inference for backreference mapper must exist within provided context");
+        const index = inferences!.indexOf(inference);
+        const forwardInferences = inferences!.slice(index);
         return createTypeMapper(map(forwardInferences, i => i.typeParameter), map(forwardInferences, () => unknownType));
     }
 
@@ -21418,9 +21421,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (sourceParams) {
                         // If the source has infer type parameters, we instantiate them in the context of the target
                         const ctx = createInferenceContext(sourceParams, /*signature*/ undefined, InferenceFlags.None, isRelatedToWorker);
-                        inferTypes(ctx.inferences, (target as ConditionalType).extendsType, sourceExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
-                        sourceExtends = instantiateType(sourceExtends, ctx.mapper);
-                        mapper = ctx.mapper;
+                        inferTypes(ctx, (target as ConditionalType).extendsType, sourceExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                        const newMapper = getMapperFromContext(ctx);
+                        sourceExtends = instantiateType(sourceExtends, newMapper);
+                        mapper = newMapper;
                     }
                     if (isTypeIdenticalTo(sourceExtends, (target as ConditionalType).extendsType) &&
                         (isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType, RecursionFlags.Both) || isRelatedTo((target as ConditionalType).checkType, (source as ConditionalType).checkType, RecursionFlags.Both))) {
@@ -23591,7 +23595,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function makeFixingMapperForContext(context: InferenceContext) {
-        return makeDeferredTypeMapper(map(context.inferences, i => i.typeParameter), map(context.inferences, (inference, i) => () => {
+        return makeDeferredTypeMapper(map(context.inferences, i => i.typeParameter), map(context.inferences, (inference) => () => {
             if (!inference.isFixed) {
                 // Before we commit to a particular inference (and thus lock out any further inferences),
                 // we infer from any intra-expression inference sites we have collected.
@@ -23599,13 +23603,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 clearCachedInferences(context.inferences);
                 inference.isFixed = true;
             }
-            return getInferredType(context, i);
+            return getInferredType(context, inference);
         }));
     }
 
     function makeNonFixingMapperForContext(context: InferenceContext) {
-        return makeDeferredTypeMapper(map(context.inferences, i => i.typeParameter), map(context.inferences, (_, i) => () => {
-            return getInferredType(context, i);
+        return makeDeferredTypeMapper(map(context.inferences, i => i.typeParameter), map(context.inferences, (inference) => () => {
+            return getInferredType(context, inference);
+        }));
+    }
+
+    function makeFreeTypeVariableMapperForContext(context: InferenceContext) {
+        return makeDeferredTypeMapper(map(context.freeTypeVariables || [], i => i.typeParameter), map(context.freeTypeVariables || [], (inference) => () => {
+            return getInferredType(context, inference);
         }));
     }
 
@@ -23641,7 +23651,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     getContextualTypeForObjectLiteralMethod(node as MethodDeclaration, ContextFlags.NoConstraints) :
                     getContextualType(node, ContextFlags.NoConstraints);
                 if (contextualType) {
-                    inferTypes(context.inferences, type, contextualType);
+                    inferTypes(context, type, contextualType);
                 }
             }
             context.intraExpressionInferenceSites = undefined;
@@ -23682,7 +23692,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getMapperFromContext<T extends InferenceContext | undefined>(context: T): TypeMapper | T & undefined {
-        return context && context.mapper;
+        return context && context.mapper && (context.freeTypeVariables ? combineTypeMappers(context.mapper, makeFreeTypeVariableMapperForContext(context)) : context.mapper);
     }
 
     // Return true if the given type could possibly reference a type parameter for which
@@ -23817,8 +23827,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeParameter = getIndexedAccessType(constraint.type, getTypeParameterFromMappedType(target)) as TypeParameter;
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
-        inferTypes([inference], sourceType, templateType);
-        return getTypeFromInference(inference) || unknownType;
+        const context = createInferenceContextWorker([inference], /*signature*/ undefined, InferenceFlags.None, compareTypesAssignable);
+        inferTypes(context, sourceType, templateType);
+        // By passing `returnFalse` here, we select the last option inferred from any overload lists -
+        // this matches historical behavior, but we can probably do better here. There's maybe a constraint we could check against?
+        return getInferredTypes(context, ts.returnFalse)[0] || unknownType;
     }
 
     function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol> {
@@ -24043,7 +24056,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority = InferencePriority.None, contravariant = false) {
+    /**
+     * Merges the outer inference context into its alternatives and returns them, or
+     * just returns an array containing the outer context if there are no alternatives.
+     */
+    function flattenInferenceContextAlternatives(context: InferenceContext): InferenceContext[] {
+        return context.alternatives ? (context.alternatives.forEach(a => mergeInferenceContexts(a, context, /*clone*/ true)), context.alternatives) : [context];
+    }
+
+    function inferTypes(context: InferenceContext, originalSource: Type, originalTarget: Type, priority = InferencePriority.None, contravariant = false) {
         let bivariant = false;
         let propagationType: Type;
         let inferencePriority: number = InferencePriority.MaxValue;
@@ -24053,6 +24074,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let targetStack: object[];
         let expandingFlags = ExpandingFlags.None;
         inferFromTypes(originalSource, originalTarget);
+        // second inference stage to the non-fixing-mapped target ensures we record mappings for
+        // the free type variables in the context which come from signature inferences,
+        // which we need so we can map the free type variables entirely out of the resulting inferred types
+        // once inference is complete with a better mapping than their constraint.
+        forEachAlternative((context, oldContext) => {
+            if (length(context.freeTypeVariables)) {
+                inferFromTypes(originalSource, instantiateType(originalTarget, context.nonFixingMapper))
+                mergeInferenceContexts(context, oldContext, /*clone*/ true);
+            }
+        });
+
+        function forEachAlternative(action: (context: InferenceContext, oldContext: InferenceContext) => void) {
+            const ctxList = context.alternatives ? context.alternatives : [context];
+            const oldContext = context;
+            for (const ctx of ctxList) {
+                context = ctx;
+                action(context, oldContext);
+            }
+            context = oldContext;
+        }
 
         function inferFromTypes(source: Type, target: Type): void {
             if (!couldContainTypeVariables(target)) {
@@ -24171,20 +24212,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             if (contravariant && !bivariant) {
                                 if (!contains(inference.contraCandidates, candidate)) {
                                     inference.contraCandidates = append(inference.contraCandidates, candidate);
-                                    clearCachedInferences(inferences);
+                                    clearCachedInferences(context.inferences);
                                 }
                             }
                             else if (!contains(inference.candidates, candidate)) {
                                 inference.candidates = append(inference.candidates, candidate);
-                                clearCachedInferences(inferences);
+                                clearCachedInferences(context.inferences);
                             }
                         }
                         if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && inference.topLevel && !isTypeParameterAtTopLevel(originalTarget, target as TypeParameter)) {
                             inference.topLevel = false;
-                            clearCachedInferences(inferences);
+                            clearCachedInferences(context.inferences);
                         }
                     }
                     inferencePriority = Math.min(inferencePriority, priority);
+
+                    // const constraint = getConstraintOfType(target);
+                    // if (constraint) {
+                    //     // By adding the constraint as an extra inference source, we allow type parameters within constraints to tie one
+                    //     // another together and create inference locations that are otherwise difficult. It basically lets a user capture a
+                    //     // whole (or part of a) parameter type into a type variable, and destructure it for use in other parameters and the
+                    //     // return type positions.
+                    //     inferFromTypes(source, constraint);
+                    // }
                     return;
                 }
                 // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
@@ -24372,7 +24422,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function getInferenceInfoForType(type: Type) {
             if (type.flags & TypeFlags.TypeVariable) {
-                for (const inference of inferences) {
+                for (const inference of context.inferences) {
+                    if (type === inference.typeParameter) {
+                        return inference;
+                    }
+                }
+                for (const inference of context.freeTypeVariables || []) {
                     if (type === inference.typeParameter) {
                         return inference;
                     }
@@ -24735,18 +24790,117 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
+        /**
+         * Semantically starts a new group of alternatives within the active inference context
+         */
+        function forkInferenceContext(): InferenceContext[] {
+            return [];
+        }
+
+        /**
+         * Performs the given action in every alternative inference context currently under consideration,
+         * and 
+         */
+        function spawnAlternativeInferenceContext(group: InferenceContext[], action: () => void) {
+            const oldContext: InferenceContext = context;
+            // We want to keep a flat list of alternatives in the top-level inference context;
+            // so we perform our new forking action for each existing alternative, and then when
+            // we're done making all the new forks, we'll replace the existing alternative list
+            // with the new one.
+            (oldContext.alternatives || [oldContext]).forEach(alternative => {
+                // It's intentional that the `clone` here doesn't clone the `alternatives` - we want this
+                // fork to be ignorant to the other forks we'll be trying - only the outermost context
+                // should retain knowledge of the many linked inference attempts we're making.
+                const newContext = cloneInferenceContext(alternative);
+                mergeInferenceContexts(newContext, oldContext, /*clone*/ true);
+                context = newContext;
+                action();
+                context = oldContext;
+                group.push(...flattenInferenceContextAlternatives(newContext));
+            });
+        }
+
+        /**
+         * Resets the alternatives list for the active infernce context to the supplied group of inference contexts
+         */
+        function joinInferenceContext(group: InferenceContext[]) {
+            group = group.length < 10 ? deduplicate(group, compareInferenceContext) : group;
+            if (group.length === 1) {
+                // Only one alternative was tried - inline it as the new outer context.
+                mergeInferenceContexts(context, group[0]);
+                context.freeTypeVariables = group[0].freeTypeVariables;
+                context.inferredTypeParameters = group[0].inferredTypeParameters;
+                context.flags = group[0].flags;
+                return;
+            }
+            context.alternatives = group;
+        }
+
+        function compareInferenceContext(a: InferenceContext, b: InferenceContext): boolean {
+            return a.compareTypes === b.compareTypes
+                && a.flags === b.flags
+                && a.inferredTypeParameters === b.inferredTypeParameters
+                && a.intraExpressionInferenceSites === b.intraExpressionInferenceSites
+                && a.signature === b.signature
+                && compareInferencesIdentical(a, a.inferences, b, b.inferences)
+                && compareInferencesIdentical(a, a.freeTypeVariables, b, b.freeTypeVariables);
+        }
+
+        function compareInferencesIdentical(ctxA: InferenceContext, a: InferenceInfo[] | undefined, ctxB: InferenceContext, b: InferenceInfo[] | undefined): boolean {
+            if (length(a) !== length(b)) return false;
+            if (length(a) === 0) return true;
+            for (let i = 0; i < length(a); i++) {
+                if (
+                    a![i].typeParameter !== b![i].typeParameter ||
+                    a![i].impliedArity !== b![i].impliedArity ||
+                    a![i].isFixed !== b![i].isFixed ||
+                    a![i].priority !== b![i].priority ||
+                    a![i].topLevel !== b![i].topLevel ||
+                    forEach(a, (_, i) => getInferredType(ctxA, a![i]) !== getInferredType(ctxB, b![i]))
+                ) return false;
+            }
+            return true;
+        }
+
         function inferFromSignatures(source: Type, target: Type, kind: SignatureKind) {
             const sourceSignatures = getSignaturesOfType(source, kind);
             const targetSignatures = getSignaturesOfType(target, kind);
             const sourceLen = sourceSignatures.length;
             const targetLen = targetSignatures.length;
-            const len = sourceLen < targetLen ? sourceLen : targetLen;
-            for (let i = 0; i < len; i++) {
-                inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]));
+            if (targetLen === 1 && sourceLen > 1) {
+                // inference from a set of overloads to a single signature - produce matches for _every_ overload
+                const group = forkInferenceContext();
+                for (let i = 0; i < sourceLen; i++) {
+                    spawnAlternativeInferenceContext(group, () => 
+                        inferFromSignature(sourceSignatures[i], targetSignatures[0])
+                    );
+                }
+                joinInferenceContext(group);
+            }
+            else {
+                // match from end of lists backwards the minimum signature length
+                // (legacy behavior - this is able to produce _a_ match, not necessarily a _good_ match)
+                const len = sourceLen < targetLen ? sourceLen : targetLen;
+                for (let i = 0; i < len; i++) {
+                    inferFromSignature(sourceSignatures[sourceLen - len + i], targetSignatures[targetLen - len + i]);
+                }
             }
         }
 
         function inferFromSignature(source: Signature, target: Signature) {
+            target = getErasedSignature(target);
+            if (source.typeParameters) {
+                if (some(context.freeTypeVariables, i => some(source.typeParameters, p => p === i.typeParameter))) {
+                    // already inferred from this sigature generically and then recured, infer to constraints this time
+                    source = getBaseSignature(source);
+                }
+                else {
+                    // Rather than getting the "base" signature, add the type parameters as free type variables to the inference list
+                    // These get saved off so we can infer from the expression type to them after we apply contextual types, and then
+                    // apply those mappings to our inference results.
+                    (context.freeTypeVariables ||= []).push(...map(source.typeParameters, createInferenceInfo));
+                }
+            }
             const saveBivariant = bivariant;
             const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
             // Once we descend into a bivariant signature we remain bivariant for all nested inferences
@@ -24847,8 +25001,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getWidenedType(unwidenedType);
     }
 
-    function getInferredType(context: InferenceContext, index: number): Type {
-        const inference = context.inferences[index];
+    function getInferredType(context: InferenceContext, inference: InferenceInfo): Type {
         if (!inference.inferredType) {
             let inferredType: Type | undefined;
             const signature = context.signature;
@@ -24882,7 +25035,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (defaultType) {
                         // Instantiate the default type. Any forward reference to a type
                         // parameter should be instantiated to the empty object type.
-                        inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
+                        inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, inference), context.nonFixingMapper));
                     }
                 }
             }
@@ -24908,12 +25061,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isInJavaScriptFile ? anyType : unknownType;
     }
 
-    function getInferredTypes(context: InferenceContext): Type[] {
-        const result: Type[] = [];
-        for (let i = 0; i < context.inferences.length; i++) {
-            result.push(getInferredType(context, i));
+    function getInferredTypes(context: InferenceContext, accept: (types: Type[]) => boolean): Type[] {
+        const alternatives = flattenInferenceContextAlternatives(context);
+        for (let a = 0; a < alternatives.length; a++) {
+            const context = alternatives[a];
+            // This mapper isn't cached on the context, as the list of free type variables is generated as inference is performed,
+            // so the mappings in this mapper can evolve as inference progresses and more free type variables are
+            // introduced.
+            const freeTypeVariableMapper = makeFreeTypeVariableMapperForContext(context);
+            const result: Type[] = [];
+            for (let i = 0; i < context.inferences.length; i++) {
+                result.push(instantiateType(getInferredType(context, context.inferences[i]), freeTypeVariableMapper));
+            }
+            // If this is this last option (since inference isn't allowed to fail), or this option passes the acceptability check, return it, otherwise, continue
+            if ((a === alternatives.length - 1) || accept(result)) {
+                return result;
+            }
         }
-        return result;
+        return Debug.assertNever(alternatives as never, "unreachable - `getInferredTypes` should always have at least one result set to choose from");
     }
 
     // EXPRESSION TYPE CHECKING
@@ -29033,10 +29198,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If no inferences have been made, and none of the type parameters for which we are inferring
             // specify default types, nothing is gained from instantiating as type parameters would just be
             // replaced with their constraints similar to the apparent type.
-            if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
+            if (inferenceContext && contextFlags! & ContextFlags.Signature && some(flatMap(flattenInferenceContextAlternatives(inferenceContext), c => c.inferences), hasInferenceCandidatesOrDefault)) {
                 // For contextual signatures we incorporate all inferences made so far, e.g. from return
                 // types as well as arguments to the left in a function call.
-                return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                return getUnionType(map(
+                    flattenInferenceContextAlternatives(inferenceContext),
+                    c => instantiateInstantiableTypes(contextualType, c.nonFixingMapper)
+                ));
             }
             if (inferenceContext?.returnMapper) {
                 // For other purposes (e.g. determining whether to produce literal types) we only
@@ -31952,25 +32120,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // the contextual signature is (...args: A) => B, we want to infer the element type of A's constraint (say 'any')
         // for T but leave it possible to later infer '[any]' back to A.
         const restType = getEffectiveRestType(contextualSignature);
-        const mapper = inferenceContext && (restType && restType.flags & TypeFlags.TypeParameter ? inferenceContext.nonFixingMapper : inferenceContext.mapper);
+        const mapper = inferenceContext && (restType && restType.flags & TypeFlags.TypeParameter ? inferenceContext.nonFixingMapper : getMapperFromContext(inferenceContext));
         const sourceSignature = mapper ? instantiateSignature(contextualSignature, mapper) : contextualSignature;
         applyToParameterTypes(sourceSignature, signature, (source, target) => {
             // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
-            inferTypes(context.inferences, source, target);
+            inferTypes(context, source, target);
         });
         if (!inferenceContext) {
             applyToReturnTypes(contextualSignature, signature, (source, target) => {
-                inferTypes(context.inferences, source, target, InferencePriority.ReturnType);
+                inferTypes(context, source, target, InferencePriority.ReturnType);
             });
         }
-        return getSignatureInstantiation(signature, getInferredTypes(context), isInJSFile(contextualSignature.declaration));
+        // We pass `returnFalse` as the acceptor so the last overload of all alternatives are chosen -
+        // this matches historical precedent, but there's probably a better option here.
+        return getSignatureInstantiation(signature, getInferredTypes(context, ts.returnFalse), isInJSFile(contextualSignature.declaration));
     }
 
-    function inferJsxTypeArguments(node: JsxOpeningLikeElement, signature: Signature, checkMode: CheckMode, context: InferenceContext): Type[] {
+    function inferJsxTypeArguments(node: JsxOpeningLikeElement, signature: Signature, checkMode: CheckMode, context: InferenceContext, accept: (types: Type[]) => boolean): Type[] {
         const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
         const checkAttrType = checkExpressionWithContextualType(node.attributes, paramType, context, checkMode);
-        inferTypes(context.inferences, checkAttrType, paramType);
-        return getInferredTypes(context);
+        inferTypes(context, checkAttrType, paramType);
+        return getInferredTypes(context, accept);
     }
 
     function getThisArgumentType(thisArgumentNode: LeftHandSideExpression | undefined) {
@@ -31983,9 +32153,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             thisArgumentType;
     }
 
-    function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: readonly Expression[], checkMode: CheckMode, context: InferenceContext): Type[] {
+    function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: readonly Expression[], checkMode: CheckMode, context: InferenceContext, accept: (types: Type[]) => boolean): Type[] {
         if (isJsxOpeningLikeElement(node)) {
-            return inferJsxTypeArguments(node, signature, checkMode, context);
+            return inferJsxTypeArguments(node, signature, checkMode, context, accept);
         }
 
         // If a contextual type is available, infer from that type to the return type of the call expression. For
@@ -32028,7 +32198,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.typeParameters)) :
                             instantiatedType;
                         // Inferences made from return types have lower priority than all other inferences.
-                        inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
+                        inferTypes(context, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
                     }
                     // Create a type mapper for instantiating generic contextual types using the inferences made
                     // from the return type. We need a separate inference pass here because (a) instantiation of
@@ -32036,7 +32206,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // outer arguments), and (b) we don't want any further inferences going into this context.
                     const returnContext = createInferenceContext(signature.typeParameters!, signature, context.flags);
                     const returnSourceType = instantiateType(contextualType, outerContext && outerContext.returnMapper);
-                    inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType);
+                    inferTypes(returnContext, returnSourceType, inferenceTargetType);
                     context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(cloneInferredPartOfContext(returnContext)) : undefined;
                 }
             }
@@ -32054,7 +32224,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const thisType = getThisTypeOfSignature(signature);
         if (thisType && couldContainTypeVariables(thisType)) {
             const thisArgumentNode = getThisArgumentOfCall(node);
-            inferTypes(context.inferences, getThisArgumentType(thisArgumentNode), thisType);
+            inferTypes(context, getThisArgumentType(thisArgumentNode), thisType);
         }
 
         for (let i = 0; i < argCount; i++) {
@@ -32063,17 +32233,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const paramType = getTypeAtPosition(signature, i);
                 if (couldContainTypeVariables(paramType)) {
                     const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
-                    inferTypes(context.inferences, argType, paramType);
+                    inferTypes(context, argType, paramType);
                 }
             }
         }
 
         if (restType && couldContainTypeVariables(restType)) {
             const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, context, checkMode);
-            inferTypes(context.inferences, spreadType, restType);
+            inferTypes(context, spreadType, restType);
         }
 
-        return getInferredTypes(context);
+        return getInferredTypes(context, accept);
     }
 
     function getMutableArrayOrTupleType(type: Type) {
@@ -32900,6 +33070,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let checkCandidate: Signature;
                 let inferenceContext: InferenceContext | undefined;
 
+                /**
+                 * Used by inference to accept or reject inference results, allowing it to explore multiple inference choices
+                 *  - it will still always return the final result, even if all of them would be rejected by this function.
+                 */
+                const acceptor = (types: Type[]): boolean => {
+                    const checkCandidate = getSignatureInstantiation(candidate, types, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
+                    if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
+                        return false;
+                    }
+                    if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                        return false;
+                    }
+                    return true;
+                };
+
                 if (candidate.typeParameters) {
                     let typeArgumentTypes: Type[] | undefined;
                     if (some(typeArguments)) {
@@ -32911,7 +33096,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     else {
                         inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-                        typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
+                        typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext, acceptor);
                         argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
                     }
                     checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
@@ -32936,7 +33121,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // round of type inference and applicability checking for this particular candidate.
                     argCheckMode = checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
                     if (inferenceContext) {
-                        const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
+                        const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext, acceptor);
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
                         // If the original signature has a generic rest type, instantiation may produce a
                         // signature with different arity and we need to perform another arity check.
@@ -33062,7 +33247,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function inferSignatureInstantiationForOverloadFailure(node: CallLikeExpression, typeParameters: readonly TypeParameter[], candidate: Signature, args: readonly Expression[], checkMode: CheckMode): Signature {
         const inferenceContext = createInferenceContext(typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-        const typeArgumentTypes = inferTypeArguments(node, candidate, args, checkMode | CheckMode.SkipContextSensitive | CheckMode.SkipGenericFunctions, inferenceContext);
+        // By passing `returnFalse` for the `accept` function, we pick the last alternative for the error signature, which matches historic behavior.
+        // A better, "closer" inference choice (by some heuristic) might be available, and may be a way to improve error messages.
+        const typeArgumentTypes = inferTypeArguments(node, candidate, args, checkMode | CheckMode.SkipContextSensitive | CheckMode.SkipGenericFunctions, inferenceContext, ts.returnFalse);
         return createSignatureInstantiation(candidate, typeArgumentTypes);
     }
 
@@ -34503,7 +34690,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (declaration.type) {
                 const typeNode = getEffectiveTypeAnnotationNode(declaration);
                 if (typeNode) {
-                    inferTypes(inferenceContext.inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
+                    inferTypes(inferenceContext, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
                 }
             }
         }
@@ -35428,7 +35615,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                         instantiatedContextualSignature ||= inferenceContext ?
-                            instantiateSignature(contextualSignature, inferenceContext.mapper) : contextualSignature;
+                            instantiateSignature(contextualSignature, getMapperFromContext(inferenceContext)) : contextualSignature;
                         assignContextualParameterTypes(signature, instantiatedContextualSignature);
                     }
                     else {
@@ -37030,7 +37217,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isConstTypeParameterContext(node: Expression) {
-        const contextualType = getContextualType(node, ContextFlags.None);
+        // ContextFlags.Signature forces us to instantiate the contextual type with
+        // WIP inference results, which can reveal members whose current contextual type
+        // is a const type parameter. TODO: Maybe rename the flag to reflect its broader use?
+        const contextualType = getContextualType(node, ContextFlags.Signature);
         return !!contextualType && someType(contextualType, isConstTypeVariable);
     }
 
@@ -37097,21 +37287,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             const instantiatedSignature = getSignatureInstantiationWithoutFillingInTypeArguments(signature, uniqueTypeParameters);
                             // Infer from the parameters of the instantiated signature to the parameters of the
                             // contextual signature starting with an empty set of inference candidates.
-                            const inferences = map(context.inferences, info => createInferenceInfo(info.typeParameter));
+                            const subcontext = cloneInferenceContext(context);
+                            subcontext.inferences = map(context.inferences, info => createInferenceInfo(info.typeParameter));
                             applyToParameterTypes(instantiatedSignature, contextualSignature, (source, target) => {
-                                inferTypes(inferences, source, target, /*priority*/ 0, /*contravariant*/ true);
+                                inferTypes(subcontext, source, target, /*priority*/ 0, /*contravariant*/ true);
                             });
-                            if (some(inferences, hasInferenceCandidates)) {
+                            if (some(subcontext.inferences, hasInferenceCandidates)) {
                                 // We have inference candidates, indicating that one or more type parameters are referenced
                                 // in the parameter types of the contextual signature. Now also infer from the return type.
                                 applyToReturnTypes(instantiatedSignature, contextualSignature, (source, target) => {
-                                    inferTypes(inferences, source, target);
+                                    inferTypes(subcontext, source, target);
                                 });
                                 // If the type parameters for which we produced candidates do not have any inferences yet,
                                 // we adopt the new inference candidates and add the type parameters of the expression type
                                 // to the set of inferred type parameters for the outer function return type.
-                                if (!hasOverlappingInferences(context.inferences, inferences)) {
-                                    mergeInferences(context.inferences, inferences);
+                                if (!hasOverlappingInferences(context.inferences, subcontext.inferences)) {
+                                    mergeInferenceContexts(context, subcontext);
                                     context.inferredTypeParameters = concatenate(context.inferredTypeParameters, uniqueTypeParameters);
                                     return getOrCreateTypeFromSignature(instantiatedSignature);
                                 }
@@ -37151,12 +37342,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function mergeInferences(target: InferenceInfo[], source: InferenceInfo[]) {
+    function mergeInferences(target: InferenceInfo[], source: InferenceInfo[], clone = false) {
         for (let i = 0; i < target.length; i++) {
             if (!hasInferenceCandidates(target[i]) && hasInferenceCandidates(source[i])) {
-                target[i] = source[i];
+                target[i] = clone ? {
+                    ...source[i],
+                    candidates: source[i].candidates && [...source[i].candidates!],
+                    contraCandidates: source[i].contraCandidates && [...source[i].contraCandidates!]
+                } : source[i];
             }
         }
+    }
+
+    function mergeInferenceContexts(target: InferenceContext, source: InferenceContext, cloneInferences = false) {
+        mergeInferences(target.inferences, source.inferences, cloneInferences);
+        // refresh mappers for new inference objects
+        target.mapper = makeFixingMapperForContext(target);
+        target.nonFixingMapper = makeNonFixingMapperForContext(target);
     }
 
     function getUniqueTypeParameters(context: InferenceContext, typeParameters: readonly TypeParameter[]): readonly TypeParameter[] {

@@ -6792,6 +6792,8 @@ export interface InferenceContext {
     returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
     inferredTypeParameters?: readonly TypeParameter[]; // Inferred type parameters for function result
     intraExpressionInferenceSites?: IntraExpressionInferenceSite[];
+    freeTypeVariables?: InferenceInfo[];           // Extra inferences made for type parameters found during inference
+    alternatives?: InferenceContext[];
 }
 
 /** @internal */

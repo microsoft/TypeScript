@@ -1,0 +1,54 @@
+=== tests/cases/compiler/overloadInferenceAlternativesAndConstContexts.ts ===
+declare function sfc<T1>(props: { x: T1, y: T1 }): 1;
+>sfc : { <T1>(props: {    x: T1;    y: T1;}): 1; <const T2>(props: { a: T2; b: T2; }): T2; <T3>(props: { q: T3; t: T3; }): 3; }
+>props : { x: T1; y: T1; }
+>x : T1
+>y : T1
+
+declare function sfc<const T2>(props: { a: T2, b: T2 }): T2;
+>sfc : { <T1>(props: { x: T1; y: T1; }): 1; <const T2>(props: {    a: T2;    b: T2;}): T2; <T3>(props: { q: T3; t: T3; }): 3; }
+>props : { a: T2; b: T2; }
+>a : T2
+>b : T2
+
+declare function sfc<T3>(props: { q: T3, t: T3 }): 3;
+>sfc : { <T1>(props: { x: T1; y: T1; }): 1; <const T2>(props: { a: T2; b: T2; }): T2; <T3>(props: {    q: T3;    t: T3;}): 3; }
+>props : { q: T3; t: T3; }
+>q : T3
+>t : T3
+
+declare function factory<
+>factory : <TProps, TResult>(tag: (props: TProps) => TResult, props: TProps, key?: string) => TResult
+
+    TProps,
+    TResult
+>(tag: (props: TProps) => TResult, props: TProps, key?: string): TResult;
+>tag : (props: TProps) => TResult
+>props : TProps
+>props : TProps
+>key : string | undefined
+
+const result = factory(sfc, {a: 0, b: 0});
+>result : 0
+>factory(sfc, {a: 0, b: 0}) : 0
+>factory : <TProps, TResult>(tag: (props: TProps) => TResult, props: TProps, key?: string | undefined) => TResult
+>sfc : { <T1>(props: { x: T1; y: T1; }): 1; <const T2>(props: { a: T2; b: T2; }): T2; <T3>(props: { q: T3; t: T3; }): 3; }
+>{a: 0, b: 0} : { a: 0; b: 0; }
+>a : 0
+>0 : 0
+>b : 0
+>0 : 0
+
+const result2 = factory<{a: 0, b: 0}, 0>(sfc, {a: 0, b: 0});
+>result2 : 0
+>factory<{a: 0, b: 0}, 0>(sfc, {a: 0, b: 0}) : 0
+>factory : <TProps, TResult>(tag: (props: TProps) => TResult, props: TProps, key?: string | undefined) => TResult
+>a : 0
+>b : 0
+>sfc : { <T1>(props: { x: T1; y: T1; }): 1; <const T2>(props: { a: T2; b: T2; }): T2; <T3>(props: { q: T3; t: T3; }): 3; }
+>{a: 0, b: 0} : { a: 0; b: 0; }
+>a : 0
+>0 : 0
+>b : 0
+>0 : 0
+
