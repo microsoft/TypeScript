@@ -28839,9 +28839,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
         return arrayContextualType && (
             index >= 0 && getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String) ||
-            getIndexTypeOfType(arrayContextualType, numberType) ||
-            mapType(arrayContextualType,
-                t => getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false),
+            mapType(arrayContextualType, t =>
+                isTupleType(t) ?
+                    getUnionType(sameMap(getTypeArguments(t), (e, i) => t.target.elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessType(e, numberType) : e), UnionReduction.None) :
+                    getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false),
                 /*noReductions*/ true));
     }
 
