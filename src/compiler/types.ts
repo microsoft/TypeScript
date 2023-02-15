@@ -6043,7 +6043,8 @@ export const enum TypeFlags {
     /** @internal */
     Nullable = Undefined | Null,
     Literal = StringLiteral | NumberLiteral | BigIntLiteral | BooleanLiteral,
-    Unit = Literal | UniqueESSymbol | Nullable,
+    Unit = Enum | Literal | UniqueESSymbol | Nullable,
+    Freshable = Enum | Literal,
     StringOrNumberLiteral = StringLiteral | NumberLiteral,
     /** @internal */
     StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
@@ -6137,22 +6138,20 @@ export interface NullableType extends IntrinsicType {
     objectFlags: ObjectFlags;
 }
 
-/** @internal */
-export interface FreshableIntrinsicType extends IntrinsicType {
-    freshType: IntrinsicType;     // Fresh version of type
-    regularType: IntrinsicType;   // Regular version of type
+export interface FreshableType extends Type {
+    freshType: FreshableType;     // Fresh version of type
+    regularType: FreshableType;   // Regular version of type
 }
 
 /** @internal */
-export type FreshableType = LiteralType | FreshableIntrinsicType;
+export interface FreshableIntrinsicType extends FreshableType, IntrinsicType {
+}
 
 // String literal types (TypeFlags.StringLiteral)
 // Numeric literal types (TypeFlags.NumberLiteral)
 // BigInt literal types (TypeFlags.BigIntLiteral)
-export interface LiteralType extends Type {
+export interface LiteralType extends FreshableType {
     value: string | number | PseudoBigInt; // Value of literal
-    freshType: LiteralType;                // Fresh version of type
-    regularType: LiteralType;              // Regular version of type
 }
 
 // Unique symbol types (TypeFlags.UniqueESSymbol)
@@ -6174,7 +6173,7 @@ export interface BigIntLiteralType extends LiteralType {
 }
 
 // Enum types (TypeFlags.Enum)
-export interface EnumType extends Type {
+export interface EnumType extends FreshableType {
 }
 
 // Types included in TypeFlags.ObjectFlagsType have an objectFlags property. Some ObjectFlags
