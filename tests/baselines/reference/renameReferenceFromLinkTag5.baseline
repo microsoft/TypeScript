@@ -1,6 +1,0 @@
-/*====== /tests/cases/fourslash/renameReferenceFromLinkTag5.ts ======*/
-
-enum E {
-    /** {@link E.[|RENAME|]} */
-    RENAME
-}

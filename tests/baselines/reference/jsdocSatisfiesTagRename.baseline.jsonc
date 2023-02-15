@@ -1,0 +1,9 @@
+// === findRenameLocations ===
+// === /a.js ===
+// /**
+//  * <|@typedef {Object} [|TRENAME|]
+//  * @property {number} a
+//  |>*/
+// 
+// /** @satisfies {/*RENAME*/[|TRENAME|]} comment */
+// const foo = { a: 1 };

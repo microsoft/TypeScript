@@ -1,0 +1,10 @@
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /tests/cases/fourslash/a.ts ===
+// const name = {};
+// <|export { name as [|nameRENAME|]/*RENAME*/ };|>
+
+// === /tests/cases/fourslash/b.ts ===
+// <|import { [|nameRENAME|] } from './a';|>
+// const x = [|nameRENAME|].toString();

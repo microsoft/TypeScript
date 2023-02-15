@@ -1,0 +1,8 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameLabel4.ts ===
+// <|[|loopRENAME|]:
+// for (let i = 0; i <= 10; i++) {
+//    if (i === 0) <|continue [|loopRENAME|];|>
+//    if (i === 1) <|continue /*RENAME*/[|loopRENAME|];|>
+//    if (i === 10) <|break [|loopRENAME|];|>
+// }|>
