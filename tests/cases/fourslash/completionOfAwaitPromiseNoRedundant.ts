@@ -4,7 +4,7 @@
 //// async function foo(x: (a: number) => Promise<Foo>) {
 ////    [|await x(1)./*1*/|]
 ////    ;([|await x(1)./*2*/|])
-////    ;([|await (x(1)./*3*/)|])
+////    ;(await ([|x(1)./*3*/|]))
 //// }
 
 for (const marker of [1, 2, 3]) {
