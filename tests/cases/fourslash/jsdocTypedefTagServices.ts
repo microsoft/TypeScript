@@ -25,5 +25,8 @@ verify.goToDefinition("use", "def");
 
 verify.rangesAreOccurrences(/*isWriteAccesss*/ undefined, ranges);
 verify.rangesAreDocumentHighlights(ranges);
-verify.baselineFindAllReferences("use", "def");
-verify.rangesAreRenameLocations(ranges);
+
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ["use", "def"] },
+    { type: "findRenameLocations", markerOrRange: ranges },
+);

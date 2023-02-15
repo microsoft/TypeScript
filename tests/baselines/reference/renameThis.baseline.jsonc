@@ -1,0 +1,37 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameThis.ts ===
+// function f(/*RENAME*/[|thisRENAME|]) {
+//     return [|thisRENAME|];
+// }
+// this;
+// const _ = { this: 0 }.this;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameThis.ts ===
+// function f([|thisRENAME|]) {
+//     return /*RENAME*/[|thisRENAME|];
+// }
+// this;
+// const _ = { this: 0 }.this;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameThis.ts ===
+// function f(this) {
+//     return this;
+// }
+// this;
+// const _ = { /*RENAME*/<|[|thisRENAME|]: 0|> }.[|thisRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameThis.ts ===
+// function f(this) {
+//     return this;
+// }
+// this;
+// const _ = { <|[|thisRENAME|]: 0|> }./*RENAME*/[|thisRENAME|];

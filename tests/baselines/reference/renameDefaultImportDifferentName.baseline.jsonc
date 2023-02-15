@@ -169,3 +169,28 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/B.ts ===
+// <|export default class /*RENAME*/[|CRENAME|] {
+//     test() {
+//     }
+// }|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/A.ts ===
+// <|import /*RENAME*/[|BRENAME|] from "./B";|>
+// let b = new [|BRENAME|]();
+// b.test();
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/A.ts ===
+// <|import [|BRENAME|] from "./B";|>
+// let b = new /*RENAME*/[|BRENAME|]();
+// b.test();

@@ -199,3 +199,31 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef /*RENAME*/[|ProductRENAME|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {[|ProductRENAME|]}
+//  */
+// const product = null;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef [|ProductRENAME|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {/*RENAME*/[|ProductRENAME|]}
+//  */
+// const product = null;

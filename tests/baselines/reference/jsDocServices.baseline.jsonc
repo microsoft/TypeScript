@@ -199,3 +199,42 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param /*RENAME*/[|fooRENAME|] I pity the foo
+//  */
+// function f(<|[|fooRENAME|]: I|>) {
+//     return [|fooRENAME|];
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|fooRENAME|] I pity the foo
+//  */
+// function f(/*RENAME*/<|[|fooRENAME|]: I|>) {
+//     return [|fooRENAME|];
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|fooRENAME|] I pity the foo
+//  */
+// function f(<|[|fooRENAME|]: I|>) {
+//     return /*RENAME*/[|fooRENAME|];
+// }

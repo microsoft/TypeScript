@@ -580,10 +580,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyRangesWithSameTextAreRenameLocations(...texts);
     }
 
-    public rangesAreRenameLocations(options?: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: FourSlash.Range[], providePrefixAndSuffixTextForRename?: boolean }) {
-        this.state.verifyRangesAreRenameLocations(options);
-    }
-
     public rangesAreDocumentHighlights(ranges?: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
         this.state.verifyRangesAreDocumentHighlights(ranges, options);
     }

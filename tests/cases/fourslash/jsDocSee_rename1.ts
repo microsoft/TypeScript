@@ -8,5 +8,5 @@
 
 
 const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations({ findInComments: true, ranges });
+verify.baselineRename(ranges, { findInComments: true });
 

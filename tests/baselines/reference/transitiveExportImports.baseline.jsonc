@@ -351,3 +351,53 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|class /*RENAME*/[|ARENAME|] {
+// }|>
+// <|export = [|ARENAME|];|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|class [|ARENAME|] {
+// }|>
+// <|export = /*RENAME*/[|ARENAME|];|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// <|export import /*RENAME*/[|bRENAME|] = require('./a');|>
+
+// === /tests/cases/fourslash/c.ts ===
+// import b = require('./b');
+// var a = new b.[|bRENAME|]();
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// <|export import [|bRENAME|] = require('./a');|>
+
+// === /tests/cases/fourslash/c.ts ===
+// import b = require('./b');
+// var a = new b./*RENAME*/[|bRENAME|]();
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/c.ts ===
+// <|import /*RENAME*/[|bRENAME|] = require('./b');|>
+// var a = new [|bRENAME|].b();
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/c.ts ===
+// <|import [|bRENAME|] = require('./b');|>
+// var a = new /*RENAME*/[|bRENAME|].b();

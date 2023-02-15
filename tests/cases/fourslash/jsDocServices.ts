@@ -20,6 +20,9 @@ verify.goToType("use", "I");
 goTo.marker("use");
 verify.quickInfoIs("(parameter) foo: I", "I pity the foo");
 
-verify.baselineFindAllReferences("use", "def", "use2");
 verify.rangesAreDocumentHighlights(ranges);
-verify.rangesAreRenameLocations(ranges);
+
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ["use", "def", "use2"] },
+    { type: "findRenameLocations", markerOrRange: ranges },
+);

@@ -302,3 +302,29 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|export default function /*RENAME*/[|fRENAME|]() {}|>
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import { a } from "./b";
+// a.default();
+// 
+// declare const x: { /*RENAME*/<|[|defaultRENAME|]: number|> };
+// x.[|defaultRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import { a } from "./b";
+// a.default();
+// 
+// declare const x: { <|[|defaultRENAME|]: number|> };
+// x./*RENAME*/[|defaultRENAME|];

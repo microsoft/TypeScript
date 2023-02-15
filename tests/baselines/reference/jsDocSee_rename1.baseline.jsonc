@@ -1,0 +1,33 @@
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/jsDocSee_rename1.ts ===
+// <|interface /*RENAME*/[|ARENAME|] {}|>
+// /**
+//  * @see {[|ARENAME|]}
+//  */
+// declare const a: [|ARENAME|]
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/jsDocSee_rename1.ts ===
+// <|interface [|ARENAME|] {}|>
+// /**
+//  * @see {/*RENAME*/[|ARENAME|]}
+//  */
+// declare const a: [|ARENAME|]
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/jsDocSee_rename1.ts ===
+// <|interface [|ARENAME|] {}|>
+// /**
+//  * @see {[|ARENAME|]}
+//  */
+// declare const a: /*RENAME*/[|ARENAME|]
