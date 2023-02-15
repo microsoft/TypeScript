@@ -1,12 +1,53 @@
 import {
-    addRange, append, Bundle, chainBundle, createEmptyExports, createExternalHelpersImportDeclarationIfNeeded, Debug, EmitFlags,
-    EmitHint, ESMap, ExportAssignment, ExportDeclaration, Expression, GeneratedIdentifierFlags, getEmitFlags,
-    getEmitModuleKind, getEmitScriptTarget, getExternalModuleNameLiteral, hasSyntacticModifier, Identifier, idText,
-    ImportDeclaration, ImportEqualsDeclaration, insertStatementsAfterCustomPrologue,
-    isExportNamespaceAsDefaultDeclaration, isExternalModule, isExternalModuleImportEqualsDeclaration,
-    isExternalModuleIndicator, isIdentifier, isNamespaceExport, isSourceFile, isStatement, Map, ModifierFlags,
-    ModuleKind, Node, NodeFlags, ScriptTarget, setOriginalNode, setTextRange, singleOrMany, some, SourceFile, Statement,
-    SyntaxKind, TransformationContext, VariableStatement, visitEachChild, visitNodes, VisitResult,
+    addRange,
+    append,
+    Bundle,
+    chainBundle,
+    createEmptyExports,
+    createExternalHelpersImportDeclarationIfNeeded,
+    Debug,
+    EmitFlags,
+    EmitHint,
+    ExportAssignment,
+    ExportDeclaration,
+    Expression,
+    GeneratedIdentifierFlags,
+    getEmitFlags,
+    getEmitModuleKind,
+    getEmitScriptTarget,
+    getExternalModuleNameLiteral,
+    getIsolatedModules,
+    hasSyntacticModifier,
+    Identifier,
+    idText,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    insertStatementsAfterCustomPrologue,
+    isExportNamespaceAsDefaultDeclaration,
+    isExternalModule,
+    isExternalModuleImportEqualsDeclaration,
+    isExternalModuleIndicator,
+    isIdentifier,
+    isNamespaceExport,
+    isSourceFile,
+    isStatement,
+    ModifierFlags,
+    ModuleKind,
+    Node,
+    NodeFlags,
+    ScriptTarget,
+    setOriginalNode,
+    setTextRange,
+    singleOrMany,
+    some,
+    SourceFile,
+    Statement,
+    SyntaxKind,
+    TransformationContext,
+    VariableStatement,
+    visitEachChild,
+    visitNodes,
+    VisitResult,
 } from "../../_namespaces/ts";
 
 /** @internal */
@@ -26,7 +67,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     context.enableEmitNotification(SyntaxKind.SourceFile);
     context.enableSubstitution(SyntaxKind.Identifier);
 
-    let helperNameSubstitutions: ESMap<string, Identifier> | undefined;
+    let helperNameSubstitutions: Map<string, Identifier> | undefined;
     let currentSourceFile: SourceFile | undefined;
     let importRequireStatements: [ImportDeclaration, VariableStatement] | undefined;
     return chainBundle(context, transformSourceFile);
@@ -36,7 +77,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             return node;
         }
 
-        if (isExternalModule(node) || compilerOptions.isolatedModules) {
+        if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
             currentSourceFile = node;
             importRequireStatements = undefined;
             let result = updateExternalModule(node);
@@ -76,7 +117,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         }
     }
 
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
                 // Though an error in es2020 modules, in node-flavor es2020 modules, we can helpfully transform this to a synthetic `require` call
@@ -149,7 +190,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
      *
      * @param node The node to visit.
      */
-    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
         Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
         let statements: Statement[] | undefined;
@@ -191,7 +232,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         return statements;
     }
 
-    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment> {
+    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment | undefined> {
         // Elide `export=` as it is not legal with --module ES6
         return node.isExportEquals ? undefined : node;
     }
@@ -246,7 +287,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
      */
     function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
         if (isSourceFile(node)) {
-            if ((isExternalModule(node) || compilerOptions.isolatedModules) && compilerOptions.importHelpers) {
+            if ((isExternalModule(node) || getIsolatedModules(compilerOptions)) && compilerOptions.importHelpers) {
                 helperNameSubstitutions = new Map<string, Identifier>();
             }
             previousOnEmitNode(hint, node, emitCallback);

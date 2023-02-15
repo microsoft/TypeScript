@@ -25,12 +25,12 @@ if(foo2.M2.x){
 
 //// [foo_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 exports.foo = 42;
 //// [foo_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = void 0;
 function f() {
     return 42;
@@ -38,7 +38,7 @@ function f() {
 exports.f = f;
 //// [foo_2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.M2 = void 0;
 var M2;
 (function (M2) {
@@ -46,7 +46,7 @@ var M2;
 })(M2 = exports.M2 || (exports.M2 = {}));
 //// [foo_3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo0 = require("../foo_0");
 var foo1 = require("./test/foo_1");
 var foo2 = require("./.././test/foo_2");

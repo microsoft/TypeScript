@@ -103,7 +103,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
@@ -112,19 +112,19 @@ exports.Foo = Foo;
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
 
 //// [/a/b/file1Consumer1Consumer1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/a/b/file1Consumer2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var z = 10;
 
 
@@ -133,7 +133,7 @@ var z = 10;
 
 //// [/a/b/moduleFile2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo4 = void 0;
 exports.Foo4 = 10;
 
@@ -204,7 +204,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.T = exports.y = void 0;
 exports.y = 10;
 
@@ -278,7 +278,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = exports.T = void 0;
 function Foo() { }
 exports.Foo = Foo;
@@ -360,7 +360,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = exports.T2 = void 0;
 function Foo() { }
 exports.Foo = Foo;
@@ -369,7 +369,7 @@ exports.Foo = Foo;
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.T2 = exports.T = exports.y = void 0;
 exports.y = 10;
 

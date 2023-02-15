@@ -1,14 +1,65 @@
 import {
-    addRange, AnyValidImportOrReExport, ArrowFunction, AssignmentDeclarationKind, Block, CallExpression,
-    CancellationToken, codefix, compilerOptionsIndicateEsModules, createDiagnosticForNode, Diagnostics,
-    DiagnosticWithLocation, Expression, ExpressionStatement, Extension, fileExtensionIsOneOf, forEachReturnStatement,
-    FunctionDeclaration, FunctionExpression, FunctionFlags, FunctionLikeDeclaration, getAllowSyntheticDefaultImports,
-    getAssignmentDeclarationKind, getFunctionFlags, getModeForUsageLocation, getResolvedModule, hasInitializer,
-    hasPropertyAccessExpressionWithName, Identifier, importFromModuleSpecifier, isAsyncFunction, isBinaryExpression,
-    isBlock, isCallExpression, isExportAssignment, isFunctionLike, isIdentifier, isPropertyAccessExpression,
-    isRequireCall, isReturnStatement, isSourceFileJS, isStringLiteral, isVariableDeclaration, isVariableStatement, Map,
-    MethodDeclaration, ModuleKind, Node, NodeFlags, Program, programContainsEsModules, PropertyAccessExpression, Push,
-    ReturnStatement, skipAlias, some, SourceFile, SyntaxKind, TypeChecker, VariableStatement,
+    addRange,
+    AnyValidImportOrReExport,
+    ArrowFunction,
+    AssignmentDeclarationKind,
+    Block,
+    CallExpression,
+    CancellationToken,
+    codefix,
+    compilerOptionsIndicateEsModules,
+    createDiagnosticForNode,
+    Diagnostics,
+    DiagnosticWithLocation,
+    Expression,
+    ExpressionStatement,
+    Extension,
+    fileExtensionIsOneOf,
+    forEachReturnStatement,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionFlags,
+    FunctionLikeDeclaration,
+    getAllowSyntheticDefaultImports,
+    getAssignmentDeclarationKind,
+    getFunctionFlags,
+    getModeForUsageLocation,
+    getResolvedModule,
+    hasInitializer,
+    hasPropertyAccessExpressionWithName,
+    Identifier,
+    importFromModuleSpecifier,
+    isAsyncFunction,
+    isBinaryExpression,
+    isBlock,
+    isCallExpression,
+    isExportAssignment,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isFunctionLike,
+    isIdentifier,
+    isPropertyAccessExpression,
+    isRequireCall,
+    isReturnStatement,
+    isSourceFileJS,
+    isStringLiteral,
+    isVariableDeclaration,
+    isVariableStatement,
+    MethodDeclaration,
+    ModuleKind,
+    Node,
+    NodeFlags,
+    Program,
+    programContainsEsModules,
+    PropertyAccessExpression,
+    Push,
+    ReturnStatement,
+    skipAlias,
+    some,
+    SourceFile,
+    SyntaxKind,
+    TypeChecker,
+    VariableStatement,
 } from "./_namespaces/ts";
 
 const visitedNestedConvertibleFunctions = new Map<string, true>();
@@ -227,7 +278,7 @@ function getKeyFromNode(exp: FunctionLikeDeclaration) {
 }
 
 function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
-    if (node.kind === SyntaxKind.FunctionExpression) {
+    if (isFunctionExpression(node)) {
         if (isVariableDeclaration(node.parent) && node.symbol.members?.size) {
             return true;
         }
@@ -236,7 +287,7 @@ function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
         return !!(symbol && (symbol.exports?.size || symbol.members?.size));
     }
 
-    if (node.kind === SyntaxKind.FunctionDeclaration) {
+    if (isFunctionDeclaration(node)) {
         return !!node.symbol.members?.size;
     }
 

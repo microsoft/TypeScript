@@ -28,19 +28,19 @@
 
 verify.docCommentTemplateAt("0", 3, "/** */");
 
-verify.docCommentTemplateAt("1", 8,
+verify.docCommentTemplateAt("1", 7,
    `/**
  * 
  * @returns
  */`);
 
-verify.docCommentTemplateAt("2", 8,
+verify.docCommentTemplateAt("2", 7,
    `/**
  * 
  * @returns
  */`);
 
-verify.docCommentTemplateAt("3", 8,
+verify.docCommentTemplateAt("3", 7,
    `/**
  * 
  * @returns
@@ -49,7 +49,7 @@ verify.docCommentTemplateAt("3", 8,
 verify.docCommentTemplateAt("4", 3, "/** */");
 
 
-verify.docCommentTemplateAt("5", 12,
+verify.docCommentTemplateAt("5", 11,
    `/**
      * 
      * @returns

@@ -1,9 +1,27 @@
 import {
     CallExpression,
-    Debug, Expression, factory, getSourceTextOfNodeFromSourceFile, hasInvalidEscape, Identifier, isExpression,
-    isExternalModule, isNoSubstitutionTemplateLiteral, NoSubstitutionTemplateLiteral, setTextRange, SourceFile,
-    SyntaxKind, TaggedTemplateExpression, TemplateHead, TemplateLiteralLikeNode, TemplateMiddle, TemplateTail,
-    TransformationContext, visitEachChild, visitNode, Visitor,
+    Debug,
+    Expression,
+    factory,
+    getSourceTextOfNodeFromSourceFile,
+    hasInvalidEscape,
+    Identifier,
+    isExpression,
+    isExternalModule,
+    isNoSubstitutionTemplateLiteral,
+    NoSubstitutionTemplateLiteral,
+    setTextRange,
+    SourceFile,
+    SyntaxKind,
+    TaggedTemplateExpression,
+    TemplateHead,
+    TemplateLiteralLikeNode,
+    TemplateMiddle,
+    TemplateTail,
+    TransformationContext,
+    visitEachChild,
+    visitNode,
+    Visitor,
 } from "../_namespaces/ts";
 
 /** @internal */
@@ -23,6 +41,7 @@ export function processTaggedTemplateExpression(
 
     // Visit the tag expression
     const tag = visitNode(node.tag, visitor, isExpression);
+    Debug.assert(tag);
 
     // Build up the template arguments and the raw and cooked strings for the template.
     // We start out with 'undefined' for the first argument and revisit later
@@ -46,7 +65,7 @@ export function processTaggedTemplateExpression(
         for (const templateSpan of template.templateSpans) {
             cookedStrings.push(createTemplateCooked(templateSpan.literal));
             rawStrings.push(getRawLiteral(templateSpan.literal, currentSourceFile));
-            templateArguments.push(visitNode(templateSpan.expression, visitor, isExpression));
+            templateArguments.push(Debug.checkDefined(visitNode(templateSpan.expression, visitor, isExpression)));
         }
     }
 

@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
 
 describe("unittests:: config:: showConfig", () => {
     function showTSConfigCorrectly(name: string, commandLinesArgs: string[], configJson?: object) {
@@ -147,6 +147,10 @@ describe("unittests:: config:: showConfig", () => {
                 }
                 break;
             }
+            case "listOrElement": {
+                ts.Debug.fail();
+                break;
+            }
             case "string": {
                 if (option.isTSConfigOnly) {
                     args = ["-p", "tsconfig.json"];
@@ -173,9 +177,8 @@ describe("unittests:: config:: showConfig", () => {
                 break;
             }
             default: {
-                const iterResult = option.type.keys().next();
-                if (iterResult.done) return ts.Debug.fail("Expected 'option.type' to have entries");
-                const val = iterResult.value;
+                const val = ts.firstOrUndefinedIterator(option.type.keys());
+                if (val === undefined) return ts.Debug.fail("Expected 'option.type' to have entries");
                 if (option.isTSConfigOnly) {
                     args = ["-p", "tsconfig.json"];
                     optionValue = { [option.name]: val };

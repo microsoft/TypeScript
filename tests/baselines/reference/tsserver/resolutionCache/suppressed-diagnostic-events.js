@@ -115,7 +115,7 @@ FsWatchesRecursive::
 
 Info 14   [00:00:25.000] request:
     {
-      "command": "geterr",
+      "command": "geterrForProject",
       "arguments": {
         "delay": 0,
         "file": "/a.ts"

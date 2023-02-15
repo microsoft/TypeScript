@@ -124,7 +124,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/solution/app/fileWithError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.myClassWithError = void 0;
 exports.myClassWithError = /** @class */ (function () {
     function myClassWithError() {
@@ -144,7 +144,7 @@ export declare var myClassWithError: {
 
 //// [/user/username/projects/solution/app/fileWithoutError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.myClass = void 0;
 var myClass = /** @class */ (function () {
     function myClass() {
@@ -160,7 +160,7 @@ export declare class myClass {
 
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };","signature":"6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"},{"version":"-11785903855-export class myClass { }","signature":"-7432826827-export declare class myClass {\n}\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./fileWithoutError.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };","signature":"6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"},{"version":"-11785903855-export class myClass { }","signature":"-7432826827-export declare class myClass {\n}\n"}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./fileWithoutError.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -197,6 +197,16 @@ export declare class myClass {
         "signature": "-7432826827-export declare class myClass {\n}\n"
       }
     },
+    "root": [
+      [
+        2,
+        "./filewitherror.ts"
+      ],
+      [
+        3,
+        "./filewithouterror.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -210,6 +220,6 @@ export declare class myClass {
     "latestChangedDtsFile": "./fileWithoutError.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1033
+  "size": 1046
 }
 

@@ -31,9 +31,7 @@ try {
 try {
 
 } catch ({ a: x, b: x }) {
->a : Symbol(a)
 >x : Symbol(x, Decl(redeclareParameterInCatchBlock.ts, 20, 10))
->b : Symbol(b)
 >x : Symbol(x, Decl(redeclareParameterInCatchBlock.ts, 20, 16))
 
 }

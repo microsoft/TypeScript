@@ -144,7 +144,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.glo_C12_public = exports.glo_C11_public = exports.glo_C8_public = exports.glo_C7_public = exports.glo_C4_public = exports.glo_C3_public = exports.glo_c_public = exports.m1 = void 0;
 var m1;
 (function (m1) {

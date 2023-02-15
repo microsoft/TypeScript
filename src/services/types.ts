@@ -1,11 +1,44 @@
 import {
-    CancellationToken, CompilerHost, CompilerOptions, CustomTransformers, Diagnostic, DiagnosticWithLocation,
-    DocumentHighlights, DocumentPositionMapper, EmitOutput, ESMap, ExportInfoMap, FileReference,
-    GetEffectiveTypeRootsHost, HasChangedAutomaticTypeDirectiveNames, HasInvalidatedResolutions, LineAndCharacter,
-    MinimalResolutionCacheHost, ModuleKind, ModuleResolutionCache, ModuleResolutionInfo, ModuleSpecifierCache,
-    ParsedCommandLine, Path, Program, ProjectReference, ResolvedModule, ResolvedModuleWithFailedLookupLocations,
-    ResolvedProjectReference, ResolvedTypeReferenceDirective, ScriptKind, Set, SourceFile, SourceFileLike, SourceMapper,
-    Symbol, SymlinkCache, TextChangeRange, textChanges, TextRange, TextSpan, TypeReferenceDirectiveResolutionInfo, UserPreferences,
+    CancellationToken,
+    CompilerHost,
+    CompilerOptions,
+    CustomTransformers,
+    Diagnostic,
+    DiagnosticWithLocation,
+    DocumentHighlights,
+    DocumentPositionMapper,
+    EmitOutput,
+    ExportInfoMap,
+    FileReference,
+    GetEffectiveTypeRootsHost,
+    HasChangedAutomaticTypeDirectiveNames,
+    HasInvalidatedResolutions,
+    LineAndCharacter,
+    MinimalResolutionCacheHost,
+    ModuleResolutionCache,
+    ModuleSpecifierCache,
+    ParsedCommandLine,
+    Path,
+    Program,
+    ProjectReference,
+    ResolutionMode,
+    ResolvedModule,
+    ResolvedModuleWithFailedLookupLocations,
+    ResolvedProjectReference,
+    ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    ScriptKind,
+    SourceFile,
+    SourceFileLike,
+    SourceMapper,
+    StringLiteralLike,
+    Symbol,
+    SymlinkCache,
+    TextChangeRange,
+    textChanges,
+    TextRange,
+    TextSpan,
+    UserPreferences,
 } from "./_namespaces/ts";
 
 declare module "../compiler/types" {
@@ -128,7 +161,7 @@ declare module "../compiler/types" {
         /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
         /** @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
 
-        /** @internal */ getNamedDeclarations(): ESMap<string, readonly Declaration[]>;
+        /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
@@ -228,9 +261,9 @@ export interface InstallPackageOptions {
 
 /** @internal */
 export const enum PackageJsonDependencyGroup {
-    Dependencies         = 1 << 0,
-    DevDependencies      = 1 << 1,
-    PeerDependencies     = 1 << 2,
+    Dependencies = 1 << 0,
+    DevDependencies = 1 << 1,
+    PeerDependencies = 1 << 2,
     OptionalDependencies = 1 << 3,
     All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies,
 }
@@ -239,10 +272,10 @@ export const enum PackageJsonDependencyGroup {
 export interface ProjectPackageJsonInfo {
     fileName: string;
     parseable: boolean;
-    dependencies?: ESMap<string, string>;
-    devDependencies?: ESMap<string, string>;
-    peerDependencies?: ESMap<string, string>;
-    optionalDependencies?: ESMap<string, string>;
+    dependencies?: Map<string, string>;
+    devDependencies?: Map<string, string>;
+    peerDependencies?: Map<string, string>;
+    optionalDependencies?: Map<string, string>;
     get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
     has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
 }
@@ -303,6 +336,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      */
     readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
     realpath?(path: string): string;
+    /** @internal */ createHash?(data: string): string;
 
     /*
      * Unlike `realpath and `readDirectory`, `readFile` and `fileExists` are now _required_
@@ -323,9 +357,27 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      *
      * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
      */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
-    getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
-    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
+    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+    getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+    /** @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext */
+    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveModuleNameLiterals?(
+        moduleLiterals: readonly StringLiteralLike[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile,
+        reusedNames: readonly StringLiteralLike[] | undefined,
+    ): readonly ResolvedModuleWithFailedLookupLocations[];
+    resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(
+        typeDirectiveReferences: readonly T[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile | undefined,
+        reusedNames: readonly T[] | undefined
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     /** @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;
     /** @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
     /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
@@ -552,7 +604,7 @@ export interface LanguageService {
     getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
     getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined;
+    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined;
 
     isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
     /**
@@ -604,6 +656,8 @@ export interface LanguageService {
     toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
     commentSelection(fileName: string, textRange: TextRange): TextChange[];
     uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
+
+    getSupportedCodeFixes(fileName?: string): readonly string[];
 
     dispose(): void;
 }
@@ -909,7 +963,7 @@ export interface RefactorActionInfo {
  */
 export interface RefactorEditInfo {
     edits: FileTextChanges[];
-    renameFilename?: string ;
+    renameFilename?: string;
     renameLocation?: number;
     commands?: CodeActionCommand[];
 }
@@ -1283,6 +1337,7 @@ export interface CompletionEntryDataAutoImport {
      * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
      */
     exportName: string;
+    exportMapKey?: string;
     moduleSpecifier?: string;
     /** The file name declaring the export's module symbol, if it was an external module */
     fileName?: string;
@@ -1293,7 +1348,6 @@ export interface CompletionEntryDataAutoImport {
 }
 
 export interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
-    /** The key in the `ExportMapCache` where the completion entry's `SymbolExportInfo[]` is found */
     exportMapKey: string;
 }
 

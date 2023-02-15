@@ -1,12 +1,12 @@
 Info 0    [00:01:01.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:02.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/main/main.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
@@ -60,7 +60,7 @@ let a = 10;
 
 //// [/user/username/projects/myproject/dependency/FnS.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn5 = exports.fn4 = exports.fn3 = exports.fn2 = exports.fn1 = void 0;
 function fn1() { }
 exports.fn1 = fn1;
@@ -83,7 +83,7 @@ export declare function fn5(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
 //// [/user/username/projects/myproject/dependency/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./fns.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n","signature":"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"}],"options":{"composite":true,"declarationDir":"../decls","declarationMap":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"../decls/FnS.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./fns.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n","signature":"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"}],"root":[2],"options":{"composite":true,"declarationDir":"../decls","declarationMap":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"../decls/FnS.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/dependency/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -111,6 +111,12 @@ export declare function fn5(): void;
         "signature": "-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"
       }
     },
+    "root": [
+      [
+        2,
+        "./fns.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationDir": "../decls",
@@ -125,12 +131,12 @@ export declare function fn5(): void;
     "latestChangedDtsFile": "../decls/FnS.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1090
+  "size": 1101
 }
 
 //// [/user/username/projects/myproject/main/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var fns_1 = require("../decls/fns");
 (0, fns_1.fn1)();
 (0, fns_1.fn2)();
@@ -147,7 +153,7 @@ export {};
 //# sourceMappingURL=main.d.ts.map
 
 //// [/user/username/projects/myproject/main/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../decls/fns.d.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n",{"version":"-805644102-import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"declarationMap":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../decls/fns.d.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n",{"version":"-805644102-import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"declarationMap":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./main.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/main/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -185,6 +191,12 @@ export {};
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        3,
+        "./main.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true
@@ -203,7 +215,7 @@ export {};
     "latestChangedDtsFile": "./main.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1118
+  "size": 1129
 }
 
 
@@ -267,7 +279,7 @@ Info 24   [00:01:25.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../dependency/FnS.ts
 	  Imported via '../decls/fns' from file 'main.ts'
 	main.ts
@@ -315,12 +327,12 @@ Info 28   [00:01:35.000] response:
     }
 Info 29   [00:01:36.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -375,7 +387,7 @@ Info 44   [00:01:51.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	random.ts
 	  Matched by default include pattern '**/*'
 
@@ -437,7 +449,7 @@ Info 47   [00:02:05.000] request:
         "line": 9,
         "offset": 1
       },
-      "seq": 1,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -551,7 +563,7 @@ Info 51   [00:02:11.000] request:
         "line": 9,
         "offset": 1
       },
-      "seq": 2,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -666,7 +678,7 @@ Info 53   [00:02:13.000] request:
         "line": 10,
         "offset": 1
       },
-      "seq": 3,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -778,7 +790,7 @@ Info 55   [00:02:15.000] request:
         "line": 11,
         "offset": 1
       },
-      "seq": 4,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -890,7 +902,7 @@ Info 57   [00:02:17.000] request:
         "line": 12,
         "offset": 1
       },
-      "seq": 5,
+      "seq": 7,
       "type": "request"
     }
 Before request
@@ -1002,7 +1014,7 @@ Info 59   [00:02:19.000] request:
         "line": 13,
         "offset": 1
       },
-      "seq": 6,
+      "seq": 8,
       "type": "request"
     }
 Before request
@@ -1108,12 +1120,12 @@ Info 60   [00:02:20.000] response:
     }
 Info 61   [00:02:21.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 9,
+      "type": "request"
     }
 Before request
 
@@ -1199,12 +1211,12 @@ Info 63   [00:02:32.000] response:
     }
 Info 64   [00:02:33.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 10,
+      "type": "request"
     }
 Before request
 
@@ -1294,12 +1306,12 @@ Info 68   [00:02:48.000] response:
     }
 Info 69   [00:02:49.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/main/main.ts"
-      }
+      },
+      "seq": 11,
+      "type": "request"
     }
 Before request
 
@@ -1385,12 +1397,12 @@ Info 71   [00:03:00.000] response:
     }
 Info 72   [00:03:01.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 12,
+      "type": "request"
     }
 Before request
 
@@ -1478,12 +1490,12 @@ Info 74   [00:03:10.000] response:
     }
 Info 75   [00:03:11.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 13,
+      "type": "request"
     }
 Before request
 
@@ -1533,7 +1545,7 @@ Info 81   [00:03:17.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../dependency/FnS.ts
 	  Imported via '../decls/fns' from file 'main.ts'
 	main.ts
