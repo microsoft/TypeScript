@@ -1,0 +1,115 @@
+=== tests/cases/compiler/spreadsAndContextualTupleTypes.ts ===
+declare function fx4<T extends [string, string, string, 'a' | 'b']>(x: T): T;
+>fx4 : Symbol(fx4, Decl(spreadsAndContextualTupleTypes.ts, 0, 0))
+>T : Symbol(T, Decl(spreadsAndContextualTupleTypes.ts, 0, 21))
+>x : Symbol(x, Decl(spreadsAndContextualTupleTypes.ts, 0, 68))
+>T : Symbol(T, Decl(spreadsAndContextualTupleTypes.ts, 0, 21))
+>T : Symbol(T, Decl(spreadsAndContextualTupleTypes.ts, 0, 21))
+
+const t3 = ['x', 'y', 'z'] as const;
+>t3 : Symbol(t3, Decl(spreadsAndContextualTupleTypes.ts, 2, 5))
+>const : Symbol(const)
+
+fx4(['x', 'y', 'z', 'a']);
+>fx4 : Symbol(fx4, Decl(spreadsAndContextualTupleTypes.ts, 0, 0))
+
+fx4([...t3, 'a']);
+>fx4 : Symbol(fx4, Decl(spreadsAndContextualTupleTypes.ts, 0, 0))
+>t3 : Symbol(t3, Decl(spreadsAndContextualTupleTypes.ts, 2, 5))
+
+// Repro from #52684
+
+const staticPath1Level = ["home"] as const;
+>staticPath1Level : Symbol(staticPath1Level, Decl(spreadsAndContextualTupleTypes.ts, 9, 5))
+>const : Symbol(const)
+
+const staticPath2Level = ["home", "user"] as const;
+>staticPath2Level : Symbol(staticPath2Level, Decl(spreadsAndContextualTupleTypes.ts, 10, 5))
+>const : Symbol(const)
+
+const staticPath3Level = ["home", "user", "downloads"] as const;
+>staticPath3Level : Symbol(staticPath3Level, Decl(spreadsAndContextualTupleTypes.ts, 11, 5))
+>const : Symbol(const)
+
+const randomID = 'id' as string;
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+declare function foo<const T>(path: T): T;
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>T : Symbol(T, Decl(spreadsAndContextualTupleTypes.ts, 15, 21))
+>path : Symbol(path, Decl(spreadsAndContextualTupleTypes.ts, 15, 30))
+>T : Symbol(T, Decl(spreadsAndContextualTupleTypes.ts, 15, 21))
+>T : Symbol(T, Decl(spreadsAndContextualTupleTypes.ts, 15, 21))
+
+const a1 = foo([...staticPath1Level, randomID, 'doc.pdf']);
+>a1 : Symbol(a1, Decl(spreadsAndContextualTupleTypes.ts, 17, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath1Level : Symbol(staticPath1Level, Decl(spreadsAndContextualTupleTypes.ts, 9, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const a2 = foo([...staticPath2Level, randomID, 'doc.pdf']);
+>a2 : Symbol(a2, Decl(spreadsAndContextualTupleTypes.ts, 18, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath2Level : Symbol(staticPath2Level, Decl(spreadsAndContextualTupleTypes.ts, 10, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const a3 = foo([...staticPath3Level, randomID, 'doc.pdf']);
+>a3 : Symbol(a3, Decl(spreadsAndContextualTupleTypes.ts, 19, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath3Level : Symbol(staticPath3Level, Decl(spreadsAndContextualTupleTypes.ts, 11, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const b1 = foo([...staticPath1Level, randomID, 'folder', 'doc.pdf']);
+>b1 : Symbol(b1, Decl(spreadsAndContextualTupleTypes.ts, 21, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath1Level : Symbol(staticPath1Level, Decl(spreadsAndContextualTupleTypes.ts, 9, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const b2 = foo([...staticPath2Level, randomID, 'folder', 'doc.pdf']);
+>b2 : Symbol(b2, Decl(spreadsAndContextualTupleTypes.ts, 22, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath2Level : Symbol(staticPath2Level, Decl(spreadsAndContextualTupleTypes.ts, 10, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const b3 = foo([...staticPath3Level, randomID, 'folder', 'doc.pdf']);
+>b3 : Symbol(b3, Decl(spreadsAndContextualTupleTypes.ts, 23, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath3Level : Symbol(staticPath3Level, Decl(spreadsAndContextualTupleTypes.ts, 11, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const c1 = foo([...staticPath1Level, randomID, 'folder', 'subfolder', 'doc.pdf']);
+>c1 : Symbol(c1, Decl(spreadsAndContextualTupleTypes.ts, 25, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath1Level : Symbol(staticPath1Level, Decl(spreadsAndContextualTupleTypes.ts, 9, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const c2 = foo([...staticPath2Level, randomID, 'folder', 'subfolder', 'doc.pdf']);
+>c2 : Symbol(c2, Decl(spreadsAndContextualTupleTypes.ts, 26, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath2Level : Symbol(staticPath2Level, Decl(spreadsAndContextualTupleTypes.ts, 10, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const c3 = foo([...staticPath3Level, randomID, 'folder', 'subfolder', 'doc.pdf']);
+>c3 : Symbol(c3, Decl(spreadsAndContextualTupleTypes.ts, 27, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath3Level : Symbol(staticPath3Level, Decl(spreadsAndContextualTupleTypes.ts, 11, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const d1 = foo([...staticPath1Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']);
+>d1 : Symbol(d1, Decl(spreadsAndContextualTupleTypes.ts, 29, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath1Level : Symbol(staticPath1Level, Decl(spreadsAndContextualTupleTypes.ts, 9, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const d2 = foo([...staticPath2Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']);
+>d2 : Symbol(d2, Decl(spreadsAndContextualTupleTypes.ts, 30, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath2Level : Symbol(staticPath2Level, Decl(spreadsAndContextualTupleTypes.ts, 10, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
+const d3 = foo([...staticPath3Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']);
+>d3 : Symbol(d3, Decl(spreadsAndContextualTupleTypes.ts, 31, 5))
+>foo : Symbol(foo, Decl(spreadsAndContextualTupleTypes.ts, 13, 32))
+>staticPath3Level : Symbol(staticPath3Level, Decl(spreadsAndContextualTupleTypes.ts, 11, 5))
+>randomID : Symbol(randomID, Decl(spreadsAndContextualTupleTypes.ts, 13, 5))
+
