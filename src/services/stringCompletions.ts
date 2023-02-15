@@ -551,7 +551,7 @@ function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile
     const scriptDirectory = getDirectoryPath(scriptPath);
     const extensionOptions = getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile, typeChecker, preferences, mode);
 
-    return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && (isRootedDiskPath(literalValue) || isUrl(literalValue))
+    return isPathRelativeToScript(literalValue) || (!compilerOptions.baseUrl || !compilerOptions.paths) && (isRootedDiskPath(literalValue) || isUrl(literalValue))
         ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath, extensionOptions)
         : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, mode, compilerOptions, host, extensionOptions, typeChecker);
 }
@@ -838,17 +838,20 @@ function getCompletionEntriesForNonRelativeModules(
     extensionOptions: ExtensionOptions,
     typeChecker: TypeChecker,
 ): readonly NameAndKind[] {
-    const { baseUrl, paths } = compilerOptions;
+    const { baseUrl, paths, pathsBasePath } = compilerOptions;
 
     const result = createNameAndKindSet();
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+
+    const projectDir = compilerOptions.project || host.getCurrentDirectory();
+
+    const absolute = normalizePath(combinePaths(projectDir, baseUrl ?? pathsBasePath));
     if (baseUrl) {
-        const projectDir = compilerOptions.project || host.getCurrentDirectory();
-        const absolute = normalizePath(combinePaths(projectDir, baseUrl));
         getCompletionEntriesForDirectoryFragment(fragment, absolute, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
-        if (paths) {
-            addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions, host, paths);
-        }
+    }
+
+    if (paths) {
+        addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions, host, paths);
     }
 
     const fragmentDirectory = getFragmentDirectory(fragment);
