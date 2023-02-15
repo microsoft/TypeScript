@@ -1,12 +1,20 @@
 // @strict: true
 // @noEmit: true
 
-declare function fx4<T extends [string, string, string, 'a' | 'b']>(x: T): T;
+declare function fx1<T extends [string, string, string, 'a' | 'b']>(x: T): T;
+declare function fx2<T extends [...string[], 'a' | 'b']>(x: T): T;
 
 const t3 = ['x', 'y', 'z'] as const;
 
-fx4(['x', 'y', 'z', 'a']);
-fx4([...t3, 'a']);
+fx1(['x', 'y', 'z', 'a']);
+fx1([...t3, 'a']);
+
+fx2(['x', 'y', 'z', 'a']);
+fx2([...t3, 'a']);
+
+const x1: [...string[], '!'] = ['!'];
+const x2: [...string[], '!'] = ['a', '!'];
+const x3: [...string[], '!'] = [...t3, '!'];
 
 // Repro from #52684
 
