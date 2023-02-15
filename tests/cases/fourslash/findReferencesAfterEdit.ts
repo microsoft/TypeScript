@@ -12,9 +12,15 @@
 ////    x./*2*/foo
 ////}
 
-verify.baselineFindAllReferencesMulti(1, '1', '2');
-
-goTo.marker("");
-edit.insert("\n");
-
-verify.baselineFindAllReferencesMulti(2, '1', '2');
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ['1', '2'] },
+    {
+        type: "customWork",
+        work: () => {
+            goTo.marker("");
+            edit.insert("\n");
+            return "edits";
+        }
+    },
+    { type: "findAllReferences", markerOrRange: ['1', '2'] },
+);
