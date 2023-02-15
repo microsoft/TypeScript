@@ -203,6 +203,7 @@ declare namespace FourSlashInterface {
         end: number;
         marker?: Marker;
     }
+    type MarkerOrNameOrRange = string | Marker | Range;
     interface TextSpan {
         start: number;
         end: number;
@@ -336,9 +337,22 @@ declare namespace FourSlashInterface {
         goToType(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
-        baselineFindAllReferences(...markerNames: string[]): void;
-        baselineFindAllReferencesMulti(seq: number, ...markerNames: string[]): void;
-        baselineGetFileReferences(fileName: string): void;
+        baselineCommands(...commands: BaselineCommand[]): void;
+        baselineFindAllReferences(...markerOrRange: MarkerOrNameOrRange[]): void;
+        baselineFindAllReferencesAtRangesWithText(...rangeText: string[]): void;
+        baselineGetFileReferences(...fileName: string[]): void;
+        baselineGoToDefinition(...markerOrRange: MarkerOrNameOrRange[]): void;
+        baselineGoToDefinitionAtRangesWithText(...rangeText: string[]): void;
+        baselineGetDefinitionAtPosition(...markerOrRange: MarkerOrNameOrRange[]): void;
+        baselineGetDefinitionAtRangesWithText(...rangeText: string[]): void;
+        baselineGoToSourceDefinition(...markerOrRange: MarkerOrNameOrRange[]): void;
+        baselineGoToSourceDefinitionAtRangesWithText(...rangeText: string[]): void;
+        baselineGoToType(...markerOrRange: MarkerOrNameOrRange[]): void;
+        baselineGoToTypeAtRangesWithText(...rangeText: string[]): void;
+        baselineGoToImplementation(...markerOrRange: MarkerOrNameOrRange[]): void;
+        baselineGoToImplementationAtRangesWithText(...rangeText: string[]): void;
+        baselineDocumentHighlights(markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>, options?: VerifyDocumentHighlightsOptions): void;
+        baselineDocumentHighlightsAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: VerifyDocumentHighlightsOptions): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
         typeAtLocation(range: Range, expected: string): void;
@@ -416,7 +430,8 @@ declare namespace FourSlashInterface {
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, preferences?: UserPreferences): void;
         renameInfoFailed(message?: string, preferences?: UserPreferences): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
-        baselineRename(marker: string, options: RenameOptions): void;
+        baselineRename(markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>, options?: RenameOptions): void;
+        baselineRenameAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: RenameOptions): void;
 
         /** Verify the quick info available at the current marker. */
         quickInfoIs(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]): void;
@@ -463,6 +478,7 @@ declare namespace FourSlashInterface {
         uncommentSelection(newFileContent: string): void;
     }
     class edit {
+        caretPosition(): Marker;
         backspace(count?: number): void;
         deleteAtCaret(times?: number): void;
         replace(start: number, length: number, text: string): void;
@@ -658,7 +674,7 @@ declare namespace FourSlashInterface {
         reportsDeprecated?: true;
     }
     interface VerifyDocumentHighlightsOptions {
-        filesToSearch?: ReadonlyArray<string>;
+        filesToSearch: ReadonlyArray<string>;
     }
     interface UserPreferences {
         readonly quotePreference?: "auto" | "double" | "single";
@@ -857,6 +873,27 @@ declare namespace FourSlashInterface {
     type RenameOptions = { readonly findInStrings?: boolean, readonly findInComments?: boolean, readonly providePrefixAndSuffixTextForRename?: boolean };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
     type DiagnosticIgnoredInterpolations = { template: string }
+    type BaselineCommand = {
+        type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
+        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
+        rangeText?: ArrayOrSingle<string>;
+    } | {
+        type: "getFileReferences";
+        fileName: ArrayOrSingle<string>;
+    } | {
+        type: "findRenameLocations";
+        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
+        rangeText?: ArrayOrSingle<string>;
+        options?: RenameOptions;
+    } | {
+        type: "documentHighlights";
+        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
+        rangeText?: ArrayOrSingle<string>;
+        options?: VerifyDocumentHighlightsOptions;
+    } | {
+        type: "customWork";
+        work: () => string | undefined;
+    };
 }
 /** Wraps a diagnostic message to be compared ignoring interpolated strings */
 declare function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations;
