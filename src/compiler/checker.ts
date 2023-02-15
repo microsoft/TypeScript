@@ -6670,8 +6670,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else {
+                    // TODO(jakebailey): wrong!
                     // Anonymous types without a symbol are never circular.
-                    return createTypeNodeFromObjectType(type);
+                    if (context.visitedTypes?.has(typeId)) {
+                        // TODO(jakebailey): copy the code above?
+                        // // If type is an anonymous type literal in a type alias declaration, use type alias name
+                        // const typeAlias = getTypeAliasForTypeLiteral(type);
+                        // if (typeAlias) {
+                        //     // The specified symbol flags need to be reinterpreted as type flags
+                        //     return symbolToTypeNode(typeAlias, context, SymbolFlags.Type);
+                        // }
+                        // else {
+                        //     return createElidedInformationPlaceholder(context);
+                        // }
+                        return createElidedInformationPlaceholder(context);
+                    }
+                    return visitAndTransformType(type, createTypeNodeFromObjectType);
+                    // return createTypeNodeFromObjectType(type);
                 }
                 function shouldWriteTypeOfFunctionSymbol() {
                     const isStaticMethodSymbol = !!(symbol.flags & SymbolFlags.Method) &&  // typeof static method
@@ -6726,6 +6741,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     context.symbolDepth!.set(id, depth + 1);
                 }
+                const hasVisited = context.visitedTypes.has(typeId);
                 context.visitedTypes.add(typeId);
                 const startLength = context.approximateLength;
                 const result = transform(type);
@@ -6733,7 +6749,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!context.reportedDiagnostic && !context.encounteredError) {
                     links?.serializedTypes?.set(key, { node: result, truncating: context.truncating, addedLength });
                 }
-                context.visitedTypes.delete(typeId);
+                if (!hasVisited) {
+                    context.visitedTypes.delete(typeId);
+                }
                 if (id) {
                     context.symbolDepth!.set(id, depth!);
                 }

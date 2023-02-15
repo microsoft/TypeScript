@@ -35,19 +35,13 @@ verify.quickInfoAt('2', `function foo<{
     };
 }`);
 verify.quickInfoAt('3', `(property) a: {
-    a: {
-        a: ...;
-    };
+    a: ...;
 }`);
 verify.quickInfoAt('4', `(property) a: {
-    a: {
-        a: ...;
-    };
+    a: ...;
 }`);
 verify.quickInfoAt('5', `(property) a: {
-    a: {
-        a: ...;
-    };
+    a: ...;
 }`);
 verify.quickInfoAt('6', `const oub: {
     [x: string]: ...;
