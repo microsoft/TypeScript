@@ -169,3 +169,17 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/foo.ts ===
+// <|export function /*RENAME*/[|barRENAME|]() { return "bar"; }|>
+// import('./foo').then((<|{ [|barRENAME|]: bar/*END SUFFIX*/ }|>) => undefined);
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/foo.ts ===
+// export function bar() { return "bar"; }
+// import('./foo').then((<|{ /*START PREFIX*/bar: /*RENAME*/[|barRENAME|] }|>) => undefined);

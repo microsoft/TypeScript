@@ -1,0 +1,45 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentNestedInArrayLiteral.ts ===
+// interface I {
+//     /*RENAME*/<|[|property1RENAME|]: number;|>
+//     property2: string;
+// }
+// var elems: I[], p1: number, property1: number;
+// <|[{ [|property1RENAME|]: p1 }] = elems;|>
+// <|[{ [|property1RENAME|]: property1/*END SUFFIX*/ }] = elems;|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentNestedInArrayLiteral.ts ===
+// interface I {
+//     <|[|property1RENAME|]: number;|>
+//     property2: string;
+// }
+// var elems: I[], p1: number, property1: number;
+// <|[{ /*RENAME*/[|property1RENAME|]: p1 }] = elems;|>
+// <|[{ [|property1RENAME|]: property1/*END SUFFIX*/ }] = elems;|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentNestedInArrayLiteral.ts ===
+// interface I {
+//     property1: number;
+//     property2: string;
+// }
+// var elems: I[], p1: number, /*RENAME*/<|[|property1RENAME|]: number|>;
+// [{ property1: p1 }] = elems;
+// <|[{ /*START PREFIX*/property1: [|property1RENAME|] }] = elems;|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentNestedInArrayLiteral.ts ===
+// interface I {
+//     property1: number;
+//     property2: string;
+// }
+// var elems: I[], p1: number, <|[|property1RENAME|]: number|>;
+// [{ property1: p1 }] = elems;
+// <|[{ /*START PREFIX*/property1: /*RENAME*/[|property1RENAME|] }] = elems;|>

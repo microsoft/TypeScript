@@ -355,3 +355,27 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|export var /*RENAME*/[|aRENAME|];|>
+
+// === /tests/cases/fourslash/b.ts ===
+// <|import { [|aRENAME|] } from './a';|>
+// <|export { [|aRENAME|] as a/*END SUFFIX*/ };|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// <|import { /*START PREFIX*/a as /*RENAME*/[|aRENAME|] } from './a';|>
+// <|export { [|aRENAME|] as a/*END SUFFIX*/ };|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// import { a } from './a';
+// <|export { /*START PREFIX*/a as /*RENAME*/[|aRENAME|] };|>

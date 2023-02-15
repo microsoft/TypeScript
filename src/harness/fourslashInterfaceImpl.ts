@@ -641,10 +641,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyRenameInfoFailed(message, preferences);
     }
 
-    public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: RenameLocationsOptions) {
-        this.state.verifyRenameLocations(startRanges, options);
-    }
-
     public baselineRename(markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>, options?: RenameOptions) {
         this.state.verifyBaselineCommands({ type: "findRenameLocations", markerOrRange, options });
     }

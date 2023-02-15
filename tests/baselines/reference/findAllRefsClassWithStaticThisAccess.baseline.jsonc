@@ -181,3 +181,19 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/findAllRefsClassWithStaticThisAccess.ts ===
+// <|class /*RENAME*/[|CRENAME|] {
+//     static s() {
+//         this;
+//     }
+//     static get f() {
+//         return this;
+// 
+//         function inner() { this; }
+//         class Inner { x = this; }
+//     }
+// }|>

@@ -891,3 +891,49 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|export function /*RENAME*/[|fRENAME|]() {}|>
+
+// === /tests/cases/fourslash/b.ts ===
+// <|export { [|fRENAME|] as g } from "./a";|>
+// <|import { [|fRENAME|] } from "./a";|>
+// import { g } from "./b";
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|export function [|fRENAME|]() {}|>
+
+// === /tests/cases/fourslash/b.ts ===
+// <|export { /*RENAME*/[|fRENAME|] as g } from "./a";|>
+// <|import { [|fRENAME|] } from "./a";|>
+// import { g } from "./b";
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// export { f as g } from "./a";
+// <|import { /*START PREFIX*/f as /*RENAME*/[|fRENAME|] } from "./a";|>
+// import { g } from "./b";
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// <|export { f as /*RENAME*/[|gRENAME|] } from "./a";|>
+// import { f } from "./a";
+// <|import { [|gRENAME|] } from "./b";|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// export { f as g } from "./a";
+// import { f } from "./a";
+// <|import { /*START PREFIX*/g as /*RENAME*/[|gRENAME|] } from "./b";|>

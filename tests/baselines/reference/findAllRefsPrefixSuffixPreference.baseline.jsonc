@@ -769,3 +769,228 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: true
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// <|const /*RENAME*/[|qRENAME|] = 1;|>
+// <|export { [|qRENAME|] as q/*END SUFFIX*/ };|>
+// const x = {
+//     z: 'value'
+// }
+// const { z } = x;
+// log(z);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: true
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const q = 1;
+// <|export { /*START PREFIX*/q as /*RENAME*/[|qRENAME|] };|>
+// const x = {
+//     z: 'value'
+// }
+// const { z } = x;
+// log(z);
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// <|import { [|qRENAME|] } from "./file1";|>
+// log([|qRENAME|] + 1);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: true
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// <|import { /*START PREFIX*/q as /*RENAME*/[|qRENAME|] } from "./file1";|>
+// log([|qRENAME|] + 1);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: true
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// <|import { /*START PREFIX*/q as [|qRENAME|] } from "./file1";|>
+// log(/*RENAME*/[|qRENAME|] + 1);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// <|const /*RENAME*/[|qRENAME|] = 1;|>
+// <|export { [|qRENAME|] };|>
+// const x = {
+//     z: 'value'
+// }
+// const { z } = x;
+// log(z);
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// <|import { [|qRENAME|] } from "./file1";|>
+// log([|qRENAME|] + 1);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// <|const [|qRENAME|] = 1;|>
+// <|export { /*RENAME*/[|qRENAME|] };|>
+// const x = {
+//     z: 'value'
+// }
+// const { z } = x;
+// log(z);
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// <|import { [|qRENAME|] } from "./file1";|>
+// log([|qRENAME|] + 1);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// <|import { /*RENAME*/[|qRENAME|] } from "./file1";|>
+// log([|qRENAME|] + 1);
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// <|const [|qRENAME|] = 1;|>
+// <|export { [|qRENAME|] };|>
+// const x = {
+//     z: 'value'
+// }
+// const { z } = x;
+// log(z);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// <|import { [|qRENAME|] } from "./file1";|>
+// log(/*RENAME*/[|qRENAME|] + 1);
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// <|const [|qRENAME|] = 1;|>
+// <|export { [|qRENAME|] };|>
+// const x = {
+//     z: 'value'
+// }
+// const { z } = x;
+// log(z);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: true
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const q = 1;
+// export { q };
+// const x = {
+//     /*RENAME*/<|[|zRENAME|]: 'value'|>
+// }
+// <|const { [|zRENAME|]: z/*END SUFFIX*/ } = x;|>
+// log(z);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: true
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const q = 1;
+// export { q };
+// const x = {
+//     z: 'value'
+// }
+// <|const { /*START PREFIX*/z: /*RENAME*/[|zRENAME|] } = x;|>
+// log([|zRENAME|]);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: true
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const q = 1;
+// export { q };
+// const x = {
+//     z: 'value'
+// }
+// <|const { /*START PREFIX*/z: [|zRENAME|] } = x;|>
+// log(/*RENAME*/[|zRENAME|]);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const q = 1;
+// export { q };
+// const x = {
+//     /*RENAME*/<|[|zRENAME|]: 'value'|>
+// }
+// <|const { [|zRENAME|] } = x;|>
+// log([|zRENAME|]);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const q = 1;
+// export { q };
+// const x = {
+//     <|[|zRENAME|]: 'value'|>
+// }
+// <|const { /*RENAME*/[|zRENAME|] } = x;|>
+// log([|zRENAME|]);
+
+
+
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: false
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const q = 1;
+// export { q };
+// const x = {
+//     <|[|zRENAME|]: 'value'|>
+// }
+// <|const { [|zRENAME|] } = x;|>
+// log(/*RENAME*/[|zRENAME|]);

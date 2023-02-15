@@ -1,0 +1,11 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameModuleExportsProperties2.ts ===
+// <|class /*RENAME*/[|ARENAME|] {}|>
+// module.exports = { B: [|ARENAME|] }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameModuleExportsProperties2.ts ===
+// <|class [|ARENAME|] {}|>
+// module.exports = { B: /*RENAME*/[|ARENAME|] }

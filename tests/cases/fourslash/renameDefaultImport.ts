@@ -16,6 +16,7 @@ verify.occurrencesAtPositionCount(1);
 
 const [CDef, C, B0Def, B0, B1] = test.ranges();;
 
-verify.renameLocations(C, [C, B0, B1]);
-verify.rangesAreRenameLocations([B0, B1]);
-verify.baselineFindAllReferences('1', '2')
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ['1', '2'] },
+    { type: "findRenameLocations", markerOrRange: [C, B0, B1] },
+);

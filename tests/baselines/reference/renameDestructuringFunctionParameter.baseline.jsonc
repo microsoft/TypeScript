@@ -1,0 +1,21 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringFunctionParameter.ts ===
+// function f(<|{/*START PREFIX*/a: /*RENAME*/[|aRENAME|]}: {a}|>) {
+//     f({/*START PREFIX*/a: [|aRENAME|]});
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringFunctionParameter.ts ===
+// function f(<|{/*START PREFIX*/a: [|aRENAME|]}: {a}|>) {
+//     f({/*START PREFIX*/a: /*RENAME*/[|aRENAME|]});
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringFunctionParameter.ts ===
+// function f(<|{[|aRENAME|]: a/*END SUFFIX*/}: {/*RENAME*/[|aRENAME|]}|>) {
+//     f({[|aRENAME|]: a/*END SUFFIX*/});
+// }

@@ -18,8 +18,9 @@ const cRanges = ranges.get("C");
 const dRanges = ranges.get("D");
 const [d0, d1, d2] = dRanges;
 
-verify.rangesAreRenameLocations(cRanges);
-verify.renameLocations(cRanges[1], cRanges);
-verify.renameLocations(d0, dRanges);
-verify.renameLocations([d1, d2], [{ range: d1, prefixText: "D as " }, d2]);
-verify.baselineFindAllReferences('1', '2', '3')
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ['1', '2', '3'] },
+    { type: "findRenameLocations", markerOrRange: cRanges },
+    { type: "findRenameLocations", markerOrRange: d0 },
+    { type: "findRenameLocations", markerOrRange: [d1, d2] },
+);

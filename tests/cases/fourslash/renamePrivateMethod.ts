@@ -8,6 +8,4 @@
 ////}
 
 const ranges = test.rangesByText().get("#foo");
-verify.renameLocations(ranges, {
-    ranges
-});
+verify.baselineRename(ranges);

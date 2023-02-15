@@ -430,3 +430,78 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfReExport2.ts ===
+// declare module "a" {
+//     <|export class /*RENAME*/[|CRENAME|] {}|>
+// }
+// declare module "b" {
+//     <|export { [|CRENAME|] as D } from "a";|>
+// }
+// declare module "c" {
+//     import { D } from "b";
+//     export function f(c: D): void;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfReExport2.ts ===
+// declare module "a" {
+//     <|export class [|CRENAME|] {}|>
+// }
+// declare module "b" {
+//     <|export { /*RENAME*/[|CRENAME|] as D } from "a";|>
+// }
+// declare module "c" {
+//     import { D } from "b";
+//     export function f(c: D): void;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfReExport2.ts ===
+// declare module "a" {
+//     export class C {}
+// }
+// declare module "b" {
+//     <|export { C as /*RENAME*/[|DRENAME|] } from "a";|>
+// }
+// declare module "c" {
+//     <|import { [|DRENAME|] } from "b";|>
+//     export function f(c: [|DRENAME|]): void;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfReExport2.ts ===
+// declare module "a" {
+//     export class C {}
+// }
+// declare module "b" {
+//     export { C as D } from "a";
+// }
+// declare module "c" {
+//     <|import { /*START PREFIX*/D as /*RENAME*/[|DRENAME|] } from "b";|>
+//     export function f(c: [|DRENAME|]): void;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfReExport2.ts ===
+// declare module "a" {
+//     export class C {}
+// }
+// declare module "b" {
+//     export { C as D } from "a";
+// }
+// declare module "c" {
+//     <|import { /*START PREFIX*/D as [|DRENAME|] } from "b";|>
+//     export function f(c: /*RENAME*/[|DRENAME|]): void;
+// }

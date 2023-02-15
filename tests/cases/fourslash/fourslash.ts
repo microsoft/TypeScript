@@ -426,7 +426,6 @@ declare namespace FourSlashInterface {
         replaceWithSemanticClassifications(format: "2020")
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, preferences?: UserPreferences): void;
         renameInfoFailed(message?: string, preferences?: UserPreferences): void;
-        renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
         baselineRename(markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>, options?: RenameOptions): void;
         baselineRenameAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: RenameOptions): void;
 

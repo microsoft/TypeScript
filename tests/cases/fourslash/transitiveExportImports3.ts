@@ -11,10 +11,10 @@
 verify.noErrors();
 
 const [f0Def, f0, f1Def, f1, g0, f2Def, f2, g1Def, g1] = test.ranges();
-
-verify.baselineFindAllReferences('f', 'g0', 'g1', 'f2')
-
-verify.renameLocations([f0, f1], [f0, f1, f2]);
-verify.renameLocations(f2, [{ range: f2, prefixText: "f as " }]);
-verify.renameLocations(g0, [g0, g1]);
-verify.renameLocations(g1, [{ range: g1, prefixText: "g as " }]);
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ['f', 'g0', 'g1', 'f2'] },
+    { type: "findRenameLocations", markerOrRange: [f0, f1] },
+    { type: "findRenameLocations", markerOrRange: f2 },
+    { type: "findRenameLocations", markerOrRange: g0 },
+    { type: "findRenameLocations", markerOrRange: g1 },
+);

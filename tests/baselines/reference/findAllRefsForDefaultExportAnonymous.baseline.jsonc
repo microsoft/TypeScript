@@ -159,3 +159,9 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// <|import /*RENAME*/[|fRENAME|] from "./a";|>

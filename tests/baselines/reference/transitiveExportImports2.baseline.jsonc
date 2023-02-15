@@ -458,3 +458,53 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|namespace /*RENAME*/[|ARENAME|] {
+//     export const x = 0;
+// }|>
+
+// === /tests/cases/fourslash/b.ts ===
+// export import B = [|ARENAME|];
+// B.x;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|namespace [|ARENAME|] {
+//     export const x = 0;
+// }|>
+
+// === /tests/cases/fourslash/b.ts ===
+// export import B = /*RENAME*/[|ARENAME|];
+// B.x;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// <|export import /*RENAME*/[|BRENAME|] = A;|>
+// [|BRENAME|].x;
+
+// === /tests/cases/fourslash/c.ts ===
+// <|import { [|BRENAME|] } from "./b";|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// <|export import [|BRENAME|] = A;|>
+// /*RENAME*/[|BRENAME|].x;
+
+// === /tests/cases/fourslash/c.ts ===
+// <|import { [|BRENAME|] } from "./b";|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/c.ts ===
+// <|import { /*START PREFIX*/B as /*RENAME*/[|BRENAME|] } from "./b";|>

@@ -1,0 +1,30 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameObjectSpread.ts ===
+// interface A1 { /*RENAME*/<|[|aRENAME|]: number|> };
+// interface A2 { a?: number };
+// let a1: A1;
+// let a2: A2;
+// let a12 = { ...a1, ...a2 };
+// a12.[|aRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameObjectSpread.ts ===
+// interface A1 { a: number };
+// interface A2 { /*RENAME*/<|[|aRENAME|]?: number|> };
+// let a1: A1;
+// let a2: A2;
+// let a12 = { ...a1, ...a2 };
+// a12.[|aRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameObjectSpread.ts ===
+// interface A1 { <|[|aRENAME|]: number|> };
+// interface A2 { <|[|aRENAME|]?: number|> };
+// let a1: A1;
+// let a2: A2;
+// let a12 = { ...a1, ...a2 };
+// a12./*RENAME*/[|aRENAME|];

@@ -5889,3 +5889,132 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|export function /*RENAME*/[|fooRENAME|](): void {}|>
+
+// === /b.ts ===
+// <|export { [|fooRENAME|] as bar } from "./a";|>
+
+// === /c.ts ===
+// <|export { [|fooRENAME|] as default } from "./a";|>
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|export function [|fooRENAME|](): void {}|>
+
+// === /b.ts ===
+// <|export { /*RENAME*/[|fooRENAME|] as bar } from "./a";|>
+
+// === /c.ts ===
+// <|export { [|fooRENAME|] as default } from "./a";|>
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|export function [|fooRENAME|](): void {}|>
+
+// === /b.ts ===
+// <|export { [|fooRENAME|] as bar } from "./a";|>
+
+// === /c.ts ===
+// <|export { /*RENAME*/[|fooRENAME|] as default } from "./a";|>
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// <|export { foo as /*RENAME*/[|barRENAME|] } from "./a";|>
+
+// === /e.ts ===
+// <|import { [|barRENAME|] } from "./b";|>
+// import baz from "./c";
+// import { default as bang } from "./c";
+// import boom from "./d";
+// [|barRENAME|](); baz(); bang(); boom();
+
+
+
+// === findRenameLocations ===
+// === /e.ts ===
+// <|import { /*START PREFIX*/bar as /*RENAME*/[|barRENAME|] } from "./b";|>
+// import baz from "./c";
+// import { default as bang } from "./c";
+// import boom from "./d";
+// [|barRENAME|](); baz(); bang(); boom();
+
+
+
+// === findRenameLocations ===
+// === /e.ts ===
+// <|import { /*START PREFIX*/bar as [|barRENAME|] } from "./b";|>
+// import baz from "./c";
+// import { default as bang } from "./c";
+// import boom from "./d";
+// /*RENAME*/[|barRENAME|](); baz(); bang(); boom();
+
+
+
+// === findRenameLocations ===
+// === /e.ts ===
+// import { bar } from "./b";
+// <|import /*RENAME*/[|bazRENAME|] from "./c";|>
+// import { default as bang } from "./c";
+// import boom from "./d";
+// bar(); [|bazRENAME|](); bang(); boom();
+
+
+
+// === findRenameLocations ===
+// === /e.ts ===
+// import { bar } from "./b";
+// <|import [|bazRENAME|] from "./c";|>
+// import { default as bang } from "./c";
+// import boom from "./d";
+// bar(); /*RENAME*/[|bazRENAME|](); bang(); boom();
+
+
+
+// === findRenameLocations ===
+// === /e.ts ===
+// import { bar } from "./b";
+// import baz from "./c";
+// <|import { default as /*RENAME*/[|bangRENAME|] } from "./c";|>
+// import boom from "./d";
+// bar(); baz(); [|bangRENAME|](); boom();
+
+
+
+// === findRenameLocations ===
+// === /e.ts ===
+// import { bar } from "./b";
+// import baz from "./c";
+// <|import { default as [|bangRENAME|] } from "./c";|>
+// import boom from "./d";
+// bar(); baz(); /*RENAME*/[|bangRENAME|](); boom();
+
+
+
+// === findRenameLocations ===
+// === /e.ts ===
+// import { bar } from "./b";
+// import baz from "./c";
+// import { default as bang } from "./c";
+// <|import /*RENAME*/[|boomRENAME|] from "./d";|>
+// bar(); baz(); bang(); [|boomRENAME|]();
+
+
+
+// === findRenameLocations ===
+// === /e.ts ===
+// import { bar } from "./b";
+// import baz from "./c";
+// import { default as bang } from "./c";
+// <|import [|boomRENAME|] from "./d";|>
+// bar(); baz(); bang(); /*RENAME*/[|boomRENAME|]();

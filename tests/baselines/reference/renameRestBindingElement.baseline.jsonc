@@ -1,0 +1,12 @@
+// === findRenameLocations ===
+// @providePrefixAndSuffixTextForRename: true
+
+// === /tests/cases/fourslash/renameRestBindingElement.ts ===
+// interface I {
+//     a: number;
+//     b: number;
+//     c: number;
+// }
+// function foo(<|{ a, .../*RENAME*/[|restRENAME|] }: I|>) {
+//     [|restRENAME|];
+// }
