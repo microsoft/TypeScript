@@ -6725,15 +6725,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     context.symbolDepth!.set(id, depth + 1);
                 }
-                const hasVisited = context.visitedTypes.has(typeId);
-                context.visitedTypes.add(typeId);
+                const typeAlreadyVisited = context.visitedTypes.has(typeId);
+                if (!typeAlreadyVisited) {
+                    context.visitedTypes.add(typeId);
+                }
                 const startLength = context.approximateLength;
                 const result = transform(type);
                 const addedLength = context.approximateLength - startLength;
                 if (!context.reportedDiagnostic && !context.encounteredError) {
                     links?.serializedTypes?.set(key, { node: result, truncating: context.truncating, addedLength });
                 }
-                if (!hasVisited) {
+                if (!typeAlreadyVisited) {
                     context.visitedTypes.delete(typeId);
                 }
                 if (id) {
