@@ -100,6 +100,7 @@ import {
     getSourceFileOfNode,
     hostGetCanonicalFileName,
     importFromModuleSpecifier,
+    importNameElisionDisabled,
     isExternalModule,
     isInJSFile,
     isIntrinsicJsxName,
@@ -650,7 +651,8 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
                 quotePreference,
                 defaultImport,
                 namedImports && arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
-                namespaceLikeImport);
+                namespaceLikeImport,
+                compilerOptions);
             newDeclarations = combine(newDeclarations, declarations);
         });
         if (newDeclarations) {
@@ -797,7 +799,7 @@ function getAddAsTypeOnly(
         // Not writing a (top-level) type-only import here would create an error because the runtime dependency is unnecessary
         return AddAsTypeOnly.Required;
     }
-    if ((compilerOptions.isolatedModules && compilerOptions.preserveValueImports || compilerOptions.verbatimModuleSyntax) &&
+    if (importNameElisionDisabled(compilerOptions) &&
         (!(targetFlags & SymbolFlags.Value) || !!checker.getTypeOnlyAliasDeclaration(symbol))
     ) {
         // A type-only import is required for this symbol if under these settings if the symbol will
@@ -1315,7 +1317,13 @@ function codeActionForFixWorker(changes: ChangeTracker, sourceFile: SourceFile, 
             const namespaceLikeImport = importKind === ImportKind.Namespace || importKind === ImportKind.CommonJS
                 ? { importKind, name: qualification?.namespacePrefix || symbolName, addAsTypeOnly }
                 : undefined;
-            insertImports(changes, sourceFile, getDeclarations(moduleSpecifier, quotePreference, defaultImport, namedImports, namespaceLikeImport), /*blankLineBetween*/ true, preferences);
+            insertImports(changes, sourceFile, getDeclarations(
+                moduleSpecifier,
+                quotePreference,
+                defaultImport,
+                namedImports,
+                namespaceLikeImport,
+                compilerOptions), /*blankLineBetween*/ true, preferences);
             if (qualification) {
                 addNamespaceQualifier(changes, sourceFile, qualification);
             }
@@ -1343,7 +1351,7 @@ function getModuleSpecifierText(promotedDeclaration: ImportClause | ImportEquals
 
 function promoteFromTypeOnly(changes: ChangeTracker, aliasDeclaration: TypeOnlyAliasDeclaration, compilerOptions: CompilerOptions, sourceFile: SourceFile, preferences: UserPreferences) {
     // See comment in `doAddExistingFix` on constant with the same name.
-    const convertExistingToTypeOnly = compilerOptions.preserveValueImports && compilerOptions.isolatedModules || compilerOptions.verbatimModuleSyntax;
+    const convertExistingToTypeOnly = importNameElisionDisabled(compilerOptions);
     switch (aliasDeclaration.kind) {
         case SyntaxKind.ImportSpecifier:
             if (aliasDeclaration.isTypeOnly) {
@@ -1429,8 +1437,7 @@ function doAddExistingFix(
     // never used in an emitting position). These are allowed to be imported without being type-only,
     // but the user has clearly already signified that they don't need them to be present at runtime
     // by placing them in a type-only import. So, just mark each specifier as type-only.
-    const convertExistingToTypeOnly = promoteFromTypeOnly
-        && (compilerOptions.preserveValueImports && compilerOptions.isolatedModules || compilerOptions.verbatimModuleSyntax);
+    const convertExistingToTypeOnly = promoteFromTypeOnly && importNameElisionDisabled(compilerOptions);
 
     if (defaultImport) {
         Debug.assert(!clause.name, "Cannot add a default import to an import clause that already has one");
@@ -1541,12 +1548,18 @@ function getNewImports(
     quotePreference: QuotePreference,
     defaultImport: Import | undefined,
     namedImports: readonly Import[] | undefined,
-    namespaceLikeImport: Import & { importKind: ImportKind.CommonJS | ImportKind.Namespace } | undefined
+    namespaceLikeImport: Import & { importKind: ImportKind.CommonJS | ImportKind.Namespace } | undefined,
+    compilerOptions: CompilerOptions,
 ): AnyImportSyntax | readonly AnyImportSyntax[] {
     const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
     let statements: AnyImportSyntax | readonly AnyImportSyntax[] | undefined;
     if (defaultImport !== undefined || namedImports?.length) {
-        const topLevelTypeOnly = (!defaultImport || needsTypeOnly(defaultImport)) && every(namedImports, needsTypeOnly);
+        // `verbatimModuleSyntax` should prefer top-level `import type` -
+        // even though it's not an error, it would add unnecessary runtime emit.
+        const topLevelTypeOnly = (!defaultImport || needsTypeOnly(defaultImport)) && every(namedImports, needsTypeOnly) ||
+            compilerOptions.verbatimModuleSyntax &&
+            defaultImport?.addAsTypeOnly !== AddAsTypeOnly.NotAllowed &&
+            !some(namedImports, i => i.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
         statements = combine(statements, makeImport(
             defaultImport && factory.createIdentifier(defaultImport.name),
             namedImports?.map(({ addAsTypeOnly, name }) => factory.createImportSpecifier(

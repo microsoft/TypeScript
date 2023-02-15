@@ -75,6 +75,7 @@ import {
     getAllAccessorDeclarations,
     getEmitModuleKind,
     getFirstConstructorWithBody,
+    getIsolatedModules,
     getNamespaceDeclarationNode,
     getStrictOptionValue,
     hasDecorators,
@@ -765,7 +766,7 @@ export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOption
     if (startsWithUseStrict(node.statements)) {
         return true;
     }
-    if (isExternalModule(node) || compilerOptions.isolatedModules) {
+    if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
         // ECMAScript Modules are always strict.
         if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
             return true;

@@ -7813,7 +7813,7 @@ export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
 
 /** @internal */
 export function shouldPreserveConstEnums(compilerOptions: CompilerOptions): boolean {
-    return !!(compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
+    return !!(compilerOptions.preserveConstEnums || getIsolatedModules(compilerOptions));
 }
 
 /** @internal */
@@ -8689,7 +8689,7 @@ export function getSourceFileOfModule(module: Symbol) {
 
 /** @internal */
 export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-    return isExternalModule(node) || compilerOptions.isolatedModules || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
+    return isExternalModule(node) || getIsolatedModules(compilerOptions) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
 }
 
 /** @internal */
