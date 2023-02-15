@@ -1,4 +1,4 @@
-=== tests/cases/compiler/issue52757.ts ===
+=== tests/cases/compiler/selfReferentialFunctionType.ts ===
 function f<T>(args: typeof f<T>): T { return args; }
 >f : <T>(args: typeof f<T>) => T
 >args : (args: typeof f<T>) => T
