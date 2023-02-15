@@ -1760,20 +1760,6 @@ export class TestState {
 
     }
 
-    public verifyDisplayPartsOfReferencedSymbol(expected: ts.SymbolDisplayPart[]) {
-        const referencedSymbols = this.findReferencesAtCaret()!;
-
-        if (referencedSymbols.length === 0) {
-            this.raiseError("No referenced symbols found at current caret position");
-        }
-        else if (referencedSymbols.length > 1) {
-            this.raiseError("More than one referenced symbol found");
-        }
-
-        assert.equal(TestState.getDisplayPartsJson(referencedSymbols[0].definition.displayParts),
-            TestState.getDisplayPartsJson(expected), this.messageAtLastKnownMarker("referenced symbol definition display parts"));
-    }
-
     private configure(preferences: ts.UserPreferences) {
         if (this.testType === FourSlashTestType.Server) {
             (this.languageService as ts.server.SessionClient).configure(preferences);

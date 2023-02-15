@@ -430,10 +430,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyBaselineCommands({ type: "documentHighlights", rangeText, options });
     }
 
-    public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {
-        this.state.verifyDisplayPartsOfReferencedSymbol(expected);
-    }
-
     public noErrors() {
         this.state.verifyNoErrors();
     }
