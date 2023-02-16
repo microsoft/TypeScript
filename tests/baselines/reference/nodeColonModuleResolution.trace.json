@@ -1,20 +1,7 @@
 [
     "======== Resolving module 'node:ph' from '/a/b/main.ts'. ========",
     "Explicitly specified module resolution kind: 'Node10'.",
-    "Loading module 'node:ph' from 'node_modules' folder, target file types: TypeScript, Declaration.",
-    "Skipping module '/a/b/node_modules/node:ph' that looks like an absolute URI.",
-    "Skipping module '/a/b/node_modules/@types/node:ph' that looks like an absolute URI.",
-    "Directory '/a/node_modules' does not exist, skipping all lookups in it.",
-    "Skipping module '/a/node_modules/node:ph' that looks like an absolute URI.",
-    "Skipping module '/a/node_modules/@types/node:ph' that looks like an absolute URI.",
-    "Directory '/node_modules' does not exist, skipping all lookups in it.",
-    "Skipping module '/node_modules/node:ph' that looks like an absolute URI.",
-    "Skipping module '/node_modules/@types/node:ph' that looks like an absolute URI.",
-    "Loading module 'node:ph' from 'node_modules' folder, target file types: JavaScript.",
-    "Skipping module '/a/b/node_modules/node:ph' that looks like an absolute URI.",
-    "Directory '/a/node_modules' does not exist, skipping all lookups in it.",
-    "Skipping module '/a/node_modules/node:ph' that looks like an absolute URI.",
-    "Directory '/node_modules' does not exist, skipping all lookups in it.",
-    "Skipping module '/node_modules/node:ph' that looks like an absolute URI.",
+    "Skipping module 'node:ph' that looks like an absolute URI, target file types: TypeScript, Declaration.",
+    "Skipping module 'node:ph' that looks like an absolute URI, target file types: JavaScript.",
     "======== Module name 'node:ph' was not resolved. ========"
 ]

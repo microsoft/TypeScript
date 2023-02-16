@@ -1770,6 +1770,12 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
                 resolved = loadModuleFromSelfNameReference(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
             }
             if (!resolved) {
+                if (moduleName.indexOf(":") > -1) {
+                    if (traceEnabled) {
+                        trace(host, Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI_target_file_types_Colon_1, moduleName, formatExtensions(extensions));
+                    }
+                    return undefined;
+                }
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_types_Colon_1, moduleName, formatExtensions(extensions));
                 }
@@ -2839,12 +2845,6 @@ function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, mod
 
 function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, moduleName: string, nodeModulesDirectory: string, nodeModulesDirectoryExists: boolean, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): Resolved | undefined {
     const candidate = normalizePath(combinePaths(nodeModulesDirectory, moduleName));
-    if (moduleName.indexOf(":") > -1) {
-        if (state.traceEnabled) {
-            trace(state.host, Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI, candidate);
-        }
-        return undefined;
-    }
     const { packageName, rest } = parsePackageName(moduleName);
     const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
 
