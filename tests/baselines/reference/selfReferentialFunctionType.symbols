@@ -1,26 +1,23 @@
 === tests/cases/compiler/selfReferentialFunctionType.ts ===
-function f<T>(args: typeof f<T>): T { return args; }
+declare function f<T>(args: typeof f<T>): T;
 >f : Symbol(f, Decl(selfReferentialFunctionType.ts, 0, 0))
->T : Symbol(T, Decl(selfReferentialFunctionType.ts, 0, 11))
->args : Symbol(args, Decl(selfReferentialFunctionType.ts, 0, 14))
+>T : Symbol(T, Decl(selfReferentialFunctionType.ts, 0, 19))
+>args : Symbol(args, Decl(selfReferentialFunctionType.ts, 0, 22))
 >f : Symbol(f, Decl(selfReferentialFunctionType.ts, 0, 0))
->T : Symbol(T, Decl(selfReferentialFunctionType.ts, 0, 11))
->T : Symbol(T, Decl(selfReferentialFunctionType.ts, 0, 11))
->args : Symbol(args, Decl(selfReferentialFunctionType.ts, 0, 14))
+>T : Symbol(T, Decl(selfReferentialFunctionType.ts, 0, 19))
+>T : Symbol(T, Decl(selfReferentialFunctionType.ts, 0, 19))
 
-function g<T = typeof g>(args: T): T { return args; }
->g : Symbol(g, Decl(selfReferentialFunctionType.ts, 0, 52))
->T : Symbol(T, Decl(selfReferentialFunctionType.ts, 2, 11))
->g : Symbol(g, Decl(selfReferentialFunctionType.ts, 0, 52))
->args : Symbol(args, Decl(selfReferentialFunctionType.ts, 2, 25))
->T : Symbol(T, Decl(selfReferentialFunctionType.ts, 2, 11))
->T : Symbol(T, Decl(selfReferentialFunctionType.ts, 2, 11))
->args : Symbol(args, Decl(selfReferentialFunctionType.ts, 2, 25))
+declare function g<T = typeof g>(args: T): T;
+>g : Symbol(g, Decl(selfReferentialFunctionType.ts, 0, 44))
+>T : Symbol(T, Decl(selfReferentialFunctionType.ts, 1, 19))
+>g : Symbol(g, Decl(selfReferentialFunctionType.ts, 0, 44))
+>args : Symbol(args, Decl(selfReferentialFunctionType.ts, 1, 33))
+>T : Symbol(T, Decl(selfReferentialFunctionType.ts, 1, 19))
+>T : Symbol(T, Decl(selfReferentialFunctionType.ts, 1, 19))
 
-function h<T>(): typeof h<T> { return h; }
->h : Symbol(h, Decl(selfReferentialFunctionType.ts, 2, 53))
->T : Symbol(T, Decl(selfReferentialFunctionType.ts, 4, 11))
->h : Symbol(h, Decl(selfReferentialFunctionType.ts, 2, 53))
->T : Symbol(T, Decl(selfReferentialFunctionType.ts, 4, 11))
->h : Symbol(h, Decl(selfReferentialFunctionType.ts, 2, 53))
+declare function h<T>(): typeof h<T>;
+>h : Symbol(h, Decl(selfReferentialFunctionType.ts, 1, 45))
+>T : Symbol(T, Decl(selfReferentialFunctionType.ts, 2, 19))
+>h : Symbol(h, Decl(selfReferentialFunctionType.ts, 1, 45))
+>T : Symbol(T, Decl(selfReferentialFunctionType.ts, 2, 19))
 
