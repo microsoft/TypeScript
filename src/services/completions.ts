@@ -26,10 +26,8 @@ import {
     CompletionEntryDataUnresolved,
     CompletionEntryDetails,
     CompletionEntryLabelDetails,
-    CompletionEntryWithApiData,
     CompletionInfo,
     CompletionInfoFlags,
-    CompletionInfoWithApiData,
     CompletionsTriggerCharacter,
     CompletionTriggerKind,
     concatenate,
@@ -871,7 +869,7 @@ function completionInfoFromData(
     formatContext: formatting.FormatContext | undefined,
     position: number,
     includeApiData: boolean | undefined,
-): CompletionInfoWithApiData | undefined {
+): CompletionInfo | undefined {
     const {
         symbols,
         contextToken,
@@ -924,7 +922,7 @@ function completionInfoFromData(
         });
     }
 
-    const entries = createSortedArray<CompletionEntryWithApiData>();
+    const entries = createSortedArray<CompletionEntry>();
     const isChecked = isCheckedFile(sourceFile, compilerOptions);
     if (isChecked && !isNewIdentifierLocation && (!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
         return undefined;
@@ -1345,7 +1343,7 @@ function createCompletionEntry(
     isJsxIdentifierExpected: boolean | undefined,
     isRightOfOpenTag: boolean | undefined,
     includeApiData: boolean
-): CompletionEntryWithApiData | undefined {
+): CompletionEntry | undefined {
     let insertText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
     let data: CompletionEntryData | undefined;
@@ -2102,7 +2100,7 @@ function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | und
 /** @internal */
 export function getCompletionEntriesFromSymbols(
     symbols: readonly Symbol[],
-    entries: SortedArray<CompletionEntryWithApiData>,
+    entries: SortedArray<CompletionEntry>,
     replacementToken: Node | undefined,
     contextToken: Node | undefined,
     location: Node,

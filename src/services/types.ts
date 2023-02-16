@@ -518,7 +518,6 @@ export interface LanguageService {
      * of code actions can be returned with the completions.
      * @param formattingSettings settings needed for calling formatting functions.
      */
-    getCompletionsAtPosition(fileName: string, position: number, options: { includeApiData: true } & GetCompletionsAtPositionOptions, formattingSettings?: FormatCodeSettings): WithMetadata<CompletionInfoWithApiData> | undefined;
     getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, formattingSettings?: FormatCodeSettings): WithMetadata<CompletionInfo> | undefined;
 
     /**
@@ -1339,10 +1338,6 @@ export interface CompletionInfo {
     entries: CompletionEntry[];
 }
 
-export interface CompletionInfoWithApiData extends CompletionInfo {
-    entries: CompletionEntryWithApiData[]
-}
-
 export interface CompletionEntryDataAutoImport {
     /**
      * The name of the property or export in the module's symbol table. Differs from the completion name
@@ -1391,6 +1386,7 @@ export interface CompletionEntry {
     isFromUncheckedFile?: true;
     isPackageJsonImport?: true;
     isImportStatementCompletion?: true;
+    symbol?: Symbol
     /**
      * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
      * that allows TS Server to look up the symbol represented by the completion item, disambiguating
@@ -1400,10 +1396,6 @@ export interface CompletionEntry {
      * is an auto-import.
      */
     data?: CompletionEntryData;
-}
-
-export interface CompletionEntryWithApiData extends CompletionEntry {
-    symbol?: Symbol
 }
 
 export interface CompletionEntryLabelDetails {
