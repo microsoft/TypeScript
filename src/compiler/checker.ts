@@ -22983,8 +22983,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getCachedType(key) ?? setCachedType(key, mapType(type, getBaseTypeOfLiteralType));
     }
 
-    // This is the same as getBaseTypeOfLiteralType, but checks EnumLiteral last so we get
-    // a specific literal's base type rather than the enum's base type.
+    // This like getBaseTypeOfLiteralType, but instead treats enum literals as strings/numbers instead
+    // of returning their enum base type (which depends on the types of other literals in the enum).
     function getBaseTypeOfLiteralTypeForComparison(type: Type): Type {
         return type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? stringType :
             type.flags & (TypeFlags.NumberLiteral | TypeFlags.Enum) ? numberType :
