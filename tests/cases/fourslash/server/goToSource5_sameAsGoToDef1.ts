@@ -14,4 +14,4 @@
 //// [|a/*start*/|]
 
 verify.goToDefinition("start", "end");
-verify.goToSourceDefinition("start", "end");
+verify.baselineGoToSourceDefinition("start");

@@ -334,10 +334,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyGoToType(arg0, endMarkerName);
     }
 
-    public goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, end: { file: string } | ArrayOrSingle<string>) {
-        this.state.verifyGoToSourceDefinition(startMarkerNames, end);
-    }
-
     public goToDefinitionForMarkers(...markerNames: string[]) {
         this.state.verifyGoToDefinitionForMarkers(markerNames);
     }
