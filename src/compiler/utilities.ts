@@ -266,7 +266,6 @@ import {
     isFunctionLike,
     isFunctionLikeDeclaration,
     isFunctionLikeOrClassStaticBlockDeclaration,
-    isFunctionTypeNode,
     isGetAccessorDeclaration,
     isHeritageClause,
     isIdentifier,
