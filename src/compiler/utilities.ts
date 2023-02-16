@@ -1781,7 +1781,7 @@ function isCommonJSContainingModuleKind(kind: ModuleKind) {
 
 /** @internal */
 export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-    return isExternalModule(node) || compilerOptions.isolatedModules || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
+    return isExternalModule(node) || getIsolatedModules(compilerOptions) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
 }
 
 /**
@@ -1812,7 +1812,7 @@ export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOption
     if (startsWithUseStrict(node.statements)) {
         return true;
     }
-    if (isExternalModule(node) || compilerOptions.isolatedModules) {
+    if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
         // ECMAScript Modules are always strict.
         if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
             return true;
@@ -8443,7 +8443,7 @@ export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
 
 /** @internal */
 export function shouldPreserveConstEnums(compilerOptions: CompilerOptions): boolean {
-    return !!(compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
+    return !!(compilerOptions.preserveConstEnums || getIsolatedModules(compilerOptions));
 }
 
 /** @internal */

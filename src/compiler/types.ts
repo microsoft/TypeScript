@@ -5997,6 +5997,7 @@ export interface NodeLinks {
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
+    parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
 }
 
 /** @internal */
@@ -6042,7 +6043,8 @@ export const enum TypeFlags {
     /** @internal */
     Nullable = Undefined | Null,
     Literal = StringLiteral | NumberLiteral | BigIntLiteral | BooleanLiteral,
-    Unit = Literal | UniqueESSymbol | Nullable,
+    Unit = Enum | Literal | UniqueESSymbol | Nullable,
+    Freshable = Enum | Literal,
     StringOrNumberLiteral = StringLiteral | NumberLiteral,
     /** @internal */
     StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
@@ -6052,7 +6054,7 @@ export const enum TypeFlags {
     /** @internal */
     Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
     /** @internal */
-    Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
+    Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol | TemplateLiteral,
     StringLike = String | StringLiteral | TemplateLiteral | StringMapping,
     NumberLike = Number | NumberLiteral | Enum,
     BigIntLike = BigInt | BigIntLiteral,
@@ -6136,22 +6138,20 @@ export interface NullableType extends IntrinsicType {
     objectFlags: ObjectFlags;
 }
 
-/** @internal */
-export interface FreshableIntrinsicType extends IntrinsicType {
-    freshType: IntrinsicType;     // Fresh version of type
-    regularType: IntrinsicType;   // Regular version of type
+export interface FreshableType extends Type {
+    freshType: FreshableType;     // Fresh version of type
+    regularType: FreshableType;   // Regular version of type
 }
 
 /** @internal */
-export type FreshableType = LiteralType | FreshableIntrinsicType;
+export interface FreshableIntrinsicType extends FreshableType, IntrinsicType {
+}
 
 // String literal types (TypeFlags.StringLiteral)
 // Numeric literal types (TypeFlags.NumberLiteral)
 // BigInt literal types (TypeFlags.BigIntLiteral)
-export interface LiteralType extends Type {
+export interface LiteralType extends FreshableType {
     value: string | number | PseudoBigInt; // Value of literal
-    freshType: LiteralType;                // Fresh version of type
-    regularType: LiteralType;              // Regular version of type
 }
 
 // Unique symbol types (TypeFlags.UniqueESSymbol)
@@ -6173,7 +6173,7 @@ export interface BigIntLiteralType extends LiteralType {
 }
 
 // Enum types (TypeFlags.Enum)
-export interface EnumType extends Type {
+export interface EnumType extends FreshableType {
 }
 
 // Types included in TypeFlags.ObjectFlagsType have an objectFlags property. Some ObjectFlags
