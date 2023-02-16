@@ -706,7 +706,7 @@ export interface GetCompletionsAtPositionOptions extends UserPreferences {
      * so use caution when serializing or retaining completion entries retrieved with this option.
      * @default false
      */
-    includeApiData?: boolean
+    includeSymbol?: boolean
     /** @deprecated Use includeCompletionsForModuleExports */
     includeExternalModuleExports?: boolean;
     /** @deprecated Use includeCompletionsWithInsertText */
