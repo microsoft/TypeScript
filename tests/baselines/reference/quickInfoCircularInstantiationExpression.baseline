@@ -1,3 +1,11 @@
+=== /tests/cases/fourslash/quickInfoCircularInstantiationExpression.ts ===
+// declare function foo<T>(t: T): typeof foo<T>;
+// foo("");
+// ^^^
+// | ----------------------------------------------------------------------
+// | function foo<string>(t: string): (t: string) => ...
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +13,7 @@
       "position": 46,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "declare",
       "textSpan": {
