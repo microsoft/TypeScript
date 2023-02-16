@@ -1,0 +1,57 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally3.ts ===
+// try {
+//     try {
+//     }
+//     catch (x) {
+//     }
+// 
+//     [|{| kind: "none" |}t/*HIGHLIGHTS*/ry|] {
+//     }
+//     [|{| kind: "none" |}finally|] {
+//     }
+// }
+// catch (e) {
+// }
+// finally {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally3.ts ===
+// try {
+//     try {
+//     }
+//     catch (x) {
+//     }
+// 
+//     [|{| kind: "none" |}tr/*HIGHLIGHTS*/y|] {
+//     }
+//     [|{| kind: "none" |}finally|] {
+//     }
+// }
+// catch (e) {
+// }
+// finally {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally3.ts ===
+// try {
+//     try {
+//     }
+//     catch (x) {
+//     }
+// 
+//     [|{| kind: "none" |}try|] {
+//     }
+//     [|{| kind: "none" |}finall/*HIGHLIGHTS*/y|] {
+//     }
+// }
+// catch (e) {
+// }
+// finally {
+// }

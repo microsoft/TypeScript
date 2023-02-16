@@ -3922,25 +3922,6 @@ export class TestState {
         );
     }
 
-    public verifyOccurrencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean) {
-        const occurrences = this.getOccurrencesAtCurrentPosition();
-        if (!occurrences || occurrences.length === 0) {
-            return this.raiseError("verifyOccurrencesAtPositionListContains failed - found 0 references, expected at least one.");
-        }
-
-        for (const occurrence of occurrences) {
-            if (occurrence && occurrence.fileName === fileName && occurrence.textSpan.start === start && ts.textSpanEnd(occurrence.textSpan) === end) {
-                if (typeof isWriteAccess !== "undefined" && occurrence.isWriteAccess !== isWriteAccess) {
-                    this.raiseError(`verifyOccurrencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ${occurrence.isWriteAccess}, expected: ${isWriteAccess}.`);
-                }
-                return;
-            }
-        }
-
-        const missingItem = { fileName, start, end, isWriteAccess };
-        this.raiseError(`verifyOccurrencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(occurrences)})`);
-    }
-
     public verifyOccurrencesAtPositionListCount(expectedCount: number) {
         const occurrences = this.getOccurrencesAtCurrentPosition();
         const actualCount = occurrences ? occurrences.length : 0;

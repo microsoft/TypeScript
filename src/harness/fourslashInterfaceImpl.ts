@@ -564,10 +564,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyNavigateTo(options);
     }
 
-    public occurrencesAtPositionContains(range: FourSlash.Range, isWriteAccess?: boolean) {
-        this.state.verifyOccurrencesAtPositionListContains(range.fileName, range.pos, range.end, isWriteAccess);
-    }
-
     public occurrencesAtPositionCount(expectedCount: number) {
         this.state.verifyOccurrencesAtPositionListCount(expectedCount);
     }

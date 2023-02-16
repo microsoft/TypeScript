@@ -395,7 +395,6 @@ declare namespace FourSlashInterface {
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
         navigateTo(...options: VerifyNavigateToOptions[]);
-        occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         occurrencesAtPositionCount(expectedCount: number): void;
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
