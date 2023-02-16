@@ -2841,9 +2841,9 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
     const candidate = normalizePath(combinePaths(nodeModulesDirectory, moduleName));
     if (moduleName.indexOf(":") > -1) {
         if (state.traceEnabled) {
-            trace(state.host, Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI, candidate)
+            trace(state.host, Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI, candidate);
         }
-        return undefined
+        return undefined;
     }
     const { packageName, rest } = parsePackageName(moduleName);
     const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
