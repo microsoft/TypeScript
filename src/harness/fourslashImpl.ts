@@ -2923,20 +2923,6 @@ export class TestState {
         assert.equal(actualDefinitionContainerName, expectedContainerName, this.messageAtLastKnownMarker("Definition Info Container Name"));
     }
 
-    public goToImplementation() {
-        const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
-        if (!implementations || !implementations.length) {
-            this.raiseError("goToImplementation failed - expected to find at least one implementation location but got 0");
-        }
-        if (implementations.length > 1) {
-            this.raiseError(`goToImplementation failed - more than 1 implementation returned (${implementations.length})`);
-        }
-
-        const implementation = implementations[0];
-        this.openFile(implementation.fileName);
-        this.currentCaretPosition = implementation.textSpan.start;
-    }
-
     public verifyRangesInImplementationList(markerName: string) {
         this.goToMarker(markerName);
         const implementations: readonly ImplementationLocationInformation[] = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;

@@ -97,10 +97,6 @@ export class GoTo {
         this.state.goToEOF();
     }
 
-    public implementation() {
-        this.state.goToImplementation();
-    }
-
     public position(positionOrLineAndCharacter: number | ts.LineAndCharacter, fileNameOrIndex?: string | number): void {
         if (fileNameOrIndex !== undefined) {
             this.file(fileNameOrIndex);

@@ -79,5 +79,4 @@ verify.goToDefinition("1", "2"); // getDefinitionAndBoundSpan
 verify.goToType("1", "SomeType"); // getTypeDefinitionAtPosition
 goTo.marker("1");
 verify.goToDefinitionIs("2"); // getDefinitionAtPosition
-goTo.implementation(); // getImplementationAtPosition
-verify.caretAtMarker("2");
+verify.baselineGoToImplementation("1");  // getImplementationAtPosition

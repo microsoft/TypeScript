@@ -21,8 +21,4 @@
 ////     }
 //// }
 
-for (const marker of ["fooClass", "barClass", "barHelloFunction", "this"]) {
-    goTo.marker(marker + 'Reference');
-    goTo.implementation();
-    verify.caretAtMarker(marker + 'Implementation');
-};
+verify.baselineGoToImplementation("fooClassReference", "barClassReference", "barHelloFunctionReference", "thisReference");

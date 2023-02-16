@@ -233,7 +233,6 @@ declare namespace FourSlashInterface {
         eachRange(action: (range: Range) => void): void;
         bof(): void;
         eof(): void;
-        implementation(): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
         position(lineAndCharacter: ts.LineAndCharacter, fileName?: string): void;
