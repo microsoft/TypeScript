@@ -257,7 +257,6 @@ declare namespace FourSlashInterface {
         errorExistsBeforeMarker(markerName?: string): void;
         quickInfoExists(): void;
         typeDefinitionCountIs(expectedCount: number): void;
-        implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;

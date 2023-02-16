@@ -2900,17 +2900,6 @@ export class TestState {
         assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Type definitions Count"));
     }
 
-    public verifyImplementationListIsEmpty(negative: boolean) {
-        const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-
-        if (negative) {
-            assert.isTrue(implementations && implementations.length > 0, "Expected at least one implementation but got 0");
-        }
-        else {
-            assert.isUndefined(implementations, "Expected implementation list to be empty but implementations returned");
-        }
-    }
-
     public verifyGoToDefinitionName(expectedName: string, expectedContainerName: string) {
         const definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         const actualDefinitionName = definitions && definitions.length ? definitions[0].name : "";

@@ -173,10 +173,6 @@ export class VerifyNegatable {
         this.state.verifyTypeDefinitionsCount(this.negative, expectedCount);
     }
 
-    public implementationListIsEmpty() {
-        this.state.verifyImplementationListIsEmpty(this.negative);
-    }
-
     public isValidBraceCompletionAtPosition(openingBrace: string) {
         this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
     }
