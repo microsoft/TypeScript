@@ -564,10 +564,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyNavigateTo(options);
     }
 
-    public noDocumentHighlights(startRange: FourSlash.Range) {
-        this.state.verifyNoDocumentHighlights(startRange);
-    }
-
     /**
      * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
      */

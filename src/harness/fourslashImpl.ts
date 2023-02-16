@@ -3914,15 +3914,6 @@ export class TestState {
         return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
     }
 
-    public verifyNoDocumentHighlights(startRange: Range) {
-        this.goToRangeStart(startRange);
-        const documentHighlights = this.getDocumentHighlightsAtCurrentPosition([this.activeFile.fileName]);
-        const numHighlights = ts.length(documentHighlights);
-        if (numHighlights > 0) {
-            this.raiseError(`verifyNoDocumentHighlights failed - unexpectedly got ${numHighlights} highlights`);
-        }
-    }
-
     private baselineGetDocumentHighlights(markerOrRange: MarkerOrNameOrRange, options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
         this.goToMarkerOrNameOrRange(markerOrRange);
         const highlights = this.getDocumentHighlightsAtCurrentPosition(ts.map(options?.filesToSearch, ts.normalizePath) || [this.activeFile.fileName]);

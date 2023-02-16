@@ -395,7 +395,6 @@ declare namespace FourSlashInterface {
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
         navigateTo(...options: VerifyNavigateToOptions[]);
-        documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
         /** Prefer {@link syntacticClassificationsAre} for more descriptive tests */
         encodedSyntacticClassificationsLength(expected: number): void;
         /** Prefer {@link semanticClassificationsAre} for more descriptive tests */
