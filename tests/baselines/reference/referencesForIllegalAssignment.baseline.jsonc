@@ -1,107 +1,83 @@
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForIllegalAssignment.ts ===
+// f/*FIND ALL REFS*/oo = foo;
+// var bar = function () { };
+// bar = bar + 1;
 
-undefined
 
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForIllegalAssignment.ts ===
+// foo = fo/*FIND ALL REFS*/o;
+// var bar = function () { };
+// bar = bar + 1;
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForIllegalAssignment.ts ===
 // foo = foo;
-// var /*FIND ALL REFS*/[|bar|] = function () { };
-// [|bar|] = [|bar|] + 1;
+// <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}bar|] = function () { };|>
+// [|{| isWriteAccess: true |}bar|] = [|bar|] + 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForIllegalAssignment.ts",
-      "kind": "var",
-      "name": "var bar: () => void",
-      "textSpan": {
-        "start": 15,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "bar",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 11,
-        "length": 26
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 15,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIllegalAssignment.ts",
-        "contextSpan": {
-          "start": 11,
-          "length": 26
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIllegalAssignment.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIllegalAssignment.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForIllegalAssignment.ts ===
+  // foo = foo;
+  // <|var /*FIND ALL REFS*/[|bar|] = function () { };|>
+  // bar = bar + 1;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var bar: () => void",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

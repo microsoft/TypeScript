@@ -1,195 +1,120 @@
-// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
-// var i: [|globalInterface|];
-
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
-// /*FIND ALL REFS*/interface [|globalInterface|] {
+// /*FIND ALL REFS*/<|interface [|{| isWriteAccess: true, isDefinition: true |}globalInterface|] {
 //      f();
-// }
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-      "kind": "interface",
-      "name": "interface globalInterface",
-      "textSpan": {
-        "start": 10,
-        "length": 15
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalInterface",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 39
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 15
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 39
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 15
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// }|>
 
 // === /tests/cases/fourslash/referencesForGlobals_2.ts ===
 // var i: [|globalInterface|];
 
-// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
-// interface /*FIND ALL REFS*/[|globalInterface|] {
-//      f();
-// }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // /*FIND ALL REFS*/<|interface [|globalInterface|] {
+  //      f();
+  // }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-      "kind": "interface",
-      "name": "interface globalInterface",
-      "textSpan": {
-        "start": 10,
-        "length": 15
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalInterface",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 39
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 15
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 39
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 15
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface globalInterface",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalInterface",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// <|interface /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}globalInterface|] {
+//      f();
+// }|>
+
+// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+// var i: [|globalInterface|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // <|interface /*FIND ALL REFS*/[|globalInterface|] {
+  //      f();
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface globalInterface",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalInterface",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// <|interface [|{| isWriteAccess: true |}globalInterface|] {
+//      f();
+// }|>
 
 // === /tests/cases/fourslash/referencesForGlobals_2.ts ===
 // var i: /*FIND ALL REFS*/[|globalInterface|];
 
-// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
-// interface [|globalInterface|] {
-//      f();
-// }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // <|interface [|globalInterface|] {
+  //      f();
+  // }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-      "kind": "interface",
-      "name": "interface globalInterface",
-      "textSpan": {
-        "start": 10,
-        "length": 15
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalInterface",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 39
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 15
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 39
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 15
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface globalInterface",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalInterface",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]

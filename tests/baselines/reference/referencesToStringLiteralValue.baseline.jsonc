@@ -1,22 +1,23 @@
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/server/referencesToStringLiteralValue.ts",
-      "kind": "var",
-      "name": "some  string",
-      "textSpan": {
-        "start": 19,
-        "length": 12
-      },
-      "displayParts": [
-        {
-          "text": "\"some  string\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": []
-  }
-]
+// === findAllReferences ===
+// === /tests/cases/fourslash/server/referencesToStringLiteralValue.ts ===
+// const s: string = "some /*FIND ALL REFS*/ string";
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/server/referencesToStringLiteralValue.ts ===
+  // const s: string = "[|some /*FIND ALL REFS*/ string|]";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "some  string",
+    "displayParts": [
+     {
+      "text": "\"some  string\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

@@ -1,281 +1,195 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForFunctionParameter.ts ===
 // var x;
 // var n;
 // 
-// function n(x: number, /*FIND ALL REFS*/[|n|]: number) {
-//     [|n|] = 32;
+// function n(x: number, /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}n|]: number|>) {
+//     [|{| isWriteAccess: true |}n|] = 32;
 //     x = [|n|];
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-      "kind": "parameter",
-      "name": "(parameter) n: number",
-      "textSpan": {
-        "start": 37,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "n",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 37,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 37,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-        "contextSpan": {
-          "start": 37,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 70,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForFunctionParameter.ts ===
+  // var x;
+  // var n;
+  // 
+  // function n(x: number, /*FIND ALL REFS*/<|[|n|]: number|>) {
+  //     n = 32;
+  //     x = n;
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) n: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "n",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForFunctionParameter.ts ===
 // var x;
 // var n;
 // 
-// function n(x: number, [|n|]: number) {
-//     /*FIND ALL REFS*/[|n|] = 32;
+// function n(x: number, <|[|{| isWriteAccess: true |}n|]: number|>) {
+//     /*FIND ALL REFS*/[|{| isWriteAccess: true |}n|] = 32;
 //     x = [|n|];
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-      "kind": "parameter",
-      "name": "(parameter) n: number",
-      "textSpan": {
-        "start": 37,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "n",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 37,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 37,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-        "contextSpan": {
-          "start": 37,
-          "length": 9
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 70,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForFunctionParameter.ts ===
+  // var x;
+  // var n;
+  // 
+  // function n(x: number, <|[|n|]: number|>) {
+  //     /*FIND ALL REFS*/n = 32;
+  //     x = n;
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) n: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "n",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForFunctionParameter.ts ===
 // var x;
 // var n;
 // 
-// function n(x: number, [|n|]: number) {
-//     [|n|] = 32;
+// function n(x: number, <|[|{| isWriteAccess: true |}n|]: number|>) {
+//     [|{| isWriteAccess: true |}n|] = 32;
 //     x = /*FIND ALL REFS*/[|n|];
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-      "kind": "parameter",
-      "name": "(parameter) n: number",
-      "textSpan": {
-        "start": 37,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "n",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 37,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 37,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-        "contextSpan": {
-          "start": 37,
-          "length": 9
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 70,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForFunctionParameter.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForFunctionParameter.ts ===
+  // var x;
+  // var n;
+  // 
+  // function n(x: number, <|[|n|]: number|>) {
+  //     n = 32;
+  //     x = /*FIND ALL REFS*/n;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) n: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "n",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

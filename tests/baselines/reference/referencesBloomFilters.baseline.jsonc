@@ -1,111 +1,60 @@
-// === /tests/cases/fourslash/redeclaration.ts ===
-// container = { "[|searchProp|]" : 18 };
-
+// === findAllReferences ===
 // === /tests/cases/fourslash/declaration.ts ===
-// var container = { /*FIND ALL REFS*/[|searchProp|] : 1 };
-
-// === /tests/cases/fourslash/stringIndexer.ts ===
-// function blah2() { container["[|searchProp|]"] };
+// var container = { /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}searchProp|] : 1|> };
 
 // === /tests/cases/fourslash/expression.ts ===
 // function blah() { return (1 + 2 + container.[|searchProp|]()) === 2;  };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/declaration.ts",
-      "kind": "property",
-      "name": "(property) searchProp: number",
-      "textSpan": {
-        "start": 18,
-        "length": 10
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "searchProp",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 18,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/declaration.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 14
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/expression.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 30,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/stringIndexer.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 15,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/redeclaration.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+// === /tests/cases/fourslash/stringIndexer.ts ===
+// function blah2() { container["[|searchProp|]"] };
+
+// === /tests/cases/fourslash/redeclaration.ts ===
+// container = { <|"[|{| isWriteAccess: true |}searchProp|]" : 18|> };
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/declaration.ts ===
+  // var container = { /*FIND ALL REFS*/<|[|searchProp|] : 1|> };
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) searchProp: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "searchProp",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
