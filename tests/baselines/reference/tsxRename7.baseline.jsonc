@@ -1,0 +1,60 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface OptionPropBag {
+//     /*RENAME*/<|[|propxRENAME|]: number|>
+//     propString: string
+//     optional?: boolean
+// }
+// declare function Opt(attributes: OptionPropBag): JSX.Element;
+// let opt = <Opt />;
+// let opt1 = <Opt <|[|propxRENAME|]={100}|> propString />;
+// let opt2 = <Opt <|[|propxRENAME|]={100}|> optional/>;
+// let opt3 = <Opt wrong />;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface OptionPropBag {
+//     <|[|propxRENAME|]: number|>
+//     propString: string
+//     optional?: boolean
+// }
+// declare function Opt(attributes: OptionPropBag): JSX.Element;
+// let opt = <Opt />;
+// let opt1 = <Opt /*RENAME*/<|[|propxRENAME|]={100}|> propString />;
+// let opt2 = <Opt <|[|propxRENAME|]={100}|> optional/>;
+// let opt3 = <Opt wrong />;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface OptionPropBag {
+//     <|[|propxRENAME|]: number|>
+//     propString: string
+//     optional?: boolean
+// }
+// declare function Opt(attributes: OptionPropBag): JSX.Element;
+// let opt = <Opt />;
+// let opt1 = <Opt <|[|propxRENAME|]={100}|> propString />;
+// let opt2 = <Opt /*RENAME*/<|[|propxRENAME|]={100}|> optional/>;
+// let opt3 = <Opt wrong />;

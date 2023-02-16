@@ -1,0 +1,646 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     /*RENAME*/<|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     <|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     <|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get [|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set [|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     <|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     /*RENAME*/<|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     <|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get [|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set [|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     <|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     <|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     /*RENAME*/<|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get [|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set [|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     <|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     <|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     <|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get /*RENAME*/[|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set [|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     <|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     <|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     <|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get [|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set /*RENAME*/[|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     <|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     <|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     <|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get [|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set [|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"/*RENAME*/[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     <|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     <|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     <|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get [|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set [|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"/*RENAME*/[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     <|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     <|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     <|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get [|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set [|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["/*RENAME*/[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     <|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     <|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     <|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get [|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set [|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["/*RENAME*/[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     <|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     <|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     <|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get [|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set [|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["/*RENAME*/[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameContextuallyTypedProperties.ts ===
+// interface I {
+//     <|[|prop1RENAME|]: () => void;|>
+//     prop2(): void;
+// }
+// 
+// var o1: I = {
+//     <|[|prop1RENAME|]() { }|>,
+//     prop2() { }
+// };
+// 
+// var o2: I = {
+//     <|[|prop1RENAME|]: () => { }|>,
+//     prop2: () => { }
+// };
+// 
+// var o3: I = {
+//     <|get [|prop1RENAME|]() { return () => { }; }|>,
+//     get prop2() { return () => { }; }
+// };
+// 
+// var o4: I = {
+//     <|set [|prop1RENAME|](v) { }|>,
+//     set prop2(v) { }
+// };
+// 
+// var o5: I = {
+//     <|"[|prop1RENAME|]"() { }|>,
+//     "prop2"() { }
+// };
+// 
+// var o6: I = {
+//     <|"[|prop1RENAME|]": function () { }|>,
+//     "prop2": function () { }
+// };
+// 
+// var o7: I = {
+//     <|["[|prop1RENAME|]"]: function () { }|>,
+//     ["prop2"]: function () { }
+// };
+// 
+// var o8: I = {
+//     <|["[|prop1RENAME|]"]() { }|>,
+//     ["prop2"]() { }
+// };
+// 
+// var o9: I = {
+//     <|get ["[|prop1RENAME|]"]() { return () => { }; }|>,
+//     get ["prop2"]() { return () => { }; }
+// };
+// 
+// var o10: I = {
+//     <|set ["/*RENAME*/[|prop1RENAME|]"](v) { }|>,
+//     set ["prop2"](v) { }
+// };

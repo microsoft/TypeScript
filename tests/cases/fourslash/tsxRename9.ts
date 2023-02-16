@@ -30,10 +30,10 @@
 //// let opt = [|<[|{| "contextRangeIndex": 23 |}MainButton|] [|[|{| "contextRangeIndex": 25 |}goTo|]="goTo"|] />|];
 //// let opt = [|<[|{| "contextRangeIndex": 27 |}MainButton|] [|wrong|] />|];
 
-verify.rangesWithSameTextAreRenameLocations(
+verify.baselineRenameAtRangesWithText([
     "onClick",
     "goTo",
     "MainButton",
     "ignore-prop",
     "wrong"
-);
+]);

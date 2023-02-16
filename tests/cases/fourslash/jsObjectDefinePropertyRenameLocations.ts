@@ -14,4 +14,4 @@
 ////    return CircularList;
 ////})()
 
-verify.rangesWithSameTextAreRenameLocations();
+verify.baselineRenameAtRangesWithText();

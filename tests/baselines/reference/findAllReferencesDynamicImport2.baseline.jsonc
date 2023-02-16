@@ -119,3 +119,23 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/foo.ts ===
+// <|export function /*RENAME*/[|barRENAME|]() { return "bar"; }|>
+// var x = import("./foo");
+// x.then(foo => {
+//     foo.[|barRENAME|]();
+// })
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/foo.ts ===
+// <|export function [|barRENAME|]() { return "bar"; }|>
+// var x = import("./foo");
+// x.then(foo => {
+//     foo./*RENAME*/[|barRENAME|]();
+// })

@@ -1,0 +1,21 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralOk1.ts ===
+// declare function f(): '/*RENAME*/[|fooRENAME|]' | 'bar'
+// class Foo {
+//     f = f()
+// }
+// const d: 'foo' = 'foo'
+// declare const ff: Foo
+// ff.f = '[|fooRENAME|]'
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralOk1.ts ===
+// declare function f(): '[|fooRENAME|]' | 'bar'
+// class Foo {
+//     f = f()
+// }
+// const d: 'foo' = 'foo'
+// declare const ff: Foo
+// ff.f = '/*RENAME*/[|fooRENAME|]'

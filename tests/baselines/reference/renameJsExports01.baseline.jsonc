@@ -89,3 +89,23 @@
     ]
    }
   ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// <|exports./*RENAME*/[|areaRENAME|] = function (r) { return r * r; }|>
+
+// === /tests/cases/fourslash/b.js ===
+// var mod = require('./a');
+// var t = mod.[|areaRENAME|](10);
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// <|exports.[|areaRENAME|] = function (r) { return r * r; }|>
+
+// === /tests/cases/fourslash/b.js ===
+// var mod = require('./a');
+// var t = mod./*RENAME*/[|areaRENAME|](10);

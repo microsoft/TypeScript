@@ -1,0 +1,17 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameParameterPropertyDeclaration5.ts ===
+// class Foo {
+//     constructor(<|protected [ /*RENAME*/[|protectedParamRENAME|] ]|>) {
+//         let myProtectedParam = [|protectedParamRENAME|];
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameParameterPropertyDeclaration5.ts ===
+// class Foo {
+//     constructor(<|protected [ [|protectedParamRENAME|] ]|>) {
+//         let myProtectedParam = /*RENAME*/[|protectedParamRENAME|];
+//     }
+// }

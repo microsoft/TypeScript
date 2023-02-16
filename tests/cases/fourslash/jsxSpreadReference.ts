@@ -18,4 +18,4 @@
 //// var x = <MyClass {...[|n/*src*/n|]}></MyClass>;
 
 verify.goToDefinition("src", "dst");
-verify.rangesWithSameTextAreRenameLocations("nn");
+verify.baselineRenameAtRangesWithText("nn");

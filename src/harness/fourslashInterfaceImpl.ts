@@ -576,10 +576,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyRangesAreOccurrences(isWriteAccess, ranges);
     }
 
-    public rangesWithSameTextAreRenameLocations(...texts: string[]) {
-        this.state.verifyRangesWithSameTextAreRenameLocations(...texts);
-    }
-
     public rangesAreDocumentHighlights(ranges?: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
         this.state.verifyRangesAreDocumentHighlights(ranges, options);
     }

@@ -1891,75 +1891,6 @@ export class TestState {
         }
     }
 
-    public verifyRangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] }) {
-        if (ts.isArray(options)) {
-            this.verifyRenameLocations(options, options);
-        }
-        else {
-            const ranges = options && options.ranges || this.getRanges();
-            this.verifyRenameLocations(ranges, { ranges, ...options });
-        }
-    }
-
-    public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: FourSlashInterface.RenameLocationsOptions) {
-        interface RangeMarkerData {
-            id?: string;
-            contextRangeIndex?: number,
-            contextRangeDelta?: number
-            contextRangeId?: string;
-        }
-        const { findInStrings = false, findInComments = false, ranges = this.getRanges(), providePrefixAndSuffixTextForRename = true } =
-            ts.isArray(options)
-                ? { findInStrings: false, findInComments: false, ranges: options, providePrefixAndSuffixTextForRename: true }
-                : options;
-
-        const _startRanges = toArray(startRanges);
-        assert(_startRanges.length);
-        for (const startRange of _startRanges) {
-            this.goToRangeStart(startRange);
-
-            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, { providePrefixAndSuffixTextForRename });
-            if (!renameInfo.canRename) {
-                this.raiseError("Expected rename to succeed, but it actually failed.");
-                break;
-            }
-
-            const references = this.languageService.findRenameLocations(
-                this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments, providePrefixAndSuffixTextForRename);
-
-            const sort = (locations: readonly ts.RenameLocation[] | undefined) =>
-                locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
-            assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
-                const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions }; // eslint-disable-line local/no-in-operator
-                const { contextRangeIndex, contextRangeDelta, contextRangeId } = (range.marker && range.marker.data || {}) as RangeMarkerData;
-                let contextSpan: ts.TextSpan | undefined;
-                if (contextRangeDelta !== undefined) {
-                    const allRanges = this.getRanges();
-                    const index = allRanges.indexOf(range);
-                    if (index !== -1) {
-                        contextSpan = ts.createTextSpanFromRange(allRanges[index + contextRangeDelta]);
-                    }
-                }
-                else if (contextRangeId !== undefined) {
-                    const allRanges = this.getRanges();
-                    const contextRange = ts.find(allRanges, range => (range.marker?.data as RangeMarkerData)?.id === contextRangeId);
-                    if (contextRange) {
-                        contextSpan = ts.createTextSpanFromRange(contextRange);
-                    }
-                }
-                else if (contextRangeIndex !== undefined) {
-                    contextSpan = ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]);
-                }
-                return {
-                    fileName: range.fileName,
-                    textSpan: ts.createTextSpanFromRange(range),
-                    ...(contextSpan ? { contextSpan } : undefined),
-                    ...prefixSuffixText
-                };
-            })));
-        }
-    }
-
     private baselineRenameWorker(markerOrRange: MarkerOrNameOrRange, options?: FourSlashInterface.RenameOptions) {
         const { fileName, position } = ts.isString(markerOrRange) ?
             this.getMarkerByName(markerOrRange) :
@@ -4032,15 +3963,6 @@ export class TestState {
             for (const range of ranges) {
                 this.verifyOccurrencesAtPositionListContains(range.fileName, range.pos, range.end, isWriteAccess);
             }
-        }
-    }
-
-    public verifyRangesWithSameTextAreRenameLocations(...texts: string[]) {
-        if (texts.length) {
-            texts.forEach(text => this.verifyRangesAreRenameLocations(this.rangesByText().get(text)));
-        }
-        else {
-            this.rangesByText().forEach(ranges => this.verifyRangesAreRenameLocations(ranges));
         }
     }
 

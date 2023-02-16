@@ -357,7 +357,6 @@ declare namespace FourSlashInterface {
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
         typeAtLocation(range: Range, expected: string): void;
         rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;
-        rangesWithSameTextAreRenameLocations(...texts: string[]): void;
         noSignatureHelp(...markers: (string | Marker)[]): void;
         noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void
         signatureHelpPresentForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void

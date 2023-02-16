@@ -1,0 +1,37 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props }
+// }
+// class MyClass {
+//   props: {
+//     name?: string;
+//     size?: number;
+//   }
+// }
+// 
+// <|var /*RENAME*/[|nnRENAME|]: {name?: string; size?: number};|>
+// var x = <MyClass {...[|nnRENAME|]}></MyClass>;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props }
+// }
+// class MyClass {
+//   props: {
+//     name?: string;
+//     size?: number;
+//   }
+// }
+// 
+// <|var [|nnRENAME|]: {name?: string; size?: number};|>
+// var x = <MyClass {.../*RENAME*/[|nnRENAME|]}></MyClass>;

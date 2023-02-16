@@ -9,5 +9,5 @@
 //// var d: D;
 //// d.[|propD|];
 
-verify.rangesWithSameTextAreRenameLocations("propD");
+verify.baselineRenameAtRangesWithText("propD");
 
