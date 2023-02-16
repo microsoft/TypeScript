@@ -23029,6 +23029,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type;
     }
 
+    function getValueOfResult(type: Type): Type {
+        const valueOf = getPropertyOfType(type, "valueOf" as __String);
+        if (valueOf) {
+            const signatures = getSignaturesOfType(getTypeOfSymbol(valueOf), ts.SignatureKind.Call);
+            if (signatures && signatures.length > 0) {
+                const returnType = getReturnTypeOfSignature(signatures[0]);
+                return returnType;
+            }
+        }
+        return type;
+    }
+
     function getWidenedLiteralType(type: Type): Type {
         return type.flags & TypeFlags.EnumLike && isFreshLiteralType(type) ? getBaseTypeOfEnumLikeType(type as LiteralType) :
             type.flags & TypeFlags.StringLiteral && isFreshLiteralType(type) ? stringType :
@@ -36498,10 +36510,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (isTypeAny(left) || isTypeAny(right)) {
                             return true;
                         }
+                        // Only collect 'valueOf' results here so that the error message doesn't display
+                        // "cannot compare Object to Object" when comparing e.g. [] > []
+                        if (!(left.flags & TypeFlags.Primitive)) left = getValueOfResult(left);
+                        if (!(right.flags & TypeFlags.Primitive)) right = getValueOfResult(right);
+
                         const leftAssignableToNumber = isTypeAssignableTo(left, numberOrBigIntType);
-                        const rightAssignableToNumber = isTypeAssignableTo(right, numberOrBigIntType);
-                        return leftAssignableToNumber && rightAssignableToNumber ||
-                            !leftAssignableToNumber && !rightAssignableToNumber && areTypesComparable(left, right);
+                        if (leftAssignableToNumber) {
+                            const rightAssignableToNumber = isTypeAssignableTo(right, numberOrBigIntType);
+                            if (rightAssignableToNumber) return true;
+                        }
+                        return isTypeAssignableTo(left, stringType) && isTypeAssignableTo(right, stringType);
                     });
                 }
                 return booleanType;
