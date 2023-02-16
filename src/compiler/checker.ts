@@ -14712,19 +14712,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (signature.baseSignatureCache) {
                 return signature.baseSignatureCache;
             }
-            const typeEraser = createTypeEraser(typeParameters);
-            const baseConstraintMapper = createTypeMapper(typeParameters, map(typeParameters, tp => getConstraintOfTypeParameter(tp) || unknownType));
-            let baseConstraints: readonly Type[] = map(typeParameters, tp => instantiateType(tp, baseConstraintMapper) || unknownType);
-            // Run N type params thru the immediate constraint mapper up to N times
-            // This way any noncircular interdependent type parameters are definitely resolved to their external dependencies
-            for (let i = 0; i < typeParameters.length - 1; i++) {
-                baseConstraints = instantiateTypes(baseConstraints, baseConstraintMapper);
-            }
-            // and then apply a type eraser to remove any remaining circularly dependent type parameters
-            baseConstraints = instantiateTypes(baseConstraints, typeEraser);
-            return signature.baseSignatureCache = instantiateSignature(signature, createTypeMapper(typeParameters, baseConstraints), /*eraseTypeParameters*/ true);
+            return signature.baseSignatureCache = instantiateSignature(signature, getTypeParameterConstraintMapper(typeParameters), /*eraseTypeParameters*/ true);
         }
         return signature;
+    }
+
+    function getTypeParameterConstraintMapper(typeParameters: readonly TypeParameter[]) {
+        const typeEraser = createTypeEraser(typeParameters);
+        const baseConstraintMapper = createTypeMapper(typeParameters, map(typeParameters, tp => getConstraintOfTypeParameter(tp) || unknownType));
+        let baseConstraints: readonly Type[] = map(typeParameters, tp => instantiateType(tp, baseConstraintMapper) || unknownType);
+        // Run N type params thru the immediate constraint mapper up to N times
+        // This way any noncircular interdependent type parameters are definitely resolved to their external dependencies
+        for (let i = 0; i < typeParameters.length - 1; i++) {
+            baseConstraints = instantiateTypes(baseConstraints, baseConstraintMapper);
+        }
+        // and then apply a type eraser to remove any remaining circularly dependent type parameters
+        baseConstraints = instantiateTypes(baseConstraints, typeEraser);
+        return createTypeMapper(typeParameters, baseConstraints);
     }
 
     function getOrCreateTypeFromSignature(signature: Signature): ObjectType {
@@ -23614,9 +23618,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function makeFreeTypeVariableMapperForContext(context: InferenceContext) {
-        return makeDeferredTypeMapper(map(context.freeTypeVariables || [], i => i.typeParameter), map(context.freeTypeVariables || [], (inference) => () => {
-            return getInferredType(context, inference);
-        }));
+        if (!context.freeTypeVariables) return undefined;
+        // make a seperate mapper for every free type variable so free type variables constrained to one another are instantiated
+        // with any intermediate inferences found rather than the constraints
+        return context.freeTypeVariables.reduceRight(
+            (previous, i) => combineTypeMappers(makeDeferredTypeMapper([i.typeParameter], [() => getInferredType(context, i)]), previous),
+            getTypeParameterConstraintMapper(map(context.freeTypeVariables, i => i.typeParameter))
+        );
     }
 
     function clearCachedInferences(inferences: InferenceInfo[]) {
@@ -23691,8 +23699,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             undefined;
     }
 
+    /**
+     * Note: for historical reasons, this function is not alternative-context-aware, instead preferring results from the last alternative.
+     * If you want to handle multiple inference alternatives, you need to iterate over flattenInferenceContextAlternatives(context) in the caller
+     * and decide how to handle multiple possible inference results!
+     */
     function getMapperFromContext<T extends InferenceContext | undefined>(context: T): TypeMapper | T & undefined {
-        return context && context.mapper && (context.freeTypeVariables ? combineTypeMappers(context.mapper, makeFreeTypeVariableMapperForContext(context)) : context.mapper);
+        const innerContext = context && last(flattenInferenceContextAlternatives(context));
+        return innerContext && innerContext.mapper && (innerContext.freeTypeVariables ? combineTypeMappers(innerContext.mapper, makeFreeTypeVariableMapperForContext(innerContext)!) : innerContext.mapper);
     }
 
     // Return true if the given type could possibly reference a type parameter for which
@@ -24890,7 +24904,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function inferFromSignature(source: Signature, target: Signature) {
             target = getErasedSignature(target);
             if (source.typeParameters) {
-                if (some(context.freeTypeVariables, i => some(source.typeParameters, p => p === i.typeParameter))) {
+                if (some(context.freeTypeVariables, i => some(source.typeParameters, p => p.symbol === i.typeParameter.symbol))) {
                     // already inferred from this sigature generically and then recured, infer to constraints this time
                     source = getBaseSignature(source);
                 }
@@ -24898,7 +24912,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Rather than getting the "base" signature, add the type parameters as free type variables to the inference list
                     // These get saved off so we can infer from the expression type to them after we apply contextual types, and then
                     // apply those mappings to our inference results.
-                    (context.freeTypeVariables ||= []).push(...map(source.typeParameters, createInferenceInfo));
+                    // Create a fresh clone of the source with a fresh clone of the source's type parameters, so recursive invocations
+                    // don't use the same type variable inferences (the noop mapper simply forces the clone)
+                    source = instantiateSignature(source, makeUnaryTypeMapper(unknownType, unknownType));
+                    (context.freeTypeVariables ||= []).push(...map(source.typeParameters!, createInferenceInfo));
                 }
             }
             const saveBivariant = bivariant;
@@ -25063,7 +25080,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getInferredTypes(context: InferenceContext, accept: (types: Type[]) => boolean): Type[] {
         const alternatives = flattenInferenceContextAlternatives(context);
-        for (let a = 0; a < alternatives.length; a++) {
+        let finalAlternative: Type[] | undefined;
+        for (let a = alternatives.length - 1; a >= 0; a--) {
             const context = alternatives[a];
             // This mapper isn't cached on the context, as the list of free type variables is generated as inference is performed,
             // so the mappings in this mapper can evolve as inference progresses and more free type variables are
@@ -25073,12 +25091,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (let i = 0; i < context.inferences.length; i++) {
                 result.push(instantiateType(getInferredType(context, context.inferences[i]), freeTypeVariableMapper));
             }
-            // If this is this last option (since inference isn't allowed to fail), or this option passes the acceptability check, return it, otherwise, continue
-            if ((a === alternatives.length - 1) || accept(result)) {
+            // Skip calling `accept` when there's only 1 alternative to try, as it can end up fixing expression types, which we can trivially avoid
+            // in simple cases when the inference result has to be used since it's the only one.
+            if ((alternatives.length === 1) || accept(result)) {
                 return result;
             }
+            if (!finalAlternative) {
+                // The last alternative in the list most closely mirrors previous behaviors of only considering the final overload in a list
+                // during inference. If none pass the `accept` function, this is the one which'll be used (likely for error reporting! It's
+                // possible to improve upon this for better errors, much like we how we do union member selection for errors in relationship checking!)
+                finalAlternative = result;
+            }
         }
-        return Debug.assertNever(alternatives as never, "unreachable - `getInferredTypes` should always have at least one result set to choose from");
+        return finalAlternative!;
     }
 
     // EXPRESSION TYPE CHECKING
