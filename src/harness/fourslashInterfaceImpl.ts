@@ -568,10 +568,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyRangesAreDocumentHighlights(ranges, options);
     }
 
-    public rangesWithSameTextAreDocumentHighlights() {
-        this.state.verifyRangesWithSameTextAreDocumentHighlights();
-    }
-
     public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
         this.state.verifyDocumentHighlightsOf(startRange, ranges, options);
     }

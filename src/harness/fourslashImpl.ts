@@ -3914,10 +3914,6 @@ export class TestState {
         return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
     }
 
-    public verifyRangesWithSameTextAreDocumentHighlights() {
-        this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges, /*options*/ undefined));
-    }
-
     public verifyDocumentHighlightsOf(startRange: Range, ranges: Range[], options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
         const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
         this.goToRangeStart(startRange);

@@ -24,8 +24,10 @@
 // @Filename: b.ts
 //// const z: /*17*/[|any|] = 0;
 
-verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17');
-verify.rangesWithSameTextAreDocumentHighlights();
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'] },
+    { type: "documentHighlights", options: { filesToSearch: ["a.ts", "b.ts"] } }
+);
 
 goTo.rangeStart(test.ranges()[0]);
 verify.renameInfoFailed();

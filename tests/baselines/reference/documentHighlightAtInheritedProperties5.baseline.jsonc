@@ -1,0 +1,82 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface C extends D {
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}prop0|]: string;|>
+//     prop1: number;
+// }
+// 
+// interface D extends C {
+//     <|[|{| kind: "reference" |}prop0|]: string;|>
+//     prop1: number;
+// }
+// 
+// var d: D;
+// d.prop1;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface C extends D {
+//     prop0: string;
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}prop1|]: number;|>
+// }
+// 
+// interface D extends C {
+//     prop0: string;
+//     <|[|{| kind: "reference" |}prop1|]: number;|>
+// }
+// 
+// var d: D;
+// d.[|{| kind: "reference" |}prop1|];
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface C extends D {
+//     <|[|{| kind: "reference" |}prop0|]: string;|>
+//     prop1: number;
+// }
+// 
+// interface D extends C {
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}prop0|]: string;|>
+//     prop1: number;
+// }
+// 
+// var d: D;
+// d.prop1;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface C extends D {
+//     prop0: string;
+//     <|[|{| kind: "reference" |}prop1|]: number;|>
+// }
+// 
+// interface D extends C {
+//     prop0: string;
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}prop1|]: number;|>
+// }
+// 
+// var d: D;
+// d.[|{| kind: "reference" |}prop1|];
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface C extends D {
+//     prop0: string;
+//     <|[|{| kind: "reference" |}prop1|]: number;|>
+// }
+// 
+// interface D extends C {
+//     prop0: string;
+//     <|[|{| kind: "reference" |}prop1|]: number;|>
+// }
+// 
+// var d: D;
+// d./*HIGHLIGHTS*/[|{| kind: "reference" |}prop1|];
