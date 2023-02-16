@@ -1,10 +1,38 @@
 import {
-    arrayFrom, CancellationToken, computeSignatureWithDiagnostics, CustomTransformers, Debug, EmitOutput, emptyArray,
-    ESMap, ExportedModulesFromDeclarationEmit, GetCanonicalFileName, getDirectoryPath, getSourceFileOfNode,
-    isDeclarationFileName, isExternalOrCommonJsModule, isGlobalScopeAugmentation, isJsonSourceFile,
-    isModuleWithStringLiteralName, isStringLiteral, Iterator, Map, mapDefined, mapDefinedIterator, ModuleDeclaration,
-    ModuleKind, outFile, OutputFile, Path, Program, ReadonlySet, Set, some, SourceFile, StringLiteralLike, Symbol,
-    toPath, TypeChecker,
+    arrayFrom,
+    CancellationToken,
+    computeSignatureWithDiagnostics,
+    CustomTransformers,
+    Debug,
+    EmitOutput,
+    emptyArray,
+    ExportedModulesFromDeclarationEmit,
+    GetCanonicalFileName,
+    getDirectoryPath,
+    getIsolatedModules,
+    getSourceFileOfNode,
+    HostForComputeHash,
+    isDeclarationFileName,
+    isExternalOrCommonJsModule,
+    isGlobalScopeAugmentation,
+    isJsonSourceFile,
+    isModuleWithStringLiteralName,
+    isStringLiteral,
+    mapDefined,
+    mapDefinedIterator,
+    ModuleDeclaration,
+    ModuleKind,
+    outFile,
+    OutputFile,
+    Path,
+    Program,
+    ResolutionMode,
+    some,
+    SourceFile,
+    StringLiteralLike,
+    Symbol,
+    toPath,
+    TypeChecker,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -23,7 +51,7 @@ export interface BuilderState {
     /**
      * Information of the file eg. its version, signature etc
      */
-    fileInfos: ESMap<Path, BuilderState.FileInfo>;
+    fileInfos: Map<Path, BuilderState.FileInfo>;
     /**
      * Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
      * Otherwise undefined
@@ -52,11 +80,11 @@ export interface BuilderState {
     /**
      * Stores signatures before before the update till affected file is commited
      */
-    oldSignatures?: ESMap<Path, string | false>;
+    oldSignatures?: Map<Path, string | false>;
     /**
      * Stores exportedModulesMap before the update till affected file is commited
      */
-    oldExportedModulesMap?: ESMap<Path, ReadonlySet<Path> | false>;
+    oldExportedModulesMap?: Map<Path, ReadonlySet<Path> | false>;
     /**
      * Cache of all files excluding default library file for the current program
      */
@@ -75,13 +103,13 @@ export namespace BuilderState {
         readonly version: string;
         signature: string | undefined;
         affectsGlobalScope: true | undefined;
-        impliedFormat: SourceFile["impliedNodeFormat"];
+        impliedFormat: ResolutionMode;
     }
 
     export interface ReadonlyManyToManyPathMap {
         getKeys(v: Path): ReadonlySet<Path> | undefined;
         getValues(k: Path): ReadonlySet<Path> | undefined;
-        keys(): Iterator<Path>;
+        keys(): IterableIterator<Path>;
     }
 
     export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
@@ -90,7 +118,7 @@ export namespace BuilderState {
     }
 
     export function createManyToManyPathMap(): ManyToManyPathMap {
-        function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
+        function create(forward: Map<Path, ReadonlySet<Path>>, reverse: Map<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
             const map: ManyToManyPathMap = {
                 getKeys: v => reverse.get(v),
                 getValues: k => forward.get(k),
@@ -136,7 +164,7 @@ export namespace BuilderState {
         return create(new Map<Path, Set<Path>>(), new Map<Path, Set<Path>>(), /*deleted*/ undefined);
     }
 
-    function addToMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V): void {
+    function addToMultimap<K, V>(map: Map<K, Set<V>>, k: K, v: V): void {
         let set = map.get(k);
         if (!set) {
             set = new Set<V>();
@@ -145,7 +173,7 @@ export namespace BuilderState {
         set.add(v);
     }
 
-    function deleteFromMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V): boolean {
+    function deleteFromMultimap<K, V>(map: Map<K, Set<V>>, k: K, v: V): boolean {
         const set = map.get(k);
 
         if (set?.delete(v)) {
@@ -157,11 +185,6 @@ export namespace BuilderState {
 
         return false;
     }
-
-    /**
-     * Compute the hash to store the shape of the file
-     */
-    export type ComputeHash = ((data: string) => string) | undefined;
 
     function getReferencedFilesFromImportedModuleSymbol(symbol: Symbol): Path[] {
         return mapDefined(symbol.declarations, declaration => getSourceFileOfNode(declaration)?.resolvedPath);
@@ -210,7 +233,7 @@ export namespace BuilderState {
 
         // Handle type reference directives
         if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
+            sourceFile.resolvedTypeReferenceDirectiveNames.forEach(({ resolvedTypeReferenceDirective }) => {
                 if (!resolvedTypeReferenceDirective) {
                     return;
                 }
@@ -272,7 +295,7 @@ export namespace BuilderState {
     /**
      * Creates the state of file references and signature for the new program from oldState if it is safe
      */
-    export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
+    export function create(newProgram: Program, oldState: Readonly<BuilderState> | undefined, disableUseFileVersionAsSignature: boolean): BuilderState {
         const fileInfos = new Map<Path, FileInfo>();
         const options = newProgram.getCompilerOptions();
         const isOutFile = outFile(options);
@@ -292,7 +315,7 @@ export namespace BuilderState {
                 useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath)?.signature : undefined :
                 oldUncommittedSignature || undefined;
             if (referencedMap) {
-                const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
+                const newReferences = getReferencedFiles(newProgram, sourceFile, newProgram.getCanonicalFileName);
                 if (newReferences) {
                     referencedMap.set(sourceFile.resolvedPath, newReferences);
                 }
@@ -340,16 +363,14 @@ export namespace BuilderState {
         programOfThisState: Program,
         path: Path,
         cancellationToken: CancellationToken | undefined,
-        computeHash: ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
+        host: HostForComputeHash,
     ): readonly SourceFile[] {
         const result = getFilesAffectedByWithOldState(
             state,
             programOfThisState,
             path,
             cancellationToken,
-            computeHash,
-            getCanonicalFileName,
+            host,
         );
         state.oldSignatures?.clear();
         state.oldExportedModulesMap?.clear();
@@ -361,24 +382,49 @@ export namespace BuilderState {
         programOfThisState: Program,
         path: Path,
         cancellationToken: CancellationToken | undefined,
-        computeHash: ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
+        host: HostForComputeHash,
     ): readonly SourceFile[] {
         const sourceFile = programOfThisState.getSourceFileByPath(path);
         if (!sourceFile) {
             return emptyArray;
         }
 
-        if (!updateShapeSignature(state, programOfThisState, sourceFile, cancellationToken, computeHash, getCanonicalFileName)) {
+        if (!updateShapeSignature(state, programOfThisState, sourceFile, cancellationToken, host)) {
             return [sourceFile];
         }
 
-        return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, computeHash, getCanonicalFileName);
+        return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, host);
     }
 
     export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
         state.fileInfos.get(path)!.signature = signature;
         (state.hasCalledUpdateShapeSignature ||= new Set()).add(path);
+    }
+
+    export function computeDtsSignature(
+        programOfThisState: Program,
+        sourceFile: SourceFile,
+        cancellationToken: CancellationToken | undefined,
+        host: HostForComputeHash,
+        onNewSignature: (signature: string, sourceFiles: readonly SourceFile[]) => void,
+    ) {
+        programOfThisState.emit(
+            sourceFile,
+            (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
+                Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
+                onNewSignature(computeSignatureWithDiagnostics(
+                    programOfThisState,
+                    sourceFile,
+                    text,
+                    host,
+                    data,
+                ), sourceFiles!);
+            },
+            cancellationToken,
+            /*emitOnlyDtsFiles*/ true,
+            /*customTransformers*/ undefined,
+            /*forceDtsEmit*/ true
+        );
     }
 
     /**
@@ -389,9 +435,8 @@ export namespace BuilderState {
         programOfThisState: Program,
         sourceFile: SourceFile,
         cancellationToken: CancellationToken | undefined,
-        computeHash: ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
-        useFileVersionAsSignature = state.useFileVersionAsSignature
+        host: HostForComputeHash,
+        useFileVersionAsSignature = state.useFileVersionAsSignature,
     ) {
         // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
         if (state.hasCalledUpdateShapeSignature?.has(sourceFile.resolvedPath)) return false;
@@ -400,26 +445,12 @@ export namespace BuilderState {
         const prevSignature = info.signature;
         let latestSignature: string | undefined;
         if (!sourceFile.isDeclarationFile && !useFileVersionAsSignature) {
-            programOfThisState.emit(
-                sourceFile,
-                (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
-                    Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
-                    latestSignature = computeSignatureWithDiagnostics(
-                        sourceFile,
-                        text,
-                        computeHash,
-                        getCanonicalFileName,
-                        data,
-                    );
-                    if (latestSignature !== prevSignature) {
-                        updateExportedModules(state, sourceFile, sourceFiles![0].exportedModulesFromDeclarationEmit);
-                    }
-                },
-                cancellationToken,
-                /*emitOnlyDtsFiles*/ true,
-                /*customTransformers*/ undefined,
-                /*forceDtsEmit*/ true
-            );
+            computeDtsSignature(programOfThisState, sourceFile, cancellationToken, host, (signature, sourceFiles) => {
+                latestSignature = signature;
+                if (latestSignature !== prevSignature) {
+                    updateExportedModules(state, sourceFile, sourceFiles[0].exportedModulesFromDeclarationEmit);
+                }
+            });
         }
         // Default is to use file version as signature
         if (latestSignature === undefined) {
@@ -448,28 +479,23 @@ export namespace BuilderState {
     export function updateExportedModules(state: BuilderState, sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
         if (!state.exportedModulesMap) return;
         (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
-        if (!exportedModulesFromDeclarationEmit) {
-            state.exportedModulesMap.deleteKey(sourceFile.resolvedPath);
-            return;
-        }
-
-        let exportedModules: Set<Path> | undefined;
-        exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFilesFromImportedModuleSymbol(symbol)));
+        const exportedModules = getExportedModules(exportedModulesFromDeclarationEmit);
         if (exportedModules) {
             state.exportedModulesMap.set(sourceFile.resolvedPath, exportedModules);
         }
         else {
             state.exportedModulesMap.deleteKey(sourceFile.resolvedPath);
         }
+    }
 
-        function addExportedModule(exportedModulePaths: Path[] | undefined) {
-            if (exportedModulePaths?.length) {
-                if (!exportedModules) {
-                    exportedModules = new Set();
-                }
-                exportedModulePaths.forEach(path => exportedModules!.add(path));
-            }
-        }
+    export function getExportedModules(exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
+        let exportedModules: Set<Path> | undefined;
+        exportedModulesFromDeclarationEmit?.forEach(
+            symbol => getReferencedFilesFromImportedModuleSymbol(symbol).forEach(
+                path => (exportedModules ??= new Set()).add(path)
+            )
+        );
+        return exportedModules;
     }
 
     /**
@@ -496,9 +522,8 @@ export namespace BuilderState {
                 seenMap.add(path);
                 const references = state.referencedMap.getValues(path);
                 if (references) {
-                    const iterator = references.keys();
-                    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-                        queue.push(iterResult.value);
+                    for (const key of references.keys()) {
+                        queue.push(key);
                     }
                 }
             }
@@ -604,15 +629,14 @@ export namespace BuilderState {
         programOfThisState: Program,
         sourceFileWithUpdatedShape: SourceFile,
         cancellationToken: CancellationToken | undefined,
-        computeHash: ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
+        host: HostForComputeHash,
     ) {
         if (isFileAffectingGlobalScope(sourceFileWithUpdatedShape)) {
             return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
         }
 
         const compilerOptions = programOfThisState.getCompilerOptions();
-        if (compilerOptions && (compilerOptions.isolatedModules || outFile(compilerOptions))) {
+        if (compilerOptions && (getIsolatedModules(compilerOptions) || outFile(compilerOptions))) {
             return [sourceFileWithUpdatedShape];
         }
 
@@ -629,7 +653,7 @@ export namespace BuilderState {
             if (!seenFileNamesMap.has(currentPath)) {
                 const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                 seenFileNamesMap.set(currentPath, currentSourceFile);
-                if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, computeHash, getCanonicalFileName)) {
+                if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, host)) {
                     queue.push(...getReferencedByPaths(state, currentSourceFile.resolvedPath));
                 }
             }

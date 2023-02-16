@@ -29,6 +29,6 @@ const o: Foo = a.o;
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = require("a");
 var o = a.o;

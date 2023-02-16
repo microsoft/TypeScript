@@ -6,6 +6,8 @@
     "project": "SameNameFilesNotSpecifiedWithAllowJs",
     "resolvedInputFiles": [
         "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
         "SameNameFilesNotSpecifiedWithAllowJs/a.ts"
     ],
     "emittedFiles": [

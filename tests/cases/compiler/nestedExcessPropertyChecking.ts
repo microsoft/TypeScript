@@ -42,3 +42,24 @@ const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
         overrides: false  // Error
     }
 };
+
+// Simplified repro from #52252
+
+type T1 = {
+    primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
+};
+
+type T2 = {
+    primary: { __typename?: 'Feature' } & { colors: { light: number } },
+};
+
+type Query = T1 & T2;
+
+const response: Query = {
+    primary: {
+        colors: {
+            light: 1,
+            dark: 3,
+        },
+    },
+};

@@ -1,12 +1,30 @@
+import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import * as fakes from "../../_namespaces/fakes";
 
 function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
     return new vfs.FileSystem(ignoreCase, {
         cwd,
         files: {
             [root]: {
+                "dev/node_modules/@foo/tsconfig/package.json": JSON.stringify({
+                    name: "@foo/tsconfig",
+                    version: "1.0.0",
+                    exports: {
+                        ".": "./src/tsconfig.json"
+                    }
+                }),
+                "dev/node_modules/@foo/tsconfig/src/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        strict: true,
+                    }
+                }),
+                "dev/tsconfig.extendsFoo.json": JSON.stringify({
+                    extends: "@foo/tsconfig",
+                    files: [
+                        "main.ts",
+                    ]
+                }),
                 "dev/node_modules/config-box/package.json": JSON.stringify({
                     name: "config-box",
                     version: "1.0.0",
@@ -181,12 +199,54 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 }),
                 "dev/extends.json": JSON.stringify({ extends: 42 }),
                 "dev/extends2.json": JSON.stringify({ extends: "configs/base" }),
+                "dev/extends3.json": JSON.stringify({ extends: "" }),
+                "dev/extends4.json": JSON.stringify({ extends: [""] }),
                 "dev/main.ts": "",
                 "dev/supplemental.ts": "",
                 "dev/tests/unit/spec.ts": "",
                 "dev/tests/utils.ts": "",
                 "dev/tests/scenarios/first.json": "",
-                "dev/tests/baselines/first/output.ts": ""
+                "dev/tests/baselines/first/output.ts": "",
+                    "dev/configs/extendsArrayFirst.json": JSON.stringify({
+                        compilerOptions: {
+                            allowJs: true,
+                            noImplicitAny: true,
+                            strictNullChecks: true
+                        }
+                    }),
+                    "dev/configs/extendsArraySecond.json": JSON.stringify({
+                        compilerOptions: {
+                            module: "amd"
+                        },
+                        include: ["../supplemental.*"]
+                    }),
+                    "dev/configs/extendsArrayThird.json": JSON.stringify({
+                        compilerOptions: {
+                            module: null, // eslint-disable-line no-null/no-null
+                            noImplicitAny: false
+                        },
+                        extends: "./extendsArrayFirst",
+                        include: ["../supplemental.*"]
+                    }),
+                    "dev/configs/extendsArrayFourth.json": JSON.stringify({
+                        compilerOptions: {
+                            module: "system",
+                            strictNullChecks: false
+                        },
+                        include: null, // eslint-disable-line no-null/no-null
+                        files: ["../main.ts"]
+                    }),
+                    "dev/configs/extendsArrayFifth.json": JSON.stringify({
+                        extends: ["./extendsArrayFirst", "./extendsArraySecond", "./extendsArrayThird", "./extendsArrayFourth"],
+                        files: [],
+                    }),
+                    "dev/extendsArrayFails.json": JSON.stringify({
+                        extends: ["./missingFile"],
+                        compilerOptions: {
+                            types: []
+                        }
+                    }),
+                    "dev/extendsArrayFails2.json": JSON.stringify({ extends: [42] }),
             }
         }
     });
@@ -295,9 +355,19 @@ describe("unittests:: config:: configurationExtension", () => {
                 messageText: `Unknown option 'excludes'. Did you mean 'exclude'?`
             }]);
 
-            testFailure("can error when 'extends' is not a string", "extends.json", [{
+            testFailure("can error when 'extends' is not a string or Array", "extends.json", [{
                 code: 5024,
-                messageText: `Compiler option 'extends' requires a value of type string.`
+                messageText: `Compiler option 'extends' requires a value of type string or Array.`
+            }]);
+
+            testFailure("can error when 'extends' is given an empty string", "extends3.json", [{
+                code: 18051,
+                messageText: `Compiler option 'extends' cannot be given an empty string.`
+            }]);
+
+            testFailure("can error when 'extends' is given an empty string in an array", "extends4.json", [{
+                code: 18051,
+                messageText: `Compiler option 'extends' cannot be given an empty string.`
             }]);
 
             testSuccess("can overwrite compiler options using extended 'null'", "configs/third.json", {
@@ -336,6 +406,7 @@ describe("unittests:: config:: configurationExtension", () => {
                 testSuccess("can lookup via an implicit tsconfig in a package-relative directory", "tsconfig.extendsBoxImpliedUnstrict.json", { strict: false }, [ts.combinePaths(basePath, "main.ts")]);
                 testSuccess("can lookup via an implicit tsconfig in a package-relative directory with name", "tsconfig.extendsBoxImpliedUnstrictExtension.json", { strict: false }, [ts.combinePaths(basePath, "main.ts")]);
                 testSuccess("can lookup via an implicit tsconfig in a package-relative directory with extension", "tsconfig.extendsBoxImpliedPath.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via an package.json exports", "tsconfig.extendsFoo.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
             });
 
             it("adds extendedSourceFiles only once", () => {
@@ -352,5 +423,40 @@ describe("unittests:: config:: configurationExtension", () => {
                 assert.deepEqual(sourceFile.extendedSourceFiles, expected);
             });
         });
+
+        describe(testName, () => {
+            it("adds extendedSourceFiles from an array only once", () => {
+                const sourceFile = ts.readJsonConfigFile("configs/extendsArrayFifth.json", (path) => host.readFile(path));
+                const dir = ts.combinePaths(basePath, "configs");
+                const expected = [
+                    ts.combinePaths(dir, "extendsArrayFirst.json"),
+                    ts.combinePaths(dir, "extendsArraySecond.json"),
+                    ts.combinePaths(dir, "extendsArrayThird.json"),
+                    ts.combinePaths(dir, "extendsArrayFourth.json"),
+                ];
+                ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "extendsArrayFifth.json");
+                assert.deepEqual(sourceFile.extendedSourceFiles, expected);
+                ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "extendsArrayFifth.json");
+                assert.deepEqual(sourceFile.extendedSourceFiles, expected);
+            });
+
+            testSuccess("can overwrite top-level compilerOptions", "configs/extendsArrayFifth.json", {
+                allowJs: true,
+                noImplicitAny: false,
+                strictNullChecks: false,
+                module: ts.ModuleKind.System
+            }, []);
+
+            testFailure("can report missing configurations", "extendsArrayFails.json", [{
+                code: 6053,
+                messageText: `File './missingFile' not found.`
+            }]);
+
+            testFailure("can error when 'extends' is not a string or Array2", "extendsArrayFails2.json", [{
+                code: 5024,
+                messageText: `Compiler option 'extends' requires a value of type string.`
+            }]);
+        });
     });
 });
+
