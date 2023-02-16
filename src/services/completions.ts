@@ -1334,6 +1334,10 @@ function createCompletionEntry(
         hasAction = true;
     }
 
+    if (contextToken && completionKind === CompletionKind.ObjectPropertyDeclaration && preferences.includeCompletionsWithInsertText) {
+        hasAction = true;
+    }
+
     if (preferences.includeCompletionsWithClassMemberSnippets &&
         preferences.includeCompletionsWithInsertText &&
         completionKind === CompletionKind.MemberLike &&
@@ -4469,6 +4473,10 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
             case SyntaxKind.Identifier:
                 return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
                     ? contextToken.parent.parent : undefined;
+            default:
+                if (isObjectLiteralExpression(parent.parent)) {
+                    return parent.parent;
+                }
         }
     }
 
