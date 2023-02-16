@@ -1,0 +1,18 @@
+=== tests/cases/compiler/selfReferentialFunctionType.ts ===
+function f<T>(args: typeof f<T>): T { return args; }
+>f : <T>(args: typeof f<T>) => T
+>args : typeof f<T>
+>f : <T>(args: typeof f<T>) => T
+>args : typeof f<T>
+
+function g<T = typeof g>(args: T): T { return args; }
+>g : <T = typeof g>(args: T) => T
+>g : <T = typeof g>(args: T) => T
+>args : T
+>args : T
+
+function h<T>(): typeof h<T> { return h; }
+>h : <T>() => typeof h<T>
+>h : <T>() => typeof h<T>
+>h : <T>() => typeof h<T>
+

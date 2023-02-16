@@ -1,0 +1,15 @@
+tests/cases/compiler/selfReferentialFunctionType.ts(1,46): error TS2322: Type 'typeof f<T>' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'typeof f<T>'.
+
+
+==== tests/cases/compiler/selfReferentialFunctionType.ts (1 errors) ====
+    function f<T>(args: typeof f<T>): T { return args; }
+                                                 ~~~~
+!!! error TS2322: Type 'typeof f<T>' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'typeof f<T>'.
+!!! related TS6212 tests/cases/compiler/selfReferentialFunctionType.ts:1:46: Did you mean to call this expression?
+    
+    function g<T = typeof g>(args: T): T { return args; }
+    
+    function h<T>(): typeof h<T> { return h; }
+    
