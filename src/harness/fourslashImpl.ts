@@ -3909,27 +3909,6 @@ export class TestState {
         }
     }
 
-    private getOccurrencesAtCurrentPosition() {
-        return ts.flatMap(
-            this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, [this.activeFile.fileName]),
-            entry => entry.highlightSpans.map<ts.ReferenceEntry>(highlightSpan => ({
-                fileName: entry.fileName,
-                textSpan: highlightSpan.textSpan,
-                isWriteAccess: highlightSpan.kind === ts.HighlightSpanKind.writtenReference,
-                ...highlightSpan.isInString && { isInString: true },
-                ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
-            }))
-        );
-    }
-
-    public verifyOccurrencesAtPositionListCount(expectedCount: number) {
-        const occurrences = this.getOccurrencesAtCurrentPosition();
-        const actualCount = occurrences ? occurrences.length : 0;
-        if (expectedCount !== actualCount) {
-            this.raiseError(`verifyOccurrencesAtPositionListCount failed - actual: ${actualCount}, expected:${expectedCount}`);
-        }
-    }
-
     private getDocumentHighlightsAtCurrentPosition(fileNamesToSearch: readonly string[]) {
         const filesToSearch = fileNamesToSearch.map(name => ts.combinePaths(this.basePath, name));
         return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);

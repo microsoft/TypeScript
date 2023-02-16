@@ -233,3 +233,12 @@
 // <|import [|BRENAME|] from "./B";|>
 // let b = new /*RENAME*/[|BRENAME|]();
 // b.test();
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/B.ts ===
+// <|export default class /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}B|] {
+//     test() {
+//     }
+// }|>

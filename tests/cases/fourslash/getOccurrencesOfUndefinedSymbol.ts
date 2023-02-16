@@ -16,5 +16,4 @@
 
 
 // "any" should not be highlighted
-goTo.marker();
-verify.occurrencesAtPositionCount(0);
+verify.baselineDocumentHighlights("");

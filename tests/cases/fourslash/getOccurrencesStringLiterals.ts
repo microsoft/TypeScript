@@ -3,4 +3,4 @@
 ////var x = "[|string|]";
 ////function f(a = "[|initial value|]") { }
 
-goTo.eachRange(() => verify.occurrencesAtPositionCount(1));
+verify.baselineDocumentHighlights();

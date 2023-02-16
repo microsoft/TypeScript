@@ -1,0 +1,27 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst04.ts ===
+// export const class C {
+//     private static [|{| kind: "none" |}c/*HIGHLIGHTS*/onst|] foo;
+//     constructor(public const foo) {
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst04.ts ===
+// export const class C {
+//     <|private static const [|{| kind: "reference" |}f/*HIGHLIGHTS*/oo|];|>
+//     constructor(public const foo) {
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst04.ts ===
+// export const class C {
+//     private static [|{| kind: "none" |}const|] foo;
+//     constructor(public con/*HIGHLIGHTS*/st foo) {
+//     }
+// }

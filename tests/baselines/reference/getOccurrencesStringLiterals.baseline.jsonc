@@ -1,0 +1,11 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesStringLiterals.ts ===
+// var x = "/*HIGHLIGHTS*/[|{| kind: "reference", isInString: true |}string|]";
+// function f(a = "initial value") { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesStringLiterals.ts ===
+// var x = "string";
+// function f(a = "/*HIGHLIGHTS*/[|{| kind: "reference", isInString: true |}initial value|]") { }

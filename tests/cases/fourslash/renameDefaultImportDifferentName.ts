@@ -11,9 +11,6 @@
 ////let b = new [|B|]();
 ////b.test();
 
-goTo.marker("1");
-verify.occurrencesAtPositionCount(1);
-
 const [CDef, C, B0Def, B0, B1] = test.ranges();
 const bRanges = [B0, B1];
 
@@ -21,4 +18,5 @@ verify.baselineCommands(
     { type: "findAllReferences", markerOrRange: ['1', '2'] },
     { type: "findRenameLocations", markerOrRange: C },
     { type: "findRenameLocations", markerOrRange: bRanges },
+    { type: "documentHighlights", markerOrRange: "1" },
 );

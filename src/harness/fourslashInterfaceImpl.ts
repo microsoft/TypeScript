@@ -564,10 +564,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyNavigateTo(options);
     }
 
-    public occurrencesAtPositionCount(expectedCount: number) {
-        this.state.verifyOccurrencesAtPositionListCount(expectedCount);
-    }
-
     public rangesAreDocumentHighlights(ranges?: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
         this.state.verifyRangesAreDocumentHighlights(ranges, options);
     }
