@@ -9,7 +9,7 @@ const enum E {
     S2 = "bar",
 >S2 : E.S2
 >"bar" : "bar"
-    
+
     N1 = 1000,
 >N1 : E.N1
 >1000 : 1000
@@ -73,4 +73,45 @@ if (someString > E.S1) {
 >S2 : E.S2
 }
 
+
+declare function someValue(): number;
+>someValue : () => number
+
+enum E2 {
+>E2 : E2
+
+    S1 = "foo",
+>S1 : E2.S1
+>"foo" : "foo"
+
+    N1 = 1000,
+>N1 : E2.N1
+>1000 : 1000
+
+    C1 = someValue(),
+>C1 : E2.C1
+>someValue() : number
+>someValue : () => number
+}
+
+someString > E2.S1;
+>someString > E2.S1 : boolean
+>someString : string
+>E2.S1 : E2.S1
+>E2 : typeof E2
+>S1 : E2.S1
+
+someNumber > E2.N1;
+>someNumber > E2.N1 : boolean
+>someNumber : number
+>E2.N1 : E2.N1
+>E2 : typeof E2
+>N1 : E2.N1
+
+someNumber > E2.C1;
+>someNumber > E2.C1 : boolean
+>someNumber : number
+>E2.C1 : E2.C1
+>E2 : typeof E2
+>C1 : E2.C1
 

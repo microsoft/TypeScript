@@ -3,7 +3,7 @@
 const enum E {
     S1 = "foo",
     S2 = "bar",
-    
+
     N1 = 1000,
     N2 = 25,
 }
@@ -26,3 +26,15 @@ if (someString > E.S1) {
     someString = E.S2;
 }
 
+
+declare function someValue(): number;
+
+enum E2 {
+    S1 = "foo",
+    N1 = 1000,
+    C1 = someValue(),
+}
+
+someString > E2.S1;
+someNumber > E2.N1;
+someNumber > E2.C1;

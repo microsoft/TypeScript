@@ -22987,17 +22987,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // a specific literal's base type rather than the enum's base type.
     function getBaseTypeOfLiteralTypeForComparison(type: Type): Type {
         return type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? stringType :
-            type.flags & TypeFlags.NumberLiteral ? numberType :
+            type.flags & (TypeFlags.NumberLiteral | TypeFlags.Enum) ? numberType :
             type.flags & TypeFlags.BigIntLiteral ? bigintType :
             type.flags & TypeFlags.BooleanLiteral ? booleanType :
-            type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(type as LiteralType) :
-            type.flags & TypeFlags.Union ? getBaseTypeOfLiteralTypeUnionForComparison(type as UnionType) :
+            type.flags & TypeFlags.Union ? mapType(type, getBaseTypeOfLiteralTypeForComparison) :
             type;
-    }
-
-    function getBaseTypeOfLiteralTypeUnionForComparison(type: UnionType) {
-        const key = `BC${getTypeId(type)}`;
-        return getCachedType(key) ?? setCachedType(key, mapType(type, getBaseTypeOfLiteralTypeForComparison));
     }
 
     function getWidenedLiteralType(type: Type): Type {
