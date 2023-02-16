@@ -1362,7 +1362,6 @@ export type HasIllegalModifiers =
     | PropertyAssignment
     | ShorthandPropertyAssignment
     | MissingDeclaration
-    | FunctionTypeNode
     | NamespaceExportDeclaration
     ;
 
@@ -1801,7 +1800,7 @@ export interface TypeParameterDeclaration extends NamedDeclaration, JSDocContain
     readonly constraint?: TypeNode;
     readonly default?: TypeNode;
 
-    // For error recovery purposes.
+    // For error recovery purposes (see `isGrammarError` in utilities.ts).
     expression?: Expression;
 }
 
@@ -1888,7 +1887,7 @@ export interface PropertySignature extends TypeElement, JSDocContainer {
     readonly questionToken?: QuestionToken;      // Present on optional property
     readonly type?: TypeNode;                    // Optional type annotation
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly initializer?: Expression | undefined; // A property signature cannot have an initializer
 }
 
@@ -1897,7 +1896,7 @@ export interface PropertyDeclaration extends ClassElement, JSDocContainer {
     readonly parent: ClassLikeDeclaration;
     readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: PropertyName;
-    readonly questionToken?: QuestionToken;      // Present for use with reporting a grammar error
+    readonly questionToken?: QuestionToken;      // Present for use with reporting a grammar error for auto-accessors (see `isGrammarError` in utilities.ts)
     readonly exclamationToken?: ExclamationToken;
     readonly type?: TypeNode;
     readonly initializer?: Expression;           // Optional initializer
@@ -1960,7 +1959,7 @@ export interface PropertyAssignment extends ObjectLiteralElement, JSDocContainer
     readonly name: PropertyName;
     readonly initializer: Expression;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined; // property assignment cannot have decorators or modifiers
     /** @internal */ readonly questionToken?: QuestionToken | undefined; // property assignment cannot have a question token
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // property assignment cannot have an exclamation token
@@ -1971,11 +1970,11 @@ export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDoc
     readonly parent: ObjectLiteralExpression;
     readonly name: Identifier;
     // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
-    // it is a grammar error to appear in actual object initializer:
+    // it is a grammar error to appear in actual object initializer (see `isGrammarError` in utilities.ts):
     readonly equalsToken?: EqualsToken;
     readonly objectAssignmentInitializer?: Expression;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined; // shorthand property assignment cannot have decorators or modifiers
     /** @internal */ readonly questionToken?: QuestionToken | undefined; // shorthand property assignment cannot have a question token
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // shorthand property assignment cannot have an exclamation token
@@ -2076,7 +2075,7 @@ export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassEle
     readonly name: PropertyName;
     readonly body?: FunctionBody | undefined;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // A method cannot have an exclamation token
 }
 
@@ -2086,7 +2085,7 @@ export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, Cla
     readonly modifiers?: NodeArray<ModifierLike> | undefined;
     readonly body?: FunctionBody | undefined;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration>; // A constructor cannot have type parameters
     /** @internal */ readonly type?: TypeNode; // A constructor cannot have a return type annotation
 }
@@ -2106,7 +2105,7 @@ export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, Cla
     readonly name: PropertyName;
     readonly body?: FunctionBody;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined; // A get accessor cannot have type parameters
 }
 
@@ -2119,7 +2118,7 @@ export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, Cla
     readonly name: PropertyName;
     readonly body?: FunctionBody;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined; // A set accessor cannot have type parameters
     /** @internal */ readonly type?: TypeNode | undefined; // A set accessor cannot have a return type
 }
@@ -2141,7 +2140,7 @@ export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContaine
     /** @internal */ endFlowNode?: FlowNode;
     /** @internal */ returnFlowNode?: FlowNode;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
 }
 
@@ -2190,8 +2189,8 @@ export interface FunctionOrConstructorTypeNodeBase extends TypeNode, SignatureDe
 export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
     readonly kind: SyntaxKind.FunctionType;
 
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
+    // A function type cannot have modifiers
+    /** @internal */ readonly modifiers?: undefined;
 }
 
 export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
@@ -3723,7 +3722,7 @@ export interface NamespaceExportDeclaration extends DeclarationStatement, JSDocC
     readonly kind: SyntaxKind.NamespaceExportDeclaration;
     readonly name: Identifier;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
 }
 
@@ -4927,7 +4926,7 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 
 export interface TypeChecker {
     getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
-    /** @internal */ getTypeOfSymbol(symbol: Symbol): Type;
+    getTypeOfSymbol(symbol: Symbol): Type;
     getDeclaredTypeOfSymbol(symbol: Symbol): Type;
     getPropertiesOfType(type: Type): Symbol[];
     getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
@@ -4946,6 +4945,8 @@ export interface TypeChecker {
     getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
     /** @internal */
     getAwaitedType(type: Type): Type | undefined;
+    /** @internal */
+    isEmptyAnonymousObjectType(type: Type): boolean;
     getReturnTypeOfSignature(signature: Signature): Type;
     /**
      * Gets the type of a parameter at a given position in a signature.
@@ -5153,9 +5154,21 @@ export interface TypeChecker {
     /** @internal */ getRecursionIdentity(type: Type): object | undefined;
     /** @internal */ getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol>;
 
-    /** @internal */ isArrayType(type: Type): boolean;
-    /** @internal */ isTupleType(type: Type): boolean;
-    /** @internal */ isArrayLikeType(type: Type): boolean;
+    /**
+     * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
+     * This function will _not_ return true if passed a type which
+     * extends `Array` (for example, the TypeScript AST's `NodeArray` type).
+     */
+    isArrayType(type: Type): boolean;
+    /**
+     * True if this type is a tuple type. This function will _not_ return true if
+     * passed a type which extends from a tuple.
+     */
+    isTupleType(type: Type): boolean;
+    /**
+     * True if this type is assignable to `ReadonlyArray<any>`.
+     */
+    isArrayLikeType(type: Type): boolean;
 
     /**
      * True if `contextualType` should not be considered for completions because
@@ -5983,6 +5996,7 @@ export interface NodeLinks {
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
+    parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
 }
 
 /** @internal */
@@ -6028,7 +6042,8 @@ export const enum TypeFlags {
     /** @internal */
     Nullable = Undefined | Null,
     Literal = StringLiteral | NumberLiteral | BigIntLiteral | BooleanLiteral,
-    Unit = Literal | UniqueESSymbol | Nullable,
+    Unit = Enum | Literal | UniqueESSymbol | Nullable,
+    Freshable = Enum | Literal,
     StringOrNumberLiteral = StringLiteral | NumberLiteral,
     /** @internal */
     StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
@@ -6038,7 +6053,7 @@ export const enum TypeFlags {
     /** @internal */
     Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
     /** @internal */
-    Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
+    Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol | TemplateLiteral,
     StringLike = String | StringLiteral | TemplateLiteral | StringMapping,
     NumberLike = Number | NumberLiteral | Enum,
     BigIntLike = BigInt | BigIntLiteral,
@@ -6122,22 +6137,20 @@ export interface NullableType extends IntrinsicType {
     objectFlags: ObjectFlags;
 }
 
-/** @internal */
-export interface FreshableIntrinsicType extends IntrinsicType {
-    freshType: IntrinsicType;     // Fresh version of type
-    regularType: IntrinsicType;   // Regular version of type
+export interface FreshableType extends Type {
+    freshType: FreshableType;     // Fresh version of type
+    regularType: FreshableType;   // Regular version of type
 }
 
 /** @internal */
-export type FreshableType = LiteralType | FreshableIntrinsicType;
+export interface FreshableIntrinsicType extends FreshableType, IntrinsicType {
+}
 
 // String literal types (TypeFlags.StringLiteral)
 // Numeric literal types (TypeFlags.NumberLiteral)
 // BigInt literal types (TypeFlags.BigIntLiteral)
-export interface LiteralType extends Type {
+export interface LiteralType extends FreshableType {
     value: string | number | PseudoBigInt; // Value of literal
-    freshType: LiteralType;                // Fresh version of type
-    regularType: LiteralType;              // Regular version of type
 }
 
 // Unique symbol types (TypeFlags.UniqueESSymbol)
@@ -6159,7 +6172,7 @@ export interface BigIntLiteralType extends LiteralType {
 }
 
 // Enum types (TypeFlags.Enum)
-export interface EnumType extends Type {
+export interface EnumType extends FreshableType {
 }
 
 // Types included in TypeFlags.ObjectFlagsType have an objectFlags property. Some ObjectFlags
@@ -6409,7 +6422,7 @@ export interface AnonymousType extends ObjectType {
 
 /** @internal */
 export interface InstantiationExpressionType extends AnonymousType {
-    node: ExpressionWithTypeArguments | TypeQueryNode;
+    node: NodeWithTypeArguments;
 }
 
 /** @internal */

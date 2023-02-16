@@ -1013,7 +1013,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
             );
         }
 
-        return visitEachChild(node, visitor, context);
+        return factory.updatePropertyDeclaration(
+            node,
+            visitNodes(node.modifiers, modifierVisitor, isModifier),
+            visitNode(node.name, propertyNameVisitor, isPropertyName),
+            /*questionOrExclamationToken*/ undefined,
+            /*type*/ undefined,
+            visitNode(node.initializer, visitor, isExpression)
+        );
     }
 
     function transformPublicFieldInitializer(node: PropertyDeclaration) {

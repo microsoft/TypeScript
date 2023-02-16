@@ -27,7 +27,7 @@ let C = (() => {
     let _static_member_initializers = [];
     return class C {
         static {
-            tslib_1.__esDecorate(null, null, _static_member_decorators, { kind: "field", name: _a, static: true, private: false }, _static_member_initializers, _staticExtraInitializers);
+            tslib_1.__esDecorate(null, null, _static_member_decorators, { kind: "field", name: _a, static: true, private: false, access: { has: obj => _a in obj, get: obj => obj[_a], set: (obj, value) => { obj[_a] = value; } } }, _static_member_initializers, _staticExtraInitializers);
             tslib_1.__runInitializers(this, _staticExtraInitializers);
         }
         static [(_static_member_decorators = [dec], _a = tslib_1.__propKey(x))] = tslib_1.__runInitializers(this, _static_member_initializers, void 0);

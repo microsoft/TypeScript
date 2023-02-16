@@ -34,6 +34,7 @@ import {
     InterfaceDeclaration,
     isComment,
     isDecorator,
+    isGrammarError,
     isJSDoc,
     isLineBreak,
     isModifier,
@@ -863,7 +864,7 @@ function formatSpanWorker(
                 // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                 const tokenInfo = formattingScanner.readTokenInfo(child);
                 // JSX text shouldn't affect indenting
-                if (child.kind !== SyntaxKind.JsxText) {
+                if (child.kind !== SyntaxKind.JsxText && !isGrammarError(parent, child)) {
                     Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
                     return inheritedIndentation;

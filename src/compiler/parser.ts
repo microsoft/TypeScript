@@ -2691,7 +2691,6 @@ namespace Parser {
                 return canFollowExportModifier();
             case SyntaxKind.DefaultKeyword:
                 return nextTokenCanFollowDefaultKeyword();
-            case SyntaxKind.AccessorKeyword:
             case SyntaxKind.StaticKeyword:
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
@@ -4371,13 +4370,13 @@ namespace Parser {
         const hasJSDoc = hasPrecedingJSDocComment();
         const modifiers = parseModifiersForConstructorType();
         const isConstructorType = parseOptional(SyntaxKind.NewKeyword);
+        Debug.assert(!modifiers || isConstructorType, "Per isStartOfFunctionOrConstructorType, a function type cannot have modifiers.");
         const typeParameters = parseTypeParameters();
         const parameters = parseParameters(SignatureFlags.Type);
         const type = parseReturnType(SyntaxKind.EqualsGreaterThanToken, /*isType*/ false);
         const node = isConstructorType
             ? factory.createConstructorTypeNode(modifiers, typeParameters, parameters, type)
             : factory.createFunctionTypeNode(typeParameters, parameters, type);
-        if (!isConstructorType) (node as Mutable<FunctionTypeNode>).modifiers = modifiers;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -5212,6 +5211,7 @@ namespace Parser {
                         switch (fourth) {
                             case SyntaxKind.EqualsToken:
                             case SyntaxKind.GreaterThanToken:
+                            case SyntaxKind.SlashToken:
                                 return false;
                             default:
                                 return true;
@@ -5658,6 +5658,11 @@ namespace Parser {
             case SyntaxKind.VoidKeyword:
                 return parseVoidExpression();
             case SyntaxKind.LessThanToken:
+                // Just like in parseUpdateExpression, we need to avoid parsing type assertions when
+                // in JSX and we see an expression like "+ <foo> bar".
+                if (languageVariant === LanguageVariant.JSX) {
+                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true);
+                }
                 // This is modified UnaryExpression grammar in TypeScript
                 //  UnaryExpression (modified):
                 //      < type > UnaryExpression
@@ -6173,6 +6178,7 @@ namespace Parser {
     }
 
     function parseTypeAssertion(): TypeAssertion {
+        Debug.assert(scriptKind === ScriptKind.TS, "Type assertions should never be parsed outside of TS; they should either be comparisons or JSX.");
         const pos = getNodePos();
         parseExpected(SyntaxKind.LessThanToken);
         const type = parseType();
@@ -6631,7 +6637,7 @@ namespace Parser {
             parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBraceParsed, openBracePosition);
             const result = withJSDoc(finishNode(factory.createBlock(statements, multiLine), pos), hasJSDoc);
             if (token() === SyntaxKind.EqualsToken) {
-                parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_the_whole_assignment_in_parentheses);
+                parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_whole_assignment_in_parentheses);
                 nextToken();
             }
 
@@ -7714,20 +7720,36 @@ namespace Parser {
     function parseModifiers(allowDecorators: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined {
         const pos = getNodePos();
         let list: ModifierLike[] | undefined;
-        let modifier, hasSeenStaticModifier = false;
-        while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
-            if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
-            list = append(list, modifier);
-        }
+        let decorator, modifier, hasSeenStaticModifier = false, hasLeadingModifier = false, hasTrailingDecorator = false;
 
-        // Decorators should be contiguous in a list of modifiers (i.e., `[...leadingModifiers, ...decorators, ...trailingModifiers]`).
-        // The leading modifiers *should* only contain `export` and `default` when decorators are present, but we'll handle errors for any other leading modifiers in the checker.
+        // Decorators should be contiguous in a list of modifiers but can potentially appear in two places (i.e., `[...leadingDecorators, ...leadingModifiers, ...trailingDecorators, ...trailingModifiers]`).
+        // The leading modifiers *should* only contain `export` and `default` when trailingDecorators are present, but we'll handle errors for any other leading modifiers in the checker.
+        // It is illegal to have both leadingDecorators and trailingDecorators, but we will report that as a grammar check in the checker.
+
+        // parse leading decorators
         if (allowDecorators && token() === SyntaxKind.AtToken) {
-            let decorator;
             while (decorator = tryParseDecorator()) {
                 list = append(list, decorator);
             }
+        }
 
+        // parse leading modifiers
+        while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
+            if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
+            list = append(list, modifier);
+            hasLeadingModifier = true;
+        }
+
+        // parse trailing decorators, but only if we parsed any leading modifiers
+        if (hasLeadingModifier && allowDecorators && token() === SyntaxKind.AtToken) {
+            while (decorator = tryParseDecorator()) {
+                list = append(list, decorator);
+                hasTrailingDecorator = true;
+            }
+        }
+
+        // parse trailing modifiers, but only if we parsed any trailing decorators
+        if (hasTrailingDecorator) {
             while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
                 if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
                 list = append(list, modifier);

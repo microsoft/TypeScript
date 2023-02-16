@@ -6310,6 +6310,7 @@ declare namespace ts {
     }
     interface TypeChecker {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
+        getTypeOfSymbol(symbol: Symbol): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
@@ -6400,6 +6401,21 @@ declare namespace ts {
         getApparentType(type: Type): Type;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
+        /**
+         * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
+         * This function will _not_ return true if passed a type which
+         * extends `Array` (for example, the TypeScript AST's `NodeArray` type).
+         */
+        isArrayType(type: Type): boolean;
+        /**
+         * True if this type is a tuple type. This function will _not_ return true if
+         * passed a type which extends from a tuple.
+         */
+        isTupleType(type: Type): boolean;
+        /**
+         * True if this type is assignable to `ReadonlyArray<any>`.
+         */
+        isArrayLikeType(type: Type): boolean;
         getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
         /**
          * Depending on the operation performed, it may be appropriate to throw away the checker
@@ -6659,7 +6675,8 @@ declare namespace ts {
         TemplateLiteral = 134217728,
         StringMapping = 268435456,
         Literal = 2944,
-        Unit = 109440,
+        Unit = 109472,
+        Freshable = 2976,
         StringOrNumberLiteral = 384,
         PossiblyFalsy = 117724,
         StringLike = 402653316,
@@ -6711,10 +6728,12 @@ declare namespace ts {
         isClass(): this is InterfaceType;
         isIndexType(): this is IndexType;
     }
-    interface LiteralType extends Type {
+    interface FreshableType extends Type {
+        freshType: FreshableType;
+        regularType: FreshableType;
+    }
+    interface LiteralType extends FreshableType {
         value: string | number | PseudoBigInt;
-        freshType: LiteralType;
-        regularType: LiteralType;
     }
     interface UniqueESSymbolType extends Type {
         symbol: Symbol;
@@ -6729,7 +6748,7 @@ declare namespace ts {
     interface BigIntLiteralType extends LiteralType {
         value: PseudoBigInt;
     }
-    interface EnumType extends Type {
+    interface EnumType extends FreshableType {
     }
     enum ObjectFlags {
         None = 0,
@@ -8673,7 +8692,6 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
-    function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean;
     /** @deprecated */
     function createUnparsedSourceFile(text: string): UnparsedSource;
     /** @deprecated */
@@ -9128,7 +9146,6 @@ declare namespace ts {
     function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-    function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string): boolean | "" | undefined;
     interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
     }
     interface ModeAwareCache<T> {
@@ -9990,7 +10007,7 @@ declare namespace ts {
         getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
-        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined;
+        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         /**
          * This will return a defined result if the position is after the `>` of the opening tag, or somewhere in the text, of a JSXElement with no closing tag.
@@ -10056,6 +10073,13 @@ declare namespace ts {
          */
         triggerCharacter?: CompletionsTriggerCharacter;
         triggerKind?: CompletionTriggerKind;
+        /**
+         * Include a `symbol` property on each completion entry object.
+         * Symbols reference cyclic data structures and sometimes an entire TypeChecker instance,
+         * so use caution when serializing or retaining completion entries retrieved with this option.
+         * @default false
+         */
+        includeSymbol?: boolean;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
@@ -10576,6 +10600,7 @@ declare namespace ts {
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
          */
         exportName: string;
+        exportMapKey?: string;
         moduleSpecifier?: string;
         /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
@@ -10585,7 +10610,6 @@ declare namespace ts {
         isPackageJsonImport?: true;
     }
     interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
-        /** The key in the `ExportMapCache` where the completion entry's `SymbolExportInfo[]` is found */
         exportMapKey: string;
     }
     interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
@@ -10613,6 +10637,12 @@ declare namespace ts {
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
         isImportStatementCompletion?: true;
+        /**
+         * For API purposes.
+         * Included for non-string completions only when `includeSymbol: true` option is passed to `getCompletionsAtPosition`.
+         * @example Get declaration of completion: `symbol.valueDeclaration`
+         */
+        symbol?: Symbol;
         /**
          * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
          * that allows TS Server to look up the symbol represented by the completion item, disambiguating
