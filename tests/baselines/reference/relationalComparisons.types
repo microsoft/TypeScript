@@ -1,0 +1,46 @@
+=== tests/cases/compiler/relationalComparisons.ts ===
+type Moment = {
+>Moment : { valueOf(): number; }
+
+    valueOf(): number;
+>valueOf : () => number
+
+};
+
+declare const m1: Moment, m2: Moment;
+>m1 : Moment
+>m2 : Moment
+
+declare const d1: Date, d2: Date;
+>d1 : Date
+>d2 : Date
+
+if (m1 > 0) { }
+>m1 > 0 : boolean
+>m1 : Moment
+>0 : 0
+
+if (m1 > m2) { }
+>m1 > m2 : boolean
+>m1 : Moment
+>m2 : Moment
+
+if (0 > m2) { }
+>0 > m2 : boolean
+>0 : 0
+>m2 : Moment
+
+if (d1 > d2) { }
+>d1 > d2 : boolean
+>d1 : Date
+>d2 : Date
+
+declare const arr1: any[], arr2: any[];
+>arr1 : any[]
+>arr2 : any[]
+
+if (arr1 > arr2) { }
+>arr1 > arr2 : boolean
+>arr1 : any[]
+>arr2 : any[]
+
