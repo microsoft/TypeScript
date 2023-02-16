@@ -1,1 +1,5 @@
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/hoverOverComment.ts ===
+// export function f() {}
+// //foo
+// /*FIND ALL REFS*///moo

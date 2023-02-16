@@ -1,63 +1,41 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/constructorFindAllReferences1.ts ===
 // export class C {
-//     /*FIND ALL REFS*/public [|constructor|]() { }
+//     /*FIND ALL REFS*/<|public [|constructor|]() { }|>
 //     public foo() { }
 // }
 // 
 // new [|C|]().foo();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/constructorFindAllReferences1.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 13,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 68
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 28,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/constructorFindAllReferences1.ts",
-        "contextSpan": {
-          "start": 21,
-          "length": 24
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 74,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/constructorFindAllReferences1.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/constructorFindAllReferences1.ts ===
+  // <|export class [|C|] {
+  //     /*FIND ALL REFS*/public constructor() { }
+  //     public foo() { }
+  // }|>
+  // 
+  // new C().foo();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

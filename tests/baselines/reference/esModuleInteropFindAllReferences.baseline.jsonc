@@ -1,157 +1,113 @@
-undefined
+// === findAllReferences ===
+// === /abc.d.ts ===
+// declare module "a" {
+//     /*FIND ALL REFS*/export const x: number;
+// }
+
+
+
+// === findAllReferences ===
+// === /abc.d.ts ===
+// declare module "a" {
+//     <|export const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|]: number;|>
+// }
 
 // === /b.ts ===
 // import a from "a";
 // a.[|x|];
 
+  // === Definitions ===
+  // === /abc.d.ts ===
+  // declare module "a" {
+  //     <|export const /*FIND ALL REFS*/[|x|]: number;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: number",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /abc.d.ts ===
 // declare module "a" {
-//     export const /*FIND ALL REFS*/[|x|]: number;
+//     <|export const [|{| isWriteAccess: true |}x|]: number;|>
 // }
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/abc.d.ts",
-      "kind": "const",
-      "name": "const x: number",
-      "textSpan": {
-        "start": 38,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 25,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 1
-        },
-        "fileName": "/abc.d.ts",
-        "contextSpan": {
-          "start": 25,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
 
 // === /b.ts ===
 // import a from "a";
 // a./*FIND ALL REFS*/[|x|];
 
-// === /abc.d.ts ===
-// declare module "a" {
-//     export const [|x|]: number;
-// }
+  // === Definitions ===
+  // === /abc.d.ts ===
+  // declare module "a" {
+  //     <|export const [|x|]: number;|>
+  // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/abc.d.ts",
-      "kind": "const",
-      "name": "const x: number",
-      "textSpan": {
-        "start": 38,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 25,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 1
-        },
-        "fileName": "/abc.d.ts",
-        "contextSpan": {
-          "start": 25,
-          "length": 23
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: number",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
