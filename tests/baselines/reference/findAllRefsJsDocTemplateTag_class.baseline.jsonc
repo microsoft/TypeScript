@@ -1,177 +1,141 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsJsDocTemplateTag_class.ts ===
 // /** @template /*FIND ALL REFS*/[|T|] */
-// class C<[|T|]> {}
+// class C<[|{| isWriteAccess: true |}T|]> {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsJsDocTemplateTag_class.ts",
-      "kind": "type parameter",
-      "name": "(type parameter) T in C<T>",
-      "textSpan": {
-        "start": 27,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "type parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "in",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsJsDocTemplateTag_class.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsJsDocTemplateTag_class.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsJsDocTemplateTag_class.ts ===
+  // /** @template /*FIND ALL REFS*/T */
+  // class C<[|T|]> {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T in C<T>",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "in",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsJsDocTemplateTag_class.ts ===
 // /** @template [|T|] */
-// class C</*FIND ALL REFS*/[|T|]> {}
+// class C</*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|]> {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsJsDocTemplateTag_class.ts",
-      "kind": "type parameter",
-      "name": "(type parameter) T in C<T>",
-      "textSpan": {
-        "start": 27,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "type parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "in",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsJsDocTemplateTag_class.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsJsDocTemplateTag_class.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsJsDocTemplateTag_class.ts ===
+  // /** @template T */
+  // class C</*FIND ALL REFS*/[|T|]> {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T in C<T>",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "in",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]

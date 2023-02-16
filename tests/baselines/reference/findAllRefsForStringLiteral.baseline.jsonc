@@ -1,52 +1,39 @@
+// === findAllReferences ===
 // === /a.ts ===
 // interface Foo {
-//     property: /*FIND ALL REFS*/"[|foo|]";
+//     property: /*FIND ALL REFS*/"[|{| isInString: true |}foo|]";
 // }
 // /**
 //  * @type {{ property: "foo"}}
 //  */
 // const obj: Foo = {
-//     property: "[|foo|]",
+//     property: "[|{| isInString: true |}foo|]",
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "var",
-      "name": "foo",
-      "textSpan": {
-        "start": 31,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 3
-        },
-        "fileName": "/a.ts",
-        "isWriteAccess": false,
-        "isInString": true
-      },
-      {
-        "textSpan": {
-          "start": 111,
-          "length": 3
-        },
-        "fileName": "/a.ts",
-        "isWriteAccess": false,
-        "isInString": true
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // interface Foo {
+  //     property: /*FIND ALL REFS*/"[|foo|]";
+  // }
+  // /**
+  //  * @type {{ property: "foo"}}
+  //  */
+  // const obj: Foo = {
+  //     property: "foo",
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "foo",
+    "displayParts": [
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

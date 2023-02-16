@@ -1,68 +1,33 @@
+// === findAllReferences ===
 // === /b.ts ===
 // /// <reference types="[|foo|]" />
-// import { x } from "/*FIND ALL REFS*/[|foo|]";
-// declare module "[|foo|]" {}
+// <|import { x } from "/*FIND ALL REFS*/[|foo|]";|>
+// <|declare module "[|{| isWriteAccess: true |}foo|]" {}|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/foo/index.d.ts",
-      "kind": "module",
-      "name": "module \"/node_modules/foo/index\"",
-      "textSpan": {
-        "start": 0,
-        "length": 19
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/node_modules/foo/index\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 22,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 49,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 30,
-          "length": 24
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 71,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 55,
-          "length": 23
-        },
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /node_modules/foo/index.d.ts ===
+  // [|export const x = 0;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/node_modules/foo/index\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/node_modules/foo/index\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

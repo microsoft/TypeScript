@@ -1,11 +1,68 @@
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
+// function f(value: string, /*FIND ALL REFS*/default: string) {}
+// 
+// const default = 1;
+// 
+// function default() {}
+// 
+// class default {}
+// 
+// const foo = {
+//     default: 1
+// }
 
-undefined
 
-undefined
 
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
+// function f(value: string, default: string) {}
+// 
+// const /*FIND ALL REFS*/default = 1;
+// 
+// function default() {}
+// 
+// class default {}
+// 
+// const foo = {
+//     default: 1
+// }
 
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
+// function f(value: string, default: string) {}
+// 
+// const default = 1;
+// 
+// function /*FIND ALL REFS*/default() {}
+// 
+// class default {}
+// 
+// const foo = {
+//     default: 1
+// }
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
+// function f(value: string, default: string) {}
+// 
+// const default = 1;
+// 
+// function default() {}
+// 
+// class /*FIND ALL REFS*/default {}
+// 
+// const foo = {
+//     default: 1
+// }
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
 // function f(value: string, default: string) {}
 // 
@@ -16,74 +73,63 @@ undefined
 // class default {}
 // 
 // const foo = {
-//     /*FIND ALL REFS*/[|default|]: 1
+//     /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}default|]: 1|>
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultKeyword.ts",
-      "kind": "property",
-      "name": "(property) default: number",
-      "textSpan": {
-        "start": 126,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "default",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 126,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 126,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultKeyword.ts",
-        "contextSpan": {
-          "start": 126,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
+  // function f(value: string, default: string) {}
+  // 
+  // const default = 1;
+  // 
+  // function default() {}
+  // 
+  // class default {}
+  // 
+  // const foo = {
+  //     /*FIND ALL REFS*/<|[|default|]: 1|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) default: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "default",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
