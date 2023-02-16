@@ -266,20 +266,18 @@ Info 19   [00:01:30.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 20   [00:01:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/node_modules 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Failed Lookup Locations
 Info 21   [00:01:32.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/node_modules 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Failed Lookup Locations
 Info 22   [00:01:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/node_modules 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Failed Lookup Locations
-Info 23   [00:01:34.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Failed Lookup Locations
-Info 24   [00:01:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Failed Lookup Locations
-Info 25   [00:01:36.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/shared/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
-Info 26   [00:01:37.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/program/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
-Info 27   [00:01:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/program/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
-Info 28   [00:01:39.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
-Info 29   [00:01:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
-Info 30   [00:01:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
-Info 31   [00:01:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
-Info 32   [00:01:43.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
-Info 33   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
-Info 34   [00:01:45.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app/src/program/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 35   [00:01:46.000] Project '/user/username/projects/myproject/app/src/program/tsconfig.json' (Configured)
-Info 36   [00:01:47.000] 	Files (4)
+Info 23   [00:01:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/shared/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info 24   [00:01:35.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/program/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
+Info 25   [00:01:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/program/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
+Info 26   [00:01:37.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
+Info 27   [00:01:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
+Info 28   [00:01:39.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
+Info 29   [00:01:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
+Info 30   [00:01:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
+Info 31   [00:01:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
+Info 32   [00:01:43.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app/src/program/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 33   [00:01:44.000] Project '/user/username/projects/myproject/app/src/program/tsconfig.json' (Configured)
+Info 34   [00:01:45.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/shared/src/library/index.ts
 	/user/username/projects/myproject/app/src/program/bar.ts
@@ -295,24 +293,24 @@ Info 36   [00:01:47.000] 	Files (4)
 	index.ts
 	  Matched by default include pattern '**/*'
 
-Info 37   [00:01:48.000] -----------------------------------------------
-Info 38   [00:01:49.000] Search path: /user/username/projects/myproject/app/src/program
-Info 39   [00:01:50.000] For info: /user/username/projects/myproject/app/src/program/tsconfig.json :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 40   [00:01:51.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
-Info 41   [00:01:52.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 42   [00:01:53.000] Search path: /user/username/projects/myproject
-Info 43   [00:01:54.000] For info: /user/username/projects/myproject/tsconfig.json :: No config files found.
-Info 44   [00:01:55.000] Project '/user/username/projects/myproject/app/src/program/tsconfig.json' (Configured)
-Info 44   [00:01:56.000] 	Files (4)
+Info 35   [00:01:46.000] -----------------------------------------------
+Info 36   [00:01:47.000] Search path: /user/username/projects/myproject/app/src/program
+Info 37   [00:01:48.000] For info: /user/username/projects/myproject/app/src/program/tsconfig.json :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 38   [00:01:49.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
+Info 39   [00:01:50.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 40   [00:01:51.000] Search path: /user/username/projects/myproject
+Info 41   [00:01:52.000] For info: /user/username/projects/myproject/tsconfig.json :: No config files found.
+Info 42   [00:01:53.000] Project '/user/username/projects/myproject/app/src/program/tsconfig.json' (Configured)
+Info 42   [00:01:54.000] 	Files (4)
 
-Info 44   [00:01:57.000] -----------------------------------------------
-Info 44   [00:01:58.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 44   [00:01:59.000] 	Files (0) InitialLoadPending
+Info 42   [00:01:55.000] -----------------------------------------------
+Info 42   [00:01:56.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 42   [00:01:57.000] 	Files (0) InitialLoadPending
 
-Info 44   [00:02:00.000] -----------------------------------------------
-Info 44   [00:02:01.000] Open files: 
-Info 44   [00:02:02.000] 	FileName: /user/username/projects/myproject/app/src/program/index.ts ProjectRootPath: undefined
-Info 44   [00:02:03.000] 		Projects: /user/username/projects/myproject/app/src/program/tsconfig.json
+Info 42   [00:01:58.000] -----------------------------------------------
+Info 42   [00:01:59.000] Open files: 
+Info 42   [00:02:00.000] 	FileName: /user/username/projects/myproject/app/src/program/index.ts ProjectRootPath: undefined
+Info 42   [00:02:01.000] 		Projects: /user/username/projects/myproject/app/src/program/tsconfig.json
 After request
 
 PolledWatches::
@@ -352,14 +350,12 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/shared/src/library:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
-Info 44   [00:02:04.000] response:
+Info 42   [00:02:02.000] response:
     {
       "responseRequired": false
     }
-Info 45   [00:02:05.000] request:
+Info 43   [00:02:03.000] request:
     {
       "command": "getCodeFixes",
       "arguments": {
@@ -414,11 +410,9 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/shared/src/library:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
-Info 46   [00:02:06.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 47   [00:02:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 44   [00:02:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 45   [00:02:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 After request
 
 PolledWatches::
@@ -461,7 +455,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 48   [00:02:08.000] response:
+Info 46   [00:02:06.000] response:
     {
       "response": [
         {

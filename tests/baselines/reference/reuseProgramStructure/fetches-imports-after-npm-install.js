@@ -7,18 +7,12 @@ resolvedModules:
 a: {
   "failedLookupLocations": [
     "node_modules/a/package.json",
-    "node_modules/a.ts",
-    "node_modules/a.tsx",
-    "node_modules/a.d.ts",
     "node_modules/a/index.ts",
     "node_modules/a/index.tsx",
     "node_modules/a/index.d.ts",
     "node_modules/@types/a/package.json",
-    "node_modules/@types/a.d.ts",
     "node_modules/@types/a/index.d.ts",
     "node_modules/a/package.json",
-    "node_modules/a.js",
-    "node_modules/a.jsx",
     "node_modules/a/index.js",
     "node_modules/a/index.jsx"
   ]
@@ -36,19 +30,13 @@ resolvedTypeReferenceDirectiveNames: undefined
 Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File 'node_modules/a/package.json' does not exist.
-File 'node_modules/a.ts' does not exist.
-File 'node_modules/a.tsx' does not exist.
-File 'node_modules/a.d.ts' does not exist.
 File 'node_modules/a/index.ts' does not exist.
 File 'node_modules/a/index.tsx' does not exist.
 File 'node_modules/a/index.d.ts' does not exist.
 File 'node_modules/@types/a/package.json' does not exist.
-File 'node_modules/@types/a.d.ts' does not exist.
 File 'node_modules/@types/a/index.d.ts' does not exist.
 Loading module 'a' from 'node_modules' folder, target file types: JavaScript.
 File 'node_modules/a/package.json' does not exist according to earlier cached lookups.
-File 'node_modules/a.js' does not exist.
-File 'node_modules/a.jsx' does not exist.
 File 'node_modules/a/index.js' does not exist.
 File 'node_modules/a/index.jsx' does not exist.
 ======== Module name 'a' was not resolved. ========
@@ -81,9 +69,6 @@ a: {
   },
   "failedLookupLocations": [
     "node_modules/a/package.json",
-    "node_modules/a.ts",
-    "node_modules/a.tsx",
-    "node_modules/a.d.ts",
     "node_modules/a/index.ts",
     "node_modules/a/index.tsx"
   ]
@@ -101,9 +86,6 @@ resolvedTypeReferenceDirectiveNames: undefined
 Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File 'node_modules/a/package.json' does not exist.
-File 'node_modules/a.ts' does not exist.
-File 'node_modules/a.tsx' does not exist.
-File 'node_modules/a.d.ts' does not exist.
 File 'node_modules/a/index.ts' does not exist.
 File 'node_modules/a/index.tsx' does not exist.
 File 'node_modules/a/index.d.ts' exists - use it as a name resolution result.

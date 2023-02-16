@@ -84,8 +84,6 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/linked-package:
   {}
-/user/username/projects/myproject/main/node_modules:
-  {}
 
 exitCode:: ExitStatus.undefined
 

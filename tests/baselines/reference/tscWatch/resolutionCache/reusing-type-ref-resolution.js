@@ -49,9 +49,6 @@ FileWatcher:: Added:: WatchInfo: /src/project/fileWithImports.ts 250 undefined S
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg0/package.json' does not exist.
-File '/src/project/node_modules/pkg0.ts' does not exist.
-File '/src/project/node_modules/pkg0.tsx' does not exist.
-File '/src/project/node_modules/pkg0.d.ts' does not exist.
 File '/src/project/node_modules/pkg0/index.ts' does not exist.
 File '/src/project/node_modules/pkg0/index.tsx' does not exist.
 File '/src/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
@@ -60,15 +57,10 @@ Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/sr
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/src/project/node_modules/pkg1.ts' does not exist.
-File '/src/project/node_modules/pkg1.tsx' does not exist.
-File '/src/project/node_modules/pkg1.d.ts' does not exist.
 Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-File '/src/project/node_modules/pkg1.js' does not exist.
-File '/src/project/node_modules/pkg1.jsx' does not exist.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
@@ -78,14 +70,12 @@ FileWatcher:: Added:: WatchInfo: /src/project/fileWithTypeRefs.ts 250 undefined 
 Root directory cannot be determined, skipping primary search paths.
 Looking up in 'node_modules' folder, initial location '/src/project'.
 File '/src/project/node_modules/pkg2/package.json' does not exist.
-File '/src/project/node_modules/pkg2.d.ts' does not exist.
 File '/src/project/node_modules/pkg2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg2/index.d.ts', result '/src/project/node_modules/pkg2/index.d.ts'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts', primary: false. ========
 ======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory not set. ========
 Root directory cannot be determined, skipping primary search paths.
 Looking up in 'node_modules' folder, initial location '/src/project'.
-File '/src/project/node_modules/pkg3.d.ts' does not exist.
 Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -352,9 +342,6 @@ Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of ol
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg1/package.json' does not exist.
-File '/src/project/node_modules/pkg1.ts' does not exist.
-File '/src/project/node_modules/pkg1.tsx' does not exist.
-File '/src/project/node_modules/pkg1.d.ts' does not exist.
 File '/src/project/node_modules/pkg1/index.ts' does not exist.
 File '/src/project/node_modules/pkg1/index.tsx' does not exist.
 File '/src/project/node_modules/pkg1/index.d.ts' exists - use it as a name resolution result.
@@ -590,7 +577,6 @@ Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWit
 Root directory cannot be determined, skipping primary search paths.
 Looking up in 'node_modules' folder, initial location '/src/project'.
 File '/src/project/node_modules/pkg3/package.json' does not exist.
-File '/src/project/node_modules/pkg3.d.ts' does not exist.
 File '/src/project/node_modules/pkg3/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg3/index.d.ts', result '/src/project/node_modules/pkg3/index.d.ts'.
 ======== Type reference directive 'pkg3' was successfully resolved to '/src/project/node_modules/pkg3/index.d.ts', primary: false. ========

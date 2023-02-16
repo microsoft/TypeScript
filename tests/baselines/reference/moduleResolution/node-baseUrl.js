@@ -13,7 +13,7 @@
 //// [/root/m3/dist/typings.d.ts]
 
 
-//// [/root/node_modules/m4.ts]
+//// [/root/node_modules/m4/index.ts]
 
 
 Resolving "m1" from /root/a/b/main.ts
@@ -65,7 +65,7 @@ Resolution:: {
 Resolving "m4" from /root/a/b/main.ts
 Resolution:: {
   "resolvedModule": {
-    "resolvedFileName": "/root/node_modules/m4.ts",
+    "resolvedFileName": "/root/node_modules/m4/index.ts",
     "extension": ".ts",
     "isExternalLibraryImport": true,
     "resolvedUsingTsExtension": false
@@ -79,24 +79,16 @@ Resolution:: {
     "/root/m4/index.tsx",
     "/root/m4/index.d.ts",
     "/root/a/b/node_modules/m4/package.json",
-    "/root/a/b/node_modules/m4.ts",
-    "/root/a/b/node_modules/m4.tsx",
-    "/root/a/b/node_modules/m4.d.ts",
     "/root/a/b/node_modules/m4/index.ts",
     "/root/a/b/node_modules/m4/index.tsx",
     "/root/a/b/node_modules/m4/index.d.ts",
     "/root/a/b/node_modules/@types/m4/package.json",
-    "/root/a/b/node_modules/@types/m4.d.ts",
     "/root/a/b/node_modules/@types/m4/index.d.ts",
     "/root/a/node_modules/m4/package.json",
-    "/root/a/node_modules/m4.ts",
-    "/root/a/node_modules/m4.tsx",
-    "/root/a/node_modules/m4.d.ts",
     "/root/a/node_modules/m4/index.ts",
     "/root/a/node_modules/m4/index.tsx",
     "/root/a/node_modules/m4/index.d.ts",
     "/root/a/node_modules/@types/m4/package.json",
-    "/root/a/node_modules/@types/m4.d.ts",
     "/root/a/node_modules/@types/m4/index.d.ts",
     "/root/node_modules/m4/package.json"
   ]
@@ -117,7 +109,7 @@ Resolution:: {
 //// [/root/m3/dist/typings.d.ts]
 
 
-//// [/root/node_modules/m4.ts]
+//// [/root/node_modules/m4/index.ts]
 
 
 Resolving "m1" from /root/a/b/main.ts with host that doesnt have directoryExists
@@ -169,7 +161,7 @@ Resolution:: {
 Resolving "m4" from /root/a/b/main.ts with host that doesnt have directoryExists
 Resolution:: {
   "resolvedModule": {
-    "resolvedFileName": "/root/node_modules/m4.ts",
+    "resolvedFileName": "/root/node_modules/m4/index.ts",
     "extension": ".ts",
     "isExternalLibraryImport": true,
     "resolvedUsingTsExtension": false
@@ -183,24 +175,16 @@ Resolution:: {
     "/root/m4/index.tsx",
     "/root/m4/index.d.ts",
     "/root/a/b/node_modules/m4/package.json",
-    "/root/a/b/node_modules/m4.ts",
-    "/root/a/b/node_modules/m4.tsx",
-    "/root/a/b/node_modules/m4.d.ts",
     "/root/a/b/node_modules/m4/index.ts",
     "/root/a/b/node_modules/m4/index.tsx",
     "/root/a/b/node_modules/m4/index.d.ts",
     "/root/a/b/node_modules/@types/m4/package.json",
-    "/root/a/b/node_modules/@types/m4.d.ts",
     "/root/a/b/node_modules/@types/m4/index.d.ts",
     "/root/a/node_modules/m4/package.json",
-    "/root/a/node_modules/m4.ts",
-    "/root/a/node_modules/m4.tsx",
-    "/root/a/node_modules/m4.d.ts",
     "/root/a/node_modules/m4/index.ts",
     "/root/a/node_modules/m4/index.tsx",
     "/root/a/node_modules/m4/index.d.ts",
     "/root/a/node_modules/@types/m4/package.json",
-    "/root/a/node_modules/@types/m4.d.ts",
     "/root/a/node_modules/@types/m4/index.d.ts",
     "/root/node_modules/m4/package.json"
   ]

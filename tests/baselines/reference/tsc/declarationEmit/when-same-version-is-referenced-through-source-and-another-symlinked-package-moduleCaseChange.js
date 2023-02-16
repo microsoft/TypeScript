@@ -91,9 +91,6 @@ Output::
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json'.
-File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.ts' does not exist.
-File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.tsx' does not exist.
-File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
@@ -107,9 +104,6 @@ Resolving real path for '/user/username/projects/myproject/plugin-one/node_modul
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'plugin-two' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/package.json' does not exist.
-File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two.ts' does not exist.
-File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two.tsx' does not exist.
-File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two.d.ts' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/index.ts' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/index.tsx' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/index.d.ts' exists - use it as a name resolution result.
@@ -119,9 +113,6 @@ Resolving real path for '/user/username/projects/myproject/plugin-one/node_modul
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/package.json'.
-File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa.ts' does not exist.
-File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa.tsx' does not exist.
-File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.

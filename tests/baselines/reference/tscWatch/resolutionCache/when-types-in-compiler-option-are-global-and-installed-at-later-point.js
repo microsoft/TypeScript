@@ -130,8 +130,6 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -159,8 +157,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/node_modules:
   {}
 
 exitCode:: ExitStatus.undefined

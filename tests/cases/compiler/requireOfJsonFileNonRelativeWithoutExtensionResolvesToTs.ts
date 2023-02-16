@@ -8,11 +8,11 @@
 import f = require("f"); // should work to f.ts
 let fnumber: number = f;
 
-// @Filename: /src/node_modules/f.json
+// @Filename: /src/node_modules/f/index.json
 {
     "a": true,
     "b": "hello"
 }
 
-// @Filename: /src/node_modules/f.ts
+// @Filename: /src/node_modules/f/index.ts
 export = 10;

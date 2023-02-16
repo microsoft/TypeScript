@@ -111,18 +111,16 @@ Info 22   [00:01:05.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 23   [00:01:06.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/consumer/node_modules 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
 Info 24   [00:01:07.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
 Info 25   [00:01:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
-Info 26   [00:01:09.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
-Info 27   [00:01:10.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
-Info 28   [00:01:11.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit-composite/package.json 2000 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: File location affecting resolution
-Info 29   [00:01:12.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/consumer/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
-Info 30   [00:01:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/consumer/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
-Info 31   [00:01:14.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
-Info 32   [00:01:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
-Info 33   [00:01:16.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
-Info 34   [00:01:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
-Info 35   [00:01:18.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/consumer/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 36   [00:01:19.000] Project '/user/username/projects/myproject/packages/consumer/tsconfig.json' (Configured)
-Info 37   [00:01:20.000] 	Files (4)
+Info 26   [00:01:09.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit-composite/package.json 2000 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: File location affecting resolution
+Info 27   [00:01:10.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/consumer/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
+Info 28   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/consumer/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
+Info 29   [00:01:12.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
+Info 30   [00:01:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
+Info 31   [00:01:14.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
+Info 32   [00:01:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
+Info 33   [00:01:16.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/consumer/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 34   [00:01:17.000] Project '/user/username/projects/myproject/packages/consumer/tsconfig.json' (Configured)
+Info 35   [00:01:18.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/packages/emit-composite/src/testModule.js
 	/user/username/projects/myproject/packages/emit-composite/src/index.js
@@ -138,20 +136,20 @@ Info 37   [00:01:20.000] 	Files (4)
 	src/index.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 38   [00:01:21.000] -----------------------------------------------
-Info 39   [00:01:22.000] event:
+Info 36   [00:01:19.000] -----------------------------------------------
+Info 37   [00:01:20.000] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/packages/consumer/tsconfig.json"}}
-Info 40   [00:01:23.000] event:
+Info 38   [00:01:21.000] event:
     {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"f6f890b868ee990140855d3b392e7be25cc511c224e307bfaf73c9f27a024a79","fileStats":{"js":2,"jsSize":203,"jsx":0,"jsxSize":0,"ts":1,"tsSize":143,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
-Info 41   [00:01:24.000] event:
+Info 39   [00:01:22.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/packages/consumer/src/index.ts","configFile":"/user/username/projects/myproject/packages/consumer/tsconfig.json","diagnostics":[]}}
-Info 42   [00:01:25.000] Project '/user/username/projects/myproject/packages/consumer/tsconfig.json' (Configured)
-Info 42   [00:01:26.000] 	Files (4)
+Info 40   [00:01:23.000] Project '/user/username/projects/myproject/packages/consumer/tsconfig.json' (Configured)
+Info 40   [00:01:24.000] 	Files (4)
 
-Info 42   [00:01:27.000] -----------------------------------------------
-Info 42   [00:01:28.000] Open files: 
-Info 42   [00:01:29.000] 	FileName: /user/username/projects/myproject/packages/consumer/src/index.ts ProjectRootPath: undefined
-Info 42   [00:01:30.000] 		Projects: /user/username/projects/myproject/packages/consumer/tsconfig.json
+Info 40   [00:01:25.000] -----------------------------------------------
+Info 40   [00:01:26.000] Open files: 
+Info 40   [00:01:27.000] 	FileName: /user/username/projects/myproject/packages/consumer/src/index.ts ProjectRootPath: undefined
+Info 40   [00:01:28.000] 		Projects: /user/username/projects/myproject/packages/consumer/tsconfig.json
 After request
 
 PolledWatches::
@@ -187,14 +185,12 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/emit-composite:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
-Info 42   [00:01:31.000] response:
+Info 40   [00:01:29.000] response:
     {
       "responseRequired": false
     }
-Info 43   [00:01:32.000] request:
+Info 41   [00:01:30.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -241,8 +237,6 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/emit-composite:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 After request
 
@@ -279,10 +273,8 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/emit-composite:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
-Info 44   [00:01:33.000] response:
+Info 42   [00:01:31.000] response:
     {
       "responseRequired": false
     }
@@ -321,10 +313,8 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/emit-composite:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
-Info 45   [00:01:34.000] event:
+Info 43   [00:01:32.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/consumer/src/index.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
@@ -361,8 +351,6 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/emit-composite:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 Before running immediate callbacks and checking length (1)
 
@@ -399,10 +387,8 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/emit-composite:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
-Info 46   [00:01:35.000] event:
+Info 44   [00:01:33.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/consumer/src/index.ts","diagnostics":[{"start":{"line":3,"offset":42},"end":{"line":3,"offset":44},"text":"Expected 1 arguments, but got 2.","code":2554,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
@@ -439,8 +425,6 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/emit-composite:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 Before running immediate callbacks and checking length (1)
 
@@ -477,12 +461,10 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/emit-composite:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
 
-Info 47   [00:01:36.000] event:
+Info 45   [00:01:34.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/consumer/src/index.ts","diagnostics":[]}}
-Info 48   [00:01:37.000] event:
+Info 46   [00:01:35.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
@@ -518,6 +500,4 @@ FsWatchesRecursive::
 /user/username/projects/myproject/packages/emit-composite/src:
   {}
 /user/username/projects/myproject/packages/emit-composite:
-  {}
-/user/username/projects/myproject/node_modules:
   {}

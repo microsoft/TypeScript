@@ -389,7 +389,7 @@ export class A {
                 content: `import { T } from "module1";`
             };
             const nodeModuleFile: File = {
-                path: "/a/b/node_modules/module1.ts",
+                path: "/a/b/node_modules/module1/index.ts",
                 content: `export interface T {}`
             };
             const classicModuleFile: File = {

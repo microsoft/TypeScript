@@ -198,7 +198,7 @@ FsWatchesRecursive::
   {}
 
 Before running timeout callbacks
-//// [/a/b/node_modules/file2.d.ts]
+//// [/a/b/node_modules/file2/index.d.ts]
 export class a { }
 
 
@@ -218,7 +218,7 @@ FsWatchesRecursive::
 /a/b/project:
   {}
 
-Info 36   [00:01:21.000] event:
+Info 36   [00:01:23.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/project/file1.ts","diagnostics":[]}}
 After running timeout callbacks
 

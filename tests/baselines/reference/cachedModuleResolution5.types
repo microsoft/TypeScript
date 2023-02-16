@@ -1,4 +1,4 @@
-=== /a/b/node_modules/foo.d.ts ===
+=== /a/b/node_modules/foo/index.d.ts ===
 export declare let x: number
 >x : number
 

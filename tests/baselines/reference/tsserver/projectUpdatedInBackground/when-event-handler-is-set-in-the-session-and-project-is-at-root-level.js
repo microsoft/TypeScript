@@ -169,7 +169,7 @@ FsWatchesRecursive::
   {}
 
 Before running timeout callbacks
-//// [/a/b/node_modules/file2.d.ts]
+//// [/a/b/node_modules/file2/index.d.ts]
 export class a { }
 
 
