@@ -1362,7 +1362,6 @@ export type HasIllegalModifiers =
     | PropertyAssignment
     | ShorthandPropertyAssignment
     | MissingDeclaration
-    | FunctionTypeNode
     | NamespaceExportDeclaration
     ;
 
@@ -1801,7 +1800,7 @@ export interface TypeParameterDeclaration extends NamedDeclaration, JSDocContain
     readonly constraint?: TypeNode;
     readonly default?: TypeNode;
 
-    // For error recovery purposes.
+    // For error recovery purposes (see `isGrammarError` in utilities.ts).
     expression?: Expression;
 }
 
@@ -1888,7 +1887,7 @@ export interface PropertySignature extends TypeElement, JSDocContainer {
     readonly questionToken?: QuestionToken;      // Present on optional property
     readonly type?: TypeNode;                    // Optional type annotation
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly initializer?: Expression | undefined; // A property signature cannot have an initializer
 }
 
@@ -1897,7 +1896,7 @@ export interface PropertyDeclaration extends ClassElement, JSDocContainer {
     readonly parent: ClassLikeDeclaration;
     readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: PropertyName;
-    readonly questionToken?: QuestionToken;      // Present for use with reporting a grammar error
+    readonly questionToken?: QuestionToken;      // Present for use with reporting a grammar error for auto-accessors (see `isGrammarError` in utilities.ts)
     readonly exclamationToken?: ExclamationToken;
     readonly type?: TypeNode;
     readonly initializer?: Expression;           // Optional initializer
@@ -1960,7 +1959,7 @@ export interface PropertyAssignment extends ObjectLiteralElement, JSDocContainer
     readonly name: PropertyName;
     readonly initializer: Expression;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined; // property assignment cannot have decorators or modifiers
     /** @internal */ readonly questionToken?: QuestionToken | undefined; // property assignment cannot have a question token
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // property assignment cannot have an exclamation token
@@ -1971,11 +1970,11 @@ export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDoc
     readonly parent: ObjectLiteralExpression;
     readonly name: Identifier;
     // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
-    // it is a grammar error to appear in actual object initializer:
+    // it is a grammar error to appear in actual object initializer (see `isGrammarError` in utilities.ts):
     readonly equalsToken?: EqualsToken;
     readonly objectAssignmentInitializer?: Expression;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined; // shorthand property assignment cannot have decorators or modifiers
     /** @internal */ readonly questionToken?: QuestionToken | undefined; // shorthand property assignment cannot have a question token
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // shorthand property assignment cannot have an exclamation token
@@ -2076,7 +2075,7 @@ export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassEle
     readonly name: PropertyName;
     readonly body?: FunctionBody | undefined;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // A method cannot have an exclamation token
 }
 
@@ -2086,7 +2085,7 @@ export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, Cla
     readonly modifiers?: NodeArray<ModifierLike> | undefined;
     readonly body?: FunctionBody | undefined;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration>; // A constructor cannot have type parameters
     /** @internal */ readonly type?: TypeNode; // A constructor cannot have a return type annotation
 }
@@ -2106,7 +2105,7 @@ export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, Cla
     readonly name: PropertyName;
     readonly body?: FunctionBody;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined; // A get accessor cannot have type parameters
 }
 
@@ -2119,7 +2118,7 @@ export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, Cla
     readonly name: PropertyName;
     readonly body?: FunctionBody;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined; // A set accessor cannot have type parameters
     /** @internal */ readonly type?: TypeNode | undefined; // A set accessor cannot have a return type
 }
@@ -2141,7 +2140,7 @@ export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContaine
     /** @internal */ endFlowNode?: FlowNode;
     /** @internal */ returnFlowNode?: FlowNode;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
 }
 
@@ -2190,8 +2189,8 @@ export interface FunctionOrConstructorTypeNodeBase extends TypeNode, SignatureDe
 export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
     readonly kind: SyntaxKind.FunctionType;
 
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
+    // A function type cannot have modifiers
+    /** @internal */ readonly modifiers?: undefined;
 }
 
 export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
@@ -3723,7 +3722,7 @@ export interface NamespaceExportDeclaration extends DeclarationStatement, JSDocC
     readonly kind: SyntaxKind.NamespaceExportDeclaration;
     readonly name: Identifier;
 
-    // The following properties are used only to report grammar errors
+    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
     /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
 }
 

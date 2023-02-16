@@ -46938,7 +46938,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.NamespaceExportDeclaration:
-            case SyntaxKind.FunctionType:
             case SyntaxKind.MissingDeclaration:
                 return find(node.modifiers, isModifier);
             default:

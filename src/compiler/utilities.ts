@@ -234,6 +234,7 @@ import {
     isArray,
     isArrayLiteralExpression,
     isArrowFunction,
+    isAutoAccessorPropertyDeclaration,
     isBigIntLiteral,
     isBinaryExpression,
     isBindingElement,
@@ -300,6 +301,7 @@ import {
     isMetaProperty,
     isMethodDeclaration,
     isMethodOrAccessor,
+    isModifierLike,
     isModuleDeclaration,
     isNamedDeclaration,
     isNamespaceExport,
@@ -333,6 +335,7 @@ import {
     isTypeElement,
     isTypeLiteralNode,
     isTypeNode,
+    isTypeParameterDeclaration,
     isTypeReferenceNode,
     isVariableDeclaration,
     isVariableStatement,
@@ -962,6 +965,30 @@ export function nodeIsMissing(node: Node | undefined): boolean {
 /** @internal */
 export function nodeIsPresent(node: Node | undefined): boolean {
     return !nodeIsMissing(node);
+}
+
+/**
+ * Tests whether `child` is a grammar error on `parent`.
+ * @internal
+ */
+export function isGrammarError(parent: Node, child: Node | NodeArray<Node>) {
+    if (isTypeParameterDeclaration(parent)) return child === parent.expression;
+    if (isClassStaticBlockDeclaration(parent)) return child === parent.modifiers;
+    if (isPropertySignature(parent)) return child === parent.initializer;
+    if (isPropertyDeclaration(parent)) return child === parent.questionToken && isAutoAccessorPropertyDeclaration(parent);
+    if (isPropertyAssignment(parent)) return child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    if (isShorthandPropertyAssignment(parent)) return child === parent.equalsToken || child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    if (isMethodDeclaration(parent)) return child === parent.exclamationToken;
+    if (isConstructorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isGetAccessorDeclaration(parent)) return child === parent.typeParameters || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isSetAccessorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isNamespaceExportDeclaration(parent)) return child === parent.modifiers || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    return false;
+}
+
+function isGrammarErrorElement<T extends Node>(nodeArray: NodeArray<T> | undefined, child: Node | NodeArray<Node>, isElement: (node: Node) => node is T) {
+    if (!nodeArray || isArray(child) || !isElement(child)) return false;
+    return contains(nodeArray, child);
 }
 
 function insertStatementsAfterPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined, isPrologueDirective: (node: Node) => boolean): T[] {
