@@ -2876,21 +2876,6 @@ export class TestState {
         this.goToPosition(pos);
     }
 
-    public goToTypeDefinition(definitionIndex: number) {
-        const definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
-        if (!definitions || !definitions.length) {
-            this.raiseError("goToTypeDefinition failed - expected to find at least one definition location but got 0");
-        }
-
-        if (definitionIndex >= definitions.length) {
-            this.raiseError(`goToTypeDefinition failed - definitionIndex value (${definitionIndex}) exceeds definition list size (${definitions.length})`);
-        }
-
-        const definition = definitions[definitionIndex];
-        this.openFile(definition.fileName);
-        this.currentCaretPosition = definition.textSpan.start;
-    }
-
     public verifyTypeDefinitionsCount(negative: boolean, expectedCount: number) {
         const assertFn = negative ? assert.notEqual : assert.equal;
 
