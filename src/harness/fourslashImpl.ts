@@ -3914,45 +3914,12 @@ export class TestState {
         return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
     }
 
-    public verifyDocumentHighlightsOf(startRange: Range, ranges: Range[], options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
-        const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
-        this.goToRangeStart(startRange);
-        this.verifyDocumentHighlights(ranges, fileNames);
-    }
-
     public verifyNoDocumentHighlights(startRange: Range) {
         this.goToRangeStart(startRange);
         const documentHighlights = this.getDocumentHighlightsAtCurrentPosition([this.activeFile.fileName]);
         const numHighlights = ts.length(documentHighlights);
         if (numHighlights > 0) {
             this.raiseError(`verifyNoDocumentHighlights failed - unexpectedly got ${numHighlights} highlights`);
-        }
-    }
-
-    private verifyDocumentHighlights(expectedRanges: Range[], fileNames: readonly string[] = [this.activeFile.fileName]) {
-        fileNames = ts.map(fileNames, ts.normalizePath);
-        const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) || [];
-
-        for (const dh of documentHighlights) {
-            if (fileNames.indexOf(dh.fileName) === -1) {
-                this.raiseError(`verifyDocumentHighlights failed - got highlights in unexpected file name ${dh.fileName}`);
-            }
-        }
-
-        for (const fileName of fileNames) {
-            const expectedRangesInFile = expectedRanges.filter(r => ts.normalizePath(r.fileName) === fileName);
-            const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName);
-            const spansInFile = highlights ? highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start) : [];
-
-            if (expectedRangesInFile.length !== spansInFile.length) {
-                this.raiseError(`verifyDocumentHighlights failed - In ${fileName}, expected ${expectedRangesInFile.length} highlights, got ${spansInFile.length}`);
-            }
-
-            ts.zipWith(expectedRangesInFile, spansInFile, (expectedRange, span) => {
-                if (span.textSpan.start !== expectedRange.pos || ts.textSpanEnd(span.textSpan) !== expectedRange.end) {
-                    this.raiseError(`verifyDocumentHighlights failed - span does not match, actual: ${stringify(span.textSpan)}, expected: ${expectedRange.pos}--${expectedRange.end}`);
-                }
-            });
         }
     }
 
