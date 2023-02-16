@@ -23018,6 +23018,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getCachedType(key) ?? setCachedType(key, mapType(type, getBaseTypeOfLiteralType));
     }
 
+    // This like getBaseTypeOfLiteralType, but instead treats enum literals as strings/numbers instead
+    // of returning their enum base type (which depends on the types of other literals in the enum).
+    function getBaseTypeOfLiteralTypeForComparison(type: Type): Type {
+        return type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? stringType :
+            type.flags & (TypeFlags.NumberLiteral | TypeFlags.Enum) ? numberType :
+            type.flags & TypeFlags.BigIntLiteral ? bigintType :
+            type.flags & TypeFlags.BooleanLiteral ? booleanType :
+            type.flags & TypeFlags.Union ? mapType(type, getBaseTypeOfLiteralTypeForComparison) :
+            type;
+    }
+
     function getWidenedLiteralType(type: Type): Type {
         return type.flags & TypeFlags.EnumLike && isFreshLiteralType(type) ? getBaseTypeOfEnumLikeType(type as LiteralType) :
             type.flags & TypeFlags.StringLiteral && isFreshLiteralType(type) ? stringType :
@@ -36481,8 +36492,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.LessThanEqualsToken:
             case SyntaxKind.GreaterThanEqualsToken:
                 if (checkForDisallowedESSymbolOperand(operator)) {
-                    leftType = getBaseTypeOfLiteralType(checkNonNullType(leftType, left));
-                    rightType = getBaseTypeOfLiteralType(checkNonNullType(rightType, right));
+                    leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(leftType, left));
+                    rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(rightType, right));
                     reportOperatorErrorUnless((left, right) => {
                         if (isTypeAny(left) || isTypeAny(right)) {
                             return true;
