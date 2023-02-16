@@ -2839,6 +2839,12 @@ function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, mod
 
 function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, moduleName: string, nodeModulesDirectory: string, nodeModulesDirectoryExists: boolean, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): Resolved | undefined {
     const candidate = normalizePath(combinePaths(nodeModulesDirectory, moduleName));
+    if (moduleName.indexOf(":") > -1) {
+        if (state.traceEnabled) {
+            trace(state.host, Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI, candidate)
+        }
+        return undefined
+    }
     const { packageName, rest } = parsePackageName(moduleName);
     const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
 
@@ -2909,7 +2915,6 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
             return fromPaths.value;
         }
     }
-
     return loader(extensions, candidate, !nodeModulesDirectoryExists, state);
 }
 
