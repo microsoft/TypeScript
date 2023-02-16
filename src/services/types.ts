@@ -702,9 +702,9 @@ export interface GetCompletionsAtPositionOptions extends UserPreferences {
     triggerCharacter?: CompletionsTriggerCharacter;
     triggerKind?: CompletionTriggerKind;
     /**
-     * Include `symbol` with each completion entry.
-     * Caveats:
-     * - The `symbol` of completions may retain a whole `TypeChecker` in it, so don’t store it longer than you need it!)
+     * Include a `symbol` property on each completion entry object.
+     * Symbols reference cyclic data structures and sometimes an entire TypeChecker instance,
+     * so use caution when serializing or retaining completion entries retrieved with this option.
      * @default false
      */
     includeApiData?: boolean
