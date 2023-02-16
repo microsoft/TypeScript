@@ -22,6 +22,7 @@ export class Foo {
      *//**
      * @constructor
      * @param {number | string} a
+     * @param {number} [b]
      */
     constructor(a, b) {
         this.#a = a
@@ -57,6 +58,7 @@ export class Foo {
      */ /**
     * @constructor
     * @param {number | string} a
+    * @param {number} [b]
     */
     constructor(a, b) {
         this.#a = a;

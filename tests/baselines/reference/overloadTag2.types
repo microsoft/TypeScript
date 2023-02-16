@@ -10,7 +10,7 @@ export class Foo {
 >"1" : "1"
 
     #b
->#b : any
+>#b : number | undefined
 
     /**
      * Should not have an implicit any error, because constructor's return type is always implicit
@@ -31,10 +31,11 @@ export class Foo {
      *//**
      * @constructor
      * @param {number | string} a
+     * @param {number} [b]
      */
     constructor(a, b) {
 >a : string | number
->b : any
+>b : number | undefined
 
         this.#a = a
 >this.#a = a : string | number
@@ -43,10 +44,10 @@ export class Foo {
 >a : string | number
 
         this.#b = b
->this.#b = b : any
->this.#b : any
+>this.#b = b : number | undefined
+>this.#b : number | undefined
 >this : this
->b : any
+>b : number | undefined
     }
 }
 var a = new Foo()
