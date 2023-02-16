@@ -1380,6 +1380,7 @@ export function updateSourceFile(sourceFile: SourceFile, newText: string, textCh
 }
 
 /** @internal */
+// Exposed only for testing.
 export function parseIsolatedJSDocComment(content: string, start?: number, length?: number) {
     const result = Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
     if (result && result.jsDoc) {
