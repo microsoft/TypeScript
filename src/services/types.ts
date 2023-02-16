@@ -1386,6 +1386,11 @@ export interface CompletionEntry {
     isFromUncheckedFile?: true;
     isPackageJsonImport?: true;
     isImportStatementCompletion?: true;
+    /**
+     * For API purposes.
+     * Included for non-string completions only when `includeSymbol: true` option is passed to `getCompletionsAtPosition`.
+     * @example Get declaration of completion: `symbol.valueDeclaration`
+     */
     symbol?: Symbol
     /**
      * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
