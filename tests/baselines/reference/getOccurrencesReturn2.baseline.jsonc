@@ -1,0 +1,89 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             while (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|{| kind: "none" |}return|];
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             while (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+// 
+//             while (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             while (false) {
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }

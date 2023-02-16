@@ -3954,18 +3954,6 @@ export class TestState {
         return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
     }
 
-    public verifyRangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]) {
-        ranges = ranges || this.getRanges();
-        assert(ranges.length);
-        for (const r of ranges) {
-            this.goToRangeStart(r);
-            this.verifyOccurrencesAtPositionListCount(ranges.length);
-            for (const range of ranges) {
-                this.verifyOccurrencesAtPositionListContains(range.fileName, range.pos, range.end, isWriteAccess);
-            }
-        }
-    }
-
     public verifyRangesWithSameTextAreDocumentHighlights() {
         this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges, /*options*/ undefined));
     }

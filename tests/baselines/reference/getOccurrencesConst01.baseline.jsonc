@@ -1,0 +1,19 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst01.ts ===
+// /*HIGHLIGHTS*/[|{| kind: "none" |}const|] enum E1 {
+//     v1,
+//     v2
+// }
+// 
+// const c = 0;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst01.ts ===
+// const enum E1 {
+//     v1,
+//     v2
+// }
+// 
+// /*HIGHLIGHTS*/const c = 0;

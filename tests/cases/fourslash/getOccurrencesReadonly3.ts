@@ -9,6 +9,7 @@
 ////  }
 ////}
 
-verify.rangesAreOccurrences(false);
-goTo.marker();
-verify.occurrencesAtPositionCount(1);
+verify.baselineCommands(
+    { type: "documentHighlights" },
+    { type: "documentHighlights", markerOrRange: "" },
+);

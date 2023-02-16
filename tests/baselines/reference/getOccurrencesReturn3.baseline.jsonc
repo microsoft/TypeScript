@@ -1,0 +1,20 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn3.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             return;
+//             return;
+//             return;
+// 
+//             if (false) {
+//                 return true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { /*HIGHLIGHTS*/[|{| kind: "none" |}return|] 4 })
+// 
+//     return;
+//     return true;
+// }

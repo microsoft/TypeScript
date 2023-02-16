@@ -1,0 +1,237 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             if (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }
+// 
+// class A {
+//     return;
+//     return 8675309;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => [|{| kind: "none" |}return|];
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             if (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }
+// 
+// class A {
+//     return;
+//     return 8675309;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+// 
+//             if (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }
+// 
+// class A {
+//     return;
+//     return 8675309;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             if (false) {
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }
+// 
+// class A {
+//     return;
+//     return 8675309;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// ret/*HIGHLIGHTS*/urn;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => return;
+//             return;
+//             return;
+// 
+//             if (false) {
+//                 return true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }
+// 
+// class A {
+//     return;
+//     return 8675309;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// retu/*HIGHLIGHTS*/rn;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => return;
+//             return;
+//             return;
+// 
+//             if (false) {
+//                 return true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }
+// 
+// class A {
+//     return;
+//     return 8675309;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             () => return;
+//             return;
+//             return;
+// 
+//             if (false) {
+//                 return true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     return;
+//     return true;
+// }
+// 
+// class A {
+//     <|[|{| kind: "reference" |}ret/*HIGHLIGHTS*/urn|];|>
+//     return 8675309;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
+// return;
+// return;
+// function f(a: number) {
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             () => return;
+//             return;
+//             return;
+// 
+//             if (false) {
+//                 return true;
+//             }
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+// }
+// 
+// class A {
+//     return;
+//     [|{| kind: "none" |}r/*HIGHLIGHTS*/eturn|] 8675309;
+// }

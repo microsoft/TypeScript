@@ -227,3 +227,31 @@
 //  * @type {/*RENAME*/[|ProductRENAME|]}
 //  */
 // const product = null;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}Product|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {[|{| kind: "reference" |}Product|]}
+//  */
+// const product = null;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef [|{| kind: "writtenReference" |}Product|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {/*HIGHLIGHTS*/[|{| kind: "reference" |}Product|]}
+//  */
+// const product = null;

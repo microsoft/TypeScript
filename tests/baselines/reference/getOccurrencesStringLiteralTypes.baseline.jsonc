@@ -1,0 +1,11 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesStringLiteralTypes.ts ===
+// function foo(a: "/*HIGHLIGHTS*/[|{| kind: "reference", isInString: true |}option 1|]") { }
+// foo("[|{| kind: "reference", isInString: true |}option 1|]");
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesStringLiteralTypes.ts ===
+// function foo(a: "[|{| kind: "reference", isInString: true |}option 1|]") { }
+// foo("/*HIGHLIGHTS*/[|{| kind: "reference", isInString: true |}option 1|]");

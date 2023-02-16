@@ -572,10 +572,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyOccurrencesAtPositionListCount(expectedCount);
     }
 
-    public rangesAreOccurrences(isWriteAccess?: boolean, ranges?: FourSlash.Range[]) {
-        this.state.verifyRangesAreOccurrences(isWriteAccess, ranges);
-    }
-
     public rangesAreDocumentHighlights(ranges?: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
         this.state.verifyRangesAreDocumentHighlights(ranges, options);
     }

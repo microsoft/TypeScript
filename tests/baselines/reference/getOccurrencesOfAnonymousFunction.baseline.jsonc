@@ -1,0 +1,15 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesOfAnonymousFunction.ts ===
+// (<|function /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}foo|](): number {
+//     var x = [|{| kind: "reference" |}foo|];
+//     return 0;
+// }|>)
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesOfAnonymousFunction.ts ===
+// (<|function [|{| kind: "writtenReference" |}foo|](): number {
+//     var x = /*HIGHLIGHTS*/[|{| kind: "reference" |}foo|];
+//     return 0;
+// }|>)
