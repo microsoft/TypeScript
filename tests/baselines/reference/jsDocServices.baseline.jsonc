@@ -238,3 +238,42 @@
 // function f(<|[|fooRENAME|]: I|>) {
 //     return /*RENAME*/[|fooRENAME|];
 // }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param /*HIGHLIGHTS*/[|{| kind: "reference" |}foo|] I pity the foo
+//  */
+// function f(<|[|{| kind: "writtenReference" |}foo|]: I|>) {
+//     return [|{| kind: "reference" |}foo|];
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|{| kind: "reference" |}foo|] I pity the foo
+//  */
+// function f(/*HIGHLIGHTS*/<|[|{| kind: "writtenReference" |}foo|]: I|>) {
+//     return [|{| kind: "reference" |}foo|];
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|{| kind: "reference" |}foo|] I pity the foo
+//  */
+// function f(<|[|{| kind: "writtenReference" |}foo|]: I|>) {
+//     return /*HIGHLIGHTS*/[|{| kind: "reference" |}foo|];
+// }

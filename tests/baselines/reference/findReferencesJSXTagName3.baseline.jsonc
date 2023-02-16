@@ -807,3 +807,171 @@
     ]
    }
   ]
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         /*HIGHLIGHTS*/<|[|{| kind: "reference" |}div|]: any;|>
+//     }
+// }
+// 
+// const Comp = () =>
+//     <|<|<[|{| contextId: 1, kind: "reference" |}div|]>
+//         Some content
+//         <|<|<[|{| contextId: 3, kind: "reference" |}div|]>More content</[|{| contextId: 4, kind: "reference" |}div|]>|>|>
+//     </[|{| contextId: 2, kind: "reference" |}div|]>|>|>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         div: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     </*HIGHLIGHTS*/[|{| kind: "none" |}div|]>
+//         Some content
+//         <div>More content</div>
+//     </[|{| kind: "none" |}div|]>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         div: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     <div>
+//         Some content
+//         </*HIGHLIGHTS*/[|{| kind: "none" |}div|]>More content</[|{| kind: "none" |}div|]>
+//     </div>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         div: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     <div>
+//         Some content
+//         <[|{| kind: "none" |}div|]>More content<//*HIGHLIGHTS*/[|{| kind: "none" |}div|]>
+//     </div>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         div: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     <[|{| kind: "none" |}div|]>
+//         Some content
+//         <div>More content</div>
+//     <//*HIGHLIGHTS*/[|{| kind: "none" |}div|]>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         div: any;
+//     }
+// }
+// 
+// <|const /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}Comp|] = () =>
+//     <div>
+//         Some content
+//         <div>More content</div>
+//     </div>;|>
+// 
+// const x = <|<|<[|{| contextId: 1, kind: "reference" |}Comp|]>
+//     Content
+// </[|{| contextId: 2, kind: "reference" |}Comp|]>|>|>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         div: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     <div>
+//         Some content
+//         <div>More content</div>
+//     </div>;
+// 
+// const x = </*HIGHLIGHTS*/[|{| kind: "none" |}Comp|]>
+//     Content
+// </[|{| kind: "none" |}Comp|]>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// namespace JSX {
+//     export interface Element { }
+//     export interface IntrinsicElements {
+//         div: any;
+//     }
+// }
+// 
+// const Comp = () =>
+//     <div>
+//         Some content
+//         <div>More content</div>
+//     </div>;
+// 
+// const x = <[|{| kind: "none" |}Comp|]>
+//     Content
+// <//*HIGHLIGHTS*/[|{| kind: "none" |}Comp|]>;

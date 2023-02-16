@@ -23,10 +23,8 @@ verify.quickInfoAt("use", desc, "Doc comment");
 
 verify.goToDefinition("use", "def");
 
-verify.rangesAreDocumentHighlights(ranges);
-
 verify.baselineCommands(
     { type: "findAllReferences", markerOrRange: ["use", "def"] },
     { type: "findRenameLocations", markerOrRange: ranges },
-    { type: "documentHighlights", markerOrRange: ranges }
+    { type: "documentHighlights", markerOrRange: ranges },
 );

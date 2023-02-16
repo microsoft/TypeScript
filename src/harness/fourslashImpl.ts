@@ -3920,16 +3920,6 @@ export class TestState {
         this.verifyDocumentHighlights(ranges, fileNames);
     }
 
-    public verifyRangesAreDocumentHighlights(ranges: Range[] | undefined, options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
-        ranges = ranges || this.getRanges();
-        assert(ranges.length);
-        const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
-        for (const range of ranges) {
-            this.goToRangeStart(range);
-            this.verifyDocumentHighlights(ranges, fileNames);
-        }
-    }
-
     public verifyNoDocumentHighlights(startRange: Range) {
         this.goToRangeStart(startRange);
         const documentHighlights = this.getDocumentHighlightsAtCurrentPosition([this.activeFile.fileName]);

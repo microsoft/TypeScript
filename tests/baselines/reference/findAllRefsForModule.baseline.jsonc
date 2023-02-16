@@ -115,3 +115,54 @@
     ]
    }
   ]
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   /b.ts
+//   /c/sub.js
+//   /d.ts
+
+// === /b.ts ===
+// <|import { x } from "/*HIGHLIGHTS*/[|{| kind: "reference" |}./a|]";|>
+
+// === /c/sub.js ===
+// <|const a = require("[|{| kind: "reference" |}../a|]");|>
+
+// === /d.ts ===
+// /// <reference path="[|{| kind: "reference" |}./a.ts|]" />
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   /b.ts
+//   /c/sub.js
+//   /d.ts
+
+// === /b.ts ===
+// <|import { x } from "[|{| kind: "reference" |}./a|]";|>
+
+// === /c/sub.js ===
+// <|const a = require("/*HIGHLIGHTS*/[|{| kind: "reference" |}../a|]");|>
+
+// === /d.ts ===
+// /// <reference path="[|{| kind: "reference" |}./a.ts|]" />
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   /b.ts
+//   /c/sub.js
+//   /d.ts
+
+// === /b.ts ===
+// <|import { x } from "[|{| kind: "reference" |}./a|]";|>
+
+// === /c/sub.js ===
+// <|const a = require("[|{| kind: "reference" |}../a|]");|>
+
+// === /d.ts ===
+// /// <reference path="/*HIGHLIGHTS*/[|{| kind: "reference" |}./a.ts|]" />

@@ -564,10 +564,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyNavigateTo(options);
     }
 
-    public rangesAreDocumentHighlights(ranges?: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
-        this.state.verifyRangesAreDocumentHighlights(ranges, options);
-    }
-
     public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
         this.state.verifyDocumentHighlightsOf(startRange, ranges, options);
     }
