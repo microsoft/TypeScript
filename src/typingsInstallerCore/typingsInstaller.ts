@@ -156,10 +156,11 @@ export abstract class TypingsInstaller {
     abstract readonly typesRegistry: Map<string, MapLike<string>>;
     /** @internal */
     private readonly watchFactory: WatchFactory<string, ProjectWatchers>;
+    protected initDone?: true;
 
     constructor(
         protected readonly installTypingHost: InstallTypingHost,
-        private readonly globalCachePath: string,
+        protected readonly globalCachePath: string,
         private readonly safeListPath: Path,
         private readonly typesMapLocation: Path,
         private readonly throttleLimit: number,
@@ -171,7 +172,13 @@ export abstract class TypingsInstaller {
             this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
         }
         this.watchFactory = getWatchFactory(this.installTypingHost as WatchFactoryHost, isLoggingEnabled ? WatchLogLevel.Verbose : WatchLogLevel.None, s => this.log.writeLine(s), getDetailWatchInfo);
-        this.processCacheLocation(this.globalCachePath);
+    }
+
+    ensureInitialized() {
+        if (!this.initDone) {
+            this.processCacheLocation(this.globalCachePath);
+            this.initDone = true;
+        }
     }
 
     closeProject(req: CloseProject) {
@@ -202,6 +209,7 @@ export abstract class TypingsInstaller {
             this.log.writeLine(`Got install request ${JSON.stringify(req)}`);
         }
 
+        this.ensureInitialized();
         // load existing typing information from the cache
         if (req.cachePath) {
             if (this.log.isEnabled()) {

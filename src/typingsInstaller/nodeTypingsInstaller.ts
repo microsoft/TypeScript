@@ -106,7 +106,7 @@ type ExecSync = (command: string, options: ExecSyncOptions) => string;
 export class NodeTypingsInstaller extends TypingsInstaller {
     private readonly nodeExecSync: ExecSync;
     private readonly npmPath: string;
-    readonly typesRegistry: Map<string, MapLike<string>>;
+    typesRegistry: Map<string, MapLike<string>> = undefined!;
 
     private delayedInitializationError: InitializationFailedResponse | undefined;
 
@@ -131,31 +131,36 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             this.log.writeLine(`validateDefaultNpmLocation: ${validateDefaultNpmLocation}`);
         }
         ({ execSync: this.nodeExecSync } = require("child_process"));
+    }
 
-        this.ensurePackageDirectoryExists(globalTypingsCacheLocation);
+    override ensureInitialized(): void {
+        if (!this.initDone) {
+            super.ensureInitialized();
 
-        try {
-            if (this.log.isEnabled()) {
-                this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
+            this.ensurePackageDirectoryExists(this.globalCachePath);
+            try {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
+                }
+                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`, { cwd: this.globalCachePath });
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
+                }
             }
-            this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`, { cwd: globalTypingsCacheLocation });
-            if (this.log.isEnabled()) {
-                this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
+            catch (e) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Error updating ${typesRegistryPackageName} package: ${(e as Error).message}`);
+                }
+                // store error info to report it later when it is known that server is already listening to events from typings installer
+                this.delayedInitializationError = {
+                    kind: "event::initializationFailed",
+                    message: (e as Error).message,
+                    stack: (e as Error).stack,
+                };
             }
+
+            this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(this.globalCachePath), this.installTypingHost, this.log);
         }
-        catch (e) {
-            if (this.log.isEnabled()) {
-                this.log.writeLine(`Error updating ${typesRegistryPackageName} package: ${(e as Error).message}`);
-            }
-            // store error info to report it later when it is known that server is already listening to events from typings installer
-            this.delayedInitializationError = {
-                kind: "event::initializationFailed",
-                message: (e as Error).message,
-                stack: (e as Error).stack,
-            };
-        }
-
-        this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), this.installTypingHost, this.log);
     }
 
     listen() {
@@ -173,6 +178,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
                     this.closeProject(req);
                     break;
                 case "typesRegistry": {
+                    this.ensureInitialized();
                     const typesRegistry: { [key: string]: MapLike<string> } = {};
                     this.typesRegistry.forEach((value, key) => {
                         typesRegistry[key] = value;
