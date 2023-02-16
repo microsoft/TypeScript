@@ -76,10 +76,6 @@ interface RangeLocationInformation extends LocationInformation {
     marker?: Marker;
 }
 
-interface ImplementationLocationInformation extends ts.ImplementationLocation {
-    matched?: boolean;
-}
-
 export interface TextSpan {
     start: number;
     end: number;
@@ -2923,88 +2919,6 @@ export class TestState {
         assert.equal(actualDefinitionContainerName, expectedContainerName, this.messageAtLastKnownMarker("Definition Info Container Name"));
     }
 
-    public verifyRangesInImplementationList(markerName: string) {
-        this.goToMarker(markerName);
-        const implementations: readonly ImplementationLocationInformation[] = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
-        if (!implementations || !implementations.length) {
-            this.raiseError("verifyRangesInImplementationList failed - expected to find at least one implementation location but got 0");
-        }
-
-        const duplicate = findDuplicatedElement(implementations, ts.documentSpansEqual);
-        if (duplicate) {
-            const { textSpan, fileName } = duplicate;
-            this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${ts.textSpanEnd(textSpan)}) in ${fileName}`);
-        }
-
-        const ranges = this.getRanges();
-
-        if (!ranges || !ranges.length) {
-            this.raiseError("verifyRangesInImplementationList failed - expected to find at least one range in test source");
-        }
-
-        const unsatisfiedRanges: Range[] = [];
-
-        const delayedErrors: string[] = [];
-        for (const range of ranges) {
-            const length = range.end - range.pos;
-            const matchingImpl = ts.find(implementations, impl =>
-                range.fileName === impl.fileName && range.pos === impl.textSpan.start && length === impl.textSpan.length);
-            if (matchingImpl) {
-                if (range.marker && range.marker.data) {
-                    const expected = range.marker.data as { displayParts?: ts.SymbolDisplayPart[], parts: string[], kind?: string };
-                    if (expected.displayParts) {
-                        if (!ts.arrayIsEqualTo(expected.displayParts, matchingImpl.displayParts, displayPartIsEqualTo)) {
-                            delayedErrors.push(`Mismatched display parts: expected ${JSON.stringify(expected.displayParts)}, actual ${JSON.stringify(matchingImpl.displayParts)}`);
-                        }
-                    }
-                    else if (expected.parts) {
-                        const actualParts = matchingImpl.displayParts.map(p => p.text);
-                        if (!ts.arrayIsEqualTo(expected.parts, actualParts)) {
-                            delayedErrors.push(`Mismatched non-tagged display parts: expected ${JSON.stringify(expected.parts)}, actual ${JSON.stringify(actualParts)}`);
-                        }
-                    }
-                    if (expected.kind !== undefined) {
-                        if (expected.kind !== matchingImpl.kind) {
-                            delayedErrors.push(`Mismatched kind: expected ${JSON.stringify(expected.kind)}, actual ${JSON.stringify(matchingImpl.kind)}`);
-                        }
-                    }
-                }
-
-                matchingImpl.matched = true;
-            }
-            else {
-                unsatisfiedRanges.push(range);
-            }
-        }
-        if (delayedErrors.length) {
-            this.raiseError(delayedErrors.join("\n"));
-        }
-
-        const unmatchedImplementations = implementations.filter(impl => !impl.matched);
-        if (unmatchedImplementations.length || unsatisfiedRanges.length) {
-            let error = "Not all ranges or implementations are satisfied";
-            if (unsatisfiedRanges.length) {
-                error += "\nUnsatisfied ranges:";
-                for (const range of unsatisfiedRanges) {
-                    error += `\n    (${range.pos}, ${range.end}) in ${range.fileName}: ${this.rangeText(range)}`;
-                }
-            }
-
-            if (unmatchedImplementations.length) {
-                error += "\nUnmatched implementations:";
-                for (const impl of unmatchedImplementations) {
-                    const end = impl.textSpan.start + impl.textSpan.length;
-                    error += `\n    (${impl.textSpan.start}, ${end}) in ${impl.fileName}: ${this.getFileContent(impl.fileName).slice(impl.textSpan.start, end)}`;
-                }
-            }
-            this.raiseError(error);
-        }
-
-        function displayPartIsEqualTo(a: ts.SymbolDisplayPart, b: ts.SymbolDisplayPart): boolean {
-            return a.kind === b.kind && a.text === b.text;
-        }
-    }
-
     public getMarkers(): Marker[] {
         //  Return a copy of the list
         return this.testData.markers.slice(0);
@@ -5048,16 +4962,6 @@ function differOnlyByWhitespace(a: string, b: string) {
 
 function stripWhitespace(s: string): string {
     return s.replace(/\s/g, "");
-}
-
-function findDuplicatedElement<T>(a: readonly T[], equal: (a: T, b: T) => boolean): T | undefined {
-    for (let i = 0; i < a.length; i++) {
-        for (let j = i + 1; j < a.length; j++) {
-            if (equal(a[i], a[j])) {
-                return a[i];
-            }
-        }
-    }
 }
 
 function displayExpectedAndActualString(expected: string, actual: string, quoted = false) {

@@ -438,7 +438,6 @@ declare namespace FourSlashInterface {
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         ProjectInfo(expected: string[]): void;
-        allRangesAppearInImplementationList(markerName: string): void;
         getEditsForFileRename(options: {
             readonly oldPath: string;
             readonly newPath: string;

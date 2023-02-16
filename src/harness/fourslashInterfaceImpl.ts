@@ -626,10 +626,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyProjectInfo(expected);
     }
 
-    public allRangesAppearInImplementationList(markerName: string) {
-        this.state.verifyRangesInImplementationList(markerName);
-    }
-
     public getEditsForFileRename(options: GetEditsForFileRenameOptions) {
         this.state.getEditsForFileRename(options);
     }
