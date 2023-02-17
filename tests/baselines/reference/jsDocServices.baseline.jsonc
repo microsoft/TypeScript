@@ -277,3 +277,29 @@
 // function f(<|[|{| kind: "writtenReference" |}foo|]: I|>) {
 //     return /*HIGHLIGHTS*/[|{| kind: "reference" |}foo|];
 // }
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// <|interface [|I|] {}|>
+// 
+// /**
+//  * @param /*GOTO TYPE*/foo I pity the foo
+//  */
+// function f(foo: I) {
+//     return foo;
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "I",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

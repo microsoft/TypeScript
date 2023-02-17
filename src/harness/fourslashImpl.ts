@@ -757,11 +757,6 @@ export class TestState {
         return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition)!;
     }
 
-    public verifyGoToType(arg0: any, endMarkerNames?: ArrayOrSingle<string>) {
-        this.verifyGoToX(arg0, endMarkerNames, () =>
-            this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition));
-    }
-
     private verifyGoToX(arg0: any, endMarkerNames: ArrayOrSingle<string | { marker: string, unverified?: boolean }> | { file: string, unverified?: boolean } | undefined, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
         if (endMarkerNames) {
             this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);

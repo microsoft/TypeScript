@@ -328,8 +328,6 @@ declare namespace FourSlashInterface {
         goToDefinition(startsAndEnds: { [startMarkerName: string]: ArrayOrSingle<string> }): void;
         /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
         goToDefinitionForMarkers(...markerNames: string[]): void;
-        goToType(startsAndEnds: { [startMarkerName: string]: ArrayOrSingle<string> }): void;
-        goToType(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         baselineCommands(...commands: BaselineCommand[]): void;
