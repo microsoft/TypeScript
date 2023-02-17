@@ -117,6 +117,7 @@ import {
     isAbstractConstructorSymbol,
     isArrowFunction,
     isAssertionExpression,
+    isAwaitExpression,
     isBigIntLiteral,
     isBinaryExpression,
     isBindingElement,
@@ -642,6 +643,7 @@ export function getCompletionsAtPosition(
     completionKind: CompletionTriggerKind | undefined,
     cancellationToken: CancellationToken,
     formatContext?: formatting.FormatContext,
+    includeSymbol = false
 ): CompletionInfo | undefined {
     const { previousToken } = getRelevantTokens(position, sourceFile);
     if (triggerCharacter && !isInString(sourceFile, position, previousToken) && !isValidTrigger(sourceFile, triggerCharacter, previousToken, position)) {
@@ -671,7 +673,7 @@ export function getCompletionsAtPosition(
         incompleteCompletionsCache?.clear();
     }
 
-    const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, compilerOptions, host, program, log, preferences);
+    const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, compilerOptions, host, program, log, preferences, includeSymbol);
     if (stringCompletions) {
         return stringCompletions;
     }
@@ -688,7 +690,7 @@ export function getCompletionsAtPosition(
 
     switch (completionData.kind) {
         case CompletionDataKind.Data:
-            const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext, position);
+            const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext, position, includeSymbol);
             if (response?.isIncomplete) {
                 incompleteCompletionsCache?.set(response);
             }
@@ -862,7 +864,8 @@ function completionInfoFromData(
     completionData: CompletionData,
     preferences: UserPreferences,
     formatContext: formatting.FormatContext | undefined,
-    position: number
+    position: number,
+    includeSymbol: boolean | undefined,
 ): CompletionInfo | undefined {
     const {
         symbols,
@@ -947,6 +950,7 @@ function completionInfoFromData(
         symbolToSortTextMap,
         isJsxIdentifierExpected,
         isRightOfOpenTag,
+        includeSymbol
     );
 
     if (keywordFilters !== KeywordCompletionFilters.None) {
@@ -1266,6 +1270,7 @@ function createCompletionEntry(
     formatContext: formatting.FormatContext | undefined,
     isJsxIdentifierExpected: boolean | undefined,
     isRightOfOpenTag: boolean | undefined,
+    includeSymbol: boolean
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
@@ -1319,7 +1324,9 @@ function createCompletionEntry(
 
         awaitText += `(await ${propertyAccessToConvert.expression.getText()})`;
         insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}${insertQuestionDot ? "?." : "."}${insertText}`;
-        replacementSpan = createTextSpanFromBounds(propertyAccessToConvert.getStart(sourceFile), propertyAccessToConvert.end);
+        const isInAwaitExpression = tryCast(propertyAccessToConvert.parent, isAwaitExpression);
+        const wrapNode = isInAwaitExpression ? propertyAccessToConvert.parent : propertyAccessToConvert.expression;
+        replacementSpan = createTextSpanFromBounds(wrapNode.getStart(sourceFile), propertyAccessToConvert.end);
     }
 
     if (originIsResolvedExport(origin)) {
@@ -1419,6 +1426,7 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
+        ...includeSymbol ? { symbol } : undefined
     };
 }
 
@@ -2048,6 +2056,7 @@ export function getCompletionEntriesFromSymbols(
     symbolToSortTextMap?: SymbolSortTextMap,
     isJsxIdentifierExpected?: boolean,
     isRightOfOpenTag?: boolean,
+    includeSymbol = false
 ): UniqueNameSet {
     const start = timestamp();
     const variableDeclaration = getVariableDeclaration(location);
@@ -2093,6 +2102,7 @@ export function getCompletionEntriesFromSymbols(
             formatContext,
             isJsxIdentifierExpected,
             isRightOfOpenTag,
+            includeSymbol
         );
         if (!entry) {
             continue;

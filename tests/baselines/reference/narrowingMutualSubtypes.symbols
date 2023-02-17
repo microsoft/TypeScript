@@ -1,0 +1,203 @@
+=== tests/cases/compiler/narrowingMutualSubtypes.ts ===
+// Check that `any` is a strict supertype of `unknown`
+
+declare const ru1: { [x: string]: unknown };
+>ru1 : Symbol(ru1, Decl(narrowingMutualSubtypes.ts, 2, 13))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 2, 22))
+
+declare const ra1: { [x: string]: any };
+>ra1 : Symbol(ra1, Decl(narrowingMutualSubtypes.ts, 3, 13))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 3, 22))
+
+const a1a = [ru1, ra1];  // { [x: string]: any }[]
+>a1a : Symbol(a1a, Decl(narrowingMutualSubtypes.ts, 5, 5))
+>ru1 : Symbol(ru1, Decl(narrowingMutualSubtypes.ts, 2, 13))
+>ra1 : Symbol(ra1, Decl(narrowingMutualSubtypes.ts, 3, 13))
+
+const a1b = [ra1, ru1];  // { [x: string]: any }[]
+>a1b : Symbol(a1b, Decl(narrowingMutualSubtypes.ts, 6, 5))
+>ra1 : Symbol(ra1, Decl(narrowingMutualSubtypes.ts, 3, 13))
+>ru1 : Symbol(ru1, Decl(narrowingMutualSubtypes.ts, 2, 13))
+
+declare const ra2: { [x: string]: any };
+>ra2 : Symbol(ra2, Decl(narrowingMutualSubtypes.ts, 8, 13))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 8, 22))
+
+declare const ru2: { [x: string]: unknown };
+>ru2 : Symbol(ru2, Decl(narrowingMutualSubtypes.ts, 9, 13))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 9, 22))
+
+const a2a = [ru2, ra2];  // { [x: string]: any }[]
+>a2a : Symbol(a2a, Decl(narrowingMutualSubtypes.ts, 11, 5))
+>ru2 : Symbol(ru2, Decl(narrowingMutualSubtypes.ts, 9, 13))
+>ra2 : Symbol(ra2, Decl(narrowingMutualSubtypes.ts, 8, 13))
+
+const a2b = [ra2, ru2];  // { [x: string]: any }[]
+>a2b : Symbol(a2b, Decl(narrowingMutualSubtypes.ts, 12, 5))
+>ra2 : Symbol(ra2, Decl(narrowingMutualSubtypes.ts, 8, 13))
+>ru2 : Symbol(ru2, Decl(narrowingMutualSubtypes.ts, 9, 13))
+
+// Check that `{}` is strict supertype of any non-empty object
+
+const c3 = {};
+>c3 : Symbol(c3, Decl(narrowingMutualSubtypes.ts, 16, 5))
+
+declare const r3: { [x: string]: unknown }
+>r3 : Symbol(r3, Decl(narrowingMutualSubtypes.ts, 17, 13))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 17, 21))
+
+const a3a = [c3, r3];  // {}[]
+>a3a : Symbol(a3a, Decl(narrowingMutualSubtypes.ts, 19, 5))
+>c3 : Symbol(c3, Decl(narrowingMutualSubtypes.ts, 16, 5))
+>r3 : Symbol(r3, Decl(narrowingMutualSubtypes.ts, 17, 13))
+
+const a3b = [r3, c3];  // {}[]
+>a3b : Symbol(a3b, Decl(narrowingMutualSubtypes.ts, 20, 5))
+>r3 : Symbol(r3, Decl(narrowingMutualSubtypes.ts, 17, 13))
+>c3 : Symbol(c3, Decl(narrowingMutualSubtypes.ts, 16, 5))
+
+declare const r4: { [x: string]: unknown }
+>r4 : Symbol(r4, Decl(narrowingMutualSubtypes.ts, 22, 13))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 22, 21))
+
+const c4 = {};
+>c4 : Symbol(c4, Decl(narrowingMutualSubtypes.ts, 23, 5))
+
+const a4a = [c4, r4];  // {}[]
+>a4a : Symbol(a4a, Decl(narrowingMutualSubtypes.ts, 25, 5))
+>c4 : Symbol(c4, Decl(narrowingMutualSubtypes.ts, 23, 5))
+>r4 : Symbol(r4, Decl(narrowingMutualSubtypes.ts, 22, 13))
+
+const a4b = [r4, c4];  // {}[]
+>a4b : Symbol(a4b, Decl(narrowingMutualSubtypes.ts, 26, 5))
+>r4 : Symbol(r4, Decl(narrowingMutualSubtypes.ts, 22, 13))
+>c4 : Symbol(c4, Decl(narrowingMutualSubtypes.ts, 23, 5))
+
+// Check that narrowing preserves original type in false branch for non-identical mutual subtypes
+
+declare function isObject1(value: unknown): value is Record<string, unknown>;
+>isObject1 : Symbol(isObject1, Decl(narrowingMutualSubtypes.ts, 26, 21))
+>value : Symbol(value, Decl(narrowingMutualSubtypes.ts, 30, 27))
+>value : Symbol(value, Decl(narrowingMutualSubtypes.ts, 30, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+function gg(x: {}) {
+>gg : Symbol(gg, Decl(narrowingMutualSubtypes.ts, 30, 77))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 32, 12))
+
+    if (isObject1(x)) {
+>isObject1 : Symbol(isObject1, Decl(narrowingMutualSubtypes.ts, 26, 21))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 32, 12))
+
+        x;  // Record<string, unknown>
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 32, 12))
+    }
+    else {
+        x;  // {}
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 32, 12))
+    }
+    x;  // {}
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 32, 12))
+}
+
+declare function isObject2(value: unknown): value is {};
+>isObject2 : Symbol(isObject2, Decl(narrowingMutualSubtypes.ts, 40, 1))
+>value : Symbol(value, Decl(narrowingMutualSubtypes.ts, 42, 27))
+>value : Symbol(value, Decl(narrowingMutualSubtypes.ts, 42, 27))
+
+function gg2(x: Record<string, unknown>) {
+>gg2 : Symbol(gg2, Decl(narrowingMutualSubtypes.ts, 42, 56))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 44, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    if (isObject2(x)) {
+>isObject2 : Symbol(isObject2, Decl(narrowingMutualSubtypes.ts, 40, 1))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 44, 13))
+
+        x;  // {}
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 44, 13))
+    }
+    else {
+        x;  // Record<string, unknown>
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 44, 13))
+    }
+    x;  // Record<string, unknown>
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 44, 13))
+}
+
+// Repro from #50916
+
+type Identity<T> = {[K in keyof T]: T[K]};
+>Identity : Symbol(Identity, Decl(narrowingMutualSubtypes.ts, 52, 1))
+>T : Symbol(T, Decl(narrowingMutualSubtypes.ts, 56, 14))
+>K : Symbol(K, Decl(narrowingMutualSubtypes.ts, 56, 21))
+>T : Symbol(T, Decl(narrowingMutualSubtypes.ts, 56, 14))
+>T : Symbol(T, Decl(narrowingMutualSubtypes.ts, 56, 14))
+>K : Symbol(K, Decl(narrowingMutualSubtypes.ts, 56, 21))
+
+type Self<T> = T extends unknown ? Identity<T> : never;
+>Self : Symbol(Self, Decl(narrowingMutualSubtypes.ts, 56, 42))
+>T : Symbol(T, Decl(narrowingMutualSubtypes.ts, 58, 10))
+>T : Symbol(T, Decl(narrowingMutualSubtypes.ts, 58, 10))
+>Identity : Symbol(Identity, Decl(narrowingMutualSubtypes.ts, 52, 1))
+>T : Symbol(T, Decl(narrowingMutualSubtypes.ts, 58, 10))
+
+function is<T>(value: T): value is Self<T> {
+>is : Symbol(is, Decl(narrowingMutualSubtypes.ts, 58, 55))
+>T : Symbol(T, Decl(narrowingMutualSubtypes.ts, 60, 12))
+>value : Symbol(value, Decl(narrowingMutualSubtypes.ts, 60, 15))
+>T : Symbol(T, Decl(narrowingMutualSubtypes.ts, 60, 12))
+>value : Symbol(value, Decl(narrowingMutualSubtypes.ts, 60, 15))
+>Self : Symbol(Self, Decl(narrowingMutualSubtypes.ts, 56, 42))
+>T : Symbol(T, Decl(narrowingMutualSubtypes.ts, 60, 12))
+
+    return true;
+}
+
+type Union =  {a: number} | {b: number} | {c: number};
+>Union : Symbol(Union, Decl(narrowingMutualSubtypes.ts, 62, 1))
+>a : Symbol(a, Decl(narrowingMutualSubtypes.ts, 64, 15))
+>b : Symbol(b, Decl(narrowingMutualSubtypes.ts, 64, 29))
+>c : Symbol(c, Decl(narrowingMutualSubtypes.ts, 64, 43))
+
+function example(x: Union) {
+>example : Symbol(example, Decl(narrowingMutualSubtypes.ts, 64, 54))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 66, 17))
+>Union : Symbol(Union, Decl(narrowingMutualSubtypes.ts, 62, 1))
+
+    if (is(x)) {}
+>is : Symbol(is, Decl(narrowingMutualSubtypes.ts, 58, 55))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 66, 17))
+
+    if (is(x)) {}
+>is : Symbol(is, Decl(narrowingMutualSubtypes.ts, 58, 55))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 66, 17))
+
+    if (is(x)) {}
+>is : Symbol(is, Decl(narrowingMutualSubtypes.ts, 58, 55))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 66, 17))
+
+    if (is(x)) {}
+>is : Symbol(is, Decl(narrowingMutualSubtypes.ts, 58, 55))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 66, 17))
+
+    if (is(x)) {}
+>is : Symbol(is, Decl(narrowingMutualSubtypes.ts, 58, 55))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 66, 17))
+
+    if (is(x)) {}
+>is : Symbol(is, Decl(narrowingMutualSubtypes.ts, 58, 55))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 66, 17))
+
+    if (is(x)) {}
+>is : Symbol(is, Decl(narrowingMutualSubtypes.ts, 58, 55))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 66, 17))
+
+    if (is(x)) {}
+>is : Symbol(is, Decl(narrowingMutualSubtypes.ts, 58, 55))
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 66, 17))
+
+    x;  // Union
+>x : Symbol(x, Decl(narrowingMutualSubtypes.ts, 66, 17))
+}
+
