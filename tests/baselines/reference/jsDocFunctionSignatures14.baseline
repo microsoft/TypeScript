@@ -1,0 +1,175 @@
+=== /tests/cases/fourslash/Foo.js ===
+// /**
+//  * This callback type is called `requestCallback` and is displayed as a global symbol.
+//  *
+//  * @callback requestCallback
+//  * @param {number} [responseCode=500]
+//  * @param {string} [responseMessage="Not handled"]
+//  */
+// 
+// /**
+//  * Does something asynchronously and executes the callback on completion.
+//  * @param {requestCallback} cb - The callback that handles the response.
+//  */
+//  function doSomethingAsynchronously(cb) {
+//     cb()
+//        ^
+// | ----------------------------------------------------------------------
+// | cb(**responseCode?: number = 500**, responseMessage?: string = "Not handled"): any
+// | ----------------------------------------------------------------------
+// };
+// 
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/Foo.js",
+      "position": 421,
+      "name": ""
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "cb",
+              "kind": "parameterName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "responseCode",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "responseCode",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "=",
+                  "kind": "operator"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "500",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            },
+            {
+              "name": "responseMessage",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "responseMessage",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "=",
+                  "kind": "operator"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"Not handled\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 421,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  }
+]
