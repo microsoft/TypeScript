@@ -9761,8 +9761,14 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
 }
 
 /** @internal */
-export function getJSDocInitializerParameter(node: ParameterDeclaration) {
-    if (!isInJSFile(node)) return;
+export function getJSDocInitializerParameter(node: ParameterDeclaration | JSDocParameterTag) {
+    if (!isInJSFile(node)) {
+        return;
+    }
+    if (isJSDocParameterTag(node)) {
+        return node.initializer;
+    }
+
     const bracketed = getJSDocParameterTags(node).find(({ isBracketed }) => isBracketed);
     return bracketed?.initializer;
 }

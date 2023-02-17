@@ -7356,8 +7356,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const parameterTypeNode = serializeTypeForDeclaration(context, parameterType, parameterSymbol, context.enclosingDeclaration, privateSymbolVisitor, bundledImports);
 
-            let { initializer } = parameterDeclaration as ParameterDeclaration;
-            if (parameterDeclaration) initializer ??= getJSDocInitializerParameter(parameterDeclaration as ParameterDeclaration);
+            let initializer: Expression | undefined;
+            if (tryCast(parameterDeclaration, isParameter)) {
+                initializer = parameterDeclaration?.initializer
+            }
+            if (parameterDeclaration) {
+                initializer = getJSDocInitializerParameter(parameterDeclaration);
+            }
 
             const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && canHaveModifiers(parameterDeclaration) ? map(getModifiers(parameterDeclaration), factory.cloneNode) : undefined;
             const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
