@@ -7312,7 +7312,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // It'd likely be better to store this somewhere else for isSymbolAccessible, but
                 // since that API _only_ uses the enclosing declaration (and its parents), this is
                 // seems like the best way to inject names into that search process.
-                const existingFakeScope = findAncestor(context.enclosingDeclaration, node => !!getNodeLinks(node).fakeScopeForSignatureDeclaration);
+                //
+                // Note that we only check the most immediate enclosingDeclaration; the only place we
+                // could potentially add another fake scope into the chain is right here, so we don't
+                // traverse all ancestors.
+                const existingFakeScope = getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration ? context.enclosingDeclaration : undefined;
                 Debug.assertOptionalNode(existingFakeScope, isBlock);
 
                 const locals = existingFakeScope?.locals ?? createSymbolTable();
@@ -8074,7 +8078,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getEnclosingDeclarationIgnoringFakeScope(enclosingDeclaration: Node) {
-            return findAncestor(enclosingDeclaration, n => !getNodeLinks(n).fakeScopeForSignatureDeclaration);
+            return getNodeLinks(enclosingDeclaration).fakeScopeForSignatureDeclaration ? enclosingDeclaration.parent : enclosingDeclaration;
         }
 
         /**
