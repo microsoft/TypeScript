@@ -9,19 +9,19 @@
 // f1('foo', 'bar', 'baz', 'qux');
 //    ^
 // | ----------------------------------------------------------------------
-// | f1(**p1: string**, p2: string, p3?: string, p4?: string): void
+// | f1(**p1: string**, p2: string, p3?: string, p4?: string = "test"): void
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | f1(p1: string, **p2: string**, p3?: string, p4?: string): void
+// | f1(p1: string, **p2: string**, p3?: string, p4?: string = "test"): void
 // | ----------------------------------------------------------------------
 //                  ^
 // | ----------------------------------------------------------------------
-// | f1(p1: string, p2: string, **p3?: string**, p4?: string): void
+// | f1(p1: string, p2: string, **p3?: string**, p4?: string = "test"): void
 // | ----------------------------------------------------------------------
 //                         ^
 // | ----------------------------------------------------------------------
-// | f1(p1: string, p2: string, p3?: string, **p4?: string**): void
+// | f1(p1: string, p2: string, p3?: string, **p4?: string = "test"**): void
 // | @param p1 - A string param
 // | @param p2 - An optional param
 // | @param p3 - Another optional param
@@ -197,6 +197,22 @@
                 {
                   "text": "string",
                   "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "=",
+                  "kind": "operator"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"test\"",
+                  "kind": "stringLiteral"
                 }
               ],
               "isOptional": true,
@@ -453,6 +469,22 @@
                 {
                   "text": "string",
                   "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "=",
+                  "kind": "operator"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"test\"",
+                  "kind": "stringLiteral"
                 }
               ],
               "isOptional": true,
@@ -709,6 +741,22 @@
                 {
                   "text": "string",
                   "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "=",
+                  "kind": "operator"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"test\"",
+                  "kind": "stringLiteral"
                 }
               ],
               "isOptional": true,
@@ -965,6 +1013,22 @@
                 {
                   "text": "string",
                   "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "=",
+                  "kind": "operator"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"test\"",
+                  "kind": "stringLiteral"
                 }
               ],
               "isOptional": true,
