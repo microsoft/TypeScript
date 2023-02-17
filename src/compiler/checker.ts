@@ -292,6 +292,7 @@ import {
     getJSDocDeprecatedTag,
     getJSDocEnumTag,
     getJSDocHost,
+    getJSDocInitializerParameter,
     getJSDocParameterTags,
     getJSDocRoot,
     getJSDocSatisfiesExpressionType,
@@ -7355,6 +7356,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const parameterTypeNode = serializeTypeForDeclaration(context, parameterType, parameterSymbol, context.enclosingDeclaration, privateSymbolVisitor, bundledImports);
 
+            let { initializer } = parameterDeclaration as ParameterDeclaration;
+            if (parameterDeclaration) initializer ??= getJSDocInitializerParameter(parameterDeclaration as ParameterDeclaration);
+
             const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && canHaveModifiers(parameterDeclaration) ? map(getModifiers(parameterDeclaration), factory.cloneNode) : undefined;
             const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
             const dotDotDotToken = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined;
@@ -7372,7 +7376,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 name,
                 questionToken,
                 parameterTypeNode,
-                /*initializer*/ undefined);
+                initializer);
             context.approximateLength += symbolName(parameterSymbol).length + 3;
             return parameterNode;
 
@@ -7389,7 +7393,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             visited.dotDotDotToken,
                             visited.propertyName,
                             visited.name,
-                            /*initializer*/ undefined);
+                            visited.initializer);
                     }
                     if (!nodeIsSynthesized(visited)) {
                         visited = factory.cloneNode(visited);

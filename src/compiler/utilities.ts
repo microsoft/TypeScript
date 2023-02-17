@@ -9761,6 +9761,15 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
 }
 
 /** @internal */
+export function getJSDocInitializerParameter(node: ParameterDeclaration) {
+    if (!isInJSFile(node)) return;
+    const bracketed = getJSDocParameterTags(node).find(({ isBracketed }) => isBracketed);
+    if (!bracketed) return;
+    const textAfter = (bracketed as any).getFullText().slice(bracketed.name.end - bracketed.pos);
+    return factory.createIdentifier(textAfter.slice(0, textAfter.indexOf("]")));
+}
+
+/** @internal */
 export function isOptionalDeclaration(declaration: Declaration): boolean {
     switch (declaration.kind) {
         case SyntaxKind.PropertyDeclaration:
