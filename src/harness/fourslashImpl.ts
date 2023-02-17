@@ -2871,15 +2871,6 @@ export class TestState {
         this.goToPosition(pos);
     }
 
-    public verifyTypeDefinitionsCount(negative: boolean, expectedCount: number) {
-        const assertFn = negative ? assert.notEqual : assert.equal;
-
-        const definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-        const actualCount = definitions && definitions.length || 0;
-
-        assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Type definitions Count"));
-    }
-
     public verifyGoToDefinitionName(expectedName: string, expectedContainerName: string) {
         const definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         const actualDefinitionName = definitions && definitions.length ? definitions[0].name : "";

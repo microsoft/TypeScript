@@ -169,10 +169,6 @@ export class VerifyNegatable {
         this.state.verifyQuickInfoExists(this.negative);
     }
 
-    public typeDefinitionCountIs(expectedCount: number) {
-        this.state.verifyTypeDefinitionsCount(this.negative, expectedCount);
-    }
-
     public isValidBraceCompletionAtPosition(openingBrace: string) {
         this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
     }
