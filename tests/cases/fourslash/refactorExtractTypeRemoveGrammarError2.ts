@@ -11,7 +11,7 @@ edit.applyRefactor({
     newContent:
 `type /*RENAME*/NewType = {
     x: string;
-    };
+};
 
 type Foo<T extends NewType> = T`,
 });

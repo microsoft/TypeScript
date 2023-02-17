@@ -804,7 +804,7 @@ function formatSpanWorker(
             isFirstListItem?: boolean): number {
             Debug.assert(!nodeIsSynthesized(child));
 
-            if (nodeIsMissing(child)) {
+            if (nodeIsMissing(child) || isGrammarError(parent, child)) {
                 return inheritedIndentation;
             }
 
@@ -864,7 +864,7 @@ function formatSpanWorker(
                 // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                 const tokenInfo = formattingScanner.readTokenInfo(child);
                 // JSX text shouldn't affect indenting
-                if (child.kind !== SyntaxKind.JsxText && !isGrammarError(parent, child)) {
+                if (child.kind !== SyntaxKind.JsxText) {
                     Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
                     return inheritedIndentation;
