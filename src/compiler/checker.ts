@@ -473,6 +473,7 @@ import {
     JSDocMemberName,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocParameterTag,
     JSDocPrivateTag,
     JSDocPropertyLikeTag,
@@ -1341,6 +1342,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     let inlineLevel = 0;
     let currentNode: Node | undefined;
     let varianceTypeParameter: TypeParameter | undefined;
+    let isInferencePartiallyBlocked = false;
 
     const emptySymbols = createSymbolTable();
     const arrayVariances = [VarianceFlags.Covariant];
@@ -1753,7 +1755,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 toMarkSkip = toMarkSkip.parent;
             } while (toMarkSkip && toMarkSkip !== containingCall);
         }
+
+        isInferencePartiallyBlocked = true;
         const result = runWithoutResolvedSignatureCaching(node, fn);
+        isInferencePartiallyBlocked = false;
+
         if (containingCall) {
             let toMarkSkip = node!;
             do {
@@ -12977,6 +12983,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeParameter = getTypeParameterFromMappedType(type);
         const constraintType = getConstraintTypeFromMappedType(type);
         const nameType = getNameTypeFromMappedType(type.target as MappedType || type);
+        const isFilteringMappedType = nameType && isTypeAssignableTo(nameType, typeParameter);
         const templateType = getTemplateTypeFromMappedType(type.target as MappedType || type);
         const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
         const templateModifiers = getMappedTypeModifiers(type);
@@ -13023,9 +13030,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     prop.links.keyType = keyType;
                     if (modifiersProp) {
                         prop.links.syntheticOrigin = modifiersProp;
-                        // If the mapped type has an `as XXX` clause, the property name likely won't match the declaration name and
-                        // multiple properties may map to the same name. Thus, we attach no declarations to the symbol.
-                        prop.declarations = nameType ? undefined : modifiersProp.declarations;
+                        prop.declarations = !nameType || isFilteringMappedType ? modifiersProp.declarations : undefined;
                     }
                     members.set(propName, prop);
                 }
@@ -22931,6 +22936,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getCachedType(key) ?? setCachedType(key, mapType(type, getBaseTypeOfLiteralType));
     }
 
+    // This like getBaseTypeOfLiteralType, but instead treats enum literals as strings/numbers instead
+    // of returning their enum base type (which depends on the types of other literals in the enum).
+    function getBaseTypeOfLiteralTypeForComparison(type: Type): Type {
+        return type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? stringType :
+            type.flags & (TypeFlags.NumberLiteral | TypeFlags.Enum) ? numberType :
+            type.flags & TypeFlags.BigIntLiteral ? bigintType :
+            type.flags & TypeFlags.BooleanLiteral ? booleanType :
+            type.flags & TypeFlags.Union ? mapType(type, getBaseTypeOfLiteralTypeForComparison) :
+            type;
+    }
+
     function getWidenedLiteralType(type: Type): Type {
         return type.flags & TypeFlags.EnumLike && isFreshLiteralType(type) ? getBaseTypeOfEnumLikeType(type as LiteralType) :
             type.flags & TypeFlags.StringLiteral && isFreshLiteralType(type) ? stringType :
@@ -32569,7 +32585,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
         const isDecorator = node.kind === SyntaxKind.Decorator;
         const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
-        const reportErrors = !candidatesOutArray;
+        const reportErrors = !isInferencePartiallyBlocked && !candidatesOutArray;
 
         let typeArguments: NodeArray<TypeNode> | undefined;
 
@@ -36394,8 +36410,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.LessThanEqualsToken:
             case SyntaxKind.GreaterThanEqualsToken:
                 if (checkForDisallowedESSymbolOperand(operator)) {
-                    leftType = getBaseTypeOfLiteralType(checkNonNullType(leftType, left));
-                    rightType = getBaseTypeOfLiteralType(checkNonNullType(rightType, right));
+                    leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(leftType, left));
+                    rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(rightType, right));
                     reportOperatorErrorUnless((left, right) => {
                         if (isTypeAny(left) || isTypeAny(right)) {
                             return true;
@@ -38595,6 +38611,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         lastSeenNonAmbientDeclaration = node as FunctionLikeDeclaration;
                     }
                 }
+                if (isInJSFile(current) && isFunctionLike(current) && current.jsDoc) {
+                    for (const node of current.jsDoc) {
+                        if (node.tags) {
+                            for (const tag of node.tags) {
+                                if (isJSDocOverloadTag(tag)) {
+                                    hasOverloads = true;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -38646,8 +38673,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const bodySignature = getSignatureFromDeclaration(bodyDeclaration);
                 for (const signature of signatures) {
                     if (!isImplementationCompatibleWithOverload(bodySignature, signature)) {
+                        const errorNode = signature.declaration && isJSDocSignature(signature.declaration)
+                            ? (signature.declaration.parent as JSDocOverloadTag | JSDocCallbackTag).tagName
+                            : signature.declaration;
                         addRelatedInfo(
-                            error(signature.declaration, Diagnostics.This_overload_signature_is_not_compatible_with_its_implementation_signature),
+                            error(errorNode, Diagnostics.This_overload_signature_is_not_compatible_with_its_implementation_signature),
                             createDiagnosticForNode(bodyDeclaration, Diagnostics.The_implementation_signature_is_declared_here)
                         );
                         break;
@@ -46841,7 +46871,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.NamespaceExportDeclaration:
-            case SyntaxKind.FunctionType:
             case SyntaxKind.MissingDeclaration:
                 return find(node.modifiers, isModifier);
             default:
