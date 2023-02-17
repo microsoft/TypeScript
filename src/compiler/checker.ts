@@ -7361,7 +7361,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 initializer = parameterDeclaration?.initializer
             }
             if (parameterDeclaration) {
-                initializer = getJSDocInitializerParameter(parameterDeclaration);
+                initializer = getJSDocInitializerParameter(parameterDeclaration) ?? initializer;
             }
 
             const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && canHaveModifiers(parameterDeclaration) ? map(getModifiers(parameterDeclaration), factory.cloneNode) : undefined;
