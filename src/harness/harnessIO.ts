@@ -609,8 +609,8 @@ export namespace Compiler {
             // do not count errors from lib.d.ts here, they are computed separately as numLibraryDiagnostics
             // if lib.d.ts is explicitly included in input files and there are some errors in it (i.e. because of duplicate identifiers)
             // then they will be added twice thus triggering 'total errors' assertion with condition
-            // 'totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length
             // Similarly for tsconfig, which may be in the input files and contain errors.
+            // 'totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics + numTest262HarnessDiagnostics, diagnostics.length
 
             if (!error.file || !isDefaultLibraryFile(error.file.fileName) && !vpath.isTsConfigFile(error.file.fileName)) {
                 totalErrorsReportedInNonLibraryNonTsconfigFiles++;
