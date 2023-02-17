@@ -1431,24 +1431,25 @@ namespace Parser {
 
     const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
 
-    let fileName: string;
-    let sourceFlags: NodeFlags;
-    let sourceText: string;
-    let languageVersion: ScriptTarget;
-    let scriptKind: ScriptKind;
-    let languageVariant: LanguageVariant;
-    let parseDiagnostics: DiagnosticWithDetachedLocation[];
-    let jsDocDiagnostics: DiagnosticWithDetachedLocation[];
-    let syntaxCursor: IncrementalParser.SyntaxCursor | undefined;
+    /* eslint-disable no-var */
+    var fileName: string;
+    var sourceFlags: NodeFlags;
+    var sourceText: string;
+    var languageVersion: ScriptTarget;
+    var scriptKind: ScriptKind;
+    var languageVariant: LanguageVariant;
+    var parseDiagnostics: DiagnosticWithDetachedLocation[];
+    var jsDocDiagnostics: DiagnosticWithDetachedLocation[];
+    var syntaxCursor: IncrementalParser.SyntaxCursor | undefined;
 
-    let currentToken: SyntaxKind;
-    let nodeCount: number;
-    let identifiers: Map<string, string>;
-    let identifierCount: number;
+    var currentToken: SyntaxKind;
+    var nodeCount: number;
+    var identifiers: Map<string, string>;
+    var identifierCount: number;
 
-    let parsingContext: ParsingContext;
+    var parsingContext: ParsingContext;
 
-    let notParenthesizedArrow: Set<number> | undefined;
+    var notParenthesizedArrow: Set<number> | undefined;
 
     // Flags that dictate what parsing context we're in.  For example:
     // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
@@ -1496,10 +1497,10 @@ namespace Parser {
     // Note: it should not be necessary to save/restore these flags during speculative/lookahead
     // parsing.  These context flags are naturally stored and restored through normal recursive
     // descent parsing and unwinding.
-    let contextFlags: NodeFlags;
+    var contextFlags: NodeFlags;
 
     // Indicates whether we are currently parsing top-level statements.
-    let topLevel = true;
+    var topLevel = true;
 
     // Whether or not we've had a parse error since creating the last AST node.  If we have
     // encountered an error, it will be stored on the next AST node we create.  Parse errors
@@ -1528,7 +1529,8 @@ namespace Parser {
     //
     // Note: any errors at the end of the file that do not precede a regular node, should get
     // attached to the EOF token.
-    let parseErrorBeforeNextFinishedNode = false;
+    var parseErrorBeforeNextFinishedNode = false;
+    /* eslint-enable no-var */
 
     export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind, setExternalModuleIndicatorOverride?: (file: SourceFile) => void): SourceFile {
         scriptKind = ensureScriptKind(fileName, scriptKind);
