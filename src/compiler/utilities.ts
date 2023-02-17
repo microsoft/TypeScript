@@ -9762,9 +9762,6 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
 
 /** @internal */
 export function getJSDocInitializerParameter(node: ParameterDeclaration | JSDocParameterTag) {
-    if (!isInJSFile(node)) {
-        return;
-    }
     if (isJSDocParameterTag(node)) {
         return node.initializer;
     }
