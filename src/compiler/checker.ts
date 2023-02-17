@@ -42624,10 +42624,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Checks a member declaration node to see if has a missing or invalid `override` modifier.
      * @param node Class-like node where the member is declared.
      * @param member Member declaration node.
-     * @param symbol Member symbol.
+     * @param memberSymbol Member symbol.
      * Note: `member` can be a synthetic node without a parent.
      */
-    function getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement, symbol: Symbol): MemberOverrideStatus {
+    function getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement, memberSymbol: Symbol): MemberOverrideStatus {
         if (!member.name) {
             return MemberOverrideStatus.Ok;
         }
@@ -42657,7 +42657,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasAbstractModifier(member),
             isStatic(member),
             /* memberIsParameterProperty */ false,
-            symbolName(symbol),
+            symbolName(memberSymbol),
         );
     }
 
