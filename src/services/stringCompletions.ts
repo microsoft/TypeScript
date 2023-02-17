@@ -192,7 +192,8 @@ export function getStringLiteralCompletions(
     host: LanguageServiceHost,
     program: Program,
     log: Log,
-    preferences: UserPreferences): CompletionInfo | undefined {
+    preferences: UserPreferences,
+    includeSymbol: boolean): CompletionInfo | undefined {
     if (isInReferenceComment(sourceFile, position)) {
         const entries = getTripleSlashReferenceCompletion(sourceFile, position, options, host);
         return entries && convertPathCompletions(entries);
@@ -200,7 +201,7 @@ export function getStringLiteralCompletions(
     if (isInString(sourceFile, position, contextToken)) {
         if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
         const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, program.getTypeChecker(), options, host, preferences);
-        return convertStringLiteralCompletions(entries, contextToken, sourceFile, host, program, log, options, preferences, position);
+        return convertStringLiteralCompletions(entries, contextToken, sourceFile, host, program, log, options, preferences, position, includeSymbol);
     }
 }
 
@@ -214,6 +215,7 @@ function convertStringLiteralCompletions(
     options: CompilerOptions,
     preferences: UserPreferences,
     position: number,
+    includeSymbol: boolean,
 ): CompletionInfo | undefined {
     if (completion === undefined) {
         return undefined;
@@ -241,6 +243,17 @@ function convertStringLiteralCompletions(
                 preferences,
                 options,
                 /*formatContext*/ undefined,
+                /*isTypeOnlyLocation */ undefined,
+                /*propertyAccessToConvert*/ undefined,
+                /*jsxIdentifierExpected*/ undefined,
+                /*isJsxInitializer*/ undefined,
+                /*importStatementCompletion*/ undefined,
+                /*recommendedCompletion*/ undefined,
+                /*symbolToOriginInfoMap*/ undefined,
+                /*symbolToSortTextMap*/ undefined,
+                /*isJsxIdentifierExpected*/ undefined,
+                /*isRightOfOpenTag*/ undefined,
+                includeSymbol
             ); // Target will not be used, so arbitrary
             return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, optionalReplacementSpan, entries };
         }

@@ -1589,6 +1589,10 @@
         "category": "Error",
         "code": 1485
     },
+    "Decorator used before 'export' here.": {
+        "category": "Error",
+        "code": 1486
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -6560,7 +6564,7 @@
         "category": "Error",
         "code": 8037
     },
-    "Decorators must come after 'export' or 'export default' in JavaScript files.": {
+    "Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.": {
         "category": "Error",
         "code": 8038
     },

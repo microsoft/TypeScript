@@ -36,7 +36,6 @@ import {
     createPackageJsonImportFilter,
     createPrinter,
     createSortedArray,
-    createTextRangeFromSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
@@ -119,6 +118,7 @@ import {
     isAbstractConstructorSymbol,
     isArrowFunction,
     isAssertionExpression,
+    isAwaitExpression,
     isBigIntLiteral,
     isBinaryExpression,
     isBindingElement,
@@ -463,6 +463,7 @@ interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
     symbolName: string;
     moduleSymbol: Symbol;
     exportName: string;
+    exportMapKey?: string;
     moduleSpecifier: string;
 }
 
@@ -652,6 +653,7 @@ export function getCompletionsAtPosition(
     completionKind: CompletionTriggerKind | undefined,
     cancellationToken: CancellationToken,
     formatContext?: formatting.FormatContext,
+    includeSymbol = false
 ): CompletionInfo | undefined {
     const { previousToken } = getRelevantTokens(position, sourceFile);
     if (triggerCharacter && !isInString(sourceFile, position, previousToken) && !isValidTrigger(sourceFile, triggerCharacter, previousToken, position)) {
@@ -681,7 +683,7 @@ export function getCompletionsAtPosition(
         incompleteCompletionsCache?.clear();
     }
 
-    const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, compilerOptions, host, program, log, preferences);
+    const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, compilerOptions, host, program, log, preferences, includeSymbol);
     if (stringCompletions) {
         return stringCompletions;
     }
@@ -698,7 +700,7 @@ export function getCompletionsAtPosition(
 
     switch (completionData.kind) {
         case CompletionDataKind.Data:
-            const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext, position);
+            const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext, position, includeSymbol);
             if (response?.isIncomplete) {
                 incompleteCompletionsCache?.set(response);
             }
@@ -872,7 +874,8 @@ function completionInfoFromData(
     completionData: CompletionData,
     preferences: UserPreferences,
     formatContext: formatting.FormatContext | undefined,
-    position: number
+    position: number,
+    includeSymbol: boolean | undefined,
 ): CompletionInfo | undefined {
     const {
         symbols,
@@ -957,6 +960,7 @@ function completionInfoFromData(
         symbolToSortTextMap,
         isJsxIdentifierExpected,
         isRightOfOpenTag,
+        includeSymbol
     );
 
     if (keywordFilters !== KeywordCompletionFilters.None) {
@@ -1276,6 +1280,7 @@ function createCompletionEntry(
     formatContext: formatting.FormatContext | undefined,
     isJsxIdentifierExpected: boolean | undefined,
     isRightOfOpenTag: boolean | undefined,
+    includeSymbol: boolean
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
@@ -1329,7 +1334,9 @@ function createCompletionEntry(
 
         awaitText += `(await ${propertyAccessToConvert.expression.getText()})`;
         insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}${insertQuestionDot ? "?." : "."}${insertText}`;
-        replacementSpan = createTextSpanFromBounds(propertyAccessToConvert.getStart(sourceFile), propertyAccessToConvert.end);
+        const isInAwaitExpression = tryCast(propertyAccessToConvert.parent, isAwaitExpression);
+        const wrapNode = isInAwaitExpression ? propertyAccessToConvert.parent : propertyAccessToConvert.expression;
+        replacementSpan = createTextSpanFromBounds(wrapNode.getStart(sourceFile), propertyAccessToConvert.end);
     }
 
     if (originIsResolvedExport(origin)) {
@@ -1429,6 +1436,7 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
+        ...includeSymbol ? { symbol } : undefined
     };
 }
 
@@ -1933,6 +1941,7 @@ function originToCompletionEntryData(origin: SymbolOriginInfoExport | SymbolOrig
     if (originIsResolvedExport(origin)) {
         const resolvedData: CompletionEntryDataResolved = {
             exportName: origin.exportName,
+            exportMapKey: origin.exportMapKey,
             moduleSpecifier: origin.moduleSpecifier,
             ambientModuleName,
             fileName: origin.fileName,
@@ -1957,6 +1966,7 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
         const resolvedOrigin: SymbolOriginInfoResolvedExport = {
             kind: SymbolOriginInfoKind.ResolvedExport,
             exportName: data.exportName,
+            exportMapKey: data.exportMapKey,
             moduleSpecifier: data.moduleSpecifier,
             symbolName: completionName,
             fileName: data.fileName,
@@ -2055,6 +2065,7 @@ export function getCompletionEntriesFromSymbols(
     symbolToSortTextMap?: SymbolSortTextMap,
     isJsxIdentifierExpected?: boolean,
     isRightOfOpenTag?: boolean,
+    includeSymbol = false
 ): UniqueNameSet {
     const start = timestamp();
     const variableDeclaration = getVariableDeclaration(location);
@@ -2100,6 +2111,7 @@ export function getCompletionEntriesFromSymbols(
             formatContext,
             isJsxIdentifierExpected,
             isRightOfOpenTag,
+            includeSymbol
         );
         if (!entry) {
             continue;
@@ -2464,6 +2476,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     const { moduleSpecifier, codeAction } = codefix.getImportCompletionAction(
         targetSymbol,
         moduleSymbol,
+        data?.exportMapKey,
         sourceFile,
         name,
         isJsxOpeningTagName,
@@ -3449,8 +3462,8 @@ function getCompletionData(
                         // module resolution modes, getting past this point guarantees that we'll be
                         // able to generate a suitable module specifier, so we can safely show a completion,
                         // even if we defer computing the module specifier.
-                        const firstImportableExportInfo = find(info, isImportableExportInfo);
-                        if (!firstImportableExportInfo) {
+                        info = filter(info, isImportableExportInfo);
+                        if (!info.length) {
                             return;
                         }
 
@@ -3467,9 +3480,9 @@ function getCompletionData(
                         // it should be identical regardless of which one is used. During the subsequent
                         // `CompletionEntryDetails` request, we'll get all the ExportInfos again and pick
                         // the best one based on the module specifier it produces.
-                        let exportInfo = firstImportableExportInfo, moduleSpecifier;
+                        let exportInfo = info[0], moduleSpecifier;
                         if (result !== "skipped") {
-                            ({ exportInfo = firstImportableExportInfo, moduleSpecifier } = result);
+                            ({ exportInfo = info[0], moduleSpecifier } = result);
                         }
 
                         const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
@@ -3707,7 +3720,7 @@ function getCompletionData(
         //   2. at the end position of an unterminated token.
         //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
         return (isRegularExpressionLiteral(contextToken) || isStringTextContainingNode(contextToken)) && (
-            rangeContainsPositionExclusive(createTextRangeFromSpan(createTextSpanFromNode(contextToken)), position) ||
+            rangeContainsPositionExclusive(contextToken, position) ||
             position === contextToken.end && (!!contextToken.isUnterminated || isRegularExpressionLiteral(contextToken)));
     }
 

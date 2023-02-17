@@ -23,9 +23,9 @@ let C = (() => {
     let _member_initializers_1 = [];
     return class C {
         static {
-            __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false }, _field1_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false }, _member_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _a, static: false, private: false }, _member_initializers_1, _instanceExtraInitializers);
+            __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false, access: { has: obj => "field1" in obj, get: obj => obj.field1, set: (obj, value) => { obj.field1 = value; } } }, _field1_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false, access: { has: obj => "field2" in obj, get: obj => obj["field2"], set: (obj, value) => { obj["field2"] = value; } } }, _member_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _a, static: false, private: false, access: { has: obj => _a in obj, get: obj => obj[_a], set: (obj, value) => { obj[_a] = value; } } }, _member_initializers_1, _instanceExtraInitializers);
         }
         field1 = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _field1_initializers, 1));
         ["field2"] = __runInitializers(this, _member_initializers, 2);

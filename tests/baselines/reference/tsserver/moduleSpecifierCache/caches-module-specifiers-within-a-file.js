@@ -961,6 +961,7 @@ Info 67   [00:02:07.000] response:
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "foo",
+              "exportMapKey": "foo|*|",
               "moduleSpecifier": "./a",
               "fileName": "/src/a.ts"
             }
@@ -993,6 +994,7 @@ Info 67   [00:02:07.000] response:
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "observable",
+              "exportMapKey": "observable|*|",
               "moduleSpecifier": "mobx",
               "fileName": "/node_modules/mobx/index.d.ts",
               "isPackageJsonImport": true
