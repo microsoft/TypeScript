@@ -1,18 +1,4 @@
-TI:: [00:01:04.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:01:05.000] Processing cache location '/a/data/'
-TI:: [00:01:06.000] Trying to find '/a/data/package.json'...
-TI:: [00:01:07.000] Finished processing cache location '/a/data/'
-Info 0    [00:01:08.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:09.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/main/main.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
+TI:: Creating typing installer
 //// [/user/username/projects/myproject/dependency/FnS.ts]
 export function fn1() { }
 export function fn2() { }
@@ -223,11 +209,42 @@ export {};
 }
 
 
-Info 2    [00:01:10.000] Search path: /user/username/projects/myproject/main
-Info 3    [00:01:11.000] For info: /user/username/projects/myproject/main/main.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
-Info 4    [00:01:12.000] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
-Info 5    [00:01:13.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-Info 6    [00:01:14.000] Config: /user/username/projects/myproject/main/tsconfig.json : {
+TI:: [00:01:04.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:01:05.000] Processing cache location '/a/data/'
+TI:: [00:01:06.000] Trying to find '/a/data/package.json'...
+TI:: [00:01:07.000] Finished processing cache location '/a/data/'
+TI:: [00:01:08.000] Npm config file: /a/data/package.json
+TI:: [00:01:09.000] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [00:01:14.000] Updating types-registry npm package...
+TI:: [00:01:15.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:01:22.000] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/types-registry/index.json]
+{
+ "entries": {}
+}
+
+
+Info 0    [00:01:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:01:24.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
+
+Info 2    [00:01:25.000] Search path: /user/username/projects/myproject/main
+Info 3    [00:01:26.000] For info: /user/username/projects/myproject/main/main.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
+Info 4    [00:01:27.000] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
+Info 5    [00:01:28.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 6    [00:01:29.000] Config: /user/username/projects/myproject/main/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/main/main.ts"
  ],
@@ -244,10 +261,10 @@ Info 6    [00:01:14.000] Config: /user/username/projects/myproject/main/tsconfig
   }
  ]
 }
-Info 7    [00:01:15.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
-Info 8    [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
-Info 9    [00:01:17.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
-Info 10   [00:01:18.000] Config: /user/username/projects/myproject/dependency/tsconfig.json : {
+Info 7    [00:01:30.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
+Info 8    [00:01:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
+Info 9    [00:01:32.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
+Info 10   [00:01:33.000] Config: /user/username/projects/myproject/dependency/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/dependency/FnS.ts"
  ],
@@ -258,20 +275,20 @@ Info 10   [00:01:18.000] Config: /user/username/projects/myproject/dependency/ts
   "configFilePath": "/user/username/projects/myproject/dependency/tsconfig.json"
  }
 }
-Info 11   [00:01:19.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-Info 12   [00:01:20.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info 13   [00:01:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info 14   [00:01:22.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info 15   [00:01:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info 16   [00:01:24.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
-Info 17   [00:01:25.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 18   [00:01:26.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Info 19   [00:01:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Info 20   [00:01:28.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Info 21   [00:01:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Info 22   [00:01:30.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 23   [00:01:31.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 24   [00:01:32.000] 	Files (3)
+Info 11   [00:01:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 12   [00:01:35.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
+Info 13   [00:01:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
+Info 14   [00:01:37.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
+Info 15   [00:01:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
+Info 16   [00:01:39.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
+Info 17   [00:01:40.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 18   [00:01:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 19   [00:01:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 20   [00:01:43.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 21   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 22   [00:01:45.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 23   [00:01:46.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 24   [00:01:47.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/decls/fns.d.ts
 	/user/username/projects/myproject/main/main.ts
@@ -284,16 +301,16 @@ Info 24   [00:01:32.000] 	Files (3)
 	main.ts
 	  Matched by default include pattern '**/*'
 
-Info 25   [00:01:33.000] -----------------------------------------------
-Info 26   [00:01:34.000] Search path: /user/username/projects/myproject/main
-Info 27   [00:01:35.000] For info: /user/username/projects/myproject/main/tsconfig.json :: No config files found.
-Info 28   [00:01:36.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 28   [00:01:37.000] 	Files (3)
+Info 25   [00:01:48.000] -----------------------------------------------
+Info 26   [00:01:49.000] Search path: /user/username/projects/myproject/main
+Info 27   [00:01:50.000] For info: /user/username/projects/myproject/main/tsconfig.json :: No config files found.
+Info 28   [00:01:51.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 28   [00:01:52.000] 	Files (3)
 
-Info 28   [00:01:38.000] -----------------------------------------------
-Info 28   [00:01:39.000] Open files: 
-Info 28   [00:01:40.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
-Info 28   [00:01:41.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 28   [00:01:53.000] -----------------------------------------------
+Info 28   [00:01:54.000] Open files: 
+Info 28   [00:01:55.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
+Info 28   [00:01:56.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 After request
 
 PolledWatches::
@@ -320,11 +337,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/decls: *new*
   {}
 
-Info 28   [00:01:42.000] response:
+Info 28   [00:01:57.000] response:
     {
       "responseRequired": false
     }
-Info 29   [00:01:43.000] request:
+Info 29   [00:01:58.000] request:
     {
       "command": "open",
       "arguments": {
@@ -335,11 +352,11 @@ Info 29   [00:01:43.000] request:
     }
 Before request
 
-Info 30   [00:01:44.000] Search path: /user/username/projects/myproject/random
-Info 31   [00:01:45.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
-Info 32   [00:01:46.000] Creating configuration project /user/username/projects/myproject/random/tsconfig.json
-Info 33   [00:01:47.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Config file
-Info 34   [00:01:48.000] Config: /user/username/projects/myproject/random/tsconfig.json : {
+Info 30   [00:01:59.000] Search path: /user/username/projects/myproject/random
+Info 31   [00:02:00.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
+Info 32   [00:02:01.000] Creating configuration project /user/username/projects/myproject/random/tsconfig.json
+Info 33   [00:02:02.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Config file
+Info 34   [00:02:03.000] Config: /user/username/projects/myproject/random/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/random/random.ts"
  ],
@@ -347,16 +364,16 @@ Info 34   [00:01:48.000] Config: /user/username/projects/myproject/random/tsconf
   "configFilePath": "/user/username/projects/myproject/random/tsconfig.json"
  }
 }
-Info 35   [00:01:49.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random 1 undefined Config: /user/username/projects/myproject/random/tsconfig.json WatchType: Wild card directory
-Info 36   [00:01:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random 1 undefined Config: /user/username/projects/myproject/random/tsconfig.json WatchType: Wild card directory
-Info 37   [00:01:51.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json
-Info 38   [00:01:52.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
-Info 39   [00:01:53.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
-Info 40   [00:01:54.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
-Info 41   [00:01:55.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
-Info 42   [00:01:56.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 43   [00:01:57.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 44   [00:01:58.000] 	Files (2)
+Info 35   [00:02:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random 1 undefined Config: /user/username/projects/myproject/random/tsconfig.json WatchType: Wild card directory
+Info 36   [00:02:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random 1 undefined Config: /user/username/projects/myproject/random/tsconfig.json WatchType: Wild card directory
+Info 37   [00:02:06.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json
+Info 38   [00:02:07.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
+Info 39   [00:02:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
+Info 40   [00:02:09.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
+Info 41   [00:02:10.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
+Info 42   [00:02:11.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 43   [00:02:12.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 44   [00:02:13.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/random/random.ts
 
@@ -366,20 +383,20 @@ Info 44   [00:01:58.000] 	Files (2)
 	random.ts
 	  Matched by default include pattern '**/*'
 
-Info 45   [00:01:59.000] -----------------------------------------------
-Info 46   [00:02:00.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 46   [00:02:01.000] 	Files (3)
+Info 45   [00:02:14.000] -----------------------------------------------
+Info 46   [00:02:15.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 46   [00:02:16.000] 	Files (3)
 
-Info 46   [00:02:02.000] -----------------------------------------------
-Info 46   [00:02:03.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 46   [00:02:04.000] 	Files (2)
+Info 46   [00:02:17.000] -----------------------------------------------
+Info 46   [00:02:18.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 46   [00:02:19.000] 	Files (2)
 
-Info 46   [00:02:05.000] -----------------------------------------------
-Info 46   [00:02:06.000] Open files: 
-Info 46   [00:02:07.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
-Info 46   [00:02:08.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
-Info 46   [00:02:09.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
-Info 46   [00:02:10.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 46   [00:02:20.000] -----------------------------------------------
+Info 46   [00:02:21.000] Open files: 
+Info 46   [00:02:22.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
+Info 46   [00:02:23.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 46   [00:02:24.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
+Info 46   [00:02:25.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 After request
 
 PolledWatches::
@@ -412,11 +429,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random: *new*
   {}
 
-Info 46   [00:02:11.000] response:
+Info 46   [00:02:26.000] response:
     {
       "responseRequired": false
     }
-Info 47   [00:02:12.000] request:
+Info 47   [00:02:27.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -429,7 +446,7 @@ Info 47   [00:02:12.000] request:
     }
 Before request
 
-Info 48   [00:02:13.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
+Info 48   [00:02:28.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
 After request
 
 PolledWatches::
@@ -464,7 +481,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 49   [00:02:14.000] response:
+Info 49   [00:02:29.000] response:
     {
       "response": {
         "definitions": [
@@ -501,14 +518,14 @@ Info 49   [00:02:14.000] response:
       },
       "responseRequired": true
     }
-Info 50   [00:02:17.000] FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 0:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
-Info 51   [00:02:18.000] Scheduled: /user/username/projects/myproject/main/tsconfig.json
-Info 52   [00:02:19.000] Scheduled: *ensureProjectForOpenFiles*
-Info 53   [00:02:20.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
-Info 54   [00:02:21.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 0:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
-Info 55   [00:02:22.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info 56   [00:02:23.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info 57   [00:02:24.000] request:
+Info 50   [00:02:32.000] FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 0:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
+Info 51   [00:02:33.000] Scheduled: /user/username/projects/myproject/main/tsconfig.json
+Info 52   [00:02:34.000] Scheduled: *ensureProjectForOpenFiles*
+Info 53   [00:02:35.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
+Info 54   [00:02:36.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 0:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
+Info 55   [00:02:37.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
+Info 56   [00:02:38.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
+Info 57   [00:02:39.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -558,10 +575,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 58   [00:02:25.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
-Info 59   [00:02:26.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 60   [00:02:27.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
-Info 61   [00:02:28.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
+Info 58   [00:02:40.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
+Info 59   [00:02:41.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info 60   [00:02:42.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
+Info 61   [00:02:43.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
 After request
 
 PolledWatches::
@@ -598,7 +615,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 62   [00:02:29.000] response:
+Info 62   [00:02:44.000] response:
     {
       "response": {
         "definitions": [
@@ -635,7 +652,7 @@ Info 62   [00:02:29.000] response:
       },
       "responseRequired": true
     }
-Info 63   [00:02:30.000] request:
+Info 63   [00:02:45.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -650,7 +667,7 @@ Before request
 
 After request
 
-Info 64   [00:02:31.000] response:
+Info 64   [00:02:46.000] response:
     {
       "response": {
         "definitions": [
@@ -687,7 +704,7 @@ Info 64   [00:02:31.000] response:
       },
       "responseRequired": true
     }
-Info 65   [00:02:32.000] request:
+Info 65   [00:02:47.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -702,7 +719,7 @@ Before request
 
 After request
 
-Info 66   [00:02:33.000] response:
+Info 66   [00:02:48.000] response:
     {
       "response": {
         "definitions": [
@@ -739,7 +756,7 @@ Info 66   [00:02:33.000] response:
       },
       "responseRequired": true
     }
-Info 67   [00:02:34.000] request:
+Info 67   [00:02:49.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -754,7 +771,7 @@ Before request
 
 After request
 
-Info 68   [00:02:35.000] response:
+Info 68   [00:02:50.000] response:
     {
       "response": {
         "definitions": [
@@ -791,7 +808,7 @@ Info 68   [00:02:35.000] response:
       },
       "responseRequired": true
     }
-Info 69   [00:02:36.000] request:
+Info 69   [00:02:51.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -806,7 +823,7 @@ Before request
 
 After request
 
-Info 70   [00:02:37.000] response:
+Info 70   [00:02:52.000] response:
     {
       "response": {
         "definitions": [
@@ -843,7 +860,7 @@ Info 70   [00:02:37.000] response:
       },
       "responseRequired": true
     }
-Info 71   [00:02:38.000] request:
+Info 71   [00:02:53.000] request:
     {
       "command": "close",
       "arguments": {
@@ -854,18 +871,18 @@ Info 71   [00:02:38.000] request:
     }
 Before request
 
-Info 72   [00:02:39.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
-Info 73   [00:02:40.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 73   [00:02:41.000] 	Files (3)
+Info 72   [00:02:54.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
+Info 73   [00:02:55.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 73   [00:02:56.000] 	Files (3)
 
-Info 73   [00:02:42.000] -----------------------------------------------
-Info 73   [00:02:43.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 73   [00:02:44.000] 	Files (2)
+Info 73   [00:02:57.000] -----------------------------------------------
+Info 73   [00:02:58.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 73   [00:02:59.000] 	Files (2)
 
-Info 73   [00:02:45.000] -----------------------------------------------
-Info 73   [00:02:46.000] Open files: 
-Info 73   [00:02:47.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
-Info 73   [00:02:48.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 73   [00:03:00.000] -----------------------------------------------
+Info 73   [00:03:01.000] Open files: 
+Info 73   [00:03:02.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
+Info 73   [00:03:03.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 After request
 
 PolledWatches::
@@ -904,11 +921,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 73   [00:02:49.000] response:
+Info 73   [00:03:04.000] response:
     {
       "responseRequired": false
     }
-Info 74   [00:02:50.000] request:
+Info 74   [00:03:05.000] request:
     {
       "command": "open",
       "arguments": {
@@ -919,22 +936,22 @@ Info 74   [00:02:50.000] request:
     }
 Before request
 
-Info 75   [00:02:51.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
-Info 76   [00:02:52.000] Search path: /user/username/projects/myproject/random
-Info 77   [00:02:53.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
-Info 78   [00:02:54.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 78   [00:02:55.000] 	Files (3)
+Info 75   [00:03:06.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
+Info 76   [00:03:07.000] Search path: /user/username/projects/myproject/random
+Info 77   [00:03:08.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
+Info 78   [00:03:09.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 78   [00:03:10.000] 	Files (3)
 
-Info 78   [00:02:56.000] -----------------------------------------------
-Info 78   [00:02:57.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 78   [00:02:58.000] 	Files (2)
+Info 78   [00:03:11.000] -----------------------------------------------
+Info 78   [00:03:12.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 78   [00:03:13.000] 	Files (2)
 
-Info 78   [00:02:59.000] -----------------------------------------------
-Info 78   [00:03:00.000] Open files: 
-Info 78   [00:03:01.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
-Info 78   [00:03:02.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
-Info 78   [00:03:03.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
-Info 78   [00:03:04.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 78   [00:03:14.000] -----------------------------------------------
+Info 78   [00:03:15.000] Open files: 
+Info 78   [00:03:16.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
+Info 78   [00:03:17.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 78   [00:03:18.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
+Info 78   [00:03:19.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 After request
 
 PolledWatches::
@@ -975,11 +992,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 78   [00:03:05.000] response:
+Info 78   [00:03:20.000] response:
     {
       "responseRequired": false
     }
-Info 79   [00:03:06.000] request:
+Info 79   [00:03:21.000] request:
     {
       "command": "close",
       "arguments": {
@@ -990,18 +1007,18 @@ Info 79   [00:03:06.000] request:
     }
 Before request
 
-Info 80   [00:03:07.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/main.ts 500 undefined WatchType: Closed Script info
-Info 81   [00:03:08.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 81   [00:03:09.000] 	Files (3)
+Info 80   [00:03:22.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/main.ts 500 undefined WatchType: Closed Script info
+Info 81   [00:03:23.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 81   [00:03:24.000] 	Files (3)
 
-Info 81   [00:03:10.000] -----------------------------------------------
-Info 81   [00:03:11.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 81   [00:03:12.000] 	Files (2)
+Info 81   [00:03:25.000] -----------------------------------------------
+Info 81   [00:03:26.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 81   [00:03:27.000] 	Files (2)
 
-Info 81   [00:03:13.000] -----------------------------------------------
-Info 81   [00:03:14.000] Open files: 
-Info 81   [00:03:15.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
-Info 81   [00:03:16.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 81   [00:03:28.000] -----------------------------------------------
+Info 81   [00:03:29.000] Open files: 
+Info 81   [00:03:30.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
+Info 81   [00:03:31.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 After request
 
 PolledWatches::
@@ -1040,11 +1057,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 81   [00:03:17.000] response:
+Info 81   [00:03:32.000] response:
     {
       "responseRequired": false
     }
-Info 82   [00:03:18.000] request:
+Info 82   [00:03:33.000] request:
     {
       "command": "close",
       "arguments": {
@@ -1055,16 +1072,16 @@ Info 82   [00:03:18.000] request:
     }
 Before request
 
-Info 83   [00:03:19.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
-Info 84   [00:03:20.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 84   [00:03:21.000] 	Files (3)
+Info 83   [00:03:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
+Info 84   [00:03:35.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 84   [00:03:36.000] 	Files (3)
 
-Info 84   [00:03:22.000] -----------------------------------------------
-Info 84   [00:03:23.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 84   [00:03:24.000] 	Files (2)
+Info 84   [00:03:37.000] -----------------------------------------------
+Info 84   [00:03:38.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 84   [00:03:39.000] 	Files (2)
 
-Info 84   [00:03:25.000] -----------------------------------------------
-Info 84   [00:03:26.000] Open files: 
+Info 84   [00:03:40.000] -----------------------------------------------
+Info 84   [00:03:41.000] Open files: 
 After request
 
 PolledWatches::
@@ -1105,11 +1122,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 84   [00:03:27.000] response:
+Info 84   [00:03:42.000] response:
     {
       "responseRequired": false
     }
-Info 85   [00:03:28.000] request:
+Info 85   [00:03:43.000] request:
     {
       "command": "open",
       "arguments": {
@@ -1120,12 +1137,12 @@ Info 85   [00:03:28.000] request:
     }
 Before request
 
-Info 86   [00:03:29.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
-Info 87   [00:03:30.000] Search path: /user/username/projects/myproject/random
-Info 88   [00:03:31.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
-Info 89   [00:03:32.000] `remove Project::
-Info 90   [00:03:33.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 91   [00:03:34.000] 	Files (3)
+Info 86   [00:03:44.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
+Info 87   [00:03:45.000] Search path: /user/username/projects/myproject/random
+Info 88   [00:03:46.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
+Info 89   [00:03:47.000] `remove Project::
+Info 90   [00:03:48.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 91   [00:03:49.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/decls/fns.d.ts
 	/user/username/projects/myproject/main/main.ts
@@ -1138,30 +1155,30 @@ Info 91   [00:03:34.000] 	Files (3)
 	main.ts
 	  Matched by default include pattern '**/*'
 
-Info 92   [00:03:35.000] -----------------------------------------------
-Info 93   [00:03:36.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
-Info 94   [00:03:37.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
-Info 95   [00:03:38.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-Info 96   [00:03:39.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info 97   [00:03:40.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info 98   [00:03:41.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-Info 99   [00:03:42.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info 100  [00:03:43.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info 101  [00:03:44.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Info 102  [00:03:45.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Info 103  [00:03:46.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Info 104  [00:03:47.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Info 105  [00:03:48.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main/main.ts 500 undefined WatchType: Closed Script info
-Info 106  [00:03:49.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
-Info 107  [00:03:50.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
-Info 108  [00:03:51.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
-Info 109  [00:03:52.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 109  [00:03:53.000] 	Files (2)
+Info 92   [00:03:50.000] -----------------------------------------------
+Info 93   [00:03:51.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
+Info 94   [00:03:52.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
+Info 95   [00:03:53.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 96   [00:03:54.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
+Info 97   [00:03:55.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
+Info 98   [00:03:56.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 99   [00:03:57.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
+Info 100  [00:03:58.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
+Info 101  [00:03:59.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 102  [00:04:00.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 103  [00:04:01.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 104  [00:04:02.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 105  [00:04:03.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/main/main.ts 500 undefined WatchType: Closed Script info
+Info 106  [00:04:04.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
+Info 107  [00:04:05.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
+Info 108  [00:04:06.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
+Info 109  [00:04:07.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 109  [00:04:08.000] 	Files (2)
 
-Info 109  [00:03:54.000] -----------------------------------------------
-Info 109  [00:03:55.000] Open files: 
-Info 109  [00:03:56.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
-Info 109  [00:03:57.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 109  [00:04:09.000] -----------------------------------------------
+Info 109  [00:04:10.000] Open files: 
+Info 109  [00:04:11.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
+Info 109  [00:04:12.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 After request
 
 PolledWatches::
@@ -1208,7 +1225,7 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/decls:
   {}
 
-Info 109  [00:03:58.000] response:
+Info 109  [00:04:13.000] response:
     {
       "responseRequired": false
     }

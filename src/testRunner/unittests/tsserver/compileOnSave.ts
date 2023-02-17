@@ -3,6 +3,7 @@ import {
     createServerHost,
     File,
     libFile,
+    TestServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
@@ -16,7 +17,7 @@ import {
     toExternalFiles,
 } from "./helpers";
 
-function createTestTypingsInstaller(host: ts.server.ServerHost, logger: Logger) {
+function createTestTypingsInstaller(host: TestServerHost, logger: Logger) {
     return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host, logger);
 }
 

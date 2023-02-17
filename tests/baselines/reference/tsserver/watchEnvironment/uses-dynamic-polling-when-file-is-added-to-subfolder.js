@@ -1,18 +1,4 @@
-TI:: [00:00:21.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:22.000] Processing cache location '/a/data/'
-TI:: [00:00:23.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:24.000] Finished processing cache location '/a/data/'
-Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:26.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/username/project/src/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
+TI:: Creating typing installer
 //// [/a/username/project/src/index.ts]
 import {} from "./"
 
@@ -36,11 +22,42 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 2    [00:00:27.000] Search path: /a/username/project/src
-Info 3    [00:00:28.000] For info: /a/username/project/src/index.ts :: Config file name: /a/username/project/tsconfig.json
-Info 4    [00:00:29.000] Creating configuration project /a/username/project/tsconfig.json
-Info 5    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /a/username/project/tsconfig.json 2000 undefined Project: /a/username/project/tsconfig.json WatchType: Config file
-Info 6    [00:00:31.000] Config: /a/username/project/tsconfig.json : {
+TI:: [00:00:21.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:22.000] Processing cache location '/a/data/'
+TI:: [00:00:23.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:24.000] Finished processing cache location '/a/data/'
+TI:: [00:00:25.000] Npm config file: /a/data/package.json
+TI:: [00:00:26.000] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [00:00:31.000] Updating types-registry npm package...
+TI:: [00:00:32.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:00:39.000] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/types-registry/index.json]
+{
+ "entries": {}
+}
+
+
+Info 0    [00:00:40.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:41.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/username/project/src/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
+
+Info 2    [00:00:42.000] Search path: /a/username/project/src
+Info 3    [00:00:43.000] For info: /a/username/project/src/index.ts :: Config file name: /a/username/project/tsconfig.json
+Info 4    [00:00:44.000] Creating configuration project /a/username/project/tsconfig.json
+Info 5    [00:00:45.000] FileWatcher:: Added:: WatchInfo: /a/username/project/tsconfig.json 2000 undefined Project: /a/username/project/tsconfig.json WatchType: Config file
+Info 6    [00:00:46.000] Config: /a/username/project/tsconfig.json : {
  "rootNames": [
   "/a/username/project/src/file1.ts",
   "/a/username/project/src/index.ts"
@@ -52,20 +69,20 @@ Info 6    [00:00:31.000] Config: /a/username/project/tsconfig.json : {
   "synchronousWatchDirectory": true
  }
 }
-Info 7    [00:00:32.000] FileWatcher:: Close:: WatchInfo: /a/username/project/tsconfig.json 2000 undefined Project: /a/username/project/tsconfig.json WatchType: Config file
-Info 8    [00:00:33.000] FileWatcher:: Added:: WatchInfo: /a/username/project/tsconfig.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Config file
-Info 9    [00:00:34.000] DirectoryWatcher:: Added:: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
-Info 10   [00:00:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
-Info 11   [00:00:36.000] FileWatcher:: Added:: WatchInfo: /a/username/project/src/file1.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:00:37.000] Starting updateGraphWorker: Project: /a/username/project/tsconfig.json
-Info 13   [00:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 14   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 15   [00:00:40.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 16   [00:00:41.000] DirectoryWatcher:: Added:: WatchInfo: /a/username/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Type roots
-Info 17   [00:00:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Type roots
-Info 18   [00:00:43.000] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 19   [00:00:44.000] Project '/a/username/project/tsconfig.json' (Configured)
-Info 20   [00:00:45.000] 	Files (3)
+Info 7    [00:00:47.000] FileWatcher:: Close:: WatchInfo: /a/username/project/tsconfig.json 2000 undefined Project: /a/username/project/tsconfig.json WatchType: Config file
+Info 8    [00:00:48.000] FileWatcher:: Added:: WatchInfo: /a/username/project/tsconfig.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Config file
+Info 9    [00:00:49.000] DirectoryWatcher:: Added:: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
+Info 10   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
+Info 11   [00:00:51.000] FileWatcher:: Added:: WatchInfo: /a/username/project/src/file1.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:00:52.000] Starting updateGraphWorker: Project: /a/username/project/tsconfig.json
+Info 13   [00:00:53.000] DirectoryWatcher:: Added:: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 14   [00:00:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 15   [00:00:55.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 16   [00:00:56.000] DirectoryWatcher:: Added:: WatchInfo: /a/username/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Type roots
+Info 17   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Type roots
+Info 18   [00:00:58.000] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 19   [00:00:59.000] Project '/a/username/project/tsconfig.json' (Configured)
+Info 20   [00:01:00.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/a/username/project/src/file1.ts
 	/a/username/project/src/index.ts
@@ -79,14 +96,14 @@ Info 20   [00:00:45.000] 	Files (3)
 	  Matched by default include pattern '**/*'
 	  Imported via "./" from file 'src/index.ts'
 
-Info 21   [00:00:46.000] -----------------------------------------------
-Info 22   [00:00:47.000] Project '/a/username/project/tsconfig.json' (Configured)
-Info 22   [00:00:48.000] 	Files (3)
+Info 21   [00:01:01.000] -----------------------------------------------
+Info 22   [00:01:02.000] Project '/a/username/project/tsconfig.json' (Configured)
+Info 22   [00:01:03.000] 	Files (3)
 
-Info 22   [00:00:49.000] -----------------------------------------------
-Info 22   [00:00:50.000] Open files: 
-Info 22   [00:00:51.000] 	FileName: /a/username/project/src/index.ts ProjectRootPath: undefined
-Info 22   [00:00:52.000] 		Projects: /a/username/project/tsconfig.json
+Info 22   [00:01:04.000] -----------------------------------------------
+Info 22   [00:01:05.000] Open files: 
+Info 22   [00:01:06.000] 	FileName: /a/username/project/src/index.ts ProjectRootPath: undefined
+Info 22   [00:01:07.000] 		Projects: /a/username/project/tsconfig.json
 After request
 
 FsWatches::
@@ -97,11 +114,11 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 22   [00:00:53.000] response:
+Info 22   [00:01:08.000] response:
     {
       "responseRequired": false
     }
-Info 23   [00:00:54.000] request:
+Info 23   [00:01:09.000] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -116,7 +133,7 @@ Before request
 
 After request
 
-Info 24   [00:00:55.000] response:
+Info 24   [00:01:10.000] response:
     {
       "response": {
         "isGlobalCompletion": false,
@@ -138,16 +155,16 @@ Before running timeout callbacks
 
 
 
-Info 25   [00:00:58.000] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
-Info 26   [00:00:59.000] Scheduled: /a/username/project/tsconfig.json
-Info 27   [00:01:00.000] Scheduled: *ensureProjectForOpenFiles*
-Info 28   [00:01:01.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
-Info 29   [00:01:02.000] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 30   [00:01:03.000] Scheduled: /a/username/project/tsconfig.jsonFailedLookupInvalidation
-Info 31   [00:01:04.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 25   [00:01:13.000] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
+Info 26   [00:01:14.000] Scheduled: /a/username/project/tsconfig.json
+Info 27   [00:01:15.000] Scheduled: *ensureProjectForOpenFiles*
+Info 28   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
+Info 29   [00:01:17.000] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 30   [00:01:18.000] Scheduled: /a/username/project/tsconfig.jsonFailedLookupInvalidation
+Info 31   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 After running timeout callbacks
 
-Info 32   [00:01:05.000] request:
+Info 32   [00:01:20.000] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -160,12 +177,12 @@ Info 32   [00:01:05.000] request:
     }
 Before request
 
-Info 33   [00:01:06.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 34   [00:01:07.000] FileWatcher:: Added:: WatchInfo: /a/username/project/src/file2.ts 500 undefined WatchType: Closed Script info
-Info 35   [00:01:08.000] Starting updateGraphWorker: Project: /a/username/project/tsconfig.json
-Info 36   [00:01:09.000] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 37   [00:01:10.000] Project '/a/username/project/tsconfig.json' (Configured)
-Info 38   [00:01:11.000] 	Files (4)
+Info 33   [00:01:21.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info 34   [00:01:22.000] FileWatcher:: Added:: WatchInfo: /a/username/project/src/file2.ts 500 undefined WatchType: Closed Script info
+Info 35   [00:01:23.000] Starting updateGraphWorker: Project: /a/username/project/tsconfig.json
+Info 36   [00:01:24.000] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 37   [00:01:25.000] Project '/a/username/project/tsconfig.json' (Configured)
+Info 38   [00:01:26.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/a/username/project/src/file1.ts
 	/a/username/project/src/index.ts
@@ -182,7 +199,7 @@ Info 38   [00:01:11.000] 	Files (4)
 	src/file2.ts
 	  Matched by default include pattern '**/*'
 
-Info 39   [00:01:12.000] -----------------------------------------------
+Info 39   [00:01:27.000] -----------------------------------------------
 After request
 
 FsWatches::
@@ -195,7 +212,7 @@ FsWatches::
 /a/username/project/src/file2.ts: *new*
   {}
 
-Info 40   [00:01:13.000] response:
+Info 40   [00:01:28.000] response:
     {
       "response": {
         "isGlobalCompletion": false,

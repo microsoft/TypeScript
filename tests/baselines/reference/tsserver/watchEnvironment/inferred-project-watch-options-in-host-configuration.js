@@ -1,22 +1,4 @@
-TI:: [00:00:29.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:30.000] Processing cache location '/a/data/'
-TI:: [00:00:31.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:32.000] Finished processing cache location '/a/data/'
-Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:34.000] request:
-    {
-      "command": "configure",
-      "arguments": {
-        "watchOptions": {
-          "excludeDirectories": [
-            "node_modules"
-          ]
-        }
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
+TI:: Creating typing installer
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -40,16 +22,51 @@ export { foo } from "./foo";
 export function foo(): string;
 
 
-Info 2    [00:00:35.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
-Info 3    [00:00:36.000] response:
+TI:: [00:00:29.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:30.000] Processing cache location '/a/data/'
+TI:: [00:00:31.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:32.000] Finished processing cache location '/a/data/'
+TI:: [00:00:33.000] Npm config file: /a/data/package.json
+TI:: [00:00:34.000] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [00:00:39.000] Updating types-registry npm package...
+TI:: [00:00:40.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:00:47.000] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/types-registry/index.json]
+{
+ "entries": {}
+}
+
+
+Info 0    [00:00:48.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:49.000] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "watchOptions": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
+
+Info 2    [00:00:50.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
+Info 3    [00:00:51.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
 After request
 
-Info 4    [00:00:37.000] response:
+Info 4    [00:00:52.000] response:
     {
       "responseRequired": false
     }
-Info 5    [00:00:38.000] request:
+Info 5    [00:00:53.000] request:
     {
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
@@ -67,12 +84,12 @@ Before request
 
 After request
 
-Info 6    [00:00:39.000] response:
+Info 6    [00:00:54.000] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 7    [00:00:40.000] request:
+Info 7    [00:00:55.000] request:
     {
       "command": "open",
       "arguments": {
@@ -84,22 +101,22 @@ Info 7    [00:00:40.000] request:
     }
 Before request
 
-Info 8    [00:00:41.000] Search path: /user/username/projects/myproject/src
-Info 9    [00:00:42.000] For info: /user/username/projects/myproject/src/main.ts :: No config files found.
-Info 10   [00:00:43.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
-Info 11   [00:00:44.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
-Info 12   [00:00:45.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
-Info 13   [00:00:46.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
-Info 14   [00:00:47.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 15   [00:00:48.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["node_modules"]} WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 16   [00:00:49.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 17   [00:00:50.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 {"excludeDirectories":["node_modules"]} WatchType: Closed Script info
-Info 18   [00:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 19   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 20   [00:00:53.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 21   [00:00:54.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 22   [00:00:55.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 23   [00:00:56.000] 	Files (4)
+Info 8    [00:00:56.000] Search path: /user/username/projects/myproject/src
+Info 9    [00:00:57.000] For info: /user/username/projects/myproject/src/main.ts :: No config files found.
+Info 10   [00:00:58.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
+Info 11   [00:00:59.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
+Info 12   [00:01:00.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
+Info 13   [00:01:01.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
+Info 14   [00:01:02.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 15   [00:01:03.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["node_modules"]} WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 16   [00:01:04.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 17   [00:01:05.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 {"excludeDirectories":["node_modules"]} WatchType: Closed Script info
+Info 18   [00:01:06.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 19   [00:01:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 20   [00:01:08.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 21   [00:01:09.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 22   [00:01:10.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 23   [00:01:11.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/node_modules/bar/foo.d.ts
 	/user/username/projects/myproject/node_modules/bar/index.d.ts
@@ -115,14 +132,14 @@ Info 23   [00:00:56.000] 	Files (4)
 	src/main.ts
 	  Root file specified for compilation
 
-Info 24   [00:00:57.000] -----------------------------------------------
-Info 25   [00:00:58.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 25   [00:00:59.000] 	Files (4)
+Info 24   [00:01:12.000] -----------------------------------------------
+Info 25   [00:01:13.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 25   [00:01:14.000] 	Files (4)
 
-Info 25   [00:01:00.000] -----------------------------------------------
-Info 25   [00:01:01.000] Open files: 
-Info 25   [00:01:02.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
-Info 25   [00:01:03.000] 		Projects: /dev/null/inferredProject1*
+Info 25   [00:01:15.000] -----------------------------------------------
+Info 25   [00:01:16.000] Open files: 
+Info 25   [00:01:17.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
+Info 25   [00:01:18.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
@@ -143,7 +160,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
-Info 25   [00:01:04.000] response:
+Info 25   [00:01:19.000] response:
     {
       "responseRequired": false
     }

@@ -1,18 +1,4 @@
-TI:: [00:00:33.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:34.000] Processing cache location '/a/data/'
-TI:: [00:00:35.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:36.000] Finished processing cache location '/a/data/'
-Info 0    [00:00:37.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:38.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/app1/app.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
+TI:: Creating typing installer
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -42,11 +28,42 @@ let y = 10;
 {"files":["app.ts","../core/core.ts"],"compilerOptions":{"outFile":"build/output.js"},"compileOnSave":true}
 
 
-Info 2    [00:00:39.000] Search path: /user/username/projects/myproject/app1
-Info 3    [00:00:40.000] For info: /user/username/projects/myproject/app1/app.ts :: Config file name: /user/username/projects/myproject/app1/tsconfig.json
-Info 4    [00:00:41.000] Creating configuration project /user/username/projects/myproject/app1/tsconfig.json
-Info 5    [00:00:42.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app1/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Config file
-Info 6    [00:00:43.000] Config: /user/username/projects/myproject/app1/tsconfig.json : {
+TI:: [00:00:33.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:34.000] Processing cache location '/a/data/'
+TI:: [00:00:35.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:36.000] Finished processing cache location '/a/data/'
+TI:: [00:00:37.000] Npm config file: /a/data/package.json
+TI:: [00:00:38.000] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [00:00:43.000] Updating types-registry npm package...
+TI:: [00:00:44.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:00:51.000] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/types-registry/index.json]
+{
+ "entries": {}
+}
+
+
+Info 0    [00:00:52.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:53.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/app1/app.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
+
+Info 2    [00:00:54.000] Search path: /user/username/projects/myproject/app1
+Info 3    [00:00:55.000] For info: /user/username/projects/myproject/app1/app.ts :: Config file name: /user/username/projects/myproject/app1/tsconfig.json
+Info 4    [00:00:56.000] Creating configuration project /user/username/projects/myproject/app1/tsconfig.json
+Info 5    [00:00:57.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app1/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Config file
+Info 6    [00:00:58.000] Config: /user/username/projects/myproject/app1/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/app1/app.ts",
   "/user/username/projects/myproject/core/core.ts"
@@ -56,16 +73,16 @@ Info 6    [00:00:43.000] Config: /user/username/projects/myproject/app1/tsconfig
   "configFilePath": "/user/username/projects/myproject/app1/tsconfig.json"
  }
 }
-Info 7    [00:00:44.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/core.ts 500 undefined WatchType: Closed Script info
-Info 8    [00:00:45.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json
-Info 9    [00:00:46.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 10   [00:00:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
-Info 11   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
-Info 12   [00:00:49.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
-Info 13   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
-Info 14   [00:00:51.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 15   [00:00:52.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
-Info 16   [00:00:53.000] 	Files (3)
+Info 7    [00:00:59.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/core.ts 500 undefined WatchType: Closed Script info
+Info 8    [00:01:00.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json
+Info 9    [00:01:01.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 10   [00:01:02.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
+Info 11   [00:01:03.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
+Info 12   [00:01:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
+Info 13   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
+Info 14   [00:01:06.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 15   [00:01:07.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
+Info 16   [00:01:08.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/app1/app.ts
 	/user/username/projects/myproject/core/core.ts
@@ -78,14 +95,14 @@ Info 16   [00:00:53.000] 	Files (3)
 	../core/core.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 17   [00:00:54.000] -----------------------------------------------
-Info 18   [00:00:55.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
-Info 18   [00:00:56.000] 	Files (3)
+Info 17   [00:01:09.000] -----------------------------------------------
+Info 18   [00:01:10.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
+Info 18   [00:01:11.000] 	Files (3)
 
-Info 18   [00:00:57.000] -----------------------------------------------
-Info 18   [00:00:58.000] Open files: 
-Info 18   [00:00:59.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
-Info 18   [00:01:00.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
+Info 18   [00:01:12.000] -----------------------------------------------
+Info 18   [00:01:13.000] Open files: 
+Info 18   [00:01:14.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
+Info 18   [00:01:15.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
 After request
 
 PolledWatches::
@@ -102,11 +119,11 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 18   [00:01:01.000] response:
+Info 18   [00:01:16.000] response:
     {
       "responseRequired": false
     }
-Info 19   [00:01:02.000] request:
+Info 19   [00:01:17.000] request:
     {
       "command": "open",
       "arguments": {
@@ -117,11 +134,11 @@ Info 19   [00:01:02.000] request:
     }
 Before request
 
-Info 20   [00:01:03.000] Search path: /user/username/projects/myproject/app2
-Info 21   [00:01:04.000] For info: /user/username/projects/myproject/app2/app.ts :: Config file name: /user/username/projects/myproject/app2/tsconfig.json
-Info 22   [00:01:05.000] Creating configuration project /user/username/projects/myproject/app2/tsconfig.json
-Info 23   [00:01:06.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Config file
-Info 24   [00:01:07.000] Config: /user/username/projects/myproject/app2/tsconfig.json : {
+Info 20   [00:01:18.000] Search path: /user/username/projects/myproject/app2
+Info 21   [00:01:19.000] For info: /user/username/projects/myproject/app2/app.ts :: Config file name: /user/username/projects/myproject/app2/tsconfig.json
+Info 22   [00:01:20.000] Creating configuration project /user/username/projects/myproject/app2/tsconfig.json
+Info 23   [00:01:21.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Config file
+Info 24   [00:01:22.000] Config: /user/username/projects/myproject/app2/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/app2/app.ts",
   "/user/username/projects/myproject/core/core.ts"
@@ -131,14 +148,14 @@ Info 24   [00:01:07.000] Config: /user/username/projects/myproject/app2/tsconfig
   "configFilePath": "/user/username/projects/myproject/app2/tsconfig.json"
  }
 }
-Info 25   [00:01:08.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json
-Info 26   [00:01:09.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app2/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
-Info 27   [00:01:10.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app2/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
-Info 28   [00:01:11.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
-Info 29   [00:01:12.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
-Info 30   [00:01:13.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 31   [00:01:14.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
-Info 32   [00:01:15.000] 	Files (3)
+Info 25   [00:01:23.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json
+Info 26   [00:01:24.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app2/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
+Info 27   [00:01:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app2/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
+Info 28   [00:01:26.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
+Info 29   [00:01:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
+Info 30   [00:01:28.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 31   [00:01:29.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
+Info 32   [00:01:30.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/app2/app.ts
 	/user/username/projects/myproject/core/core.ts
@@ -151,20 +168,20 @@ Info 32   [00:01:15.000] 	Files (3)
 	../core/core.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 33   [00:01:16.000] -----------------------------------------------
-Info 34   [00:01:17.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
-Info 34   [00:01:18.000] 	Files (3)
+Info 33   [00:01:31.000] -----------------------------------------------
+Info 34   [00:01:32.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
+Info 34   [00:01:33.000] 	Files (3)
 
-Info 34   [00:01:19.000] -----------------------------------------------
-Info 34   [00:01:20.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
-Info 34   [00:01:21.000] 	Files (3)
+Info 34   [00:01:34.000] -----------------------------------------------
+Info 34   [00:01:35.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
+Info 34   [00:01:36.000] 	Files (3)
 
-Info 34   [00:01:22.000] -----------------------------------------------
-Info 34   [00:01:23.000] Open files: 
-Info 34   [00:01:24.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
-Info 34   [00:01:25.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
-Info 34   [00:01:26.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
-Info 34   [00:01:27.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
+Info 34   [00:01:37.000] -----------------------------------------------
+Info 34   [00:01:38.000] Open files: 
+Info 34   [00:01:39.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
+Info 34   [00:01:40.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
+Info 34   [00:01:41.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
+Info 34   [00:01:42.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
 After request
 
 PolledWatches::
@@ -185,11 +202,11 @@ FsWatches::
 /user/username/projects/myproject/app2/tsconfig.json: *new*
   {}
 
-Info 34   [00:01:28.000] response:
+Info 34   [00:01:43.000] response:
     {
       "responseRequired": false
     }
-Info 35   [00:01:29.000] request:
+Info 35   [00:01:44.000] request:
     {
       "command": "open",
       "arguments": {
@@ -200,24 +217,24 @@ Info 35   [00:01:29.000] request:
     }
 Before request
 
-Info 36   [00:01:30.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/core/core.ts 500 undefined WatchType: Closed Script info
-Info 37   [00:01:31.000] Search path: /user/username/projects/myproject/core
-Info 38   [00:01:32.000] For info: /user/username/projects/myproject/core/core.ts :: No config files found.
-Info 39   [00:01:33.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
-Info 39   [00:01:34.000] 	Files (3)
+Info 36   [00:01:45.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/core/core.ts 500 undefined WatchType: Closed Script info
+Info 37   [00:01:46.000] Search path: /user/username/projects/myproject/core
+Info 38   [00:01:47.000] For info: /user/username/projects/myproject/core/core.ts :: No config files found.
+Info 39   [00:01:48.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
+Info 39   [00:01:49.000] 	Files (3)
 
-Info 39   [00:01:35.000] -----------------------------------------------
-Info 39   [00:01:36.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
-Info 39   [00:01:37.000] 	Files (3)
+Info 39   [00:01:50.000] -----------------------------------------------
+Info 39   [00:01:51.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
+Info 39   [00:01:52.000] 	Files (3)
 
-Info 39   [00:01:38.000] -----------------------------------------------
-Info 39   [00:01:39.000] Open files: 
-Info 39   [00:01:40.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
-Info 39   [00:01:41.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
-Info 39   [00:01:42.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
-Info 39   [00:01:43.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
-Info 39   [00:01:44.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
-Info 39   [00:01:45.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
+Info 39   [00:01:53.000] -----------------------------------------------
+Info 39   [00:01:54.000] Open files: 
+Info 39   [00:01:55.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
+Info 39   [00:01:56.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
+Info 39   [00:01:57.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
+Info 39   [00:01:58.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
+Info 39   [00:01:59.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
+Info 39   [00:02:00.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
 After request
 
 PolledWatches::
@@ -240,11 +257,11 @@ FsWatches *deleted*::
 /user/username/projects/myproject/core/core.ts:
   {}
 
-Info 39   [00:01:46.000] response:
+Info 39   [00:02:01.000] response:
     {
       "responseRequired": false
     }
-Info 40   [00:01:47.000] request:
+Info 40   [00:02:02.000] request:
     {
       "command": "change",
       "arguments": {
@@ -262,11 +279,11 @@ Before request
 
 After request
 
-Info 41   [00:01:48.000] response:
+Info 41   [00:02:03.000] response:
     {
       "responseRequired": false
     }
-Info 42   [00:01:49.000] request:
+Info 42   [00:02:04.000] request:
     {
       "command": "change",
       "arguments": {
@@ -284,13 +301,13 @@ Before request
 
 After request
 
-Info 43   [00:01:50.000] response:
+Info 43   [00:02:05.000] response:
     {
       "responseRequired": false
     }
 Project1 is dirty: true
 Project2 is dirty: true
-Info 44   [00:01:51.000] request:
+Info 44   [00:02:06.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -301,47 +318,47 @@ Info 44   [00:01:51.000] request:
     }
 Before request
 
-Info 45   [00:01:52.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json
-Info 46   [00:01:53.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 47   [00:01:54.000] Different program with same set of files
-Info 48   [00:01:55.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json
-Info 49   [00:01:56.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 50   [00:01:57.000] Different program with same set of files
-Info 51   [00:01:58.000] Before ensureProjectForOpenFiles:
-Info 52   [00:01:59.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
-Info 52   [00:02:00.000] 	Files (3)
+Info 45   [00:02:07.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json
+Info 46   [00:02:08.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 47   [00:02:09.000] Different program with same set of files
+Info 48   [00:02:10.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json
+Info 49   [00:02:11.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 50   [00:02:12.000] Different program with same set of files
+Info 51   [00:02:13.000] Before ensureProjectForOpenFiles:
+Info 52   [00:02:14.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
+Info 52   [00:02:15.000] 	Files (3)
 
-Info 52   [00:02:01.000] -----------------------------------------------
-Info 52   [00:02:02.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
-Info 52   [00:02:03.000] 	Files (3)
+Info 52   [00:02:16.000] -----------------------------------------------
+Info 52   [00:02:17.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
+Info 52   [00:02:18.000] 	Files (3)
 
-Info 52   [00:02:04.000] -----------------------------------------------
-Info 52   [00:02:05.000] Open files: 
-Info 52   [00:02:06.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
-Info 52   [00:02:07.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
-Info 52   [00:02:08.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
-Info 52   [00:02:09.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
-Info 52   [00:02:10.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
-Info 52   [00:02:11.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
-Info 52   [00:02:12.000] After ensureProjectForOpenFiles:
-Info 53   [00:02:13.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
-Info 53   [00:02:14.000] 	Files (3)
+Info 52   [00:02:19.000] -----------------------------------------------
+Info 52   [00:02:20.000] Open files: 
+Info 52   [00:02:21.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
+Info 52   [00:02:22.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
+Info 52   [00:02:23.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
+Info 52   [00:02:24.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
+Info 52   [00:02:25.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
+Info 52   [00:02:26.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
+Info 52   [00:02:27.000] After ensureProjectForOpenFiles:
+Info 53   [00:02:28.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
+Info 53   [00:02:29.000] 	Files (3)
 
-Info 53   [00:02:15.000] -----------------------------------------------
-Info 53   [00:02:16.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
-Info 53   [00:02:17.000] 	Files (3)
+Info 53   [00:02:30.000] -----------------------------------------------
+Info 53   [00:02:31.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
+Info 53   [00:02:32.000] 	Files (3)
 
-Info 53   [00:02:18.000] -----------------------------------------------
-Info 53   [00:02:19.000] Open files: 
-Info 53   [00:02:20.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
-Info 53   [00:02:21.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
-Info 53   [00:02:22.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
-Info 53   [00:02:23.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
-Info 53   [00:02:24.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
-Info 53   [00:02:25.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
+Info 53   [00:02:33.000] -----------------------------------------------
+Info 53   [00:02:34.000] Open files: 
+Info 53   [00:02:35.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
+Info 53   [00:02:36.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
+Info 53   [00:02:37.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
+Info 53   [00:02:38.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
+Info 53   [00:02:39.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
+Info 53   [00:02:40.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
 After request
 
-Info 53   [00:02:26.000] response:
+Info 53   [00:02:41.000] response:
     {
       "response": [
         {

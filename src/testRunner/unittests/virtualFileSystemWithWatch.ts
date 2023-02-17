@@ -414,6 +414,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
                 }
             }
         }
+        // Ensure root folder exists
+        this.ensureFileOrFolder({ path: !this.windowsStyleRoot ? "/" : this.getHostSpecificPath("/") });
     }
 
     modifyFile(filePath: string, content: string, options?: Partial<WatchInvokeOptions>) {
@@ -1174,6 +1176,7 @@ export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles
 
 export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
     const host = inputHost as TestServerHostTrackingWrittenFiles;
+    if (host.writtenFiles) return host;
     const originalWriteFile = host.writeFile;
     host.writtenFiles = new Map<Path, number>();
     host.writeFile = (fileName, content) => {

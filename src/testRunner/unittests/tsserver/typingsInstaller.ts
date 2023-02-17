@@ -26,14 +26,14 @@ import NameValidationResult = ts.JsTyping.NameValidationResult;
 interface InstallerParams {
     globalTypingsCacheLocation?: string;
     throttleLimit?: number;
-    typesRegistry?: Map<string, ts.MapLike<string>>;
+    typesRegistry?: string | readonly string[];
 }
 
 type InstallWorkerThrowingError = string;
 type InstallWorkerExecutingCommand = [installedTypings: string[] | string, typingFiles: File[]];
 type CustomInstallWorker = (installer: Installer, requestId: number, packageNames: string[], cb: ts.server.typingsInstaller.RequestCompletedAction) => void;
 class Installer extends TestTypingsInstaller {
-    constructor(host: ts.server.ServerHost, logger: Logger, p?: InstallerParams) {
+    constructor(host: TestServerHost, logger: Logger, p?: InstallerParams) {
         super(
             (p && p.globalTypingsCacheLocation) || "/a/data",
             (p && p.throttleLimit) || 5,
@@ -117,7 +117,7 @@ describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
             host,
             logger,
             "should not be called",
-            { typesRegistry: createTypesRegistry("config"), globalTypingsCacheLocation: typesCache }
+            { typesRegistry: "config", globalTypingsCacheLocation: typesCache }
         );
         const service = createProjectService(host, { typingsInstaller: installer, logger });
         service.openClientFile(f1.path);
@@ -163,7 +163,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/jquery"], [jquery]],
-            { typesRegistry: createTypesRegistry("jquery") }
+            { typesRegistry: "jquery" }
         );
 
         const projectService = createProjectService(host, {
@@ -204,7 +204,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/jquery"], [jquery]],
-            { typesRegistry: createTypesRegistry("jquery") }
+            { typesRegistry: "jquery" }
         );
 
         const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer, logger });
@@ -230,7 +230,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [[], []],
-            { typesRegistry: createTypesRegistry("jquery") }
+            { typesRegistry: "jquery" }
         );
 
         const projectService = createProjectService(host, { typingsInstaller: installer, logger });
@@ -291,7 +291,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             "nothing should get installed",
-            { typesRegistry: createTypesRegistry("node") },
+            { typesRegistry: "node" },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -314,7 +314,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const logger = createLoggerWithInMemoryLogs(host);
         const installer = new (class extends Installer {
             constructor() {
-                super(host, logger, { typesRegistry: createTypesRegistry("jquery") });
+                super(host, logger, { typesRegistry: "jquery" });
             }
             override enqueueInstallTypingsRequest() {
                 assert(false, "auto discovery should not be enabled");
@@ -349,7 +349,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/node"], [jquery]],
-            { typesRegistry: createTypesRegistry("jquery") },
+            { typesRegistry: "jquery" },
         );
         const projectFileName = "/a/app/test.csproj";
         const projectService = createProjectService(host, { typingsInstaller: installer, logger });
@@ -399,7 +399,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/lodash", "@types/react"], [lodashDts, reactDts]],
-            { typesRegistry: createTypesRegistry("lodash", "react") },
+            { typesRegistry: ["lodash", "react"] },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -431,7 +431,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [[], []],
-            { typesRegistry: createTypesRegistry("jquery") }
+            { typesRegistry: "jquery" }
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -460,7 +460,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [[], []],
-            { typesRegistry: createTypesRegistry("jquery") }
+            { typesRegistry: "jquery" }
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -495,7 +495,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [[], []],
-            { typesRegistry: createTypesRegistry("jquery") }
+            { typesRegistry: "jquery" }
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -560,7 +560,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/commander", "@types/express", "@types/jquery", "@types/moment"], [commander, express, jquery, moment]],
-            { typesRegistry: createTypesRegistry("jquery", "commander", "moment", "express") }
+            { typesRegistry: ["jquery", "commander", "moment", "express"] }
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -634,7 +634,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash"], typingFiles],
-            { throttleLimit: 3, typesRegistry: createTypesRegistry("commander", "express", "jquery", "moment", "lodash") },
+            { throttleLimit: 3, typesRegistry: ["commander", "express", "jquery", "moment", "lodash"] },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -711,7 +711,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 }
                 executeCommand(installer, requestId, packageNames, host, typingFiles.map(f => f.typings), typingFiles, cb);
             },
-            { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") },
+            { throttleLimit: 1, typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"] },
         );
 
         // Create project #1 with 4 typings
@@ -792,7 +792,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/zkat__cacache"], [cacacheDTS]],
-            { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("zkat__cacache", "nested", "commander") },
+            { globalTypingsCacheLocation: "/tmp", typesRegistry: ["zkat__cacache", "nested", "commander"] },
         );
 
         const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer, logger });
@@ -862,7 +862,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 host,
                 logger,
                 [["@types/jquery"], [jqueryDTS]],
-                { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery", "nested", "commander") },
+                { globalTypingsCacheLocation: "/tmp", typesRegistry: ["jquery", "nested", "commander"] },
             );
 
             const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer, logger });
@@ -924,7 +924,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/jquery"], [jqueryDTS]],
-            { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") },
+            { globalTypingsCacheLocation: "/tmp", typesRegistry: "jquery" },
         );
 
         const projectService = createProjectService(host, {
@@ -967,7 +967,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/jquery"], [jqueryDTS]],
-            { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") },
+            { globalTypingsCacheLocation: "/tmp", typesRegistry: "jquery" },
         );
 
         const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer, logger });
@@ -1003,7 +1003,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/commander"], [commander]],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") },
+            { globalTypingsCacheLocation: cachePath, typesRegistry: "commander" },
         );
         const service = createProjectService(host, { typingsInstaller: installer, logger });
         service.openClientFile(f.path);
@@ -1044,7 +1044,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/node", "@types/commander", `@types/${emberComponentDirectory}`], [node, commander, emberComponent]],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("node", "commander") },
+            { globalTypingsCacheLocation: cachePath, typesRegistry: ["node", "commander"] },
         );
         const service = createProjectService(host, { typingsInstaller: installer, logger });
         service.openClientFile(file.path);
@@ -1075,7 +1075,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [typeNames.map(name => `@types/${name}`), typeNames.map((name): File => ({ path: typePath(name), content: "" }))],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry(...typeNames) },
+            { globalTypingsCacheLocation: cachePath, typesRegistry: typeNames },
         );
         const service = createProjectService(host, {
             typingsInstaller: installer,
@@ -1108,7 +1108,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["foo"], []],
-            { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("foo") },
+            { globalTypingsCacheLocation: "/tmp", typesRegistry: "foo" },
         );
         const projectService = createProjectService(host, { typingsInstaller: installer, logger });
         projectService.openClientFile(f1.path);
@@ -1217,7 +1217,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [["@types/jquery"], [jquery]],
-            { typesRegistry: createTypesRegistry("jquery") }
+            { typesRegistry: "jquery" }
         );
 
         const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer, logger });
@@ -1273,7 +1273,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             [[], []],
-            { typesRegistry: createTypesRegistry("jquery") }
+            { typesRegistry: "jquery" }
         );
 
         const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer, logger });
@@ -1617,7 +1617,7 @@ describe("unittests:: tsserver:: typingsInstaller:: telemetry events", () => {
             host,
             logger,
             [["@types/commander"], [commander]],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") }
+            { globalTypingsCacheLocation: cachePath, typesRegistry: "commander" }
         );
         const projectService = createProjectService(host, { typingsInstaller: installer, logger });
         projectService.openClientFile(f1.path);
@@ -1659,7 +1659,7 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
             host,
             logger,
             [["@types/commander"], [commander]],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") }
+            { globalTypingsCacheLocation: cachePath, typesRegistry: "commander" }
         );
         const projectService = createProjectService(host, { typingsInstaller: installer, logger });
         projectService.openClientFile(f1.path);
@@ -1685,7 +1685,7 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
             host,
             logger,
             ["", []],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") }
+            { globalTypingsCacheLocation: cachePath, typesRegistry: "commander" }
         );
         const projectService = createProjectService(host, { typingsInstaller: installer, logger });
         projectService.openClientFile(f1.path);
@@ -1751,7 +1751,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
             host,
             logger,
             [typingNames, typingFiles],
-            { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("foo") },
+            { globalTypingsCacheLocation, typesRegistry: "foo" },
         );
         const projectService = createProjectService(host, { typingsInstaller: installer, logger });
         projectService.openClientFile(app.path);
@@ -1833,7 +1833,7 @@ declare module "stream" {
             host,
             logger,
             [["node"], [nodeTyping]],
-            { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("node") }
+            { globalTypingsCacheLocation, typesRegistry: "node" }
         );
         const projectService = createProjectService(host, { typingsInstaller: installer, logger });
         projectService.openClientFile(file.path);
@@ -1927,8 +1927,7 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
         const host = createServerHost(files, { currentDirectory });
         const logger = createLoggerWithInMemoryLogs(host);
 
-        const typesRegistry = createTypesRegistry("pkgcurrentdirectory");
-        const typingsInstaller = new TestTypingsInstaller(typingsCache, /*throttleLimit*/ 5, host, logger, typesRegistry);
+        const typingsInstaller = new TestTypingsInstaller(typingsCache, /*throttleLimit*/ 5, host, logger, "pkgcurrentdirectory");
 
         const projectService = createProjectService(host, { typingsInstaller, logger });
 
