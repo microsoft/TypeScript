@@ -44,7 +44,16 @@
                 "escapedText": "name1"
             },
             "isNameFirst": false,
-            "isBracketed": true
+            "isBracketed": true,
+            "initializer": {
+                "kind": "NumericLiteral",
+                "pos": 33,
+                "end": 35,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "text": "1",
+                "numericLiteralFlags": 0
+            }
         },
         "length": 1,
         "pos": 8,
