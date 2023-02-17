@@ -11,5 +11,5 @@
 
 verify.signatureHelp({
     marker: "1",
-    text: "f(p?: Thing): void"
+    text: "f(p?: Thing = Foo()): void"
 });
