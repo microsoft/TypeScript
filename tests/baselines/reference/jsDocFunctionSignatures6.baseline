@@ -5,7 +5,7 @@
 //  * @param {string} [p3] - Another optional param
 //  * @param {string} [p4="test"] - An optional param with a default value
 //  */
-// function f1(p1, p2, p3, p4){}
+// function f1(p1, p2, p3, p4 = "Ignored"){}
 // f1('foo', 'bar', 'baz', 'qux');
 //    ^
 // | ----------------------------------------------------------------------
@@ -32,7 +32,7 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/Foo.js",
-      "position": 244,
+      "position": 256,
       "name": "1"
     },
     "item": {
@@ -293,7 +293,7 @@
         }
       ],
       "applicableSpan": {
-        "start": 244,
+        "start": 256,
         "length": 26
       },
       "selectedItemIndex": 0,
@@ -304,7 +304,7 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/Foo.js",
-      "position": 251,
+      "position": 263,
       "name": "2"
     },
     "item": {
@@ -565,7 +565,7 @@
         }
       ],
       "applicableSpan": {
-        "start": 244,
+        "start": 256,
         "length": 26
       },
       "selectedItemIndex": 0,
@@ -576,7 +576,7 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/Foo.js",
-      "position": 258,
+      "position": 270,
       "name": "3"
     },
     "item": {
@@ -837,7 +837,7 @@
         }
       ],
       "applicableSpan": {
-        "start": 244,
+        "start": 256,
         "length": 26
       },
       "selectedItemIndex": 0,
@@ -848,7 +848,7 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/Foo.js",
-      "position": 265,
+      "position": 277,
       "name": "4"
     },
     "item": {
@@ -1109,7 +1109,7 @@
         }
       ],
       "applicableSpan": {
-        "start": 244,
+        "start": 256,
         "length": 26
       },
       "selectedItemIndex": 0,
