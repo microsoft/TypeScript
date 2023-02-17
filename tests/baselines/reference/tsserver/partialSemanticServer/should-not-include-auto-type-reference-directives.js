@@ -1,5 +1,9 @@
-Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:40.000] request:
+TI:: [00:00:31.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:32.000] Processing cache location '/a/data/'
+TI:: [00:00:33.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:34.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:44.000] request:
     {
       "command": "open",
       "arguments": {
@@ -45,10 +49,10 @@ interface Array<T> { length: number; [n: number]: T; }
 export const something = 10;
 
 
-Info 2    [00:00:41.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 3    [00:00:42.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 4    [00:00:43.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 5    [00:00:44.000] 	Files (2)
+Info 2    [00:00:45.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 3    [00:00:46.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 4    [00:00:47.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 5    [00:00:48.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/a.ts
 
@@ -58,17 +62,17 @@ Info 5    [00:00:44.000] 	Files (2)
 	user/username/projects/myproject/a.ts
 	  Root file specified for compilation
 
-Info 6    [00:00:45.000] -----------------------------------------------
-Info 7    [00:00:46.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 7    [00:00:47.000] 	Files (2)
+Info 6    [00:00:49.000] -----------------------------------------------
+Info 7    [00:00:50.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 7    [00:00:51.000] 	Files (2)
 
-Info 7    [00:00:48.000] -----------------------------------------------
-Info 7    [00:00:49.000] Open files: 
-Info 7    [00:00:50.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-Info 7    [00:00:51.000] 		Projects: /dev/null/inferredProject1*
+Info 7    [00:00:52.000] -----------------------------------------------
+Info 7    [00:00:53.000] Open files: 
+Info 7    [00:00:54.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info 7    [00:00:55.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-Info 7    [00:00:52.000] response:
+Info 7    [00:00:56.000] response:
     {
       "responseRequired": false
     }

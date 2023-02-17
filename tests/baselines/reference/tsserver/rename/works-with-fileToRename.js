@@ -1,5 +1,9 @@
-Info 0    [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:08.000] request:
+TI:: [00:00:07.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:08.000] Processing cache location '/a/data/'
+TI:: [00:00:09.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:10.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:12.000] request:
     {
       "command": "open",
       "arguments": {
@@ -16,14 +20,14 @@ export const a = 0;
 import { a } from "./a";
 
 
-Info 2    [00:00:09.000] Search path: /
-Info 3    [00:00:10.000] For info: /b.ts :: No config files found.
-Info 4    [00:00:11.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 5    [00:00:12.000] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info 6    [00:00:13.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 7    [00:00:14.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 8    [00:00:15.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 9    [00:00:16.000] 	Files (2)
+Info 2    [00:00:13.000] Search path: /
+Info 3    [00:00:14.000] For info: /b.ts :: No config files found.
+Info 4    [00:00:15.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 5    [00:00:16.000] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
+Info 6    [00:00:17.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 7    [00:00:18.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 8    [00:00:19.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 9    [00:00:20.000] 	Files (2)
 	/a.ts
 	/b.ts
 
@@ -33,14 +37,14 @@ Info 9    [00:00:16.000] 	Files (2)
 	b.ts
 	  Root file specified for compilation
 
-Info 10   [00:00:17.000] -----------------------------------------------
-Info 11   [00:00:18.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 11   [00:00:19.000] 	Files (2)
+Info 10   [00:00:21.000] -----------------------------------------------
+Info 11   [00:00:22.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 11   [00:00:23.000] 	Files (2)
 
-Info 11   [00:00:20.000] -----------------------------------------------
-Info 11   [00:00:21.000] Open files: 
-Info 11   [00:00:22.000] 	FileName: /b.ts ProjectRootPath: undefined
-Info 11   [00:00:23.000] 		Projects: /dev/null/inferredProject1*
+Info 11   [00:00:24.000] -----------------------------------------------
+Info 11   [00:00:25.000] Open files: 
+Info 11   [00:00:26.000] 	FileName: /b.ts ProjectRootPath: undefined
+Info 11   [00:00:27.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
@@ -51,11 +55,11 @@ FsWatches::
 /a.ts: *new*
   {}
 
-Info 11   [00:00:24.000] response:
+Info 11   [00:00:28.000] response:
     {
       "responseRequired": false
     }
-Info 12   [00:00:25.000] request:
+Info 12   [00:00:29.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -70,7 +74,7 @@ Before request
 
 After request
 
-Info 13   [00:00:26.000] response:
+Info 13   [00:00:30.000] response:
     {
       "response": {
         "info": {
@@ -81,7 +85,7 @@ Info 13   [00:00:26.000] response:
       },
       "responseRequired": true
     }
-Info 14   [00:00:27.000] request:
+Info 14   [00:00:31.000] request:
     {
       "command": "configure",
       "arguments": {
@@ -94,15 +98,15 @@ Info 14   [00:00:27.000] request:
     }
 Before request
 
-Info 15   [00:00:28.000] response:
+Info 15   [00:00:32.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":3,"success":true,"performanceData":{"updateGraphDurationMs":*}}
 After request
 
-Info 16   [00:00:29.000] response:
+Info 16   [00:00:33.000] response:
     {
       "responseRequired": false
     }
-Info 17   [00:00:30.000] request:
+Info 17   [00:00:34.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -117,7 +121,7 @@ Before request
 
 After request
 
-Info 18   [00:00:31.000] response:
+Info 18   [00:00:35.000] response:
     {
       "response": {
         "info": {
@@ -166,7 +170,7 @@ Info 18   [00:00:31.000] response:
       },
       "responseRequired": true
     }
-Info 19   [00:00:32.000] request:
+Info 19   [00:00:36.000] request:
     {
       "command": "configure",
       "arguments": {
@@ -179,15 +183,15 @@ Info 19   [00:00:32.000] request:
     }
 Before request
 
-Info 20   [00:00:33.000] response:
+Info 20   [00:00:37.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":5,"success":true,"performanceData":{"updateGraphDurationMs":*}}
 After request
 
-Info 21   [00:00:34.000] response:
+Info 21   [00:00:38.000] response:
     {
       "responseRequired": false
     }
-Info 22   [00:00:35.000] request:
+Info 22   [00:00:39.000] request:
     {
       "command": "configure",
       "arguments": {
@@ -202,16 +206,16 @@ Info 22   [00:00:35.000] request:
     }
 Before request
 
-Info 23   [00:00:36.000] Host configuration update for file /b.ts
-Info 24   [00:00:37.000] response:
+Info 23   [00:00:40.000] Host configuration update for file /b.ts
+Info 24   [00:00:41.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":6,"success":true,"performanceData":{"updateGraphDurationMs":*}}
 After request
 
-Info 25   [00:00:38.000] response:
+Info 25   [00:00:42.000] response:
     {
       "responseRequired": false
     }
-Info 26   [00:00:39.000] request:
+Info 26   [00:00:43.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -226,7 +230,7 @@ Before request
 
 After request
 
-Info 27   [00:00:40.000] response:
+Info 27   [00:00:44.000] response:
     {
       "response": {
         "info": {

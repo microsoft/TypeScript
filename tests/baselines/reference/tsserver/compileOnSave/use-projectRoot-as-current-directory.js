@@ -1,5 +1,9 @@
-Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
+TI:: [00:00:17.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:18.000] Processing cache location '/a/data/'
+TI:: [00:00:19.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:20.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:22.000] request:
     {
       "command": "openExternalProject",
       "arguments": {
@@ -36,14 +40,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 2    [00:00:19.000] FileWatcher:: Added:: WatchInfo: /root/TypeScriptProject3/TypeScriptProject3/Foo.ts 500 undefined WatchType: Closed Script info
-Info 3    [00:00:20.000] Starting updateGraphWorker: Project: /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj
-Info 4    [00:00:21.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 5    [00:00:22.000] DirectoryWatcher:: Added:: WatchInfo: /root/TypeScriptProject3/TypeScriptProject3/node_modules/@types 1 undefined Project: /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj WatchType: Type roots
-Info 6    [00:00:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /root/TypeScriptProject3/TypeScriptProject3/node_modules/@types 1 undefined Project: /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj WatchType: Type roots
-Info 7    [00:00:24.000] Finishing updateGraphWorker: Project: /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 8    [00:00:25.000] Project '/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj' (External)
-Info 9    [00:00:26.000] 	Files (2)
+Info 2    [00:00:23.000] FileWatcher:: Added:: WatchInfo: /root/TypeScriptProject3/TypeScriptProject3/Foo.ts 500 undefined WatchType: Closed Script info
+Info 3    [00:00:24.000] Starting updateGraphWorker: Project: /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj
+Info 4    [00:00:25.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 5    [00:00:26.000] DirectoryWatcher:: Added:: WatchInfo: /root/TypeScriptProject3/TypeScriptProject3/node_modules/@types 1 undefined Project: /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj WatchType: Type roots
+Info 6    [00:00:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /root/TypeScriptProject3/TypeScriptProject3/node_modules/@types 1 undefined Project: /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj WatchType: Type roots
+Info 7    [00:00:28.000] Finishing updateGraphWorker: Project: /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 8    [00:00:29.000] Project '/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj' (External)
+Info 9    [00:00:30.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/root/TypeScriptProject3/TypeScriptProject3/Foo.ts
 
@@ -53,7 +57,7 @@ Info 9    [00:00:26.000] 	Files (2)
 	Foo.ts
 	  Root file specified for compilation
 
-Info 10   [00:00:27.000] -----------------------------------------------
+Info 10   [00:00:31.000] -----------------------------------------------
 After request
 
 PolledWatches::
@@ -66,12 +70,12 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 11   [00:00:28.000] response:
+Info 11   [00:00:32.000] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 12   [00:00:29.000] request:
+Info 12   [00:00:33.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -91,7 +95,7 @@ consonle.log('file1');
 //# sourceMappingURL=bar.js.map
 
 
-Info 13   [00:00:34.000] response:
+Info 13   [00:00:38.000] response:
     {
       "response": true,
       "responseRequired": true

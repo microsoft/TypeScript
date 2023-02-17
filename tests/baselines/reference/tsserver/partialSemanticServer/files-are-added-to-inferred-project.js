@@ -1,5 +1,9 @@
-Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:32.000] request:
+TI:: [00:00:31.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:32.000] Processing cache location '/a/data/'
+TI:: [00:00:33.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:34.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:36.000] request:
     {
       "command": "open",
       "arguments": {
@@ -42,10 +46,10 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-Info 2    [00:00:33.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 3    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 4    [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 5    [00:00:36.000] 	Files (2)
+Info 2    [00:00:37.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 3    [00:00:38.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 4    [00:00:39.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 5    [00:00:40.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/a.ts
 
@@ -55,21 +59,21 @@ Info 5    [00:00:36.000] 	Files (2)
 	user/username/projects/myproject/a.ts
 	  Root file specified for compilation
 
-Info 6    [00:00:37.000] -----------------------------------------------
-Info 7    [00:00:38.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 7    [00:00:39.000] 	Files (2)
+Info 6    [00:00:41.000] -----------------------------------------------
+Info 7    [00:00:42.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 7    [00:00:43.000] 	Files (2)
 
-Info 7    [00:00:40.000] -----------------------------------------------
-Info 7    [00:00:41.000] Open files: 
-Info 7    [00:00:42.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-Info 7    [00:00:43.000] 		Projects: /dev/null/inferredProject1*
+Info 7    [00:00:44.000] -----------------------------------------------
+Info 7    [00:00:45.000] Open files: 
+Info 7    [00:00:46.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info 7    [00:00:47.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-Info 7    [00:00:44.000] response:
+Info 7    [00:00:48.000] response:
     {
       "responseRequired": false
     }
-Info 8    [00:00:45.000] request:
+Info 8    [00:00:49.000] request:
     {
       "command": "completions",
       "arguments": {
@@ -82,15 +86,15 @@ Info 8    [00:00:45.000] request:
     }
 Before request
 
-Info 9    [00:00:46.000] getCompletionData: Get current token: *
-Info 10   [00:00:47.000] getCompletionData: Is inside comment: *
-Info 11   [00:00:48.000] getCompletionData: Get previous token: *
-Info 12   [00:00:49.000] getCompletionsAtPosition: isCompletionListBlocker: *
-Info 13   [00:00:50.000] getCompletionData: Semantic work: *
-Info 14   [00:00:51.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info 9    [00:00:50.000] getCompletionData: Get current token: *
+Info 10   [00:00:51.000] getCompletionData: Is inside comment: *
+Info 11   [00:00:52.000] getCompletionData: Get previous token: *
+Info 12   [00:00:53.000] getCompletionsAtPosition: isCompletionListBlocker: *
+Info 13   [00:00:54.000] getCompletionData: Semantic work: *
+Info 14   [00:00:55.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
 
-Info 15   [00:00:52.000] response:
+Info 15   [00:00:56.000] response:
     {
       "response": [
         {
@@ -108,7 +112,7 @@ Info 15   [00:00:52.000] response:
       ],
       "responseRequired": true
     }
-Info 16   [00:00:53.000] request:
+Info 16   [00:00:57.000] request:
     {
       "command": "open",
       "arguments": {
@@ -119,10 +123,10 @@ Info 16   [00:00:53.000] request:
     }
 Before request
 
-Info 17   [00:00:54.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 18   [00:00:55.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 19   [00:00:56.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 20   [00:00:57.000] 	Files (3)
+Info 17   [00:00:58.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 18   [00:00:59.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 19   [00:01:00.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 20   [00:01:01.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/a.ts
 	/user/username/projects/myproject/b.ts
@@ -135,23 +139,23 @@ Info 20   [00:00:57.000] 	Files (3)
 	user/username/projects/myproject/b.ts
 	  Root file specified for compilation
 
-Info 21   [00:00:58.000] -----------------------------------------------
-Info 22   [00:00:59.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 22   [00:01:00.000] 	Files (3)
+Info 21   [00:01:02.000] -----------------------------------------------
+Info 22   [00:01:03.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 22   [00:01:04.000] 	Files (3)
 
-Info 22   [00:01:01.000] -----------------------------------------------
-Info 22   [00:01:02.000] Open files: 
-Info 22   [00:01:03.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-Info 22   [00:01:04.000] 		Projects: /dev/null/inferredProject1*
-Info 22   [00:01:05.000] 	FileName: /user/username/projects/myproject/b.ts ProjectRootPath: undefined
-Info 22   [00:01:06.000] 		Projects: /dev/null/inferredProject1*
+Info 22   [00:01:05.000] -----------------------------------------------
+Info 22   [00:01:06.000] Open files: 
+Info 22   [00:01:07.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info 22   [00:01:08.000] 		Projects: /dev/null/inferredProject1*
+Info 22   [00:01:09.000] 	FileName: /user/username/projects/myproject/b.ts ProjectRootPath: undefined
+Info 22   [00:01:10.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-Info 22   [00:01:07.000] response:
+Info 22   [00:01:11.000] response:
     {
       "responseRequired": false
     }
-Info 23   [00:01:08.000] request:
+Info 23   [00:01:12.000] request:
     {
       "command": "completions",
       "arguments": {
@@ -164,15 +168,15 @@ Info 23   [00:01:08.000] request:
     }
 Before request
 
-Info 24   [00:01:09.000] getCompletionData: Get current token: *
-Info 25   [00:01:10.000] getCompletionData: Is inside comment: *
-Info 26   [00:01:11.000] getCompletionData: Get previous token: *
-Info 27   [00:01:12.000] getCompletionsAtPosition: isCompletionListBlocker: *
-Info 28   [00:01:13.000] getCompletionData: Semantic work: *
-Info 29   [00:01:14.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info 24   [00:01:13.000] getCompletionData: Get current token: *
+Info 25   [00:01:14.000] getCompletionData: Is inside comment: *
+Info 26   [00:01:15.000] getCompletionData: Get previous token: *
+Info 27   [00:01:16.000] getCompletionsAtPosition: isCompletionListBlocker: *
+Info 28   [00:01:17.000] getCompletionData: Semantic work: *
+Info 29   [00:01:18.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
 
-Info 30   [00:01:15.000] response:
+Info 30   [00:01:19.000] response:
     {
       "response": [
         {

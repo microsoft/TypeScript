@@ -1,5 +1,9 @@
-Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
+TI:: [00:00:17.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:18.000] Processing cache location '/a/data/'
+TI:: [00:00:19.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:20.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:22.000] request:
     {
       "command": "open",
       "arguments": {
@@ -35,11 +39,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 2    [00:00:19.000] Search path: /
-Info 3    [00:00:20.000] For info: /a.ts :: Config file name: /tsconfig.json
-Info 4    [00:00:21.000] Creating configuration project /tsconfig.json
-Info 5    [00:00:22.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 6    [00:00:23.000] Config: /tsconfig.json : {
+Info 2    [00:00:23.000] Search path: /
+Info 3    [00:00:24.000] For info: /a.ts :: Config file name: /tsconfig.json
+Info 4    [00:00:25.000] Creating configuration project /tsconfig.json
+Info 5    [00:00:26.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info 6    [00:00:27.000] Config: /tsconfig.json : {
  "rootNames": [
   "/a.ts",
   "/b.ts",
@@ -55,18 +59,18 @@ Info 6    [00:00:23.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 7    [00:00:24.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:26.000] Enabling plugin myplugin from candidate paths: /a/lib/tsc.js/../../..
-Info 10   [00:00:27.000] Loading myplugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
-Info 11   [00:00:28.000] Plugin validation succeeded
-Info 12   [00:00:29.000] FileWatcher:: Added:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:00:30.000] FileWatcher:: Added:: WatchInfo: /c.ts 500 undefined WatchType: Closed Script info
-Info 14   [00:00:31.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 15   [00:00:32.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 16   [00:00:33.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 17   [00:00:34.000] Project '/tsconfig.json' (Configured)
-Info 18   [00:00:35.000] 	Files (4)
+Info 7    [00:00:28.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info 8    [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info 9    [00:00:30.000] Enabling plugin myplugin from candidate paths: /a/lib/tsc.js/../../..
+Info 10   [00:00:31.000] Loading myplugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+Info 11   [00:00:32.000] Plugin validation succeeded
+Info 12   [00:00:33.000] FileWatcher:: Added:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
+Info 13   [00:00:34.000] FileWatcher:: Added:: WatchInfo: /c.ts 500 undefined WatchType: Closed Script info
+Info 14   [00:00:35.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 15   [00:00:36.000] Starting updateGraphWorker: Project: /tsconfig.json
+Info 16   [00:00:37.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 17   [00:00:38.000] Project '/tsconfig.json' (Configured)
+Info 18   [00:00:39.000] 	Files (4)
 	/a.ts
 	/b.ts
 	/c.ts
@@ -82,14 +86,14 @@ Info 18   [00:00:35.000] 	Files (4)
 	a/lib/lib.d.ts
 	  Matched by default include pattern '**/*'
 
-Info 19   [00:00:36.000] -----------------------------------------------
-Info 20   [00:00:37.000] Project '/tsconfig.json' (Configured)
-Info 20   [00:00:38.000] 	Files (4)
+Info 19   [00:00:40.000] -----------------------------------------------
+Info 20   [00:00:41.000] Project '/tsconfig.json' (Configured)
+Info 20   [00:00:42.000] 	Files (4)
 
-Info 20   [00:00:39.000] -----------------------------------------------
-Info 20   [00:00:40.000] Open files: 
-Info 20   [00:00:41.000] 	FileName: /a.ts ProjectRootPath: undefined
-Info 20   [00:00:42.000] 		Projects: /tsconfig.json
+Info 20   [00:00:43.000] -----------------------------------------------
+Info 20   [00:00:44.000] Open files: 
+Info 20   [00:00:45.000] 	FileName: /a.ts ProjectRootPath: undefined
+Info 20   [00:00:46.000] 		Projects: /tsconfig.json
 After request
 
 FsWatches::
@@ -106,11 +110,11 @@ FsWatchesRecursive::
 /: *new*
   {}
 
-Info 20   [00:00:43.000] response:
+Info 20   [00:00:47.000] response:
     {
       "responseRequired": false
     }
-Info 21   [00:00:44.000] request:
+Info 21   [00:00:48.000] request:
     {
       "command": "open",
       "arguments": {
@@ -121,18 +125,18 @@ Info 21   [00:00:44.000] request:
     }
 Before request
 
-Info 22   [00:00:45.000] FileWatcher:: Close:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
-Info 23   [00:00:46.000] Search path: /
-Info 24   [00:00:47.000] For info: /b.ts :: Config file name: /tsconfig.json
-Info 25   [00:00:48.000] Project '/tsconfig.json' (Configured)
-Info 25   [00:00:49.000] 	Files (4)
+Info 22   [00:00:49.000] FileWatcher:: Close:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
+Info 23   [00:00:50.000] Search path: /
+Info 24   [00:00:51.000] For info: /b.ts :: Config file name: /tsconfig.json
+Info 25   [00:00:52.000] Project '/tsconfig.json' (Configured)
+Info 25   [00:00:53.000] 	Files (4)
 
-Info 25   [00:00:50.000] -----------------------------------------------
-Info 25   [00:00:51.000] Open files: 
-Info 25   [00:00:52.000] 	FileName: /a.ts ProjectRootPath: undefined
-Info 25   [00:00:53.000] 		Projects: /tsconfig.json
-Info 25   [00:00:54.000] 	FileName: /b.ts ProjectRootPath: undefined
-Info 25   [00:00:55.000] 		Projects: /tsconfig.json
+Info 25   [00:00:54.000] -----------------------------------------------
+Info 25   [00:00:55.000] Open files: 
+Info 25   [00:00:56.000] 	FileName: /a.ts ProjectRootPath: undefined
+Info 25   [00:00:57.000] 		Projects: /tsconfig.json
+Info 25   [00:00:58.000] 	FileName: /b.ts ProjectRootPath: undefined
+Info 25   [00:00:59.000] 		Projects: /tsconfig.json
 After request
 
 FsWatches::
@@ -151,11 +155,11 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 25   [00:00:56.000] response:
+Info 25   [00:01:00.000] response:
     {
       "responseRequired": false
     }
-Info 26   [00:00:57.000] request:
+Info 26   [00:01:01.000] request:
     {
       "command": "open",
       "arguments": {
@@ -166,20 +170,20 @@ Info 26   [00:00:57.000] request:
     }
 Before request
 
-Info 27   [00:00:58.000] FileWatcher:: Close:: WatchInfo: /c.ts 500 undefined WatchType: Closed Script info
-Info 28   [00:00:59.000] Search path: /
-Info 29   [00:01:00.000] For info: /c.ts :: Config file name: /tsconfig.json
-Info 30   [00:01:01.000] Project '/tsconfig.json' (Configured)
-Info 30   [00:01:02.000] 	Files (4)
+Info 27   [00:01:02.000] FileWatcher:: Close:: WatchInfo: /c.ts 500 undefined WatchType: Closed Script info
+Info 28   [00:01:03.000] Search path: /
+Info 29   [00:01:04.000] For info: /c.ts :: Config file name: /tsconfig.json
+Info 30   [00:01:05.000] Project '/tsconfig.json' (Configured)
+Info 30   [00:01:06.000] 	Files (4)
 
-Info 30   [00:01:03.000] -----------------------------------------------
-Info 30   [00:01:04.000] Open files: 
-Info 30   [00:01:05.000] 	FileName: /a.ts ProjectRootPath: undefined
-Info 30   [00:01:06.000] 		Projects: /tsconfig.json
-Info 30   [00:01:07.000] 	FileName: /b.ts ProjectRootPath: undefined
-Info 30   [00:01:08.000] 		Projects: /tsconfig.json
-Info 30   [00:01:09.000] 	FileName: /c.ts ProjectRootPath: undefined
+Info 30   [00:01:07.000] -----------------------------------------------
+Info 30   [00:01:08.000] Open files: 
+Info 30   [00:01:09.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 30   [00:01:10.000] 		Projects: /tsconfig.json
+Info 30   [00:01:11.000] 	FileName: /b.ts ProjectRootPath: undefined
+Info 30   [00:01:12.000] 		Projects: /tsconfig.json
+Info 30   [00:01:13.000] 	FileName: /c.ts ProjectRootPath: undefined
+Info 30   [00:01:14.000] 		Projects: /tsconfig.json
 After request
 
 FsWatches::
@@ -196,11 +200,11 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 30   [00:01:11.000] response:
+Info 30   [00:01:15.000] response:
     {
       "responseRequired": false
     }
-Info 31   [00:01:12.000] request:
+Info 31   [00:01:16.000] request:
     {
       "command": "getSupportedCodeFixes",
       "seq": 4,
@@ -210,7 +214,7 @@ Before request
 
 After request
 
-Info 32   [00:01:13.000] response:
+Info 32   [00:01:17.000] response:
     {
       "response": [
         "2352",
@@ -1433,7 +1437,7 @@ Info 32   [00:01:13.000] response:
       ],
       "responseRequired": true
     }
-Info 33   [00:01:14.000] request:
+Info 33   [00:01:18.000] request:
     {
       "command": "getSupportedCodeFixes",
       "arguments": {
@@ -1446,14 +1450,14 @@ Before request
 
 After request
 
-Info 34   [00:01:15.000] response:
+Info 34   [00:01:19.000] response:
     {
       "response": [
         "a"
       ],
       "responseRequired": true
     }
-Info 35   [00:01:16.000] request:
+Info 35   [00:01:20.000] request:
     {
       "command": "getSupportedCodeFixes",
       "arguments": {
@@ -1466,14 +1470,14 @@ Before request
 
 After request
 
-Info 36   [00:01:17.000] response:
+Info 36   [00:01:21.000] response:
     {
       "response": [
         "b"
       ],
       "responseRequired": true
     }
-Info 37   [00:01:18.000] request:
+Info 37   [00:01:22.000] request:
     {
       "command": "getSupportedCodeFixes",
       "arguments": {
@@ -1486,14 +1490,14 @@ Before request
 
 After request
 
-Info 38   [00:01:19.000] response:
+Info 38   [00:01:23.000] response:
     {
       "response": [
         "2352"
       ],
       "responseRequired": true
     }
-Info 39   [00:01:20.000] request:
+Info 39   [00:01:24.000] request:
     {
       "command": "getSupportedCodeFixes",
       "arguments": {
@@ -1506,7 +1510,7 @@ Before request
 
 After request
 
-Info 40   [00:01:21.000] response:
+Info 40   [00:01:25.000] response:
     {
       "response": [
         "2352"

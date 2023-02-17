@@ -1,5 +1,9 @@
-Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:16.000] request:
+TI:: [00:00:15.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:16.000] Processing cache location '/a/data/'
+TI:: [00:00:17.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:18.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:20.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -31,12 +35,12 @@ interface Array<T> { length: number; [n: number]: T; }
 
 After request
 
-Info 2    [00:00:17.000] response:
+Info 2    [00:00:21.000] response:
     {
       "responseRequired": false
     }
 Before checking timeout queue length (1) and running
 
-Info 3    [00:00:18.000] event:
+Info 3    [00:00:22.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
 After checking timeout queue length (1) and running

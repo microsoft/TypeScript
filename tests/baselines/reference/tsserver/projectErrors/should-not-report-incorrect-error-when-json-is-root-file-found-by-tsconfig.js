@@ -1,5 +1,9 @@
-Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:26.000] request:
+TI:: [00:00:25.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:26.000] Processing cache location '/a/data/'
+TI:: [00:00:27.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:28.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:30.000] request:
     {
       "command": "open",
       "arguments": {
@@ -34,13 +38,13 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"resolveJsonModule":true,"composite":true},"include":["./src/*.ts","./src/*.json"]}
 
 
-Info 2    [00:00:27.000] Search path: /user/username/projects/myproject/src
-Info 3    [00:00:28.000] For info: /user/username/projects/myproject/src/test.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 4    [00:00:29.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
-Info 5    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 6    [00:00:31.000] event:
+Info 2    [00:00:31.000] Search path: /user/username/projects/myproject/src
+Info 3    [00:00:32.000] For info: /user/username/projects/myproject/src/test.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 4    [00:00:33.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
+Info 5    [00:00:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 6    [00:00:35.000] event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/tsconfig.json","reason":"Creating possible configured project for /user/username/projects/myproject/src/test.ts to open"}}
-Info 7    [00:00:32.000] Config: /user/username/projects/myproject/tsconfig.json : {
+Info 7    [00:00:36.000] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/src/test.ts",
   "/user/username/projects/myproject/src/blabla.json"
@@ -51,18 +55,18 @@ Info 7    [00:00:32.000] Config: /user/username/projects/myproject/tsconfig.json
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
  }
 }
-Info 8    [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 10   [00:00:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/blabla.json 500 undefined WatchType: Closed Script info
-Info 11   [00:00:36.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 12   [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info 13   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info 14   [00:00:39.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 15   [00:00:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 16   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 17   [00:00:42.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 18   [00:00:43.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 19   [00:00:44.000] 	Files (3)
+Info 8    [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 9    [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 10   [00:00:39.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/blabla.json 500 undefined WatchType: Closed Script info
+Info 11   [00:00:40.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 12   [00:00:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info 13   [00:00:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info 14   [00:00:43.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 15   [00:00:44.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 16   [00:00:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 17   [00:00:46.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 18   [00:00:47.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 19   [00:00:48.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/src/blabla.json
 	/user/username/projects/myproject/src/test.ts
@@ -76,22 +80,22 @@ Info 19   [00:00:44.000] 	Files (3)
 	src/test.ts
 	  Matched by include pattern './src/*.ts' in 'tsconfig.json'
 
-Info 20   [00:00:45.000] -----------------------------------------------
-Info 21   [00:00:46.000] event:
+Info 20   [00:00:49.000] -----------------------------------------------
+Info 21   [00:00:50.000] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig.json"}}
-Info 22   [00:00:47.000] event:
+Info 22   [00:00:51.000] event:
     {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"4a33d78ee40d836c4f4e64c59aed976628aea0013be9585c5ff171dfc41baf98","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":87,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"resolveJsonModule":true,"composite":true},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
-Info 23   [00:00:48.000] event:
+Info 23   [00:00:52.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/src/test.ts","configFile":"/user/username/projects/myproject/tsconfig.json","diagnostics":[]}}
-Info 24   [00:00:49.000] Search path: /user/username/projects/myproject
-Info 25   [00:00:50.000] For info: /user/username/projects/myproject/tsconfig.json :: No config files found.
-Info 26   [00:00:51.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 26   [00:00:52.000] 	Files (3)
+Info 24   [00:00:53.000] Search path: /user/username/projects/myproject
+Info 25   [00:00:54.000] For info: /user/username/projects/myproject/tsconfig.json :: No config files found.
+Info 26   [00:00:55.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 26   [00:00:56.000] 	Files (3)
 
-Info 26   [00:00:53.000] -----------------------------------------------
-Info 26   [00:00:54.000] Open files: 
-Info 26   [00:00:55.000] 	FileName: /user/username/projects/myproject/src/test.ts ProjectRootPath: undefined
-Info 26   [00:00:56.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 26   [00:00:57.000] -----------------------------------------------
+Info 26   [00:00:58.000] Open files: 
+Info 26   [00:00:59.000] 	FileName: /user/username/projects/myproject/src/test.ts ProjectRootPath: undefined
+Info 26   [00:01:00.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
 PolledWatches::
@@ -112,11 +116,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
-Info 26   [00:00:57.000] response:
+Info 26   [00:01:01.000] response:
     {
       "responseRequired": false
     }
-Info 27   [00:00:58.000] request:
+Info 27   [00:01:02.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -132,26 +136,26 @@ Before request
 
 After request
 
-Info 28   [00:00:59.000] response:
+Info 28   [00:01:03.000] response:
     {
       "responseRequired": false
     }
 Before checking timeout queue length (1) and running
 
-Info 29   [00:01:00.000] event:
+Info 29   [00:01:04.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 30   [00:01:01.000] event:
+Info 30   [00:01:05.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 31   [00:01:02.000] event:
+Info 31   [00:01:06.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
-Info 32   [00:01:03.000] event:
+Info 32   [00:01:07.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)

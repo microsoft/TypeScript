@@ -1,5 +1,9 @@
-Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
+TI:: [00:00:17.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:18.000] Processing cache location '/a/data/'
+TI:: [00:00:19.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:20.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:22.000] request:
     {
       "command": "open",
       "arguments": {
@@ -35,16 +39,16 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 2    [00:00:19.000] Search path: /
-Info 3    [00:00:20.000] For info: /d.ts :: No config files found.
-Info 4    [00:00:21.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 5    [00:00:22.000] FileWatcher:: Added:: WatchInfo: /c.ts 500 undefined WatchType: Closed Script info
-Info 6    [00:00:23.000] FileWatcher:: Added:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
-Info 7    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info 8    [00:00:25.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 9    [00:00:26.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 10   [00:00:27.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 11   [00:00:28.000] 	Files (5)
+Info 2    [00:00:23.000] Search path: /
+Info 3    [00:00:24.000] For info: /d.ts :: No config files found.
+Info 4    [00:00:25.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 5    [00:00:26.000] FileWatcher:: Added:: WatchInfo: /c.ts 500 undefined WatchType: Closed Script info
+Info 6    [00:00:27.000] FileWatcher:: Added:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
+Info 7    [00:00:28.000] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
+Info 8    [00:00:29.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 9    [00:00:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 10   [00:00:31.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 11   [00:00:32.000] 	Files (5)
 	/a/lib/lib.d.ts
 	/a.ts
 	/b.ts
@@ -63,14 +67,14 @@ Info 11   [00:00:28.000] 	Files (5)
 	d.ts
 	  Root file specified for compilation
 
-Info 12   [00:00:29.000] -----------------------------------------------
-Info 13   [00:00:30.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 13   [00:00:31.000] 	Files (5)
+Info 12   [00:00:33.000] -----------------------------------------------
+Info 13   [00:00:34.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 13   [00:00:35.000] 	Files (5)
 
-Info 13   [00:00:32.000] -----------------------------------------------
-Info 13   [00:00:33.000] Open files: 
-Info 13   [00:00:34.000] 	FileName: /d.ts ProjectRootPath: undefined
-Info 13   [00:00:35.000] 		Projects: /dev/null/inferredProject1*
+Info 13   [00:00:36.000] -----------------------------------------------
+Info 13   [00:00:37.000] Open files: 
+Info 13   [00:00:38.000] 	FileName: /d.ts ProjectRootPath: undefined
+Info 13   [00:00:39.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 FsWatches::
@@ -83,11 +87,11 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 13   [00:00:36.000] response:
+Info 13   [00:00:40.000] response:
     {
       "responseRequired": false
     }
-Info 14   [00:00:37.000] request:
+Info 14   [00:00:41.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -100,7 +104,7 @@ Before request
 
 After request
 
-Info 15   [00:00:38.000] response:
+Info 15   [00:00:42.000] response:
     {
       "response": [
         {

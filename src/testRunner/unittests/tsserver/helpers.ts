@@ -45,6 +45,8 @@ export const customTypesMap = {
 
 export interface PostExecAction {
     readonly success: boolean;
+    requestId: number;
+    readonly packageNames: readonly string[];
     readonly callback: ts.server.typingsInstaller.RequestCompletedAction;
 }
 
@@ -92,7 +94,7 @@ function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Lo
     return logger;
 
     function msg(s: string, type = ts.server.Msg.Err, write: (s: string) => void) {
-        s = `[${nowString()}] ${s}`;
+        s = `[${nowString(logger.host!)}] ${s}`;
         if (!inGroup || firstInGroup) s = padStringRight(type + " " + seq.toString(), "          ") + s;
         if (ts.Debug.isDebugging) console.log(s);
         write(s);
@@ -102,12 +104,12 @@ function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Lo
     function padStringRight(str: string, padding: string) {
         return (str + padding).slice(0, padding.length);
     }
+}
 
-    function nowString() {
-        // E.g. "12:34:56.789"
-        const d = logger.host!.now();
-        return `${ts.padLeft(d.getUTCHours().toString(), 2, "0")}:${ts.padLeft(d.getUTCMinutes().toString(), 2, "0")}:${ts.padLeft(d.getUTCSeconds().toString(), 2, "0")}.${ts.padLeft(d.getUTCMilliseconds().toString(), 3, "0")}`;
-    }
+function nowString(host: TestServerHost) {
+    // E.g. "12:34:56.789"
+    const d = host.now();
+    return `${ts.padLeft(d.getUTCHours().toString(), 2, "0")}:${ts.padLeft(d.getUTCMinutes().toString(), 2, "0")}:${ts.padLeft(d.getUTCSeconds().toString(), 2, "0")}.${ts.padLeft(d.getUTCMilliseconds().toString(), 3, "0")}`;
 }
 
 export function createLoggerWritingToConsole(host: TestServerHost): Logger {
@@ -121,6 +123,24 @@ export function createLoggerWritingToConsole(host: TestServerHost): Logger {
     }, host);
 }
 
+function sanitizeLog(s: string) {
+    return s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
+        .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
+        .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
+        .replace(`"version":"${ts.version}"`, `"version":"FakeVersion"`)
+        .replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`)
+        .replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`)
+        .replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`)
+        .replace(/getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: isCompletionListBlocker: *`)
+        .replace(/getCompletionData: Semantic work: \d+(?:\.\d+)?/g, `getCompletionData: Semantic work: *`)
+        .replace(/getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`)
+        .replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`)
+        .replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`)
+        .replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`)
+        .replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`)
+        .replace(/\"exportMapKey\"\:\s*\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`));
+}
+
 export function createLoggerWithInMemoryLogs(host: TestServerHost): Logger {
     const logger = createHasErrorMessageLogger();
     const logs: string[] = [];
@@ -129,23 +149,7 @@ export function createLoggerWithInMemoryLogs(host: TestServerHost): Logger {
         logs,
         hasLevel: ts.returnTrue,
         loggingEnabled: ts.returnTrue,
-        info: s => logs.push(
-            s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
-                .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
-                .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
-                .replace(`"version":"${ts.version}"`, `"version":"FakeVersion"`)
-                .replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`)
-                .replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`)
-                .replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`)
-                .replace(/getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: isCompletionListBlocker: *`)
-                .replace(/getCompletionData: Semantic work: \d+(?:\.\d+)?/g, `getCompletionData: Semantic work: *`)
-                .replace(/getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`)
-                .replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`)
-                .replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`)
-                .replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`)
-                .replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`)
-                .replace(/\"exportMapKey\"\:\s*\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`))
-        )
+        info: s => logs.push(sanitizeLog(s))
     }, host);
 }
 
@@ -161,15 +165,34 @@ export function appendAllScriptInfos(session: TestSession) {
     session.logger.log("");
 }
 
+const versionRegExp = new RegExp(ts.version, "g");
+const tsMajorMinorVersion = new RegExp(`@ts${ts.versionMajorMinor}`, "g");
+function loggerToTypingsInstallerLog(logger: Logger | undefined): ts.server.typingsInstaller.Log | undefined {
+    return logger?.loggingEnabled() ? {
+        isEnabled: ts.returnTrue,
+        writeLine: s => logger.log(`TI:: [${nowString(logger.host!)}] ${sanitizeLog(s).replace(versionRegExp, "FakeVersion")
+                .replace(tsMajorMinorVersion, `@tsFakeMajor.Minor`)
+            }`),
+    } : undefined;
+}
+
 export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller implements ts.server.ITypingsInstaller {
     protected projectService!: ts.server.ProjectService;
     constructor(
         readonly globalTypingsCacheLocation: string,
         throttleLimit: number,
         installTypingHost: ts.server.ServerHost,
+        logger: Logger,
         readonly typesRegistry = new Map<string, ts.MapLike<string>>(),
-        log?: ts.server.typingsInstaller.Log) {
-        super(installTypingHost, globalTypingsCacheLocation, "/safeList.json" as ts.Path, customTypesMap.path, throttleLimit, log);
+    ) {
+        super(
+            installTypingHost,
+            globalTypingsCacheLocation,
+            "/safeList.json" as ts.Path,
+            customTypesMap.path,
+            throttleLimit,
+            loggerToTypingsInstallerLog(logger)
+        );
     }
 
     protected postExecActions: PostExecAction[] = [];
@@ -182,12 +205,11 @@ export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
         const actionsToRun = this.postExecActions;
         this.postExecActions = [];
         for (const action of actionsToRun) {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`#${action.requestId} with arguments'${JSON.stringify(action.packageNames)}':: ${action.success}`);
+            }
             action.callback(action.success);
         }
-    }
-
-    checkPendingCommands(expectedCount: number) {
-        assert.equal(this.postExecActions.length, expectedCount, `Expected ${expectedCount} post install actions`);
     }
 
     onProjectClosed = ts.noop;
@@ -200,11 +222,17 @@ export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
         return this.installTypingHost;
     }
 
-    installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
-        this.addPostExecAction("success", cb);
+    installWorker(requestId: number, packageNames: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+        if (this.log.isEnabled()) {
+            this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
+        }
+        this.addPostExecAction("success", requestId, packageNames, cb);
     }
 
     sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings) {
+        if (this.log.isEnabled()) {
+            this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
+        }
         this.projectService.updateTypingsForProject(response);
     }
 
@@ -213,10 +241,12 @@ export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
         this.install(request);
     }
 
-    addPostExecAction(stdout: string | string[], cb: ts.server.typingsInstaller.RequestCompletedAction) {
+    addPostExecAction(stdout: string | string[], requestId: number, packageNames: string[], cb: ts.server.typingsInstaller.RequestCompletedAction) {
         const out = ts.isString(stdout) ? stdout : createNpmPackageJsonString(stdout);
         const action: PostExecAction = {
             success: !!out,
+            requestId,
+            packageNames,
             callback: cb
         };
         this.postExecActions.push(action);
@@ -453,8 +483,9 @@ export class TestSession extends ts.server.Session {
 }
 
 export function createSession(host: ts.server.ServerHost, opts: Partial<TestSessionOptions> = {}) {
+    const logger = opts.logger || createHasErrorMessageLogger();
     if (opts.typingsInstaller === undefined) {
-        opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
+        opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host, logger);
     }
 
     if (opts.eventHandler !== undefined) {
@@ -469,7 +500,7 @@ export function createSession(host: ts.server.ServerHost, opts: Partial<TestSess
         typingsInstaller: undefined!, // TODO: GH#18217
         byteLength: Buffer.byteLength,
         hrtime: process.hrtime,
-        logger: opts.logger || createHasErrorMessageLogger(),
+        logger,
         canUseEvents: false
     };
 

@@ -1,5 +1,9 @@
-Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:28.000] request:
+TI:: [00:00:27.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:28.000] Processing cache location '/a/data/'
+TI:: [00:00:29.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:30.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:32.000] request:
     {
       "command": "open",
       "arguments": {
@@ -44,11 +48,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 2    [00:00:29.000] Search path: /user/username/projects/myproject
-Info 3    [00:00:30.000] For info: /user/username/projects/myproject/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 4    [00:00:31.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
-Info 5    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 6    [00:00:33.000] Config: /user/username/projects/myproject/tsconfig.json : {
+Info 2    [00:00:33.000] Search path: /user/username/projects/myproject
+Info 3    [00:00:34.000] For info: /user/username/projects/myproject/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 4    [00:00:35.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
+Info 5    [00:00:36.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 6    [00:00:37.000] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/file1.ts",
   "/user/username/projects/myproject/file2.ts",
@@ -60,18 +64,18 @@ Info 6    [00:00:33.000] Config: /user/username/projects/myproject/tsconfig.json
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
  }
 }
-Info 7    [00:00:34.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:36.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/file2.ts 500 undefined WatchType: Closed Script info
-Info 10   [00:00:37.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/file3.ts 500 undefined WatchType: Closed Script info
-Info 11   [00:00:38.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/module.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:00:39.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 13   [00:00:40.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 14   [00:00:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 15   [00:00:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 16   [00:00:43.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 17   [00:00:44.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 18   [00:00:45.000] 	Files (5)
+Info 7    [00:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 8    [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 9    [00:00:40.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/file2.ts 500 undefined WatchType: Closed Script info
+Info 10   [00:00:41.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/file3.ts 500 undefined WatchType: Closed Script info
+Info 11   [00:00:42.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/module.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:00:43.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 13   [00:00:44.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 14   [00:00:45.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 15   [00:00:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 16   [00:00:47.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 17   [00:00:48.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 18   [00:00:49.000] 	Files (5)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/file1.ts
 	/user/username/projects/myproject/file2.ts
@@ -90,14 +94,14 @@ Info 18   [00:00:45.000] 	Files (5)
 	module.ts
 	  Matched by default include pattern '**/*'
 
-Info 19   [00:00:46.000] -----------------------------------------------
-Info 20   [00:00:47.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 20   [00:00:48.000] 	Files (5)
+Info 19   [00:00:50.000] -----------------------------------------------
+Info 20   [00:00:51.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 20   [00:00:52.000] 	Files (5)
 
-Info 20   [00:00:49.000] -----------------------------------------------
-Info 20   [00:00:50.000] Open files: 
-Info 20   [00:00:51.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 20   [00:00:52.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 20   [00:00:53.000] -----------------------------------------------
+Info 20   [00:00:54.000] Open files: 
+Info 20   [00:00:55.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 20   [00:00:56.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
 PolledWatches::
@@ -120,11 +124,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-Info 20   [00:00:53.000] response:
+Info 20   [00:00:57.000] response:
     {
       "responseRequired": false
     }
-Info 21   [00:00:54.000] request:
+Info 21   [00:00:58.000] request:
     {
       "command": "open",
       "arguments": {
@@ -135,18 +139,18 @@ Info 21   [00:00:54.000] request:
     }
 Before request
 
-Info 22   [00:00:55.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/file2.ts 500 undefined WatchType: Closed Script info
-Info 23   [00:00:56.000] Search path: /user/username/projects/myproject
-Info 24   [00:00:57.000] For info: /user/username/projects/myproject/file2.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 25   [00:00:58.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 25   [00:00:59.000] 	Files (5)
+Info 22   [00:00:59.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/file2.ts 500 undefined WatchType: Closed Script info
+Info 23   [00:01:00.000] Search path: /user/username/projects/myproject
+Info 24   [00:01:01.000] For info: /user/username/projects/myproject/file2.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 25   [00:01:02.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 25   [00:01:03.000] 	Files (5)
 
-Info 25   [00:01:00.000] -----------------------------------------------
-Info 25   [00:01:01.000] Open files: 
-Info 25   [00:01:02.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 25   [00:01:03.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 25   [00:01:04.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 25   [00:01:05.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 25   [00:01:04.000] -----------------------------------------------
+Info 25   [00:01:05.000] Open files: 
+Info 25   [00:01:06.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 25   [00:01:07.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 25   [00:01:08.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 25   [00:01:09.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
 PolledWatches::
@@ -171,11 +175,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 25   [00:01:06.000] response:
+Info 25   [00:01:10.000] response:
     {
       "responseRequired": false
     }
-Info 26   [00:01:07.000] request:
+Info 26   [00:01:11.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -186,29 +190,29 @@ Info 26   [00:01:07.000] request:
     }
 Before request
 
-Info 27   [00:01:08.000] Before ensureProjectForOpenFiles:
-Info 28   [00:01:09.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 28   [00:01:10.000] 	Files (5)
+Info 27   [00:01:12.000] Before ensureProjectForOpenFiles:
+Info 28   [00:01:13.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 28   [00:01:14.000] 	Files (5)
 
-Info 28   [00:01:11.000] -----------------------------------------------
-Info 28   [00:01:12.000] Open files: 
-Info 28   [00:01:13.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 28   [00:01:14.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 28   [00:01:15.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 28   [00:01:16.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 28   [00:01:17.000] After ensureProjectForOpenFiles:
-Info 29   [00:01:18.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 29   [00:01:19.000] 	Files (5)
+Info 28   [00:01:15.000] -----------------------------------------------
+Info 28   [00:01:16.000] Open files: 
+Info 28   [00:01:17.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 28   [00:01:18.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 28   [00:01:19.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 28   [00:01:20.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 28   [00:01:21.000] After ensureProjectForOpenFiles:
+Info 29   [00:01:22.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 29   [00:01:23.000] 	Files (5)
 
-Info 29   [00:01:20.000] -----------------------------------------------
-Info 29   [00:01:21.000] Open files: 
-Info 29   [00:01:22.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 29   [00:01:23.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 29   [00:01:24.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 29   [00:01:25.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 29   [00:01:24.000] -----------------------------------------------
+Info 29   [00:01:25.000] Open files: 
+Info 29   [00:01:26.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 29   [00:01:27.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 29   [00:01:28.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 29   [00:01:29.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
-Info 29   [00:01:26.000] response:
+Info 29   [00:01:30.000] response:
     {
       "response": [
         {
@@ -224,7 +228,7 @@ Info 29   [00:01:26.000] response:
       ],
       "responseRequired": true
     }
-Info 30   [00:01:27.000] request:
+Info 30   [00:01:31.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -235,12 +239,12 @@ Info 30   [00:01:27.000] request:
     }
 Before request
 
-Info 31   [00:01:30.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 32   [00:01:31.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/file1.js
-Info 33   [00:01:32.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 34   [00:01:35.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 35   [00:01:36.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/file1.d.ts
-Info 36   [00:01:37.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 31   [00:01:34.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 32   [00:01:35.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/file1.js
+Info 33   [00:01:36.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 34   [00:01:39.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 35   [00:01:40.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/file1.d.ts
+Info 36   [00:01:41.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file1.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 After request
 //// [/user/username/projects/myproject/file1.js]
 var x = 1;
@@ -255,12 +259,12 @@ declare function foo(): string;
 
 
 
-Info 37   [00:01:38.000] response:
+Info 37   [00:01:42.000] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 38   [00:01:39.000] request:
+Info 38   [00:01:43.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -271,12 +275,12 @@ Info 38   [00:01:39.000] request:
     }
 Before request
 
-Info 39   [00:01:42.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 40   [00:01:43.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/file2.js
-Info 41   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 42   [00:01:47.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 43   [00:01:48.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/file2.d.ts
-Info 44   [00:01:49.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 39   [00:01:46.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 40   [00:01:47.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/file2.js
+Info 41   [00:01:48.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 42   [00:01:51.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 43   [00:01:52.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/file2.d.ts
+Info 44   [00:01:53.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file2.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 After request
 //// [/user/username/projects/myproject/file2.js]
 var y = 2;
@@ -291,12 +295,12 @@ declare function bar(): string;
 
 
 
-Info 45   [00:01:50.000] response:
+Info 45   [00:01:54.000] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 46   [00:01:51.000] request:
+Info 46   [00:01:55.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -307,12 +311,12 @@ Info 46   [00:01:51.000] request:
     }
 Before request
 
-Info 47   [00:01:54.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 48   [00:01:55.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/file3.js
-Info 49   [00:01:56.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 50   [00:01:59.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 51   [00:02:00.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/file3.d.ts
-Info 52   [00:02:01.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 47   [00:01:58.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 48   [00:01:59.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/file3.js
+Info 49   [00:02:00.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 50   [00:02:03.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 51   [00:02:04.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/file3.d.ts
+Info 52   [00:02:05.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/file3.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 After request
 //// [/user/username/projects/myproject/file3.js]
 var xy = 3;
@@ -323,12 +327,12 @@ declare const xy = 3;
 
 
 
-Info 53   [00:02:02.000] response:
+Info 53   [00:02:06.000] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 54   [00:02:03.000] request:
+Info 54   [00:02:07.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -339,12 +343,12 @@ Info 54   [00:02:03.000] request:
     }
 Before request
 
-Info 55   [00:02:06.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 56   [00:02:07.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/module.js
-Info 57   [00:02:08.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 58   [00:02:11.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 59   [00:02:12.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/module.d.ts
-Info 60   [00:02:13.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 55   [00:02:10.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 56   [00:02:11.000] Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/module.js
+Info 57   [00:02:12.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.js :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 58   [00:02:15.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 59   [00:02:16.000] Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/module.d.ts
+Info 60   [00:02:17.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/module.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 After request
 //// [/user/username/projects/myproject/module.js]
 "use strict";
@@ -358,12 +362,12 @@ export declare const xyz = 4;
 
 
 
-Info 61   [00:02:14.000] response:
+Info 61   [00:02:18.000] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 62   [00:02:15.000] request:
+Info 62   [00:02:19.000] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -393,12 +397,12 @@ Before request
 
 After request
 
-Info 63   [00:02:16.000] response:
+Info 63   [00:02:20.000] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 64   [00:02:17.000] request:
+Info 64   [00:02:21.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -409,32 +413,32 @@ Info 64   [00:02:17.000] request:
     }
 Before request
 
-Info 65   [00:02:18.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 66   [00:02:19.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 67   [00:02:20.000] Different program with same set of files
-Info 68   [00:02:21.000] Before ensureProjectForOpenFiles:
-Info 69   [00:02:22.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 69   [00:02:23.000] 	Files (5)
+Info 65   [00:02:22.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 66   [00:02:23.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 67   [00:02:24.000] Different program with same set of files
+Info 68   [00:02:25.000] Before ensureProjectForOpenFiles:
+Info 69   [00:02:26.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 69   [00:02:27.000] 	Files (5)
 
-Info 69   [00:02:24.000] -----------------------------------------------
-Info 69   [00:02:25.000] Open files: 
-Info 69   [00:02:26.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 69   [00:02:27.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 69   [00:02:28.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 69   [00:02:29.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 69   [00:02:30.000] After ensureProjectForOpenFiles:
-Info 70   [00:02:31.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 70   [00:02:32.000] 	Files (5)
+Info 69   [00:02:28.000] -----------------------------------------------
+Info 69   [00:02:29.000] Open files: 
+Info 69   [00:02:30.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 69   [00:02:31.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 69   [00:02:32.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 69   [00:02:33.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 69   [00:02:34.000] After ensureProjectForOpenFiles:
+Info 70   [00:02:35.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 70   [00:02:36.000] 	Files (5)
 
-Info 70   [00:02:33.000] -----------------------------------------------
-Info 70   [00:02:34.000] Open files: 
-Info 70   [00:02:35.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 70   [00:02:36.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 70   [00:02:37.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 70   [00:02:38.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 70   [00:02:37.000] -----------------------------------------------
+Info 70   [00:02:38.000] Open files: 
+Info 70   [00:02:39.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 70   [00:02:40.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 70   [00:02:41.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 70   [00:02:42.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
-Info 70   [00:02:39.000] response:
+Info 70   [00:02:43.000] response:
     {
       "response": [
         {
@@ -447,7 +451,7 @@ Info 70   [00:02:39.000] response:
       ],
       "responseRequired": true
     }
-Info 71   [00:02:40.000] request:
+Info 71   [00:02:44.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -468,12 +472,12 @@ function foo() {
 
 //// [/user/username/projects/myproject/file1.d.ts] file written with same contents
 
-Info 72   [00:02:47.000] response:
+Info 72   [00:02:51.000] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 73   [00:02:48.000] request:
+Info 73   [00:02:52.000] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -503,12 +507,12 @@ Before request
 
 After request
 
-Info 74   [00:02:49.000] response:
+Info 74   [00:02:53.000] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 75   [00:02:50.000] request:
+Info 75   [00:02:54.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -519,32 +523,32 @@ Info 75   [00:02:50.000] request:
     }
 Before request
 
-Info 76   [00:02:51.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 77   [00:02:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 78   [00:02:53.000] Different program with same set of files
-Info 79   [00:02:54.000] Before ensureProjectForOpenFiles:
-Info 80   [00:02:55.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 80   [00:02:56.000] 	Files (5)
+Info 76   [00:02:55.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 77   [00:02:56.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 78   [00:02:57.000] Different program with same set of files
+Info 79   [00:02:58.000] Before ensureProjectForOpenFiles:
+Info 80   [00:02:59.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 80   [00:03:00.000] 	Files (5)
 
-Info 80   [00:02:57.000] -----------------------------------------------
-Info 80   [00:02:58.000] Open files: 
-Info 80   [00:02:59.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 80   [00:03:00.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 80   [00:03:01.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 80   [00:03:02.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 80   [00:03:03.000] After ensureProjectForOpenFiles:
-Info 81   [00:03:04.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 81   [00:03:05.000] 	Files (5)
+Info 80   [00:03:01.000] -----------------------------------------------
+Info 80   [00:03:02.000] Open files: 
+Info 80   [00:03:03.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 80   [00:03:04.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 80   [00:03:05.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 80   [00:03:06.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 80   [00:03:07.000] After ensureProjectForOpenFiles:
+Info 81   [00:03:08.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 81   [00:03:09.000] 	Files (5)
 
-Info 81   [00:03:06.000] -----------------------------------------------
-Info 81   [00:03:07.000] Open files: 
-Info 81   [00:03:08.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 81   [00:03:09.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 81   [00:03:10.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 81   [00:03:11.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 81   [00:03:10.000] -----------------------------------------------
+Info 81   [00:03:11.000] Open files: 
+Info 81   [00:03:12.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 81   [00:03:13.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 81   [00:03:14.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 81   [00:03:15.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
-Info 81   [00:03:12.000] response:
+Info 81   [00:03:16.000] response:
     {
       "response": [
         {
@@ -557,7 +561,7 @@ Info 81   [00:03:12.000] response:
       ],
       "responseRequired": true
     }
-Info 82   [00:03:13.000] request:
+Info 82   [00:03:17.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -578,7 +582,7 @@ function bar() {
 
 //// [/user/username/projects/myproject/file2.d.ts] file written with same contents
 
-Info 83   [00:03:20.000] response:
+Info 83   [00:03:24.000] response:
     {
       "response": true,
       "responseRequired": true

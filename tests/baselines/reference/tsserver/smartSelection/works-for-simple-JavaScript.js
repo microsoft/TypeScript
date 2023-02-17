@@ -1,5 +1,9 @@
-Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:12.000] request:
+TI:: [00:00:11.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:12.000] Processing cache location '/a/data/'
+TI:: [00:00:13.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:14.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:16.000] request:
     {
       "command": "open",
       "arguments": {
@@ -34,13 +38,13 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 2    [00:00:13.000] Search path: /
-Info 3    [00:00:14.000] For info: /file.js :: No config files found.
-Info 4    [00:00:15.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 5    [00:00:16.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 6    [00:00:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 7    [00:00:18.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 8    [00:00:19.000] 	Files (2)
+Info 2    [00:00:17.000] Search path: /
+Info 3    [00:00:18.000] For info: /file.js :: No config files found.
+Info 4    [00:00:19.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 5    [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 6    [00:00:21.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 7    [00:00:22.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 8    [00:00:23.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/file.js
 
@@ -50,14 +54,32 @@ Info 8    [00:00:19.000] 	Files (2)
 	file.js
 	  Root file specified for compilation
 
-Info 9    [00:00:20.000] -----------------------------------------------
-Info 10   [00:00:21.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 10   [00:00:22.000] 	Files (2)
+Info 9    [00:00:24.000] -----------------------------------------------
+TI:: [00:00:25.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/file.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
+TI:: [00:00:26.000] Request specifies cache path '/a/data/', loading cached information...
+TI:: [00:00:27.000] Processing cache location '/a/data/'
+TI:: [00:00:28.000] Cache location was already processed...
+TI:: [00:00:29.000] Failed to load safelist from types map file '/typesMap.json'
+TI:: [00:00:30.000] Explicitly included types: []
+TI:: [00:00:31.000] Inferred typings from unresolved imports: []
+TI:: [00:00:32.000] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [00:00:33.000] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [00:00:34.000] DirectoryWatcher:: Added:: WatchInfo: /bower_components
+TI:: [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules
+TI:: [00:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:00:40.000] Sending response:
+    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+TI:: [00:00:41.000] No new typings were requested as a result of typings discovery
+Info 10   [00:00:42.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 10   [00:00:43.000] 	Files (2)
 
-Info 10   [00:00:23.000] -----------------------------------------------
-Info 10   [00:00:24.000] Open files: 
-Info 10   [00:00:25.000] 	FileName: /file.js ProjectRootPath: undefined
-Info 10   [00:00:26.000] 		Projects: /dev/null/inferredProject1*
+Info 10   [00:00:44.000] -----------------------------------------------
+Info 10   [00:00:45.000] Open files: 
+Info 10   [00:00:46.000] 	FileName: /file.js ProjectRootPath: undefined
+Info 10   [00:00:47.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
@@ -70,11 +92,11 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 10   [00:00:27.000] response:
+Info 10   [00:00:48.000] response:
     {
       "responseRequired": false
     }
-Info 11   [00:00:28.000] request:
+Info 11   [00:00:49.000] request:
     {
       "command": "selectionRange",
       "arguments": {
@@ -93,7 +115,7 @@ Before request
 
 After request
 
-Info 12   [00:00:29.000] response:
+Info 12   [00:00:50.000] response:
     {
       "response": [
         {

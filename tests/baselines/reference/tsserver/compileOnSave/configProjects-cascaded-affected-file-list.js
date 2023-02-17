@@ -1,5 +1,9 @@
-Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:22.000] request:
+TI:: [00:00:21.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:22.000] Processing cache location '/a/data/'
+TI:: [00:00:23.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:24.000] Finished processing cache location '/a/data/'
+Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:26.000] request:
     {
       "command": "open",
       "arguments": {
@@ -40,11 +44,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 2    [00:00:23.000] Search path: /a/b
-Info 3    [00:00:24.000] For info: /a/b/moduleFile1.ts :: Config file name: /a/b/tsconfig.json
-Info 4    [00:00:25.000] Creating configuration project /a/b/tsconfig.json
-Info 5    [00:00:26.000] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Info 6    [00:00:27.000] Config: /a/b/tsconfig.json : {
+Info 2    [00:00:27.000] Search path: /a/b
+Info 3    [00:00:28.000] For info: /a/b/moduleFile1.ts :: Config file name: /a/b/tsconfig.json
+Info 4    [00:00:29.000] Creating configuration project /a/b/tsconfig.json
+Info 5    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info 6    [00:00:31.000] Config: /a/b/tsconfig.json : {
  "rootNames": [
   "/a/b/file1Consumer1.ts",
   "/a/b/file1Consumer1Consumer1.ts",
@@ -55,18 +59,18 @@ Info 6    [00:00:27.000] Config: /a/b/tsconfig.json : {
   "configFilePath": "/a/b/tsconfig.json"
  }
 }
-Info 7    [00:00:28.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer1.ts 500 undefined WatchType: Closed Script info
-Info 10   [00:00:31.000] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer1Consumer1.ts 500 undefined WatchType: Closed Script info
-Info 11   [00:00:32.000] FileWatcher:: Added:: WatchInfo: /a/b/globalFile3.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:00:33.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 13   [00:00:34.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 14   [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 15   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 16   [00:00:37.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 17   [00:00:38.000] Project '/a/b/tsconfig.json' (Configured)
-Info 18   [00:00:39.000] 	Files (5)
+Info 7    [00:00:32.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info 8    [00:00:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info 9    [00:00:34.000] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer1.ts 500 undefined WatchType: Closed Script info
+Info 10   [00:00:35.000] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer1Consumer1.ts 500 undefined WatchType: Closed Script info
+Info 11   [00:00:36.000] FileWatcher:: Added:: WatchInfo: /a/b/globalFile3.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:00:37.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info 13   [00:00:38.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 14   [00:00:39.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 15   [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 16   [00:00:41.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 17   [00:00:42.000] Project '/a/b/tsconfig.json' (Configured)
+Info 18   [00:00:43.000] 	Files (5)
 	/a/lib/lib.d.ts
 	/a/b/moduleFile1.ts
 	/a/b/file1Consumer1.ts
@@ -87,14 +91,14 @@ Info 18   [00:00:39.000] 	Files (5)
 	globalFile3.ts
 	  Matched by default include pattern '**/*'
 
-Info 19   [00:00:40.000] -----------------------------------------------
-Info 20   [00:00:41.000] Project '/a/b/tsconfig.json' (Configured)
-Info 20   [00:00:42.000] 	Files (5)
+Info 19   [00:00:44.000] -----------------------------------------------
+Info 20   [00:00:45.000] Project '/a/b/tsconfig.json' (Configured)
+Info 20   [00:00:46.000] 	Files (5)
 
-Info 20   [00:00:43.000] -----------------------------------------------
-Info 20   [00:00:44.000] Open files: 
-Info 20   [00:00:45.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefined
-Info 20   [00:00:46.000] 		Projects: /a/b/tsconfig.json
+Info 20   [00:00:47.000] -----------------------------------------------
+Info 20   [00:00:48.000] Open files: 
+Info 20   [00:00:49.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefined
+Info 20   [00:00:50.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
@@ -117,11 +121,11 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
-Info 20   [00:00:47.000] response:
+Info 20   [00:00:51.000] response:
     {
       "responseRequired": false
     }
-Info 21   [00:00:48.000] request:
+Info 21   [00:00:52.000] request:
     {
       "command": "open",
       "arguments": {
@@ -132,18 +136,18 @@ Info 21   [00:00:48.000] request:
     }
 Before request
 
-Info 22   [00:00:49.000] FileWatcher:: Close:: WatchInfo: /a/b/file1Consumer1.ts 500 undefined WatchType: Closed Script info
-Info 23   [00:00:50.000] Search path: /a/b
-Info 24   [00:00:51.000] For info: /a/b/file1Consumer1.ts :: Config file name: /a/b/tsconfig.json
-Info 25   [00:00:52.000] Project '/a/b/tsconfig.json' (Configured)
-Info 25   [00:00:53.000] 	Files (5)
+Info 22   [00:00:53.000] FileWatcher:: Close:: WatchInfo: /a/b/file1Consumer1.ts 500 undefined WatchType: Closed Script info
+Info 23   [00:00:54.000] Search path: /a/b
+Info 24   [00:00:55.000] For info: /a/b/file1Consumer1.ts :: Config file name: /a/b/tsconfig.json
+Info 25   [00:00:56.000] Project '/a/b/tsconfig.json' (Configured)
+Info 25   [00:00:57.000] 	Files (5)
 
-Info 25   [00:00:54.000] -----------------------------------------------
-Info 25   [00:00:55.000] Open files: 
-Info 25   [00:00:56.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefined
-Info 25   [00:00:57.000] 		Projects: /a/b/tsconfig.json
-Info 25   [00:00:58.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
-Info 25   [00:00:59.000] 		Projects: /a/b/tsconfig.json
+Info 25   [00:00:58.000] -----------------------------------------------
+Info 25   [00:00:59.000] Open files: 
+Info 25   [00:01:00.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefined
+Info 25   [00:01:01.000] 		Projects: /a/b/tsconfig.json
+Info 25   [00:01:02.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
+Info 25   [00:01:03.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
@@ -168,11 +172,11 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 25   [00:01:00.000] response:
+Info 25   [00:01:04.000] response:
     {
       "responseRequired": false
     }
-Info 26   [00:01:01.000] request:
+Info 26   [00:01:05.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -186,7 +190,7 @@ Before request
 
 After request
 
-Info 27   [00:01:02.000] response:
+Info 27   [00:01:06.000] response:
     {
       "response": [
         {
@@ -201,7 +205,7 @@ Info 27   [00:01:02.000] response:
       ],
       "responseRequired": true
     }
-Info 28   [00:01:03.000] request:
+Info 28   [00:01:07.000] request:
     {
       "command": "change",
       "arguments": {
@@ -219,11 +223,11 @@ Before request
 
 After request
 
-Info 29   [00:01:04.000] response:
+Info 29   [00:01:08.000] response:
     {
       "responseRequired": false
     }
-Info 30   [00:01:05.000] request:
+Info 30   [00:01:09.000] request:
     {
       "command": "change",
       "arguments": {
@@ -241,11 +245,11 @@ Before request
 
 After request
 
-Info 31   [00:01:06.000] response:
+Info 31   [00:01:10.000] response:
     {
       "responseRequired": false
     }
-Info 32   [00:01:07.000] request:
+Info 32   [00:01:11.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -257,12 +261,12 @@ Info 32   [00:01:07.000] request:
     }
 Before request
 
-Info 33   [00:01:08.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 34   [00:01:09.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 35   [00:01:10.000] Different program with same set of files
+Info 33   [00:01:12.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info 34   [00:01:13.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 35   [00:01:14.000] Different program with same set of files
 After request
 
-Info 36   [00:01:11.000] response:
+Info 36   [00:01:15.000] response:
     {
       "response": [
         {

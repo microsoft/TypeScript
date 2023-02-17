@@ -34,9 +34,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra r
             content: "export let x = 1"
         };
         const host: TestServerHost & ts.ModuleResolutionHost = createServerHost([file1, lib]);
+        const logger = createLoggerWithInMemoryLogs(host);
         const projectService = createProjectService(host, {
-            typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host),
-            logger: createLoggerWithInMemoryLogs(host)
+            typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host, logger),
+            logger
         });
 
         projectService.setCompilerOptionsForInferredProjects({ traceResolution: true, allowJs: true });
