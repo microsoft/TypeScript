@@ -464,7 +464,7 @@ export function fromParameter(isNaN: number, bar: typeof globalThis.isNaN) {
 // Non-inference cases.
 
 export const explicitlyTypedVariable: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN = (isNaN) => isNaN;
->explicitlyTypedVariable : (isNaN: (number: number) => boolean) => (number: number) => boolean
+>explicitlyTypedVariable : (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN
 >isNaN : (number: number) => boolean
 >globalThis.isNaN : (number: number) => boolean
 >globalThis : typeof globalThis
@@ -512,7 +512,7 @@ export class AsClassProperty {
 }
 
 export type AsFunctionType = (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
->AsFunctionType : (isNaN: (number: number) => boolean) => (number: number) => boolean
+>AsFunctionType : (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN
 >isNaN : (number: number) => boolean
 >globalThis.isNaN : (number: number) => boolean
 >globalThis : typeof globalThis

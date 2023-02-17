@@ -109,27 +109,27 @@ export type AsFunctionType = (isNaN: typeof globalThis.isNaN) => typeof globalTh
 
 
 //// [declarationEmitGlobalThisPreserved.d.ts]
-export declare const a1: (isNaN: typeof isNaN) => typeof isNaN;
-export declare const a2: (isNaN: typeof isNaN, bar?: typeof isNaN) => typeof isNaN;
-export declare const a3: (isNaN: number, bar: typeof isNaN) => typeof isNaN;
-export declare const a4: (isNaN: number) => typeof isNaN;
+export declare const a1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare const a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare const a3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare const a4: (isNaN: number) => typeof globalThis.isNaN;
 export declare const aObj: {
-    a1: (isNaN: typeof isNaN) => typeof isNaN;
-    a2: (isNaN: typeof isNaN, bar?: typeof isNaN) => typeof isNaN;
-    a3: (isNaN: number, bar: typeof isNaN) => typeof isNaN;
-    a4: (isNaN: number) => typeof isNaN;
+    a1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+    a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+    a3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+    a4: (isNaN: number) => typeof globalThis.isNaN;
 };
 export type a4Return = ReturnType<ReturnType<typeof a4>>;
 export type a4oReturn = ReturnType<ReturnType<typeof aObj['a4']>>;
-export declare const b1: (isNaN: typeof isNaN) => typeof isNaN;
-export declare const b2: (isNaN: typeof isNaN, bar?: typeof isNaN) => typeof isNaN;
-export declare const b3: (isNaN: number, bar: typeof isNaN) => typeof isNaN;
-export declare const b4: (isNaN: number) => typeof isNaN;
+export declare const b1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare const b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare const b3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare const b4: (isNaN: number) => typeof globalThis.isNaN;
 export declare const bObj: {
-    b1: (isNaN: typeof isNaN) => typeof isNaN;
-    b2: (isNaN: typeof isNaN, bar?: typeof isNaN) => typeof isNaN;
-    b3: (isNaN: number, bar: typeof isNaN) => typeof isNaN;
-    b4: (isNaN: number) => typeof isNaN;
+    b1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+    b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+    b3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+    b4: (isNaN: number) => typeof globalThis.isNaN;
 };
 export type b4Return = ReturnType<ReturnType<typeof b4>>;
 export type b4oReturn = ReturnType<ReturnType<typeof bObj['b4']>>;
@@ -138,17 +138,17 @@ export declare function c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalTh
 export declare function c3(isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN;
 export declare function c4(isNaN: number): typeof globalThis.isNaN;
 export declare const cObj: {
-    c1(isNaN: typeof isNaN): typeof isNaN;
-    c2(isNaN: typeof isNaN, bar?: typeof isNaN): typeof isNaN;
-    c3(isNaN: number, bar: typeof isNaN): typeof isNaN;
-    c4(isNaN: number): typeof isNaN;
+    c1(isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN;
+    c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN;
+    c3(isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN;
+    c4(isNaN: number): typeof globalThis.isNaN;
 };
 export type c4Return = ReturnType<ReturnType<typeof c4>>;
 export type c4oReturn = ReturnType<ReturnType<typeof cObj['c4']>>;
-export declare function d1(): () => (isNaN: typeof isNaN) => typeof isNaN;
-export declare function d2(): () => (isNaN: typeof isNaN, bar?: typeof isNaN) => typeof isNaN;
-export declare function d3(): () => (isNaN: number, bar: typeof isNaN) => typeof isNaN;
-export declare function d4(): () => (isNaN: number) => typeof isNaN;
+export declare function d1(): () => (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare function d2(): () => (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare function d3(): () => (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare function d4(): () => (isNaN: number) => typeof globalThis.isNaN;
 export type d4Return = ReturnType<ReturnType<ReturnType<ReturnType<typeof d4>>>>;
 export declare class A {
     method1(isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN;
@@ -168,125 +168,3 @@ export declare class AsClassProperty {
     isNaN?: typeof globalThis.isNaN;
 }
 export type AsFunctionType = (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
-
-
-//// [DtsFileErrors]
-
-
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(1,27): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(2,27): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(6,10): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(7,10): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(11,35): error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(12,36): error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(13,27): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(14,27): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(18,10): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(19,10): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(23,35): error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(24,36): error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(30,8): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(31,8): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(36,36): error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(37,38): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(38,38): error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts(41,35): error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-
-
-==== tests/cases/compiler/declarationEmitGlobalThisPreserved.d.ts (18 errors) ====
-    export declare const a1: (isNaN: typeof isNaN) => typeof isNaN;
-                              ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-    export declare const a2: (isNaN: typeof isNaN, bar?: typeof isNaN) => typeof isNaN;
-                              ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-    export declare const a3: (isNaN: number, bar: typeof isNaN) => typeof isNaN;
-    export declare const a4: (isNaN: number) => typeof isNaN;
-    export declare const aObj: {
-        a1: (isNaN: typeof isNaN) => typeof isNaN;
-             ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-        a2: (isNaN: typeof isNaN, bar?: typeof isNaN) => typeof isNaN;
-             ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-        a3: (isNaN: number, bar: typeof isNaN) => typeof isNaN;
-        a4: (isNaN: number) => typeof isNaN;
-    };
-    export type a4Return = ReturnType<ReturnType<typeof a4>>;
-                                      ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-    export type a4oReturn = ReturnType<ReturnType<typeof aObj['a4']>>;
-                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-    export declare const b1: (isNaN: typeof isNaN) => typeof isNaN;
-                              ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-    export declare const b2: (isNaN: typeof isNaN, bar?: typeof isNaN) => typeof isNaN;
-                              ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-    export declare const b3: (isNaN: number, bar: typeof isNaN) => typeof isNaN;
-    export declare const b4: (isNaN: number) => typeof isNaN;
-    export declare const bObj: {
-        b1: (isNaN: typeof isNaN) => typeof isNaN;
-             ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-        b2: (isNaN: typeof isNaN, bar?: typeof isNaN) => typeof isNaN;
-             ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-        b3: (isNaN: number, bar: typeof isNaN) => typeof isNaN;
-        b4: (isNaN: number) => typeof isNaN;
-    };
-    export type b4Return = ReturnType<ReturnType<typeof b4>>;
-                                      ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-    export type b4oReturn = ReturnType<ReturnType<typeof bObj['b4']>>;
-                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-    export declare function c1(isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN;
-    export declare function c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN;
-    export declare function c3(isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN;
-    export declare function c4(isNaN: number): typeof globalThis.isNaN;
-    export declare const cObj: {
-        c1(isNaN: typeof isNaN): typeof isNaN;
-           ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-        c2(isNaN: typeof isNaN, bar?: typeof isNaN): typeof isNaN;
-           ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-        c3(isNaN: number, bar: typeof isNaN): typeof isNaN;
-        c4(isNaN: number): typeof isNaN;
-    };
-    export type c4Return = ReturnType<ReturnType<typeof c4>>;
-    export type c4oReturn = ReturnType<ReturnType<typeof cObj['c4']>>;
-                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-    export declare function d1(): () => (isNaN: typeof isNaN) => typeof isNaN;
-                                         ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-    export declare function d2(): () => (isNaN: typeof isNaN, bar?: typeof isNaN) => typeof isNaN;
-                                         ~~~~~~~~~~~~~~~~~~~
-!!! error TS2502: 'isNaN' is referenced directly or indirectly in its own type annotation.
-    export declare function d3(): () => (isNaN: number, bar: typeof isNaN) => typeof isNaN;
-    export declare function d4(): () => (isNaN: number) => typeof isNaN;
-    export type d4Return = ReturnType<ReturnType<ReturnType<ReturnType<typeof d4>>>>;
-                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint '(...args: any) => any'.
-    export declare class A {
-        method1(isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN;
-        method2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN;
-        method3(isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN;
-        method4(isNaN: number): typeof globalThis.isNaN;
-    }
-    export declare function fromParameter(isNaN: number, bar: typeof globalThis.isNaN): () => {
-        bar: typeof globalThis.isNaN;
-    };
-    export declare const explicitlyTypedVariable: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
-    export declare function explicitlyTypedFunction(isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN;
-    export type AsObjectProperty = {
-        isNaN: typeof globalThis.isNaN;
-    };
-    export declare class AsClassProperty {
-        isNaN?: typeof globalThis.isNaN;
-    }
-    export type AsFunctionType = (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
-    
