@@ -5287,6 +5287,7 @@ export const enum NodeBuilderFlags {
     UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
     NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
     OmitThisParameter                       = 1 << 25,
+    IncludeParameterInitializers            = 1 << 31,  // Wether to include initializers into function signature, which is used to display signature help
 
     // Error handling
     AllowThisInObjectLiteral                = 1 << 15,
