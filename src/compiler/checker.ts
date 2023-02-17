@@ -7358,7 +7358,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             let initializer: Expression | undefined;
             if (tryCast(parameterDeclaration, isParameter)) {
-                initializer = parameterDeclaration?.initializer
+                initializer = parameterDeclaration?.initializer;
             }
             if (parameterDeclaration) {
                 initializer = getJSDocInitializerParameter(parameterDeclaration) ?? initializer;
