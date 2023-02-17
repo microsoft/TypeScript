@@ -2130,10 +2130,10 @@ export function getCompletionEntriesFromSymbols(
             // Filter out parameters from their own initializers
             // `function f(a = /* no 'a' and 'b' here */, b) { }`
             const symbolDeclaration = symbol.valueDeclaration;
-            if (tryCast(variableOrParameterDeclaration, isParameter) && tryCast(symbolDeclaration, isParameter)) {
-                const symbolDeclarationPos = (symbolDeclaration as ParameterDeclaration).pos;
-                const { parameters } = (variableOrParameterDeclaration as ParameterDeclaration).parent;
-                if (symbolDeclarationPos >= variableOrParameterDeclaration!.pos && symbolDeclarationPos < parameters.end) {
+            if (variableOrParameterDeclaration && isParameter(variableOrParameterDeclaration) && symbolDeclaration && isParameter(symbolDeclaration)) {
+                const symbolDeclarationPos = symbolDeclaration.pos;
+                const { parameters } = variableOrParameterDeclaration.parent;
+                if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && symbolDeclarationPos < parameters.end) {
                     return false;
                 }
             }
