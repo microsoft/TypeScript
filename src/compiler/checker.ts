@@ -17019,7 +17019,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!addSpans((t as TemplateLiteralType).texts, (t as TemplateLiteralType).types)) return false;
                     text += texts[i + 1];
                 }
-                else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t)) {
+                else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t) || t.flags & TypeFlags.Intersection) {
                     newTypes.push(t);
                     newTexts.push(text);
                     text = texts[i + 1];
