@@ -49,13 +49,29 @@ const res2 = fn1(...itNum);
 >...itNum : Iterable<number>
 >itNum : Iterable<number>
 
+const res3 = fn1(true, ..."hello");
+>res3 : readonly [true, ...any[]]
+>fn1(true, ..."hello") : readonly [true, ...any[]]
+>fn1 : <const T extends readonly unknown[]>(...args: T) => T
+>true : true
+>..."hello" : any
+>"hello" : "hello"
+
+const res4 = fn1(true, ...itNum);
+>res4 : readonly [true, ...any[]]
+>fn1(true, ...itNum) : readonly [true, ...any[]]
+>fn1 : <const T extends readonly unknown[]>(...args: T) => T
+>true : true
+>...itNum : Iterable<number>
+>itNum : Iterable<number>
+
 // repro from #52781
 declare function foo<T extends unknown[]>(...args: T): T;
 >foo : <T extends unknown[]>(...args: T) => T
 >args : T
 
-const p = foo(..."hello");
->p : any[]
+const p1 = foo(..."hello");
+>p1 : any[]
 >foo(..."hello") : any[]
 >foo : <T extends unknown[]>(...args: T) => T
 >..."hello" : any
@@ -65,6 +81,22 @@ const p2 = foo(...itNum);
 >p2 : Iterable<number>
 >foo(...itNum) : Iterable<number>
 >foo : <T extends unknown[]>(...args: T) => T
+>...itNum : Iterable<number>
+>itNum : Iterable<number>
+
+const p3 = foo(true, ..."hello");
+>p3 : [boolean, ...any[]]
+>foo(true, ..."hello") : [boolean, ...any[]]
+>foo : <T extends unknown[]>(...args: T) => T
+>true : true
+>..."hello" : any
+>"hello" : "hello"
+
+const p4 = foo(true, ...itNum);
+>p4 : [boolean, ...any[]]
+>foo(true, ...itNum) : [boolean, ...any[]]
+>foo : <T extends unknown[]>(...args: T) => T
+>true : true
 >...itNum : Iterable<number>
 >itNum : Iterable<number>
 

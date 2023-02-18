@@ -33,20 +33,38 @@ const res2 = fn1(...itNum);
 >fn1 : Symbol(fn1, Decl(argumentsSpreadRestIterables.tsx, 4, 46))
 >itNum : Symbol(itNum, Decl(argumentsSpreadRestIterables.tsx, 0, 13))
 
+const res3 = fn1(true, ..."hello");
+>res3 : Symbol(res3, Decl(argumentsSpreadRestIterables.tsx, 9, 5))
+>fn1 : Symbol(fn1, Decl(argumentsSpreadRestIterables.tsx, 4, 46))
+
+const res4 = fn1(true, ...itNum);
+>res4 : Symbol(res4, Decl(argumentsSpreadRestIterables.tsx, 10, 5))
+>fn1 : Symbol(fn1, Decl(argumentsSpreadRestIterables.tsx, 4, 46))
+>itNum : Symbol(itNum, Decl(argumentsSpreadRestIterables.tsx, 0, 13))
+
 // repro from #52781
 declare function foo<T extends unknown[]>(...args: T): T;
->foo : Symbol(foo, Decl(argumentsSpreadRestIterables.tsx, 8, 27))
->T : Symbol(T, Decl(argumentsSpreadRestIterables.tsx, 11, 21))
->args : Symbol(args, Decl(argumentsSpreadRestIterables.tsx, 11, 42))
->T : Symbol(T, Decl(argumentsSpreadRestIterables.tsx, 11, 21))
->T : Symbol(T, Decl(argumentsSpreadRestIterables.tsx, 11, 21))
+>foo : Symbol(foo, Decl(argumentsSpreadRestIterables.tsx, 10, 33))
+>T : Symbol(T, Decl(argumentsSpreadRestIterables.tsx, 13, 21))
+>args : Symbol(args, Decl(argumentsSpreadRestIterables.tsx, 13, 42))
+>T : Symbol(T, Decl(argumentsSpreadRestIterables.tsx, 13, 21))
+>T : Symbol(T, Decl(argumentsSpreadRestIterables.tsx, 13, 21))
 
-const p = foo(..."hello");
->p : Symbol(p, Decl(argumentsSpreadRestIterables.tsx, 12, 5))
->foo : Symbol(foo, Decl(argumentsSpreadRestIterables.tsx, 8, 27))
+const p1 = foo(..."hello");
+>p1 : Symbol(p1, Decl(argumentsSpreadRestIterables.tsx, 14, 5))
+>foo : Symbol(foo, Decl(argumentsSpreadRestIterables.tsx, 10, 33))
 
 const p2 = foo(...itNum);
->p2 : Symbol(p2, Decl(argumentsSpreadRestIterables.tsx, 13, 5))
->foo : Symbol(foo, Decl(argumentsSpreadRestIterables.tsx, 8, 27))
+>p2 : Symbol(p2, Decl(argumentsSpreadRestIterables.tsx, 15, 5))
+>foo : Symbol(foo, Decl(argumentsSpreadRestIterables.tsx, 10, 33))
+>itNum : Symbol(itNum, Decl(argumentsSpreadRestIterables.tsx, 0, 13))
+
+const p3 = foo(true, ..."hello");
+>p3 : Symbol(p3, Decl(argumentsSpreadRestIterables.tsx, 16, 5))
+>foo : Symbol(foo, Decl(argumentsSpreadRestIterables.tsx, 10, 33))
+
+const p4 = foo(true, ...itNum);
+>p4 : Symbol(p4, Decl(argumentsSpreadRestIterables.tsx, 17, 5))
+>foo : Symbol(foo, Decl(argumentsSpreadRestIterables.tsx, 10, 33))
 >itNum : Symbol(itNum, Decl(argumentsSpreadRestIterables.tsx, 0, 13))
 
