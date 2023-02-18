@@ -745,42 +745,12 @@ export class TestState {
         this.verifyGoToXWorker(/*startMarker*/ undefined, toArray(endMarker), () => this.getGoToDefinition());
     }
 
-    public verifyGoToDefinition(arg0: any, endMarkerNames?: ArrayOrSingle<string | { marker: string, unverified?: boolean }> | { file: string, unverified?: boolean }) {
-        this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinitionAndBoundSpan());
-    }
-
     private getGoToDefinition(): readonly ts.DefinitionInfo[] {
         return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
     }
 
     private getGoToDefinitionAndBoundSpan(): ts.DefinitionInfoAndBoundSpan {
         return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition)!;
-    }
-
-    private verifyGoToX(arg0: any, endMarkerNames: ArrayOrSingle<string | { marker: string, unverified?: boolean }> | { file: string, unverified?: boolean } | undefined, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
-        if (endMarkerNames) {
-            this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
-        }
-        else if (ts.isArray(arg0)) {
-            const pairs = arg0 as readonly [ArrayOrSingle<string>, ArrayOrSingle<string>][];
-            for (const [start, end] of pairs) {
-                this.verifyGoToXPlain(start, end, getDefs);
-            }
-        }
-        else {
-            const obj: { [startMarkerName: string]: ArrayOrSingle<string> } = arg0;
-            for (const startMarkerName in obj) {
-                if (ts.hasProperty(obj, startMarkerName)) {
-                    this.verifyGoToXPlain(startMarkerName, obj[startMarkerName], getDefs);
-                }
-            }
-        }
-    }
-
-    private verifyGoToXPlain(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string | { marker: string, unverified?: boolean }> | { file: string, unverified?: boolean }, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
-        for (const start of toArray(startMarkerNames)) {
-            this.verifyGoToXSingle(start, endMarkerNames, getDefs);
-        }
     }
 
     public verifyGoToDefinitionForMarkers(markerNames: string[]) {

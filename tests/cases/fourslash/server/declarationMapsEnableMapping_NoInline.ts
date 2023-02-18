@@ -76,10 +76,10 @@
 goTo.file("/index.ts");
 verify.getEmitOutput(["/dist/index.js", "/dist/index.d.ts.map", "/dist/index.d.ts"]);
 
-verify.goToDefinition("1", "2"); // getDefinitionAndBoundSpan
 goTo.marker("1");
 verify.goToDefinitionIs("2"); // getDefinitionAtPosition
 verify.baselineCommands(
     { type: "goToImplementation", markerOrRange: "1" }, // getImplementationAtPosition
-    { type: "goToType", markerOrRange: "1" }, // getTypeDefinitionAtPosition
+    { type: "goToType", markerOrRange: "1" }, // getTypeDefinitionAtPosition,
+    { type: "goToDefinition", markerOrRange: "1" }, // getDefinitionAndBoundSpan
 );

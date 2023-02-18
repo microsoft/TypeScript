@@ -61,3 +61,37 @@
     "name": ""
    }
   ]
+
+
+
+// === goToDefinition ===
+// === /index.ts ===
+// export class Foo {
+//     member: string;
+//     [|methodName|](propName: SomeType): SomeType { return propName; }
+//     otherMethod() {
+//         if (Math.random() > 0.5) {
+//             return {x: 42};
+//         }
+//         return {y: "yes"};
+//     }
+// }
+// 
+// export interface SomeType {
+//     member: number;
+// }
+
+// === /mymodule.ts ===
+// import * as mod from "/dist/index";
+// const instance = new mod.Foo();
+// instance./*GOTO DEF*/[|methodName|]({member: 12});
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

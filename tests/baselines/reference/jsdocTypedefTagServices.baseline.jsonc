@@ -255,3 +255,30 @@
 //  * @type {/*HIGHLIGHTS*/[|{| kind: "reference" |}Product|]}
 //  */
 // const product = null;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef [|Product|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {/*GOTO DEF*/Product}
+//  */
+// const product = null;
+
+  // === Details ===
+  [
+   {
+    "kind": "type",
+    "name": "Product",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

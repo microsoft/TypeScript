@@ -15,3 +15,23 @@
     "name": ""
    }
   ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// export const [|a|] = 'a';
+
+// === /b.ts ===
+// import { a } from './a';
+// [|a|]/*GOTO DEF*/
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

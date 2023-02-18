@@ -219,3 +219,25 @@
     ]
    }
   ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|export default function [|f|]() {}|>
+
+// === /tests/cases/fourslash/b.ts ===
+// import g from "./a";
+// /*GOTO DEF*/[|g|]();
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "f",
+    "containerName": "\"/tests/cases/fourslash/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

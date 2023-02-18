@@ -310,12 +310,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyGoToDefinitionIs(endMarkers);
     }
 
-    public goToDefinition(startMarkerName: ArrayOrSingle<string>, endMarkerName: ArrayOrSingle<string>, range?: FourSlash.Range): void;
-    public goToDefinition(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][] | { [startMarkerName: string]: ArrayOrSingle<string> }): void;
-    public goToDefinition(arg0: any, endMarkerName?: ArrayOrSingle<string>) {
-        this.state.verifyGoToDefinition(arg0, endMarkerName);
-    }
-
     public goToDefinitionForMarkers(...markerNames: string[]) {
         this.state.verifyGoToDefinitionForMarkers(markerNames);
     }

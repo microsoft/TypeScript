@@ -313,18 +313,6 @@ declare namespace FourSlashInterface {
         /** Verifies that goToDefinition at the current position would take you to `endMarker`. */
         goToDefinitionIs(endMarkers: ArrayOrSingle<string>): void;
         goToDefinitionName(name: string, containerName: string): void;
-        /**
-         * `verify.goToDefinition("a", "b");` verifies that go-to-definition at marker "a" takes you to marker "b".
-         * `verify.goToDefinition(["a", "aa"], "b");` verifies that markers "a" and "aa" have the same definition "b".
-         * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
-         */
-        goToDefinition(startMarkerNames: ArrayOrSingle<string>, fileResult: { file: string, unverified?: boolean }): void;
-        goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string | { marker: string, unverified?: boolean }>): void;
-        goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, range: Range): void;
-        /** Performs `goToDefinition` for each pair. */
-        goToDefinition(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][]): void;
-        /** Performs `goToDefinition` on each key and value. */
-        goToDefinition(startsAndEnds: { [startMarkerName: string]: ArrayOrSingle<string> }): void;
         /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
         goToDefinitionForMarkers(...markerNames: string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;

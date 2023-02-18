@@ -478,3 +478,51 @@
     ]
    }
   ]
+
+
+
+// === goToDefinition ===
+// === /node_modules/a/node_modules/x/index.d.ts ===
+// <|export default class [|X|] {
+//     private x: number;
+// }|>
+
+// === /node_modules/a/index.d.ts ===
+// import [|X|]/*GOTO DEF*/ from "x";
+// export function a(x: X): void;
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "X",
+    "containerName": "\"/node_modules/a/node_modules/x/index\"",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /node_modules/a/node_modules/x/index.d.ts ===
+// <|export default class [|X|] {
+//     private x: number;
+// }|>
+
+// === /node_modules/b/index.d.ts ===
+// import [|X|]/*GOTO DEF*/ from "x";
+// export const b: X;
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "X",
+    "containerName": "\"/node_modules/a/node_modules/x/index\"",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]
