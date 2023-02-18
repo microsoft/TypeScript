@@ -16971,7 +16971,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTemplateLiteralType(texts: readonly string[], types: readonly Type[]): Type {
-        // TODO(jakebailey): filter out intersections here?
         const unionIndex = findIndex(types, t => !!(t.flags & (TypeFlags.Never | TypeFlags.Union)));
         if (unionIndex >= 0) {
             return checkCrossProductUnion(types) ?
