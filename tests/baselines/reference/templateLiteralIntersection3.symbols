@@ -19,3 +19,14 @@ options1[`foo/${path}`] = false;
 >options1 : Symbol(options1, Decl(templateLiteralIntersection3.ts, 3, 13))
 >path : Symbol(path, Decl(templateLiteralIntersection3.ts, 1, 13))
 
+
+// Lowercase<`foo/${Path}`> => `foo/${Lowercase<Path>}`
+declare const lowercasePath: Lowercase<`foo/${Path}`>;
+>lowercasePath : Symbol(lowercasePath, Decl(templateLiteralIntersection3.ts, 11, 13))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Path : Symbol(Path, Decl(templateLiteralIntersection3.ts, 0, 0))
+
+options1[lowercasePath] = false;
+>options1 : Symbol(options1, Decl(templateLiteralIntersection3.ts, 3, 13))
+>lowercasePath : Symbol(lowercasePath, Decl(templateLiteralIntersection3.ts, 11, 13))
+
