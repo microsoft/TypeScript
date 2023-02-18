@@ -62,6 +62,7 @@ import {
     first,
     firstDefined,
     flatMap,
+    forEach,
     formatting,
     FunctionLikeDeclaration,
     getAllSuperTypeNodes,
@@ -117,6 +118,7 @@ import {
     isAbstractConstructorSymbol,
     isArrowFunction,
     isAssertionExpression,
+    isAwaitExpression,
     isBigIntLiteral,
     isBinaryExpression,
     isBindingElement,
@@ -426,15 +428,16 @@ export enum CompletionSource {
 
 /** @internal */
 export const enum SymbolOriginInfoKind {
-    ThisType            = 1 << 0,
-    SymbolMember        = 1 << 1,
-    Export              = 1 << 2,
-    Promise             = 1 << 3,
-    Nullable            = 1 << 4,
-    ResolvedExport      = 1 << 5,
-    TypeOnlyAlias       = 1 << 6,
-    ObjectLiteralMethod = 1 << 7,
-    Ignore              = 1 << 8,
+    ThisType             = 1 << 0,
+    SymbolMember         = 1 << 1,
+    Export               = 1 << 2,
+    Promise              = 1 << 3,
+    Nullable             = 1 << 4,
+    ResolvedExport       = 1 << 5,
+    TypeOnlyAlias        = 1 << 6,
+    ObjectLiteralMethod  = 1 << 7,
+    Ignore               = 1 << 8,
+    ComputedPropertyName = 1 << 9,
 
     SymbolMemberNoExport = SymbolMember,
     SymbolMemberExport   = SymbolMember | Export,
@@ -474,6 +477,10 @@ interface SymbolOriginInfoObjectLiteralMethod extends SymbolOriginInfo {
     isSnippet?: true,
 }
 
+interface SymbolOriginInfoComputedPropertyName extends SymbolOriginInfo {
+    symbolName: string;
+}
+
 function originIsThisType(origin: SymbolOriginInfo): boolean {
     return !!(origin.kind & SymbolOriginInfoKind.ThisType);
 }
@@ -490,8 +497,8 @@ function originIsResolvedExport(origin: SymbolOriginInfo | undefined): origin is
     return !!(origin && origin.kind === SymbolOriginInfoKind.ResolvedExport);
 }
 
-function originIncludesSymbolName(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport | SymbolOriginInfoResolvedExport {
-    return originIsExport(origin) || originIsResolvedExport(origin);
+function originIncludesSymbolName(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | SymbolOriginInfoComputedPropertyName {
+    return originIsExport(origin) || originIsResolvedExport(origin) || originIsComputedPropertyName(origin);
 }
 
 function originIsPackageJsonImport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport {
@@ -516,6 +523,10 @@ function originIsObjectLiteralMethod(origin: SymbolOriginInfo | undefined): orig
 
 function originIsIgnore(origin: SymbolOriginInfo | undefined): boolean {
     return !!(origin && origin.kind & SymbolOriginInfoKind.Ignore);
+}
+
+function originIsComputedPropertyName(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoComputedPropertyName {
+    return !!(origin && origin.kind & SymbolOriginInfoKind.ComputedPropertyName);
 }
 
 /** @internal */
@@ -642,6 +653,7 @@ export function getCompletionsAtPosition(
     completionKind: CompletionTriggerKind | undefined,
     cancellationToken: CancellationToken,
     formatContext?: formatting.FormatContext,
+    includeSymbol = false
 ): CompletionInfo | undefined {
     const { previousToken } = getRelevantTokens(position, sourceFile);
     if (triggerCharacter && !isInString(sourceFile, position, previousToken) && !isValidTrigger(sourceFile, triggerCharacter, previousToken, position)) {
@@ -671,7 +683,7 @@ export function getCompletionsAtPosition(
         incompleteCompletionsCache?.clear();
     }
 
-    const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, compilerOptions, host, program, log, preferences);
+    const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, compilerOptions, host, program, log, preferences, includeSymbol);
     if (stringCompletions) {
         return stringCompletions;
     }
@@ -688,7 +700,7 @@ export function getCompletionsAtPosition(
 
     switch (completionData.kind) {
         case CompletionDataKind.Data:
-            const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext, position);
+            const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext, position, includeSymbol);
             if (response?.isIncomplete) {
                 incompleteCompletionsCache?.set(response);
             }
@@ -862,7 +874,8 @@ function completionInfoFromData(
     completionData: CompletionData,
     preferences: UserPreferences,
     formatContext: formatting.FormatContext | undefined,
-    position: number
+    position: number,
+    includeSymbol: boolean | undefined,
 ): CompletionInfo | undefined {
     const {
         symbols,
@@ -947,6 +960,7 @@ function completionInfoFromData(
         symbolToSortTextMap,
         isJsxIdentifierExpected,
         isRightOfOpenTag,
+        includeSymbol
     );
 
     if (keywordFilters !== KeywordCompletionFilters.None) {
@@ -1266,6 +1280,7 @@ function createCompletionEntry(
     formatContext: formatting.FormatContext | undefined,
     isJsxIdentifierExpected: boolean | undefined,
     isRightOfOpenTag: boolean | undefined,
+    includeSymbol: boolean
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
@@ -1319,7 +1334,9 @@ function createCompletionEntry(
 
         awaitText += `(await ${propertyAccessToConvert.expression.getText()})`;
         insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}${insertQuestionDot ? "?." : "."}${insertText}`;
-        replacementSpan = createTextSpanFromBounds(propertyAccessToConvert.getStart(sourceFile), propertyAccessToConvert.end);
+        const isInAwaitExpression = tryCast(propertyAccessToConvert.parent, isAwaitExpression);
+        const wrapNode = isInAwaitExpression ? propertyAccessToConvert.parent : propertyAccessToConvert.expression;
+        replacementSpan = createTextSpanFromBounds(wrapNode.getStart(sourceFile), propertyAccessToConvert.end);
     }
 
     if (originIsResolvedExport(origin)) {
@@ -1419,6 +1436,7 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
+        ...includeSymbol ? { symbol } : undefined
     };
 }
 
@@ -1544,10 +1562,9 @@ function getEntryForMemberCompletion(
                 requiredModifiers |= ModifierFlags.Abstract;
             }
             if (isClassElement(node)
-                && checker.getMemberOverrideModifierStatus(classLikeDeclaration, node) === MemberOverrideStatus.NeedsOverride) {
+                && checker.getMemberOverrideModifierStatus(classLikeDeclaration, node, symbol) === MemberOverrideStatus.NeedsOverride) {
                 requiredModifiers |= ModifierFlags.Override;
             }
-
             if (!completionNodes.length) {
                 // Keep track of added missing required modifiers and modifiers already present.
                 // This is needed when we have overloaded signatures,
@@ -2048,6 +2065,7 @@ export function getCompletionEntriesFromSymbols(
     symbolToSortTextMap?: SymbolSortTextMap,
     isJsxIdentifierExpected?: boolean,
     isRightOfOpenTag?: boolean,
+    includeSymbol = false
 ): UniqueNameSet {
     const start = timestamp();
     const variableDeclaration = getVariableDeclaration(location);
@@ -2093,6 +2111,7 @@ export function getCompletionEntriesFromSymbols(
             formatContext,
             isJsxIdentifierExpected,
             isRightOfOpenTag,
+            includeSymbol
         );
         if (!entry) {
             continue;
@@ -2312,7 +2331,8 @@ export function getCompletionEntryDetails(
         case "symbol": {
             const { symbol, location, contextToken, origin, previousToken } = symbolCompletion;
             const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(name, location, contextToken, origin, symbol, program, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, data, source, cancellationToken);
-            return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
+            const symbolName = originIsComputedPropertyName(origin) ? origin.symbolName : symbol.name;
+            return createCompletionDetailsForSymbol(symbol, symbolName, typeChecker, sourceFile, location, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
         }
         case "literal": {
             const { literal } = symbolCompletion;
@@ -2364,12 +2384,12 @@ function createSimpleDetails(name: string, kind: ScriptElementKind, kind2: Symbo
 }
 
 /** @internal */
-export function createCompletionDetailsForSymbol(symbol: Symbol, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
+export function createCompletionDetailsForSymbol(symbol: Symbol, name: string, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
     const { displayParts, documentation, symbolKind, tags } =
         checker.runWithCancellationToken(cancellationToken, checker =>
             SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All)
         );
-    return createCompletionDetails(symbol.name, SymbolDisplay.getSymbolModifiers(checker, symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
+    return createCompletionDetails(name, SymbolDisplay.getSymbolModifiers(checker, symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
 }
 
 /** @internal */
@@ -3953,8 +3973,17 @@ function getCompletionData(
                     type && typeChecker.getPropertiesOfType(type);
             });
             symbols = concatenate(symbols, filterClassMembersList(baseSymbols, decl.members, classElementModifierFlags));
+            forEach(symbols, (symbol, index) => {
+                const declaration = symbol?.valueDeclaration;
+                if (declaration && isClassElement(declaration) && declaration.name && isComputedPropertyName(declaration.name)) {
+                    const origin: SymbolOriginInfoComputedPropertyName = {
+                        kind: SymbolOriginInfoKind.ComputedPropertyName,
+                        symbolName: typeChecker.symbolToString(symbol),
+                    };
+                    symbolToOriginInfoMap[index] = origin;
+                }
+            });
         }
-
         return GlobalsSearch.Success;
     }
 
@@ -4535,7 +4564,7 @@ function getCompletionEntryDisplayNameForSymbol(
     }
     switch (kind) {
         case CompletionKind.MemberLike:
-            return undefined;
+            return originIsComputedPropertyName(origin) ? { name: origin.symbolName, needsConvertPropertyAccess: false } : undefined;
         case CompletionKind.ObjectPropertyDeclaration:
             // TODO: GH#18169
             return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
