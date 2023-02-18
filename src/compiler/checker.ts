@@ -589,6 +589,7 @@ import {
     isJsxAttributeLike,
     isJsxAttributes,
     isJsxElement,
+    isJsxExpression,
     isJsxOpeningElement,
     isJsxOpeningFragment,
     isJsxOpeningLikeElement,
@@ -30160,7 +30161,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode | undefined) {
         const attributes = openingLikeElement.attributes;
-        const attributesType = getContextualType(attributes, ContextFlags.None);
+        const contextualType = getContextualType(attributes, ContextFlags.None);
         const allAttributesTable = strictNullChecks ? createSymbolTable() : undefined;
         let attributesTable = createSymbolTable();
         let spread: Type = emptyJsxObjectType;
@@ -30189,11 +30190,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (attributeDecl.name.escapedText === jsxChildrenPropertyName) {
                     explicitlySpecifyChildrenAttribute = true;
                 }
-                if (attributesType) {
-                    const prop = getPropertyOfType(attributesType, member.escapedName);
+                if (contextualType) {
+                    const prop = getPropertyOfType(contextualType, member.escapedName);
                     if (prop && prop.declarations && isDeprecatedSymbol(prop)) {
                         addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
                     }
+                }
+                if (contextualType && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
+                    attributeDecl.initializer && isJsxExpression(attributeDecl.initializer) && attributeDecl.initializer.expression && isContextSensitive(attributeDecl.initializer.expression)) {
+                    const inferenceContext = getInferenceContext(attributes);
+                    Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
+                    const inferenceNode = attributeDecl.initializer.expression;
+                    addIntraExpressionInferenceSite(inferenceContext, inferenceNode, exprType);
                 }
             }
             else {
