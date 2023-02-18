@@ -20,7 +20,7 @@ options1[`foo`] = false;
 
 options1[`foo/${path}`] = false;
 >options1[`foo/${path}`] = false : false
->options1[`foo/${path}`] : ({ prop: number; } & { [k: string]: boolean; })[`foo/${Path}`]
+>options1[`foo/${path}`] : boolean
 >options1 : { prop: number; } & { [k: string]: boolean; }
 >`foo/${path}` : `foo/${Path}`
 >path : Path
