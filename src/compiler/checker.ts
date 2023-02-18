@@ -7275,7 +7275,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
             }
 
-            const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
+            const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true);
 
             // For regular function/method declarations, the enclosing declaration will already be signature.declaration,
             // so this is a no-op, but for arrow functions and function expressions, the enclosing declaration will be
@@ -12604,18 +12604,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function getExpandedParameters(sig: Signature, skipUnionExpanding?: boolean): readonly (readonly Symbol[])[] {
+    function getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[]
+    function getExpandedParameters(sig: Signature, skipUnionExpanding: true): readonly Symbol[]
+    function getExpandedParameters(sig: Signature, skipUnionExpanding?: boolean): readonly Symbol[] | readonly (readonly Symbol[])[] {
         if (signatureHasRestParameter(sig)) {
             const restIndex = sig.parameters.length - 1;
             const restType = getTypeOfSymbol(sig.parameters[restIndex]);
             if (isTupleType(restType)) {
-                return [expandSignatureParametersWithTupleMembers(restType, restIndex)];
+                const expanded = expandSignatureParametersWithTupleMembers(restType, restIndex);
+                return skipUnionExpanding ? expanded : [expanded]
             }
             else if (!skipUnionExpanding && restType.flags & TypeFlags.Union && every((restType as UnionType).types, isTupleType)) {
                 return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex));
             }
         }
-        return [sig.parameters];
+        return skipUnionExpanding ? sig.parameters : [sig.parameters];
 
         function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number) {
             const elementTypes = getTypeArguments(restType);
