@@ -7300,12 +7300,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 && !isInJSFile(signature.declaration)
                 && some(expandedParams)
             ) {
-                // As a performance optimization, share the symbol table between all faked scopes
-                // in this node builder chain. This is especially needed when we are working on an
-                // excessively deep type; if we don't do this, then we spend all of our time adding
-                // more and more scopes that need to be searched in isSymbolAccessible later. Since
-                // all we really want to do is to mark certain names as unavailable, we can just
-                // keep all of the names we're introducing in one large table and push/pop from it as
+                // As a performance optimization, reuse the same fake scope within this chain.
+                // This is especially needed when we are working on an excessively deep type;
+                // if we don't do this, then we spend all of our time adding more and more
+                // scopes that need to be searched in isSymbolAccessible later. Since all we
+                // really want to do is to mark certain names as unavailable, we can just keep
+                // all of the names we're introducing in one large table and push/pop from it as
                 // needed; isSymbolAccessible will walk upward and find the closest "fake" scope,
                 // which will conveniently report on any and all faked scopes in the chain.
                 //
