@@ -14,7 +14,7 @@ let C = (() => {
     return class C {
         static {
             _private_method1_decorators = [dec];
-            __esDecorate(this, _private_method1_descriptor = { value: __setFunctionName(function () { }, "#method1") }, _private_method1_decorators, { kind: "method", name: "#method1", static: false, private: true }, null, _instanceExtraInitializers);
+            __esDecorate(this, _private_method1_descriptor = { value: __setFunctionName(function () { }, "#method1") }, _private_method1_decorators, { kind: "method", name: "#method1", static: false, private: true, access: { has: obj => #method1 in obj, get: obj => obj.#method1 } }, null, _instanceExtraInitializers);
         }
         get #method1() { return _private_method1_descriptor.value; }
         constructor() {
