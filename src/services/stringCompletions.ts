@@ -312,7 +312,7 @@ function stringLiteralCompletionDetails(name: string, location: Node, completion
         }
         case StringLiteralCompletionKind.Properties: {
             const match = find(completion.symbols, s => s.name === name);
-            return match && createCompletionDetailsForSymbol(match, checker, sourceFile, location, cancellationToken);
+            return match && createCompletionDetailsForSymbol(match, match.name, checker, sourceFile, location, cancellationToken);
         }
         case StringLiteralCompletionKind.Types:
             return find(completion.types, t => t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.string, [textPart(name)]) : undefined;

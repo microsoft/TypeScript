@@ -6590,6 +6590,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else {
+                    const isInstantiationExpressionType = !!(getObjectFlags(type) & ObjectFlags.InstantiationExpressionType);
+                    if (isInstantiationExpressionType) {
+                        const instantiationExpressionType = type as InstantiationExpressionType;
+                        if (isTypeQueryNode(instantiationExpressionType.node)) {
+                            const typeNode = serializeExistingTypeNode(context, instantiationExpressionType.node);
+                            if (typeNode) {
+                                return typeNode;
+                            }
+                        }
+                        if (context.visitedTypes?.has(typeId)) {
+                            return createElidedInformationPlaceholder(context);
+                        }
+                        return visitAndTransformType(type, createTypeNodeFromObjectType);
+                    }
                     // Anonymous types without a symbol are never circular.
                     return createTypeNodeFromObjectType(type);
                 }
@@ -7175,6 +7189,86 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
+
+            // For regular function/method declarations, the enclosing declaration will already be signature.declaration,
+            // so this is a no-op, but for arrow functions and function expressions, the enclosing declaration will be
+            // the declaration that the arrow function / function expression is assigned to.
+            //
+            // If the parameters or return type include "typeof globalThis.paramName", using the wrong scope will lead
+            // us to believe that we can emit "typeof paramName" instead, even though that would refer to the parameter,
+            // not the global. Make sure we are in the right scope by changing the enclosingDeclaration to the function.
+            //
+            // We can't use the declaration directly; it may be in another file and so we may lose access to symbols
+            // accessible to the current enclosing declaration, or gain access to symbols not accessible to the current
+            // enclosing declaration. To keep this chain accurate, insert a fake scope into the chain which makes the
+            // function's parameters visible.
+            //
+            // If the declaration is in a JS file, then we don't need to do this at all, as there are no annotations besides
+            // JSDoc, which are always outside the function declaration, so are not in the parameter scope.
+            let cleanup: (() => void) | undefined;
+            if (
+                context.enclosingDeclaration
+                && signature.declaration
+                && signature.declaration !== context.enclosingDeclaration
+                && !isInJSFile(signature.declaration)
+                && some(expandedParams)
+            ) {
+                // As a performance optimization, reuse the same fake scope within this chain.
+                // This is especially needed when we are working on an excessively deep type;
+                // if we don't do this, then we spend all of our time adding more and more
+                // scopes that need to be searched in isSymbolAccessible later. Since all we
+                // really want to do is to mark certain names as unavailable, we can just keep
+                // all of the names we're introducing in one large table and push/pop from it as
+                // needed; isSymbolAccessible will walk upward and find the closest "fake" scope,
+                // which will conveniently report on any and all faked scopes in the chain.
+                //
+                // It'd likely be better to store this somewhere else for isSymbolAccessible, but
+                // since that API _only_ uses the enclosing declaration (and its parents), this is
+                // seems like the best way to inject names into that search process.
+                //
+                // Note that we only check the most immediate enclosingDeclaration; the only place we
+                // could potentially add another fake scope into the chain is right here, so we don't
+                // traverse all ancestors.
+                const existingFakeScope = getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration ? context.enclosingDeclaration : undefined;
+                Debug.assertOptionalNode(existingFakeScope, isBlock);
+
+                const locals = existingFakeScope?.locals ?? createSymbolTable();
+
+                let newLocals: __String[] | undefined;
+                for (const param of expandedParams) {
+                    if (!locals.has(param.escapedName)) {
+                        newLocals = append(newLocals, param.escapedName);
+                        locals.set(param.escapedName, param);
+                    }
+                }
+
+                if (newLocals) {
+                    function removeNewLocals() {
+                        forEach(newLocals, s => locals.delete(s));
+                    }
+
+                    if (existingFakeScope) {
+                        cleanup = removeNewLocals;
+                    }
+                    else {
+                        // Use a Block for this; the type of the node doesn't matter so long as it
+                        // has locals, and this is cheaper/easier than using a function-ish Node.
+                        const fakeScope = parseNodeFactory.createBlock(emptyArray);
+                        getNodeLinks(fakeScope).fakeScopeForSignatureDeclaration = true;
+                        fakeScope.locals = locals;
+
+                        const saveEnclosingDeclaration = context.enclosingDeclaration;
+                        setParent(fakeScope, saveEnclosingDeclaration);
+                        context.enclosingDeclaration = fakeScope;
+
+                        cleanup = () => {
+                            context.enclosingDeclaration = saveEnclosingDeclaration;
+                            removeNewLocals();
+                        };
+                    }
+                }
+            }
+
             // If the expanded parameter list had a variadic in a non-trailing position, don't expand it
             const parameters = (some(expandedParams, p => p !== expandedParams[expandedParams.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : expandedParams).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor, options?.privateSymbolVisitor, options?.bundledImports));
             const thisParameter = context.flags & NodeBuilderFlags.OmitThisParameter ? undefined : tryGetThisParameterDeclaration(signature, context);
@@ -7230,6 +7324,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 node.typeArguments = factory.createNodeArray(typeArguments);
             }
 
+            cleanup?.();
             return node;
         }
 
@@ -7895,13 +7990,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return !(getObjectFlags(type) & ObjectFlags.Reference) || !isTypeReferenceNode(existing) || length(existing.typeArguments) >= getMinTypeArgumentCount((type as TypeReference).target.typeParameters);
         }
 
+        function getEnclosingDeclarationIgnoringFakeScope(enclosingDeclaration: Node) {
+            return getNodeLinks(enclosingDeclaration).fakeScopeForSignatureDeclaration ? enclosingDeclaration.parent : enclosingDeclaration;
+        }
+
         /**
          * Unlike `typeToTypeNodeHelper`, this handles setting up the `AllowUniqueESSymbolType` flag
          * so a `unique symbol` is returned when appropriate for the input symbol, rather than `typeof sym`
          */
         function serializeTypeForDeclaration(context: NodeBuilderContext, type: Type, symbol: Symbol, enclosingDeclaration: Node | undefined, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
             if (!isErrorType(type) && enclosingDeclaration) {
-                const declWithExistingAnnotation = getDeclarationWithTypeAnnotation(symbol, enclosingDeclaration);
+                const declWithExistingAnnotation = getDeclarationWithTypeAnnotation(symbol, getEnclosingDeclarationIgnoringFakeScope(enclosingDeclaration));
                 if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation) && !isGetAccessorDeclaration(declWithExistingAnnotation)) {
                     // try to reuse the existing annotation
                     const existing = getEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
@@ -7937,7 +8036,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function serializeReturnTypeForSignature(context: NodeBuilderContext, type: Type, signature: Signature, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
             if (!isErrorType(type) && context.enclosingDeclaration) {
                 const annotation = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
-                if (!!findAncestor(annotation, n => n === context.enclosingDeclaration) && annotation) {
+                const enclosingDeclarationIgnoringFakeScope = getEnclosingDeclarationIgnoringFakeScope(context.enclosingDeclaration);
+                if (!!findAncestor(annotation, n => n === enclosingDeclarationIgnoringFakeScope) && annotation) {
                     const annotated = getTypeFromTypeNode(annotation);
                     const thisInstantiated = annotated.flags & TypeFlags.TypeParameter && (annotated as TypeParameter).isThisType ? instantiateType(annotated, signature.mapper) : annotated;
                     if (thisInstantiated === type && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(annotation, type)) {
@@ -42630,17 +42730,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Checks a member declaration node to see if has a missing or invalid `override` modifier.
      * @param node Class-like node where the member is declared.
      * @param member Member declaration node.
+     * @param memberSymbol Member symbol.
      * Note: `member` can be a synthetic node without a parent.
      */
-    function getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideStatus {
+    function getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement, memberSymbol: Symbol): MemberOverrideStatus {
         if (!member.name) {
             return MemberOverrideStatus.Ok;
         }
 
-        const symbol = getSymbolOfDeclaration(node);
-        const type = getDeclaredTypeOfSymbol(symbol) as InterfaceType;
+        const classSymbol = getSymbolOfDeclaration(node);
+        const type = getDeclaredTypeOfSymbol(classSymbol) as InterfaceType;
         const typeWithThis = getTypeWithThisArgument(type);
-        const staticType = getTypeOfSymbol(symbol) as ObjectType;
+        const staticType = getTypeOfSymbol(classSymbol) as ObjectType;
 
         const baseTypeNode = getEffectiveBaseTypeNode(node);
         const baseTypes = baseTypeNode && getBaseTypes(type);
@@ -42650,8 +42751,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const memberHasOverrideModifier = member.parent
             ? hasOverrideModifier(member)
             : hasSyntacticModifier(member, ModifierFlags.Override);
-
-        const memberName = unescapeLeadingUnderscores(getTextOfPropertyName(member.name));
 
         return checkMemberForOverrideModifier(
             node,
@@ -42664,7 +42763,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasAbstractModifier(member),
             isStatic(member),
             /* memberIsParameterProperty */ false,
-            memberName,
+            symbolName(memberSymbol),
         );
     }
 
