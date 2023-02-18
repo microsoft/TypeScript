@@ -23201,7 +23201,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return restType && createArrayType(restType);
     }
 
-    function getElementTypeOfSliceOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0, writing = false) {
+    function getElementTypeOfSliceOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0, writing = false, noReductions = false) {
         const length = getTypeReferenceArity(type) - endSkipCount;
         if (index < length) {
             const typeArguments = getTypeArguments(type);
@@ -23210,7 +23210,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const t = typeArguments[i];
                 elementTypes.push(type.target.elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessType(t, numberType) : t);
             }
-            return writing ? getIntersectionType(elementTypes) : getUnionType(elementTypes);
+            return writing ? getIntersectionType(elementTypes) : getUnionType(elementTypes, noReductions ? UnionReduction.None : UnionReduction.Literal);
         }
         return undefined;
     }
@@ -28956,9 +28956,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (prop) {
                     return isCircularMappedProperty(prop) ? undefined : getTypeOfSymbol(prop);
                 }
-                if (isTupleType(t)) {
-                    const restType = getRestTypeOfTupleType(t);
-                    if (restType && isNumericLiteralName(name) && +name >= 0) {
+                if (isTupleType(t) && isNumericLiteralName(name) && +name >= 0) {
+                    const restType = getElementTypeOfSliceOfTupleType(t, t.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
+                    if (restType) {
                         return restType;
                     }
                 }
@@ -29010,10 +29010,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // type of T.
     function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
         return arrayContextualType && (
-            getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String)
-            || mapType(
-                arrayContextualType,
-                t => getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false),
+            index >= 0 && getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String) ||
+            mapType(arrayContextualType, t =>
+                isTupleType(t) ?
+                    getElementTypeOfSliceOfTupleType(t, 0, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true) :
+                    getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false),
                 /*noReductions*/ true));
     }
 
@@ -29245,7 +29246,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ArrayLiteralExpression: {
                 const arrayLiteral = parent as ArrayLiteralExpression;
                 const type = getApparentTypeOfContextualType(arrayLiteral, contextFlags);
-                return getContextualTypeForElementExpression(type, indexOfNode(arrayLiteral.elements, node));
+                // The index of an array literal element doesn't necessarily line up with the index of the corresponding
+                // element in a contextual tuple type when there are preceding spread elements in the array literal. For
+                // this reason we only pass indices for elements that precede the first spread element.
+                const spreadIndex = getNodeLinks(arrayLiteral).firstSpreadIndex ??= findIndex(arrayLiteral.elements, isSpreadElement);
+                const elementIndex = indexOfNode(arrayLiteral.elements, node);
+                return getContextualTypeForElementExpression(type, spreadIndex < 0 || elementIndex < spreadIndex ? elementIndex : -1);
             }
             case SyntaxKind.ConditionalExpression:
                 return getContextualTypeForConditionalOperand(node, contextFlags);
