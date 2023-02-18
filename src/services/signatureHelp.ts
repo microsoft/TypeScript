@@ -16,6 +16,7 @@ import {
     emptyArray,
     Expression,
     factory,
+    findAncestor,
     findContainingList,
     findIndex,
     findPrecedingToken,
@@ -30,7 +31,9 @@ import {
     Identifier,
     identity,
     InternalSymbolName,
+    isArrayBindingPattern,
     isBinaryExpression,
+    isBindingElement,
     isBlock,
     isCallOrNewExpression,
     isFunctionTypeNode,
@@ -41,6 +44,8 @@ import {
     isJsxOpeningLikeElement,
     isMethodDeclaration,
     isNoSubstitutionTemplateLiteral,
+    isObjectBindingPattern,
+    isParameter,
     isPropertyAccessExpression,
     isSourceFile,
     isSourceFileJS,
@@ -387,7 +392,7 @@ function countBinaryExpressionParameters(b: BinaryExpression): number {
 }
 
 function tryGetParameterInfo(startingToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
-    const node = getAdjustedStartNode(startingToken);
+    const node = getAdjustedNode(startingToken);
     if (node === undefined) return undefined;
 
     const info = getContextualSignatureLocationInfo(node, sourceFile, position, checker);
@@ -407,15 +412,14 @@ function tryGetParameterInfo(startingToken: Node, position: number, sourceFile: 
     return { isTypeParameterList: false, invocation, argumentsSpan, argumentIndex, argumentCount };
 }
 
-function getAdjustedStartNode(node: Node) {
+function getAdjustedNode(node: Node) {
     switch (node.kind) {
-        case SyntaxKind.Identifier:
-            return node.parent.kind === SyntaxKind.Parameter ? node.parent : undefined;
         case SyntaxKind.OpenParenToken:
         case SyntaxKind.CommaToken:
             return node;
         default:
-            return undefined;
+            return findAncestor(node.parent, n =>
+                isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
     }
 }
 
