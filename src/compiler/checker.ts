@@ -12604,15 +12604,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[]
-    function getExpandedParameters(sig: Signature, skipUnionExpanding: true): readonly Symbol[]
+    function getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
+    function getExpandedParameters(sig: Signature, skipUnionExpanding: true): readonly Symbol[];
     function getExpandedParameters(sig: Signature, skipUnionExpanding?: boolean): readonly Symbol[] | readonly (readonly Symbol[])[] {
         if (signatureHasRestParameter(sig)) {
             const restIndex = sig.parameters.length - 1;
             const restType = getTypeOfSymbol(sig.parameters[restIndex]);
             if (isTupleType(restType)) {
                 const expanded = expandSignatureParametersWithTupleMembers(restType, restIndex);
-                return skipUnionExpanding ? expanded : [expanded]
+                return skipUnionExpanding ? expanded : [expanded];
             }
             else if (!skipUnionExpanding && restType.flags & TypeFlags.Union && every((restType as UnionType).types, isTupleType)) {
                 return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex));
