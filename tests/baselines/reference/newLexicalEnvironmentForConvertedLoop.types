@@ -39,7 +39,7 @@ function foo(set: any) {
 >set : any
 >values : any
 >push : any
->...[] : undefined
->[] : undefined[]
+>...[] : never
+>[] : readonly []
   }
 };

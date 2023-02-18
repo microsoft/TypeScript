@@ -83,15 +83,16 @@ f2(1, 2, 3, 4, 5, 6, 7);
 >6 : 6
 >7 : 7
 
-f2(...[1], 2, 3, 4, 5, 6);
->f2(...[1], 2, 3, 4, 5, 6) : any
+f2(1, 2, 3, 4, 5, ...[6, 7]);
+>f2(1, 2, 3, 4, 5, ...[6, 7]) : any
 >f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
->...[1] : number
->[1] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
 >4 : 4
 >5 : 5
+>...[6, 7] : number
+>[6, 7] : readonly [number, number]
 >6 : 6
+>7 : 7
 

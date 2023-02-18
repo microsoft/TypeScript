@@ -177,6 +177,25 @@ const x61 = f6(1, 'b', { a: 1, b: 'x' });
 >b : "x"
 >'x' : "x"
 
+const x62 = f6(...[1, 'b']);
+>x62 : readonly [number, string]
+>f6(...[1, 'b']) : readonly [number, string]
+>f6 : <const T extends readonly unknown[]>(...args: T) => T
+>...[1, 'b'] : string | number
+>[1, 'b'] : readonly [number, string]
+>1 : 1
+>'b' : "b"
+
+const x63 = f6(true, ...[1, 'b']);
+>x63 : readonly [true, number, string]
+>f6(true, ...[1, 'b']) : readonly [true, number, string]
+>f6 : <const T extends readonly unknown[]>(...args: T) => T
+>true : true
+>...[1, 'b'] : string | number
+>[1, 'b'] : readonly [number, string]
+>1 : 1
+>'b' : "b"
+
 class C1<const T> {
 >C1 : C1<T>
 
