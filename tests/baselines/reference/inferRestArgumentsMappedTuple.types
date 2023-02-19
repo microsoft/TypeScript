@@ -1,0 +1,37 @@
+=== tests/cases/compiler/inferRestArgumentsMappedTuple.ts ===
+type MyMappedType<Primitive extends any> = {
+>MyMappedType : MyMappedType<Primitive>
+
+	primitive: Primitive;
+>primitive : Primitive
+
+};
+
+type TupleMapperOld<Tuple extends any[]> = {
+>TupleMapperOld : TupleMapperOld<Tuple>
+
+	[Key in keyof Tuple]: Tuple[Key] extends Tuple[number] ? MyMappedType<Tuple[Key]> : never;
+};
+
+// [MyMappedType<string>, MyMappedType<number>]
+type MyMappedTupleOld = TupleMapperOld<[string, number]>;
+>MyMappedTupleOld : [MyMappedType<string>, MyMappedType<number>]
+
+//    ^?
+
+declare function extractPrimitivesOld<Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>): Tuple;
+>extractPrimitivesOld : <Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>) => Tuple
+>mappedTypes : TupleMapperOld<Tuple>
+
+// [string, number]
+const myPrimitiveTupleOld: [string, number] = extractPrimitivesOld({ primitive: "" }, { primitive: 0 });
+>myPrimitiveTupleOld : [string, number]
+>extractPrimitivesOld({ primitive: "" }, { primitive: 0 }) : [unknown, unknown]
+>extractPrimitivesOld : <Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>) => Tuple
+>{ primitive: "" } : { primitive: string; }
+>primitive : string
+>"" : ""
+>{ primitive: 0 } : { primitive: number; }
+>primitive : number
+>0 : 0
+
