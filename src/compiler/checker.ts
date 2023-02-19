@@ -17932,6 +17932,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     links.resolvedType = errorType;
                 }
             }
+
+            if (node.typeArguments && !isErrorType(links.resolvedType)) {
+                addLazyDiagnostic(() => {
+                    const typeParameters = getTypeParametersForTypeAndSymbol(links.resolvedType!, links.resolvedSymbol!);
+                    if (typeParameters) {
+                        checkTypeArgumentConstraints(node, typeParameters);
+                    }
+                });
+            }
         }
         return links.resolvedType;
     }
@@ -17943,13 +17952,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getInstantiationExpressionType(getTypeOfSymbol(symbol), node); // intentionally doesn't use resolved symbol so type is cached as expected on the alias
         }
         else {
-            const type = tryGetDeclaredTypeOfSymbol(resolvedSymbol); // call this first to ensure typeParameters is populated (if applicable)
-            const typeParameters = type && getTypeParametersForTypeAndSymbol(type, resolvedSymbol);
-            if (node.typeArguments && typeParameters) {
-                addLazyDiagnostic(() => {
-                    checkTypeArgumentConstraints(node, typeParameters);
-                });
-            }
             return getTypeReferenceType(node, resolvedSymbol); // getTypeReferenceType doesn't handle aliases - it must get the resolved symbol
         }
     }
