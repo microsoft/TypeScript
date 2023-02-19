@@ -161,6 +161,7 @@ import {
     isImportSpecifier,
     isInComment,
     isIndexSignatureDeclaration,
+    isInferTypeNode,
     isInitializedProperty,
     isInJSFile,
     isInRightSideOfInternalImportEqualsDeclaration,
@@ -227,6 +228,7 @@ import {
     isTypeOfExpression,
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
+    isTypeParameterDeclaration,
     isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
@@ -352,6 +354,7 @@ import {
     TypeLiteralNode,
     TypeNode,
     TypeOnlyImportDeclaration,
+    TypeParameterDeclaration,
     TypeQueryNode,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -2128,12 +2131,20 @@ export function getCompletionEntriesFromSymbols(
             }
 
             // Filter out parameters from their own initializers
-            // `function f(a = /* no 'a' and 'b' here */, b) { }`
-            const symbolDeclaration = symbol.valueDeclaration;
-            if (variableOrParameterDeclaration && isParameter(variableOrParameterDeclaration) && symbolDeclaration && isParameter(symbolDeclaration)) {
+            // `function f(a = /* no 'a' and 'b' here */, b) { }` or
+            // `function f<T = /* no 'T' here */>(a: T) { }`
+            const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+            if (variableOrParameterDeclaration && symbolDeclaration && (
+                (isTypeParameterDeclaration(variableOrParameterDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) ||
+                (isParameter(variableOrParameterDeclaration) && isParameter(symbolDeclaration))
+            )) {
                 const symbolDeclarationPos = symbolDeclaration.pos;
-                const { parameters } = variableOrParameterDeclaration.parent;
-                if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && symbolDeclarationPos < parameters.end) {
+                const parameters = isParameter(variableOrParameterDeclaration) ?
+                    variableOrParameterDeclaration.parent.parameters :
+                    isInferTypeNode(variableOrParameterDeclaration.parent) ?
+                        undefined :
+                        variableOrParameterDeclaration.parent.typeParameters;
+                if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && parameters && symbolDeclarationPos < parameters.end) {
                     return false;
                 }
             }
@@ -5101,10 +5112,10 @@ function getVariableOrParameterDeclaration(contextToken: Node | undefined) {
     if (!contextToken) return;
 
     return findAncestor(contextToken, node =>
-        (isParameter(node) && !isIndexSignatureDeclaration(node.parent)) ||
+        (isParameter(node) || isTypeParameterDeclaration(node) && !isIndexSignatureDeclaration(node.parent)) ||
             (isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
-            : isVariableDeclaration(node))) as ParameterDeclaration | VariableDeclaration | undefined;
+            : isVariableDeclaration(node))) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
 }
 
 function isArrowFunctionBody(node: Node) {
