@@ -74,3 +74,8 @@ spreadC.m(); // error 'm' is not in '{ ... c }'
 let obj: object = { a: 123 };
 let spreadObj = { ...obj };
 spreadObj.a; // error 'a' is not in {}
+
+// repro from #51376
+type Item = { attribute: string; };
+declare const result: Partial<Record<'attribute', string | null>>;
+const item: Item = { attribute: "", ...result }; // error reported on spread and not on the compatible property

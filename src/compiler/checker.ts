@@ -19339,10 +19339,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
     ) {
+        const seen = new Set<Type>();
         // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
         let reportedError = false;
         for (const value of iterator) {
             const { errorNode: prop, innerExpression: next, nameType, errorMessage } = value;
+
+            if (seen.has(nameType)) {
+                continue;
+            }
+            seen.add(nameType);
+
             let targetPropType = getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType);
             if (!targetPropType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables
             let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
@@ -19467,9 +19474,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
 
     function *generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
-        if (!length(node.properties)) return;
-        for (const prop of node.properties) {
-            if (isJsxSpreadAttribute(prop) || isHyphenatedJsxName(idText(prop.name))) continue;
+        const len = length(node.properties);
+        if (!len) return;
+        for (let i = len - 1; i >= 0; i--) {
+            const prop = node.properties[i];
+            if (isJsxSpreadAttribute(prop)) {
+                for (const propOfSpread of getPropertiesOfType(getTypeOfExpression(prop.expression))) {
+                    const type = getLiteralTypeFromProperty(propOfSpread, TypeFlags.StringOrNumberLiteralOrUnique);
+                    if (type.flags & TypeFlags.Never) {
+                        continue;
+                    }
+                    yield { errorNode: prop, innerExpression: undefined, nameType: type };
+                }
+                continue;
+            }
+            if (isHyphenatedJsxName(idText(prop.name))) continue;
             yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: getStringLiteralType(idText(prop.name)) };
         }
     }
@@ -19646,11 +19665,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function *generateObjectLiteralElements(node: ObjectLiteralExpression): ElaborationIterator {
-        if (!length(node.properties)) return;
-        for (const prop of node.properties) {
-            if (isSpreadAssignment(prop)) continue;
+        const len = length(node.properties);
+        if (!len) return;
+        for (let i = len - 1; i >= 0; i--) {
+            const prop = node.properties[i];
+
+            if (isSpreadAssignment(prop)) {
+                for (const propOfSpread of getPropertiesOfType(getTypeOfExpression(prop.expression))) {
+                    const type = getLiteralTypeFromProperty(propOfSpread, TypeFlags.StringOrNumberLiteralOrUnique);
+                    if (type.flags & TypeFlags.Never) {
+                        continue;
+                    }
+                    yield { errorNode: prop, innerExpression: undefined, nameType: type };
+                }
+                continue;
+            }
             const type = getLiteralTypeFromProperty(getSymbolOfDeclaration(prop), TypeFlags.StringOrNumberLiteralOrUnique);
-            if (!type || (type.flags & TypeFlags.Never)) {
+            if (type.flags & TypeFlags.Never) {
                 continue;
             }
             switch (prop.kind) {

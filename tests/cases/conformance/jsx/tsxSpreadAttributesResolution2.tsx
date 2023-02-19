@@ -28,3 +28,4 @@ let y = <Poisoned />;
 let z = <Poisoned x y/>;
 let w = <Poisoned {...{x: 5, y: "2"}}/>;
 let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
+let w2 = <Poisoned {...{x: 'foo', y: "2"}} X="hi" />;

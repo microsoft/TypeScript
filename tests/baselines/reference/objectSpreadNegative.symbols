@@ -246,3 +246,19 @@ let spreadObj = { ...obj };
 spreadObj.a; // error 'a' is not in {}
 >spreadObj : Symbol(spreadObj, Decl(objectSpreadNegative.ts, 72, 3))
 
+// repro from #51376
+type Item = { attribute: string; };
+>Item : Symbol(Item, Decl(objectSpreadNegative.ts, 73, 12))
+>attribute : Symbol(attribute, Decl(objectSpreadNegative.ts, 76, 13))
+
+declare const result: Partial<Record<'attribute', string | null>>;
+>result : Symbol(result, Decl(objectSpreadNegative.ts, 77, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+const item: Item = { attribute: "", ...result }; // error reported on spread and not on the compatible property
+>item : Symbol(item, Decl(objectSpreadNegative.ts, 78, 5))
+>Item : Symbol(Item, Decl(objectSpreadNegative.ts, 73, 12))
+>attribute : Symbol(attribute, Decl(objectSpreadNegative.ts, 78, 20))
+>result : Symbol(result, Decl(objectSpreadNegative.ts, 77, 13))
+

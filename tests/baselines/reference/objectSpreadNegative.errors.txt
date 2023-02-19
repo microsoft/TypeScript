@@ -1,8 +1,6 @@
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(13,21): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(16,5): error TS2322: Type '{ sn?: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
-  Types of property 'sn' are incompatible.
-    Type 'string | number | undefined' is not assignable to type 'string | number'.
-      Type 'undefined' is not assignable to type 'string | number'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(16,65): error TS2322: Type 'string | number | undefined' is not assignable to type 'string | number'.
+  Type 'undefined' is not assignable to type 'string | number'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(23,1): error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,1): error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,20): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
@@ -24,9 +22,11 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(59,1): error TS2349
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(63,1): error TS2322: Type '12' is not assignable to type 'undefined'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(69,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(79,37): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (22 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (23 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -45,11 +45,10 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(74,11): error TS233
     declare let optionalString: { sn?: string };
     declare let optionalNumber: { sn?: number };
     let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
-        ~~~~~~~~~~~
-!!! error TS2322: Type '{ sn?: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
-!!! error TS2322:   Types of property 'sn' are incompatible.
-!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | number'.
-!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+                                                                    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string | number | undefined' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string | number'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadNegative.ts:16:20: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
     // error, 'sn' is optional in source, required in target
     
     // assignability as target
@@ -158,4 +157,13 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(74,11): error TS233
     spreadObj.a; // error 'a' is not in {}
               ~
 !!! error TS2339: Property 'a' does not exist on type '{}'.
+    
+    // repro from #51376
+    type Item = { attribute: string; };
+    declare const result: Partial<Record<'attribute', string | null>>;
+    const item: Item = { attribute: "", ...result }; // error reported on spread and not on the compatible property
+                                        ~~~~~~~~~
+!!! error TS2322: Type 'string | null' is not assignable to type 'string'.
+!!! error TS2322:   Type 'null' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadNegative.ts:77:15: The expected type comes from property 'attribute' which is declared here on type 'Item'
     
