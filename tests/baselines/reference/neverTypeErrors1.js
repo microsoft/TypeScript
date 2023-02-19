@@ -75,6 +75,6 @@ function f5() {
 }
 function func() {
     return {
-        value: []
+        value: [],
     };
 }

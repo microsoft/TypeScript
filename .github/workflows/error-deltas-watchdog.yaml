@@ -14,7 +14,7 @@ jobs:
       issues: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      TAGS: "@RyanCavanaugh @DanielRosenwasser @amcasey"
+      TAGS: "@navya9singh @RyanCavanaugh @DanielRosenwasser"
     steps:
     - name: NewErrors
       run: | # --json and --jq prints exactly one issue number per line of output

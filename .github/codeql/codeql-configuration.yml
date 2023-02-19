@@ -3,6 +3,6 @@ name : CodeQL Configuration
 paths:
   - src
   - scripts
-  - Gulpfile.mjs
+  - Herebyfile.mjs
 paths-ignore:
   - src/lib

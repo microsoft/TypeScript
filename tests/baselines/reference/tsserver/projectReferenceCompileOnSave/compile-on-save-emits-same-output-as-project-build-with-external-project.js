@@ -1,12 +1,12 @@
 Info 0    [00:00:53.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:54.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/SiblingClass/Source.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -70,7 +70,7 @@ declare module Hmi {
 
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./Source.ts"],"js":{"sections":[{"pos":0,"end":251,"kind":"text"}],"hash":"10774636636-var Hmi;\n(function (Hmi) {\n    var Button = /** @class */ (function () {\n        function Button() {\n        }\n        Button.myStaticFunction = function () {\n        };\n        return Button;\n    }());\n    Hmi.Button = Button;\n})(Hmi || (Hmi = {}));\n"},"dts":{"sections":[{"pos":0,"end":89,"kind":"text"}],"hash":"-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n"}},"program":{"fileNames":["./Source.ts"],"fileInfos":["-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"],"options":{"composite":true,"outFile":"./Source.js"},"outSignature":"-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./Source.ts"],"js":{"sections":[{"pos":0,"end":251,"kind":"text"}],"hash":"10774636636-var Hmi;\n(function (Hmi) {\n    var Button = /** @class */ (function () {\n        function Button() {\n        }\n        Button.myStaticFunction = function () {\n        };\n        return Button;\n    }());\n    Hmi.Button = Button;\n})(Hmi || (Hmi = {}));\n"},"dts":{"sections":[{"pos":0,"end":89,"kind":"text"}],"hash":"-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./Source.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"],"root":[2],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo.readable.baseline.txt]
 {
@@ -102,20 +102,29 @@ declare module Hmi {
   },
   "program": {
     "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
       "./Source.ts"
     ],
     "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
       "./Source.ts": "-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"
     },
+    "root": [
+      [
+        2,
+        "./Source.ts"
+      ]
+    ],
     "options": {
       "composite": true,
+      "module": 0,
       "outFile": "./Source.js"
     },
     "outSignature": "-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
     "latestChangedDtsFile": "./Source.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 994
+  "size": 1409
 }
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo.baseline.txt]
@@ -171,7 +180,7 @@ declare module Hmi {
 
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./Source.ts"],"js":{"sections":[{"pos":0,"end":268,"kind":"text"}],"hash":"7833001416-var Hmi;\n(function (Hmi) {\n    var Sibling = /** @class */ (function () {\n        function Sibling() {\n        }\n        Sibling.prototype.mySiblingFunction = function () {\n        };\n        return Sibling;\n    }());\n    Hmi.Sibling = Sibling;\n})(Hmi || (Hmi = {}));\n"},"dts":{"sections":[{"pos":0,"end":84,"kind":"text"}],"hash":"7777218469-declare module Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n"}},"program":{"fileNames":["./Source.ts"],"fileInfos":["-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"],"options":{"composite":true,"outFile":"./Source.js"},"outSignature":"7777218469-declare module Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./Source.ts"],"js":{"sections":[{"pos":0,"end":268,"kind":"text"}],"hash":"7833001416-var Hmi;\n(function (Hmi) {\n    var Sibling = /** @class */ (function () {\n        function Sibling() {\n        }\n        Sibling.prototype.mySiblingFunction = function () {\n        };\n        return Sibling;\n    }());\n    Hmi.Sibling = Sibling;\n})(Hmi || (Hmi = {}));\n"},"dts":{"sections":[{"pos":0,"end":84,"kind":"text"}],"hash":"7777218469-declare module Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../buttonClass/Source.d.ts","./Source.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"],"root":[3],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"7777218469-declare module Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo.readable.baseline.txt]
 {
@@ -203,20 +212,31 @@ declare module Hmi {
   },
   "program": {
     "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "../buttonClass/Source.d.ts",
       "./Source.ts"
     ],
     "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "../buttonClass/Source.d.ts": "-9317793727-declare module Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
       "./Source.ts": "-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"
     },
+    "root": [
+      [
+        3,
+        "./Source.ts"
+      ]
+    ],
     "options": {
       "composite": true,
+      "module": 0,
       "outFile": "./Source.js"
     },
     "outSignature": "7777218469-declare module Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n",
     "latestChangedDtsFile": "./Source.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 993
+  "size": 1546
 }
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo.baseline.txt]
@@ -306,7 +326,7 @@ Info 19   [00:01:12.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../buttonClass/Source.ts
 	  Source from referenced project '../buttonClass/tsconfig.json' included because '--outFile' specified
 	Source.ts
@@ -355,7 +375,7 @@ Info 24   [00:01:23.000] request:
         "file": "/user/username/projects/myproject/SiblingClass/Source.ts",
         "projectFileName": "/user/username/projects/myproject/SiblingClass/tsconfig.json"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request

@@ -4,72 +4,72 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(15,12): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(16,12): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'string'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(17,12): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(18,12): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(18,12): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(20,12): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(21,12): error TS2365: Operator '<' cannot be applied to types 'string' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(22,12): error TS2365: Operator '<' cannot be applied to types 'string' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(23,12): error TS2365: Operator '<' cannot be applied to types 'string' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(23,12): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(25,12): error TS2365: Operator '<' cannot be applied to types 'void' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(26,12): error TS2365: Operator '<' cannot be applied to types 'void' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(27,12): error TS2365: Operator '<' cannot be applied to types 'void' and 'string'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(28,12): error TS2365: Operator '<' cannot be applied to types 'void' and 'E'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(31,12): error TS2365: Operator '<' cannot be applied to types 'E' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(32,12): error TS2365: Operator '<' cannot be applied to types 'E' and 'string'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(33,12): error TS2365: Operator '<' cannot be applied to types 'E' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(28,12): error TS2365: Operator '<' cannot be applied to types 'void' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(31,12): error TS2365: Operator '<' cannot be applied to types 'number' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(32,12): error TS2365: Operator '<' cannot be applied to types 'number' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(33,12): error TS2365: Operator '<' cannot be applied to types 'number' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(36,12): error TS2365: Operator '>' cannot be applied to types 'number' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(37,12): error TS2365: Operator '>' cannot be applied to types 'number' and 'string'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(38,12): error TS2365: Operator '>' cannot be applied to types 'number' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(41,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(42,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(43,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(44,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(44,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(46,12): error TS2365: Operator '>' cannot be applied to types 'string' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(47,12): error TS2365: Operator '>' cannot be applied to types 'string' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(48,12): error TS2365: Operator '>' cannot be applied to types 'string' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(49,12): error TS2365: Operator '>' cannot be applied to types 'string' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(49,12): error TS2365: Operator '>' cannot be applied to types 'string' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(51,12): error TS2365: Operator '>' cannot be applied to types 'void' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(52,12): error TS2365: Operator '>' cannot be applied to types 'void' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(53,12): error TS2365: Operator '>' cannot be applied to types 'void' and 'string'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(54,12): error TS2365: Operator '>' cannot be applied to types 'void' and 'E'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(57,12): error TS2365: Operator '>' cannot be applied to types 'E' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(58,12): error TS2365: Operator '>' cannot be applied to types 'E' and 'string'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(59,12): error TS2365: Operator '>' cannot be applied to types 'E' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(54,12): error TS2365: Operator '>' cannot be applied to types 'void' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(57,12): error TS2365: Operator '>' cannot be applied to types 'number' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(58,12): error TS2365: Operator '>' cannot be applied to types 'number' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(59,12): error TS2365: Operator '>' cannot be applied to types 'number' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(62,12): error TS2365: Operator '<=' cannot be applied to types 'number' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(63,12): error TS2365: Operator '<=' cannot be applied to types 'number' and 'string'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(64,12): error TS2365: Operator '<=' cannot be applied to types 'number' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(67,12): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(68,12): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'string'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(69,12): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(70,12): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(70,12): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(72,12): error TS2365: Operator '<=' cannot be applied to types 'string' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(73,12): error TS2365: Operator '<=' cannot be applied to types 'string' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(74,12): error TS2365: Operator '<=' cannot be applied to types 'string' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(75,12): error TS2365: Operator '<=' cannot be applied to types 'string' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(75,12): error TS2365: Operator '<=' cannot be applied to types 'string' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(77,12): error TS2365: Operator '<=' cannot be applied to types 'void' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(78,12): error TS2365: Operator '<=' cannot be applied to types 'void' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(79,12): error TS2365: Operator '<=' cannot be applied to types 'void' and 'string'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(80,12): error TS2365: Operator '<=' cannot be applied to types 'void' and 'E'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(83,12): error TS2365: Operator '<=' cannot be applied to types 'E' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(84,12): error TS2365: Operator '<=' cannot be applied to types 'E' and 'string'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(85,12): error TS2365: Operator '<=' cannot be applied to types 'E' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(80,12): error TS2365: Operator '<=' cannot be applied to types 'void' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(83,12): error TS2365: Operator '<=' cannot be applied to types 'number' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(84,12): error TS2365: Operator '<=' cannot be applied to types 'number' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(85,12): error TS2365: Operator '<=' cannot be applied to types 'number' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(88,12): error TS2365: Operator '>=' cannot be applied to types 'number' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(89,12): error TS2365: Operator '>=' cannot be applied to types 'number' and 'string'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(90,12): error TS2365: Operator '>=' cannot be applied to types 'number' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(93,12): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(94,12): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'string'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(95,12): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(96,12): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(96,12): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(98,12): error TS2365: Operator '>=' cannot be applied to types 'string' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(99,12): error TS2365: Operator '>=' cannot be applied to types 'string' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(100,12): error TS2365: Operator '>=' cannot be applied to types 'string' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(101,12): error TS2365: Operator '>=' cannot be applied to types 'string' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(101,12): error TS2365: Operator '>=' cannot be applied to types 'string' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(103,12): error TS2365: Operator '>=' cannot be applied to types 'void' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(104,12): error TS2365: Operator '>=' cannot be applied to types 'void' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(105,12): error TS2365: Operator '>=' cannot be applied to types 'void' and 'string'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(106,12): error TS2365: Operator '>=' cannot be applied to types 'void' and 'E'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(109,12): error TS2365: Operator '>=' cannot be applied to types 'E' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(110,12): error TS2365: Operator '>=' cannot be applied to types 'E' and 'string'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(111,12): error TS2365: Operator '>=' cannot be applied to types 'E' and 'void'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(106,12): error TS2365: Operator '>=' cannot be applied to types 'void' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(109,12): error TS2365: Operator '>=' cannot be applied to types 'number' and 'boolean'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(110,12): error TS2365: Operator '>=' cannot be applied to types 'number' and 'string'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(111,12): error TS2365: Operator '>=' cannot be applied to types 'number' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(114,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'boolean' have no overlap.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(115,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string' have no overlap.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(116,12): error TS2367: This comparison appears to be unintentional because the types 'number' and 'void' have no overlap.
@@ -176,7 +176,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'void'.
     var r1b1 = b < e;
                ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'number'.
     
     var r1c1 = c < a;
                ~~~~~
@@ -189,7 +189,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '<' cannot be applied to types 'string' and 'void'.
     var r1c1 = c < e;
                ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'string' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
     
     var r1d1 = d < a;
                ~~~~~
@@ -202,18 +202,18 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '<' cannot be applied to types 'void' and 'string'.
     var r1d1 = d < e;
                ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'void' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'void' and 'number'.
     
     var r1e1 = e < a; // no error, expected
     var r1e1 = e < b;
                ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'boolean'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'boolean'.
     var r1e1 = e < c;
                ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'string'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'string'.
     var r1e1 = e < d;
                ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'void'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'void'.
     
     // operator >
     var r2a1 = a > b;
@@ -238,7 +238,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'void'.
     var r2b1 = b > e;
                ~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'E'.
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
     
     var r2c1 = c > a;
                ~~~~~
@@ -251,7 +251,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '>' cannot be applied to types 'string' and 'void'.
     var r2c1 = c > e;
                ~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'string' and 'E'.
+!!! error TS2365: Operator '>' cannot be applied to types 'string' and 'number'.
     
     var r2d1 = d > a;
                ~~~~~
@@ -264,18 +264,18 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '>' cannot be applied to types 'void' and 'string'.
     var r2d1 = d > e;
                ~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'void' and 'E'.
+!!! error TS2365: Operator '>' cannot be applied to types 'void' and 'number'.
     
     var r2e1 = e > a; // no error, expected
     var r2e1 = e > b;
                ~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'E' and 'boolean'.
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'boolean'.
     var r2e1 = e > c;
                ~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'E' and 'string'.
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'string'.
     var r2e1 = e > d;
                ~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'E' and 'void'.
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'void'.
     
     // operator <=
     var r3a1 = a <= b;
@@ -300,7 +300,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'void'.
     var r3b1 = b <= e;
                ~~~~~~
-!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'E'.
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'number'.
     
     var r3c1 = c <= a;
                ~~~~~~
@@ -313,7 +313,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '<=' cannot be applied to types 'string' and 'void'.
     var r3c1 = c <= e;
                ~~~~~~
-!!! error TS2365: Operator '<=' cannot be applied to types 'string' and 'E'.
+!!! error TS2365: Operator '<=' cannot be applied to types 'string' and 'number'.
     
     var r3d1 = d <= a;
                ~~~~~~
@@ -326,18 +326,18 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '<=' cannot be applied to types 'void' and 'string'.
     var r3d1 = d <= e;
                ~~~~~~
-!!! error TS2365: Operator '<=' cannot be applied to types 'void' and 'E'.
+!!! error TS2365: Operator '<=' cannot be applied to types 'void' and 'number'.
     
     var r3e1 = e <= a; // no error, expected
     var r3e1 = e <= b;
                ~~~~~~
-!!! error TS2365: Operator '<=' cannot be applied to types 'E' and 'boolean'.
+!!! error TS2365: Operator '<=' cannot be applied to types 'number' and 'boolean'.
     var r3e1 = e <= c;
                ~~~~~~
-!!! error TS2365: Operator '<=' cannot be applied to types 'E' and 'string'.
+!!! error TS2365: Operator '<=' cannot be applied to types 'number' and 'string'.
     var r3e1 = e <= d;
                ~~~~~~
-!!! error TS2365: Operator '<=' cannot be applied to types 'E' and 'void'.
+!!! error TS2365: Operator '<=' cannot be applied to types 'number' and 'void'.
     
     // operator >=
     var r4a1 = a >= b;
@@ -362,7 +362,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'void'.
     var r4b1 = b >= e;
                ~~~~~~
-!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'E'.
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'number'.
     
     var r4c1 = c >= a;
                ~~~~~~
@@ -375,7 +375,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '>=' cannot be applied to types 'string' and 'void'.
     var r4c1 = c >= e;
                ~~~~~~
-!!! error TS2365: Operator '>=' cannot be applied to types 'string' and 'E'.
+!!! error TS2365: Operator '>=' cannot be applied to types 'string' and 'number'.
     
     var r4d1 = d >= a;
                ~~~~~~
@@ -388,18 +388,18 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '>=' cannot be applied to types 'void' and 'string'.
     var r4d1 = d >= e;
                ~~~~~~
-!!! error TS2365: Operator '>=' cannot be applied to types 'void' and 'E'.
+!!! error TS2365: Operator '>=' cannot be applied to types 'void' and 'number'.
     
     var r4e1 = e >= a; // no error, expected
     var r4e1 = e >= b;
                ~~~~~~
-!!! error TS2365: Operator '>=' cannot be applied to types 'E' and 'boolean'.
+!!! error TS2365: Operator '>=' cannot be applied to types 'number' and 'boolean'.
     var r4e1 = e >= c;
                ~~~~~~
-!!! error TS2365: Operator '>=' cannot be applied to types 'E' and 'string'.
+!!! error TS2365: Operator '>=' cannot be applied to types 'number' and 'string'.
     var r4e1 = e >= d;
                ~~~~~~
-!!! error TS2365: Operator '>=' cannot be applied to types 'E' and 'void'.
+!!! error TS2365: Operator '>=' cannot be applied to types 'number' and 'void'.
     
     // operator ==
     var r5a1 = a == b;

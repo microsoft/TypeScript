@@ -1,12 +1,13 @@
+import { CancelError } from "@esfx/canceltoken";
+import chalk from "chalk";
 import del from "del";
 import fs from "fs";
 import os from "os";
 import path from "path";
-import mkdirP from "mkdirp";
-import log from "fancy-log";
+
+import { findUpFile, findUpRoot } from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
 import { exec } from "./utils.mjs";
-import { findUpFile, findUpRoot } from "./findUpDir.mjs";
 
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
@@ -19,9 +20,11 @@ export const localTest262Baseline = "internal/baselines/test262/local";
  * @param {string} runJs
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
- * @param {boolean} _watchMode
+ * @param {object} options
+ * @param {import("@esfx/canceltoken").CancelToken} [options.token]
+ * @param {boolean} [options.watching]
  */
-export async function runConsoleTests(runJs, defaultReporter, runInParallel, _watchMode) {
+export async function runConsoleTests(runJs, defaultReporter, runInParallel, options = {}) {
     let testTimeout = cmdLineOptions.timeout;
     const tests = cmdLineOptions.tests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
@@ -34,7 +37,14 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, _wa
     const shards = +cmdLineOptions.shards || undefined;
     const shardId = +cmdLineOptions.shardId || undefined;
     if (!cmdLineOptions.dirty) {
+        if (options.watching) {
+            console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
+        }
         await cleanTestDirs();
+
+        if (options.token?.signaled) {
+            return;
+        }
     }
 
     if (fs.existsSync(testConfigFile)) {
@@ -57,6 +67,10 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, _wa
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
         testTimeout = 400000;
+    }
+
+    if (options.watching) {
+        console.log(chalk.yellowBright(`[watch] running tests...`));
     }
 
     if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
@@ -117,21 +131,11 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, _wa
 
     try {
         setNodeEnvToDevelopment();
-        const { exitCode } = await exec(process.execPath, args);
+
+        const { exitCode } = await exec(process.execPath, args, { token: options.token });
         if (exitCode !== 0) {
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
-        }
-        else if (cmdLineOptions.ci && runJs.startsWith("built")) {
-            // finally, do a sanity check and build the compiler with the built version of itself
-            log.info("Starting sanity check build...");
-            // Cleanup everything except lint rules (we'll need those later and would rather not waste time rebuilding them)
-            await exec("gulp", ["clean-tsc", "clean-services", "clean-tsserver", "clean-lssl", "clean-tests"]);
-            const { exitCode } = await exec("gulp", ["local", "--lkg=false"]);
-            if (exitCode !== 0) {
-                errorStatus = exitCode;
-                error = new Error(`Sanity check build process exited with status code ${errorStatus}.`);
-            }
         }
     }
     catch (e) {
@@ -146,26 +150,35 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, _wa
     await deleteTemporaryProjectOutput();
 
     if (error !== undefined) {
-        process.exitCode = typeof errorStatus === "number" ? errorStatus : 2;
-        throw error;
+        if (error instanceof CancelError) {
+            throw error;
+        }
+
+        if (options.watching) {
+            console.error(`${chalk.redBright(error.name)}: ${error.message}`);
+        }
+        else {
+            process.exitCode = typeof errorStatus === "number" ? errorStatus : 2;
+            throw error;
+        }
     }
 }
 
 export async function cleanTestDirs() {
     await del([localBaseline, localRwcBaseline]);
-    mkdirP.sync(localRwcBaseline);
-    mkdirP.sync(localBaseline);
+    await fs.promises.mkdir(localRwcBaseline, { recursive: true });
+    await fs.promises.mkdir(localBaseline, { recursive: true });
 }
 
 /**
- * used to pass data from gulp command line directly to run.js
+ * used to pass data from command line directly to run.js
  * @param {string} tests
  * @param {string} runners
  * @param {boolean} light
  * @param {string} [taskConfigsFolder]
- * @param {string | number} [workerCount]
+ * @param {number} [workerCount]
  * @param {string} [stackTraceLimit]
- * @param {string | number} [timeout]
+ * @param {number} [timeout]
  * @param {boolean} [keepFailed]
  * @param {number | undefined} [shards]
  * @param {number | undefined} [shardId]
@@ -184,7 +197,7 @@ export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, wo
         shards,
         shardId
     });
-    log.info("Running tests with config: " + testConfigContents);
+    console.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
 

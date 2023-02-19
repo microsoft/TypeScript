@@ -68,3 +68,24 @@ tests/cases/compiler/nestedExcessPropertyChecking.ts(40,9): error TS2559: Type '
         }
     };
     
+    // Simplified repro from #52252
+    
+    type T1 = {
+        primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
+    };
+    
+    type T2 = {
+        primary: { __typename?: 'Feature' } & { colors: { light: number } },
+    };
+    
+    type Query = T1 & T2;
+    
+    const response: Query = {
+        primary: {
+            colors: {
+                light: 1,
+                dark: 3,
+            },
+        },
+    };
+    

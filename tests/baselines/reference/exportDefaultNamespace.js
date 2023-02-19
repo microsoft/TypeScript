@@ -8,11 +8,11 @@ someFunc.someProp = 'yo';
 
 //// [exportDefaultNamespace.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function someFunc() {
     return 'hello!';
 }
-exports["default"] = someFunc;
+exports.default = someFunc;
 someFunc.someProp = 'yo';
 
 
