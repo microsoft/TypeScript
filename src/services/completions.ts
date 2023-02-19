@@ -5112,7 +5112,7 @@ function getVariableOrParameterDeclaration(contextToken: Node | undefined) {
     if (!contextToken) return;
 
     return findAncestor(contextToken, node =>
-        (isParameter(node) || isTypeParameterDeclaration(node) && !isIndexSignatureDeclaration(node.parent)) ||
+        ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)) ||
             (isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
             : isVariableDeclaration(node))) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
