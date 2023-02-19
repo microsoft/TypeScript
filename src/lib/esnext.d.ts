@@ -1,4 +1,2 @@
 /// <reference lib="es2023" />
 /// <reference lib="esnext.intl" />
-/// <reference lib="esnext.typedarrays" />
-/// <reference lib="esnext.array" />
