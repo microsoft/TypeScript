@@ -14914,7 +14914,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const [childTypeParameter = declaration.parent, grandParent] = walkUpParenthesizedTypesAndGetParentAndChild(declaration.parent.parent);
                     if (grandParent.kind === SyntaxKind.TypeReference && !omitTypeReferences) {
                         const typeReference = grandParent as TypeReferenceNode;
-                        const typeParameters = getTypeParametersForTypeReference(typeReference);
+                        const typeParameters = getTypeParametersForTypeReferenceOrImport(typeReference);
                         if (typeParameters) {
                             const index = typeReference.typeArguments!.indexOf(childTypeParameter as TypeNode);
                             if (index < typeParameters.length) {
@@ -17931,15 +17931,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     links.resolvedSymbol = unknownSymbol;
                     links.resolvedType = errorType;
                 }
-            }
-
-            if (node.typeArguments && !isErrorType(links.resolvedType)) {
-                addLazyDiagnostic(() => {
-                    const typeParameters = getTypeParametersForTypeAndSymbol(links.resolvedType!, links.resolvedSymbol!);
-                    if (typeParameters) {
-                        checkTypeArgumentConstraints(node, typeParameters);
-                    }
-                });
             }
         }
         return links.resolvedType;
@@ -38327,8 +38318,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function getTypeParametersForTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments) {
-        const type = getTypeFromTypeReference(node);
+    function getTypeParametersForTypeReferenceOrImport(node: TypeReferenceNode | ExpressionWithTypeArguments | ImportTypeNode) {
+        const type = getTypeFromTypeNode(node);
         if (!isErrorType(type)) {
             const symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol) {
@@ -38348,11 +38339,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         forEach(node.typeArguments, checkSourceElement);
-        const type = getTypeFromTypeReference(node);
+        checkTypeReferenceOrImport(node);
+    }
+
+    function checkTypeReferenceOrImport(node: TypeReferenceNode | ExpressionWithTypeArguments | ImportTypeNode) {
+        const type = getTypeFromTypeNode(node);
         if (!isErrorType(type)) {
             if (node.typeArguments) {
                 addLazyDiagnostic(() => {
-                    const typeParameters = getTypeParametersForTypeReference(node);
+                    const typeParameters = getTypeParametersForTypeReferenceOrImport(node);
                     if (typeParameters) {
                         checkTypeArgumentConstraints(node, typeParameters);
                     }
@@ -38374,7 +38369,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeArgumentConstraint(node: TypeNode): Type | undefined {
         const typeReferenceNode = tryCast(node.parent, isTypeReferenceType);
         if (!typeReferenceNode) return undefined;
-        const typeParameters = getTypeParametersForTypeReference(typeReferenceNode);
+        const typeParameters = getTypeParametersForTypeReferenceOrImport(typeReferenceNode);
         if (!typeParameters) return undefined;
         const constraint = getConstraintOfTypeParameter(typeParameters[typeReferenceNode.typeArguments!.indexOf(node)]);
         return constraint && instantiateType(constraint, createTypeMapper(typeParameters, getEffectiveTypeArguments(typeReferenceNode, typeParameters)));
@@ -38577,7 +38572,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        getTypeFromTypeNode(node);
+        checkTypeReferenceOrImport(node);
     }
 
     function checkNamedTupleMember(node: NamedTupleMember) {
