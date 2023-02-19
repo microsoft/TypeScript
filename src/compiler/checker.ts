@@ -19472,6 +19472,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return reportedError;
     }
 
+    function *generateSpreadProperties(node: SpreadAssignment | JsxSpreadAttribute): ElaborationIterator {
+        for (const propOfSpread of getPropertiesOfType(getTypeOfExpression(node.expression))) {
+            const type = getLiteralTypeFromProperty(propOfSpread, TypeFlags.StringOrNumberLiteralOrUnique);
+            if (type.flags & TypeFlags.Never) {
+                continue;
+            }
+            yield { errorNode: node, innerExpression: undefined, nameType: type };
+        }
+    }
 
     function *generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
         const len = length(node.properties);
@@ -19479,13 +19488,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (let i = len - 1; i >= 0; i--) {
             const prop = node.properties[i];
             if (isJsxSpreadAttribute(prop)) {
-                for (const propOfSpread of getPropertiesOfType(getTypeOfExpression(prop.expression))) {
-                    const type = getLiteralTypeFromProperty(propOfSpread, TypeFlags.StringOrNumberLiteralOrUnique);
-                    if (type.flags & TypeFlags.Never) {
-                        continue;
-                    }
-                    yield { errorNode: prop, innerExpression: undefined, nameType: type };
-                }
+                yield *generateSpreadProperties(prop);
                 continue;
             }
             if (isHyphenatedJsxName(idText(prop.name))) continue;
@@ -19671,13 +19674,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const prop = node.properties[i];
 
             if (isSpreadAssignment(prop)) {
-                for (const propOfSpread of getPropertiesOfType(getTypeOfExpression(prop.expression))) {
-                    const type = getLiteralTypeFromProperty(propOfSpread, TypeFlags.StringOrNumberLiteralOrUnique);
-                    if (type.flags & TypeFlags.Never) {
-                        continue;
-                    }
-                    yield { errorNode: prop, innerExpression: undefined, nameType: type };
-                }
+                yield *generateSpreadProperties(prop);
                 continue;
             }
             const type = getLiteralTypeFromProperty(getSymbolOfDeclaration(prop), TypeFlags.StringOrNumberLiteralOrUnique);
