@@ -78,7 +78,6 @@ function foo(x: A): string { return "abc"; }
 class C {
 >C : C
 
-    // Error expected
     s = foo(this);
 >s : string
 >foo(this) : string

@@ -45,7 +45,7 @@ const E = class {
 //// [mappedTypeProperties.js]
 "use strict";
 var _a, _b;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var C = /** @class */ (function () {
     function C() {
     }
@@ -69,4 +69,4 @@ var E = (_b = /** @class */ (function () {
 
 
 //// [mappedTypeProperties.d.ts]
-export declare type PlaceType = 'openSky' | 'roofed' | 'garage';
+export type PlaceType = 'openSky' | 'roofed' | 'garage';

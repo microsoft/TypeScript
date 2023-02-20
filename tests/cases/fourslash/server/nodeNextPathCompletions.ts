@@ -38,6 +38,6 @@
 
 verify.baselineCompletions();
 edit.insert("dependency/");
-verify.completions({ exact: ["lol", "dir/"], isNewIdentifierLocation: true });
+verify.completions({ exact: ["lol", "dir"], isNewIdentifierLocation: true });
 edit.insert("l");
 verify.completions({ exact: ["lol"], isNewIdentifierLocation: true });

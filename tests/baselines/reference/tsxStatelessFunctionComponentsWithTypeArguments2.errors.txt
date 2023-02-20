@@ -32,6 +32,8 @@ tests/cases/conformance/jsx/file.tsx(31,52): error TS2322: Type '(val: string) =
                   ~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { prop: unknown; "ignore-prop": string; }'.
 !!! error TS2322:   Type 'T' is not assignable to type '{ prop: unknown; "ignore-prop": string; }'.
+!!! related TS2208 tests/cases/conformance/jsx/file.tsx:12:14: This type parameter might need an `extends { prop: unknown; "ignore-prop": string; }` constraint.
+!!! related TS2208 tests/cases/conformance/jsx/file.tsx:12:14: This type parameter might need an `extends JSX.IntrinsicAttributes & { prop: unknown; "ignore-prop": string; }` constraint.
     }
     
     declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;

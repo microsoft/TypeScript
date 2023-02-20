@@ -75,6 +75,10 @@ function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [nu
     z = x;  // Error
 }
 
+// repro #50216
+declare let tt3: [number, string, ...any[]]
+let tt4: [number, ...number[]] = tt3  // Error
+
 // Inference
 
 function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
@@ -123,7 +127,7 @@ fn2([1, 'abc', true]);  // [number, boolean]
 // Repro from #39595
 
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
-    
+
 const a1 = foo('blah1', 1);
 const b1 = foo('blah1', 'blah2', 1);
 const c1 = foo(1);  // Error
@@ -173,6 +177,7 @@ function ft3(x, y, z) {
     y = x; // Error
     z = x; // Error
 }
+var tt4 = tt3; // Error
 // Inference
 function pipe() {
     var args = [];
@@ -229,35 +234,37 @@ var e1 = foo('blah1', 'blah2', 1, 2, 3); // Error
 
 
 //// [variadicTuples2.d.ts]
-declare type V00 = [number, ...string[]];
-declare type V01 = [...string[], number];
-declare type V03 = [number, ...string[], number];
-declare type V10 = [number, ...string[], ...boolean[]];
-declare type V11 = [number, ...string[], boolean?];
-declare type V12 = [number, string?, boolean];
-declare type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
-declare type V20 = Tup3<[number], string[], [number]>;
-declare type V21 = Tup3<[number], [string?], [boolean]>;
-declare type V22 = Tup3<[number], string[], boolean[]>;
-declare type V23 = Tup3<[number], string[], [boolean?]>;
-declare type V24 = Tup3<[number], [boolean?], string[]>;
-declare type V25 = Tup3<string[], number[], boolean[]>;
-declare type V26 = Tup3<string[], number[], [boolean]>;
-declare type V27 = Tup3<[number?], [string], [boolean?]>;
-declare type V30<A extends unknown[]> = Tup3<A, string[], number[]>;
-declare type V31<A extends unknown[]> = Tup3<string[], A, number[]>;
-declare type V32<A extends unknown[]> = Tup3<string[], number[], A>;
-declare type V40<A extends unknown[]> = Tup3<A, [string?], number[]>;
-declare type V41<A extends unknown[]> = Tup3<[string?], A, number[]>;
-declare type V42<A extends unknown[]> = Tup3<[string?], number[], A>;
-declare type V50<A extends unknown[]> = Tup3<A, string[], [number?]>;
-declare type V51<A extends unknown[]> = Tup3<string[], A, [number?]>;
-declare type V52<A extends unknown[]> = Tup3<string[], [number?], A>;
+type V00 = [number, ...string[]];
+type V01 = [...string[], number];
+type V03 = [number, ...string[], number];
+type V10 = [number, ...string[], ...boolean[]];
+type V11 = [number, ...string[], boolean?];
+type V12 = [number, string?, boolean];
+type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
+type V20 = Tup3<[number], string[], [number]>;
+type V21 = Tup3<[number], [string?], [boolean]>;
+type V22 = Tup3<[number], string[], boolean[]>;
+type V23 = Tup3<[number], string[], [boolean?]>;
+type V24 = Tup3<[number], [boolean?], string[]>;
+type V25 = Tup3<string[], number[], boolean[]>;
+type V26 = Tup3<string[], number[], [boolean]>;
+type V27 = Tup3<[number?], [string], [boolean?]>;
+type V30<A extends unknown[]> = Tup3<A, string[], number[]>;
+type V31<A extends unknown[]> = Tup3<string[], A, number[]>;
+type V32<A extends unknown[]> = Tup3<string[], number[], A>;
+type V40<A extends unknown[]> = Tup3<A, [string?], number[]>;
+type V41<A extends unknown[]> = Tup3<[string?], A, number[]>;
+type V42<A extends unknown[]> = Tup3<[string?], number[], A>;
+type V50<A extends unknown[]> = Tup3<A, string[], [number?]>;
+type V51<A extends unknown[]> = Tup3<string[], A, [number?]>;
+type V52<A extends unknown[]> = Tup3<string[], [number?], A>;
 declare let tt1: [...string[], number];
 declare function ft1(...args: [...strs: string[], num: number]): void;
 declare let tt2: [number, ...string[], number];
 declare function ft2(n1: number, ...rest: [...strs: string[], n2: number]): void;
 declare function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]): void;
+declare let tt3: [number, string, ...any[]];
+declare let tt4: [number, ...number[]];
 declare function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]): void;
 declare const sa: string[];
 declare function fn1<T, U>(t: [...unknown[], T, U]): [T, U];

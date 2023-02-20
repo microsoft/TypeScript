@@ -4,4 +4,4 @@ import foo = require('./foo');
 
 //// [commentOnImportStatement2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

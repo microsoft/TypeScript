@@ -18,6 +18,7 @@ tests/cases/compiler/tile1.ts(24,7): error TS2322: Type 'C' is not assignable to
     	oninit?(vnode: Vnode<Attrs, State>): number;
     	                            ~~~~~
 !!! error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
+!!! related TS2208 tests/cases/compiler/tile1.ts:1:28: This type parameter might need an `extends Lifecycle<Attrs, State>` constraint.
     	[_: number]: any;
     }
     
@@ -31,6 +32,7 @@ tests/cases/compiler/tile1.ts(24,7): error TS2322: Type 'C' is not assignable to
     	view(this: State, vnode: Vnode<Attrs, State>): number;
     	                                      ~~~~~
 !!! error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
+!!! related TS2208 tests/cases/compiler/tile1.ts:10:28: This type parameter might need an `extends Lifecycle<Attrs, State>` constraint.
     }
     
     interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {

@@ -20,7 +20,6 @@
                 "flags": "JSDoc",
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "originalKeywordKind": "NewKeyword",
                 "escapedText": "new"
             },
             "type": {
@@ -31,7 +30,7 @@
                 "modifierFlagsCache": 0,
                 "transformFlags": 1,
                 "typeName": {
-                    "kind": "FirstNode",
+                    "kind": "QualifiedName",
                     "pos": 14,
                     "end": 17,
                     "flags": "JSDoc",

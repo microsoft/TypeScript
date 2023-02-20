@@ -57,46 +57,44 @@ Shape signatures in builder refreshed for::
 /a/b/projects/myproject/src/file1.ts (used version)
 /a/b/projects/myproject/src/file2.ts (used version)
 
-WatchedFiles::
-/a/b/projects/myproject/src/tsconfig.json:
-  {"fileName":"/a/b/projects/myProject/src/tsconfig.json","pollingInterval":250}
-/a/b/projects/myproject/src/file1.ts:
-  {"fileName":"/a/b/projects/myProject/src/file1.ts","pollingInterval":250}
-/a/b/projects/myproject/node_modules/module1/index.js:
-  {"fileName":"/a/b/projects/myProject/node_modules/module1/index.js","pollingInterval":250}
-/a/b/projects/myproject/src/file2.ts:
-  {"fileName":"/a/b/projects/myProject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/projects/myproject/node_modules/module1/package.json:
-  {"fileName":"/a/b/projects/myproject/node_modules/module1/package.json","pollingInterval":250}
+PolledWatches::
+/a/b/projects/myproject/src/node_modules:
+  {"pollingInterval":500}
+/a/b/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/projects/myproject/src/tsconfig.json:
+  {}
+/a/b/projects/myproject/src/file1.ts:
+  {}
+/a/b/projects/myproject/node_modules/module1/index.js:
+  {}
+/a/b/projects/myproject/src/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/projects/myproject/src/node_modules:
-  {"directoryName":"/a/b/projects/myProject/src/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/projects/myproject/node_modules:
-  {"directoryName":"/a/b/projects/myProject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/projects/myproject/src/node_modules/@types:
-  {"directoryName":"/a/b/projects/myProject/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/projects/myproject/node_modules/@types:
-  {"directoryName":"/a/b/projects/myProject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /a/b/projects/myproject/src:
-  {"directoryName":"/a/b/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/projects/myProject/dist/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var module1 = require("module1");
 module1("hello");
 
 
 //// [/a/b/projects/myProject/dist/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var module11 = require("module1");
 module11("hello");
 
@@ -134,37 +132,37 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/projects/myproject/src/file1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/projects/myproject/src/tsconfig.json:
-  {"fileName":"/a/b/projects/myProject/src/tsconfig.json","pollingInterval":250}
-/a/b/projects/myproject/src/file1.ts:
-  {"fileName":"/a/b/projects/myProject/src/file1.ts","pollingInterval":250}
-/a/b/projects/myproject/node_modules/module1/index.js:
-  {"fileName":"/a/b/projects/myProject/node_modules/module1/index.js","pollingInterval":250}
-/a/b/projects/myproject/src/file2.ts:
-  {"fileName":"/a/b/projects/myProject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/projects/myproject/src/node_modules:
+  {"pollingInterval":500}
+/a/b/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/projects/myproject/src/tsconfig.json:
+  {}
+/a/b/projects/myproject/src/file1.ts:
+  {}
+/a/b/projects/myproject/node_modules/module1/index.js:
+  {}
+/a/b/projects/myproject/src/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/projects/myproject/src/node_modules:
-  {"directoryName":"/a/b/projects/myProject/src/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/projects/myproject/node_modules:
-  {"directoryName":"/a/b/projects/myProject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/projects/myproject/src/node_modules/@types:
-  {"directoryName":"/a/b/projects/myProject/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/projects/myproject/node_modules/@types:
-  {"directoryName":"/a/b/projects/myProject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /a/b/projects/myproject/src:
-  {"directoryName":"/a/b/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/projects/myProject/dist/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var module1 = require("module1");
 module1("hello");
 ;

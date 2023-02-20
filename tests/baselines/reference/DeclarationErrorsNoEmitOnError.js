@@ -6,11 +6,11 @@ export interface I {
 
 //// [DeclarationErrorsNoEmitOnError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [DeclarationErrorsNoEmitOnError.d.ts]
-declare type T = {
+type T = {
     x: number;
 };
 export interface I {

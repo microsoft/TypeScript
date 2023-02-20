@@ -204,7 +204,7 @@ export abstract class BB {
 
 //// [templateLiteralTypesPatterns.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.BB = exports.AA = void 0;
 // ok
 var a = "/bin";

@@ -169,24 +169,24 @@ f("a"); // Error, should allow only "b"
 
 
 //// [mappedTypeAsClauses.d.ts]
-declare type Getters<T> = {
+type Getters<T> = {
     [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P];
 };
-declare type TG1 = Getters<{
+type TG1 = Getters<{
     foo: string;
     bar: number;
     baz: {
         z: boolean;
     };
 }>;
-declare type PropDef<K extends keyof any, T> = {
+type PropDef<K extends keyof any, T> = {
     name: K;
     type: T;
 };
-declare type TypeFromDefs<T extends PropDef<keyof any, any>> = {
+type TypeFromDefs<T extends PropDef<keyof any, any>> = {
     [P in T as P['name']]: P['type'];
 };
-declare type TP1 = TypeFromDefs<{
+type TP1 = TypeFromDefs<{
     name: 'a';
     type: string;
 } | {
@@ -196,26 +196,26 @@ declare type TP1 = TypeFromDefs<{
     name: 'a';
     type: boolean;
 }>;
-declare type TA1 = Getters<string[]>;
-declare type TA2 = Getters<[number, boolean]>;
-declare type Methods<T> = {
+type TA1 = Getters<string[]>;
+type TA2 = Getters<[number, boolean]>;
+type Methods<T> = {
     [P in keyof T as T[P] extends Function ? P : never]: T[P];
 };
-declare type TM1 = Methods<{
+type TM1 = Methods<{
     foo(): number;
     bar(x: string): boolean;
     baz: string | number;
 }>;
-declare type DoubleProp<T> = {
+type DoubleProp<T> = {
     [P in keyof T & string as `${P}1` | `${P}2`]: T[P];
 };
-declare type TD1 = DoubleProp<{
+type TD1 = DoubleProp<{
     a: string;
     b: number;
 }>;
-declare type TD2 = keyof TD1;
-declare type TD3<U> = keyof DoubleProp<U>;
-declare type Lazyify<T> = {
+type TD2 = keyof TD1;
+type TD3<U> = keyof DoubleProp<U>;
+type Lazyify<T> = {
     [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K];
 };
 interface Person {
@@ -223,17 +223,17 @@ interface Person {
     age: number;
     location?: string;
 }
-declare type LazyPerson = Lazyify<Person>;
-declare type Example = {
+type LazyPerson = Lazyify<Person>;
+type Example = {
     foo: string;
     bar: number;
 };
-declare type PickByValueType<T, U> = {
+type PickByValueType<T, U> = {
     [K in keyof T as T[K] extends U ? K : never]: T[K];
 };
-declare type T1 = PickByValueType<Example, string>;
+type T1 = PickByValueType<Example, string>;
 declare const e1: T1;
-declare type T2 = keyof T1;
+type T2 = keyof T1;
 declare const e2: T2;
 interface Car {
     name: string;
@@ -249,39 +249,39 @@ interface Wheel {
     type: "summer" | "winter";
     radius: number;
 }
-declare type Primitive = string | number | boolean;
-declare type OnlyPrimitives<T> = {
+type Primitive = string | number | boolean;
+type OnlyPrimitives<T> = {
     [K in keyof T as T[K] extends Primitive ? K : never]: T[K];
 };
 declare let primitiveCar: OnlyPrimitives<Car>;
 declare let keys: keyof OnlyPrimitives<Car>;
-declare type KeysOfPrimitives<T> = keyof OnlyPrimitives<T>;
+type KeysOfPrimitives<T> = keyof OnlyPrimitives<T>;
 declare let carKeys: KeysOfPrimitives<Car>;
-declare type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
-declare type If<Cond extends boolean, Then, Else> = Cond extends true ? Then : Else;
-declare type GetKey<S, V> = keyof {
+type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
+type If<Cond extends boolean, Then, Else> = Cond extends true ? Then : Else;
+type GetKey<S, V> = keyof {
     [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any;
 };
-declare type GetKeyWithIf<S, V> = keyof {
+type GetKeyWithIf<S, V> = keyof {
     [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any;
 };
-declare type GetObjWithIf<S, V> = {
+type GetObjWithIf<S, V> = {
     [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any;
 };
-declare type Task = {
+type Task = {
     isDone: boolean;
 };
-declare type Schema = {
+type Schema = {
     root: {
         title: string;
         task: Task;
     };
     Task: Task;
 };
-declare type Res1 = GetKey<Schema, Schema['root']['task']>;
-declare type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;
-declare type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;
-declare type KeysExtendedBy<T, U> = keyof {
+type Res1 = GetKey<Schema, Schema['root']['task']>;
+type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;
+type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;
+type KeysExtendedBy<T, U> = keyof {
     [K in keyof T as U extends T[K] ? K : never]: T[K];
 };
 interface M {
@@ -289,48 +289,48 @@ interface M {
     b: number;
 }
 declare function f(x: KeysExtendedBy<M, number>): "b";
-declare type NameMap = {
+type NameMap = {
     'a': 'x';
     'b': 'y';
     'c': 'z';
 };
-declare type TS0<T> = keyof {
+type TS0<T> = keyof {
     [P in keyof T as keyof Record<P, number>]: string;
 };
-declare type TS1<T> = keyof {
+type TS1<T> = keyof {
     [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string;
 };
-declare type TS2<T> = keyof {
+type TS2<T> = keyof {
     [P in keyof T as P & ('a' | 'b' | 'c')]: string;
 };
-declare type TS3<T> = keyof {
+type TS3<T> = keyof {
     [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string;
 };
-declare type TS4<T> = keyof {
+type TS4<T> = keyof {
     [P in keyof T as NameMap[P & keyof NameMap]]: string;
 };
-declare type TS5<T> = keyof {
+type TS5<T> = keyof {
     [P in keyof T & keyof NameMap as NameMap[P]]: string;
 };
-declare type TS6<T, U, V> = keyof {
+type TS6<T, U, V> = keyof {
     [K in keyof T as V & (K extends U ? K : never)]: string;
 };
-declare type TN0<T> = keyof {
+type TN0<T> = keyof {
     [P in keyof T as T[P] extends number ? P : never]: string;
 };
-declare type TN1<T> = keyof {
+type TN1<T> = keyof {
     [P in keyof T as number extends T[P] ? P : never]: string;
 };
-declare type TN2<T> = keyof {
+type TN2<T> = keyof {
     [P in keyof T as 'a' extends P ? 'x' : 'y']: string;
 };
-declare type TN3<T> = keyof {
+type TN3<T> = keyof {
     [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string;
 };
-declare type TN4<T, U> = keyof {
+type TN4<T, U> = keyof {
     [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string;
 };
-declare type TN5<T, U> = keyof {
+type TN5<T, U> = keyof {
     [K in keyof T as keyof {
         [P in K as T[P] extends U ? K : never]: true;
     }]: string;

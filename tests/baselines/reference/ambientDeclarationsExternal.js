@@ -27,7 +27,7 @@ var n: number;
 // Ambient external import declaration referencing ambient external module using top level module name
 //// [consumer.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 // Ambient external module members are always exported with or without export keyword when module lacks export assignment
 var imp3 = require("equ2");
 var n = imp3.x;
