@@ -1,17 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    baselineTsserverLogs,
-    checkProjectActualFiles,
-    createHostWithSolutionBuild,
-    createLoggerWithInMemoryLogs,
-    createProjectService,
-    createSession,
-    makeReferenceItem,
-    openFilesForSession,
-    protocolFileLocationFromSubstring,
-    protocolLocationFromSubstring,
-    verifyGetErrRequest,
-} from "./helpers";
+import { solutionBuildWithBaseline } from "../tscWatch/helpers";
 import {
     createServerHost,
     File,
@@ -20,7 +8,18 @@ import {
     libFile,
     SymLink,
 } from "../virtualFileSystemWithWatch";
-import { solutionBuildWithBaseline } from "../tscWatch/helpers";
+import {
+    baselineTsserverLogs,
+    checkProjectActualFiles,
+    createHostWithSolutionBuild,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSession,
+    openFilesForSession,
+    protocolFileLocationFromSubstring,
+    protocolLocationFromSubstring,
+    verifyGetErrRequest,
+} from "./helpers";
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {
     describe("with container project", () => {
@@ -184,54 +183,9 @@ function foo() {
             openFilesForSession([keyboardTs, terminalTs], session);
 
             const searchStr = "evaluateKeyboardEvent";
-            const importStr = `import { evaluateKeyboardEvent } from 'common/input/keyboard';`;
-            const result = session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(keyboardTs, searchStr)
-            }).response as ts.server.protocol.ReferencesResponseBody;
-            assert.deepEqual(result, {
-                refs: [
-                    makeReferenceItem({
-                        file: keyboardTs,
-                        text: searchStr,
-                        contextText: `export function evaluateKeyboardEvent() { }`,
-                        isDefinition: true,
-                        lineText: `export function evaluateKeyboardEvent() { }`
-                    }),
-                    makeReferenceItem({
-                        file: keyboardTestTs,
-                        text: searchStr,
-                        contextText: importStr,
-                        isDefinition: false,
-                        isWriteAccess: true,
-                        lineText: importStr
-                    }),
-                    makeReferenceItem({
-                        file: keyboardTestTs,
-                        text: searchStr,
-                        options: { index: 1 },
-                        isDefinition: false,
-                        lineText: `    return evaluateKeyboardEvent();`
-                    }),
-                    makeReferenceItem({
-                        file: terminalTs,
-                        text: searchStr,
-                        contextText: importStr,
-                        isDefinition: false,
-                        isWriteAccess: true,
-                        lineText: importStr
-                    }),
-                    makeReferenceItem({
-                        file: terminalTs,
-                        text: searchStr,
-                        options: { index: 1 },
-                        isDefinition: false,
-                        lineText: `    return evaluateKeyboardEvent();`
-                    }),
-                ],
-                symbolName: searchStr,
-                symbolStartOffset: protocolLocationFromSubstring(keyboardTs.content, searchStr).offset,
-                symbolDisplayString: "function evaluateKeyboardEvent(): void"
             });
             baselineTsserverLogs("projectReferences", `root file is file from referenced project${disableSourceOfProjectReferenceRedirect ? " and using declaration maps" : ""}`, session);
         }

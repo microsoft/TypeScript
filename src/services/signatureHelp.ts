@@ -3,10 +3,11 @@ import {
     BinaryExpression,
     CallLikeExpression,
     CancellationToken,
+    canHaveSymbol,
     CheckFlags,
     contains,
     countWhere,
-    createPrinter,
+    createPrinterWithRemoveComments,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -48,6 +49,7 @@ import {
     isTemplateLiteralToken,
     isTemplateSpan,
     isTemplateTail,
+    isTransientSymbol,
     last,
     lastOrUndefined,
     ListFormat,
@@ -76,7 +78,7 @@ import {
     TaggedTemplateExpression,
     TemplateExpression,
     TextSpan,
-    TransientSymbol,
+    tryCast,
     Type,
     TypeChecker,
     TypeParameter,
@@ -431,7 +433,7 @@ function getContextualSignatureLocationInfo(startingToken: Node, sourceFile: Sou
 // The type of a function type node has a symbol at that node, but it's better to use the symbol for a parameter or type alias.
 function chooseBetterSymbol(s: Symbol): Symbol {
     return s.name === InternalSymbolName.Type
-        ? firstDefined(s.declarations, d => isFunctionTypeNode(d) ? d.parent.symbol : undefined) || s
+        ? firstDefined(s.declarations, d => isFunctionTypeNode(d) ? tryCast(d.parent, canHaveSymbol)?.symbol : undefined) || s
         : s;
 }
 
@@ -657,7 +659,7 @@ function createTypeHelpItems(
 function getTypeHelpItem(symbol: Symbol, typeParameters: readonly TypeParameter[], checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItem {
     const typeSymbolDisplay = symbolToDisplayParts(checker, symbol);
 
-    const printer = createPrinter({ removeComments: true });
+    const printer = createPrinterWithRemoveComments();
     const parameters = typeParameters.map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
 
     const documentation = symbol.getDocumentationComment(checker);
@@ -697,7 +699,7 @@ interface SignatureHelpItemInfo { readonly isVariadic: boolean; readonly paramet
 
 function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
     const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;
-    const printer = createPrinter({ removeComments: true });
+    const printer = createPrinterWithRemoveComments();
     const parameters = (typeParameters || emptyArray).map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
     const thisParameter = candidateSignature.thisParameter ? [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!] : [];
 
@@ -711,7 +713,7 @@ function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeC
 }
 
 function itemInfoForParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
-    const printer = createPrinter({ removeComments: true });
+    const printer = createPrinterWithRemoveComments();
     const typeParameterParts = mapToDisplayParts(writer => {
         if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
             const args = factory.createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));
@@ -722,7 +724,7 @@ function itemInfoForParameters(candidateSignature: Signature, checker: TypeCheck
     const isVariadic: (parameterList: readonly Symbol[]) => boolean =
         !checker.hasEffectiveRestParameter(candidateSignature) ? _ => false
         : lists.length === 1 ? _ => true
-        : pList => !!(pList.length && (pList[pList.length - 1] as TransientSymbol).checkFlags & CheckFlags.RestParameter);
+        : pList => !!(pList.length && tryCast(pList[pList.length - 1], isTransientSymbol)?.links.checkFlags! & CheckFlags.RestParameter);
     return lists.map(parameterList => ({
         isVariadic: isVariadic(parameterList),
         parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),
@@ -737,7 +739,7 @@ function createSignatureHelpParameterForParameter(parameter: Symbol, checker: Ty
         printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
     });
     const isOptional = checker.isOptionalParameter(parameter.valueDeclaration as ParameterDeclaration);
-    const isRest = !!((parameter as TransientSymbol).checkFlags & CheckFlags.RestParameter);
+    const isRest = isTransientSymbol(parameter) && !!(parameter.links.checkFlags & CheckFlags.RestParameter);
     return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isRest };
 }
 

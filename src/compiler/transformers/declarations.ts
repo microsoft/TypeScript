@@ -93,13 +93,17 @@ import {
     InterfaceDeclaration,
     isAnyImportSyntax,
     isArray,
+    isArrayBindingElement,
+    isBindingElement,
     isBindingPattern,
     isClassDeclaration,
+    isClassElement,
     isDeclaration,
     isEntityName,
     isEntityNameExpression,
     isExportAssignment,
     isExportDeclaration,
+    isExpressionWithTypeArguments,
     isExternalModule,
     isExternalModuleAugmentation,
     isExternalModuleIndicator,
@@ -109,6 +113,7 @@ import {
     isFunctionLike,
     isGlobalScopeAugmentation,
     isIdentifier,
+    isIdentifierANonContextualKeyword,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isIndexSignatureDeclaration,
@@ -131,15 +136,18 @@ import {
     isSourceFile,
     isSourceFileJS,
     isSourceFileNotJson,
+    isStatement,
     isStringANonContextualKeyword,
     isStringLiteral,
     isStringLiteralLike,
     isTupleTypeNode,
     isTypeAliasDeclaration,
+    isTypeElement,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
     isUnparsedSource,
+    isVariableDeclaration,
     last,
     LateBoundDeclaration,
     LateVisibilityPaintedStatement,
@@ -277,7 +285,7 @@ export function transformDeclarations(context: TransformationContext) {
     let enclosingDeclaration: Node;
     let necessaryTypeReferences: Set<[specifier: string, mode: ResolutionMode]> | undefined;
     let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-    let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
+    let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment | undefined>>;
     let suppressNewDiagnosticContexts: boolean;
     let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -502,7 +510,7 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isExternalOrCommonJsModule(sourceFile) || isJsonSourceFile(sourceFile)) {
                         resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
                         needsDeclare = false;
-                        const statements = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
+                        const statements = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
                         const newFile = factory.updateSourceFile(sourceFile, [factory.createModuleDeclaration(
                             [factory.createModifier(SyntaxKind.DeclareKeyword)],
                             factory.createStringLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
@@ -511,7 +519,7 @@ export function transformDeclarations(context: TransformationContext) {
                         return newFile;
                     }
                     needsDeclare = true;
-                    const updated = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
+                    const updated = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
                     return factory.updateSourceFile(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                 }
             ), mapDefined(node.prepends, prepend => {
@@ -560,7 +568,7 @@ export function transformDeclarations(context: TransformationContext) {
             emittedImports = filter(combinedStatements, isAnyImportSyntax);
         }
         else {
-            const statements = visitNodes(node.statements, visitDeclarationStatements);
+            const statements = visitNodes(node.statements, visitDeclarationStatements, isStatement);
             combinedStatements = setTextRange(factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
             refs.forEach(referenceVisitor);
             emittedImports = filter(combinedStatements, isAnyImportSyntax);
@@ -573,7 +581,7 @@ export function transformDeclarations(context: TransformationContext) {
         return updated;
 
         function getLibReferences() {
-            return map(arrayFrom(libs.keys()), lib => ({ fileName: lib, pos: -1, end: -1 }));
+            return arrayFrom(libs.keys(), lib => ({ fileName: lib, pos: -1, end: -1 }));
         }
 
         function getFileReferencesForUsedTypeReferences() {
@@ -676,19 +684,19 @@ export function transformDeclarations(context: TransformationContext) {
         }
         else {
             if (name.kind === SyntaxKind.ArrayBindingPattern) {
-                return factory.updateArrayBindingPattern(name, visitNodes(name.elements, visitBindingElement));
+                return factory.updateArrayBindingPattern(name, visitNodes(name.elements, visitBindingElement, isArrayBindingElement));
             }
             else {
-                return factory.updateObjectBindingPattern(name, visitNodes(name.elements, visitBindingElement));
+                return factory.updateObjectBindingPattern(name, visitNodes(name.elements, visitBindingElement, isBindingElement));
             }
         }
 
-        function visitBindingElement<T extends ArrayBindingElement>(elem: T): T;
+        function visitBindingElement<T extends Node>(elem: T): T;
         function visitBindingElement(elem: ArrayBindingElement): ArrayBindingElement {
             if (elem.kind === SyntaxKind.OmittedExpression) {
                 return elem;
             }
-            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced) {
+            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
                // Unnecessary property renaming is forbidden in types, so remove renaming
                 return factory.updateBindingElement(
                     elem,
@@ -767,10 +775,10 @@ export function transformDeclarations(context: TransformationContext) {
             (resolver.isRequiredInitializedParameter(node) ||
              resolver.isOptionalUninitializedParameterProperty(node));
         if (type && !shouldUseResolverType) {
-            return visitNode(type, visitDeclarationSubtree);
+            return visitNode(type, visitDeclarationSubtree, isTypeNode);
         }
         if (!getParseTreeNode(node)) {
-            return type ? visitNode(type, visitDeclarationSubtree) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            return type ? visitNode(type, visitDeclarationSubtree, isTypeNode) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
         }
         if (node.kind === SyntaxKind.SetAccessor) {
             // Set accessors with no associated type node (from it's param or get accessor return) are `any` since they are never contextually typed right now
@@ -850,13 +858,13 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function updateParamsList(node: Node, params: NodeArray<ParameterDeclaration>, modifierMask?: ModifierFlags) {
+    function updateParamsList(node: Node, params: NodeArray<ParameterDeclaration>, modifierMask?: ModifierFlags): NodeArray<ParameterDeclaration> {
         if (hasEffectiveModifier(node, ModifierFlags.Private)) {
-            return undefined!; // TODO: GH#18217
+            return factory.createNodeArray();
         }
         const newParams = map(params, p => ensureParameter(p, modifierMask));
         if (!newParams) {
-            return undefined!; // TODO: GH#18217
+            return factory.createNodeArray();
         }
         return factory.createNodeArray(newParams, params.hasTrailingComma);
     }
@@ -891,7 +899,7 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function ensureTypeParams(node: Node, params: NodeArray<TypeParameterDeclaration> | undefined) {
-        return hasEffectiveModifier(node, ModifierFlags.Private) ? undefined : visitNodes(params, visitDeclarationSubtree);
+        return hasEffectiveModifier(node, ModifierFlags.Private) ? undefined : visitNodes(params, visitDeclarationSubtree, isTypeParameterDeclaration);
     }
 
     function isEnclosingDeclaration(node: Node) {
@@ -1061,13 +1069,13 @@ export function transformDeclarations(context: TransformationContext) {
 
         // And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
         // (and remove them from the set to examine for outter declarations)
-        return visitNodes(statements, visitLateVisibilityMarkedStatements);
+        return visitNodes(statements, visitLateVisibilityMarkedStatements, isStatement);
 
         function visitLateVisibilityMarkedStatements(statement: Statement) {
             if (isLateVisibilityPaintedStatement(statement)) {
                 const key = getOriginalNodeId(statement);
                 if (lateStatementReplacementMap.has(key)) {
-                    const result = lateStatementReplacementMap.get(key);
+                    const result = lateStatementReplacementMap.get(key) as Statement | readonly Statement[] | undefined;
                     lateStatementReplacementMap.delete(key);
                     if (result) {
                         if (isArray(result) ? some(result, needsScopeMarker) : needsScopeMarker(result)) {
@@ -1085,7 +1093,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function visitDeclarationSubtree(input: Node): VisitResult<Node> {
+    function visitDeclarationSubtree(input: Node): VisitResult<Node | undefined> {
         if (shouldStripInternal(input)) return;
         if (isDeclaration(input)) {
             if (isDeclarationAndNotVisible(input)) return;
@@ -1254,7 +1262,7 @@ export function transformDeclarations(context: TransformationContext) {
                         input,
                         ensureModifiers(input),
                         updateParamsList(input, input.parameters),
-                        visitNode(input.type, visitDeclarationSubtree) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                        visitNode(input.type, visitDeclarationSubtree, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ));
                 }
                 case SyntaxKind.VariableDeclaration: {
@@ -1274,20 +1282,24 @@ export function transformDeclarations(context: TransformationContext) {
                 case SyntaxKind.ConditionalType: {
                     // We have to process conditional types in a special way because for visibility purposes we need to push a new enclosingDeclaration
                     // just for the `infer` types in the true branch. It's an implicit declaration scope that only applies to _part_ of the type.
-                    const checkType = visitNode(input.checkType, visitDeclarationSubtree);
-                    const extendsType = visitNode(input.extendsType, visitDeclarationSubtree);
+                    const checkType = visitNode(input.checkType, visitDeclarationSubtree, isTypeNode);
+                    const extendsType = visitNode(input.extendsType, visitDeclarationSubtree, isTypeNode);
                     const oldEnclosingDecl = enclosingDeclaration;
                     enclosingDeclaration = input.trueType;
-                    const trueType = visitNode(input.trueType, visitDeclarationSubtree);
+                    const trueType = visitNode(input.trueType, visitDeclarationSubtree, isTypeNode);
                     enclosingDeclaration = oldEnclosingDecl;
-                    const falseType = visitNode(input.falseType, visitDeclarationSubtree);
+                    const falseType = visitNode(input.falseType, visitDeclarationSubtree, isTypeNode);
+                    Debug.assert(checkType);
+                    Debug.assert(extendsType);
+                    Debug.assert(trueType);
+                    Debug.assert(falseType);
                     return cleanup(factory.updateConditionalTypeNode(input, checkType, extendsType, trueType, falseType));
                 }
                 case SyntaxKind.FunctionType: {
-                    return cleanup(factory.updateFunctionTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
+                    return cleanup(factory.updateFunctionTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration), updateParamsList(input, input.parameters), Debug.checkDefined(visitNode(input.type, visitDeclarationSubtree, isTypeNode))));
                 }
                 case SyntaxKind.ConstructorType: {
-                    return cleanup(factory.updateConstructorTypeNode(input, ensureModifiers(input), visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
+                    return cleanup(factory.updateConstructorTypeNode(input, ensureModifiers(input), visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration), updateParamsList(input, input.parameters), Debug.checkDefined(visitNode(input.type, visitDeclarationSubtree, isTypeNode))));
                 }
                 case SyntaxKind.ImportType: {
                     if (!isLiteralImportTypeNode(input)) return cleanup(input);
@@ -1334,7 +1346,7 @@ export function transformDeclarations(context: TransformationContext) {
         return node.parent.kind === SyntaxKind.MethodDeclaration && hasEffectiveModifier(node.parent, ModifierFlags.Private);
     }
 
-    function visitDeclarationStatements(input: Node): VisitResult<Node> {
+    function visitDeclarationStatements(input: Node): VisitResult<Node | undefined> {
         if (!isPreservedDeclarationStatement(input)) {
             // return undefined for unmatched kinds to omit them from the tree
             return;
@@ -1441,7 +1453,7 @@ export function transformDeclarations(context: TransformationContext) {
                     ensureModifiers(input),
                     input.name,
                     visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
-                    visitNode(input.type, visitDeclarationSubtree, isTypeNode)
+                    Debug.checkDefined(visitNode(input.type, visitDeclarationSubtree, isTypeNode))
                 ));
                 needsDeclare = previousNeedsDeclare;
                 return clean;
@@ -1453,7 +1465,7 @@ export function transformDeclarations(context: TransformationContext) {
                     input.name,
                     ensureTypeParams(input, input.typeParameters),
                     transformHeritageClauses(input.heritageClauses),
-                    visitNodes(input.members, visitDeclarationSubtree)
+                    visitNodes(input.members, visitDeclarationSubtree, isTypeElement)
                 ));
             }
             case SyntaxKind.FunctionDeclaration: {
@@ -1553,7 +1565,7 @@ export function transformDeclarations(context: TransformationContext) {
                     const oldHasScopeFix = resultHasScopeMarker;
                     resultHasScopeMarker = false;
                     needsScopeFixMarker = false;
-                    const statements = visitNodes(inner.statements, visitDeclarationStatements);
+                    const statements = visitNodes(inner.statements, visitDeclarationStatements, isStatement);
                     let lateStatements = transformAndReplaceLatePaintedStatements(statements);
                     if (input.flags & NodeFlags.Ambient) {
                         needsScopeFixMarker = false; // If it was `declare`'d everything is implicitly exported already, ignore late printed "privates"
@@ -1567,7 +1579,7 @@ export function transformDeclarations(context: TransformationContext) {
                             lateStatements = factory.createNodeArray([...lateStatements, createEmptyExports(factory)]);
                         }
                         else {
-                            lateStatements = visitNodes(lateStatements, stripExportModifiers);
+                            lateStatements = visitNodes(lateStatements, stripExportModifiers, isStatement);
                         }
                     }
                     const body = factory.updateModuleBlock(inner, lateStatements);
@@ -1658,7 +1670,7 @@ export function transformDeclarations(context: TransformationContext) {
                         /*initializer*/ undefined
                     )
                 ] : undefined;
-                const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree));
+                const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree, isClassElement));
                 const members = factory.createNodeArray(memberNodes);
 
                 const extendsClause = getEffectiveBaseTypeNode(input);
@@ -1678,11 +1690,11 @@ export function transformDeclarations(context: TransformationContext) {
                         if (clause.token === SyntaxKind.ExtendsKeyword) {
                             const oldDiag = getSymbolAccessibilityDiagnostic;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(clause.types[0]);
-                            const newClause = factory.updateHeritageClause(clause, map(clause.types, t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree))));
+                            const newClause = factory.updateHeritageClause(clause, map(clause.types, t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree, isTypeNode))));
                             getSymbolAccessibilityDiagnostic = oldDiag;
                             return newClause;
                         }
-                        return factory.updateHeritageClause(clause, visitNodes(factory.createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationSubtree));
+                        return factory.updateHeritageClause(clause, visitNodes(factory.createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationSubtree, isExpressionWithTypeArguments));
                     }));
                     return [statement, cleanup(factory.updateClassDeclaration(
                         input,
@@ -1741,7 +1753,7 @@ export function transformDeclarations(context: TransformationContext) {
 
     function transformVariableStatement(input: VariableStatement) {
         if (!forEach(input.declarationList.declarations, getBindingNameVisible)) return;
-        const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree);
+        const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree, isVariableDeclaration);
         if (!length(nodes)) return;
         return factory.updateVariableStatement(input, factory.createNodeArray(ensureModifiers(input)), factory.updateVariableDeclarationList(input.declarationList, nodes));
     }
@@ -1832,7 +1844,7 @@ export function transformDeclarations(context: TransformationContext) {
     function transformHeritageClauses(nodes: NodeArray<HeritageClause> | undefined) {
         return factory.createNodeArray(filter(map(nodes, clause => factory.updateHeritageClause(clause, visitNodes(factory.createNodeArray(filter(clause.types, t => {
             return isEntityNameExpression(t.expression) || (clause.token === SyntaxKind.ExtendsKeyword && t.expression.kind === SyntaxKind.NullKeyword);
-        })), visitDeclarationSubtree))), clause => clause.types && !!clause.types.length));
+        })), visitDeclarationSubtree, isExpressionWithTypeArguments))), clause => clause.types && !!clause.types.length));
     }
 }
 

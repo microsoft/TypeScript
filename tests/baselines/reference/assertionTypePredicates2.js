@@ -28,7 +28,7 @@ export const main = () => {
 /**
  * @typedef {{ x: number }} A
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
 /**
  * @typedef { A & { y: number } } B

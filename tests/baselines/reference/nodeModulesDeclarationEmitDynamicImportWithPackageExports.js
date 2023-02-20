@@ -79,24 +79,24 @@ export {};
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [other.js]
 // esm format file
-export const a = await import("package/cjs");
-export const b = await import("package/mjs");
-export const c = await import("package");
-export const f = await import("inner");
+export var a = await import("package/cjs");
+export var b = await import("package/mjs");
+export var c = await import("package");
+export var f = await import("inner");
 //// [other2.js]
 // esm format file
-export const d = await import("inner/cjs");
-export const e = await import("inner/mjs");
+export var d = await import("inner/cjs");
+export var e = await import("inner/mjs");
 //// [other.mjs]
 // esm format file
-export const a = await import("package/cjs");
-export const b = await import("package/mjs");
-export const c = await import("package");
-export const f = await import("inner");
+export var a = await import("package/cjs");
+export var b = await import("package/mjs");
+export var c = await import("package");
+export var f = await import("inner");
 //// [other2.mjs]
 // esm format file
-export const d = await import("inner/cjs");
-export const e = await import("inner/mjs");
+export var d = await import("inner/cjs");
+export var e = await import("inner/mjs");
 //// [other.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

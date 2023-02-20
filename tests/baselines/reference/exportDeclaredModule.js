@@ -16,6 +16,6 @@ var x: number = foo1.b();
 module.exports = M1;
 //// [foo2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo1 = require("./foo1");
 var x = foo1.b();

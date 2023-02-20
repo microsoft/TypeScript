@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
 import { notImplementedHost } from "./extract/helpers";
 
 // Some tests have trailing whitespace
@@ -330,7 +330,7 @@ namespace M {
 
     function findConstructor(sourceFile: ts.SourceFile): ts.ConstructorDeclaration {
         const classDecl = sourceFile.statements[0] as ts.ClassDeclaration;
-        return ts.find<ts.ClassElement, ts.ConstructorDeclaration>(classDecl.members, (m): m is ts.ConstructorDeclaration => ts.isConstructorDeclaration(m) && !!m.body)!;
+        return ts.find(classDecl.members, (m): m is ts.ConstructorDeclaration => ts.isConstructorDeclaration(m) && !!m.body)!;
     }
     function createTestSuperCall() {
         const superCall = ts.factory.createCallExpression(

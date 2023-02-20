@@ -1,10 +1,10 @@
-import * as ts from "./_namespaces/ts";
-import * as fakes from "./_namespaces/fakes";
-import * as vpath from "./_namespaces/vpath";
-import * as documents from "./_namespaces/documents";
-import * as vfs from "./_namespaces/vfs";
 import * as collections from "./_namespaces/collections";
+import * as documents from "./_namespaces/documents";
+import * as fakes from "./_namespaces/fakes";
 import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 /**
  * Test harness compiler functionality.
@@ -191,7 +191,7 @@ export class CompilationResult {
     public getSourceMapRecord(): string | undefined {
         const maps = this.result!.sourceMaps;
         if (maps && maps.length > 0) {
-            return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, Array.from(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), Array.from(this.dts.values()));
+            return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, ts.arrayFrom(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), ts.arrayFrom(this.dts.values()));
         }
     }
 
@@ -213,7 +213,7 @@ export class CompilationResult {
         }
         else {
             path = vpath.resolve(this.vfs.cwd(), path);
-            const outDir = ext === ".d.ts" || ext === ".json.d.ts" || ext === ".d.mts" || ext === ".d.cts" ? this.options.declarationDir || this.options.outDir : this.options.outDir;
+            const outDir = ext === ".d.ts" || ext === ".d.mts" || ext === ".d.cts" || (ext.endsWith(".ts") || ts.stringContains(ext, ".d.")) ? this.options.declarationDir || this.options.outDir : this.options.outDir;
             if (outDir) {
                 const common = this.commonSourceDirectory;
                 if (common) {
@@ -241,7 +241,7 @@ export class CompilationResult {
     }
 }
 
-export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions): CompilationResult {
+export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions, typeScriptVersion?: string): CompilationResult {
     if (compilerOptions.project || !rootFiles || rootFiles.length === 0) {
         const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
         if (project) {
@@ -265,11 +265,10 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     // pre-emit/post-emit error comparison requires declaration emit twice, which can be slow. If it's unlikely to flag any error consistency issues
     // and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
     const skipErrorComparison = ts.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
-
-    const preProgram = !skipErrorComparison ? ts.createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
+    const preProgram = !skipErrorComparison ? ts.createProgram({ rootNames: rootFiles || [], options: { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host, typeScriptVersion }) : undefined;
     const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
-    const program = ts.createProgram(rootFiles || [], compilerOptions, host);
+    const program = ts.createProgram({ rootNames: rootFiles || [], options: compilerOptions, host, typeScriptVersion });
     const emitResult = program.emit();
     const postErrors = ts.getPreEmitDiagnostics(program);
     const longerErrors = ts.length(preErrors) > postErrors.length ? preErrors : postErrors;

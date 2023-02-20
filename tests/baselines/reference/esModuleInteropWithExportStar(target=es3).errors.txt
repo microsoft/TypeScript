@@ -1,0 +1,15 @@
+error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+
+
+!!! error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+==== tests/cases/compiler/fs.d.ts (0 errors) ====
+    export const x: number;
+==== tests/cases/compiler/mjts.ts (0 errors) ====
+    import * as fs from "./fs";
+    
+    fs;
+    
+    export * from "./fs";
+    export {x} from "./fs";
+    export {x as y} from "./fs";
+    

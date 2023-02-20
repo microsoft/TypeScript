@@ -23,6 +23,20 @@ CleanBuild:
         "version": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "emitDeclarationOnly": true
@@ -66,6 +80,20 @@ IncrementalBuild:
         "version": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "emitDeclarationOnly": false
@@ -101,18 +129,32 @@ CleanBuild:
         "version": "-13789510868-export const e = 10;"
       },
       "../../project1/src/a.d.ts": {
-        "version": "-3762229137-export declare const a = 10;\r\n"
+        "version": "-3497920574-export declare const a = 10;\n"
       },
       "./f.ts": {
         "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
       },
       "../../project1/src/b.d.ts": {
-        "version": "-1807916688-export declare const b = 10;\r\n"
+        "version": "-3829150557-export declare const b = 10;\n"
       },
       "./g.ts": {
         "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
       }
     },
+    "root": [
+      [
+        2,
+        "./e.ts"
+      ],
+      [
+        4,
+        "./f.ts"
+      ],
+      [
+        6,
+        "./g.ts"
+      ]
+    ],
     "options": {
       "declaration": true,
       "emitDeclarationOnly": true
@@ -148,18 +190,32 @@ IncrementalBuild:
         "version": "-13789510868-export const e = 10;"
       },
       "../../project1/src/a.d.ts": {
-        "version": "-3762229137-export declare const a = 10;\r\n"
+        "version": "-3497920574-export declare const a = 10;\n"
       },
       "./f.ts": {
         "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
       },
       "../../project1/src/b.d.ts": {
-        "version": "-1807916688-export declare const b = 10;\r\n"
+        "version": "-3829150557-export declare const b = 10;\n"
       },
       "./g.ts": {
         "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
       }
     },
+    "root": [
+      [
+        2,
+        "./e.ts"
+      ],
+      [
+        4,
+        "./f.ts"
+      ],
+      [
+        6,
+        "./g.ts"
+      ]
+    ],
     "options": {
       "declaration": true,
       "emitDeclarationOnly": false

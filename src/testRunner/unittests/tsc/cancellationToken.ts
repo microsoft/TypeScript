@@ -1,20 +1,20 @@
+import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import * as Harness from "../../_namespaces/Harness";
-import {
-    createWatchedSystem,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
 import {
     baselineBuildInfo,
     CommandLineProgram,
 } from "../tsc/helpers";
 import {
-    applyChange,
+    applyEdit,
     createBaseline,
     watchBaseline,
 } from "../tscWatch/helpers";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 
 describe("unittests:: tsc:: builder cancellationToken", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");
@@ -87,7 +87,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
 
             // Cancel on first semantic operation
             // Change
-            oldSnap = applyChange(
+            oldSnap = applyEdit(
                 sys,
                 baseline,
                 sys => sys.appendFile(cFile.path, "export function foo() {}"),
@@ -125,7 +125,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
 
             function noChange(caption: string) {
-                oldSnap = applyChange(sys, baseline, ts.noop, caption);
+                oldSnap = applyEdit(sys, baseline, ts.noop, caption);
             }
 
             function updatePrograms() {

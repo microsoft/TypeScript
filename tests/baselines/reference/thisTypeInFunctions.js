@@ -262,7 +262,7 @@ var impl = {
     },
     explicitThis: function () {
         return this.a;
-    }
+    },
 };
 impl.explicitVoid1 = function () { return 12; };
 impl.explicitVoid2 = function () { return 12; };

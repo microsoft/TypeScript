@@ -30,7 +30,7 @@ class D { m() { g; } }
 
 //// [noUnusedLocals_selfReference.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function f() {
     f;
     function g() {
