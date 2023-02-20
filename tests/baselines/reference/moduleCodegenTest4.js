@@ -6,7 +6,7 @@ void 0;
 
 //// [moduleCodegenTest4.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Baz = void 0;
 var Baz;
 (function (Baz) {

@@ -7,6 +7,7 @@ import {
     CallExpression,
     CancellationToken,
     canHaveModifiers,
+    canHaveSymbol,
     cast,
     Debug,
     ExportAssignment,
@@ -43,6 +44,7 @@ import {
     isImportEqualsDeclaration,
     isImportTypeNode,
     isInJSFile,
+    isJSDocCallbackTag,
     isJSDocTypedefTag,
     isModuleExportsAccessExpression,
     isNamedExports,
@@ -73,6 +75,7 @@ import {
     SymbolFlags,
     symbolName,
     SyntaxKind,
+    tryCast,
     TypeChecker,
     ValidImportTypeNode,
     VariableDeclaration,
@@ -610,7 +613,7 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
             else if (isBinaryExpression(grandparent)) {
                 return getSpecialPropertyExport(grandparent, /*useLhsSymbol*/ true);
             }
-            else if (isJSDocTypedefTag(parent)) {
+            else if (isJSDocTypedefTag(parent) || isJSDocCallbackTag(parent)) {
                 return exportInfo(symbol, ExportKind.Named);
             }
         }
@@ -650,6 +653,7 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
 
         // Search on the local symbol in the exporting module, not the exported symbol.
         importedSymbol = skipExportSpecifierSymbol(importedSymbol, checker);
+
         // Similarly, skip past the symbol for 'export ='
         if (importedSymbol.escapedName === "export=") {
             importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker);
@@ -683,10 +687,10 @@ function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker
 
     const decl = Debug.checkDefined(importedSymbol.valueDeclaration);
     if (isExportAssignment(decl)) { // `export = class {}`
-        return decl.expression.symbol;
+        return tryCast(decl.expression, canHaveSymbol)?.symbol;
     }
     else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-        return decl.right.symbol;
+        return tryCast(decl.right, canHaveSymbol)?.symbol;
     }
     else if (isSourceFile(decl)) { // json module
         return decl.symbol;
@@ -741,7 +745,7 @@ function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol
     if (symbol.declarations) {
         for (const declaration of symbol.declarations) {
             if (isExportSpecifier(declaration) && !declaration.propertyName && !declaration.parent.parent.moduleSpecifier) {
-                return checker.getExportSpecifierLocalTargetSymbol(declaration)!;
+                return checker.getExportSpecifierLocalTargetSymbol(declaration) || symbol;
             }
             else if (isPropertyAccessExpression(declaration) && isModuleExportsAccessExpression(declaration.expression) && !isPrivateIdentifier(declaration.name)) {
                 // Export of form 'module.exports.propName = expr';

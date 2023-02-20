@@ -15,7 +15,8 @@ b: {
   "resolvedModule": {
     "resolvedFileName": "b.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: undefined
@@ -44,7 +45,8 @@ b: {
   "resolvedModule": {
     "resolvedFileName": "b.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: undefined
@@ -89,7 +91,8 @@ b: {
   "resolvedModule": {
     "resolvedFileName": "b.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 c: {
@@ -110,6 +113,6 @@ resolvedTypeReferenceDirectiveNames: undefined
 MissingPaths:: ["lib.d.ts"]
 
 a.ts(2,15): error TS2306: File 'b.ts' is not a module.
-a.ts(3,31): error TS2792: Cannot find module 'c'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+a.ts(3,31): error TS2792: Cannot find module 'c'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 

@@ -27,7 +27,7 @@ const d = <MyTagWithOptionalNonJSXBits x={2} />; // Technically OK, but probably
 //// [jsxIssuesErrorWhenTagExpectsTooManyArguments.js]
 "use strict";
 /// <reference path="react16.d.ts" />
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 function MyComp4(props, context, bad, verybad) {
     return React.createElement("div", null);

@@ -3,7 +3,7 @@ import {
     AssignmentExpression,
     AssignmentOperatorToken,
     CallLikeExpression,
-    concatenate,
+    canHaveSymbol, concatenate,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -131,6 +131,18 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         return functionDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
     }
 
+    if (node.kind === SyntaxKind.AwaitKeyword) {
+        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
+        const isAsyncFunction = functionDeclaration && some(functionDeclaration.modifiers, (node) => node.kind === SyntaxKind.AsyncKeyword);
+        return isAsyncFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+    }
+
+    if (node.kind === SyntaxKind.YieldKeyword) {
+        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
+        const isGeneratorFunction = functionDeclaration && functionDeclaration.asteriskToken;
+        return isGeneratorFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+    }
+
     if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
         const classDecl = node.parent.parent;
         const { symbol, failedAliasResolution } = getSymbol(classDecl, typeChecker, stopAtAlias);
@@ -245,7 +257,7 @@ function symbolMatchesSignature(s: Symbol, calledDeclaration: SignatureDeclarati
     return s === calledDeclaration.symbol
         || s === calledDeclaration.symbol.parent
         || isAssignmentExpression(calledDeclaration.parent)
-        || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
+        || (!isCallLikeExpression(calledDeclaration.parent) && s === tryCast(calledDeclaration.parent, canHaveSymbol)?.symbol);
 }
 
 // If the current location we want to find its definition is in an object literal, try to get the contextual type for the

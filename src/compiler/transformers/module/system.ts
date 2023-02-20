@@ -78,7 +78,7 @@ import {
     isNamedExports,
     isObjectLiteralExpression,
     isOmittedExpression,
-    isParameterDeclaration,
+    isParameter,
     isPrefixUnaryExpression,
     isPropertyAssignment,
     isShorthandPropertyAssignment,
@@ -708,7 +708,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param node The node to visit.
      */
-    function topLevelVisitor(node: Node): VisitResult<Node> {
+    function topLevelVisitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
                 return visitImportDeclaration(node as ImportDeclaration);
@@ -732,7 +732,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param node The node to visit.
      */
-    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
+    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         if (node.importClause) {
             hoistVariableDeclaration(getLocalNameForExternalImport(factory, node, currentSourceFile)!); // TODO: GH#18217
@@ -750,7 +750,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return singleOrMany(statements);
     }
 
-    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement | undefined> {
         Debug.assertIsDefined(node);
         return undefined;
     }
@@ -760,7 +760,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param node The node to visit.
      */
-    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
         Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
         let statements: Statement[] | undefined;
@@ -783,7 +783,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param node The node to visit.
      */
-    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
+    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
         if (node.isExportEquals) {
             // Elide `export=` as it is illegal in a SystemJS module.
             return undefined;
@@ -806,7 +806,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param node The node to visit.
      */
-    function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
+    function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement | undefined> {
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
             hoistedStatements = append(hoistedStatements,
                 factory.updateFunctionDeclaration(
@@ -815,7 +815,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     node.asteriskToken,
                     factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                     /*typeParameters*/ undefined,
-                    visitNodes(node.parameters, visitor, isParameterDeclaration),
+                    visitNodes(node.parameters, visitor, isParameter),
                     /*type*/ undefined,
                     visitNode(node.body, visitor, isBlock)));
         }
@@ -840,7 +840,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param node The node to visit.
      */
-    function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
+    function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
 
         // Hoist the name of the class declaration to the outer module body function.
@@ -887,7 +887,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param node The node to visit.
      */
-    function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
+    function visitVariableStatement(node: VariableStatement): VisitResult<Statement | undefined> {
         if (!shouldHoistVariableDeclarationList(node.declarationList)) {
             return visitNode(node, visitor, isStatement);
         }
@@ -1293,7 +1293,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param node The node to visit.
      */
-    function topLevelNestedVisitor(node: Node): VisitResult<Node> {
+    function topLevelNestedVisitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.VariableStatement:
                 return visitVariableStatement(node as VariableStatement);
@@ -1448,7 +1448,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             return expressions ? factory.inlineExpressions(expressions) : factory.createOmittedExpression();
         }
         else {
-            return visitNode(node, discardedValueVisitor, isExpression);
+            return visitNode(node, discardedValueVisitor, isForInitializer);
         }
     }
 
@@ -1487,7 +1487,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateLabeledStatement(
             node,
             node.label,
-            visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)
+            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
         );
     }
 
@@ -1500,7 +1500,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateWithStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)
+            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
         );
     }
 
@@ -1513,7 +1513,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateSwitchStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            visitNode(node.caseBlock, topLevelNestedVisitor, isCaseBlock)
+            Debug.checkDefined(visitNode(node.caseBlock, topLevelNestedVisitor, isCaseBlock))
         );
     }
 
@@ -1578,7 +1578,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         node = factory.updateCatchClause(
             node,
             node.variableDeclaration,
-            visitNode(node.block, topLevelNestedVisitor, isBlock)
+            Debug.checkDefined(visitNode(node.block, topLevelNestedVisitor, isBlock))
         );
 
         enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1676,7 +1676,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         //     };
         // });
         const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
-        const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor);
+        const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
         const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
         return factory.createCallExpression(
@@ -1798,7 +1798,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param node The node to visit.
      */
-    function modifierVisitor(node: Node): VisitResult<Node> {
+    function modifierVisitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.DefaultKeyword:

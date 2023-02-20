@@ -1,15 +1,14 @@
-import * as ts from "./_namespaces/ts";
-import * as fakes from "./_namespaces/fakes";
-import * as vfs from "./_namespaces/vfs";
 import * as collections from "./_namespaces/collections";
-import * as vpath from "./_namespaces/vpath";
-import * as Utils from "./_namespaces/Utils";
+import * as fakes from "./_namespaces/fakes";
 import {
     Compiler,
-    harnessNewLine,
     mockHash,
     virtualFileSystemRoot,
 } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import { getNewLineCharacter } from "./_namespaces/ts";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
@@ -150,7 +149,7 @@ export abstract class LanguageServiceAdapterHost {
     }
 
     public getNewLine(): string {
-        return harnessNewLine;
+        return getNewLineCharacter(this.settings);
     }
 
     public getFilenames(): string[] {
@@ -296,11 +295,11 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return script ? script.version.toString() : undefined!; // TODO: GH#18217
     }
 
-    directoryExists(dirName: string): boolean {
+    override directoryExists(dirName: string): boolean {
         return this.sys.directoryExists(dirName);
     }
 
-    fileExists(fileName: string): boolean {
+    override fileExists(fileName: string): boolean {
         return this.sys.fileExists(fileName);
     }
 
@@ -308,11 +307,11 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return this.sys.readDirectory(path, extensions, exclude, include, depth);
     }
 
-    readFile(path: string): string | undefined {
+    override readFile(path: string): string | undefined {
         return this.sys.readFile(path);
     }
 
-    realpath(path: string): string {
+    override realpath(path: string): string {
         return this.sys.realpath(path);
     }
 
@@ -390,11 +389,11 @@ class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.L
         }
     }
 
-    getFilenames(): string[] { return this.nativeHost.getFilenames(); }
-    getScriptInfo(fileName: string): ScriptInfo | undefined { return this.nativeHost.getScriptInfo(fileName); }
-    addScript(fileName: string, content: string, isRootFile: boolean): void { this.nativeHost.addScript(fileName, content, isRootFile); }
-    editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
-    positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
+    override getFilenames(): string[] { return this.nativeHost.getFilenames(); }
+    override getScriptInfo(fileName: string): ScriptInfo | undefined { return this.nativeHost.getScriptInfo(fileName); }
+    override addScript(fileName: string, content: string, isRootFile: boolean): void { this.nativeHost.addScript(fileName, content, isRootFile); }
+    override editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
+    override positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
 
     getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
     getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
@@ -413,15 +412,15 @@ class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.L
     readDirectory = ts.notImplemented;
     readDirectoryNames = ts.notImplemented;
     readFileNames = ts.notImplemented;
-    fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
-    readFile(fileName: string) {
+    override fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
+    override readFile(fileName: string) {
         const snapshot = this.nativeHost.getScriptSnapshot(fileName);
         return snapshot && ts.getSnapshotText(snapshot);
     }
     log(s: string): void { this.nativeHost.log(s); }
     trace(s: string): void { this.nativeHost.trace(s); }
     error(s: string): void { this.nativeHost.error(s); }
-    directoryExists(): boolean {
+    override directoryExists(): boolean {
         // for tests pessimistically assume that directory always exists
         return true;
     }
@@ -588,8 +587,8 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
         return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
     }
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: ts.DocCommentTemplateOptions): ts.TextInsertion {
-        return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position, options));
+    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: ts.DocCommentTemplateOptions, formatOptions?: ts.FormatCodeSettings): ts.TextInsertion {
+        return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position, options, formatOptions));
     }
     isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
         return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
@@ -599,6 +598,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     }
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
         return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
+    }
+    getSupportedCodeFixes(): never {
+        throw new Error("Not supported on the shim.");
     }
     getCodeFixesAtPosition(): never {
         throw new Error("Not supported on the shim.");
@@ -744,12 +746,12 @@ class SessionClientHost extends NativeLanguageServiceHost implements ts.server.S
         this.client = client;
     }
 
-    openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
+    override openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
         super.openFile(fileName, content, scriptKindName);
         this.client.openFile(fileName, content, scriptKindName);
     }
 
-    editScript(fileName: string, start: number, end: number, newText: string) {
+    override editScript(fileName: string, start: number, end: number, newText: string) {
         const changeArgs = this.client.createChangeFileRequestArgs(fileName, start, end, newText);
         super.editScript(fileName, start, end, newText);
         this.client.changeFile(fileName, changeArgs);
@@ -1012,7 +1014,7 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
             typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
-            byteLength: Utils.byteLength,
+            byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: serverHost,
             canUseEvents: true

@@ -1,8 +1,8 @@
 import * as collections from "./_namespaces/collections";
-import * as ts from "./_namespaces/ts";
-import * as vpath from "./_namespaces/vpath";
 import * as documents from "./_namespaces/documents";
 import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as vpath from "./_namespaces/vpath";
 
 /**
  * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
@@ -84,16 +84,9 @@ export class FileSystem {
 
         let cwd = options.cwd;
         if ((!cwd || !vpath.isRoot(cwd)) && this._lazy.links) {
-            const iterator = collections.getIterator(this._lazy.links.keys());
-            try {
-                for (let i = collections.nextResult(iterator); i; i = collections.nextResult(iterator)) {
-                    const name = i.value;
-                    cwd = cwd ? vpath.resolve(name, cwd) : name;
-                    break;
-                }
-            }
-            finally {
-                collections.closeIterator(iterator);
+            for (const name of this._lazy.links.keys()) {
+                cwd = cwd ? vpath.resolve(name, cwd) : name;
+                break;
             }
         }
 
@@ -384,28 +377,21 @@ export class FileSystem {
     public getFileListing(): string {
         let result = "";
         const printLinks = (dirname: string | undefined, links: collections.SortedMap<string, Inode>) => {
-            const iterator = collections.getIterator(links);
-            try {
-                for (let i = collections.nextResult(iterator); i; i = collections.nextResult(iterator)) {
-                    const [name, node] = i.value;
-                    const path = dirname ? vpath.combine(dirname, name) : name;
-                    const marker = vpath.compare(this._cwd, path, this.ignoreCase) === 0 ? "*" : " ";
-                    if (result) result += "\n";
-                    result += marker;
-                    if (isDirectory(node)) {
-                        result += vpath.addTrailingSeparator(path);
-                        printLinks(path, this._getLinks(node));
-                    }
-                    else if (isFile(node)) {
-                        result += path;
-                    }
-                    else if (isSymlink(node)) {
-                        result += path + " -> " + node.symlink;
-                    }
+            for (const [name, node] of links) {
+                const path = dirname ? vpath.combine(dirname, name) : name;
+                const marker = vpath.compare(this._cwd, path, this.ignoreCase) === 0 ? "*" : " ";
+                if (result) result += "\n";
+                result += marker;
+                if (isDirectory(node)) {
+                    result += vpath.addTrailingSeparator(path);
+                    printLinks(path, this._getLinks(node));
                 }
-            }
-            finally {
-                collections.closeIterator(iterator);
+                else if (isFile(node)) {
+                    result += path;
+                }
+                else if (isSymlink(node)) {
+                    result += path + " -> " + node.symlink;
+                }
             }
         };
         printLinks(/*dirname*/ undefined, this._getRootLinks());
@@ -500,7 +486,7 @@ export class FileSystem {
         const { node } = this._walk(this._resolve(path));
         if (!node) throw createIOError("ENOENT");
         if (!isDirectory(node)) throw createIOError("ENOTDIR");
-        return Array.from(this._getLinks(node).keys());
+        return ts.arrayFrom(this._getLinks(node).keys());
     }
 
     /**
@@ -876,7 +862,7 @@ export class FileSystem {
     private _mknod(dev: number, type: typeof S_IFREG, mode: number, time?: number): FileInode;
     private _mknod(dev: number, type: typeof S_IFDIR, mode: number, time?: number): DirectoryInode;
     private _mknod(dev: number, type: typeof S_IFLNK, mode: number, time?: number): SymlinkInode;
-    private _mknod(dev: number, type: number, mode: number, time = this.time()) {
+    private _mknod(dev: number, type: number, mode: number, time = this.time()): Inode {
         return {
             dev,
             ino: ++inoCount,
@@ -886,7 +872,7 @@ export class FileSystem {
             ctimeMs: time,
             birthtimeMs: time,
             nlink: 0
-        } as Inode;
+        };
     }
 
     private _addLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
@@ -979,7 +965,7 @@ export class FileSystem {
                 birthtimeMs: root.birthtimeMs,
                 nlink: root.nlink,
                 shadowRoot: root
-            } as Inode;
+            };
 
             if (isSymlink(root)) (shadow as SymlinkInode).symlink = root.symlink;
             shadows.set(shadow.ino, shadow);
@@ -989,15 +975,8 @@ export class FileSystem {
     }
 
     private _copyShadowLinks(source: ReadonlyMap<string, Inode>, target: collections.SortedMap<string, Inode>) {
-        const iterator = collections.getIterator(source);
-        try {
-            for (let i = collections.nextResult(iterator); i; i = collections.nextResult(iterator)) {
-                const [name, root] = i.value;
-                target.set(name, this._getShadow(root));
-            }
-        }
-        finally {
-            collections.closeIterator(iterator);
+        for (const [name, root] of source) {
+            target.set(name, this._getShadow(root));
         }
     }
 
@@ -1626,7 +1605,7 @@ function* iteratePatchWorker(dirname: string, container: FileSet): IterableItera
         const entry = normalizeFileSetEntry(container[name]);
         const file = dirname ? vpath.combine(dirname, name) : name;
         if (entry instanceof Directory) {
-            yield* ts.arrayFrom(iteratePatchWorker(file, entry.files));
+            yield* iteratePatchWorker(file, entry.files);
         }
         else if (entry instanceof File) {
             const content = typeof entry.data === "string" ? entry.data : entry.data.toString("utf8");

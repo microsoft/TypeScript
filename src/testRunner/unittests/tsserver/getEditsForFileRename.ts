@@ -42,7 +42,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
             readFile: path => host.readFile(path),
             fileExists: path => host.fileExists(path),
             resolveModuleNames: (moduleNames, containingFile) => moduleNames.map(name => ts.resolveModuleName(name, containingFile, options, lsHost, moduleResolutionCache).resolvedModule),
-            getResolvedModuleWithFailedLookupLocationsFromCache: (moduleName, containingFile, mode) => moduleResolutionCache.getOrCreateCacheForDirectory(ts.getDirectoryPath(containingFile)).get(moduleName, mode),
+            getResolvedModuleWithFailedLookupLocationsFromCache: (moduleName, containingFile, mode) => moduleResolutionCache.getFromDirectoryCache(moduleName, mode, ts.getDirectoryPath(containingFile), /*redirectedReference*/ undefined),
         };
         const service = ts.createLanguageService(lsHost);
         const edits = service.getEditsForFileRename("/old.ts", "/new.ts", ts.testFormatSettings, ts.emptyOptions);
@@ -82,7 +82,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         openFilesForSession([aUserTs, bUserTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
-            command: ts.server.CommandNames.GetEditsForFileRename,
+            command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
                 oldFilePath: aOldTs.path,
                 newFilePath: "/a/new.ts",
@@ -101,7 +101,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         openFilesForSession([aTs, cTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
-            command: ts.server.CommandNames.GetEditsForFileRename,
+            command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
                 oldFilePath: "/b.ts",
                 newFilePath: cTs.path,

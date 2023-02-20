@@ -52,10 +52,12 @@ import {
     JSDocImplementsTag,
     JSDocParameterTag,
     JSDocPropertyTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocTag,
     JSDocTagInfo,
     JSDocTemplateTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeTag,
     lastOrUndefined,
@@ -133,6 +135,8 @@ const jsDocTagNames = [
     "lends",
     "license",
     "link",
+    "linkcode",
+    "linkplain",
     "listens",
     "member",
     "memberof",
@@ -141,16 +145,19 @@ const jsDocTagNames = [
     "module",
     "name",
     "namespace",
+    "overload",
     "override",
     "package",
     "param",
     "private",
+    "prop",
     "property",
     "protected",
     "public",
     "readonly",
     "requires",
     "returns",
+    "satisfies",
     "see",
     "since",
     "static",
@@ -258,6 +265,10 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
     const { comment, kind } = tag;
     const namePart = getTagNameDisplayPart(kind);
     switch (kind) {
+        case SyntaxKind.JSDocThrowsTag:
+            const typeExpression = (tag as JSDocThrowsTag).typeExpression;
+            return typeExpression ? withNode(typeExpression) :
+                comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         case SyntaxKind.JSDocImplementsTag:
             return withNode((tag as JSDocImplementsTag).class);
         case SyntaxKind.JSDocAugmentsTag:
@@ -285,7 +296,8 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
             }
             return displayParts;
         case SyntaxKind.JSDocTypeTag:
-            return withNode((tag as JSDocTypeTag).typeExpression);
+        case SyntaxKind.JSDocSatisfiesTag:
+            return withNode((tag as JSDocTypeTag | JSDocSatisfiesTag).typeExpression);
         case SyntaxKind.JSDocTypedefTag:
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocPropertyTag:

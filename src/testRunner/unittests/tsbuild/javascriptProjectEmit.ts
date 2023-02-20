@@ -4,7 +4,6 @@ import {
     replaceText,
     symbolLibContent,
     verifyTsc,
-    verifyTscWithEdits,
 } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
@@ -96,7 +95,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
         commandLineArgs: ["-b", "/src"]
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "javascriptProjectEmit",
         subScenario: `modifies outfile js projects and concatenates them correctly`,
         fs: () => loadProjectFromFiles({
@@ -126,6 +125,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
+                            "ignoreDeprecations":"5.0",
                             "composite": true,
                             "outFile": "sub-project.js",
                             
@@ -151,6 +151,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
+                            "ignoreDeprecations":"5.0",
                             "composite": true,
                             "outFile": "sub-project-2.js",
                             
@@ -163,6 +164,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
             "/src/tsconfig.json": Utils.dedent`
                     {
                         "compilerOptions": {
+                            "ignoreDeprecations":"5.0",
                             "composite": true,
                             "outFile": "src.js"
                         },
@@ -185,8 +187,8 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
         }, symbolLibContent),
         commandLineArgs: ["-b", "/src"],
         edits: [{
-            subScenario: "incremental-declaration-doesnt-change",
-            modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
+            caption: "incremental-declaration-doesnt-change",
+            edit: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
         }]
     });
 

@@ -1,6 +1,6 @@
 define(["require", "exports", "m1"], function (require, exports, m1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     m1.f1("test");
     m1.f2.a = "10"; // Error: Should be number
     m1.rel = 42; // Error: Should be boolean

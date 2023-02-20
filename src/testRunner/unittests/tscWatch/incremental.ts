@@ -1,5 +1,9 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import {
+    CommandLineProgram,
+    libContent,
+} from "../tsc/helpers";
 import {
     createWatchedSystem,
     File,
@@ -7,11 +11,7 @@ import {
     TestServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
-    CommandLineProgram,
-    libContent,
-} from "../tsc/helpers";
-import {
-    applyChange,
+    applyEdit,
     createBaseline,
     SystemSnap,
     verifyTscWatch,
@@ -55,7 +55,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         build(oldSnap);
 
         if (modifyFs) {
-            const oldSnap = applyChange(sys, baseline, modifyFs);
+            const oldSnap = applyEdit(sys, baseline, modifyFs);
             build(oldSnap);
         }
 
@@ -404,6 +404,5 @@ export const Fragment: unique symbol;
             [libFile.path]: libFile.content,
         }),
         commandLineArgs: ["--p", "src/project", "-i", "-w"],
-        changes: ts.emptyArray
     });
 });

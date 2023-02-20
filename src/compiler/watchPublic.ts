@@ -43,7 +43,6 @@ import {
     getBuildInfo,
     getConfigFileParsingDiagnostics,
     getDirectoryPath,
-    getEntries,
     getFileNamesFromConfigSpecs,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
@@ -121,7 +120,6 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
 export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
     host.createHash = maybeBind(system, system.createHash);
-    host.disableUseFileVersionAsSignature = system.disableUseFileVersionAsSignature;
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
@@ -248,7 +246,6 @@ export interface ProgramHost<T extends BuilderProgram> {
     createDirectory?(path: string): void;
     writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
     // For testing
-    disableUseFileVersionAsSignature?: boolean;
     storeFilesChangingSignatureDuringEmit?: boolean;
     now?(): Date;
 }
@@ -381,6 +378,11 @@ interface ParsedConfig {
     reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
 }
 
+// All of one and partial of the other, or vice versa.
+type WatchCompilerHostOfFilesAndCompilerOptionsOrConfigFile<T extends BuilderProgram> =
+    | WatchCompilerHostOfFilesAndCompilerOptions<T> & Partial<WatchCompilerHostOfConfigFile<T>>
+    | WatchCompilerHostOfConfigFile<T> & Partial<WatchCompilerHostOfFilesAndCompilerOptions<T>>;
+
 /**
  * Creates the watch from the host for root files and compiler options
  */
@@ -389,7 +391,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
  * Creates the watch from the host for config file
  */
 export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
-export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions<T> & WatchCompilerHostOfConfigFile<T>): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
+export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptionsOrConfigFile<T>): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
     interface FilePresentOnHost {
         version: string;
         sourceFile: SourceFile;
@@ -439,11 +441,14 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
     reportWatchDiagnostic(Diagnostics.Starting_compilation_in_watch_mode);
     if (configFileName && !host.configFileParsingResult) {
-        newLine = getNewLineCharacter(optionsToExtendForConfigFile, () => host.getNewLine());
+        newLine = getNewLineCharacter(optionsToExtendForConfigFile);
         Debug.assert(!rootFileNames);
         parseConfigFile();
         newLine = updateNewLine();
     }
+
+    Debug.assert(compilerOptions);
+    Debug.assert(rootFileNames);
 
     const { watchFile, watchDirectory, writeLog } = createWatchFactory(host, compilerOptions);
     const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -454,7 +459,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         configFileWatcher = watchFile(configFileName, scheduleProgramReload, PollingInterval.High, watchOptions, WatchType.ConfigFile);
     }
 
-    const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
+    const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions!, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
     setGetSourceFileAsHashVersioned(compilerHost);
     // Members for CompilerHost
     const getNewSourceFile = compilerHost.getSourceFile;
@@ -466,7 +471,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     compilerHost.onReleaseParsedCommandLine = onReleaseParsedCommandLine;
     // Members for ResolutionCacheHost
     compilerHost.toPath = toPath;
-    compilerHost.getCompilationSettings = () => compilerOptions;
+    compilerHost.getCompilationSettings = () => compilerOptions!;
     compilerHost.useSourceOfProjectReferenceRedirect = maybeBind(host, host.useSourceOfProjectReferenceRedirect);
     compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
     compilerHost.watchAffectingFileLocation = (file, cb) => watchFile(file, cb, PollingInterval.High, watchOptions, WatchType.AffectingFileLocation);
@@ -569,6 +574,10 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
     function synchronizeProgram() {
         writeLog(`Synchronizing program`);
+
+        Debug.assert(compilerOptions);
+        Debug.assert(rootFileNames);
+
         clearInvalidateResolutionsOfFailedLookupLocations();
 
         const program = getCurrentBuilderProgram();
@@ -659,7 +668,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function updateNewLine() {
-        return getNewLineCharacter(compilerOptions || optionsToExtendForConfigFile, () => host.getNewLine());
+        return getNewLineCharacter(compilerOptions || optionsToExtendForConfigFile);
     }
 
     function toPath(fileName: string) {
@@ -852,6 +861,10 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
     function reloadFileNamesFromConfigFile() {
         writeLog("Reloading new file names and options");
+
+        Debug.assert(compilerOptions);
+        Debug.assert(configFileName);
+
         reloadLevel = ConfigFileProgramReloadLevel.None;
         rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
         if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
@@ -863,6 +876,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function reloadConfigFile() {
+        Debug.assert(configFileName);
         writeLog(`Reloading config file: ${configFileName}`);
         reloadLevel = ConfigFileProgramReloadLevel.None;
 
@@ -881,6 +895,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function parseConfigFile() {
+        Debug.assert(configFileName);
         setConfigFileParsingResult(getParsedCommandLineOfConfigFile(
             configFileName,
             optionsToExtendForConfigFile,
@@ -910,6 +925,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             // With host implementing getParsedCommandLine we cant just update file names
             if (config.parsedCommandLine && config.reloadLevel === ConfigFileProgramReloadLevel.Partial && !host.getParsedCommandLine) {
                 writeLog("Reloading new file names and options");
+                Debug.assert(compilerOptions);
                 const fileNames = getFileNamesFromConfigSpecs(
                     config.parsedCommandLine.options.configFile!.configFileSpecs!,
                     getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory),
@@ -1019,7 +1035,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         if (wildcardDirectories) {
             updateWatchingWildcardDirectories(
                 watchedWildcardDirectories || (watchedWildcardDirectories = new Map()),
-                new Map(getEntries(wildcardDirectories)),
+                new Map(Object.entries(wildcardDirectories)),
                 watchWildcardDirectory
             );
         }
@@ -1032,7 +1048,8 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         return watchDirectory(
             directory,
             fileOrDirectory => {
-                Debug.assert(!!configFileName);
+                Debug.assert(configFileName);
+                Debug.assert(compilerOptions);
 
                 const fileOrDirectoryPath = toPath(fileOrDirectory);
 
@@ -1071,6 +1088,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function updateExtendedConfigFilesWatches(forProjectPath: Path, options: CompilerOptions | undefined, watchOptions: WatchOptions | undefined, watchType: WatchTypeRegistry["ExtendedConfigFile"] | WatchTypeRegistry["ExtendedConfigOfReferencedProject"]) {
+        Debug.assert(configFileName);
         updateSharedExtendedConfigFileWatcher(
             forProjectPath,
             options,
@@ -1126,7 +1144,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         if (commandLine.parsedCommandLine?.wildcardDirectories) {
             updateWatchingWildcardDirectories(
                 commandLine.watchedDirectories ||= new Map(),
-                new Map(getEntries(commandLine.parsedCommandLine?.wildcardDirectories)),
+                new Map(Object.entries(commandLine.parsedCommandLine?.wildcardDirectories)),
                 (directory, flags) => watchDirectory(
                     directory,
                     fileOrDirectory => {
