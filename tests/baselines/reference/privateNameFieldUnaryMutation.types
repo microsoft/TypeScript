@@ -76,6 +76,86 @@ class C {
 >this.#test++ : number
 >this.#test : number
 >this : this
+
+        (this.#test)++;
+>(this.#test)++ : number
+>(this.#test) : number
+>this.#test : number
+>this : this
+
+        (this.#test)--;
+>(this.#test)-- : number
+>(this.#test) : number
+>this.#test : number
+>this : this
+
+        ++(this.#test);
+>++(this.#test) : number
+>(this.#test) : number
+>this.#test : number
+>this : this
+
+        --(this.#test);
+>--(this.#test) : number
+>(this.#test) : number
+>this.#test : number
+>this : this
+
+        const e = (this.#test)++;
+>e : number
+>(this.#test)++ : number
+>(this.#test) : number
+>this.#test : number
+>this : this
+
+        const f = (this.#test)--;
+>f : number
+>(this.#test)-- : number
+>(this.#test) : number
+>this.#test : number
+>this : this
+
+        const g = ++(this.#test);
+>g : number
+>++(this.#test) : number
+>(this.#test) : number
+>this.#test : number
+>this : this
+
+        const h = --(this.#test);
+>h : number
+>--(this.#test) : number
+>(this.#test) : number
+>this.#test : number
+>this : this
+
+        for (this.#test = 0; this.#test < 10; ++(this.#test)) {}
+>this.#test = 0 : 0
+>this.#test : number
+>this : this
+>0 : 0
+>this.#test < 10 : boolean
+>this.#test : number
+>this : this
+>10 : 10
+>++(this.#test) : number
+>(this.#test) : number
+>this.#test : number
+>this : this
+
+        for (this.#test = 0; this.#test < 10; (this.#test)++) {}
+>this.#test = 0 : 0
+>this.#test : number
+>this : this
+>0 : 0
+>this.#test < 10 : boolean
+>this.#test : number
+>this : this
+>10 : 10
+>(this.#test)++ : number
+>(this.#test) : number
+>this.#test : number
+>this : this
     }
     test() {
 >test : () => void
@@ -186,6 +266,128 @@ class C {
 >getInstance : () => C
 >10 : 10
 >this.getInstance().#test++ : number
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+
+        (this.getInstance().#test)++;
+>(this.getInstance().#test)++ : number
+>(this.getInstance().#test) : number
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+
+        (this.getInstance().#test)--;
+>(this.getInstance().#test)-- : number
+>(this.getInstance().#test) : number
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+
+        ++(this.getInstance().#test);
+>++(this.getInstance().#test) : number
+>(this.getInstance().#test) : number
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+
+        --(this.getInstance().#test);
+>--(this.getInstance().#test) : number
+>(this.getInstance().#test) : number
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+
+        const e = (this.getInstance().#test)++;
+>e : number
+>(this.getInstance().#test)++ : number
+>(this.getInstance().#test) : number
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+
+        const f = (this.getInstance().#test)--;
+>f : number
+>(this.getInstance().#test)-- : number
+>(this.getInstance().#test) : number
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+
+        const g = ++(this.getInstance().#test);
+>g : number
+>++(this.getInstance().#test) : number
+>(this.getInstance().#test) : number
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+
+        const h = --(this.getInstance().#test);
+>h : number
+>--(this.getInstance().#test) : number
+>(this.getInstance().#test) : number
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+
+        for (this.getInstance().#test = 0; this.getInstance().#test < 10; ++(this.getInstance().#test)) {}
+>this.getInstance().#test = 0 : 0
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+>0 : 0
+>this.getInstance().#test < 10 : boolean
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+>10 : 10
+>++(this.getInstance().#test) : number
+>(this.getInstance().#test) : number
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+
+        for (this.getInstance().#test = 0; this.getInstance().#test < 10; (this.getInstance().#test)++) {}
+>this.getInstance().#test = 0 : 0
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+>0 : 0
+>this.getInstance().#test < 10 : boolean
+>this.getInstance().#test : number
+>this.getInstance() : C
+>this.getInstance : () => C
+>this : this
+>getInstance : () => C
+>10 : 10
+>(this.getInstance().#test)++ : number
+>(this.getInstance().#test) : number
 >this.getInstance().#test : number
 >this.getInstance() : C
 >this.getInstance : () => C

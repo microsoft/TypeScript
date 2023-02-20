@@ -208,7 +208,7 @@ callIt({
 });
 callIt({
     produce: function (_a) { return 0; },
-    consume: function (n) { return n.toFixed(); }
+    consume: function (n) { return n.toFixed(); },
 });
 callIt({
     produce: function () {
@@ -233,15 +233,15 @@ make({
 });
 foo({
     a: function () { return 42; },
-    b: function (a) { }
+    b: function (a) { },
 });
 foo({
     a: function () { return 42; },
-    b: function (a) { }
+    b: function (a) { },
 });
 foo({
     a: function () { return 42; },
-    b: function (a) { }
+    b: function (a) { },
 });
 function test(foo) { }
 test({
@@ -280,7 +280,7 @@ createMappingComponent({
     map: function (inputs) {
         return {
             bool: inputs.nonexistent,
-            str: inputs.num
+            str: inputs.num, // Causes error
         };
     }
 });
@@ -311,7 +311,7 @@ example({
 });
 branch({
     test: x,
-    "if": function (t) { return t === "a"; },
+    if: function (t) { return t === "a"; },
     then: function (u) {
         var test1 = u;
     }
@@ -338,7 +338,7 @@ declare function foo<A>(options: {
     a: A;
     b: (a: A) => void;
 }): void;
-declare type Chain<R1, R2> = {
+type Chain<R1, R2> = {
     a(): R1;
     b(a: R1): R2;
     c(b: R2): void;
@@ -347,11 +347,11 @@ declare function test<R1, R2>(foo: Chain<R1, R2>): void;
 declare class Wrapper<T = any> {
     value?: T;
 }
-declare type WrappedMap = Record<string, Wrapper>;
-declare type Unwrap<D extends WrappedMap> = {
+type WrappedMap = Record<string, Wrapper>;
+type Unwrap<D extends WrappedMap> = {
     [K in keyof D]: D[K] extends Wrapper<infer T> ? T : never;
 };
-declare type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
+type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
     setup(): {
         inputs: I;
         outputs: O;

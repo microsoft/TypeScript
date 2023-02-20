@@ -43,7 +43,7 @@ import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
 //// [es6ImportNamedImportAmd_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.aaaa = exports.z2 = exports.z1 = exports.x1 = exports.a1 = exports.m = exports.x = exports.a = void 0;
     exports.a = 10;
     exports.x = exports.a;
@@ -57,7 +57,7 @@ define(["require", "exports"], function (require, exports) {
 //// [es6ImportNamedImportAmd_1.js]
 define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0"], function (require, exports, es6ImportNamedImportAmd_0_1, es6ImportNamedImportAmd_0_2, es6ImportNamedImportAmd_0_3, es6ImportNamedImportAmd_0_4, es6ImportNamedImportAmd_0_5, es6ImportNamedImportAmd_0_6, es6ImportNamedImportAmd_0_7, es6ImportNamedImportAmd_0_8, es6ImportNamedImportAmd_0_9) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var xxxx = es6ImportNamedImportAmd_0_1.a;
     var xxxx = es6ImportNamedImportAmd_0_2.a;
     var xxxx = es6ImportNamedImportAmd_0_3.x;

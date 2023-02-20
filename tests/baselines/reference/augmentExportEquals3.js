@@ -35,13 +35,13 @@ define(["require", "exports"], function (require, exports) {
 //// [file2.js]
 define(["require", "exports", "./file1"], function (require, exports, x) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     x.b = 1;
 });
 //// [file3.js]
 define(["require", "exports", "./file1", "./file2"], function (require, exports, x) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var a;
     var b = x.b;
 });

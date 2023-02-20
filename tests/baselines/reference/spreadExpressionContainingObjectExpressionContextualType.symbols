@@ -1,0 +1,23 @@
+=== tests/cases/compiler/spreadExpressionContainingObjectExpressionContextualType.ts ===
+// repro #49585
+
+const { value } = (() => ({
+>value : Symbol(value, Decl(spreadExpressionContainingObjectExpressionContextualType.ts, 2, 7))
+
+  value: "",
+>value : Symbol(value, Decl(spreadExpressionContainingObjectExpressionContextualType.ts, 2, 27))
+
+  ...(true ? {} : {}),
+}))();
+
+// repro 49684#discussion_r920545763
+
+const { value2 } = {
+>value2 : Symbol(value2, Decl(spreadExpressionContainingObjectExpressionContextualType.ts, 9, 7))
+
+  value2: "",
+>value2 : Symbol(value2, Decl(spreadExpressionContainingObjectExpressionContextualType.ts, 9, 20))
+
+  ...(() => true ? {} : {})(),
+};
+

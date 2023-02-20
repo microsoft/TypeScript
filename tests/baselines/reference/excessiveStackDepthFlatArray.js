@@ -51,7 +51,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 configureStore({
-    middleware: __spreadArray([], defaultMiddleware, true)
+    middleware: __spreadArray([], defaultMiddleware, true), // Should not error
 });
 var Component = function () {
     var categories = ['Fruit', 'Vegetables'];

@@ -18,6 +18,31 @@ switch (0) {
 >true : true
 }
 
+declare var q: string
+>q : string
+
+declare var r: number | "hello"
+>r : number | "hello"
+
+switch (r) {
+>r : number | "hello"
+
+    case q: break
+>q : string
+
+    case 42: break
+>42 : 42
+
+    case true: break // Error
+>true : true
+
+    case "hello": break
+>"hello" : "hello"
+
+    case "world": break // Error
+>"world" : "world"
+}
+
 var s: any = 0;
 >s : any
 >0 : 0

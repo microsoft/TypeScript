@@ -47,15 +47,15 @@ elem = <h></h>; // Expect assignability error here
 
 //// [component.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx predom */
 var renderer2_1 = require("./renderer2");
-exports["default"] = (0, renderer2_1.predom)("h", null);
+exports.default = (0, renderer2_1.predom)("h", null);
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx dom */
 var renderer_1 = require("./renderer");
 var component_1 = require("./component");
-var elem = component_1["default"];
+var elem = component_1.default;
 elem = (0, renderer_1.dom)("h", null); // Expect assignability error here

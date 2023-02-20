@@ -36,7 +36,7 @@ export const a: import("typescript-fsa").A;
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 var typescript_fsa_1 = require("typescript-fsa");
 exports.a = (0, typescript_fsa_1.getA)();

@@ -94,6 +94,22 @@ function good8({a, b}) {}
 >b : string
 
 /**
+ * @param {{ a: string }} argument
+ */
+function good9({ a }) {
+>good9 : ({ a }: {    a: string;}, ...args: any[]) => void
+>a : string
+
+    console.log(arguments, a);
+>console.log(arguments, a) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>arguments : IArguments
+>a : string
+}
+
+/**
  * @param {object} obj - this type gets ignored
  * @param {string} obj.a
  * @param {string} obj.b - and x's type gets used for both parameters

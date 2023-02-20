@@ -1,15 +1,15 @@
-tests/cases/conformance/types/unknown/unknownType1.ts(50,5): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(51,5): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(52,5): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(53,5): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(54,5): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(55,5): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(56,6): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(57,6): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(63,5): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(64,5): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(65,5): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/types/unknown/unknownType1.ts(66,9): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(50,5): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(51,5): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(52,5): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(53,5): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(54,5): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(55,5): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(56,6): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(57,6): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(63,5): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(64,5): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(65,5): error TS18046: 'x' is of type 'unknown'.
+tests/cases/conformance/types/unknown/unknownType1.ts(66,9): error TS18046: 'x' is of type 'unknown'.
 tests/cases/conformance/types/unknown/unknownType1.ts(110,9): error TS2322: Type 'unknown' is not assignable to type 'object'.
 tests/cases/conformance/types/unknown/unknownType1.ts(111,9): error TS2322: Type 'unknown' is not assignable to type 'string'.
 tests/cases/conformance/types/unknown/unknownType1.ts(112,9): error TS2322: Type 'unknown' is not assignable to type 'string[]'.
@@ -80,28 +80,28 @@ tests/cases/conformance/types/unknown/unknownType1.ts(181,5): error TS2322: Type
         x !== 10;
         x >= 0;  // Error
         ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
         x.foo;  // Error
         ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
         x[10];  // Error
         ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
         x();  // Error
         ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
         x + 1;  // Error
         ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
         x * 2;  // Error
         ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
         -x;  // Error
          ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
         +x;  // Error
          ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
     }
     
     // No property accesses, element accesses, or function calls
@@ -109,16 +109,16 @@ tests/cases/conformance/types/unknown/unknownType1.ts(181,5): error TS2322: Type
     function f11(x: unknown) {
         x.foo;  // Error
         ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
         x[5];  // Error
         ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
         x();  // Error
         ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
         new x();  // Error
             ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
     }
     
     // typeof, instanceof, and user defined type predicates

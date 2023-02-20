@@ -51,7 +51,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Timestamped = exports.wrapClass = void 0;
 function wrapClass(param) {
     return /** @class */ (function () {
@@ -93,10 +93,10 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.TimestampedUser = exports.User = void 0;
 var wrapClass_1 = require("./wrapClass");
-exports["default"] = (0, wrapClass_1.wrapClass)(0);
+exports.default = (0, wrapClass_1.wrapClass)(0);
 // Simple class
 var User = /** @class */ (function () {
     function User() {
@@ -122,7 +122,7 @@ export declare function wrapClass(param: any): {
         foo(): any;
     };
 };
-export declare type Constructor<T = {}> = new (...args: any[]) => T;
+export type Constructor<T = {}> = new (...args: any[]) => T;
 export declare function Timestamped<TBase extends Constructor>(Base: TBase): {
     new (...args: any[]): {
         timestamp: number;

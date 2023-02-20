@@ -9,7 +9,7 @@ const tag = <div></div>;
 
 //// [jsxImportForSideEffectsNonExtantNoError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var React = require("react");
 require("./App.css"); // doesn't actually exist

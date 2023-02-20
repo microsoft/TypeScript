@@ -9,4 +9,4 @@ import { y } from "../node_modules/foo";
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
