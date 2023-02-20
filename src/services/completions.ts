@@ -55,6 +55,7 @@ import {
     Expression,
     ExpressionWithTypeArguments,
     factory,
+    FileTextChanges,
     filter,
     find,
     findAncestor,
@@ -292,6 +293,7 @@ import {
     Program,
     programContainsModules,
     PropertyAccessExpression,
+    PropertyAssignment,
     PropertyDeclaration,
     PropertyName,
     PropertySignature,
@@ -2447,6 +2449,29 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
         return { codeActions: [codeAction], sourceDisplay: undefined };
     }
 
+    if (contextToken && isObjectLiteralExpression(contextToken.parent.parent) && previousToken?.kind !== SyntaxKind.ColonToken) { //previoustoken =: , preferences are0
+        let changes: FileTextChanges[];
+        if (getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
+            changes = textChanges.ChangeTracker.with(
+                { host, formatContext, preferences },
+                tracker=>tracker.replacePropertyAssignment(sourceFile, contextToken.parent as PropertyAssignment ,contextToken.parent as PropertyAssignment));
+        }
+        else {
+            changes = textChanges.ChangeTracker.with(
+                { host, formatContext, preferences },
+                tracker=>tracker.replacePropertyAssignmentOnSameLine(sourceFile, contextToken.parent as PropertyAssignment ,contextToken.parent as PropertyAssignment));
+        }
+        if (changes) {
+            return {
+                sourceDisplay: undefined,
+                codeActions: [{
+                    changes,
+                    description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
+                }],
+            };
+        }
+    }
+
     if (!origin || !(originIsExport(origin) || originIsResolvedExport(origin))) {
         return { codeActions: undefined, sourceDisplay: undefined };
     }
@@ -4474,7 +4499,7 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
                 return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
                     ? contextToken.parent.parent : undefined;
             default:
-                if (isObjectLiteralExpression(parent.parent)) {
+                if (isObjectLiteralExpression(parent.parent) && contextToken.kind !== SyntaxKind.ColonToken) {
                     return parent.parent;
                 }
         }
