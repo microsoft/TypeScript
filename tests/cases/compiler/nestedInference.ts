@@ -1,0 +1,62 @@
+// @strict: true
+// @lib: esnext
+// @noEmit: true
+
+// repro from #52864
+
+const matcher = Symbol("@ts-pattern/matcher");
+
+type MatcherProtocol<input> = {
+  match: <I>(value: I | input) => void;
+};
+
+interface Matcher<input> {
+  [matcher](): MatcherProtocol<input>;
+}
+
+type Pattern<a> =
+  | Matcher<a>
+  | (a extends readonly [any, ...any]
+      ? { readonly [index in keyof a]: Pattern<a[index]> }
+      : a extends object
+      ? { readonly [k in keyof a]: Pattern<a[k]> }
+      : a);
+
+type Match<i> = {
+  with<p extends Pattern<i>>(pattern: p): void;
+};
+
+declare function match<input>(value: input): Match<input>;
+declare function union<input, ps extends [Pattern<input>, ...Pattern<input>[]]>(
+  ...patterns: ps
+): Matcher<input>;
+declare function when<input, p extends (value: input) => unknown>(
+  predicate: p
+): Matcher<input>;
+
+match<"a" | "b">("a").with(union("a"));
+
+match<"a" | "b">("a")
+  .with(union("this is wrong")); // error
+
+match<"a" | "b">("a").with(
+  when((x) => {
+    let a: "a" | "b" = x; // OK
+    return a;
+  })
+);
+
+match<{ type: "a" | "b" }>({ type: "a" }).with({
+  type: union("a"),
+});
+
+match<{ type: "a" | "b" }>({ type: "a" }).with({
+  type: union("this is wrong"), // error
+});
+
+match<{ type: "a" | "b" }>({ type: "a" }).with({
+  type: when((x) => {
+    let a: "a" | "b" = x; // OK
+    return a;
+  }),
+});
