@@ -1043,8 +1043,8 @@ describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRe
     }
 
     function logDirtyOfProjects(session: TestSession) {
-        session.logger.logs.push(`Project1 is dirty: ${session.getProjectService().configuredProjects.get(`/user/username/projects/myproject/app1/tsconfig.json`)!.dirty}`);
-        session.logger.logs.push(`Project2 is dirty: ${session.getProjectService().configuredProjects.get(`/user/username/projects/myproject/app2/tsconfig.json`)!.dirty}`);
+        session.logger.log(`Project1 is dirty: ${session.getProjectService().configuredProjects.get(`/user/username/projects/myproject/app1/tsconfig.json`)!.dirty}`);
+        session.logger.log(`Project2 is dirty: ${session.getProjectService().configuredProjects.get(`/user/username/projects/myproject/app2/tsconfig.json`)!.dirty}`);
     }
 
     function verify(subScenario: string, commandArgs: ts.server.protocol.FileRequestArgs) {

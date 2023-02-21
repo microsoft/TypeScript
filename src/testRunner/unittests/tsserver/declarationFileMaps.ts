@@ -18,7 +18,7 @@ function checkDeclarationFiles(file: File, session: TestSession): void {
     const project = ts.Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as ts.server.NormalizedPath, /*ensureProject*/ false));
     const program = project.getCurrentProgram()!;
     const output = ts.getFileEmitOutput(program, ts.Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
-    session.logger.logs.push(`ts.getFileEmitOutput: ${file.path}: ${JSON.stringify(output, undefined, " ")}`);
+    session.logger.log(`ts.getFileEmitOutput: ${file.path}: ${JSON.stringify(output, undefined, " ")}`);
     closeFilesForSession([file], session);
 }
 
