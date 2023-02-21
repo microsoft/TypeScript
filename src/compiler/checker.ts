@@ -20789,10 +20789,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
             const targetTypes = target.types;
+            if (target.flags & TypeFlags.UnionOrIntersection && containsType(targetTypes, source)) {
+                return Ternary.True;
+            }
             if (target.flags & TypeFlags.Union) {
-                if (containsType(targetTypes, source)) {
-                    return Ternary.True;
-                }
                 const match = getMatchingUnionConstituentForType(target as UnionType, source);
                 if (match) {
                     const related = isRelatedTo(source, match, RecursionFlags.Target, /*reportErrors*/ false);
@@ -20832,7 +20832,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             const sourceTypes = source.types;
-            if (source.flags & TypeFlags.Union && containsType(sourceTypes, target)) {
+            if (containsType(sourceTypes, target)) {
                 return Ternary.True;
             }
             const len = sourceTypes.length;
