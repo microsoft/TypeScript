@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     __String,
     AccessExpression,
@@ -387,6 +386,7 @@ import {
     hasStaticModifier,
     hasSyntacticModifier,
     hasSyntacticModifiers,
+    hasType,
     HeritageClause,
     Identifier,
     identifierToKeywordKind,
@@ -1816,6 +1816,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getTypeOnlyAliasDeclaration,
         getMemberOverrideModifierStatus,
         isTypeParameterPossiblyReferenced,
+        typeHasCallOrConstructSignatures,
     };
 
     function runWithoutResolvedSignatureCaching<T>(node: Node | undefined, fn: () => T): T {
@@ -10069,7 +10070,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): number {
         for (let i = resolutionTargets.length - 1; i >= 0; i--) {
-            if (hasType(resolutionTargets[i], resolutionPropertyNames[i])) {
+            if (resolutionTargetHasProperty(resolutionTargets[i], resolutionPropertyNames[i])) {
                 return -1;
             }
             if (resolutionTargets[i] === target && resolutionPropertyNames[i] === propertyName) {
@@ -10079,7 +10080,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return -1;
     }
 
-    function hasType(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
+    function resolutionTargetHasProperty(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
         switch (propertyName) {
             case TypeSystemPropertyName.Type:
                 return !!getSymbolLinks(target as Symbol).type;
@@ -19260,7 +19261,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
         // Or functions with annotated parameter types
-        if (some(node.parameters, ts.hasType)) {
+        if (some(node.parameters, hasType)) {
             return false;
         }
         const sourceSig = getSingleCallSignature(source);
@@ -45567,7 +45568,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function typeHasCallOrConstructSignatures(type: Type): boolean {
-        return ts.typeHasCallOrConstructSignatures(type, checker);
+        return getSignaturesOfType(type, SignatureKind.Call).length !== 0 || getSignaturesOfType(type, SignatureKind.Construct).length !== 0;
     }
 
     function getRootSymbols(symbol: Symbol): readonly Symbol[] {
