@@ -1731,6 +1731,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getTypeOnlyAliasDeclaration,
         getMemberOverrideModifierStatus,
         isTypeParameterPossiblyReferenced,
+        typeHasCallOrConstructSignatures,
     };
 
     function runWithoutResolvedSignatureCaching<T>(node: Node | undefined, fn: () => T): T {
@@ -9982,7 +9983,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): number {
         for (let i = resolutionTargets.length - 1; i >= 0; i--) {
-            if (targetHasType(resolutionTargets[i], resolutionPropertyNames[i])) {
+            if (resolutionTargetHasProperty(resolutionTargets[i], resolutionPropertyNames[i])) {
                 return -1;
             }
             if (resolutionTargets[i] === target && resolutionPropertyNames[i] === propertyName) {
@@ -9992,7 +9993,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return -1;
     }
 
-    function targetHasType(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
+    function resolutionTargetHasProperty(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
         switch (propertyName) {
             case TypeSystemPropertyName.Type:
                 return !!getSymbolLinks(target as Symbol).type;
@@ -45480,8 +45481,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function typeHasCallOrConstructSignatures(type: Type): boolean {
-        return length(getSignaturesOfType(type, SignatureKind.Call)) > 0
-            || length(getSignaturesOfType(type, SignatureKind.Construct)) > 0;
+        return getSignaturesOfType(type, SignatureKind.Call).length !== 0 || getSignaturesOfType(type, SignatureKind.Construct).length !== 0;
     }
 
     function getRootSymbols(symbol: Symbol): readonly Symbol[] {
