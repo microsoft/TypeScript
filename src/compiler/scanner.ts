@@ -961,31 +961,32 @@ export function createScanner(languageVersion: ScriptTarget,
     start?: number,
     length?: number): Scanner {
 
-    let text = textInitial!;
+    /* eslint-disable no-var */
+    var text = textInitial!;
 
     // Current position (end position of text of current token)
-    let pos: number;
+    var pos: number;
 
 
     // end of text
-    let end: number;
+    var end: number;
 
     // Start position of whitespace before current token
-    let startPos: number;
+    var startPos: number;
 
     // Start position of text of current token
-    let tokenPos: number;
+    var tokenPos: number;
 
-    let token: SyntaxKind;
-    let tokenValue!: string;
-    let tokenFlags: TokenFlags;
+    var token: SyntaxKind;
+    var tokenValue!: string;
+    var tokenFlags: TokenFlags;
 
-    let commentDirectives: CommentDirective[] | undefined;
-    let inJSDocType = 0;
+    var commentDirectives: CommentDirective[] | undefined;
+    var inJSDocType = 0;
 
     setText(text, start, length);
 
-    const scanner: Scanner = {
+    var scanner: Scanner = {
         getStartPos: () => startPos,
         getTextPos: () => pos,
         getToken: () => token,
@@ -1030,6 +1031,8 @@ export function createScanner(languageVersion: ScriptTarget,
         lookAhead,
         scanRange,
     };
+
+    /* eslint-disable no-var */
 
     if (Debug.isDebugging) {
         Object.defineProperty(scanner, "__debugShowCurrentPositionInText", {

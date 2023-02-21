@@ -9,12 +9,12 @@ var dec;
 
 // @filename: file1.js
 
-// error
+// ok
 @dec export class C1 { }
 
 // @filename: file2.js
 
-// error
+// ok
 @dec export default class C2 {}
 
 // @filename: file3.js
@@ -31,3 +31,13 @@ export @dec class C4 {}
 
 // ok
 export default @dec class C5 {}
+
+// @filename: file6.js
+
+// error
+@dec export @dec class C6 {}
+
+// @filename: file7.js
+
+// error
+@dec export default @dec class C7 {}

@@ -1,8 +1,9 @@
+tests/cases/conformance/jsdoc/overloadTag2.js(14,9): error TS2394: This overload signature is not compatible with its implementation signature.
 tests/cases/conformance/jsdoc/overloadTag2.js(25,20): error TS7006: Parameter 'b' implicitly has an 'any' type.
 tests/cases/conformance/jsdoc/overloadTag2.js(30,9): error TS2554: Expected 1-2 arguments, but got 0.
 
 
-==== tests/cases/conformance/jsdoc/overloadTag2.js (2 errors) ====
+==== tests/cases/conformance/jsdoc/overloadTag2.js (3 errors) ====
     export class Foo {
         #a = true ? 1 : "1"
         #b
@@ -17,6 +18,9 @@ tests/cases/conformance/jsdoc/overloadTag2.js(30,9): error TS2554: Expected 1-2 
         /**
          * @constructor
          * @overload
+            ~~~~~~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 tests/cases/conformance/jsdoc/overloadTag2.js:25:5: The implementation signature is declared here.
          * @param {number} a
          */
         /**

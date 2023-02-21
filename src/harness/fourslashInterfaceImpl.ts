@@ -252,9 +252,17 @@ export class Verify extends VerifyNegatable {
     }
 
     public completions(...optionsArray: VerifyCompletionsOptions[]) {
+        if (optionsArray.length === 1) {
+            return this.state.verifyCompletions(optionsArray[0]);
+        }
         for (const options of optionsArray) {
             this.state.verifyCompletions(options);
         }
+        return {
+            andApplyCodeAction: () => {
+                throw new Error("Cannot call andApplyCodeAction on multiple completions requests");
+            },
+        };
     }
 
     public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.UserPreferences) {

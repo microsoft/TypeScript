@@ -91,7 +91,7 @@ enum N2 { C = val(), D = val() }
 >val : () => number
 
 type T1 = { [K in N1 | N2]: K };
->T1 : { [x: number]: N1.A | N1.B | N2.C | N2.D; }
+>T1 : { [x: number]: N1 | N2; }
 
 // Enum types with string valued members are always literal enum types and therefore
 // ONE and TWO below are not computed members but rather just numerically valued members
