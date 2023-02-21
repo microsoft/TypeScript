@@ -17625,7 +17625,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getActualTypeVariable(type: Type): Type {
         if (type.flags & TypeFlags.Substitution) {
-            return (type as SubstitutionType).baseType;
+            return getActualTypeVariable((type as SubstitutionType).baseType);
         }
         if (type.flags & TypeFlags.IndexedAccess && (
             (type as IndexedAccessType).objectType.flags & TypeFlags.Substitution ||
