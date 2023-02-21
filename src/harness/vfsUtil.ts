@@ -52,7 +52,7 @@ export class FileSystem {
     public readonly ignoreCase: boolean;
 
     /** Gets the comparison function used to compare two paths. */
-    public readonly stringComparer: (a: string, b: string) => number;
+    public readonly stringComparer: ts.Comparer<string>;
 
     // lazy-initialized state that should be mutable even if the FileSystem is frozen.
     private _lazy: {

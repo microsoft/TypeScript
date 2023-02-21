@@ -57,8 +57,11 @@ export interface Push<T> {
 /** @internal */
 export type EqualityComparer<T> = (a: T, b: T) => boolean;
 
+// The values of Comparison are specified here to ensure that a function like
+// `(a: T, b: T) => number` is not assignable; while many algorithms are okay
+// with values other than these three, some are not (like binarySearch).
 /** @internal */
-export type Comparer<T> = (a: T, b: T) => Comparison;
+export type Comparer<T> = (a: T, b: T) => -1 | 0 | 1;
 
 /** @internal */
 export const enum Comparison {

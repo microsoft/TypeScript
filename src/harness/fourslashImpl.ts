@@ -1217,7 +1217,7 @@ export class TestState {
             const marker = this.getMarkerByName(markerName);
             const references = this.languageService.findReferences(marker.fileName, marker.position);
             const refsByFile = references
-                ? ts.group(ts.sort(ts.flatMap(references, r => r.references), (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
+                ? ts.group(ts.sort(ts.flatMap(references, r => r.references), (a, b) => ts.compareValues(a.textSpan.start, b.textSpan.start)), ref => ref.fileName)
                 : ts.emptyArray;
 
             // Write input files
@@ -1232,7 +1232,7 @@ export class TestState {
     public verifyBaselineGetFileReferences(fileName: string) {
         const references = this.languageService.getFileReferences(fileName);
         const refsByFile = references
-            ? ts.group(ts.sort(references, (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
+            ? ts.group(ts.sort(references, (a, b) => ts.compareValues(a.textSpan.start, b.textSpan.start)), ref => ref.fileName)
             : ts.emptyArray;
 
         // Write input files
@@ -1516,7 +1516,7 @@ export class TestState {
                 this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments, providePrefixAndSuffixTextForRename);
 
             const sort = (locations: readonly ts.RenameLocation[] | undefined) =>
-                locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
+                locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || ts.compareValues(r1.textSpan.start, r2.textSpan.start));
             assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
                 const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions }; // eslint-disable-line local/no-in-operator
                 const { contextRangeIndex, contextRangeDelta, contextRangeId } = (range.marker && range.marker.data || {}) as RangeMarkerData;
@@ -1564,7 +1564,7 @@ export class TestState {
         const renamesByFile = ts.group(locations, l => l.fileName);
         const baselineContent = renamesByFile.map(renames => {
             const { fileName } = renames[0];
-            const sortedRenames = ts.sort(renames, (a, b) => b.textSpan.start - a.textSpan.start);
+            const sortedRenames = ts.sort(renames, (a, b) => ts.compareValues(b.textSpan.start, a.textSpan.start));
             let baselineFileContent = this.getFileContent(fileName);
             for (const { textSpan } of sortedRenames) {
                 const isOriginalSpan = fileName === this.activeFile.fileName && ts.textSpanIntersectsWithPosition(textSpan, position);
