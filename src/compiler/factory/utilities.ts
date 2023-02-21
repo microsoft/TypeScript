@@ -1151,7 +1151,6 @@ export function canHaveIllegalModifiers(node: Node): node is HasIllegalModifiers
     return kind === SyntaxKind.ClassStaticBlockDeclaration
         || kind === SyntaxKind.PropertyAssignment
         || kind === SyntaxKind.ShorthandPropertyAssignment
-        || kind === SyntaxKind.FunctionType
         || kind === SyntaxKind.MissingDeclaration
         || kind === SyntaxKind.NamespaceExportDeclaration;
 }
