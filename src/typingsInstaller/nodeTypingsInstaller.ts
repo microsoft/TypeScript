@@ -106,7 +106,7 @@ type ExecSync = (command: string, options: ExecSyncOptions) => string;
 export class NodeTypingsInstaller extends TypingsInstaller {
     private readonly nodeExecSync: ExecSync;
     private readonly npmPath: string;
-    typesRegistry: Map<string, MapLike<string>> = undefined!;
+    readonly typesRegistry: Map<string, MapLike<string>>;
 
     delayedInitializationError: InitializationFailedResponse | undefined;
 
