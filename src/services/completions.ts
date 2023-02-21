@@ -1332,11 +1332,7 @@ function createCompletionEntry(
         }
     }
 
-    if (origin?.kind === SymbolOriginInfoKind.TypeOnlyAlias) {
-        hasAction = true;
-    }
-
-    if (contextToken && contextToken.kind !== SyntaxKind.OpenBraceToken && completionKind === CompletionKind.ObjectPropertyDeclaration && preferences.includeCompletionsWithInsertText) {
+    if ((origin?.kind === SymbolOriginInfoKind.TypeOnlyAlias) || (contextToken && contextToken.kind !== SyntaxKind.OpenBraceToken && completionKind === CompletionKind.ObjectPropertyDeclaration && preferences.includeCompletionsWithInsertText)) {
         hasAction = true;
     }
 
@@ -2449,7 +2445,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
         return { codeActions: [codeAction], sourceDisplay: undefined };
     }
 
-    if (contextToken && isObjectLiteralExpression(contextToken.parent.parent) && previousToken?.kind !== SyntaxKind.ColonToken) { //previoustoken =: , preferences are0
+    if (contextToken && isObjectLiteralExpression(contextToken.parent.parent) && previousToken?.kind !== SyntaxKind.ColonToken) {
         let changes: FileTextChanges[];
         if (getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
             changes = textChanges.ChangeTracker.with(
