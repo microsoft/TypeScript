@@ -32,6 +32,20 @@
 ////     protected /*f*/
 //// }
 
+//// declare function decorator(...args: any[]): any;
+
+//// class DecoratorBase {
+////     protected foo(a: string): string;
+////     protected foo(a: number): number;
+////     protected foo(a: any): any {
+////         return a;
+////     }
+//// }
+
+//// class DecoratorSub extends DecoratorBase {
+////     @decorator protected /*g*/
+//// }
+
 verify.completions(
     {
         marker: "a",
@@ -55,14 +69,14 @@ verify.completions(
             {
                 name: "method",
                 sortText: completion.SortText.LocationPriority,
-                insertText: "method(): void;",
+                insertText: "public abstract method(): void;",
                 filterText: "method",
                 replacementSpan: undefined,
             },
             {
                 name: "prop",
                 sortText: completion.SortText.LocationPriority,
-                insertText: "prop: number;",
+                insertText: "public abstract prop: number;",
                 filterText: "prop",
                 replacementSpan: undefined,
             },
@@ -80,14 +94,14 @@ verify.completions(
             {
                 name: "method",
                 sortText: completion.SortText.LocationPriority,
-                insertText: "method(): void {\n}",
+                insertText: "public override method(): void {\n}",
                 filterText: "method",
                 replacementSpan: undefined,
             },
             {
                 name: "prop",
                 sortText: completion.SortText.LocationPriority,
-                insertText: "prop: number;",
+                insertText: "public override prop: number;",
                 filterText: "prop",
                 replacementSpan: undefined,
             },
@@ -101,13 +115,19 @@ verify.completions(
             includeCompletionsWithSnippetText: false,
             includeCompletionsWithClassMemberSnippets: true,
         },
-        excludes: ["prop"],
         includes: [
             {
                 name: "method",
                 sortText: completion.SortText.LocationPriority,
-                insertText: "method(): void {\n}",
+                insertText: "override method(): void {\n}",
                 filterText: "method",
+                replacementSpan: undefined,
+            },
+            {
+                name: "prop",
+                sortText: completion.SortText.LocationPriority,
+                insertText: "protected override prop: number;",
+                filterText: "prop",
                 replacementSpan: undefined,
             },
         ]
@@ -120,13 +140,19 @@ verify.completions(
             includeCompletionsWithSnippetText: false,
             includeCompletionsWithClassMemberSnippets: true,
         },
-        excludes: ["prop"],
         includes: [
             {
                 name: "method",
                 sortText: completion.SortText.LocationPriority,
-                insertText: "method(): void {\n}",
+                insertText: "override method(): void {\n}",
                 filterText: "method",
+                replacementSpan: undefined,
+            },
+            {
+                name: "prop",
+                sortText: completion.SortText.LocationPriority,
+                insertText: "protected override prop: number;",
+                filterText: "prop",
                 replacementSpan: undefined,
             },
         ]
@@ -144,10 +170,34 @@ verify.completions(
             {
                 name: "prop",
                 sortText: completion.SortText.LocationPriority,
-                insertText: "prop: number;",
+                insertText: "protected prop: number;",
                 filterText: "prop",
                 replacementSpan: undefined,
             },
         ]
     },
-);    
+    {
+        marker: "g",
+        isNewIdentifierLocation: true,
+        preferences: {
+            includeCompletionsWithInsertText: true,
+            includeCompletionsWithSnippetText: false,
+            includeCompletionsWithClassMemberSnippets: true,
+        },
+        includes: [
+            {
+                name: "foo",
+                sortText: completion.SortText.LocationPriority,
+                insertText:
+`protected foo(a: string): string;
+protected foo(a: number): number;
+@decorator
+protected foo(a: any) {
+}`,
+                filterText: "foo",
+                replacementSpan: undefined,
+            },
+        ]
+    },
+);
+

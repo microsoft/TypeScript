@@ -25,7 +25,7 @@ verify.completions({
             name: "M",
             sortText: completion.SortText.LocationPriority,
             insertText:
-`M<T>(t: T): void;
+`abstract M<T>(t: T): void;
 abstract M<T>(t: T, x: number): void;`,
             filterText: "M",
         },

@@ -29,7 +29,7 @@ verify.completions({
         {
             name: "P",
             sortText: completion.SortText.LocationPriority,
-            insertText: "get P(): string;",
+            insertText: "abstract get P(): string;",
             filterText: "P",
         },
     ],
@@ -47,7 +47,7 @@ verify.completions({
         {
             name: "P",
             sortText: completion.SortText.LocationPriority,
-            insertText: "get P(): string;",
+            insertText: "abstract override get P(): string;",
             filterText: "P",
         },
     ],

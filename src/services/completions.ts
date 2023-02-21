@@ -5,6 +5,7 @@ import {
     BinaryExpression,
     BreakOrContinueStatement,
     CancellationToken,
+    canHaveDecorators,
     canUsePropertyAccess,
     CaseBlock,
     CaseClause,
@@ -43,6 +44,7 @@ import {
     createTextSpanFromRange,
     Debug,
     Declaration,
+    Decorator,
     DefaultClause,
     Diagnostics,
     diagnosticToString,
@@ -87,6 +89,7 @@ import {
     getLineAndCharacterOfPosition,
     getLineStartPositionForPosition,
     getLocalSymbolForExportDefault,
+    getModifiers,
     getNameOfDeclaration,
     getNameTable,
     getNewLineCharacter,
@@ -140,6 +143,7 @@ import {
     isConstructorDeclaration,
     isContextualKeyword,
     isDeclarationName,
+    isDecorator,
     isDefaultClause,
     isDeprecatedDeclaration,
     isEntityName,
@@ -267,8 +271,8 @@ import {
     memoize,
     memoizeOne,
     MethodDeclaration,
-    Modifier,
     ModifierFlags,
+    ModifierLike,
     modifiersToFlags,
     ModifierSyntaxKind,
     modifierToFlag,
@@ -1562,7 +1566,7 @@ function getEntryForMemberCompletion(
     position: number,
     contextToken: Node | undefined,
     formatContext: formatting.FormatContext | undefined,
-): { insertText: string, filterText?: string, isSnippet?: true, importAdder?: codefix.ImportAdder } | undefined {
+): { insertText: string, filterText?: string, isSnippet?: true, importAdder?: codefix.ImportAdder, eraseRange?: TextRange } | undefined {
     const classLikeDeclaration = findAncestor(location, isClassLike);
     if (!classLikeDeclaration) {
         return undefined; // This should never happen.
@@ -1599,8 +1603,7 @@ function getEntryForMemberCompletion(
     }
 
     let modifiers = ModifierFlags.None;
-    const { modifiers: presentModifiers, modifierList: presentModifiersList } = getPresentModifiers(contextToken, sourceFile, position);
-    presentModifiersList;
+    const { modifiers: presentModifiers, range: eraseRange, decorators: presentDecorators } = getPresentModifiers(contextToken, sourceFile, position);
     // Whether the suggested member should be abstract.
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
     const isAbstract = presentModifiers & ModifierFlags.Abstract && classLikeDeclaration.modifierFlagsCache & ModifierFlags.Abstract;
@@ -1653,6 +1656,9 @@ function getEntryForMemberCompletion(
             allowedModifiers |= ModifierFlags.Async;
         }
         const allowedAndPresent = presentModifiers & allowedModifiers;
+        if (presentModifiers & (~allowedModifiers)) {
+            return undefined; // This completion entry will be filtered out.
+        }
         // If the original member is protected, we allow it to change to public.
         if (modifiers & ModifierFlags.Protected && allowedAndPresent & ModifierFlags.Public) {
             modifiers &= ~ModifierFlags.Protected;
@@ -1663,21 +1669,13 @@ function getEntryForMemberCompletion(
         }
         modifiers |= allowedAndPresent;
         completionNodes = completionNodes.map(node => factory.updateModifiers(node, modifiers));
-        // // We check if the already present modifiers are a prefix of the modifiers we are about to insert.
-        // // If they are not, then we can't offer this completion.
-        // const modifiersInsertList = factory.createModifiersFromModifierFlags(modifiers);
-        // for (let i = 0; i < presentModifiersList.length; i++) {
-        //     if (presentModifiersList[i].kind !== modifiersInsertList?.[i]?.kind) {
-        //         return undefined;
-        //     }
-        // }
-
-        if (presentModifiers & (~allowedModifiers)) {
-            return undefined;
+        // Add back the decorators that were already present.
+        if (presentDecorators?.length) {
+            const lastNode = completionNodes[completionNodes.length - 1];
+            if (canHaveDecorators(lastNode)) {
+                completionNodes[completionNodes.length - 1] = factory.updateModifierLike(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
+            }
         }
-
-        // // Omit already present modifiers from the first node's modifiers list, so we don't add them twice.
-        // completionNodes[0] = factory.updateModifiers(completionNodes[0], modifiers & ~presentModifiers);
 
         const format = ListFormat.MultiLine | ListFormat.NoTrailingNewLine;
         // If we have access to formatting settings, we print the nodes using the emitter,
@@ -1697,21 +1695,22 @@ function getEntryForMemberCompletion(
         }
     }
 
-    return { insertText, filterText, isSnippet, importAdder };
+    return { insertText, filterText, isSnippet, importAdder, eraseRange };
 }
 
 function getPresentModifiers(
     contextToken: Node | undefined,
     sourceFile: SourceFile,
-    position: number): { modifiers: ModifierFlags, modifierList: Modifier[], span: TextSpan } {
+    position: number): { modifiers: ModifierFlags, decorators?: Decorator[], range?: TextRange } {
     if (!contextToken ||
         getLineAndCharacterOfPosition(sourceFile, position).line
             > getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line) {
-        return { modifiers: ModifierFlags.None, modifierList: [] };
+        return { modifiers: ModifierFlags.None };
     }
     let modifiers = ModifierFlags.None;
-    let modifierList: Modifier[] = [];
+    let decorators: Decorator[] | undefined;
     let contextMod;
+    let range: TextRange = { pos: position, end: position };
     /*
     Cases supported:
     In
@@ -1731,18 +1730,19 @@ function getPresentModifiers(
     `location.parent` is property declaration ``protected override m``,
     `location.parent.parent` is class declaration ``class C { ... }``.
     */
-    if (isPropertyDeclaration(contextToken.parent)) {
+    if (isPropertyDeclaration(contextToken.parent) && contextToken.parent.modifiers) {
         modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
-        modifierList = contextToken.parent.modifiers?.filter(isModifier) || [];
+        decorators = contextToken.parent.modifiers.filter(isDecorator) || [];
+        range.pos = Math.min(range.pos, contextToken.parent.modifiers.pos);
     }
     if (contextMod = isModifierLike(contextToken)) {
         const contextModifierFlag = modifierToFlag(contextMod);
         if (!(modifiers & contextModifierFlag)) {
-            modifierList.push(factory.createToken(contextMod));
             modifiers |= contextModifierFlag;
+            range.pos = Math.min(range.pos, contextToken.pos);
         }
     }
-    return { modifiers, modifierList };
+    return { modifiers, decorators, range: range.pos !== position ? range : undefined  };
 }
 
 function isModifierLike(node: Node): ModifierSyntaxKind | undefined {
@@ -2523,7 +2523,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     }
 
     if (source === CompletionSource.ClassMemberSnippet) {
-        const { importAdder } = getEntryForMemberCompletion(
+        const { importAdder, eraseRange } = getEntryForMemberCompletion(
             host,
             program,
             compilerOptions,
@@ -2534,10 +2534,17 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             position,
             contextToken,
             formatContext)!;
-        if (importAdder) {
+        if (importAdder || eraseRange) {
             const changes = textChanges.ChangeTracker.with(
                 { host, formatContext, preferences },
-                importAdder.writeFixes);
+                tracker => {
+                    if (importAdder) {
+                        importAdder.writeFixes(tracker);
+                    }
+                    if (eraseRange) {
+                        tracker.deleteRange(sourceFile, eraseRange);
+                    }
+                });
             return {
                 sourceDisplay: undefined,
                 codeActions: [{

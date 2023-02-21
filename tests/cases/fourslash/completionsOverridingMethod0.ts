@@ -112,146 +112,147 @@
 ////}
 
 
-// verify.completions({
-//     marker: "a",
-//     isNewIdentifierLocation: true,
-//     preferences: {
-//         includeCompletionsWithInsertText: true,
-//         includeCompletionsWithSnippetText: false,
-//         includeCompletionsWithClassMemberSnippets: true,
-//     },
-//     includes: [
-//         {
-//             name: "foo",
-//             sortText: completion.SortText.LocationPriority,
-//             insertText: "foo(param1: string, param2: boolean): Promise<void> {\n}",
-//             filterText: "foo",
-//         }
-//     ],
-// });
+verify.completions({
+    marker: "a",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "foo(param1: string, param2: boolean): Promise<void> {\n}",
+            filterText: "foo",
+        }
+    ],
+});
 
-// verify.completions({
-//     marker: "b",
-//     isNewIdentifierLocation: true,
-//     preferences: {
-//         includeCompletionsWithInsertText: true,
-//         includeCompletionsWithSnippetText: false,
-//         includeCompletionsWithClassMemberSnippets: true,
-//     },
-//     includes: [
-//         {
-//             name: "foo",
-//             sortText: completion.SortText.LocationPriority,
-//             insertText: "foo(a: string, b: string): string {\n}",
-//             filterText: "foo",
-//         }
-//     ],
-// });
+verify.completions({
+    marker: "b",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "foo(a: string, b: string): string {\n}",
+            filterText: "foo",
+        }
+    ],
+});
 
-// verify.completions({
-//     marker: "c",
-//     isNewIdentifierLocation: true,
-//     preferences: {
-//         includeCompletionsWithInsertText: true,
-//         includeCompletionsWithSnippetText: false,
-//         includeCompletionsWithClassMemberSnippets: true,
-//     },
-//     includes: [
-//         {
-//             name: "foo",
-//             sortText: completion.SortText.LocationPriority,
-//             insertText: "foo(a: string): string {\n}",
-//             filterText: "foo",
-//         }
-//     ],
-// });
+verify.completions({
+    marker: "c",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "foo(a: string): string {\n}",
+            filterText: "foo",
+        }
+    ],
+});
 
-// verify.completions({
-//     marker: "d",
-//     isNewIdentifierLocation: true,
-//     preferences: {
-//         includeCompletionsWithInsertText: true,
-//         includeCompletionsWithSnippetText: false,
-//         includeCompletionsWithClassMemberSnippets: true,
-//     },
-//     includes: [
-//         {
-//             name: "foo",
-//             sortText: completion.SortText.LocationPriority,
-//             insertText: "foo(a: string): string {\n}",
-//             filterText: "foo",
-//         }
-//     ],
-// });
+verify.completions({
+    marker: "d",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "foo(a: string): string {\n}",
+            filterText: "foo",
+        }
+    ],
+});
 
-// verify.completions({
-//     marker: "e",
-//     isNewIdentifierLocation: true,
-//     preferences: {
-//         includeCompletionsWithInsertText: true,
-//         includeCompletionsWithSnippetText: false,
-//         includeCompletionsWithClassMemberSnippets: true,
-//     },
-//     includes: [
-//         {
-//             name: "foo",
-//             sortText: completion.SortText.LocationPriority,
-//             insertText: "foo(a: string): string {\n}",
-//             filterText: "foo",
-//         }
-//     ],
-// });
+verify.completions({
+    marker: "e",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "foo(a: string): string {\n}",
+            filterText: "foo",
+        }
+    ],
+});
 
-// verify.completions({
-//     marker: "f",
-//     isNewIdentifierLocation: true,
-//     preferences: {
-//         includeCompletionsWithInsertText: true,
-//         includeCompletionsWithSnippetText: false,
-//         includeCompletionsWithClassMemberSnippets: true,
-//     },
-//     includes: [
-//         {
-//             name: "foo",
-//             sortText: completion.SortText.LocationPriority,
-//             insertText: "foo(a: string): string {\n}",
-//             filterText: "foo",
-//         }
-//     ],
-// });
+verify.completions({
+    marker: "f",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "foo(a: string): string {\n}",
+            filterText: "foo",
+        }
+    ],
+});
 
-// verify.completions({
-//     marker: "g",
-//     isNewIdentifierLocation: true,
-//     preferences: {
-//         includeCompletionsWithInsertText: true,
-//         includeCompletionsWithSnippetText: false,
-//         includeCompletionsWithClassMemberSnippets: true,
-//     },
-//     includes: [
-//         {
-//             name: "foo",
-//             sortText: completion.SortText.LocationPriority,
-//             insertText:
-// `foo(a: string): string;
-// foo(a: undefined, b: number): string;
-// foo(a: unknown, b?: unknown): string {
-// }`,
-//             filterText: "foo",
-//         }
-//     ],
-// });
+verify.completions({
+    marker: "g",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            insertText:
+`foo(a: string): string;
+foo(a: undefined, b: number): string;
+foo(a: unknown, b?: unknown): string {
+}`,
+            filterText: "foo",
+        }
+    ],
+});
 
-// verify.completions({
-//     marker: "h1",
-//     isNewIdentifierLocation: true,
-//     preferences: {
-//         includeCompletionsWithInsertText: true,
-//         includeCompletionsWithSnippetText: false,
-//         includeCompletionsWithClassMemberSnippets: true,
-//     },
-//     excludes: "met",
-// });
+verify.completions({
+    marker: "h1",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
+    },
+    excludes: "met",
+});
+
 verify.completions({
     marker: "h2",
     isNewIdentifierLocation: true,
@@ -264,30 +265,32 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            insertText: "met(n: number): number {\n}",
+            insertText: "static met(n: number): number {\n}",
             filterText: "met",
         }
     ],
 });
 
-// verify.completions({
-//     marker: "i",
-//     isNewIdentifierLocation: true,
-//     preferences: {
-//         includeCompletionsWithInsertText: true,
-//         includeCompletionsWithSnippetText: false,
-//         includeCompletionsWithClassMemberSnippets: true,
-//     },
-//     includes: [
-//         {
-//             name: "met",
-//             sortText: completion.SortText.LocationPriority,
-//             insertText: "met<T>(t: T): T {\n}",
-//         },
-//         {
-//             name: "metcons",
-//             sortText: completion.SortText.LocationPriority,
-//             insertText: "metcons<T extends string | number>(t: T): T {\n}",
-//         }
-//     ],
-// });
+verify.completions({
+    marker: "i",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
+    },
+    includes: [
+        {
+            name: "met",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "met<T>(t: T): T {\n}",
+            filterText: "met"
+        },
+        {
+            name: "metcons",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "metcons<T extends string | number>(t: T): T {\n}",
+            filterText: "metcons"
+        }
+    ],
+});

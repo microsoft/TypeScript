@@ -53,13 +53,13 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            insertText: "met(n: string): void;",
+            insertText: "abstract met(n: string): void;",
             filterText: "met"
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
-            insertText: "met2(n: number): void;",
+            insertText: "abstract met2(n: number): void;",
             filterText: "met2"
         }
     ],
@@ -77,13 +77,13 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            insertText: "met(n: string): void;",
+            insertText: "abstract met(n: string): void;",
             filterText: "met"
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
-            insertText: "met2(n: number): void;",
+            insertText: "abstract met2(n: number): void;",
             filterText: "met2"
         }
     ],
