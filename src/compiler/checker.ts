@@ -11250,9 +11250,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true);
             const declaredType = firstDefined(exportSymbol?.declarations, d => isExportAssignment(d) ? tryGetTypeFromEffectiveTypeNode(d) : undefined);
 
-            if (!popTypeResolution()) {
-                links.type = errorType;
-            }
+
             // It only makes sense to get the type of a value symbol. If the result of resolving
             // the alias is not a value, then it has no type. To get the type associated with a
             // type symbol, call getDeclaredTypeOfSymbol.
@@ -11263,6 +11261,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : declaredType ? declaredType
                 : getAllSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                 : errorType;
+            
+            if (!popTypeResolution()) {
+                if (!exportSymbol) {
+                    error(symbol.declarations?.[0], Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
+                }
+                else {
+                    error(exportSymbol.declarations?.[0], Diagnostics.Circular_definition_of_import_alias_0, symbolToString(exportSymbol));
+                }
+                return links.type = errorType;
+            }
         }
         return links.type;
     }
