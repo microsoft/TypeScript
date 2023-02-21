@@ -3342,6 +3342,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             });
         }
         if (isPrototypeProperty && namespaceSymbol && namespaceSymbol.valueDeclaration && isAssignmentDeclaration(namespaceSymbol.valueDeclaration)) {
+            //A prototype property assignment to something that looks class-like shouldn't actually count if the class-likeness came from an assignment declaration.
+            //The checker requires an actual class/constructor function to attach the prototype property to.
             containerIsClass = false;
         }
         if (containerIsClass && namespaceSymbol && namespaceSymbol.valueDeclaration) {
