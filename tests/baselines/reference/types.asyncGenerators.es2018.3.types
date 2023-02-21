@@ -1,0 +1,13 @@
+=== tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.3.ts ===
+async function * AsyncIterableWithAllTypeParams(): AsyncIterableIterator<number, string, boolean> {
+>AsyncIterableWithAllTypeParams : () => AsyncIterableIterator<number, string, boolean>
+
+    const bool: boolean = yield 3;
+>bool : boolean
+>yield 3 : boolean
+>3 : 3
+    
+    return 'abc';
+>'abc' : "abc"
+}
+
