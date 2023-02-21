@@ -735,7 +735,6 @@ import {
     isVariableStatement,
     isWriteAccess,
     isWriteOnlyAccess,
-    isWriteOnlyUsage,
     IterableOrIteratorType,
     IterationTypes,
     JSDoc,
@@ -25104,7 +25103,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     SymbolFlags.Value | SymbolFlags.ExportValue,
                     getCannotFindNameDiagnosticForName(node),
                     node,
-                    !isWriteOnlyUsage(node),
+                    !isWriteOnlyAccess(node),
                     /*excludeGlobals*/ false) || unknownSymbol;
         }
         return links.resolvedSymbol;
@@ -31684,7 +31683,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!hasPrivateModifier && !hasPrivateIdentifier) {
             return;
         }
-        if (nodeForCheckWriteOnly && isWriteOnlyUsage(nodeForCheckWriteOnly) && !(prop.flags & SymbolFlags.SetAccessor)) {
+        if (nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly) && !(prop.flags & SymbolFlags.SetAccessor)) {
             return;
         }
         if (isSelfTypeAccess) {

@@ -7473,41 +7473,13 @@ export function isWriteAccess(node: Node) {
     return accessKind(node) !== AccessKind.Read;
 }
 
-/** @internal */
-export function isWriteOnlyUsage(node: Node) {
-    return accessKindForUsageChecks(node) === AccessKind.Write;
-}
-
-/** @internal */
-export function isWriteUsage(node: Node) {
-    return accessKindForUsageChecks(node) !== AccessKind.Read;
-}
-
 const enum AccessKind {
     /** Only reads from a variable. */
     Read,
-    /** Only writes to a variable without using the result. E.g.: `x++;`. */
+    /** Only writes to a variable without ever reading it. E.g.: `x=1;`. */
     Write,
-    /** Writes to a variable and uses the result as an expression. E.g.: `f(x++);`. */
+    /** Reads from and writes to a variable. E.g.: `f(x++);`, `x/=1`. */
     ReadWrite
-}
-function accessKindForUsageChecks(node: Node) {
-    const kind = accessKind(node);
-    const { parent } = node;
-
-    switch (parent?.kind) {
-        case SyntaxKind.PostfixUnaryExpression:
-        case SyntaxKind.PrefixUnaryExpression:
-        case SyntaxKind.BinaryExpression:
-            return kind === AccessKind.ReadWrite ? writeOrReadWrite() : kind;
-        default:
-            return kind;
-    }
-
-    function writeOrReadWrite(): AccessKind {
-        // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
-        return parent.parent && walkUpParenthesizedExpressions(parent.parent).kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
-    }
 }
 function accessKind(node: Node): AccessKind {
     const { parent } = node;
