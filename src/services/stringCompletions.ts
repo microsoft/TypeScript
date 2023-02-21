@@ -432,7 +432,6 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker, preferences) };
         case SyntaxKind.CaseClause:
             const tracker = newCaseClauseTracker(typeChecker, (parent as CaseClause).parent.clauses);
-
             const literals = fromContextualType().types.filter(literal => !tracker.hasValue(literal.value));
             return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
         default:
