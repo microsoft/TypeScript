@@ -1336,7 +1336,7 @@ function createCompletionEntry(
         hasAction = true;
     }
 
-    if (contextToken && completionKind === CompletionKind.ObjectPropertyDeclaration && preferences.includeCompletionsWithInsertText) {
+    if (contextToken && contextToken.kind !== SyntaxKind.OpenBraceToken && completionKind === CompletionKind.ObjectPropertyDeclaration && preferences.includeCompletionsWithInsertText) {
         hasAction = true;
     }
 
@@ -4499,7 +4499,7 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
                 return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
                     ? contextToken.parent.parent : undefined;
             default:
-                if (isObjectLiteralExpression(parent.parent) && contextToken.kind !== SyntaxKind.ColonToken) {
+                if (parent.parent && isObjectLiteralExpression(parent.parent) && contextToken.kind !== SyntaxKind.ColonToken) {
                     return parent.parent;
                 }
         }
