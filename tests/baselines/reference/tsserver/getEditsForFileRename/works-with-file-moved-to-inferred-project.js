@@ -19,12 +19,6 @@ export {};
 {"files":["./a.ts","./b.ts"]}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:11.000] Search path: /
 Info 3    [00:00:12.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /tsconfig.json
@@ -65,20 +59,18 @@ Info 18   [00:00:32.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
-/b:
+/b: *new*
   {"pollingInterval":500}
-/b.ts:
+/b.ts: *new*
   {"pollingInterval":500}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-/:
+/: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 18   [00:00:33.000] response:
     {
@@ -94,22 +86,6 @@ Info 19   [00:00:34.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/b:
-  {"pollingInterval":500}
-/b.ts:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/:
-  {}
-
-FsWatchesRecursive::
 
 Info 20   [00:00:35.000] Search path: /
 Info 21   [00:00:36.000] For info: /c.ts :: Config file name: /tsconfig.json
@@ -140,22 +116,6 @@ Info 28   [00:00:52.000] 	FileName: /c.ts ProjectRootPath: undefined
 Info 28   [00:00:53.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-PolledWatches::
-/b:
-  {"pollingInterval":500}
-/b.ts:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/:
-  {}
-
-FsWatchesRecursive::
-
 Info 28   [00:00:54.000] response:
     {
       "responseRequired": false
@@ -172,39 +132,7 @@ Info 29   [00:00:55.000] request:
     }
 Before request
 
-PolledWatches::
-/b:
-  {"pollingInterval":500}
-/b.ts:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/b:
-  {"pollingInterval":500}
-/b.ts:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/:
-  {}
-
-FsWatchesRecursive::
 
 Info 30   [00:00:56.000] response:
     {

@@ -16,12 +16,6 @@ let t3 = { "div": 123 };
 let t4 = t3["div"];
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:11.000] Search path: /a/b
 Info 3    [00:00:12.000] For info: /a/b/file1.ts :: No config files found.
 Info 4    [00:00:13.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -48,14 +42,10 @@ Info 12   [00:00:26.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 12   [00:00:27.000] response:
     {
@@ -74,27 +64,7 @@ Info 13   [00:00:28.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 14   [00:00:29.000] response:
     {
@@ -175,27 +145,7 @@ Info 15   [00:00:30.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 16   [00:00:31.000] response:
     {
@@ -248,27 +198,7 @@ Info 17   [00:00:32.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 18   [00:00:33.000] response:
     {

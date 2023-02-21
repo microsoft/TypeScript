@@ -32,12 +32,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:23.000] Search path: c:/myfolder/allproject/project
 Info 3    [00:00:24.000] For info: c:/myfolder/allproject/project/file1.ts :: Config file name: c:/myfolder/allproject/project/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project c:/myfolder/allproject/project/tsconfig.json
@@ -86,21 +80,21 @@ Info 20   [00:00:46.000] 		Projects: c:/myfolder/allproject/project/tsconfig.jso
 After request
 
 PolledWatches::
-c:/myfolder/allproject/project/node_modules/@types:
+c:/myfolder/allproject/project/node_modules/@types: *new*
   {"pollingInterval":500}
-c:/myfolder/allproject/node_modules/@types:
+c:/myfolder/allproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/myfolder/allproject/project/tsconfig.json:
+c:/myfolder/allproject/project/tsconfig.json: *new*
   {}
-c:/myfolder/allproject/project/file2.ts:
+c:/myfolder/allproject/project/file2.ts: *new*
   {}
-c:/a/lib/lib.d.ts:
+c:/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-c:/myfolder/allproject/project:
+c:/myfolder/allproject/project: *new*
   {}
 
 Info 20   [00:00:47.000] response:

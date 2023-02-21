@@ -38,12 +38,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:19.000] Search path: /a/b
 Info 3    [00:00:20.000] For info: /a/b/moduleFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /a/b/tsconfig.json
@@ -93,19 +87,19 @@ Info 18   [00:00:40.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/file1consumer1.ts:
+/a/b/file1consumer1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 18   [00:00:41.000] response:
@@ -128,39 +122,7 @@ Info 19   [00:00:42.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 20   [00:00:43.000] response:
     {
@@ -178,42 +140,10 @@ Info 21   [00:00:44.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 22   [00:00:45.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 23   [00:00:46.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 24   [00:00:47.000] Different program with same set of files
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 25   [00:00:48.000] response:
     {

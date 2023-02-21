@@ -23,12 +23,6 @@ export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:11.000] Search path: /
 Info 3    [00:00:12.000] For info: /main.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /tsconfig.json
@@ -71,17 +65,17 @@ Info 16   [00:00:30.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-/mod.ts:
+/mod.ts: *new*
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
 
 Info 16   [00:00:31.000] response:
@@ -98,20 +92,6 @@ Info 17   [00:00:32.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/mod.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 18   [00:00:33.000] FileWatcher:: Close:: WatchInfo: /mod.ts 500 undefined WatchType: Closed Script info
 Info 19   [00:00:34.000] Search path: /
@@ -135,6 +115,10 @@ FsWatches::
 /tsconfig.json:
   {}
 
+FsWatches *deleted*::
+/mod.ts:
+  {}
+
 FsWatchesRecursive::
 /:
   {}
@@ -156,32 +140,8 @@ Info 22   [00:00:45.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 23   [00:00:46.000] Finding references to /mod.ts position 95 in project /tsconfig.json
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 24   [00:00:47.000] response:
     {

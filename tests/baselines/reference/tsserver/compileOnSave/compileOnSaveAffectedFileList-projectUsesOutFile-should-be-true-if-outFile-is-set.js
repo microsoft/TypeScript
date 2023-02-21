@@ -19,12 +19,6 @@ let y = 1
 {"compilerOptions":{"outFile":"/a/out.js"},"compileOnSave":true}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:13.000] Search path: /a
 Info 3    [00:00:14.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:15.000] Creating configuration project /a/tsconfig.json
@@ -69,19 +63,19 @@ Info 18   [00:00:34.000] 		Projects: /a/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
+/a/tsconfig.json: *new*
   {}
-/a/b.ts:
+/a/b.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 Info 18   [00:00:35.000] response:
@@ -98,22 +92,6 @@ Info 19   [00:00:36.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/b.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
 
 Info 20   [00:00:37.000] Before ensureProjectForOpenFiles:
 Info 21   [00:00:38.000] Project '/a/tsconfig.json' (Configured)
@@ -132,22 +110,6 @@ Info 22   [00:00:48.000] Open files:
 Info 22   [00:00:49.000] 	FileName: /a/a.ts ProjectRootPath: undefined
 Info 22   [00:00:50.000] 		Projects: /a/tsconfig.json
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/b.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
 
 Info 22   [00:00:51.000] response:
     {

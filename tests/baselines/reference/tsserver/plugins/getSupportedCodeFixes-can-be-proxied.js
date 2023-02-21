@@ -35,12 +35,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:19.000] Search path: /
 Info 3    [00:00:20.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /tsconfig.json
@@ -98,20 +92,18 @@ Info 20   [00:00:41.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 20   [00:00:42.000] 		Projects: /tsconfig.json
 After request
 
-PolledWatches::
-
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-/b.ts:
+/b.ts: *new*
   {}
-/c.ts:
+/c.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
 
 Info 20   [00:00:43.000] response:
@@ -129,22 +121,6 @@ Info 21   [00:00:44.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/b.ts:
-  {}
-/c.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 22   [00:00:45.000] FileWatcher:: Close:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
 Info 23   [00:00:46.000] Search path: /
 Info 24   [00:00:47.000] For info: /b.ts :: Config file name: /tsconfig.json
@@ -159,14 +135,16 @@ Info 25   [00:00:54.000] 	FileName: /b.ts ProjectRootPath: undefined
 Info 25   [00:00:55.000] 		Projects: /tsconfig.json
 After request
 
-PolledWatches::
-
 FsWatches::
 /tsconfig.json:
   {}
 /c.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/b.ts:
   {}
 
 FsWatchesRecursive::
@@ -188,20 +166,6 @@ Info 26   [00:00:57.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/c.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 27   [00:00:58.000] FileWatcher:: Close:: WatchInfo: /c.ts 500 undefined WatchType: Closed Script info
 Info 28   [00:00:59.000] Search path: /
 Info 29   [00:01:00.000] For info: /c.ts :: Config file name: /tsconfig.json
@@ -218,12 +182,14 @@ Info 30   [00:01:09.000] 	FileName: /c.ts ProjectRootPath: undefined
 Info 30   [00:01:10.000] 		Projects: /tsconfig.json
 After request
 
-PolledWatches::
-
 FsWatches::
 /tsconfig.json:
   {}
 /a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/c.ts:
   {}
 
 FsWatchesRecursive::
@@ -242,31 +208,7 @@ Info 31   [00:01:12.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 After request
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 32   [00:01:13.000] response:
     {
@@ -1502,31 +1444,7 @@ Info 33   [00:01:14.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 After request
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 34   [00:01:15.000] response:
     {
@@ -1546,31 +1464,7 @@ Info 35   [00:01:16.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 After request
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 36   [00:01:17.000] response:
     {
@@ -1590,31 +1484,7 @@ Info 37   [00:01:18.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 After request
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 38   [00:01:19.000] response:
     {
@@ -1634,31 +1504,7 @@ Info 39   [00:01:20.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 After request
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 40   [00:01:21.000] response:
     {

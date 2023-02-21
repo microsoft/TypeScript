@@ -72,12 +72,6 @@ const bar: Bar = {
 
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:25.000] Search path: /packages/babel-loader/src
 Info 3    [00:00:26.000] For info: /packages/babel-loader/src/index.ts :: Config file name: /packages/babel-loader/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /packages/babel-loader/tsconfig.json
@@ -158,25 +152,25 @@ Info 25   [00:00:53.000] 		Projects: /packages/babel-loader/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.es2018.full.d.ts:
+/a/lib/lib.es2018.full.d.ts: *new*
   {"pollingInterval":500}
-/packages/babel-loader/node_modules/@types:
+/packages/babel-loader/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/packages/babel-loader/tsconfig.json:
+/packages/babel-loader/tsconfig.json: *new*
   {}
-/packages/core/tsconfig.json:
+/packages/core/tsconfig.json: *new*
   {}
-/packages/core/src/index.ts:
+/packages/core/src/index.ts: *new*
   {}
-/packages/core/src/loading-indicator.ts:
+/packages/core/src/loading-indicator.ts: *new*
   {}
 
 FsWatchesRecursive::
-/packages/babel-loader/src:
+/packages/babel-loader/src: *new*
   {}
-/packages/core/src:
+/packages/core/src: *new*
   {}
 
 Info 25   [00:00:54.000] response:
@@ -199,28 +193,6 @@ Info 26   [00:00:55.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.es2018.full.d.ts:
-  {"pollingInterval":500}
-/packages/babel-loader/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/packages/babel-loader/tsconfig.json:
-  {}
-/packages/core/tsconfig.json:
-  {}
-/packages/core/src/index.ts:
-  {}
-/packages/core/src/loading-indicator.ts:
-  {}
-
-FsWatchesRecursive::
-/packages/babel-loader/src:
-  {}
-/packages/core/src:
-  {}
 
 Info 27   [00:00:56.000] FileWatcher:: Close:: WatchInfo: /packages/core/src/index.ts 500 undefined WatchType: Closed Script info
 Info 28   [00:00:57.000] Search path: /packages/core/src
@@ -266,7 +238,7 @@ PolledWatches::
   {"pollingInterval":500}
 /packages/babel-loader/node_modules/@types:
   {"pollingInterval":500}
-/packages/core/node_modules/@types:
+/packages/core/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -275,6 +247,10 @@ FsWatches::
 /packages/core/tsconfig.json:
   {}
 /packages/core/src/loading-indicator.ts:
+  {}
+
+FsWatches *deleted*::
+/packages/core/src/index.ts:
   {}
 
 FsWatchesRecursive::
@@ -316,51 +292,7 @@ Info 42   [00:01:22.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.es2018.full.d.ts:
-  {"pollingInterval":500}
-/packages/babel-loader/node_modules/@types:
-  {"pollingInterval":500}
-/packages/core/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/packages/babel-loader/tsconfig.json:
-  {}
-/packages/core/tsconfig.json:
-  {}
-/packages/core/src/loading-indicator.ts:
-  {}
-
-FsWatchesRecursive::
-/packages/babel-loader/src:
-  {}
-/packages/core/src:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.es2018.full.d.ts:
-  {"pollingInterval":500}
-/packages/babel-loader/node_modules/@types:
-  {"pollingInterval":500}
-/packages/core/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/packages/babel-loader/tsconfig.json:
-  {}
-/packages/core/tsconfig.json:
-  {}
-/packages/core/src/loading-indicator.ts:
-  {}
-
-FsWatchesRecursive::
-/packages/babel-loader/src:
-  {}
-/packages/core/src:
-  {}
 
 Info 43   [00:01:23.000] response:
     {
@@ -379,28 +311,6 @@ Info 44   [00:01:24.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.es2018.full.d.ts:
-  {"pollingInterval":500}
-/packages/babel-loader/node_modules/@types:
-  {"pollingInterval":500}
-/packages/core/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/packages/babel-loader/tsconfig.json:
-  {}
-/packages/core/tsconfig.json:
-  {}
-/packages/core/src/loading-indicator.ts:
-  {}
-
-FsWatchesRecursive::
-/packages/babel-loader/src:
-  {}
-/packages/core/src:
-  {}
 
 Info 45   [00:01:25.000] Finding references to /packages/core/src/index.ts position 92 in project /packages/core/tsconfig.json
 Info 46   [00:01:26.000] Starting updateGraphWorker: Project: /packages/babel-loader/tsconfig.json
@@ -424,7 +334,7 @@ PolledWatches::
   {"pollingInterval":500}
 /packages/core/node_modules/@types:
   {"pollingInterval":500}
-/packages/core/dist/loading-indicator.d.ts:
+/packages/core/dist/loading-indicator.d.ts: *new*
   {"pollingInterval":2000}
 
 FsWatches::

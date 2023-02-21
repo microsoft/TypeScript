@@ -16,12 +16,6 @@ let z = 1;
 {"files":["src/file1.ts","file3.ts"]}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:20.000] Search path: /a/b/src
 Info 2    [00:00:21.000] For info: /a/b/src/file1.ts :: Config file name: /a/b/tsconfig.json
 Info 3    [00:00:22.000] Creating configuration project /a/b/tsconfig.json
@@ -157,20 +151,18 @@ Before running timeout callbacks
 
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/src/node_modules/@types:
+/a/b/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 45   [00:01:55.000] Running: /a/b/tsconfig.json
 Info 46   [00:01:56.000] Reloading configured project /a/b/tsconfig.json
@@ -274,7 +266,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 64   [00:02:50.000] FileWatcher:: Added:: WatchInfo: /a/b/src/file1.ts 500 undefined WatchType: Closed Script info
@@ -392,14 +384,18 @@ PolledWatches::
 /a/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/a/b/src/node_modules/@types:
+  {"pollingInterval":500}
+
 FsWatches::
 /a/b/tsconfig.json:
   {}
-/a/b/src/file1.ts:
+/a/b/src/file1.ts: *new*
   {}
-/a/b/src/file2.ts:
+/a/b/src/file2.ts: *new*
   {}
-/a/b/file3.ts:
+/a/b/file3.ts: *new*
   {}
 
 FsWatchesRecursive::

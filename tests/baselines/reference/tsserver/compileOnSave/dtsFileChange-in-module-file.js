@@ -19,12 +19,6 @@ import { x } from './runtime/a;
 {"compilerOptions":{},"compileOnSave":true}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:15.000] Search path: /a/runtime
 Info 3    [00:00:16.000] For info: /a/runtime/a.d.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:17.000] Creating configuration project /a/tsconfig.json
@@ -70,21 +64,21 @@ Info 20   [00:00:38.000] 		Projects: /a/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
+/a/tsconfig.json: *new*
   {}
-/a/b.ts:
+/a/b.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
-/a/runtime:
+/a/runtime: *new*
   {}
 
 Info 20   [00:00:39.000] response:
@@ -101,24 +95,6 @@ Info 21   [00:00:40.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/b.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/a/runtime:
-  {}
 
 Info 22   [00:00:41.000] FileWatcher:: Close:: WatchInfo: /a/b.ts 500 undefined WatchType: Closed Script info
 Info 23   [00:00:42.000] Search path: /a
@@ -144,6 +120,10 @@ FsWatches::
 /a/tsconfig.json:
   {}
 
+FsWatches *deleted*::
+/a/b.ts:
+  {}
+
 FsWatchesRecursive::
 /a:
   {}
@@ -164,22 +144,6 @@ Info 26   [00:00:53.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/a/runtime:
-  {}
 
 Info 27   [00:00:54.000] Before ensureProjectForOpenFiles:
 Info 28   [00:00:55.000] Project '/a/tsconfig.json' (Configured)
@@ -203,22 +167,6 @@ Info 29   [00:01:10.000] 	FileName: /a/b.ts ProjectRootPath: undefined
 Info 29   [00:01:11.000] 		Projects: /a/tsconfig.json
 After request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/a/runtime:
-  {}
-
 Info 29   [00:01:12.000] response:
     {
       "response": [],
@@ -235,39 +183,7 @@ Info 30   [00:01:13.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/a/runtime:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/a/runtime:
-  {}
 
 Info 31   [00:01:14.000] response:
     {

@@ -56,18 +56,16 @@ Shape signatures in builder refreshed for::
 /a/f1.ts (used version)
 /a/d/f0.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/d/f0.ts:
+/a/d/f0.ts: *new*
   {}
-/a/f1.ts:
+/a/f1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -129,20 +127,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/a/d/f0.ts:
-  {}
-/a/f1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/d/f0.js]
@@ -188,7 +172,7 @@ Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
 PolledWatches::
-/node_modules:
+/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -196,7 +180,11 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/:
+/: *new*
+  {}
+
+FsWatches *deleted*::
+/a/f1.ts:
   {}
 
 FsWatchesRecursive::
@@ -255,14 +243,20 @@ Shape signatures in builder refreshed for::
 /a/f1.ts (computed .d.ts)
 /a/d/f0.ts (computed .d.ts)
 
-PolledWatches::
+PolledWatches *deleted*::
+/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
 /a/d/f0.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/f1.ts:
+/a/f1.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/:
   {}
 
 FsWatchesRecursive::

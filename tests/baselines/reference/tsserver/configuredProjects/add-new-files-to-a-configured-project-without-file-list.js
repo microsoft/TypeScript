@@ -20,12 +20,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:16.000] Search path: /a/b
 Info 2    [00:00:17.000] For info: /a/b/commonFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 3    [00:00:18.000] Creating configuration project /a/b/tsconfig.json
@@ -74,17 +68,17 @@ let y = 1
 
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 20   [00:00:43.000] Running: /a/b/tsconfig.json
@@ -134,7 +128,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
 
 FsWatchesRecursive::

@@ -35,12 +35,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:19.000] Search path: /
 Info 3    [00:00:20.000] For info: /d.ts :: No config files found.
 Info 4    [00:00:21.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -79,19 +73,15 @@ Info 13   [00:00:34.000] 	FileName: /d.ts ProjectRootPath: undefined
 Info 13   [00:00:35.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-PolledWatches::
-
 FsWatches::
-/c.ts:
+/c.ts: *new*
   {}
-/b.ts:
+/b.ts: *new*
   {}
-/a.ts:
+/a.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 13   [00:00:36.000] response:
     {
@@ -108,35 +98,7 @@ Info 14   [00:00:37.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-/c.ts:
-  {}
-/b.ts:
-  {}
-/a.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-
-FsWatches::
-/c.ts:
-  {}
-/b.ts:
-  {}
-/a.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 15   [00:00:38.000] response:
     {

@@ -29,12 +29,6 @@ declare function f(): void;
 {"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a/a.ts"],"names":[],"mappings":"AAAA,iBAAS,CAAC,SAAK"}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:23.000] Search path: /a
 Info 3    [00:00:24.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /a/tsconfig.json
@@ -76,17 +70,17 @@ Info 17   [00:00:43.000] 		Projects: /a/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 Info 17   [00:00:44.000] response:
@@ -120,20 +114,6 @@ Info 18   [00:00:45.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 Info 19   [00:00:46.000] FileWatcher:: Added:: WatchInfo: /a/a.ts 500 undefined WatchType: Closed Script info
 Info 20   [00:00:47.000] Project '/a/tsconfig.json' (Configured)
 Info 20   [00:00:48.000] 	Files (1)
@@ -151,7 +131,7 @@ PolledWatches::
 FsWatches::
 /a/tsconfig.json:
   {}
-/a/a.ts:
+/a/a.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -172,22 +152,6 @@ Info 21   [00:00:52.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
 
 Info 22   [00:00:53.000] Search path: /b
 Info 23   [00:00:54.000] For info: /b/b.ts :: Config file name: /b/tsconfig.json
@@ -244,7 +208,7 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules/@types:
   {"pollingInterval":500}
-/b/node_modules/@types:
+/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -252,13 +216,13 @@ FsWatches::
   {}
 /a/a.ts:
   {}
-/b/tsconfig.json:
+/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
 /a:
   {}
-/b:
+/b: *new*
   {}
 
 Info 37   [00:01:17.000] response:
@@ -278,28 +242,6 @@ Info 38   [00:01:18.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/b:
-  {}
-
 Info 39   [00:01:19.000] Finding references to /b/b.ts position 0 in project /b/tsconfig.json
 Info 40   [00:01:20.000] Search path: /a
 Info 41   [00:01:21.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
@@ -307,28 +249,6 @@ Info 42   [00:01:22.000] Search path: /a
 Info 43   [00:01:23.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info 44   [00:01:24.000] Finding references to /a/a.ts position 9 in project /a/tsconfig.json
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/b:
-  {}
 
 Info 45   [00:01:25.000] response:
     {

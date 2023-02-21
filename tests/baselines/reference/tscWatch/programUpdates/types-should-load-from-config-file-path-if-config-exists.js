@@ -49,22 +49,20 @@ Shape signatures in builder refreshed for::
 /a/b/app.ts (used version)
 /a/b/node_modules/@types/node/index.d.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/app.ts:
+/a/b/app.ts: *new*
   {}
-/a/b/node_modules/@types/node/index.d.ts:
+/a/b/node_modules/@types/node/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b/node_modules:
+/a/b/node_modules: *new*
   {}
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined

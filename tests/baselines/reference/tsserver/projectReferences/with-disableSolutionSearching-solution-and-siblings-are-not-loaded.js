@@ -55,12 +55,6 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:36.000] Search path: /user/username/projects/solution/compiler
 Info 3    [00:00:37.000] For info: /user/username/projects/solution/compiler/program.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
 Info 4    [00:00:38.000] Creating configuration project /user/username/projects/solution/compiler/tsconfig.json
@@ -110,20 +104,18 @@ Info 18   [00:00:57.000] 		Projects: /user/username/projects/solution/compiler/t
 After request
 
 PolledWatches::
-/user/username/projects/solution/compiler/node_modules/@types:
+/user/username/projects/solution/compiler/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
+/user/username/projects/solution/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/solution/compiler/tsconfig.json:
+/user/username/projects/solution/compiler/tsconfig.json: *new*
   {}
-/user/username/projects/solution/compiler/types.ts:
+/user/username/projects/solution/compiler/types.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 18   [00:00:58.000] response:
     {
@@ -142,40 +134,8 @@ Info 19   [00:00:59.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/solution/compiler/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/compiler/tsconfig.json:
-  {}
-/user/username/projects/solution/compiler/types.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 20   [00:01:00.000] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
 After request
-
-PolledWatches::
-/user/username/projects/solution/compiler/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/compiler/tsconfig.json:
-  {}
-/user/username/projects/solution/compiler/types.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 21   [00:01:01.000] response:
     {

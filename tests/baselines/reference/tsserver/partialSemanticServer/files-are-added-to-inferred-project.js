@@ -42,12 +42,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:33.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 3    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 4    [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -71,12 +65,6 @@ Info 7    [00:00:42.000] 	FileName: /user/username/projects/myproject/a.ts Proje
 Info 7    [00:00:43.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 7    [00:00:44.000] response:
     {
       "responseRequired": false
@@ -94,12 +82,6 @@ Info 8    [00:00:45.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 9    [00:00:46.000] getCompletionData: Get current token: *
 Info 10   [00:00:47.000] getCompletionData: Is inside comment: *
 Info 11   [00:00:48.000] getCompletionData: Get previous token: *
@@ -107,12 +89,6 @@ Info 12   [00:00:49.000] getCompletionsAtPosition: isCompletionListBlocker: *
 Info 13   [00:00:50.000] getCompletionData: Semantic work: *
 Info 14   [00:00:51.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 15   [00:00:52.000] response:
     {
@@ -143,12 +119,6 @@ Info 16   [00:00:53.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 17   [00:00:54.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 18   [00:00:55.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 19   [00:00:56.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -177,12 +147,6 @@ Info 22   [00:01:05.000] 	FileName: /user/username/projects/myproject/b.ts Proje
 Info 22   [00:01:06.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 22   [00:01:07.000] response:
     {
       "responseRequired": false
@@ -200,12 +164,6 @@ Info 23   [00:01:08.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 24   [00:01:09.000] getCompletionData: Get current token: *
 Info 25   [00:01:10.000] getCompletionData: Is inside comment: *
 Info 26   [00:01:11.000] getCompletionData: Get previous token: *
@@ -213,12 +171,6 @@ Info 27   [00:01:12.000] getCompletionsAtPosition: isCompletionListBlocker: *
 Info 28   [00:01:13.000] getCompletionData: Semantic work: *
 Info 29   [00:01:14.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 30   [00:01:15.000] response:
     {

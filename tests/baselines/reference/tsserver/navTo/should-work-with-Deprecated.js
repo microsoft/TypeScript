@@ -30,12 +30,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:17.000] Search path: /a/b
 Info 3    [00:00:18.000] For info: /a/b/file1.js :: Config file name: /a/b/jsconfig.json
 Info 4    [00:00:19.000] Creating configuration project /a/b/jsconfig.json
@@ -82,21 +76,21 @@ Info 17   [00:00:37.000] 		Projects: /a/b/jsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/bower_components:
+/a/b/bower_components: *new*
   {"pollingInterval":500}
-/a/b/node_modules:
+/a/b/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/jsconfig.json:
+/a/b/jsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 17   [00:00:38.000] response:
@@ -116,43 +110,7 @@ Info 18   [00:00:39.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/jsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/jsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 19   [00:00:40.000] response:
     {

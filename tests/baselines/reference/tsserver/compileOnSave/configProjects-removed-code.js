@@ -23,12 +23,6 @@ export function Foo() { };
                     }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:15.000] Search path: /a/b
 Info 3    [00:00:16.000] For info: /a/b/referenceFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:17.000] Creating configuration project /a/b/tsconfig.json
@@ -73,19 +67,19 @@ Info 18   [00:00:36.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/modulefile1.ts:
+/a/b/modulefile1.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 18   [00:00:37.000] response:
@@ -121,6 +115,10 @@ PolledWatches::
 
 FsWatches::
 /a/b/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/a/b/modulefile1.ts:
   {}
 
 FsWatchesRecursive::
@@ -162,7 +160,7 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/node_modules/@types:
   {"pollingInterval":500}
-/a/b/modulefile1.ts:
+/a/b/modulefile1.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -197,39 +195,7 @@ Info 38   [00:01:10.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile1.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile1.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 39   [00:01:11.000] response:
     {

@@ -43,12 +43,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:25.000] Search path: /a/b
 Info 3    [00:00:26.000] For info: /a/b/globalFile3.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /a/b/tsconfig.json
@@ -112,25 +106,25 @@ Info 21   [00:00:49.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/file1consumer1.ts:
+/a/b/file1consumer1.ts: *new*
   {}
-/a/b/file1consumer2.ts:
+/a/b/file1consumer2.ts: *new*
   {}
-/a/b/modulefile1.ts:
+/a/b/modulefile1.ts: *new*
   {}
-/a/b/modulefile2.ts:
+/a/b/modulefile2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 21   [00:00:50.000] response:
@@ -153,51 +147,7 @@ Info 22   [00:00:51.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 23   [00:00:52.000] response:
     {
@@ -213,28 +163,6 @@ Info 24   [00:00:53.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 25   [00:00:54.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 26   [00:00:55.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -256,28 +184,6 @@ Info 30   [00:01:08.000] Open files:
 Info 30   [00:01:09.000] 	FileName: /a/b/globalFile3.ts ProjectRootPath: undefined
 Info 30   [00:01:10.000] 		Projects: /a/b/tsconfig.json
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 30   [00:01:11.000] response:
     {

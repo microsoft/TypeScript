@@ -43,12 +43,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:31.000] Search path: /user/username/projects/myproject/usage
 Info 3    [00:00:32.000] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
@@ -127,25 +121,25 @@ Info 30   [00:01:04.000] 		Projects: /user/username/projects/myproject/usage/tsc
 After request
 
 PolledWatches::
-/user/username/projects/myproject/usage/node_modules/@types:
+/user/username/projects/myproject/usage/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
+/user/username/projects/myproject/usage/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/dependency/tsconfig.json:
+/user/username/projects/myproject/dependency/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/dependency/fns.ts:
+/user/username/projects/myproject/dependency/fns.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/usage:
+/user/username/projects/myproject/usage: *new*
   {}
-/user/username/projects/myproject/dependency:
+/user/username/projects/myproject/dependency: *new*
   {}
 
 Info 30   [00:01:05.000] response:
@@ -166,51 +160,7 @@ Info 31   [00:01:06.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-
 After request
-
-PolledWatches::
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
 
 Info 32   [00:01:07.000] response:
     {
@@ -218,152 +168,20 @@ Info 32   [00:01:07.000] response:
     }
 Before checking timeout queue length (1) and running
 
-PolledWatches::
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-
 Info 33   [00:01:08.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
-PolledWatches::
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
 
 Info 34   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[{"start":{"line":3,"offset":1},"end":{"line":3,"offset":6},"text":"Cannot find name 'fnErr'.","code":2304,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
 
 Info 35   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 Info 36   [00:01:11.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}

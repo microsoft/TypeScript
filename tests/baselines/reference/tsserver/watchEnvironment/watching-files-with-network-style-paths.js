@@ -27,12 +27,6 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 3    [00:00:18.000] Search path: c:/myprojects/project
 Info 4    [00:00:19.000] For info: c:/myprojects/project/x.js :: No config files found.
 Info 5    [00:00:20.000] FileWatcher:: Added:: WatchInfo: c:/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -64,22 +58,20 @@ Info 15   [00:00:35.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-c:/myprojects/project/tsconfig.json:
+c:/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
-c:/myprojects/project/jsconfig.json:
+c:/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-c:/myprojects/project/node_modules/@types:
+c:/myprojects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-c:/myprojects/project/bower_components:
+c:/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
-c:/myprojects/project/node_modules:
+c:/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/a/lib/lib.d.ts:
+c:/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 15   [00:00:36.000] response:
     {
@@ -114,12 +106,6 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 19   [00:00:20.000] Search path: //vda1cs4850/myprojects/project
 Info 20   [00:00:21.000] For info: //vda1cs4850/myprojects/project/x.js :: No config files found.
 Info 21   [00:00:22.000] FileWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -151,22 +137,20 @@ Info 31   [00:00:37.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-//vda1cs4850/myprojects/project/tsconfig.json:
+//vda1cs4850/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
-//vda1cs4850/myprojects/project/jsconfig.json:
+//vda1cs4850/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-//vda1cs4850/myprojects/project/node_modules/@types:
+//vda1cs4850/myprojects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-//vda1cs4850/myprojects/project/bower_components:
+//vda1cs4850/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
-//vda1cs4850/myprojects/project/node_modules:
+//vda1cs4850/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-//vda1cs4850/a/lib/lib.d.ts:
+//vda1cs4850/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 31   [00:00:38.000] response:
     {
@@ -201,12 +185,6 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 35   [00:00:22.000] Search path: //vda1cs4850/c$/myprojects/project
 Info 36   [00:00:23.000] For info: //vda1cs4850/c$/myprojects/project/x.js :: No config files found.
 Info 37   [00:00:24.000] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -238,22 +216,20 @@ Info 47   [00:00:39.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-//vda1cs4850/c$/myprojects/project/tsconfig.json:
+//vda1cs4850/c$/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
-//vda1cs4850/c$/myprojects/project/jsconfig.json:
+//vda1cs4850/c$/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-//vda1cs4850/c$/myprojects/project/node_modules/@types:
+//vda1cs4850/c$/myprojects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-//vda1cs4850/c$/myprojects/project/bower_components:
+//vda1cs4850/c$/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
-//vda1cs4850/c$/myprojects/project/node_modules:
+//vda1cs4850/c$/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-//vda1cs4850/a/lib/lib.d.ts:
+//vda1cs4850/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 47   [00:00:40.000] response:
     {
@@ -288,12 +264,6 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 51   [00:00:22.000] Search path: c:/users/username/myprojects/project
 Info 52   [00:00:23.000] For info: c:/users/username/myprojects/project/x.js :: No config files found.
 Info 53   [00:00:24.000] FileWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -325,22 +295,20 @@ Info 63   [00:00:39.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-c:/users/username/myprojects/project/tsconfig.json:
+c:/users/username/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
-c:/users/username/myprojects/project/jsconfig.json:
+c:/users/username/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-c:/users/username/myprojects/project/node_modules/@types:
+c:/users/username/myprojects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-c:/users/username/myprojects/project/bower_components:
+c:/users/username/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
-c:/users/username/myprojects/project/node_modules:
+c:/users/username/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/a/lib/lib.d.ts:
+c:/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 63   [00:00:40.000] response:
     {
@@ -375,12 +343,6 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 67   [00:00:26.000] Search path: //vda1cs4850/c$/users/username/myprojects/project
 Info 68   [00:00:27.000] For info: //vda1cs4850/c$/users/username/myprojects/project/x.js :: No config files found.
 Info 69   [00:00:28.000] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -412,22 +374,20 @@ Info 79   [00:00:43.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-//vda1cs4850/c$/users/username/myprojects/project/tsconfig.json:
+//vda1cs4850/c$/users/username/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
-//vda1cs4850/c$/users/username/myprojects/project/jsconfig.json:
+//vda1cs4850/c$/users/username/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types:
+//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-//vda1cs4850/c$/users/username/myprojects/project/bower_components:
+//vda1cs4850/c$/users/username/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
-//vda1cs4850/c$/users/username/myprojects/project/node_modules:
+//vda1cs4850/c$/users/username/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-//vda1cs4850/a/lib/lib.d.ts:
+//vda1cs4850/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 79   [00:00:44.000] response:
     {

@@ -43,12 +43,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:31.000] Search path: /user/username/projects/myproject/usage
 Info 3    [00:00:32.000] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
@@ -117,27 +111,27 @@ Info 26   [00:01:00.000] 		Projects: /user/username/projects/myproject/usage/tsc
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls:
+/user/username/projects/myproject/decls: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types:
+/user/username/projects/myproject/usage/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
+/user/username/projects/myproject/usage/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/dependency/tsconfig.json:
+/user/username/projects/myproject/dependency/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/dependency/fns.ts:
+/user/username/projects/myproject/dependency/fns.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/usage:
+/user/username/projects/myproject/usage: *new*
   {}
-/user/username/projects/myproject/dependency:
+/user/username/projects/myproject/dependency: *new*
   {}
 
 Info 26   [00:01:01.000] response:
@@ -154,30 +148,6 @@ Info 27   [00:01:02.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/myproject/decls:
-  {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
 
 Info 28   [00:01:03.000] Before ensureProjectForOpenFiles:
 Info 29   [00:01:04.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
@@ -196,30 +166,6 @@ Info 30   [00:01:14.000] Open files:
 Info 30   [00:01:15.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 30   [00:01:16.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 After request
-
-PolledWatches::
-/user/username/projects/myproject/decls:
-  {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
 
 Info 30   [00:01:17.000] response:
     {
@@ -254,30 +200,6 @@ export function fn2() { }
 function fn3() { }
 
 
-PolledWatches::
-/user/username/projects/myproject/decls:
-  {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-
 Info 36   [00:01:26.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
 Info 37   [00:01:27.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 38   [00:01:28.000] Different program with same set of files
@@ -298,30 +220,6 @@ Info 41   [00:01:40.000] Open files:
 Info 41   [00:01:41.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 41   [00:01:42.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 After request
-
-PolledWatches::
-/user/username/projects/myproject/decls:
-  {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
 
 Info 41   [00:01:43.000] response:
     {
@@ -347,30 +245,6 @@ Info 42   [00:01:44.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/myproject/decls:
-  {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-
 Info 43   [00:01:47.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
 Info 44   [00:01:48.000] Project: /user/username/projects/myproject/usage/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/usage/usage.js
 Info 45   [00:01:49.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
@@ -383,30 +257,6 @@ var fns_1 = require("../decls/fns");
 (0, fns_1.fn2)();
 
 
-
-PolledWatches::
-/user/username/projects/myproject/decls:
-  {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
 
 Info 46   [00:01:50.000] response:
     {
@@ -424,55 +274,7 @@ Info 47   [00:01:51.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/myproject/decls:
-  {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-
 After request
-
-PolledWatches::
-/user/username/projects/myproject/decls:
-  {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
 
 Info 48   [00:01:52.000] response:
     {

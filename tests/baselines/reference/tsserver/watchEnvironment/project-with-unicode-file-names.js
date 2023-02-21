@@ -27,12 +27,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:21.000] Search path: /User/userName/Projects/İ
 Info 3    [00:00:22.000] For info: /User/userName/Projects/İ/foo.ts :: No config files found.
 Info 4    [00:00:23.000] FileWatcher:: Added:: WatchInfo: /User/userName/Projects/İ/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -66,20 +60,18 @@ Info 16   [00:00:40.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/user/username/projects/İ/tsconfig.json:
+/user/username/projects/İ/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/İ/jsconfig.json:
+/user/username/projects/İ/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/İ/node_modules:
+/user/username/projects/İ/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/İ/node_modules/@types:
+/user/username/projects/İ/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 16   [00:00:41.000] response:
     {

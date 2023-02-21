@@ -34,22 +34,10 @@ let y = 1
 let x = 1
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:19.000] Host watch options changed to {"watchFile":4}, it will be take effect for next watches.
 Info 3    [00:00:20.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 4    [00:00:21.000] response:
     {
@@ -66,12 +54,6 @@ Info 5    [00:00:22.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 6    [00:00:23.000] Search path: /a/b
 Info 7    [00:00:24.000] For info: /a/b/commonFile1.ts :: Config file name: /a/b/tsconfig.json
@@ -119,19 +101,19 @@ Info 22   [00:00:44.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 22   [00:00:45.000] response:

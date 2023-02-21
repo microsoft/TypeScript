@@ -16,12 +16,6 @@ const x = 1; export { x };
 import { x } from "./a"; const y = x + 1;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:09.000] Search path: /
 Info 3    [00:00:10.000] For info: /a.ts :: No config files found.
 Info 4    [00:00:11.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -46,12 +40,8 @@ Info 10   [00:00:22.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 10   [00:00:23.000] response:
     {
@@ -67,14 +57,6 @@ Info 11   [00:00:24.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 12   [00:00:25.000] Search path: /
 Info 13   [00:00:26.000] For info: /b.ts :: No config files found.
@@ -115,14 +97,6 @@ Info 25   [00:00:44.000] 	FileName: /b.ts ProjectRootPath: undefined
 Info 25   [00:00:45.000] 		Projects: /dev/null/inferredProject2*
 After request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 25   [00:00:46.000] response:
     {
       "responseRequired": false
@@ -142,26 +116,10 @@ Info 26   [00:00:47.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 27   [00:00:48.000] Host configuration update for file /a.ts
 Info 28   [00:00:49.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":3,"success":true,"performanceData":{"updateGraphDurationMs":*}}
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 29   [00:00:50.000] response:
     {
@@ -180,23 +138,7 @@ Info 30   [00:00:51.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 31   [00:00:52.000] response:
     {
@@ -278,23 +220,7 @@ Info 32   [00:00:53.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 33   [00:00:54.000] response:
     {

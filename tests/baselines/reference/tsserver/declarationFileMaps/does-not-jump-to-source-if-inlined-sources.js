@@ -43,12 +43,6 @@ export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }
 let a = 10;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:33.000] Search path: /user
 Info 3    [00:00:34.000] For info: /user/user.ts :: No config files found.
 Info 4    [00:00:35.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -83,18 +77,16 @@ Info 14   [00:00:50.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/user/node_modules/@types:
+/user/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/bin/a.d.ts:
+/a/bin/a.d.ts: *new*
   {}
-/b/bin/b.d.ts:
+/b/bin/b.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 14   [00:00:51.000] response:
     {
@@ -113,20 +105,6 @@ Info 15   [00:00:52.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/bin/a.d.ts:
-  {}
-/b/bin/b.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 16   [00:00:53.000] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
 After request
 
@@ -141,10 +119,8 @@ FsWatches::
   {}
 /b/bin/b.d.ts:
   {}
-/a/bin/a.d.ts.map:
+/a/bin/a.d.ts.map: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 17   [00:00:54.000] response:
     {
@@ -196,22 +172,6 @@ Info 18   [00:00:55.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/bin/a.d.ts:
-  {}
-/b/bin/b.d.ts:
-  {}
-/a/bin/a.d.ts.map:
-  {}
-
-FsWatchesRecursive::
-
 Info 19   [00:00:56.000] FileWatcher:: Added:: WatchInfo: /b/bin/b.d.ts.map 500 undefined WatchType: Closed Script info
 Info 20   [00:00:57.000] FileWatcher:: Added:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 After request
@@ -229,12 +189,10 @@ FsWatches::
   {}
 /a/bin/a.d.ts.map:
   {}
-/b/bin/b.d.ts.map:
+/b/bin/b.d.ts.map: *new*
   {}
-/b/b.ts:
+/b/b.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 21   [00:00:58.000] response:
     {
@@ -284,26 +242,6 @@ Info 22   [00:00:59.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/bin/a.d.ts:
-  {}
-/b/bin/b.d.ts:
-  {}
-/a/bin/a.d.ts.map:
-  {}
-/b/bin/b.d.ts.map:
-  {}
-/b/b.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 23   [00:01:00.000] FileWatcher:: Added:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
 Info 24   [00:01:01.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 24   [00:01:02.000] 	Files (3)
@@ -329,10 +267,8 @@ FsWatches::
   {}
 /b/b.ts:
   {}
-/user/user.ts:
+/user/user.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 24   [00:01:05.000] response:
     {
@@ -348,28 +284,6 @@ Info 25   [00:01:06.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/bin/a.d.ts:
-  {}
-/b/bin/b.d.ts:
-  {}
-/a/bin/a.d.ts.map:
-  {}
-/b/bin/b.d.ts.map:
-  {}
-/b/b.ts:
-  {}
-/user/user.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 26   [00:01:07.000] Search path: /dummy
 Info 27   [00:01:08.000] For info: /dummy/dummy.ts :: No config files found.
@@ -424,12 +338,26 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/dummy/node_modules/@types:
+/dummy/node_modules/@types: *new*
   {"pollingInterval":500}
 
-FsWatches::
+PolledWatches *deleted*::
+/user/node_modules/@types:
+  {"pollingInterval":500}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/bin/a.d.ts:
+  {}
+/b/bin/b.d.ts:
+  {}
+/a/bin/a.d.ts.map:
+  {}
+/b/bin/b.d.ts.map:
+  {}
+/b/b.ts:
+  {}
+/user/user.ts:
+  {}
 
 Info 49   [00:01:36.000] response:
     {

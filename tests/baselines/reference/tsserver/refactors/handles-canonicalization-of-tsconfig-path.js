@@ -16,12 +16,6 @@ const x = 0;
 { "files": ["./a.ts"] }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:11.000] Search path: /Foo
 Info 3    [00:00:12.000] For info: /Foo/a.ts :: Config file name: /Foo/tsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /Foo/tsconfig.json
@@ -58,16 +52,14 @@ Info 15   [00:00:29.000] 		Projects: /Foo/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/foo/node_modules/@types:
+/foo/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/foo/tsconfig.json:
+/foo/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 15   [00:00:30.000] response:
     {
@@ -90,31 +82,7 @@ Info 16   [00:00:31.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/foo/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/foo/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/foo/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/foo/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 17   [00:00:32.000] response:
     {

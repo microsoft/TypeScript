@@ -274,12 +274,6 @@ export {};
 }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:01:19.000] Search path: /user/username/projects/project/src/common/input
 Info 3    [00:01:20.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Info 4    [00:01:21.000] Creating configuration project /user/username/projects/project/src/common/tsconfig.json
@@ -346,25 +340,25 @@ Info 28   [00:01:53.000] 		Projects: /user/username/projects/project/src/common/
 After request
 
 PolledWatches::
-/user/username/projects/project/src/common/node_modules/@types:
+/user/username/projects/project/src/common/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/project/src/node_modules/@types:
+/user/username/projects/project/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
+/user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/project/src/common/tsconfig.json:
+/user/username/projects/project/src/common/tsconfig.json: *new*
   {}
-/user/username/projects/project/src/common/input/keyboard.test.ts:
+/user/username/projects/project/src/common/input/keyboard.test.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/project/src/tsconfig.json:
+/user/username/projects/project/src/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/project/src/common:
+/user/username/projects/project/src/common: *new*
   {}
 
 Info 28   [00:01:54.000] response:
@@ -381,28 +375,6 @@ Info 29   [00:01:55.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/project/src/common/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/src/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/project/src/common/tsconfig.json:
-  {}
-/user/username/projects/project/src/common/input/keyboard.test.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/project/src/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/project/src/common:
-  {}
 
 Info 30   [00:01:56.000] Search path: /user/username/projects/project/src
 Info 31   [00:01:57.000] For info: /user/username/projects/project/src/terminal.ts :: Config file name: /user/username/projects/project/src/tsconfig.json
@@ -499,13 +471,13 @@ FsWatches::
   {}
 /user/username/projects/project/src/tsconfig.json:
   {}
-/user/username/projects/project/out/input/keyboard.d.ts:
+/user/username/projects/project/out/input/keyboard.d.ts: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/project/src/common:
   {}
-/user/username/projects/project/src:
+/user/username/projects/project/src: *new*
   {}
 
 Info 48   [00:02:25.000] response:
@@ -524,32 +496,6 @@ Info 49   [00:02:26.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/project/src/common/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/src/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/project/src/common/tsconfig.json:
-  {}
-/user/username/projects/project/src/common/input/keyboard.test.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/project/src/tsconfig.json:
-  {}
-/user/username/projects/project/out/input/keyboard.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/project/src/common:
-  {}
-/user/username/projects/project/src:
-  {}
 
 Info 50   [00:02:27.000] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
 Info 51   [00:02:28.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts.map 500 undefined WatchType: Closed Script info
@@ -579,7 +525,7 @@ FsWatches::
   {}
 /user/username/projects/project/out/input/keyboard.d.ts:
   {}
-/user/username/projects/project/out/input/keyboard.d.ts.map:
+/user/username/projects/project/out/input/keyboard.d.ts.map: *new*
   {}
 
 FsWatchesRecursive::

@@ -48,12 +48,6 @@ export { foo } from "./foo";
 export function foo(): string;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:31.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Info 3    [00:00:32.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 4    [00:00:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -87,18 +81,16 @@ Info 13   [00:00:42.000] 	Files (4)
 Info 14   [00:00:43.000] -----------------------------------------------
 After request
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/src/main.ts:
+/user/username/projects/myproject/src/main.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
 
 Info 15   [00:00:44.000] response:
@@ -117,20 +109,6 @@ Info 16   [00:00:45.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/src/main.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/src:
-  {}
-
 Info 17   [00:00:46.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Info 18   [00:00:47.000] Project '/user/username/projects/myproject/project.csproj' (External)
 Info 18   [00:00:48.000] 	Files (4)
@@ -141,10 +119,12 @@ Info 18   [00:00:51.000] 	FileName: /user/username/projects/myproject/src/main.t
 Info 18   [00:00:52.000] 		Projects: /user/username/projects/myproject/project.csproj
 After request
 
-PolledWatches::
-
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/src/main.ts:
   {}
 
 FsWatchesRecursive::

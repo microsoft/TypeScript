@@ -19,12 +19,6 @@ foo
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:11.000] Search path: /
 Info 3    [00:00:12.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /tsconfig.json
@@ -66,17 +60,17 @@ Info 16   [00:00:30.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-/b.ts:
+/b.ts: *new*
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
 
 Info 16   [00:00:31.000] response:
@@ -93,20 +87,6 @@ Info 17   [00:00:32.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/b.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 18   [00:00:33.000] FileWatcher:: Close:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
 Info 19   [00:00:34.000] Search path: /
@@ -128,6 +108,10 @@ PolledWatches::
 
 FsWatches::
 /tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/b.ts:
   {}
 
 FsWatchesRecursive::
@@ -153,18 +137,6 @@ Info 22   [00:00:45.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 23   [00:00:46.000] getCompletionData: Get current token: *
 Info 24   [00:00:47.000] getCompletionData: Is inside comment: *
 Info 25   [00:00:48.000] getCompletionData: Get previous token: *
@@ -176,18 +148,6 @@ Info 30   [00:00:53.000] collectAutoImports: *
 Info 31   [00:00:54.000] getCompletionData: Semantic work: *
 Info 32   [00:00:55.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 33   [00:00:56.000] response:
     {
@@ -248,32 +208,8 @@ Info 34   [00:00:57.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 35   [00:00:58.000] getExportInfoMap: cache hit
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 36   [00:00:59.000] response:
     {
@@ -373,32 +309,8 @@ Info 37   [00:01:00.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 38   [00:01:01.000] getExportInfoMap: cache hit
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 39   [00:01:02.000] response:
     {

@@ -24,12 +24,6 @@ Before request
                 };
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:13.000] Search path: /a/b
 Info 3    [00:00:14.000] For info: /a/b/file1.js :: No config files found.
 Info 4    [00:00:15.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -60,20 +54,18 @@ Info 13   [00:00:29.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/bower_components:
+/a/b/bower_components: *new*
   {"pollingInterval":500}
-/a/b/node_modules:
+/a/b/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/file2.d.ts:
+/a/b/file2.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 13   [00:00:30.000] response:
     {
@@ -89,22 +81,6 @@ Info 14   [00:00:31.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/file2.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 15   [00:00:32.000] FileWatcher:: Close:: WatchInfo: /a/b/file2.d.ts 500 undefined WatchType: Closed Script info
 Info 16   [00:00:33.000] Search path: /a/b
@@ -130,9 +106,9 @@ PolledWatches::
 /a/b/node_modules:
   {"pollingInterval":500}
 
-FsWatches::
-
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/b/file2.d.ts:
+  {}
 
 Info 18   [00:00:43.000] response:
     {
@@ -149,35 +125,7 @@ Info 19   [00:00:44.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 20   [00:00:45.000] response:
     {
@@ -194,20 +142,6 @@ Info 21   [00:00:46.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 22   [00:00:47.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 23   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -242,13 +176,15 @@ PolledWatches::
 /a/b/node_modules:
   {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500} *new*
+
+PolledWatches *deleted*::
+/a/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/file1.js:
+/a/b/file1.js: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 32   [00:01:03.000] response:
     {
@@ -265,39 +201,7 @@ Info 33   [00:01:04.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/file1.js:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/file1.js:
-  {}
-
-FsWatchesRecursive::
 
 Info 34   [00:01:05.000] response:
     {
@@ -360,22 +264,6 @@ Info 35   [00:01:06.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/file1.js:
-  {}
-
-FsWatchesRecursive::
-
 Info 36   [00:01:07.000] FileWatcher:: Close:: WatchInfo: /a/b/file1.js 500 undefined WatchType: Closed Script info
 Info 37   [00:01:08.000] Search path: /a/b
 Info 38   [00:01:09.000] For info: /a/b/file1.js :: No config files found.
@@ -430,9 +318,9 @@ PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
-FsWatches::
-
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/b/file1.js:
+  {}
 
 Info 54   [00:01:33.000] response:
     {
@@ -449,35 +337,7 @@ Info 55   [00:01:34.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 56   [00:01:35.000] response:
     {

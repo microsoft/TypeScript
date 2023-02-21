@@ -38,12 +38,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:19.000] reload projects.
 Info 3    [00:00:20.000] Before ensureProjectForOpenFiles:
 Info 4    [00:00:21.000] Open files: 
@@ -53,12 +47,6 @@ Info 5    [00:00:24.000] Host file extension mappings updated
 Info 6    [00:00:25.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 7    [00:00:26.000] response:
     {
@@ -74,12 +62,6 @@ Info 8    [00:00:27.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 9    [00:00:28.000] Search path: /a/b
 Info 10   [00:00:29.000] For info: /a/b/f1.ts :: Config file name: /a/b/tsconfig.json
@@ -127,17 +109,17 @@ Info 24   [00:00:48.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 24   [00:00:49.000] response:
@@ -156,35 +138,7 @@ Info 25   [00:00:50.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 26   [00:00:51.000] response:
     {
@@ -231,12 +185,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 29   [00:00:19.000] reload projects.
 Info 30   [00:00:20.000] Before ensureProjectForOpenFiles:
 Info 31   [00:00:21.000] Open files: 
@@ -246,12 +194,6 @@ Info 32   [00:00:24.000] Host file extension mappings updated
 Info 33   [00:00:25.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 34   [00:00:26.000] response:
     {
@@ -267,12 +209,6 @@ Info 35   [00:00:27.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 36   [00:00:28.000] Search path: /a/b
 Info 37   [00:00:29.000] For info: /a/b/f1.ts :: Config file name: /a/b/tsconfig.json
@@ -316,17 +252,17 @@ Info 51   [00:00:48.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 51   [00:00:49.000] response:
@@ -345,35 +281,7 @@ Info 52   [00:00:50.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 53   [00:00:51.000] response:
     {
@@ -420,12 +328,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 56   [00:00:19.000] reload projects.
 Info 57   [00:00:20.000] Before ensureProjectForOpenFiles:
 Info 58   [00:00:21.000] Open files: 
@@ -435,12 +337,6 @@ Info 59   [00:00:24.000] Host file extension mappings updated
 Info 60   [00:00:25.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 61   [00:00:26.000] response:
     {
@@ -456,12 +352,6 @@ Info 62   [00:00:27.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 63   [00:00:28.000] Search path: /a/b
 Info 64   [00:00:29.000] For info: /a/b/f1.ts :: Config file name: /a/b/tsconfig.json
@@ -504,17 +394,17 @@ Info 78   [00:00:48.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 78   [00:00:49.000] response:
@@ -533,35 +423,7 @@ Info 79   [00:00:50.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 80   [00:00:51.000] response:
     {
@@ -608,12 +470,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 83   [00:00:19.000] reload projects.
 Info 84   [00:00:20.000] Before ensureProjectForOpenFiles:
 Info 85   [00:00:21.000] Open files: 
@@ -623,12 +479,6 @@ Info 86   [00:00:24.000] Host file extension mappings updated
 Info 87   [00:00:25.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 88   [00:00:26.000] response:
     {
@@ -644,12 +494,6 @@ Info 89   [00:00:27.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 90   [00:00:28.000] Search path: /a/b
 Info 91   [00:00:29.000] For info: /a/b/f1.ts :: Config file name: /a/b/tsconfig.json
@@ -695,16 +539,14 @@ Info 103  [00:00:46.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 103  [00:00:47.000] response:
     {
@@ -722,31 +564,7 @@ Info 104  [00:00:48.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 105  [00:00:49.000] response:
     {
@@ -793,12 +611,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 108  [00:00:19.000] reload projects.
 Info 109  [00:00:20.000] Before ensureProjectForOpenFiles:
 Info 110  [00:00:21.000] Open files: 
@@ -808,12 +620,6 @@ Info 111  [00:00:24.000] Host file extension mappings updated
 Info 112  [00:00:25.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 113  [00:00:26.000] response:
     {
@@ -829,12 +635,6 @@ Info 114  [00:00:27.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 115  [00:00:28.000] Search path: /a/b
 Info 116  [00:00:29.000] For info: /a/b/f1.ts :: Config file name: /a/b/tsconfig.json
@@ -878,17 +678,17 @@ Info 130  [00:00:48.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 130  [00:00:49.000] response:
@@ -907,35 +707,7 @@ Info 131  [00:00:50.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 132  [00:00:51.000] response:
     {

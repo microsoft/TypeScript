@@ -32,12 +32,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:19.000] Search path: /a/b
 Info 3    [00:00:20.000] For info: /a/b/f1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /a/b/tsconfig.json
@@ -85,19 +79,19 @@ Info 18   [00:00:40.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/f2.ts:
+/a/b/f2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 18   [00:00:41.000] response:
@@ -114,22 +108,6 @@ Info 19   [00:00:42.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/f2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 20   [00:00:43.000] FileWatcher:: Close:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
 Info 21   [00:00:44.000] Search path: /a/b
@@ -155,6 +133,10 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/a/b/f2.ts:
+  {}
+
 FsWatchesRecursive::
 /a/b:
   {}
@@ -175,20 +157,6 @@ Info 24   [00:00:55.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 25   [00:00:58.000] DirectoryWatcher:: Triggered with /a/b/f1.js :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info 26   [00:00:59.000] Project: /a/b/tsconfig.json Detected file add/remove of non supported extension: /a/b/f1.js
 Info 27   [00:01:00.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/f1.js :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
@@ -201,20 +169,6 @@ function Foo() { return 10; }
 exports.Foo = Foo;
 
 
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 28   [00:01:01.000] response:
     {

@@ -31,12 +31,6 @@ let x =1;
                 };
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:13.000] FileWatcher:: Added:: WatchInfo: /a/b/file1.js 500 undefined WatchType: Closed Script info
 Info 3    [00:00:14.000] FileWatcher:: Added:: WatchInfo: /a/b/file2.d.ts 500 undefined WatchType: Closed Script info
 Info 4    [00:00:15.000] Starting updateGraphWorker: Project: project1
@@ -57,21 +51,21 @@ Info 9    [00:00:20.000] -----------------------------------------------
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/bower_components:
+/bower_components: *new*
   {"pollingInterval":500}
-/node_modules:
+/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/file1.js:
+/a/b/file1.js: *new*
   {}
-/a/b/file2.d.ts:
+/a/b/file2.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 Info 10   [00:00:21.000] response:
@@ -90,43 +84,7 @@ Info 11   [00:00:22.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/file1.js:
-  {}
-/a/b/file2.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/file1.js:
-  {}
-/a/b/file2.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
 
 Info 12   [00:00:23.000] response:
     {

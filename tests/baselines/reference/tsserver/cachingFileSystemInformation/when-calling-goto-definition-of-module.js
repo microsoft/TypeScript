@@ -28,12 +28,6 @@ export class Bookshelf { }
 {"compilerOptions":{"target":"es6","module":"es6","baseUrl":"./","paths":{"~/*":["*"]}},"exclude":["api","build","node_modules","public","seeds","sql_updates","tests.build"]}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:25.000] Search path: /a/b/controllers/vessels
 Info 3    [00:00:26.000] For info: /a/b/controllers/vessels/client.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /a/b/tsconfig.json
@@ -93,21 +87,21 @@ Info 19   [00:00:47.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/a/lib/lib.es6.d.ts: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/models/vessel.ts:
+/a/b/models/vessel.ts: *new*
   {}
-/a/b/utils/db.ts:
+/a/b/utils/db.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 19   [00:00:48.000] response:
@@ -126,43 +120,7 @@ Info 20   [00:00:49.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/models/vessel.ts:
-  {}
-/a/b/utils/db.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/models/vessel.ts:
-  {}
-/a/b/utils/db.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 21   [00:00:50.000] response:
     {
@@ -197,24 +155,6 @@ Info 27   [00:00:56.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/models/vessel.ts:
-  {}
-/a/b/utils/db.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 28   [00:00:57.000] FileWatcher:: Close:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
 Info 29   [00:00:58.000] Search path: /a/b/models
 Info 30   [00:00:59.000] For info: /a/b/models/vessel.ts :: Config file name: /a/b/tsconfig.json
@@ -239,6 +179,10 @@ FsWatches::
 /a/b/tsconfig.json:
   {}
 /a/b/utils/db.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/models/vessel.ts:
   {}
 
 FsWatchesRecursive::

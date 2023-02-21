@@ -39,22 +39,10 @@ export function foo(): string;
 {"include":["src"],"watchOptions":{"excludeDirectories":["node_modules"]}}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:33.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
 Info 3    [00:00:34.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 4    [00:00:35.000] response:
     {
@@ -70,12 +58,6 @@ Info 5    [00:00:36.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 6    [00:00:37.000] Search path: /user/username/projects/myproject/src
 Info 7    [00:00:38.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
@@ -133,16 +115,14 @@ Info 26   [00:01:01.000] 	FileName: /user/username/projects/myproject/src/main.t
 Info 26   [00:01:02.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
 
 Info 26   [00:01:03.000] response:

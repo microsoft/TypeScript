@@ -37,12 +37,6 @@ export const y = x;
 
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:31.000] Search path: /src/projects/app
 Info 3    [00:00:32.000] For info: /src/projects/app/appB.ts :: Config file name: /src/projects/app/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /src/projects/app/tsconfig.json
@@ -153,27 +147,27 @@ Info 59   [00:01:33.000] 		Projects: /src/projects/app/tsconfig.json
 After request
 
 PolledWatches::
-/src/projects/app/node_modules:
+/src/projects/app/node_modules: *new*
   {"pollingInterval":500}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/src/projects/app/tsconfig.json:
+/src/projects/app/tsconfig.json: *new*
   {}
-/src/projects/app/appa.ts:
+/src/projects/app/appa.ts: *new*
   {}
-/src/projects/common/tsconfig.json:
+/src/projects/common/tsconfig.json: *new*
   {}
-/src/projects/common/moduleb.ts:
+/src/projects/common/moduleb.ts: *new*
   {}
 
 FsWatchesRecursive::
-/src/projects/app:
+/src/projects/app: *new*
   {}
-/src/projects/common:
+/src/projects/common: *new*
   {}
-/src/projects/node_modules:
+/src/projects/node_modules: *new*
   {}
 
 Info 59   [00:01:34.000] response:

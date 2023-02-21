@@ -37,12 +37,6 @@ export const ghijkl = a.abcdef;
 {"references":[{"path":"./a"},{"path":"./b"}],"files":[]}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:19.000] Search path: /a
 Info 3    [00:00:20.000] For info: /a/index.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /a/tsconfig.json
@@ -92,19 +86,19 @@ Info 23   [00:00:48.000] 		Projects: /a/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
+/a/tsconfig.json: *new*
   {}
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 Info 23   [00:00:49.000] response:
@@ -121,22 +115,6 @@ Info 24   [00:00:50.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
 
 Info 25   [00:00:51.000] Loading configured project /tsconfig.json
 Info 26   [00:00:52.000] Config: /tsconfig.json : {
@@ -202,7 +180,7 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules/@types:
   {"pollingInterval":500}
-/b/node_modules/@types:
+/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -210,15 +188,15 @@ FsWatches::
   {}
 /tsconfig.json:
   {}
-/b/tsconfig.json:
+/b/tsconfig.json: *new*
   {}
-/b/index.ts:
+/b/index.ts: *new*
   {}
 
 FsWatchesRecursive::
 /a:
   {}
-/b:
+/b: *new*
   {}
 
 Info 44   [00:01:10.000] response:

@@ -173,6 +173,7 @@ export function applyEdit(sys: BaselineBase["sys"], baseline: BaselineBase["base
     edit(sys);
     baseline.push("Input::");
     sys.diff(baseline, oldSnap);
+    sys.serializeWatches(baseline);
     return sys.snap();
 }
 

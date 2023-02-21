@@ -41,12 +41,6 @@ import {C} from "./c/fc"; console.log(C)
 
 //// [/users/username/projects/b/c] symlink(/users/username/projects/c)
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:37.000] Search path: /users/username/projects/a
 Info 3    [00:00:38.000] For info: /users/username/projects/a/a.ts :: Config file name: /users/username/projects/a/tsconfig.json
 Info 4    [00:00:39.000] Creating configuration project /users/username/projects/a/tsconfig.json
@@ -95,19 +89,19 @@ Info 18   [00:00:58.000] 		Projects: /users/username/projects/a/tsconfig.json
 After request
 
 PolledWatches::
-/users/username/projects/a/node_modules/@types:
+/users/username/projects/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/a/tsconfig.json:
+/users/username/projects/a/tsconfig.json: *new*
   {}
-/users/username/projects/a/c/fc.ts:
+/users/username/projects/a/c/fc.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/a:
+/users/username/projects/a: *new*
   {}
 
 Info 18   [00:00:59.000] response:
@@ -125,22 +119,6 @@ Info 19   [00:01:00.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/users/username/projects/a/c/fc.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
 
 Info 20   [00:01:01.000] Search path: /users/username/projects/b
 Info 21   [00:01:02.000] For info: /users/username/projects/b/b.ts :: Config file name: /users/username/projects/b/tsconfig.json
@@ -197,7 +175,7 @@ After request
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/b/node_modules/@types:
+/users/username/projects/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -207,15 +185,15 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/users/username/projects/b/tsconfig.json:
+/users/username/projects/b/tsconfig.json: *new*
   {}
-/users/username/projects/b/c/fc.ts:
+/users/username/projects/b/c/fc.ts: *new*
   {}
 
 FsWatchesRecursive::
 /users/username/projects/a:
   {}
-/users/username/projects/b:
+/users/username/projects/b: *new*
   {}
 
 Info 35   [00:01:27.000] response:
@@ -233,30 +211,6 @@ Info 36   [00:01:28.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/users/username/projects/a/c/fc.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/b/tsconfig.json:
-  {}
-/users/username/projects/b/c/fc.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
-/users/username/projects/b:
-  {}
 
 Info 37   [00:01:29.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/a/c/fc.ts 500 undefined WatchType: Closed Script info
 Info 38   [00:01:30.000] Search path: /users/username/projects/a/c
@@ -294,6 +248,10 @@ FsWatches::
 /users/username/projects/b/c/fc.ts:
   {}
 
+FsWatches *deleted*::
+/users/username/projects/a/c/fc.ts:
+  {}
+
 FsWatchesRecursive::
 /users/username/projects/a:
   {}
@@ -315,28 +273,6 @@ Info 41   [00:01:46.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/b/tsconfig.json:
-  {}
-/users/username/projects/b/c/fc.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
-/users/username/projects/b:
-  {}
 
 Info 42   [00:01:47.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/b/c/fc.ts 500 undefined WatchType: Closed Script info
 Info 43   [00:01:48.000] Search path: /users/username/projects/b/c
@@ -374,6 +310,10 @@ FsWatches::
 /users/username/projects/b/tsconfig.json:
   {}
 
+FsWatches *deleted*::
+/users/username/projects/b/c/fc.ts:
+  {}
+
 FsWatchesRecursive::
 /users/username/projects/a:
   {}
@@ -397,47 +337,7 @@ Info 46   [00:02:06.000] request:
     }
 Before request
 
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
-/users/username/projects/b:
-  {}
-
 After request
-
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
-/users/username/projects/b:
-  {}
 
 Info 47   [00:02:07.000] response:
     {

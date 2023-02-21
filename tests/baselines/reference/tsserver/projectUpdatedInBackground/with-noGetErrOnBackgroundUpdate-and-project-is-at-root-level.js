@@ -32,12 +32,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"typeRoots":[]}}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:21.000] Search path: /a/b/project
 Info 3    [00:00:22.000] For info: /a/b/project/file1.ts :: Config file name: /a/b/project/tsconfig.json
 Info 4    [00:00:23.000] Creating configuration project /a/b/project/tsconfig.json
@@ -93,19 +87,19 @@ Info 22   [00:00:46.000] 		Projects: /a/b/project/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/project/node_modules:
+/a/b/project/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/project/tsconfig.json:
+/a/b/project/tsconfig.json: *new*
   {}
-/a/b/project/file3.ts:
+/a/b/project/file3.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b/project:
+/a/b/project: *new*
   {}
 
 Info 22   [00:00:47.000] response:
@@ -120,22 +114,6 @@ Before checking timeout queue length (2) and running
 //// [/a/b/project/file3.ts]
 export class c { }export class d {}
 
-
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
 
 Info 27   [00:00:55.000] Running: /a/b/project/tsconfig.json
 Info 28   [00:00:56.000] Starting updateGraphWorker: Project: /a/b/project/tsconfig.json
@@ -163,111 +141,15 @@ Info 35   [00:01:15.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/project/file1.ts"]}}
 After checking timeout queue length (2) and running
 
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
-
 Checking timeout queue length: 0
-
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
 
 Before running timeout callbacks
 //// [/a/b/node_modules/file2.d.ts]
 export class a { }
 
 
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
-
 After running timeout callbacks
-
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
 
 Before running timeout callbacks
 
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
-
 After running timeout callbacks
-
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}

@@ -45,12 +45,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:49.000] Search path: /user/username/projects/myproject/app/src/program
 Info 3    [00:00:50.000] For info: /user/username/projects/myproject/app/src/program/index.ts :: Config file name: /user/username/projects/myproject/app/src/program/tsconfig.json
 Info 4    [00:00:51.000] Creating configuration project /user/username/projects/myproject/app/src/program/tsconfig.json
@@ -147,43 +141,43 @@ Info 44   [00:01:39.000] 		Projects: /user/username/projects/myproject/app/src/p
 After request
 
 PolledWatches::
-/user/username/projects/myproject/app/src/program/node_modules:
+/user/username/projects/myproject/app/src/program/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules:
+/user/username/projects/myproject/app/src/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules:
+/user/username/projects/myproject/app/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/app/src/program/node_modules/@types:
+/user/username/projects/myproject/app/src/program/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules/@types:
+/user/username/projects/myproject/app/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules/@types:
+/user/username/projects/myproject/app/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/app/src/program/tsconfig.json:
+/user/username/projects/myproject/app/src/program/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/app/src/program/bar.ts:
+/user/username/projects/myproject/app/src/program/bar.ts: *new*
   {}
-/user/username/projects/myproject/shared/src/library/tsconfig.json:
+/user/username/projects/myproject/shared/src/library/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/shared/src/library/index.ts:
+/user/username/projects/myproject/shared/src/library/index.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/shared/package.json:
+/user/username/projects/myproject/shared/package.json: *new*
   {}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/app/src/program:
+/user/username/projects/myproject/app/src/program: *new*
   {}
-/user/username/projects/myproject/shared/src/library:
+/user/username/projects/myproject/shared/src/library: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
 
 Info 44   [00:01:40.000] response:
@@ -208,89 +202,9 @@ Info 45   [00:01:41.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/myproject/app/src/program/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/program/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app/src/program/tsconfig.json:
-  {}
-/user/username/projects/myproject/app/src/program/bar.ts:
-  {}
-/user/username/projects/myproject/shared/src/library/tsconfig.json:
-  {}
-/user/username/projects/myproject/shared/src/library/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/shared/package.json:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/app/src/program:
-  {}
-/user/username/projects/myproject/shared/src/library:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 46   [00:01:42.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 47   [00:01:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 After request
-
-PolledWatches::
-/user/username/projects/myproject/app/src/program/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/program/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app/src/program/tsconfig.json:
-  {}
-/user/username/projects/myproject/app/src/program/bar.ts:
-  {}
-/user/username/projects/myproject/shared/src/library/tsconfig.json:
-  {}
-/user/username/projects/myproject/shared/src/library/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/shared/package.json:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/app/src/program:
-  {}
-/user/username/projects/myproject/shared/src/library:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 Info 48   [00:01:44.000] response:
     {

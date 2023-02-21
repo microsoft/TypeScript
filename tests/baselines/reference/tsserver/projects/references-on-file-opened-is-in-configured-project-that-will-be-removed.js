@@ -38,12 +38,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:37.000] Search path: /user/username/projects/myproject/playground
 Info 3    [00:00:38.000] For info: /user/username/projects/myproject/playground/tests.ts :: Config file name: /user/username/projects/myproject/playground/tsconfig.json
 Info 4    [00:00:39.000] Creating configuration project /user/username/projects/myproject/playground/tsconfig.json
@@ -97,23 +91,23 @@ Info 21   [00:01:01.000] 		Projects: /user/username/projects/myproject/playgroun
 After request
 
 PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
+/user/username/projects/myproject/playground/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/playground/tsconfig.json:
+/user/username/projects/myproject/playground/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts: *new*
   {}
-/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/playground:
+/user/username/projects/myproject/playground: *new*
   {}
 
 Info 21   [00:01:02.000] response:
@@ -130,26 +124,6 @@ Info 22   [00:01:03.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/playground/tsconfig.json:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/playground:
-  {}
 
 Info 23   [00:01:04.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/playground/tests.ts 500 undefined WatchType: Closed Script info
 Info 24   [00:01:05.000] Project '/user/username/projects/myproject/playground/tsconfig.json' (Configured)
@@ -174,7 +148,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/playground/tests.ts:
+/user/username/projects/myproject/playground/tests.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -195,28 +169,6 @@ Info 25   [00:01:10.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/playground/tsconfig.json:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/playground/tests.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/playground:
-  {}
 
 Info 26   [00:01:11.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts 500 undefined WatchType: Closed Script info
 Info 27   [00:01:12.000] Search path: /user/username/projects/myproject/playground/tsconfig-json/tests
@@ -294,7 +246,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
+/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -302,11 +254,23 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
+/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json: *new*
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/playground/tsconfig.json:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
+  {}
+/user/username/projects/myproject/playground/tests.ts:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/playground/tsconfig-json/src:
+/user/username/projects/myproject/playground/tsconfig-json/src: *new*
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/playground:
   {}
 
 Info 57   [00:01:48.000] response:
@@ -325,26 +289,6 @@ Info 58   [00:01:49.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/playground/tsconfig-json/src:
-  {}
 
 Info 59   [00:01:50.000] Before ensureProjectForOpenFiles:
 Info 60   [00:01:51.000] Project '/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json' (Configured)
@@ -406,21 +350,21 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/tests/tsconfig.json:
+/user/username/projects/myproject/playground/tsconfig-json/tests/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/playground/tsconfig-json/tests/jsconfig.json:
+/user/username/projects/myproject/playground/tsconfig-json/tests/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/playground/tsconfig-json/jsconfig.json:
+/user/username/projects/myproject/playground/tsconfig-json/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/playground/jsconfig.json:
+/user/username/projects/myproject/playground/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
+/user/username/projects/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/playground/tsconfig-json/tests/node_modules/@types:
+/user/username/projects/myproject/playground/tsconfig-json/tests/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/tests/spec.d.ts:
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.d.ts: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -430,7 +374,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
   {}
-/user/username/projects/myproject/playground/tsconfig.json:
+/user/username/projects/myproject/playground/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

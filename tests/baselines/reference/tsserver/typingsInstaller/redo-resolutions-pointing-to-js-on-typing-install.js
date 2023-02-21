@@ -8,12 +8,6 @@ Creating project service
 module.exports = 0
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:22.000] Search path: /user/username/projects/a/b
 Info 2    [00:00:23.000] For info: /user/username/projects/a/b/app.js :: No config files found.
 Info 3    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/b/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -63,31 +57,29 @@ Before checking timeout queue length (2) and running
 
 
 PolledWatches::
-/user/username/projects/a/b/tsconfig.json:
+/user/username/projects/a/b/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/a/b/jsconfig.json:
+/user/username/projects/a/b/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/a/tsconfig.json:
+/user/username/projects/a/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/a/jsconfig.json:
+/user/username/projects/a/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/a/b/node_modules:
+/user/username/projects/a/b/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/a/node_modules:
+/user/username/projects/a/node_modules: *new*
   {"pollingInterval":500}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/user/username/projects/a/b/node_modules/@types:
+/user/username/projects/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/a/node_modules/@types:
+/user/username/projects/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/a/b/bower_components:
+/user/username/projects/a/b/bower_components: *new*
   {"pollingInterval":500}
-
-FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/node_modules:
+/user/username/projects/node_modules: *new*
   {}
 
 Info 25   [00:01:04.000] Running: /dev/null/inferredProject1*
@@ -134,10 +126,8 @@ PolledWatches::
 /user/username/projects/a/b/bower_components:
   {"pollingInterval":500}
 
-FsWatches::
-
 FsWatchesRecursive::
 /user/username/projects/node_modules:
   {}
-/user/username/projects/a/cache/node_modules:
+/user/username/projects/a/cache/node_modules: *new*
   {}

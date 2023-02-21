@@ -26,12 +26,6 @@ type T = typeof import("./a").a;
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:17.000] Search path: /project
 Info 3    [00:00:18.000] For info: /project/a.ts :: Config file name: /project/tsconfig.json
 Info 4    [00:00:19.000] Creating configuration project /project/tsconfig.json
@@ -89,23 +83,23 @@ Info 20   [00:00:40.000] 		Projects: /project/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/project/node_modules/@types:
+/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/project/tsconfig.json:
+/project/tsconfig.json: *new*
   {}
-/project/b.ts:
+/project/b.ts: *new*
   {}
-/project/c.ts:
+/project/c.ts: *new*
   {}
-/project/d.ts:
+/project/d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/project:
+/project: *new*
   {}
 
 Info 20   [00:00:41.000] response:
@@ -122,26 +116,6 @@ Info 21   [00:00:42.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/project/b.ts:
-  {}
-/project/c.ts:
-  {}
-/project/d.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
 
 Info 22   [00:00:43.000] FileWatcher:: Close:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
 Info 23   [00:00:44.000] Search path: /project
@@ -171,6 +145,10 @@ FsWatches::
 /project/d.ts:
   {}
 
+FsWatches *deleted*::
+/project/b.ts:
+  {}
+
 FsWatchesRecursive::
 /project:
   {}
@@ -189,24 +167,6 @@ Info 26   [00:00:55.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/project/c.ts:
-  {}
-/project/d.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
 
 Info 27   [00:00:56.000] FileWatcher:: Close:: WatchInfo: /project/c.ts 500 undefined WatchType: Closed Script info
 Info 28   [00:00:57.000] Search path: /project
@@ -236,6 +196,10 @@ FsWatches::
 /project/d.ts:
   {}
 
+FsWatches *deleted*::
+/project/c.ts:
+  {}
+
 FsWatchesRecursive::
 /project:
   {}
@@ -254,22 +218,6 @@ Info 31   [00:01:10.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/project/d.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
 
 Info 32   [00:01:11.000] FileWatcher:: Close:: WatchInfo: /project/d.ts 500 undefined WatchType: Closed Script info
 Info 33   [00:01:12.000] Search path: /project
@@ -299,6 +247,10 @@ FsWatches::
 /project/tsconfig.json:
   {}
 
+FsWatches *deleted*::
+/project/d.ts:
+  {}
+
 FsWatchesRecursive::
 /project:
   {}
@@ -320,37 +272,9 @@ Info 36   [00:01:27.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
-
 Info 37   [00:01:28.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":5,"success":true,"performanceData":{"updateGraphDurationMs":*}}
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
 
 Info 38   [00:01:29.000] response:
     {
@@ -367,35 +291,7 @@ Info 39   [00:01:30.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
 
 Info 40   [00:01:31.000] response:
     {

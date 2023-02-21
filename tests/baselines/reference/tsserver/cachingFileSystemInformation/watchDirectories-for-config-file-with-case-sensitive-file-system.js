@@ -23,12 +23,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"strict":true,"strictNullChecks":true,"target":"es2016","module":"commonjs","moduleResolution":"node","sourceMap":true,"noEmitOnError":true,"experimentalDecorators":true,"emitDecoratorMetadata":true,"types":["node","jest"],"noUnusedLocals":true,"outDir":"./compiled","typeRoots":["types","node_modules/@types"],"baseUrl":".","paths":{"*":["types/*"]}},"include":["src/**/*"],"exclude":["node_modules","compiled"]}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:34.000] Search path: /Users/someuser/work/applications/frontend/src/app/utils
 Info 2    [00:00:35.000] For info: /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts :: Config file name: /Users/someuser/work/applications/frontend/tsconfig.json
 Info 3    [00:00:36.000] Creating configuration project /Users/someuser/work/applications/frontend/tsconfig.json
@@ -112,23 +106,23 @@ export class Cookie { }
 
 
 PolledWatches::
-/Users/someuser/work/applications/frontend/types:
+/Users/someuser/work/applications/frontend/types: *new*
   {"pollingInterval":500}
-/Users/someuser/work/applications/frontend/node_modules:
+/Users/someuser/work/applications/frontend/node_modules: *new*
   {"pollingInterval":500}
-/Users/someuser/work/applications/node_modules:
+/Users/someuser/work/applications/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/Users/someuser/work/applications/frontend/tsconfig.json:
+/Users/someuser/work/applications/frontend/tsconfig.json: *new*
   {}
-/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts:
+/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts: *new*
   {}
-/a/lib/lib.es2016.full.d.ts:
+/a/lib/lib.es2016.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/Users/someuser/work/applications/frontend/src:
+/Users/someuser/work/applications/frontend/src: *new*
   {}
 
 Info 25   [00:01:06.000] Running: /Users/someuser/work/applications/frontend/tsconfig.json
@@ -187,7 +181,7 @@ FsWatches::
   {}
 /a/lib/lib.es2016.full.d.ts:
   {}
-/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts:
+/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts: *new*
   {}
 
 FsWatchesRecursive::

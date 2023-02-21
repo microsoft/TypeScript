@@ -362,12 +362,6 @@ declare namespace container {
 ======================================================================
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:01:12.000] Search path: /user/username/projects/container/compositeExec
 Info 3    [00:01:13.000] For info: /user/username/projects/container/compositeExec/index.ts :: Config file name: /user/username/projects/container/compositeExec/tsconfig.json
 Info 4    [00:01:14.000] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
@@ -446,24 +440,22 @@ Info 26   [00:01:44.000] 		Projects: /user/username/projects/container/composite
 After request
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
+/user/username/projects/container/compositeexec/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
+/user/username/projects/container/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
+/user/username/projects/container/compositeexec/tsconfig.json: *new*
   {}
-/user/username/projects/container/lib/tsconfig.json:
+/user/username/projects/container/lib/tsconfig.json: *new*
   {}
-/user/username/projects/container/lib/index.ts:
+/user/username/projects/container/lib/index.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/container/tsconfig.json:
+/user/username/projects/container/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 26   [00:01:45.000] response:
     {
@@ -481,26 +473,6 @@ Info 27   [00:01:46.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 28   [00:01:47.000] Search path: /user/username/projects/container/lib
 Info 29   [00:01:48.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
@@ -595,9 +567,9 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
+/user/username/projects/container/lib/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
+/user/username/projects/container/exec/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -611,12 +583,10 @@ FsWatches::
   {}
 /user/username/projects/container/tsconfig.json:
   {}
-/user/username/projects/container/exec/tsconfig.json:
+/user/username/projects/container/exec/tsconfig.json: *new*
   {}
-/user/username/projects/container/exec/index.ts:
+/user/username/projects/container/exec/index.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 62   [00:02:21.000] response:
     {

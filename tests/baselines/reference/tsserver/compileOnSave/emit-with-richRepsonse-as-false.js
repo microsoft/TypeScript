@@ -32,12 +32,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:25.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:26.000] For info: /user/username/projects/myproject/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -87,19 +81,19 @@ Info 18   [00:00:46.000] 		Projects: /user/username/projects/myproject/tsconfig.
 After request
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/file2.ts:
+/user/username/projects/myproject/file2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 Info 18   [00:00:47.000] response:
@@ -116,22 +110,6 @@ Info 19   [00:00:48.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 Info 20   [00:00:49.000] Before ensureProjectForOpenFiles:
 Info 21   [00:00:50.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -150,22 +128,6 @@ Info 22   [00:01:00.000] Open files:
 Info 22   [00:01:01.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
 Info 22   [00:01:02.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 Info 22   [00:01:03.000] response:
     {
@@ -193,22 +155,6 @@ Info 23   [00:01:04.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 24   [00:01:08.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/test :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 25   [00:01:09.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 26   [00:01:10.000] Scheduled: *ensureProjectForOpenFiles*
@@ -230,22 +176,6 @@ declare const x = 1;
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 35   [00:01:23.000] response:
     {
       "response": true,
@@ -262,22 +192,6 @@ Info 36   [00:01:24.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 Info 37   [00:01:25.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test/file1.d.ts 500 undefined WatchType: Closed Script info
 Info 38   [00:01:26.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -313,7 +227,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/test/file1.d.ts:
+/user/username/projects/myproject/test/file1.d.ts: *new*
   {}
 
 FsWatchesRecursive::

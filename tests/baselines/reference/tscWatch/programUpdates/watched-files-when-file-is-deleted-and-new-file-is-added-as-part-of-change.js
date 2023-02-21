@@ -44,19 +44,19 @@ Shape signatures in builder refreshed for::
 /home/username/project/src/file1.ts (used version)
 
 PolledWatches::
-/home/username/project/node_modules/@types:
+/home/username/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/home/username/project/tsconfig.json:
+/home/username/project/tsconfig.json: *new*
   {}
-/home/username/project/src/file1.ts:
+/home/username/project/src/file1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/home/username/project:
+/home/username/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -105,7 +105,11 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/home/username/project/src/file2.ts:
+/home/username/project/src/file2.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/home/username/project/src/file1.ts:
   {}
 
 FsWatchesRecursive::

@@ -40,12 +40,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:21.000] Search path: /a/b
 Info 3    [00:00:22.000] For info: /a/b/moduleFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:23.000] Creating configuration project /a/b/tsconfig.json
@@ -100,21 +94,21 @@ Info 19   [00:00:43.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/file1consumer1.ts:
+/a/b/file1consumer1.ts: *new*
   {}
-/a/b/file1consumer2.ts:
+/a/b/file1consumer2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 19   [00:00:44.000] response:
@@ -133,43 +127,7 @@ Info 20   [00:00:45.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 21   [00:00:46.000] response:
     {

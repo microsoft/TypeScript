@@ -40,12 +40,6 @@ export class X {}
 export class A {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:40.000] Search path: /user/username/projects/myproject/c
 Info 2    [00:00:41.000] For info: /user/username/projects/myproject/c/index.ts :: Config file name: /user/username/projects/myproject/c/tsconfig.json
 Info 3    [00:00:42.000] Creating configuration project /user/username/projects/myproject/c/tsconfig.json
@@ -172,37 +166,37 @@ export class A {}
 
 
 PolledWatches::
-/user/username/projects/myproject/c/node_modules/@types:
+/user/username/projects/myproject/c/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
+/user/username/projects/myproject/c/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/b/tsconfig.json:
+/user/username/projects/myproject/b/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/a/tsconfig.json:
+/user/username/projects/myproject/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/b/index.ts:
+/user/username/projects/myproject/b/index.ts: *new*
   {}
-/user/username/projects/myproject/a/index.ts:
+/user/username/projects/myproject/a/index.ts: *new*
   {}
-/user/username/projects/myproject/refs/a.d.ts:
+/user/username/projects/myproject/refs/a.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/c:
+/user/username/projects/myproject/c: *new*
   {}
-/user/username/projects/myproject/b:
+/user/username/projects/myproject/b: *new*
   {}
-/user/username/projects/myproject/a:
+/user/username/projects/myproject/a: *new*
   {}
-/user/username/projects/myproject/refs:
+/user/username/projects/myproject/refs: *new*
   {}
 
 Info 43   [00:01:35.000] Running: /user/username/projects/myproject/c/tsconfig.json
@@ -298,7 +292,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/nrefs/a.d.ts:
+/user/username/projects/myproject/nrefs/a.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -310,7 +304,7 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/refs:
   {}
-/user/username/projects/myproject/nrefs:
+/user/username/projects/myproject/nrefs: *new*
   {}
 
 Info 58   [00:02:05.000] FileWatcher:: Triggered with /user/username/projects/myproject/b/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
@@ -321,44 +315,6 @@ Before checking timeout queue length (2) and running
 //// [/user/username/projects/myproject/b/tsconfig.json]
 {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
 
-
-PolledWatches::
-/user/username/projects/myproject/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/b/index.ts:
-  {}
-/user/username/projects/myproject/a/index.ts:
-  {}
-/user/username/projects/myproject/refs/a.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/nrefs/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/c:
-  {}
-/user/username/projects/myproject/b:
-  {}
-/user/username/projects/myproject/a:
-  {}
-/user/username/projects/myproject/refs:
-  {}
-/user/username/projects/myproject/nrefs:
-  {}
 
 Info 62   [00:02:09.000] Running: /user/username/projects/myproject/c/tsconfig.json
 Info 63   [00:02:10.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
@@ -463,4 +419,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/a:
   {}
 /user/username/projects/myproject/refs:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/nrefs:
   {}

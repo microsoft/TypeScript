@@ -16,12 +16,6 @@ export function bar() { };
 import * as T from './moduleFile'; T.bar();
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:13.000] Search path: /a/b
 Info 3    [00:00:14.000] For info: /a/b/file1.ts :: No config files found.
 Info 4    [00:00:15.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -52,16 +46,14 @@ Info 13   [00:00:29.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/modulefile.ts:
+/a/b/modulefile.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 13   [00:00:30.000] response:
     {
@@ -78,31 +70,7 @@ Info 14   [00:00:31.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/modulefile.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/modulefile.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 15   [00:00:32.000] response:
     {
@@ -126,9 +94,9 @@ PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
-FsWatches::
-
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/b/modulefile.ts:
+  {}
 
 Info 21   [00:00:41.000] Running: /dev/null/inferredProject1*
 Info 22   [00:00:42.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -170,14 +138,12 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/node_modules/@types:
   {"pollingInterval":500}
-/a/b/modulefile:
+/a/b/modulefile: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b:
+/a/b: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 34   [00:01:06.000] request:
     {
@@ -190,35 +156,7 @@ Info 34   [00:01:06.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b:
-  {}
-
-FsWatchesRecursive::
 
 Info 35   [00:01:07.000] response:
     {
@@ -251,38 +189,10 @@ export function bar() { };
 
 //// [/a/b/moduleFile1.ts] deleted
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b:
-  {}
-
-FsWatchesRecursive::
-
 Info 42   [00:01:17.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 43   [00:01:18.000] Scheduled: /dev/null/inferredProject1*
 Info 44   [00:01:19.000] Scheduled: *ensureProjectForOpenFiles*
 After running timeout callbacks
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b:
-  {}
-
-FsWatchesRecursive::
 
 Info 45   [00:01:20.000] request:
     {
@@ -300,55 +210,13 @@ Info 45   [00:01:20.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b:
-  {}
-
-FsWatchesRecursive::
 
 Info 46   [00:01:21.000] response:
     {
       "responseRequired": false
     }
 Before running timeout callbacks
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b:
-  {}
-
-FsWatchesRecursive::
 
 Info 47   [00:01:22.000] Running: /dev/null/inferredProject1*
 Info 48   [00:01:23.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -395,11 +263,17 @@ PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/a/b/modulefile:
+  {"pollingInterval":500}
+
 FsWatches::
-/a/b/modulefile.ts:
+/a/b/modulefile.ts: *new*
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/b:
+  {}
 
 Info 61   [00:01:48.000] request:
     {
@@ -412,31 +286,7 @@ Info 61   [00:01:48.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/modulefile.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/modulefile.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 62   [00:01:49.000] response:
     {

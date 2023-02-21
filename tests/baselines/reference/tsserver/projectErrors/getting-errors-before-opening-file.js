@@ -29,19 +29,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 2    [00:00:17.000] response:
     {
@@ -49,18 +37,6 @@ Info 2    [00:00:17.000] response:
     }
 Before checking timeout queue length (1) and running
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 3    [00:00:18.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
 After checking timeout queue length (1) and running
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::

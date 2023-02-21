@@ -32,12 +32,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:23.000] Search path: /a/username/project/src
 Info 3    [00:00:24.000] For info: /a/username/project/src/index.ts :: Config file name: /a/username/project/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /a/username/project/tsconfig.json
@@ -92,22 +86,20 @@ Info 22   [00:00:48.000] 		Projects: /a/username/project/tsconfig.json
 After request
 
 PolledWatches::
-/a/username/project:
+/a/username/project: *new*
   {"pollingInterval":500}
-/a/username/project/src:
+/a/username/project/src: *new*
   {"pollingInterval":500}
-/a/username/project/node_modules/@types:
+/a/username/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json:
+/a/username/project/tsconfig.json: *new*
   {}
-/a/username/project/src/file1.ts:
+/a/username/project/src/file1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 22   [00:00:49.000] response:
     {
@@ -126,43 +118,7 @@ Info 23   [00:00:50.000] request:
     }
 Before request
 
-PolledWatches::
-/a/username/project:
-  {"pollingInterval":500}
-/a/username/project/src:
-  {"pollingInterval":500}
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/username/project:
-  {"pollingInterval":500}
-/a/username/project/src:
-  {"pollingInterval":500}
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 24   [00:00:51.000] response:
     {
@@ -192,24 +148,6 @@ Before running timeout callbacks
 //// [/a/username/project/src/file2.ts]
 
 
-
-PolledWatches::
-/a/username/project:
-  {"pollingInterval":500}
-/a/username/project/src:
-  {"pollingInterval":500}
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 32   [00:01:01.000] Running: /a/username/project/tsconfig.json
 Info 33   [00:01:02.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
@@ -252,10 +190,8 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/username/project/src/file2.ts:
+/a/username/project/src/file2.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 40   [00:01:09.000] request:
     {
@@ -270,47 +206,7 @@ Info 40   [00:01:09.000] request:
     }
 Before request
 
-PolledWatches::
-/a/username/project:
-  {"pollingInterval":500}
-/a/username/project/src:
-  {"pollingInterval":500}
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/username/project/src/file2.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/username/project:
-  {"pollingInterval":500}
-/a/username/project/src:
-  {"pollingInterval":500}
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/username/project/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/username/project/src/file2.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 41   [00:01:10.000] response:
     {

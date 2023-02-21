@@ -31,12 +31,6 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:17.000] Search path: /a/b
 Info 3    [00:00:18.000] For info: /a/b/app.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:19.000] Creating configuration project /a/b/tsconfig.json
@@ -86,17 +80,17 @@ Info 21   [00:00:41.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 21   [00:00:42.000] response:
@@ -115,20 +109,6 @@ Before running timeout callbacks
                 }
             }
 
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 26   [00:00:50.000] Running: /a/b/tsconfig.json
 Info 27   [00:00:51.000] Reloading configured project /a/b/tsconfig.json
@@ -171,20 +151,6 @@ Info 39   [00:01:15.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/app.ts"]}}
 After running timeout callbacks
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 40   [00:01:19.000] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info 41   [00:01:20.000] Scheduled: /a/b/tsconfig.json
 Info 42   [00:01:21.000] Scheduled: *ensureProjectForOpenFiles*
@@ -195,20 +161,6 @@ Before running timeout callbacks
                 "compilerOptions": {}
             }
 
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 44   [00:01:23.000] Reloading configured project /a/b/tsconfig.json
 Info 45   [00:01:24.000] event:
@@ -252,17 +204,3 @@ Info 57   [00:01:48.000] got projects updated in background, updating diagnostic
 Info 58   [00:01:49.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/app.ts"]}}
 After running timeout callbacks
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}

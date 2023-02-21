@@ -16,12 +16,6 @@ Before request
                 x === "string";
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:09.000] Search path: /a
 Info 3    [00:00:10.000] For info: /a/jsFile.js :: No config files found.
 Info 4    [00:00:11.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -48,18 +42,14 @@ Info 12   [00:00:24.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/bower_components:
+/a/bower_components: *new*
   {"pollingInterval":500}
-/a/node_modules:
+/a/node_modules: *new*
   {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 12   [00:00:25.000] response:
     {
@@ -76,35 +66,7 @@ Info 13   [00:00:26.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 14   [00:00:27.000] response:
     {

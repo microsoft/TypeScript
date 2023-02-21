@@ -42,12 +42,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:33.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 3    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 4    [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -71,12 +65,6 @@ Info 7    [00:00:42.000] 	FileName: /user/username/projects/myproject/a.ts Proje
 Info 7    [00:00:43.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 7    [00:00:44.000] response:
     {
       "responseRequired": false
@@ -92,24 +80,12 @@ Info 8    [00:00:45.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 9    [00:00:46.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 9    [00:00:47.000] 	Files (2)
 
 Info 9    [00:00:48.000] -----------------------------------------------
 Info 9    [00:00:49.000] Open files: 
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 9    [00:00:50.000] response:
     {
@@ -125,12 +101,6 @@ Info 10   [00:00:51.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 11   [00:00:52.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 12   [00:00:53.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -155,12 +125,6 @@ Info 16   [00:01:01.000] 	FileName: /user/username/projects/myproject/c.ts Proje
 Info 16   [00:01:02.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 16   [00:01:03.000] response:
     {
       "responseRequired": false
@@ -175,12 +139,6 @@ Info 17   [00:01:04.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 18   [00:01:05.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 19   [00:01:06.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -209,12 +167,6 @@ Info 23   [00:01:15.000] 		Projects: /dev/null/inferredProject1*
 Info 23   [00:01:16.000] 	FileName: /user/username/projects/myproject/b.ts ProjectRootPath: undefined
 Info 23   [00:01:17.000] 		Projects: /dev/null/inferredProject1*
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 23   [00:01:18.000] response:
     {

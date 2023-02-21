@@ -38,12 +38,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:39.000] Search path: /user/username/projects/myproject/mocks
 Info 3    [00:00:40.000] For info: /user/username/projects/myproject/mocks/cssMock.js :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:41.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -104,21 +98,21 @@ Info 23   [00:01:05.000] 		Projects: /user/username/projects/myproject/tsconfig.
 After request
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js:
+/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js: *new*
   {}
-/user/username/projects/myproject/apps/editor/src/src.js:
+/user/username/projects/myproject/apps/editor/src/src.js: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 Info 23   [00:01:06.000] response:
@@ -135,24 +129,6 @@ Info 24   [00:01:07.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js:
-  {}
-/user/username/projects/myproject/apps/editor/src/src.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 Info 25   [00:01:08.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/mocks/cssMock.js 500 undefined WatchType: Closed Script info
 Info 26   [00:01:09.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -175,7 +151,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/mocks/cssmock.js:
+/user/username/projects/myproject/mocks/cssmock.js: *new*
   {}
 
 FsWatchesRecursive::
@@ -196,26 +172,6 @@ Info 27   [00:01:14.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js:
-  {}
-/user/username/projects/myproject/apps/editor/src/src.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/mocks/cssmock.js:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 Info 28   [00:01:15.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js 500 undefined WatchType: Closed Script info
 Info 29   [00:01:16.000] Search path: /user/username/projects/myproject/apps/editor/scripts
@@ -350,27 +306,27 @@ After request
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/apps/editor/node_modules/@types:
+/user/username/projects/myproject/apps/editor/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/apps/node_modules/@types:
+/user/username/projects/myproject/apps/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/apps/editor/scripts/tsconfig.json:
+/user/username/projects/myproject/apps/editor/scripts/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/apps/editor/scripts/jsconfig.json:
+/user/username/projects/myproject/apps/editor/scripts/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/apps/editor/jsconfig.json:
+/user/username/projects/myproject/apps/editor/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/apps/tsconfig.json:
+/user/username/projects/myproject/apps/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/apps/jsconfig.json:
+/user/username/projects/myproject/apps/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
+/user/username/projects/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/apps/editor/scripts/node_modules/@types:
+/user/username/projects/myproject/apps/editor/scripts/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/apps/editor/scripts/bower_components:
+/user/username/projects/myproject/apps/editor/scripts/bower_components: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/apps/editor/scripts/node_modules:
+/user/username/projects/myproject/apps/editor/scripts/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -380,11 +336,21 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/apps/editor/tsconfig.json:
+/user/username/projects/myproject/apps/editor/tsconfig.json: *new*
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js:
+  {}
+/user/username/projects/myproject/mocks/cssmock.js:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/apps/editor/src:
+/user/username/projects/myproject/apps/editor/src: *new*
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject:
   {}
 
 Info 83   [00:02:34.000] response:

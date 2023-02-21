@@ -19,12 +19,6 @@ Before request
                 x === "string";
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:11.000] Search path: /a
 Info 3    [00:00:12.000] For info: /a/jsFile.js :: Config file name: /a/jsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /a/jsconfig.json
@@ -68,21 +62,21 @@ Info 17   [00:00:31.000] 		Projects: /a/jsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/bower_components:
+/a/bower_components: *new*
   {"pollingInterval":500}
-/a/node_modules:
+/a/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/jsconfig.json:
+/a/jsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 Info 17   [00:00:32.000] response:
@@ -100,43 +94,7 @@ Info 18   [00:00:33.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/jsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/jsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
 
 Info 19   [00:00:34.000] response:
     {

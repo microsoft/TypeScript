@@ -33,12 +33,6 @@ foo
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:31.000] Search path: /a
 Info 3    [00:00:32.000] For info: /a/user.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /tsconfig.json
@@ -97,29 +91,29 @@ Info 26   [00:01:00.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-/b/user.ts:
+/b/user.ts: *new*
   {}
-/a/node_modules/foo/package.json:
+/a/node_modules/foo/package.json: *new*
   {}
-/b/node_modules/foo/package.json:
+/b/node_modules/foo/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
-/a/node_modules:
+/a/node_modules: *new*
   {}
-/b/node_modules:
+/b/node_modules: *new*
   {}
-/a:
+/a: *new*
   {}
-/b:
+/b: *new*
   {}
 
 Info 26   [00:01:01.000] response:
@@ -136,32 +130,6 @@ Info 27   [00:01:02.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/b/user.ts:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
 
 Info 28   [00:01:03.000] FileWatcher:: Close:: WatchInfo: /b/user.ts 500 undefined WatchType: Closed Script info
 Info 29   [00:01:04.000] Search path: /b
@@ -187,6 +155,10 @@ FsWatches::
 /a/node_modules/foo/package.json:
   {}
 /b/node_modules/foo/package.json:
+  {}
+
+FsWatches *deleted*::
+/b/user.ts:
   {}
 
 FsWatchesRecursive::
@@ -223,55 +195,7 @@ Info 32   [00:01:15.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
 
 Info 33   [00:01:16.000] response:
     {
@@ -319,55 +243,7 @@ Info 34   [00:01:17.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a/node_modules/foo/package.json:
-  {}
-/b/node_modules/foo/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/a/node_modules:
-  {}
-/b/node_modules:
-  {}
-/a:
-  {}
-/b:
-  {}
 
 Info 35   [00:01:18.000] response:
     {

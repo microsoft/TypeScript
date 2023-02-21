@@ -10,12 +10,6 @@ Creating project service
 {"name":"test","dependencies":{"jquery":"^3.1.0"}}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:14.000] Search path: /a/b
 Info 2    [00:00:15.000] For info: /a/b/app.js :: Config file name: /a/b/tsconfig.json
 Info 3    [00:00:16.000] Creating configuration project /a/b/tsconfig.json
@@ -63,23 +57,23 @@ declare const $: { x: number }
 
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/bower_components:
+/a/b/bower_components: *new*
   {"pollingInterval":500}
-/a/b/node_modules:
+/a/b/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/package.json:
+/a/b/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 18   [00:00:49.000] Running: /a/b/tsconfig.json
@@ -115,23 +109,3 @@ Info 27   [00:01:07.000] Open files:
 Info 27   [00:01:08.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info 27   [00:01:09.000] 		Projects: /a/b/tsconfig.json
 After checking timeout queue length (2) and running
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/bower_components:
-  {"pollingInterval":500}
-/a/b/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}

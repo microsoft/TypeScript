@@ -34,12 +34,6 @@ import a = require("../a");
 export const ghijkl = a.abcdef;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:17.000] Search path: /a
 Info 3    [00:00:18.000] For info: /a/index.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:19.000] Creating configuration project /a/tsconfig.json
@@ -81,17 +75,17 @@ Info 19   [00:00:39.000] 		Projects: /a/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 Info 19   [00:00:40.000] response:
@@ -108,20 +102,6 @@ Info 20   [00:00:41.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
 
 Info 21   [00:00:42.000] Search path: /b
 Info 22   [00:00:43.000] For info: /b/index.ts :: Config file name: /b/tsconfig.json
@@ -183,19 +163,19 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules/@types:
   {"pollingInterval":500}
-/b/node_modules/@types:
+/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /a/tsconfig.json:
   {}
-/b/tsconfig.json:
+/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
 /a:
   {}
-/b:
+/b: *new*
   {}
 
 Info 38   [00:01:10.000] response:
@@ -214,47 +194,7 @@ Info 39   [00:01:11.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/b:
-  {}
 
 Info 40   [00:01:12.000] response:
     {

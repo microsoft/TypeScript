@@ -45,12 +45,6 @@ interface Array<T> { length: number; [n: number]: T; }
 export const something = 10;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:41.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 3    [00:00:42.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: false Elapsed:: *ms
 Info 4    [00:00:43.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -65,12 +59,6 @@ Info 7    [00:00:49.000] Open files:
 Info 7    [00:00:50.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 7    [00:00:51.000] 		Projects: /dev/null/inferredProject1*
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 7    [00:00:52.000] response:
     {

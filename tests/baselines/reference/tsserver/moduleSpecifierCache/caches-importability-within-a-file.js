@@ -35,12 +35,6 @@ declare module 'ambient' {}
 export declare function observable(): unknown;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:29.000] Search path: /src
 Info 3    [00:00:30.000] For info: /src/a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:31.000] Creating configuration project /tsconfig.json
@@ -116,27 +110,27 @@ Info 28   [00:01:03.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-/src/ambient.d.ts:
+/src/ambient.d.ts: *new*
   {}
-/src/b-link.ts:
+/src/b-link.ts: *new*
   {}
-/src/b.ts:
+/src/b.ts: *new*
   {}
-/src/c.ts:
+/src/c.ts: *new*
   {}
-/package.json:
+/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/src:
+/src: *new*
   {}
-/node_modules:
+/node_modules: *new*
   {}
 
 Info 28   [00:01:04.000] response:
@@ -153,30 +147,6 @@ Info 29   [00:01:05.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/src/ambient.d.ts:
-  {}
-/src/b-link.ts:
-  {}
-/src/b.ts:
-  {}
-/src/c.ts:
-  {}
-/package.json:
-  {}
-
-FsWatchesRecursive::
-/src:
-  {}
-/node_modules:
-  {}
 
 Info 30   [00:01:06.000] FileWatcher:: Close:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
 Info 31   [00:01:07.000] Search path: /src
@@ -212,6 +182,10 @@ FsWatches::
 /package.json:
   {}
 
+FsWatches *deleted*::
+/src/b.ts:
+  {}
+
 FsWatchesRecursive::
 /src:
   {}
@@ -232,28 +206,6 @@ Info 34   [00:01:21.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/src/ambient.d.ts:
-  {}
-/src/b-link.ts:
-  {}
-/src/c.ts:
-  {}
-/package.json:
-  {}
-
-FsWatchesRecursive::
-/src:
-  {}
-/node_modules:
-  {}
 
 Info 35   [00:01:22.000] FileWatcher:: Close:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
 Info 36   [00:01:23.000] Search path: /src
@@ -289,6 +241,10 @@ FsWatches::
 /package.json:
   {}
 
+FsWatches *deleted*::
+/src/c.ts:
+  {}
+
 FsWatchesRecursive::
 /src:
   {}
@@ -315,49 +271,9 @@ Info 39   [00:01:39.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/src/ambient.d.ts:
-  {}
-/src/b-link.ts:
-  {}
-/package.json:
-  {}
-
-FsWatchesRecursive::
-/src:
-  {}
-/node_modules:
-  {}
-
 Info 40   [00:01:40.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":4,"success":true,"performanceData":{"updateGraphDurationMs":*,"createAutoImportProviderProgramDurationMs":*}}
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/src/ambient.d.ts:
-  {}
-/src/b-link.ts:
-  {}
-/package.json:
-  {}
-
-FsWatchesRecursive::
-/src:
-  {}
-/node_modules:
-  {}
 
 Info 41   [00:01:41.000] response:
     {
@@ -376,26 +292,6 @@ Info 42   [00:01:42.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/src/ambient.d.ts:
-  {}
-/src/b-link.ts:
-  {}
-/package.json:
-  {}
-
-FsWatchesRecursive::
-/src:
-  {}
-/node_modules:
-  {}
-
 Info 43   [00:01:43.000] getCompletionData: Get current token: *
 Info 44   [00:01:44.000] getCompletionData: Is inside comment: *
 Info 45   [00:01:45.000] getCompletionData: Get previous token: *
@@ -408,26 +304,6 @@ Info 51   [00:01:51.000] collectAutoImports: *
 Info 52   [00:01:52.000] getCompletionData: Semantic work: *
 Info 53   [00:01:53.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-/src/ambient.d.ts:
-  {}
-/src/b-link.ts:
-  {}
-/package.json:
-  {}
-
-FsWatchesRecursive::
-/src:
-  {}
-/node_modules:
-  {}
 
 Info 54   [00:01:54.000] response:
     {

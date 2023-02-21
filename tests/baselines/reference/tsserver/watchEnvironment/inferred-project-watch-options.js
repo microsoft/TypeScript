@@ -37,19 +37,7 @@ export { foo } from "./foo";
 export function foo(): string;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 2    [00:00:31.000] response:
     {
@@ -67,12 +55,6 @@ Info 3    [00:00:32.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 4    [00:00:33.000] Search path: /user/username/projects/myproject/src
 Info 5    [00:00:34.000] For info: /user/username/projects/myproject/src/main.ts :: No config files found.
@@ -117,23 +99,23 @@ Info 22   [00:00:56.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/user/username/projects/myproject/src/tsconfig.json:
+/user/username/projects/myproject/src/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
+/user/username/projects/myproject/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
+/user/username/projects/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
 
 Info 22   [00:00:57.000] response:

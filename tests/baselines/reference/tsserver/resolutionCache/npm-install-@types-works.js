@@ -29,12 +29,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:19.000] Search path: /a/b/projects/temp
 Info 3    [00:00:20.000] For info: /a/b/projects/temp/a.ts :: No config files found.
 Info 4    [00:00:21.000] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -68,20 +62,18 @@ Info 16   [00:00:38.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/b/projects/temp/tsconfig.json:
+/a/b/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
+/a/b/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
+/a/b/projects/temp/node_modules: *new*
   {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
+/a/b/projects/temp/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 16   [00:00:39.000] response:
     {
@@ -101,39 +93,7 @@ Info 17   [00:00:40.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 18   [00:00:41.000] response:
     {
@@ -141,119 +101,23 @@ Info 18   [00:00:41.000] response:
     }
 Before checking timeout queue length (1) and running
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 19   [00:00:42.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 20   [00:00:43.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[{"start":{"line":1,"offset":20},"end":{"line":1,"offset":25},"text":"Cannot find module 'pad' or its corresponding type declarations.","code":2307,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 21   [00:00:44.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
 Info 22   [00:00:45.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 23   [00:00:51.000] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 24   [00:00:52.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
@@ -293,14 +157,20 @@ PolledWatches::
 /a/b/projects/temp/jsconfig.json:
   {"pollingInterval":2000}
 
+PolledWatches *deleted*::
+/a/b/projects/temp/node_modules:
+  {"pollingInterval":500}
+/a/b/projects/temp/node_modules/@types:
+  {"pollingInterval":500}
+
 FsWatches::
 /a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
+/a/b/projects/temp/node_modules: *new*
   {}
-/a/b/projects/temp/node_modules/@types:
+/a/b/projects/temp/node_modules/@types: *new*
   {}
 
 Info 50   [00:01:21.000] Running: /dev/null/inferredProject1*
@@ -327,39 +197,7 @@ Info 57   [00:01:28.000] 	Files (3)
 Info 58   [00:01:29.000] -----------------------------------------------
 After running timeout callbacks
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
-
 Before running timeout callbacks
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
 
 Info 59   [00:01:30.000] Running: *ensureProjectForOpenFiles*
 Info 60   [00:01:31.000] Before ensureProjectForOpenFiles:
@@ -383,94 +221,14 @@ Info 63   [00:01:46.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/projects/temp/a.ts"]}}
 After running timeout callbacks
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
-
 Before running timeout callbacks
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
 
 Info 64   [00:01:47.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
 After running timeout callbacks
 
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
-
 Before running immediate callbacks
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
 
 Info 65   [00:01:48.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
 Before running immediate callbacks
-
-PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}

@@ -35,12 +35,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:27.000] Search path: /a/b/projects/config
 Info 3    [00:00:28.000] For info: /a/b/projects/config/file.ts :: Config file name: /a/b/projects/config/tsconfig.json
 Info 4    [00:00:29.000] Creating configuration project /a/b/projects/config/tsconfig.json
@@ -86,19 +80,19 @@ Info 18   [00:00:48.000] 		Projects: /a/b/projects/config/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/projects/config/node_modules/@types:
+/a/b/projects/config/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/projects/config/tsconfig.json:
+/a/b/projects/config/tsconfig.json: *new*
   {}
-/a/b/projects/files/file1.ts:
+/a/b/projects/files/file1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b/projects/config:
+/a/b/projects/config: *new*
   {}
 
 Info 18   [00:00:49.000] response:
@@ -115,22 +109,6 @@ Info 19   [00:00:50.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/b/projects/config/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/config/tsconfig.json:
-  {}
-/a/b/projects/files/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/config:
-  {}
 
 Info 20   [00:00:51.000] FileWatcher:: Close:: WatchInfo: /a/b/projects/files/file1.ts 500 undefined WatchType: Closed Script info
 Info 21   [00:00:52.000] Search path: /a/b/projects/files
@@ -156,6 +134,10 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/a/b/projects/files/file1.ts:
+  {}
+
 FsWatchesRecursive::
 /a/b/projects/config:
   {}
@@ -174,20 +156,6 @@ Info 24   [00:01:03.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/b/projects/config/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/config/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/config:
-  {}
 
 Info 25   [00:01:04.000] FileWatcher:: Added:: WatchInfo: /a/b/projects/config/file.ts 500 undefined WatchType: Closed Script info
 Info 26   [00:01:05.000] Project '/a/b/projects/config/tsconfig.json' (Configured)
@@ -208,7 +176,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/projects/config/file.ts:
+/a/b/projects/config/file.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -229,22 +197,6 @@ Info 27   [00:01:12.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/b/projects/config/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/config/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/projects/config/file.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/config:
-  {}
 
 Info 28   [00:01:13.000] Search path: /a/b/projects/files
 Info 29   [00:01:14.000] For info: /a/b/projects/files/file2.ts :: No config files found.
@@ -300,18 +252,30 @@ Info 49   [00:01:41.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/b/projects/files/tsconfig.json:
+/a/b/projects/files/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/files/jsconfig.json:
+/a/b/projects/files/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/files/node_modules/@types:
+/a/b/projects/files/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/a/b/projects/config/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/b/projects/config/tsconfig.json:
+  {}
+/a/b/projects/config/file.ts:
+  {}
+
+FsWatchesRecursive *deleted*::
+/a/b/projects/config:
+  {}
 
 Info 49   [00:01:42.000] response:
     {
@@ -329,20 +293,6 @@ Info 50   [00:01:43.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/b/projects/files/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 51   [00:01:44.000] Before ensureProjectForOpenFiles:
 Info 52   [00:01:45.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -385,20 +335,6 @@ Info 60   [00:02:09.000] 		Projects: /dev/null/inferredProject2*
 Info 60   [00:02:10.000] 	FileName: /a/b/projects/files/file2.ts ProjectRootPath: undefined
 Info 60   [00:02:11.000] 		Projects: /dev/null/inferredProject1*
 After request
-
-PolledWatches::
-/a/b/projects/files/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 60   [00:02:12.000] response:
     {

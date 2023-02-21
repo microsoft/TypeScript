@@ -270,12 +270,6 @@ declare module Hmi {
 ======================================================================
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:55.000] Search path: /user/username/projects/myproject/SiblingClass
 Info 3    [00:00:56.000] For info: /user/username/projects/myproject/SiblingClass/Source.ts :: Config file name: /user/username/projects/myproject/SiblingClass/tsconfig.json
 Info 4    [00:00:57.000] Creating configuration project /user/username/projects/myproject/SiblingClass/tsconfig.json
@@ -345,24 +339,22 @@ Info 23   [00:01:21.000] 		Projects: /user/username/projects/myproject/SiblingCl
 After request
 
 PolledWatches::
-/user/username/projects/myproject/SiblingClass/node_modules/@types:
+/user/username/projects/myproject/SiblingClass/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/SiblingClass/tsconfig.json:
+/user/username/projects/myproject/SiblingClass/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/tsbase.json:
+/user/username/projects/myproject/tsbase.json: *new*
   {}
-/user/username/projects/myproject/buttonClass/tsconfig.json:
+/user/username/projects/myproject/buttonClass/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/buttonClass/Source.ts:
+/user/username/projects/myproject/buttonClass/Source.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 23   [00:01:22.000] response:
     {
@@ -380,49 +372,9 @@ Info 24   [00:01:23.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/myproject/SiblingClass/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/SiblingClass/tsconfig.json:
-  {}
-/user/username/projects/myproject/tsbase.json:
-  {}
-/user/username/projects/myproject/buttonClass/tsconfig.json:
-  {}
-/user/username/projects/myproject/buttonClass/Source.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
 //// [/user/username/projects/myproject/SiblingClass/Source.js] file written with same contents
 //// [/user/username/projects/myproject/SiblingClass/Source.d.ts] file written with same contents
-
-PolledWatches::
-/user/username/projects/myproject/SiblingClass/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/SiblingClass/tsconfig.json:
-  {}
-/user/username/projects/myproject/tsbase.json:
-  {}
-/user/username/projects/myproject/buttonClass/tsconfig.json:
-  {}
-/user/username/projects/myproject/buttonClass/Source.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 25   [00:01:30.000] response:
     {

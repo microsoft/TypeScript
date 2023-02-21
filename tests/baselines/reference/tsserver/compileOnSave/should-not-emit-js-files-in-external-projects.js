@@ -45,12 +45,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:19.000] FileWatcher:: Added:: WatchInfo: /a/b/file1.ts 500 undefined WatchType: Closed Script info
 Info 3    [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/b/file2.js 500 undefined WatchType: Closed Script info
 Info 4    [00:00:21.000] Starting updateGraphWorker: Project: /a/b/externalproject
@@ -76,18 +70,16 @@ Info 11   [00:00:28.000] -----------------------------------------------
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/file1.ts:
+/a/b/file1.ts: *new*
   {}
-/a/b/file2.js:
+/a/b/file2.js: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 12   [00:00:29.000] response:
     {
@@ -105,39 +97,11 @@ Info 13   [00:00:30.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/file1.ts:
-  {}
-/a/b/file2.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
 //// [/a/b/dist.js]
 consonle.log('file1');
 
 
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/file1.ts:
-  {}
-/a/b/file2.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 14   [00:00:33.000] response:
     {

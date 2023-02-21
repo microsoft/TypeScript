@@ -16,12 +16,6 @@ label: while (1) {}
 { "compilerOptions": { "allowUnusedLabels": true } }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:09.000] Search path: /
 Info 3    [00:00:10.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:11.000] Creating configuration project /tsconfig.json
@@ -59,15 +53,15 @@ Info 15   [00:00:27.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
 
 Info 15   [00:00:28.000] response:
@@ -82,18 +76,6 @@ Before running timeout callbacks
 //// [/tsconfig.json]
 { "compilerOptions": { "allowUnusedLabels": false } }
 
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 20   [00:00:35.000] Running: /tsconfig.json
 Info 21   [00:00:36.000] Reloading configured project /tsconfig.json
@@ -128,18 +110,6 @@ Info 29   [00:00:54.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 29   [00:00:55.000] 		Projects: /tsconfig.json
 After running timeout callbacks
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 Info 29   [00:00:56.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -151,31 +121,7 @@ Info 29   [00:00:56.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 Info 30   [00:00:57.000] response:
     {

@@ -46,12 +46,6 @@ shared.dog();
 export const dog = () => { };
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:46.000] Search path: /user/username/projects/solution/api/src
 Info 3    [00:00:47.000] For info: /user/username/projects/solution/api/src/server.ts :: Config file name: /user/username/projects/solution/api/tsconfig.json
 Info 4    [00:00:48.000] Creating configuration project /user/username/projects/solution/api/tsconfig.json
@@ -134,29 +128,29 @@ Info 32   [00:01:24.000] 		Projects: /user/username/projects/solution/api/tsconf
 After request
 
 PolledWatches::
-/user/username/projects/solution/api/node_modules/@types:
+/user/username/projects/solution/api/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
+/user/username/projects/solution/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/solution/api/tsconfig.json:
+/user/username/projects/solution/api/tsconfig.json: *new*
   {}
-/user/username/projects/solution/shared/tsconfig.json:
+/user/username/projects/solution/shared/tsconfig.json: *new*
   {}
-/user/username/projects/solution/shared/src/index.ts:
+/user/username/projects/solution/shared/src/index.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/solution/tsconfig.json:
+/user/username/projects/solution/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/solution/api/src:
+/user/username/projects/solution/api/src: *new*
   {}
-/user/username/projects/solution/shared/src:
+/user/username/projects/solution/shared/src: *new*
   {}
-/user/username/projects/solution/shared:
+/user/username/projects/solution/shared: *new*
   {}
 
 Info 32   [00:01:25.000] response:
@@ -175,32 +169,6 @@ Info 33   [00:01:26.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/solution/api/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/api/tsconfig.json:
-  {}
-/user/username/projects/solution/shared/tsconfig.json:
-  {}
-/user/username/projects/solution/shared/src/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/solution/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/solution/api/src:
-  {}
-/user/username/projects/solution/shared/src:
-  {}
-/user/username/projects/solution/shared:
-  {}
 
 Info 34   [00:01:27.000] Finding references to /user/username/projects/solution/api/src/server.ts position 52 in project /user/username/projects/solution/api/tsconfig.json
 Info 35   [00:01:28.000] Search path: /user/username/projects/solution/shared/src
@@ -306,9 +274,9 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/solution/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/solution/shared/node_modules/@types:
+/user/username/projects/solution/shared/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/solution/app/node_modules/@types:
+/user/username/projects/solution/app/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -322,9 +290,9 @@ FsWatches::
   {}
 /user/username/projects/solution/tsconfig.json:
   {}
-/user/username/projects/solution/app/tsconfig.json:
+/user/username/projects/solution/app/tsconfig.json: *new*
   {}
-/user/username/projects/solution/app/src/app.ts:
+/user/username/projects/solution/app/src/app.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -334,7 +302,7 @@ FsWatchesRecursive::
   {}
 /user/username/projects/solution/shared:
   {}
-/user/username/projects/solution/app/src:
+/user/username/projects/solution/app/src: *new*
   {}
 
 Info 79   [00:02:12.000] response:

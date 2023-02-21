@@ -75,12 +75,6 @@ export function foo() {}
 {"name":"@types/react","version":"16.9.14"}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:01:00.000] Search path: e:/myproject/src
 Info 3    [00:01:01.000] For info: e:/myproject/src/app.js :: No config files found.
 Info 4    [00:01:02.000] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -137,35 +131,35 @@ Info 24   [00:01:27.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-e:/myproject/src/tsconfig.json:
+e:/myproject/src/tsconfig.json: *new*
   {"pollingInterval":2000}
-e:/myproject/src/jsconfig.json:
+e:/myproject/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-e:/myproject/src/node_modules:
+e:/myproject/src/node_modules: *new*
   {"pollingInterval":500}
-e:/myproject/src/node_modules/@types:
+e:/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
-e:/myproject/src/bower_components:
+e:/myproject/src/bower_components: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/a/lib/lib.d.ts:
+c:/a/lib/lib.d.ts: *new*
   {}
-e:/myproject/node_modules/@types/react/package.json:
+e:/myproject/node_modules/@types/react/package.json: *new*
   {}
-c:/typescript/node_modules/@types/react/package.json:
+c:/typescript/node_modules/@types/react/package.json: *new*
   {}
-e:/myproject/node_modules/react-router-dom/package.json:
+e:/myproject/node_modules/react-router-dom/package.json: *new*
   {}
-c:/typescript/node_modules/@types/react-router-dom/package.json:
+c:/typescript/node_modules/@types/react-router-dom/package.json: *new*
   {}
-e:/myproject/node_modules/@types/prop-types/package.json:
+e:/myproject/node_modules/@types/prop-types/package.json: *new*
   {}
-e:/myproject/package.json:
+e:/myproject/package.json: *new*
   {}
 
 FsWatchesRecursive::
-e:/myproject/node_modules:
+e:/myproject/node_modules: *new*
   {}
 
 Info 24   [00:01:28.000] response:
@@ -187,38 +181,6 @@ Info 25   [00:01:29.000] request:
     }
 Before request
 
-PolledWatches::
-e:/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-e:/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-e:/myproject/src/node_modules:
-  {"pollingInterval":500}
-e:/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-e:/myproject/src/bower_components:
-  {"pollingInterval":500}
-
-FsWatches::
-c:/a/lib/lib.d.ts:
-  {}
-e:/myproject/node_modules/@types/react/package.json:
-  {}
-c:/typescript/node_modules/@types/react/package.json:
-  {}
-e:/myproject/node_modules/react-router-dom/package.json:
-  {}
-c:/typescript/node_modules/@types/react-router-dom/package.json:
-  {}
-e:/myproject/node_modules/@types/prop-types/package.json:
-  {}
-e:/myproject/package.json:
-  {}
-
-FsWatchesRecursive::
-e:/myproject/node_modules:
-  {}
-
 Info 26   [00:01:30.000] getCompletionData: Get current token: *
 Info 27   [00:01:31.000] getCompletionData: Is inside comment: *
 Info 28   [00:01:32.000] getCompletionData: Get previous token: *
@@ -231,38 +193,6 @@ Info 34   [00:01:38.000] collectAutoImports: *
 Info 35   [00:01:39.000] getCompletionData: Semantic work: *
 Info 36   [00:01:40.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
-
-PolledWatches::
-e:/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-e:/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-e:/myproject/src/node_modules:
-  {"pollingInterval":500}
-e:/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-e:/myproject/src/bower_components:
-  {"pollingInterval":500}
-
-FsWatches::
-c:/a/lib/lib.d.ts:
-  {}
-e:/myproject/node_modules/@types/react/package.json:
-  {}
-c:/typescript/node_modules/@types/react/package.json:
-  {}
-e:/myproject/node_modules/react-router-dom/package.json:
-  {}
-c:/typescript/node_modules/@types/react-router-dom/package.json:
-  {}
-e:/myproject/node_modules/@types/prop-types/package.json:
-  {}
-e:/myproject/package.json:
-  {}
-
-FsWatchesRecursive::
-e:/myproject/node_modules:
-  {}
 
 Info 37   [00:01:41.000] response:
     {

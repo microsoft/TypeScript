@@ -26,12 +26,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:18.000] Search path: /a
 Info 2    [00:00:19.000] For info: /a/app.js :: Config file name: /a/jsconfig.json
 Info 3    [00:00:20.000] Creating configuration project /a/jsconfig.json

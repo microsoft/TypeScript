@@ -42,12 +42,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:33.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 3    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: false Elapsed:: *ms
 Info 4    [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -62,12 +56,6 @@ Info 7    [00:00:41.000] Open files:
 Info 7    [00:00:42.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 7    [00:00:43.000] 		Projects: /dev/null/inferredProject1*
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 7    [00:00:44.000] response:
     {
@@ -86,12 +74,6 @@ Info 8    [00:00:45.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 9    [00:00:46.000] Request: completionInfo not allowed in LanguageServiceMode.Syntactic
 Info 10   [00:00:47.000] request:
     {
@@ -106,12 +88,6 @@ Info 10   [00:00:47.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 11   [00:00:48.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Info 12   [00:00:49.000] request:
     {
@@ -123,12 +99,6 @@ Info 12   [00:00:49.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 13   [00:00:50.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 14   [00:00:51.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false Elapsed:: *ms
@@ -147,12 +117,6 @@ Info 18   [00:01:01.000] 	FileName: /user/username/projects/myproject/b.ts Proje
 Info 18   [00:01:02.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 18   [00:01:03.000] response:
     {
       "responseRequired": false
@@ -170,12 +134,6 @@ Info 19   [00:01:04.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 20   [00:01:05.000] Request: completionInfo not allowed in LanguageServiceMode.Syntactic
 Info 21   [00:01:06.000] request:
     {
@@ -189,12 +147,6 @@ Info 21   [00:01:06.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 22   [00:01:07.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Info 23   [00:01:08.000] request:
@@ -210,12 +162,6 @@ Info 23   [00:01:08.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 24   [00:01:09.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Info 25   [00:01:10.000] request:
     {
@@ -227,12 +173,6 @@ Info 25   [00:01:10.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 26   [00:01:11.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 27   [00:01:12.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: false Elapsed:: *ms
@@ -253,12 +193,6 @@ Info 31   [00:01:24.000] 	FileName: /user/username/projects/myproject/c.ts Proje
 Info 31   [00:01:25.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 31   [00:01:26.000] response:
     {
       "responseRequired": false
@@ -273,12 +207,6 @@ Info 32   [00:01:27.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 33   [00:01:28.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 34   [00:01:29.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 4 structureChanged: false Elapsed:: *ms
@@ -301,12 +229,6 @@ Info 38   [00:01:43.000] 	FileName: /user/username/projects/myproject/node_modul
 Info 38   [00:01:44.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 38   [00:01:45.000] response:
     {
       "responseRequired": false
@@ -322,12 +244,6 @@ Info 39   [00:01:46.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 40   [00:01:47.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 40   [00:01:48.000] 	Files (0) NoProgram
 
@@ -340,12 +256,6 @@ Info 40   [00:01:54.000] 		Projects: /dev/null/inferredProject1*
 Info 40   [00:01:55.000] 	FileName: /user/username/projects/myproject/node_modules/something/index.d.ts ProjectRootPath: undefined
 Info 40   [00:01:56.000] 		Projects: /dev/null/inferredProject1*
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 40   [00:01:57.000] response:
     {
@@ -362,12 +272,6 @@ Info 41   [00:01:58.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 42   [00:01:59.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 42   [00:02:00.000] 	Files (0) NoProgram
 
@@ -378,12 +282,6 @@ Info 42   [00:02:04.000] 		Projects: /dev/null/inferredProject1*
 Info 42   [00:02:05.000] 	FileName: /user/username/projects/myproject/node_modules/something/index.d.ts ProjectRootPath: undefined
 Info 42   [00:02:06.000] 		Projects: /dev/null/inferredProject1*
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 42   [00:02:07.000] response:
     {

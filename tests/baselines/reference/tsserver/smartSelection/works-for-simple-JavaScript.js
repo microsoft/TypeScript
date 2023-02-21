@@ -34,12 +34,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:13.000] Search path: /
 Info 3    [00:00:14.000] For info: /file.js :: No config files found.
 Info 4    [00:00:15.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -67,16 +61,14 @@ Info 10   [00:00:26.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/bower_components:
+/bower_components: *new*
   {"pollingInterval":500}
-/node_modules:
+/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 10   [00:00:27.000] response:
     {
@@ -99,31 +91,7 @@ Info 11   [00:00:28.000] request:
     }
 Before request
 
-PolledWatches::
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 12   [00:00:29.000] response:
     {

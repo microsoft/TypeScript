@@ -18,12 +18,6 @@ Info 1    [00:00:03.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:04.000] Search path: ^/untitled/ts-nul-authority
 Info 3    [00:00:05.000] For info: ^/untitled/ts-nul-authority/Untitled-1 :: No config files found.
 Info 4    [00:00:06.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -48,12 +42,8 @@ Info 10   [00:00:17.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 10   [00:00:18.000] response:
     {
@@ -74,23 +64,7 @@ Info 11   [00:00:19.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 12   [00:00:20.000] response:
     {
@@ -133,23 +107,7 @@ Info 13   [00:00:21.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 14   [00:00:22.000] response:
     {
@@ -157,68 +115,20 @@ Info 14   [00:00:22.000] response:
     }
 Before checking timeout queue length (1) and running
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 15   [00:00:23.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 16   [00:00:24.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 17   [00:00:25.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"^/untitled/ts-nul-authority/Untitled-1","diagnostics":[]}}
 Info 18   [00:00:26.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::

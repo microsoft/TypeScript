@@ -16,12 +16,6 @@ export const a = 0;
 { "files": ["./a.ts"] }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:09.000] Search path: /
 Info 3    [00:00:10.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:11.000] Creating configuration project /tsconfig.json
@@ -56,14 +50,12 @@ Info 13   [00:00:25.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 13   [00:00:26.000] response:
     {
@@ -86,27 +78,7 @@ Info 14   [00:00:27.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 15   [00:00:28.000] response:
     {

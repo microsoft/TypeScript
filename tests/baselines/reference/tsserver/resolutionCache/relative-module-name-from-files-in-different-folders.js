@@ -35,12 +35,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:42.000] Search path: /user/username/projects/myproject/product/src
 Info 2    [00:00:43.000] For info: /user/username/projects/myproject/product/src/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 3    [00:00:44.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -188,29 +182,29 @@ import { module1 } from "../src/module1}";import { module2 } from "../module2";i
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/product/module2.ts:
+/user/username/projects/myproject/product/module2.ts: *new*
   {}
-/user/username/projects/myproject/product/src/module1.ts:
+/user/username/projects/myproject/product/src/module1.ts: *new*
   {}
-/user/username/projects/myproject/product/src/feature/file2.ts:
+/user/username/projects/myproject/product/src/feature/file2.ts: *new*
   {}
-/user/username/projects/myproject/product/test/file4.ts:
+/user/username/projects/myproject/product/test/file4.ts: *new*
   {}
-/user/username/projects/myproject/product/test/src/file3.ts:
+/user/username/projects/myproject/product/test/src/file3.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/product:
+/user/username/projects/myproject/product: *new*
   {}
 
 Info 82   [00:02:21.000] Running: /user/username/projects/myproject/tsconfig.json
@@ -243,29 +237,3 @@ Info 97   [00:02:45.000] Open files:
 Info 97   [00:02:46.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
 Info 97   [00:02:47.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After running timeout callbacks
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/product/module2.ts:
-  {}
-/user/username/projects/myproject/product/src/module1.ts:
-  {}
-/user/username/projects/myproject/product/src/feature/file2.ts:
-  {}
-/user/username/projects/myproject/product/test/file4.ts:
-  {}
-/user/username/projects/myproject/product/test/src/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/product:
-  {}

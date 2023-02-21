@@ -36,12 +36,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:19.000] FileWatcher:: Added:: WatchInfo: /root/TypeScriptProject3/TypeScriptProject3/Foo.ts 500 undefined WatchType: Closed Script info
 Info 3    [00:00:20.000] Starting updateGraphWorker: Project: /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj
 Info 4    [00:00:21.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
@@ -63,16 +57,14 @@ Info 10   [00:00:27.000] -----------------------------------------------
 After request
 
 PolledWatches::
-/root/typescriptproject3/typescriptproject3/node_modules/@types:
+/root/typescriptproject3/typescriptproject3/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/root/typescriptproject3/typescriptproject3/foo.ts:
+/root/typescriptproject3/typescriptproject3/foo.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 11   [00:00:28.000] response:
     {
@@ -90,18 +82,6 @@ Info 12   [00:00:29.000] request:
     }
 Before request
 
-PolledWatches::
-/root/typescriptproject3/typescriptproject3/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/root/typescriptproject3/typescriptproject3/foo.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
 //// [/root/TypeScriptProject3/TypeScriptProject3/bar.js.map]
 {"version":3,"file":"bar.js","sourceRoot":"","sources":["Foo.ts"],"names":[],"mappings":"AAAA,QAAQ,CAAC,GAAG,CAAC,OAAO,CAAC,CAAC"}
@@ -110,18 +90,6 @@ After request
 consonle.log('file1');
 //# sourceMappingURL=bar.js.map
 
-
-PolledWatches::
-/root/typescriptproject3/typescriptproject3/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/root/typescriptproject3/typescriptproject3/foo.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 13   [00:00:34.000] response:
     {

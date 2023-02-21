@@ -49,12 +49,6 @@ export declare class B {
 {"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IACV,CAAC;CACJ"}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:33.000] Search path: /user/username/projects/myproject/a
 Info 3    [00:00:34.000] For info: /user/username/projects/myproject/a/index.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
 Info 4    [00:00:35.000] Creating configuration project /user/username/projects/myproject/a/tsconfig.json
@@ -127,25 +121,25 @@ Info 28   [00:01:04.000] 		Projects: /user/username/projects/myproject/a/tsconfi
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
+/user/username/projects/myproject/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
+/user/username/projects/myproject/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/b/tsconfig.json:
+/user/username/projects/myproject/b/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/b/lib/index.d.ts:
+/user/username/projects/myproject/b/lib/index.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/a:
+/user/username/projects/myproject/a: *new*
   {}
-/user/username/projects/myproject/b:
+/user/username/projects/myproject/b: *new*
   {}
 
 Info 28   [00:01:05.000] response:
@@ -164,28 +158,6 @@ Info 29   [00:01:06.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/lib/index.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/a:
-  {}
-/user/username/projects/myproject/b:
-  {}
 
 Info 30   [00:01:07.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
 Info 31   [00:01:08.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/lib/index.d.ts.map 500 undefined WatchType: Closed Script info
@@ -228,7 +200,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
+/user/username/projects/myproject/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -238,13 +210,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/b/lib/index.d.ts:
   {}
-/user/username/projects/myproject/b/lib/index.d.ts.map:
+/user/username/projects/myproject/b/lib/index.d.ts.map: *new*
   {}
-/user/username/projects/myproject/b/index.ts:
+/user/username/projects/myproject/b/index.ts: *new*
   {}
-/user/username/projects/myproject/b/helper.ts:
+/user/username/projects/myproject/b/helper.ts: *new*
   {}
-/user/username/projects/myproject/b:
+/user/username/projects/myproject/b: *new*
   {}
 
 FsWatchesRecursive::

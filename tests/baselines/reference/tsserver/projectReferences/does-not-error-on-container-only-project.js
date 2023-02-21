@@ -503,66 +503,34 @@ declare namespace container {
 
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
+/user/username/projects/container/compositeexec/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
+/user/username/projects/container/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
+/user/username/projects/container/exec/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
+/user/username/projects/container/lib/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
+/user/username/projects/container/compositeexec/tsconfig.json: *new*
   {}
-/user/username/projects/container/compositeexec/index.ts:
+/user/username/projects/container/compositeexec/index.ts: *new*
   {}
-/user/username/projects/container/lib/tsconfig.json:
+/user/username/projects/container/lib/tsconfig.json: *new*
   {}
-/user/username/projects/container/lib/index.ts:
+/user/username/projects/container/lib/index.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/container/exec/tsconfig.json:
+/user/username/projects/container/exec/tsconfig.json: *new*
   {}
-/user/username/projects/container/exec/index.ts:
+/user/username/projects/container/exec/index.ts: *new*
   {}
-/user/username/projects/container/tsconfig.json:
+/user/username/projects/container/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 50   [00:02:00.000] response:
     {
@@ -580,67 +548,7 @@ Info 51   [00:02:01.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 52   [00:02:02.000] response:
     {
@@ -659,67 +567,7 @@ Info 53   [00:02:03.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 54   [00:02:04.000] response:
     {
@@ -738,67 +586,7 @@ Info 55   [00:02:05.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 56   [00:02:06.000] response:
     {
@@ -816,67 +604,7 @@ Info 57   [00:02:07.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 58   [00:02:08.000] response:
     {
@@ -894,67 +622,7 @@ Info 59   [00:02:09.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 60   [00:02:10.000] response:
     {
@@ -973,67 +641,7 @@ Info 61   [00:02:11.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 62   [00:02:12.000] response:
     {
@@ -1052,67 +660,7 @@ Info 63   [00:02:13.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 64   [00:02:14.000] response:
     {
@@ -1130,67 +678,7 @@ Info 65   [00:02:15.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 66   [00:02:16.000] response:
     {
@@ -1208,67 +696,7 @@ Info 67   [00:02:17.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 68   [00:02:18.000] response:
     {
@@ -1287,67 +715,7 @@ Info 69   [00:02:19.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 70   [00:02:20.000] response:
     {
@@ -1366,67 +734,7 @@ Info 71   [00:02:21.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 72   [00:02:22.000] response:
     {
@@ -1444,67 +752,7 @@ Info 73   [00:02:23.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 74   [00:02:24.000] response:
     {
@@ -1522,67 +770,7 @@ Info 75   [00:02:25.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 76   [00:02:26.000] response:
     {
@@ -1601,67 +789,7 @@ Info 77   [00:02:27.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 78   [00:02:28.000] response:
     {
@@ -1680,67 +808,7 @@ Info 79   [00:02:29.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 80   [00:02:30.000] response:
     {
@@ -1758,67 +826,7 @@ Info 81   [00:02:31.000] request:
     }
 Before request
 
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/compositeexec/index.ts:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 82   [00:02:32.000] response:
     {

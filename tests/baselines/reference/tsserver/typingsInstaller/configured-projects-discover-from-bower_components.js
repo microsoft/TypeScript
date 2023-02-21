@@ -13,12 +13,6 @@ Creating project service
 {"name":"jquery"}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:16.000] Search path: /
 Info 2    [00:00:17.000] For info: /app.js :: Config file name: /jsconfig.json
 Info 3    [00:00:18.000] Creating configuration project /jsconfig.json
@@ -95,21 +89,21 @@ Before checking timeout queue length (2) and running
 
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/node_modules:
+/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/jsconfig.json:
+/jsconfig.json: *new*
   {}
-/tmp/package.json:
+/tmp/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
-/bower_components:
+/bower_components: *new*
   {}
 
 Info 43   [00:01:16.000] Running: /jsconfig.json
@@ -145,21 +139,3 @@ Info 52   [00:01:34.000] Open files:
 Info 52   [00:01:35.000] 	FileName: /app.js ProjectRootPath: undefined
 Info 52   [00:01:36.000] 		Projects: /jsconfig.json
 After checking timeout queue length (2) and running
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/jsconfig.json:
-  {}
-/tmp/package.json:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/bower_components:
-  {}

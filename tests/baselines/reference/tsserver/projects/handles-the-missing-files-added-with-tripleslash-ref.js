@@ -27,12 +27,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:15.000] Search path: /a/b
 Info 3    [00:00:16.000] For info: /a/b/commonFile1.ts :: No config files found.
 Info 4    [00:00:17.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -63,16 +57,14 @@ Info 13   [00:00:31.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 13   [00:00:32.000] response:
     {
@@ -89,31 +81,7 @@ Info 14   [00:00:33.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/commonfile2.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/b/commonfile2.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 15   [00:00:34.000] response:
     {
@@ -161,11 +129,13 @@ PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/a/b/commonfile2.ts:
+  {"pollingInterval":500}
+
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-
-FsWatchesRecursive::
 
 Info 21   [00:00:42.000] Running: /dev/null/inferredProject1*
 Info 22   [00:00:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -212,10 +182,8 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 31   [00:01:04.000] request:
     {
@@ -228,31 +196,7 @@ Info 31   [00:01:04.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-
-FsWatchesRecursive::
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-
-FsWatchesRecursive::
 
 Info 32   [00:01:05.000] response:
     {

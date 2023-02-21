@@ -29,12 +29,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:23.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:24.000] For info: /user/username/projects/myproject/a.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -87,19 +81,19 @@ Info 21   [00:00:47.000] 		Projects: /user/username/projects/myproject/tsconfig.
 After request
 
 PolledWatches::
-/user/username/projects/myproject/somefile.txt:
+/user/username/projects/myproject/somefile.txt: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 Info 21   [00:00:48.000] response:
@@ -115,22 +109,6 @@ Before running timeout callbacks
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"plugins":[{"name":"some-other-plugin"}]}}
 
-
-PolledWatches::
-/user/username/projects/myproject/somefile.txt:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 Info 26   [00:00:56.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 27   [00:00:57.000] Reloading configured project /user/username/projects/myproject/tsconfig.json
@@ -179,7 +157,11 @@ After running timeout callbacks
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/someotherfile.txt:
+/user/username/projects/myproject/someotherfile.txt: *new*
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/somefile.txt:
   {"pollingInterval":500}
 
 FsWatches::

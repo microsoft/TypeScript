@@ -19,12 +19,6 @@ import * as T from './moduleFile'; T.bar();
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:15.000] Search path: /a/b
 Info 3    [00:00:16.000] For info: /a/b/file1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:17.000] Creating configuration project /a/b/tsconfig.json
@@ -69,19 +63,19 @@ Info 18   [00:00:36.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/modulefile.ts:
+/a/b/modulefile.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 18   [00:00:37.000] response:
@@ -99,39 +93,7 @@ Info 19   [00:00:38.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/modulefile.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/modulefile.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 20   [00:00:39.000] response:
     {
@@ -165,6 +127,10 @@ PolledWatches::
 
 FsWatches::
 /a/b/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/a/b/modulefile.ts:
   {}
 
 FsWatchesRecursive::
@@ -215,15 +181,15 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/node_modules/@types:
   {"pollingInterval":500}
-/a/b/modulefile:
+/a/b/modulefile: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /a/b/tsconfig.json:
   {}
-/a/b/modulefile1.ts:
+/a/b/modulefile1.ts: *new*
   {}
-/a/b:
+/a/b: *new*
   {}
 
 FsWatchesRecursive::
@@ -241,47 +207,7 @@ Info 48   [00:01:22.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 49   [00:01:23.000] response:
     {
@@ -341,6 +267,10 @@ FsWatches::
 /a/b:
   {}
 
+FsWatches *deleted*::
+/a/b/modulefile1.ts:
+  {}
+
 FsWatchesRecursive::
 /a/b:
   {}
@@ -349,24 +279,6 @@ Info 69   [00:01:46.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 70   [00:01:47.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 71   [00:01:48.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running timeout callbacks
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 72   [00:01:49.000] request:
     {
@@ -378,24 +290,6 @@ Info 72   [00:01:49.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 73   [00:01:50.000] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info 74   [00:01:51.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
@@ -425,10 +319,18 @@ PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/a/b/modulefile:
+  {"pollingInterval":500}
+
 FsWatches::
 /a/b/tsconfig.json:
   {}
-/a/b/modulefile.ts:
+/a/b/modulefile.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/a/b:
   {}
 
 FsWatchesRecursive::

@@ -4,6 +4,7 @@ import {
     clone,
     combinePaths,
     compareStringsCaseSensitive,
+    contains,
     createGetCanonicalFileName,
     createMultiMap,
     createSystemWatchFunctions,
@@ -157,18 +158,6 @@ function invokeWatcherCallbacks<T>(callbacks: readonly T[] | undefined, invokeCa
             invokeCallback(cb);
         }
     }
-}
-
-function createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): FileWatcher {
-    map.add(path, callback);
-    let closed = false;
-    return {
-        close: () => {
-            Debug.assert(!closed);
-            map.remove(path, callback);
-            closed = true;
-        }
-    };
 }
 
 interface CallbackData {
@@ -621,8 +610,23 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.removeFileOrFolder(currentEntry);
     }
 
+    private hasWatchChanges?: boolean;
+    private createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): FileWatcher {
+        this.hasWatchChanges = true;
+        map.add(path, callback);
+        let closed = false;
+        return {
+            close: () => {
+                Debug.assert(!closed);
+                map.remove(path, callback);
+                this.hasWatchChanges = true;
+                closed = true;
+            }
+        };
+    }
+
     private watchFileWorker(fileName: string, cb: FileWatcherCallback, pollingInterval: PollingInterval) {
-        return createWatcher(
+        return this.createWatcher(
             this.watchedFiles,
             this.toFullPath(fileName),
             { cb, pollingInterval }
@@ -638,7 +642,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         const path = this.toFullPath(fileOrDirectory);
         // Error if the path does not exist
         if (this.inodeWatching && !this.inodes?.has(path)) throw new Error();
-        const result = createWatcher(
+        const result = this.createWatcher(
             recursive ? this.fsWatchesRecursive : this.fsWatches,
             path,
             {
@@ -1000,13 +1004,15 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         baseline.push("");
     }
 
+    private serializedWatchedFiles: Map<string, TestFileWatcher[]> | undefined;
+    private serializedFsWatches: Map<string, TestFsWatcher[]> | undefined;
+    private serializedFsWatchesRecursive: Map<string, TestFsWatcher[]> | undefined;
     serializeWatches(baseline: string[] = []) {
-        serializeMultiMap(baseline, "PolledWatches", this.watchedFiles);
-        baseline.push("");
-        serializeMultiMap(baseline, "FsWatches", this.fsWatches);
-        baseline.push("");
-        serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive);
-        baseline.push("");
+        if (!this.hasWatchChanges) return baseline;
+        this.serializedWatchedFiles = serializeMultiMap(baseline, "PolledWatches", this.watchedFiles, this.serializedWatchedFiles);
+        this.serializedFsWatches = serializeMultiMap(baseline, "FsWatches", this.fsWatches, this.serializedFsWatches);
+        this.serializedFsWatchesRecursive = serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, this.serializedFsWatchesRecursive);
+        this.hasWatchChanges = false;
         return baseline;
     }
 
@@ -1109,14 +1115,51 @@ function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsE
     }
 }
 
-function serializeMultiMap<T>(baseline: string[], caption: string, multiMap: MultiMap<string, T>) {
-    baseline.push(`${caption}::`);
-    multiMap.forEach((values, key) => {
-        baseline.push(`${key}:`);
+function serializeMultiMap<T>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, serialized: Map<string, T[]> | undefined) {
+    let hasChange = diffMap(baseline, caption, multiMap, serialized, /*deleted*/ false);
+    hasChange = diffMap(baseline, caption, serialized, multiMap, /*deleted*/ true) || hasChange;
+    if (hasChange) {
+        serialized = new Map();
+        multiMap.forEach((value, key) => serialized!.set(key, new Array(...value)));
+    }
+    return serialized;
+}
+
+function diffMap<T>(
+    baseline: string[],
+    caption: string,
+    map: Map<string, T[]> | undefined,
+    old: Map<string, T[]> | undefined,
+    deleted: boolean
+) {
+    let captionAdded = false;
+    let baselineChanged = false;
+    let hasChange = false;
+    map?.forEach((values, key) => {
+        const existing = old?.get(key);
+        let addedKey = false;
         for (const value of values) {
-            baseline.push(`  ${JSON.stringify(value)}`);
+            const hasExisting = contains(existing, value);
+            if (deleted && hasExisting) continue;
+            if (!hasExisting) hasChange = true;
+            if (!addedKey) {
+                addBaseline(`${key}:${deleted || existing ? "" : " *new*"}`);
+                addedKey = true;
+            }
+            addBaseline(`  ${JSON.stringify(value)}${deleted || hasExisting || !existing ? "" : " *new*"}`);
         }
     });
+    if (baselineChanged) baseline.push("");
+    return hasChange;
+
+    function addBaseline(s: string) {
+        if (!captionAdded) {
+            baseline.push(`${caption}${deleted ? " *deleted*" : ""}::`);
+            captionAdded = true;
+        }
+        baseline.push(s);
+        baselineChanged = true;
+    }
 }
 
 function baselineOutputs(baseline: string[], output: readonly string[], start: number, end = output.length) {

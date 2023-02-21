@@ -14,12 +14,6 @@ var x = 1;
 var y = 2;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:09.000] Search path: /a
 Info 3    [00:00:10.000] For info: /a/app.ts :: No config files found.
 Info 4    [00:00:11.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -46,14 +40,10 @@ Info 12   [00:00:24.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 12   [00:00:25.000] response:
     {
@@ -70,32 +60,12 @@ Info 13   [00:00:26.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
 //// [/a/app.js]
 var x = 1;
 var y = 2;
 
 
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 14   [00:00:29.000] response:
     {
@@ -117,12 +87,6 @@ Before request
 var x = 1;
 var y = 2;
 
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 17   [00:00:09.000] Search path: /a
 Info 18   [00:00:10.000] For info: /a/app.ts :: No config files found.
@@ -150,14 +114,10 @@ Info 27   [00:00:24.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 27   [00:00:25.000] response:
     {
@@ -174,32 +134,12 @@ Info 28   [00:00:26.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 After request
 //// [/a/app.js]
 var x = 1;
 var y = 2;
 
 
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 29   [00:00:29.000] response:
     {

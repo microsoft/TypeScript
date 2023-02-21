@@ -7,12 +7,6 @@ var x = require("lib")
 export let x = 1
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:20.000] Search path: /a/b
 Info 2    [00:00:21.000] For info: /a/b/app.js :: No config files found.
 Info 3    [00:00:22.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*

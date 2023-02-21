@@ -152,27 +152,27 @@ Shape signatures in builder refreshed for::
 /src/project/filewithtyperefs.ts (computed .d.ts during emit)
 
 PolledWatches::
-/src/project/node_modules/@types:
+/src/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/src/project/tsconfig.json:
+/src/project/tsconfig.json: *new*
   {}
-/src/project/filewithimports.ts:
+/src/project/filewithimports.ts: *new*
   {}
-/src/project/node_modules/pkg0/index.d.ts:
+/src/project/node_modules/pkg0/index.d.ts: *new*
   {}
-/src/project/filewithtyperefs.ts:
+/src/project/filewithtyperefs.ts: *new*
   {}
-/src/project/node_modules/pkg2/index.d.ts:
+/src/project/node_modules/pkg2/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/src/project/node_modules:
+/src/project/node_modules: *new*
   {}
-/src/project:
+/src/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -425,7 +425,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/src/project/node_modules/pkg1/index.d.ts:
+/src/project/node_modules/pkg1/index.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -657,7 +657,7 @@ FsWatches::
   {}
 /src/project/node_modules/pkg1/index.d.ts:
   {}
-/src/project/node_modules/pkg3/index.d.ts:
+/src/project/node_modules/pkg3/index.d.ts: *new*
   {}
 
 FsWatchesRecursive::

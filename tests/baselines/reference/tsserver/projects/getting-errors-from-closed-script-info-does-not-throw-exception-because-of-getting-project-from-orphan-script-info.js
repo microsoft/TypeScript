@@ -29,12 +29,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{}}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:17.000] Search path: /a/b
 Info 3    [00:00:18.000] For info: /a/b/app.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:19.000] Creating configuration project /a/b/tsconfig.json
@@ -76,17 +70,17 @@ Info 17   [00:00:37.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 17   [00:00:38.000] response:
@@ -103,20 +97,6 @@ Info 18   [00:00:39.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 19   [00:00:40.000] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info 20   [00:00:41.000] Project '/a/b/tsconfig.json' (Configured)
@@ -135,7 +115,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/app.ts:
+/a/b/app.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -160,39 +140,7 @@ Info 21   [00:00:46.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/app.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/app.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 22   [00:00:47.000] response:
     {

@@ -43,12 +43,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:25.000] Search path: /a/b
 Info 3    [00:00:26.000] For info: /a/b/moduleFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /a/b/tsconfig.json
@@ -112,25 +106,25 @@ Info 21   [00:00:49.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/file1consumer1.ts:
+/a/b/file1consumer1.ts: *new*
   {}
-/a/b/file1consumer2.ts:
+/a/b/file1consumer2.ts: *new*
   {}
-/a/b/globalfile3.ts:
+/a/b/globalfile3.ts: *new*
   {}
-/a/b/modulefile2.ts:
+/a/b/modulefile2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 21   [00:00:50.000] response:
@@ -149,51 +143,7 @@ Info 22   [00:00:51.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 23   [00:00:52.000] response:
     {
@@ -226,51 +176,7 @@ Info 24   [00:00:53.000] request:
     }
 Before request
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 25   [00:00:54.000] response:
     {
@@ -314,6 +220,10 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/a/b/file1consumer2.ts:
+  {}
+
 FsWatchesRecursive::
 /a/b:
   {}
@@ -343,26 +253,6 @@ Info 39   [00:01:09.000] 	Files (5)
 
 Info 40   [00:01:10.000] -----------------------------------------------
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 41   [00:01:11.000] response:
     {

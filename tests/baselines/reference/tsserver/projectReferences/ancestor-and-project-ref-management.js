@@ -365,12 +365,6 @@ declare namespace container {
 ======================================================================
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:01:16.000] Search path: /user/username/projects/container/compositeExec
 Info 3    [00:01:17.000] For info: /user/username/projects/container/compositeExec/index.ts :: Config file name: /user/username/projects/container/compositeExec/tsconfig.json
 Info 4    [00:01:18.000] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
@@ -449,24 +443,22 @@ Info 26   [00:01:48.000] 		Projects: /user/username/projects/container/composite
 After request
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
+/user/username/projects/container/compositeexec/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
+/user/username/projects/container/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
+/user/username/projects/container/compositeexec/tsconfig.json: *new*
   {}
-/user/username/projects/container/lib/tsconfig.json:
+/user/username/projects/container/lib/tsconfig.json: *new*
   {}
-/user/username/projects/container/lib/index.ts:
+/user/username/projects/container/lib/index.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/container/tsconfig.json:
+/user/username/projects/container/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 26   [00:01:49.000] response:
     {
@@ -482,26 +474,6 @@ Info 27   [00:01:50.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 28   [00:01:51.000] Search path: /user/username/projects/temp
 Info 29   [00:01:52.000] For info: /user/username/projects/temp/temp.ts :: No config files found.
@@ -547,11 +519,11 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json:
+/user/username/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json:
+/user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/temp/node_modules/@types:
+/user/username/projects/temp/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -565,8 +537,6 @@ FsWatches::
   {}
 /user/username/projects/container/tsconfig.json:
   {}
-
-FsWatchesRecursive::
 
 Info 39   [00:02:16.000] response:
     {
@@ -584,32 +554,6 @@ Info 40   [00:02:17.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 41   [00:02:18.000] Search path: /user/username/projects/container/lib
 Info 42   [00:02:19.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
@@ -710,9 +654,9 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
+/user/username/projects/container/lib/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
+/user/username/projects/container/exec/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -726,12 +670,10 @@ FsWatches::
   {}
 /user/username/projects/container/tsconfig.json:
   {}
-/user/username/projects/container/exec/tsconfig.json:
+/user/username/projects/container/exec/tsconfig.json: *new*
   {}
-/user/username/projects/container/exec/index.ts:
+/user/username/projects/container/exec/index.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 75   [00:02:52.000] response:
     {
@@ -860,6 +802,12 @@ PolledWatches::
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/user/username/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+
 FsWatches::
 /user/username/projects/container/compositeexec/tsconfig.json:
   {}
@@ -875,10 +823,8 @@ FsWatches::
   {}
 /user/username/projects/container/exec/index.ts:
   {}
-/user/username/projects/temp/temp.ts:
+/user/username/projects/temp/temp.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 80   [00:03:15.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
 Info 81   [00:03:16.000] Search path: /user/username/projects/temp
@@ -937,9 +883,9 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json:
+/user/username/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json:
+/user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -958,7 +904,9 @@ FsWatches::
 /user/username/projects/container/exec/index.ts:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/temp/temp.ts:
+  {}
 
 Info 90   [00:03:45.000] response:
     {
@@ -1035,6 +983,12 @@ PolledWatches::
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/user/username/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+
 FsWatches::
 /user/username/projects/container/compositeexec/tsconfig.json:
   {}
@@ -1050,12 +1004,10 @@ FsWatches::
   {}
 /user/username/projects/container/exec/index.ts:
   {}
-/user/username/projects/container/compositeexec/index.ts:
+/user/username/projects/container/compositeexec/index.ts: *new*
   {}
-/user/username/projects/temp/temp.ts:
+/user/username/projects/temp/temp.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 96   [00:04:25.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
 Info 97   [00:04:26.000] Search path: /user/username/projects/temp
@@ -1161,16 +1113,42 @@ After request
 PolledWatches::
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json:
+/user/username/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json:
+/user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/user/username/projects/container/compositeexec/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/lib/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/exec/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/container/compositeexec/tsconfig.json:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/lib/index.ts:
+  {}
+/user/username/projects/container/tsconfig.json:
+  {}
+/user/username/projects/container/exec/tsconfig.json:
+  {}
+/user/username/projects/container/exec/index.ts:
+  {}
+/user/username/projects/container/compositeexec/index.ts:
+  {}
+/user/username/projects/temp/temp.ts:
+  {}
 
 Info 143  [00:05:18.000] response:
     {

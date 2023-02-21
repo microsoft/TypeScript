@@ -36,22 +36,10 @@ export { foo } from "./foo";
 export function foo(): string;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:31.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
 Info 3    [00:00:32.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
 After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 4    [00:00:33.000] response:
     {
@@ -83,12 +71,6 @@ Info 5    [00:00:34.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 Info 6    [00:00:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 {"excludeDirectories":["node_modules"]} WatchType: Closed Script info
 Info 7    [00:00:36.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["node_modules"]} WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -122,16 +104,14 @@ Info 16   [00:00:45.000] 	Files (4)
 Info 17   [00:00:46.000] -----------------------------------------------
 After request
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/src/main.ts:
+/user/username/projects/myproject/src/main.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
 
 Info 18   [00:00:47.000] response:
@@ -150,18 +130,6 @@ Info 19   [00:00:48.000] request:
     }
 Before request
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/src/main.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Info 20   [00:00:49.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 {"excludeDirectories":["node_modules"]} WatchType: Closed Script info
 Info 21   [00:00:50.000] Project '/user/username/projects/myproject/project.csproj' (External)
 Info 21   [00:00:51.000] 	Files (4)
@@ -172,10 +140,12 @@ Info 21   [00:00:54.000] 	FileName: /user/username/projects/myproject/src/main.t
 Info 21   [00:00:55.000] 		Projects: /user/username/projects/myproject/project.csproj
 After request
 
-PolledWatches::
-
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/src/main.ts:
   {}
 
 FsWatchesRecursive::

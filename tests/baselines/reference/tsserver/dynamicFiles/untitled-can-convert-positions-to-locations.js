@@ -16,12 +16,6 @@ Before request
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:11.000] Search path: /proj
 Info 3    [00:00:12.000] For info: /proj/a.ts :: Config file name: /proj/tsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /proj/tsconfig.json
@@ -60,17 +54,17 @@ Info 17   [00:00:31.000] 		Projects: /proj/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/proj/node_modules/@types:
+/proj/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/proj/tsconfig.json:
+/proj/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/proj:
+/proj: *new*
   {}
 
 Info 17   [00:00:32.000] response:
@@ -90,20 +84,6 @@ Info 18   [00:00:33.000] request:
       "type": "request"
     }
 Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/proj/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/proj/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/proj:
-  {}
 
 Info 19   [00:00:34.000] Search path: 
 Info 20   [00:00:35.000] For info: untitled:^Untitled-1 :: No config files found.
@@ -142,7 +122,7 @@ PolledWatches::
   {"pollingInterval":500}
 /proj/node_modules/@types:
   {"pollingInterval":500}
-/typings/@epic/core.d.ts:
+/typings/@epic/core.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -175,39 +155,7 @@ Info 31   [00:00:57.000] request:
     }
 Before request
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/proj/node_modules/@types:
-  {"pollingInterval":500}
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/proj/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/proj:
-  {}
-
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/proj/node_modules/@types:
-  {"pollingInterval":500}
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/proj/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/proj:
-  {}
 
 Info 32   [00:00:58.000] response:
     {
