@@ -36,7 +36,8 @@ switch (2) {
     case 1:
 >1 : 1
 
-        x++;
->x++ : number
+        x=1;
+>x=1 : 1
 >x : any
+>1 : 1
 }

@@ -64,7 +64,6 @@ tests/cases/compiler/unusedPrivateMembers.ts(56,13): error TS6133: 'b' is declar
         public test() {
             var x = new Test6();
             x.a++;
-            x.b++;
         }
     }
     

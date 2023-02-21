@@ -7,6 +7,5 @@ tests/cases/compiler/unusedLocalsInMethod2.ts(3,9): error TS6199: All variables 
             var x, y = 10;
             ~~~~~~~~~~~~~~
 !!! error TS6199: All variables are unused.
-            y++;
         }
     }

@@ -2,7 +2,6 @@
 class greeter {
     public function1() {
         var x, y = 10;
-        y++;
     }
 }
 
@@ -12,7 +11,6 @@ var greeter = /** @class */ (function () {
     }
     greeter.prototype.function1 = function () {
         var x, y = 10;
-        y++;
     };
     return greeter;
 }());

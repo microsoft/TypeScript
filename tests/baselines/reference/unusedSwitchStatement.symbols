@@ -22,6 +22,6 @@ switch (2) {
 >x : Symbol(x, Decl(unusedSwitchStatement.ts, 14, 11))
 
     case 1:
-        x++;
+        x=1;
 >x : Symbol(x, Decl(unusedSwitchStatement.ts, 14, 11))
 }
