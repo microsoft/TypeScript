@@ -49,7 +49,8 @@ export interface PostExecAction {
 }
 
 export interface Logger extends ts.server.Logger {
-    logs: string[];
+    logs?: string[];
+    log(s: string): void;
     host?: TestServerHost;
 }
 
@@ -64,7 +65,7 @@ export function nullLogger(): Logger {
         startGroup: ts.noop,
         endGroup: ts.noop,
         getLogFileName: ts.returnUndefined,
-        logs: [],
+        log: ts.noop,
     };
 }
 
@@ -87,6 +88,7 @@ function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Lo
     logger.host = host;
     const originalInfo = logger.info;
     logger.info = s => msg(s, ts.server.Msg.Info, s => originalInfo.call(logger, s));
+    logger.log = s => originalInfo.call(logger, s);
     return logger;
 
     function msg(s: string, type = ts.server.Msg.Err, write: (s: string) => void) {
@@ -121,11 +123,13 @@ export function createLoggerWritingToConsole(host: TestServerHost): Logger {
 
 export function createLoggerWithInMemoryLogs(host: TestServerHost): Logger {
     const logger = createHasErrorMessageLogger();
+    const logs: string[] = [];
     return handleLoggerGroup({
         ...logger,
+        logs,
         hasLevel: ts.returnTrue,
         loggingEnabled: ts.returnTrue,
-        info: s => logger.logs.push(
+        info: s => logs.push(
             s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
                 .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
                 .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
@@ -146,26 +150,15 @@ export function createLoggerWithInMemoryLogs(host: TestServerHost): Logger {
 }
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: Logger; }) {
-    ts.Debug.assert(sessionOrService.logger.logs.length); // Ensure caller used in memory logger
+    ts.Debug.assert(sessionOrService.logger.logs?.length); // Ensure caller used in memory logger
     Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
 }
 
-export function appendAllScriptInfos(service: ts.server.ProjectService, logs: string[]) {
-    logs.push("");
-    logs.push(`ScriptInfos:`);
-    service.filenameToScriptInfo.forEach(info => logs.push(`path: ${info.path} fileName: ${info.fileName}`));
-    logs.push("");
-}
-
-export function appendProjectFileText(project: ts.server.Project, logs: string[]) {
-    logs.push("");
-    logs.push(`Project: ${project.getProjectName()}`);
-    project.getCurrentProgram()?.getSourceFiles().forEach(f => {
-        logs.push(JSON.stringify({ fileName: f.fileName, version: f.version }));
-        logs.push(f.text);
-        logs.push("");
-    });
-    logs.push("");
+export function appendAllScriptInfos(session: TestSession) {
+    session.logger.log("");
+    session.logger.log(`ScriptInfos:`);
+    session.getProjectService().filenameToScriptInfo.forEach(info => session.logger.log(`path: ${info.path} fileName: ${info.fileName}`));
+    session.logger.log("");
 }
 
 export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller implements ts.server.ITypingsInstaller {
@@ -386,9 +379,11 @@ function patchHostTimeouts(
 
     function baselineHost(title: string) {
         if (!session.logger.hasLevel(ts.server.LogLevel.verbose)) return;
-        session.logger.logs.push(title);
-        host.diff(session.logger.logs, hostDiff);
-        host.serializeWatches(session.logger.logs);
+        session.logger.log(title);
+        const logs = session.logger.logs || [];
+        host.diff(logs, hostDiff);
+        host.serializeWatches(logs);
+        if (!session.logger.logs) logs.forEach(log => session.logger.log(log));
         hostDiff = host.snap();
         host.writtenFiles.clear();
     }
@@ -785,7 +780,7 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
     skip?: readonly (SkipErrors | undefined)[];
 }
 function checkAllErrors({ session, host, existingTimeouts, files, skip }: CheckAllErrors) {
-    ts.Debug.assert(session.logger.logs.length);
+    ts.Debug.assert(session.logger.logs?.length);
     for (let i = 0; i < files.length; i++) {
         if (existingTimeouts !== undefined) {
             host.checkTimeoutQueueLength(existingTimeouts + 1);
