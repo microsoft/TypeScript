@@ -347,7 +347,6 @@ import {
     TypeChecker,
     TypeElement,
     TypeFlags,
-    typeHasCallOrConstructSignatures,
     TypeLiteralNode,
     TypeNode,
     TypeOnlyImportDeclaration,
@@ -4774,7 +4773,7 @@ function getApparentProperties(type: Type, node: ObjectLiteralExpression | JsxAt
         !(memberType.flags & TypeFlags.Primitive
             || checker.isArrayLikeType(memberType)
             || checker.isTypeInvalidDueToUnionDiscriminant(memberType, node)
-            || typeHasCallOrConstructSignatures(memberType, checker)
+            || checker.typeHasCallOrConstructSignatures(memberType)
             || memberType.isClass() && containsNonPublicProperties(memberType.getApparentProperties()))));
 }
 
