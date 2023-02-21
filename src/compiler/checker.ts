@@ -16125,7 +16125,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function insertType(types: Type[], type: Type): boolean {
-        const index = binarySearch(types, type, getTypeId, compareValues);
+        // TODO(jakebailey): we already have insertSorted and should use it here (adding the perf optimization?)
+        const len = types.length;
+        // Perf optimization (measure?); check the last element first as we often insert in order.
+        const index = len && type.id > types[len - 1].id ? ~len : binarySearch(types, type, getTypeId, compareValues);
         if (index < 0) {
             types.splice(~index, 0, type);
             return true;
@@ -16147,11 +16150,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
             }
             else {
-                const len = typeSet.length;
-                const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
-                if (index < 0) {
-                    typeSet.splice(~index, 0, type);
-                }
+                insertType(typeSet, type);
             }
         }
         return includes;
@@ -16439,7 +16438,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedType;
     }
 
-    function addTypeToIntersection(typeSet: Map<string, Type>, includes: TypeFlags, type: Type) {
+    function addTypeToIntersection(typeSet: Type[], includes: TypeFlags, type: Type) {
         const flags = type.flags;
         if (flags & TypeFlags.Intersection) {
             return addTypesToIntersection(typeSet, includes, (type as IntersectionType).types);
@@ -16447,7 +16446,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isEmptyAnonymousObjectType(type)) {
             if (!(includes & TypeFlags.IncludesEmptyObject)) {
                 includes |= TypeFlags.IncludesEmptyObject;
-                typeSet.set(type.id.toString(), type);
+                insertType(typeSet, type);
             }
         }
         else {
@@ -16459,13 +16458,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     includes |= TypeFlags.IncludesMissingType;
                     type = undefinedType;
                 }
-                if (!typeSet.has(type.id.toString())) {
+                const inserted = insertType(typeSet, type);
+                if (inserted) {
                     if (type.flags & TypeFlags.Unit && includes & TypeFlags.Unit) {
                         // We have seen two distinct unit types which means we should reduce to an
                         // empty intersection. Adding TypeFlags.NonPrimitive causes that to happen.
                         includes |= TypeFlags.NonPrimitive;
                     }
-                    typeSet.set(type.id.toString(), type);
                 }
             }
             includes |= flags & TypeFlags.IncludesMask;
@@ -16475,7 +16474,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Add the given types to the given type set. Order is preserved, freshness is removed from literal
     // types, duplicates are removed, and nested types of the given kind are flattened into the set.
-    function addTypesToIntersection(typeSet: Map<string, Type>, includes: TypeFlags, types: readonly Type[]) {
+    function addTypesToIntersection(typeSet: Type[], includes: TypeFlags, types: readonly Type[]) {
         for (const type of types) {
             includes = addTypeToIntersection(typeSet, includes, getRegularTypeOfLiteralType(type));
         }
@@ -16618,9 +16617,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
     // for intersections of types with signatures can be deterministic.
     function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], noSupertypeReduction?: boolean): Type {
-        const typeMembershipMap: Map<string, Type> = new Map();
-        const includes = addTypesToIntersection(typeMembershipMap, 0 as TypeFlags, types);
-        const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
+        const typeSet: Type[] = [];
+        const includes = addTypesToIntersection(typeSet, 0 as TypeFlags, types);
         // An intersection type is considered empty if it contains
         // the type never, or
         // more than one unit type or,
