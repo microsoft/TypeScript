@@ -1325,17 +1325,18 @@ export function createSourceFile(fileName: string, sourceText: string, languageV
     const {
         languageVersion,
         setExternalModuleIndicator: overrideSetExternalModuleIndicator,
-        impliedNodeFormat: format
+        impliedNodeFormat: format,
+        skipJSDoc,
     } = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions : ({ languageVersion: languageVersionOrOptions } as CreateSourceFileOptions);
     if (languageVersion === ScriptTarget.JSON) {
-        result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON, noop);
+        result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON, noop, skipJSDoc);
     }
     else {
         const setIndicator = format === undefined ? overrideSetExternalModuleIndicator : (file: SourceFile) => {
             file.impliedNodeFormat = format;
             return (overrideSetExternalModuleIndicator || setExternalModuleIndicator)(file);
         };
-        result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind, setIndicator);
+        result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind, setIndicator, skipJSDoc);
     }
     perfLogger.logStopParseSourceFile();
 
@@ -1698,7 +1699,7 @@ namespace Parser {
         scanner.setOnError(scanError);
         scanner.setScriptTarget(languageVersion);
         scanner.setLanguageVariant(languageVariant);
-        scanner.setSkipJSDoc(_skipJSDoc && !!(contextFlags & NodeFlags.JavaScriptFile));
+        scanner.setSkipJSDoc(_skipJSDoc && !(contextFlags & NodeFlags.JavaScriptFile));
     }
 
     function clearState() {

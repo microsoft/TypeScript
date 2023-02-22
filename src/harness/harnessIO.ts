@@ -243,7 +243,7 @@ export namespace Compiler {
     export function createSourceFileAndAssertInvariants(
         fileName: string,
         sourceText: string,
-        languageVersion: ts.ScriptTarget) {
+        languageVersion: ts.CreateSourceFileOptions) {
         // We'll only assert invariants outside of light mode.
         const shouldAssertInvariants = !lightMode;
 
@@ -263,20 +263,20 @@ export namespace Compiler {
     // Cache of lib files from "built/local"
     let libFileNameSourceFileMap: Map<string, ts.SourceFile> | undefined;
 
-    export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile | undefined {
+    export function getDefaultLibrarySourceFile(compilerOptions: ts.CompilerOptions, fileName = defaultLibFileName): ts.SourceFile | undefined {
         if (!isDefaultLibraryFile(fileName)) {
             return undefined;
         }
 
         if (!libFileNameSourceFileMap) {
             libFileNameSourceFileMap = new Map(Object.entries({
-                [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest)
+                [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, { languageVersion: ts.ScriptTarget.Latest, skipJSDoc: compilerOptions.skipJSDocParsing })
             }));
         }
 
         let sourceFile = libFileNameSourceFileMap.get(fileName);
         if (!sourceFile) {
-            libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest));
+            libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, { languageVersion: ts.ScriptTarget.Latest, skipJSDoc: compilerOptions.skipJSDocParsing }));
         }
         return sourceFile;
     }

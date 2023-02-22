@@ -238,6 +238,7 @@ export class CompilerHost implements ts.CompilerHost {
     private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
     private _parseConfigHost: ParseConfigHost | undefined;
     private _newLine: string;
+    // private _skipJSDocParsing: boolean | undefined;
 
     constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false) {
         if (sys instanceof vfs.FileSystem) sys = new System(sys);
@@ -247,6 +248,7 @@ export class CompilerHost implements ts.CompilerHost {
         this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
         this._setParentNodes = setParentNodes;
         this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
+        // this._skipJSDocParsing = options.skipJSDocParsing;
     }
 
     public get vfs() {
@@ -335,7 +337,7 @@ export class CompilerHost implements ts.CompilerHost {
         return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
     }
 
-    public getSourceFile(fileName: string, languageVersion: number): ts.SourceFile | undefined {
+    public getSourceFile(fileName: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions): ts.SourceFile | undefined {
         const canonicalFileName = this.getCanonicalFileName(vpath.resolve(this.getCurrentDirectory(), fileName));
         const existing = this._sourceFiles.get(canonicalFileName);
         if (existing) return existing;
@@ -349,7 +351,7 @@ export class CompilerHost implements ts.CompilerHost {
         // reused across multiple tests. In that case, we cache the SourceFile we parse
         // so that it can be reused across multiple tests to avoid the cost of
         // repeatedly parsing the same file over and over (such as lib.d.ts).
-        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
+        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersionOrOptions=${languageVersionOrOptions !== undefined ? JSON.stringify(languageVersionOrOptions) : undefined},setParentNodes=${this._setParentNodes}]`;
         if (cacheKey) {
             const meta = this.vfs.filemeta(canonicalFileName);
             const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
@@ -359,7 +361,7 @@ export class CompilerHost implements ts.CompilerHost {
             }
         }
 
-        const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
+        const parsed = ts.createSourceFile(fileName, content, languageVersionOrOptions, this._setParentNodes || this.shouldAssertInvariants);
         if (this.shouldAssertInvariants) {
             Utils.assertInvariants(parsed, /*parent*/ undefined);
         }
