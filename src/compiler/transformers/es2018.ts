@@ -8,7 +8,6 @@ import {
     advancedAsyncSuperHelper,
     append,
     ArrowFunction,
-    AssignmentPattern,
     asyncSuperHelper,
     AwaitExpression,
     BinaryExpression,
@@ -20,6 +19,7 @@ import {
     concatenate,
     ConciseBody,
     ConstructorDeclaration,
+    containsObjectRestOrSpread,
     createForOfBindingStatement,
     createSuperAccessVariableStatement,
     Debug,
@@ -41,11 +41,9 @@ import {
     FunctionLikeDeclaration,
     GeneratedIdentifierFlags,
     GetAccessorDeclaration,
-    getElementsOfBindingOrAssignmentPattern,
     getEmitScriptTarget,
     getFunctionFlags,
     getNodeId,
-    getTargetOfBindingOrAssignmentElement,
     hasSyntacticModifier,
     Identifier,
     insertStatementsAfterStandardPrologue,
@@ -715,32 +713,6 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             factory.restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
         exitSubtree(ancestorFacts);
         return result;
-    }
-
-    /**
-     * Walk an AssignmentPattern to determine if it contains object rest (`...`) syntax. We cannot rely on
-     * propagation of `TransformFlags.ContainsObjectRestOrSpread` since it isn't propagated by default in
-     * ObjectLiteralExpression and ArrayLiteralExpression since we do not know whether they belong to an
-     * AssignmentPattern at the time the nodes are parsed.
-     */
-    function containsObjectRestOrSpread(node: AssignmentPattern): boolean {
-        if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) return true;
-        if (node.transformFlags & TransformFlags.ContainsES2018) {
-            // check for nested spread assignments, otherwise '{ x: { a, ...b } = foo } = c'
-            // will not be correctly interpreted by the ES2018 transformer
-            for (const element of getElementsOfBindingOrAssignmentPattern(node)) {
-                const target = getTargetOfBindingOrAssignmentElement(element);
-                if (target && isAssignmentPattern(target)) {
-                    if (target.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
-                        return true;
-                    }
-                    if (target.transformFlags & TransformFlags.ContainsES2018) {
-                        if (containsObjectRestOrSpread(target)) return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     function transformForOfStatementWithObjectRest(node: ForOfStatement) {
