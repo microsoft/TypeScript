@@ -167,10 +167,11 @@ function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
 }
 
 function getOptionsForHelp(commandLine: ParsedCommandLine) {
+    const filtered = filter(optionDeclarations.slice(), v => !v.hiddenInAllViews && (!!commandLine.options.all || !!v.showInSimplifiedHelpView));
     // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
     return !!commandLine.options.all ?
-        sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
-        filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
+        sort(filtered, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
+        filtered;
 }
 
 function printVersion(sys: System) {

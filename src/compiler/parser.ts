@@ -1309,6 +1309,7 @@ export interface CreateSourceFileOptions {
     setExternalModuleIndicator?: (file: SourceFile) => void;
     /** @internal */ packageJsonLocations?: readonly string[];
     /** @internal */ packageJsonScope?: PackageJsonInfo;
+    /** @internal */ skipJSDoc?: boolean;
 }
 
 function setExternalModuleIndicator(sourceFile: SourceFile) {
@@ -1531,9 +1532,11 @@ namespace Parser {
     // Note: any errors at the end of the file that do not precede a regular node, should get
     // attached to the EOF token.
     var parseErrorBeforeNextFinishedNode = false;
+
+    var skipJSDoc = false;
     /* eslint-enable no-var */
 
-    export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind, setExternalModuleIndicatorOverride?: (file: SourceFile) => void): SourceFile {
+    export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind, setExternalModuleIndicatorOverride?: (file: SourceFile) => void, skipJSDoc = false): SourceFile {
         scriptKind = ensureScriptKind(fileName, scriptKind);
         if (scriptKind === ScriptKind.JSON) {
             const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
@@ -1547,7 +1550,7 @@ namespace Parser {
             return result;
         }
 
-        initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind);
+        initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind, skipJSDoc);
 
         const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind, setExternalModuleIndicatorOverride || setExternalModuleIndicator);
 
@@ -1558,7 +1561,7 @@ namespace Parser {
 
     export function parseIsolatedEntityName(content: string, languageVersion: ScriptTarget): EntityName | undefined {
         // Choice of `isDeclarationFile` should be arbitrary
-        initializeState("", content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS);
+        initializeState("", content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS, /*skipJSDoc*/ false);
         // Prime the scanner.
         nextToken();
         const entityName = parseEntityName(/*allowReservedWords*/ true);
@@ -1568,7 +1571,7 @@ namespace Parser {
     }
 
     export function parseJsonText(fileName: string, sourceText: string, languageVersion: ScriptTarget = ScriptTarget.ES2015, syntaxCursor?: IncrementalParser.SyntaxCursor, setParentNodes = false): JsonSourceFile {
-        initializeState(fileName, sourceText, languageVersion, syntaxCursor, ScriptKind.JSON);
+        initializeState(fileName, sourceText, languageVersion, syntaxCursor, ScriptKind.JSON, /*skipJSDoc*/ false);
         sourceFlags = contextFlags;
 
         // Prime the scanner.
@@ -1656,7 +1659,7 @@ namespace Parser {
         return result;
     }
 
-    function initializeState(_fileName: string, _sourceText: string, _languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor | undefined, _scriptKind: ScriptKind) {
+    function initializeState(_fileName: string, _sourceText: string, _languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor | undefined, _scriptKind: ScriptKind, _skipJSDoc: boolean) {
         NodeConstructor = objectAllocator.getNodeConstructor();
         TokenConstructor = objectAllocator.getTokenConstructor();
         IdentifierConstructor = objectAllocator.getIdentifierConstructor();
@@ -1669,6 +1672,7 @@ namespace Parser {
         syntaxCursor = _syntaxCursor;
         scriptKind = _scriptKind;
         languageVariant = getLanguageVariant(_scriptKind);
+        skipJSDoc = _skipJSDoc;
 
         parseDiagnostics = [];
         parsingContext = 0;
@@ -1718,6 +1722,7 @@ namespace Parser {
         identifiers = undefined!;
         notParenthesizedArrow = undefined;
         topLevel = true;
+        skipJSDoc = false;
     }
 
     function parseSourceFileWorker(languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind, setExternalModuleIndicator: (file: SourceFile) => void): SourceFile {
@@ -1765,10 +1770,18 @@ namespace Parser {
         return hasJSDoc ? addJSDocComment(node) : node;
     }
 
+    const seeLink = /@(?:see|link)/;
+    function shouldParseJSDoc<T extends HasJSDoc>(node: T, comment: ts.CommentRange) {
+        if (!skipJSDoc) return true;
+        if (node.flags & NodeFlags.JavaScriptFile) return true;
+        if (seeLink.test(sourceText.slice(comment.pos, comment.end))) return true;
+        return undefined;
+    }
+
     let hasDeprecatedTag = false;
     function addJSDocComment<T extends HasJSDoc>(node: T): T {
         Debug.assert(!node.jsDoc); // Should only be called once per node
-        const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
+        const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => shouldParseJSDoc(node, comment) && JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
         if (jsDoc.length) node.jsDoc = jsDoc;
         if (hasDeprecatedTag) {
             hasDeprecatedTag = false;
@@ -8430,7 +8443,7 @@ namespace Parser {
 
     export namespace JSDocParser {
         export function parseJSDocTypeExpressionForTests(content: string, start: number | undefined, length: number | undefined): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
-            initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+            initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS, /*skipJSDoc*/ false);
             scanner.setText(content, start, length);
             currentToken = scanner.scan();
             const jsDocTypeExpression = parseJSDocTypeExpression();
@@ -8480,7 +8493,7 @@ namespace Parser {
         }
 
         export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
-            initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+            initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS, /*skipJSDoc*/ false);
             const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
 
             const sourceFile = { languageVariant: LanguageVariant.Standard, text: content } as SourceFile;
