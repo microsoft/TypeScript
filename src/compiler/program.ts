@@ -4404,7 +4404,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createDiagnostic(Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
         }
         else {
-            createDiagnostic(Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
+            createDiagnostic(Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
         }
     }
 

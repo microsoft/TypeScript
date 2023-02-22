@@ -501,49 +501,53 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
 }
 
 function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
-    let file: SourceFile;
-    let options: CompilerOptions;
-    let languageVersion: ScriptTarget;
-    let parent: Node;
-    let container: IsContainer | EntityNameExpression;
-    let thisParentContainer: IsContainer | EntityNameExpression; // Container one level up
-    let blockScopeContainer: IsBlockScopedContainer;
-    let lastContainer: HasLocals;
-    let delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
-    let seenThisKeyword: boolean;
+    /* eslint-disable no-var */
+    var file: SourceFile;
+    var options: CompilerOptions;
+    var languageVersion: ScriptTarget;
+    var parent: Node;
+    var container: IsContainer | EntityNameExpression;
+    var thisParentContainer: IsContainer | EntityNameExpression; // Container one level up
+    var blockScopeContainer: IsBlockScopedContainer;
+    var lastContainer: HasLocals;
+    var delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
+    var seenThisKeyword: boolean;
 
     // state used by control flow analysis
-    let currentFlow: FlowNode;
-    let currentBreakTarget: FlowLabel | undefined;
-    let currentContinueTarget: FlowLabel | undefined;
-    let currentReturnTarget: FlowLabel | undefined;
-    let currentTrueTarget: FlowLabel | undefined;
-    let currentFalseTarget: FlowLabel | undefined;
-    let currentExceptionTarget: FlowLabel | undefined;
-    let preSwitchCaseFlow: FlowNode | undefined;
-    let activeLabelList: ActiveLabel | undefined;
-    let hasExplicitReturn: boolean;
+    var currentFlow: FlowNode;
+    var currentBreakTarget: FlowLabel | undefined;
+    var currentContinueTarget: FlowLabel | undefined;
+    var currentReturnTarget: FlowLabel | undefined;
+    var currentTrueTarget: FlowLabel | undefined;
+    var currentFalseTarget: FlowLabel | undefined;
+    var currentExceptionTarget: FlowLabel | undefined;
+    var preSwitchCaseFlow: FlowNode | undefined;
+    var activeLabelList: ActiveLabel | undefined;
+    var hasExplicitReturn: boolean;
 
     // state used for emit helpers
-    let emitFlags: NodeFlags;
+    var emitFlags: NodeFlags;
 
     // If this file is an external module, then it is automatically in strict-mode according to
     // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
     // not depending on if we see "use strict" in certain places or if we hit a class/namespace
     // or if compiler options contain alwaysStrict.
-    let inStrictMode: boolean;
+    var inStrictMode: boolean;
 
     // If we are binding an assignment pattern, we will bind certain expressions differently.
-    let inAssignmentPattern = false;
+    var inAssignmentPattern = false;
 
-    let symbolCount = 0;
+    var symbolCount = 0;
 
-    let Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
-    let classifiableNames: Set<__String>;
+    var Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
+    var classifiableNames: Set<__String>;
 
-    const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
-    const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
-    const bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
+    var unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+    var reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+    var bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
+    /* eslint-enable no-var */
+
+    return bindSourceFile;
 
     /**
      * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
@@ -599,8 +603,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
     }
-
-    return bindSourceFile;
 
     function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
         if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
