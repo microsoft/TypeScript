@@ -103,6 +103,8 @@ export interface Scanner {
     // callback returns something truthy, then the scanner state is not rolled back.  The result
     // of invoking the callback is returned from this function.
     tryScan<T>(callback: () => T): T;
+    /** @internal */
+    setSkipJSDoc(skip: boolean): void;
 }
 
 /** @internal */
@@ -324,6 +326,11 @@ const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)
  * Test for whether a multi-line comment with leading whitespace trimmed's last line contains a directive.
  */
 const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
+
+/**
+ * Test for whether a comment contains a JSDoc tag needed by the checker when run in tsc.
+ */
+const semanticJSDocTagRegEx = /@(?:see|link)/i;
 
 function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
     // Bail out quickly if it couldn't possibly be in the map.
@@ -984,6 +991,8 @@ export function createScanner(languageVersion: ScriptTarget,
     var commentDirectives: CommentDirective[] | undefined;
     var inJSDocType = 0;
 
+    var skipJSDoc = false;
+
     setText(text, start, length);
 
     var scanner: Scanner = {
@@ -1030,6 +1039,7 @@ export function createScanner(languageVersion: ScriptTarget,
         tryScan,
         lookAhead,
         scanRange,
+        setSkipJSDoc,
     };
     /* eslint-enable no-var */
 
@@ -1823,9 +1833,7 @@ export function createScanner(languageVersion: ScriptTarget,
                     // Multi-line comment
                     if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                         pos += 2;
-                        if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash) {
-                            tokenFlags |= TokenFlags.PrecedingJSDocComment;
-                        }
+                        const isJSDoc = text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash;
 
                         let commentClosed = false;
                         let lastLineStart = tokenPos;
@@ -1844,6 +1852,10 @@ export function createScanner(languageVersion: ScriptTarget,
                                 lastLineStart = pos;
                                 tokenFlags |= TokenFlags.PrecedingLineBreak;
                             }
+                        }
+
+                        if (isJSDoc && (!skipJSDoc || semanticJSDocTagRegEx.test(text.slice(tokenPos, pos)))) {
+                            tokenFlags |= TokenFlags.PrecedingJSDocComment;
                         }
 
                         commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
@@ -2619,6 +2631,10 @@ export function createScanner(languageVersion: ScriptTarget,
 
     function setLanguageVariant(variant: LanguageVariant) {
         languageVariant = variant;
+    }
+
+    function setSkipJSDoc(skip: boolean) {
+        skipJSDoc = skip;
     }
 
     function setTextPos(textPos: number) {

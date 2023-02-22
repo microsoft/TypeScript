@@ -1532,8 +1532,6 @@ namespace Parser {
     // Note: any errors at the end of the file that do not precede a regular node, should get
     // attached to the EOF token.
     var parseErrorBeforeNextFinishedNode = false;
-
-    var skipJSDoc = false;
     /* eslint-enable no-var */
 
     export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind, setExternalModuleIndicatorOverride?: (file: SourceFile) => void, skipJSDoc = false): SourceFile {
@@ -1672,7 +1670,6 @@ namespace Parser {
         syntaxCursor = _syntaxCursor;
         scriptKind = _scriptKind;
         languageVariant = getLanguageVariant(_scriptKind);
-        skipJSDoc = _skipJSDoc;
 
         parseDiagnostics = [];
         parsingContext = 0;
@@ -1701,6 +1698,7 @@ namespace Parser {
         scanner.setOnError(scanError);
         scanner.setScriptTarget(languageVersion);
         scanner.setLanguageVariant(languageVariant);
+        scanner.setSkipJSDoc(_skipJSDoc && !!(contextFlags & NodeFlags.JavaScriptFile));
     }
 
     function clearState() {
@@ -1708,6 +1706,7 @@ namespace Parser {
         scanner.clearCommentDirectives();
         scanner.setText("");
         scanner.setOnError(undefined);
+        scanner.setSkipJSDoc(false);
 
         // Clear any data.  We don't want to accidentally hold onto it for too long.
         sourceText = undefined!;
@@ -1722,7 +1721,6 @@ namespace Parser {
         identifiers = undefined!;
         notParenthesizedArrow = undefined;
         topLevel = true;
-        skipJSDoc = false;
     }
 
     function parseSourceFileWorker(languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind, setExternalModuleIndicator: (file: SourceFile) => void): SourceFile {
@@ -1739,6 +1737,8 @@ namespace Parser {
         const statements = parseList(ParsingContext.SourceElements, parseStatement);
         Debug.assert(token() === SyntaxKind.EndOfFileToken);
         const endOfFileToken = addJSDocComment(parseTokenNode<EndOfFileToken>());
+        // TODO(jakebailey): this should really be the following, but why isn't the flag set?
+        // const endOfFileToken = withJSDoc(parseTokenNode<EndOfFileToken>(), hasPrecedingJSDocComment());
 
         const sourceFile = createSourceFile(fileName, languageVersion, scriptKind, isDeclarationFile, statements, endOfFileToken, sourceFlags, setExternalModuleIndicator);
 
@@ -1770,18 +1770,15 @@ namespace Parser {
         return hasJSDoc ? addJSDocComment(node) : node;
     }
 
-    const seeLink = /@(?:see|link)/;
-    function shouldParseJSDoc<T extends HasJSDoc>(node: T, comment: ts.CommentRange) {
-        if (!skipJSDoc) return true;
-        if (node.flags & NodeFlags.JavaScriptFile) return true;
-        if (seeLink.test(sourceText.slice(comment.pos, comment.end))) return true;
-        return undefined;
-    }
-
     let hasDeprecatedTag = false;
+    /**
+     * Adds a JSDoc comment to a node, if any exist.
+     *
+     * Avoid calling this directly; use {@see withJSDoc} instead.
+     */
     function addJSDocComment<T extends HasJSDoc>(node: T): T {
         Debug.assert(!node.jsDoc); // Should only be called once per node
-        const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => shouldParseJSDoc(node, comment) && JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
+        const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
         if (jsDoc.length) node.jsDoc = jsDoc;
         if (hasDeprecatedTag) {
             hasDeprecatedTag = false;
@@ -5072,7 +5069,7 @@ namespace Parser {
         const equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
         const body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier, allowReturnTypeInArrowFunction);
         const node = factory.createArrowFunction(asyncModifier, /*typeParameters*/ undefined, parameters, /*type*/ undefined, equalsGreaterThanToken, body);
-        return addJSDocComment(finishNode(node, pos));
+        return finishNode(node, pos);
     }
 
     function tryParseParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction: boolean): Expression | undefined {
