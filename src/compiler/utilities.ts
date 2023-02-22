@@ -596,7 +596,9 @@ export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
 const stringWriter = createSingleLineStringWriter();
 
 function createSingleLineStringWriter(): EmitTextWriter {
-    let str = "";
+    /* eslint-disable no-var */
+    var str = "";
+    /* eslint-enable no-var */
     const writeText: (text: string) => void = text => str += text;
     return {
         getText: () => str,
@@ -5810,12 +5812,14 @@ export function isNightly() {
 
 /** @internal */
 export function createTextWriter(newLine: string): EmitTextWriter {
-    let output: string;
-    let indent: number;
-    let lineStart: boolean;
-    let lineCount: number;
-    let linePos: number;
-    let hasTrailingComment = false;
+    /* eslint-disable no-var */
+    var output: string;
+    var indent: number;
+    var lineStart: boolean;
+    var lineCount: number;
+    var linePos: number;
+    var hasTrailingComment = false;
+    /* eslint-enable no-var */
 
     function updateLineCountAndPosFor(s: string) {
         const lineStartsOfS = computeLineStarts(s);
