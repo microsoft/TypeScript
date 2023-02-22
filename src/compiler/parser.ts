@@ -6167,7 +6167,7 @@ namespace Parser {
     }
 
     function parseTypeAssertion(): TypeAssertion {
-        Debug.assert(scriptKind === ScriptKind.TS, "Type assertions should never be parsed outside of TS; they should either be comparisons or JSX.");
+        Debug.assert(languageVariant !== LanguageVariant.JSX, "Type assertions should never be parsed in JSX; they should be parsed as comparisons or JSX elements/fragments.");
         const pos = getNodePos();
         parseExpected(SyntaxKind.LessThanToken);
         const type = parseType();
