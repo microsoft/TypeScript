@@ -108,7 +108,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
     private readonly npmPath: string;
     readonly typesRegistry: Map<string, MapLike<string>>;
 
-    delayedInitializationError: InitializationFailedResponse | undefined;
+    private delayedInitializationError: InitializationFailedResponse | undefined;
 
     constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, typesMapLocation: string, npmLocation: string | undefined, validateDefaultNpmLocation: boolean, throttleLimit: number, log: Log) {
         const libDirectory = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
@@ -158,7 +158,50 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), this.installTypingHost, this.log);
     }
 
-    sendResponse(response: TypingInstallerResponseUnion) {
+    handleRequest(req: TypingInstallerRequestUnion) {
+        if (this.delayedInitializationError) {
+            // report initializationFailed error
+            this.sendResponse(this.delayedInitializationError);
+            this.delayedInitializationError = undefined;
+        }
+        switch (req.kind) {
+            case "discover":
+                this.install(req);
+                break;
+            case "closeProject":
+                this.closeProject(req);
+                break;
+            case "typesRegistry": {
+                const typesRegistry: { [key: string]: MapLike<string> } = {};
+                this.typesRegistry.forEach((value, key) => {
+                    typesRegistry[key] = value;
+                });
+                const response: TypesRegistryResponse = { kind: EventTypesRegistry, typesRegistry };
+                this.sendResponse(response);
+                break;
+            }
+            case "installPackage": {
+                const { fileName, packageName, projectName, projectRootPath } = req;
+                const cwd = getDirectoryOfPackageJson(fileName, this.installTypingHost) || projectRootPath;
+                if (cwd) {
+                    this.installWorker(-1, [packageName], cwd, success => {
+                        const message = success ? `Package ${packageName} installed.` : `There was an error installing ${packageName}.`;
+                        const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success, message };
+                        this.sendResponse(response);
+                    });
+                }
+                else {
+                    const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success: false, message: "Could not determine a project root path." };
+                    this.sendResponse(response);
+                }
+                break;
+            }
+            default:
+                Debug.assertNever(req);
+        }
+    }
+
+    protected sendResponse(response: TypingInstallerResponseUnion) {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
         }
@@ -168,7 +211,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         }
     }
 
-    installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
+    protected installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
         if (this.log.isEnabled()) {
             this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
         }
@@ -230,46 +273,7 @@ process.on("disconnect", () => {
 let installer: NodeTypingsInstaller | undefined;
 process.on("message", (req: TypingInstallerRequestUnion) => {
     installer ??= new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
-    if (installer.delayedInitializationError) {
-        // report initializationFailed error
-        installer.sendResponse(installer.delayedInitializationError);
-        installer.delayedInitializationError = undefined;
-    }
-    switch (req.kind) {
-        case "discover":
-            installer.install(req);
-            break;
-        case "closeProject":
-            installer.closeProject(req);
-            break;
-        case "typesRegistry": {
-            const typesRegistry: { [key: string]: MapLike<string> } = {};
-            installer.typesRegistry.forEach((value, key) => {
-                typesRegistry[key] = value;
-            });
-            const response: TypesRegistryResponse = { kind: EventTypesRegistry, typesRegistry };
-            installer.sendResponse(response);
-            break;
-        }
-        case "installPackage": {
-            const { fileName, packageName, projectName, projectRootPath } = req;
-            const cwd = getDirectoryOfPackageJson(fileName, sys) || projectRootPath;
-            if (cwd) {
-                installer.installWorker(-1, [packageName], cwd, success => {
-                    const message = success ? `Package ${packageName} installed.` : `There was an error installing ${packageName}.`;
-                    const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success, message };
-                    installer!.sendResponse(response);
-                });
-            }
-            else {
-                const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success: false, message: "Could not determine a project root path." };
-                installer.sendResponse(response);
-            }
-            break;
-        }
-        default:
-            Debug.assertNever(req);
-    }
+    installer.handleRequest(req);
 });
 
 function indent(newline: string, str: string | undefined): string {
