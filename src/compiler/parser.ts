@@ -1631,7 +1631,7 @@ namespace Parser {
         createSourceFile: factoryCreateSourceFile,
         createSourceFile: factoryCreateSourceFile,
         updateSourceFile: factoryUpdateSourceFile
-    } = factory
+    } = factory;
 
     var fileName: string;
     var sourceFlags: NodeFlags;
