@@ -547,6 +547,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
     /* eslint-enable no-var */
 
+    return bindSourceFile;
+
     /**
      * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
      * If so, the node _must_ be in the current file (as that's the only way anything could have traversed to it to yield it as the error node)
@@ -601,8 +603,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
     }
-
-    return bindSourceFile;
 
     function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
         if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
