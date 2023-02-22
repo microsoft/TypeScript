@@ -10,5 +10,19 @@
 ////function imDeprecated() {}
 ////[|imDeprecated|]()
 
-const [range] = test.ranges();
-verify.getSuggestionDiagnostics([]);
+/////**
+//// * {@see imDeprecated}
+//// * @deprecated
+//// */
+////function imDeprecated2() {}
+////[|imDeprecated2|]()
+
+const [, range] = test.ranges();
+verify.getSuggestionDiagnostics([
+    {
+        "code": 6387,
+        "message": "The signature '(): void' of 'imDeprecated2' is deprecated.",
+        "reportsDeprecated": true,
+        "range": range
+    },
+]);
