@@ -238,7 +238,6 @@ export class CompilerHost implements ts.CompilerHost {
     private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
     private _parseConfigHost: ParseConfigHost | undefined;
     private _newLine: string;
-    // private _skipJSDocParsing: boolean | undefined;
 
     constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false) {
         if (sys instanceof vfs.FileSystem) sys = new System(sys);
@@ -248,7 +247,6 @@ export class CompilerHost implements ts.CompilerHost {
         this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
         this._setParentNodes = setParentNodes;
         this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
-        // this._skipJSDocParsing = options.skipJSDocParsing;
     }
 
     public get vfs() {
