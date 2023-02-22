@@ -1549,9 +1549,10 @@ namespace Parser {
             return result;
         }
 
+        skipJSDoc = skipJSDoc && scriptKind !== ScriptKind.JS && scriptKind !== ScriptKind.JSX;
         initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind, skipJSDoc);
 
-        const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind, setExternalModuleIndicatorOverride || setExternalModuleIndicator);
+        const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind, setExternalModuleIndicatorOverride || setExternalModuleIndicator, skipJSDoc);
 
         clearState();
 
@@ -1699,7 +1700,7 @@ namespace Parser {
         scanner.setOnError(scanError);
         scanner.setScriptTarget(languageVersion);
         scanner.setLanguageVariant(languageVariant);
-        scanner.setSkipJSDoc(_skipJSDoc && !(contextFlags & NodeFlags.JavaScriptFile));
+        scanner.setSkipJSDoc(_skipJSDoc);
     }
 
     function clearState() {
@@ -1724,7 +1725,7 @@ namespace Parser {
         topLevel = true;
     }
 
-    function parseSourceFileWorker(languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind, setExternalModuleIndicator: (file: SourceFile) => void): SourceFile {
+    function parseSourceFileWorker(languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind, setExternalModuleIndicator: (file: SourceFile) => void, skipJSDoc: boolean): SourceFile {
         const isDeclarationFile = isDeclarationFileName(fileName);
         if (isDeclarationFile) {
             contextFlags |= NodeFlags.Ambient;
@@ -1751,6 +1752,7 @@ namespace Parser {
         sourceFile.identifierCount = identifierCount;
         sourceFile.identifiers = identifiers;
         sourceFile.parseDiagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
+        sourceFile.jsdocSkipped = skipJSDoc;
         if (jsDocDiagnostics) {
             sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
         }
@@ -9524,7 +9526,7 @@ namespace IncrementalParser {
         if (sourceFile.statements.length === 0) {
             // If we don't have any statements in the current source file, then there's no real
             // way to incrementally parse.  So just do a full parse instead.
-            return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true, sourceFile.scriptKind, sourceFile.setExternalModuleIndicator);
+            return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true, sourceFile.scriptKind, sourceFile.setExternalModuleIndicator, sourceFile.jsdocSkipped);
         }
 
         // Make sure we're not trying to incrementally update a source file more than once.  Once
@@ -9588,7 +9590,7 @@ namespace IncrementalParser {
         // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
         // will immediately bail out of walking any subtrees when we can see that their parents
         // are already correct.
-        const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true, sourceFile.scriptKind, sourceFile.setExternalModuleIndicator);
+        const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true, sourceFile.scriptKind, sourceFile.setExternalModuleIndicator, sourceFile.jsdocSkipped);
         result.commentDirectives = getNewCommentDirectives(
             sourceFile.commentDirectives,
             result.commentDirectives,

@@ -4363,6 +4363,8 @@ export interface SourceFile extends Declaration, LocalsContainer {
 
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
+
+    /** @internal */ jsdocSkipped?: boolean;
 }
 
 /** @internal */
