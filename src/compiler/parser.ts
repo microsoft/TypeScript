@@ -1736,9 +1736,8 @@ namespace Parser {
 
         const statements = parseList(ParsingContext.SourceElements, parseStatement);
         Debug.assert(token() === SyntaxKind.EndOfFileToken);
-        const endOfFileToken = addJSDocComment(parseTokenNode<EndOfFileToken>());
-        // TODO(jakebailey): this should really be the following, but why isn't the flag set?
-        // const endOfFileToken = withJSDoc(parseTokenNode<EndOfFileToken>(), hasPrecedingJSDocComment());
+        const endHasJSDoc = hasPrecedingJSDocComment();
+        const endOfFileToken = withJSDoc(parseTokenNode<EndOfFileToken>(), endHasJSDoc);
 
         const sourceFile = createSourceFile(fileName, languageVersion, scriptKind, isDeclarationFile, statements, endOfFileToken, sourceFlags, setExternalModuleIndicator);
 
