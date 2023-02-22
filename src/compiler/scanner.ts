@@ -1031,8 +1031,7 @@ export function createScanner(languageVersion: ScriptTarget,
         lookAhead,
         scanRange,
     };
-
-    /* eslint-disable no-var */
+    /* eslint-enable no-var */
 
     if (Debug.isDebugging) {
         Object.defineProperty(scanner, "__debugShowCurrentPositionInText", {

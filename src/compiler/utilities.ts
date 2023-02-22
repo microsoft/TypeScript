@@ -464,7 +464,6 @@ import {
     Signature,
     SignatureDeclaration,
     SignatureFlags,
-    SignatureKind,
     singleElementArray,
     singleOrUndefined,
     skipOuterExpressions,
@@ -7643,11 +7642,6 @@ export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclar
 /** @internal */
 export function getObjectFlags(type: Type): ObjectFlags {
     return type.flags & TypeFlags.ObjectFlagsType ? (type as ObjectFlagsType).objectFlags : 0;
-}
-
-/** @internal */
-export function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker) {
-    return checker.getSignaturesOfType(type, SignatureKind.Call).length !== 0 || checker.getSignaturesOfType(type, SignatureKind.Construct).length !== 0;
 }
 
 /** @internal */
