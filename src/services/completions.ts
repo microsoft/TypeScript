@@ -59,6 +59,7 @@ import {
     findAncestor,
     findChildOfKind,
     findPrecedingToken,
+    findNextToken,
     first,
     firstDefined,
     flatMap,
@@ -205,6 +206,7 @@ import {
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isPropertyNameLiteral,
+    isPropertyAssignment,
     isRegularExpressionLiteral,
     isShorthandPropertyAssignment,
     isSingleOrDoubleQuote,
@@ -358,8 +360,6 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
-    isPropertyAssignment,
-    findNextToken,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
 
