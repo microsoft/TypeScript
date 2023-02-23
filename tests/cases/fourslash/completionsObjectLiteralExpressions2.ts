@@ -14,21 +14,22 @@
 
 verify.completions({
   marker: "",
-  includes: [
-      {
-          name: "secondary",
-          sortText: completion.SortText.OptionalMember,
-          hasAction: true,
-      }],
+  includes: [{
+    name: "secondary",
+    sortText: completion.SortText.OptionalMember,
+    hasAction: true,
+    source: completion.CompletionSource.ObjectLiteralExpression,
+   }],
   preferences: {
-      allowIncompleteCompletions: true,
-      includeInsertTextCompletions: true,
+    allowIncompleteCompletions: true,
+    includeInsertTextCompletions: true,
   }
 });
 
 verify.applyCodeActionFromCompletion("", {
   name: "secondary",
-  description: `Includes imports of types referenced by 'secondary'`,
+  description: `Add missing comma for an object member completion 'secondary'.`,
+  source: completion.CompletionSource.ObjectLiteralExpression,
   newFileContent:
 `interface ColorPalette {
   primary?: string;

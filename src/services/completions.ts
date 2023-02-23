@@ -54,7 +54,6 @@ import {
     Expression,
     ExpressionWithTypeArguments,
     factory,
-    FileTextChanges,
     filter,
     find,
     findAncestor,
@@ -294,7 +293,6 @@ import {
     Program,
     programContainsModules,
     PropertyAccessExpression,
-    PropertyAssignment,
     PropertyDeclaration,
     PropertyName,
     PropertySignature,
@@ -360,6 +358,8 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
+    isPropertyAssignment,
+    findNextToken,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
 
@@ -425,6 +425,8 @@ export enum CompletionSource {
     ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
     /** Case completions for switch statements */
     SwitchCases = "SwitchCases/",
+    /** Completions for an Object literal expression */
+    ObjectLiteralExpression = "ObjectLiteralExpression/",
 }
 
 /** @internal */
@@ -1348,7 +1350,13 @@ function createCompletionEntry(
         }
     }
 
-    if ((origin?.kind === SymbolOriginInfoKind.TypeOnlyAlias) || (contextToken && contextToken.kind !== SyntaxKind.OpenBraceToken && completionKind === CompletionKind.ObjectPropertyDeclaration && preferences.includeCompletionsWithInsertText)) {
+    if ((origin?.kind === SymbolOriginInfoKind.TypeOnlyAlias)) {
+        hasAction = true;
+    }
+
+    if ((contextToken && isPropertyAssignment(contextToken.parent) && findNextToken(contextToken, contextToken?.parent, sourceFile)?.kind !== SyntaxKind.CommaToken &&
+        completionKind === CompletionKind.ObjectPropertyDeclaration)) {
+        source = CompletionSource.ObjectLiteralExpression;
         hasAction = true;
     }
 
@@ -2277,7 +2285,8 @@ function getSymbolCompletionFromEntryId(
         return info && info.name === entryId.name && (
             entryId.source === CompletionSource.ClassMemberSnippet && symbol.flags & SymbolFlags.ClassMember
             || entryId.source === CompletionSource.ObjectLiteralMethodSnippet && symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)
-            || getSourceFromOrigin(origin) === entryId.source)
+            || getSourceFromOrigin(origin) === entryId.source
+            || entryId.source === CompletionSource.ObjectLiteralExpression)
             ? { type: "symbol" as const, symbol, location, origin, contextToken, previousToken, isJsxInitializer, isTypeOnlyLocation }
             : undefined;
     }) || { type: "none" };
@@ -2466,24 +2475,16 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
         return { codeActions: [codeAction], sourceDisplay: undefined };
     }
 
-    if (contextToken && isObjectLiteralExpression(contextToken.parent.parent) && previousToken?.kind !== SyntaxKind.ColonToken) {
-        let changes: FileTextChanges[];
-        if (getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
-            changes = textChanges.ChangeTracker.with(
-                { host, formatContext, preferences },
-                tracker=>tracker.replacePropertyAssignment(sourceFile, contextToken.parent as PropertyAssignment ,contextToken.parent as PropertyAssignment));
-        }
-        else {
-            changes = textChanges.ChangeTracker.with(
-                { host, formatContext, preferences },
-                tracker=>tracker.replacePropertyAssignmentOnSameLine(sourceFile, contextToken.parent as PropertyAssignment ,contextToken.parent as PropertyAssignment));
-        }
+    if (source === CompletionSource.ObjectLiteralExpression && contextToken) {
+        const changes = textChanges.ChangeTracker.with(
+            { host, formatContext, preferences },
+            tracker=>tracker.insertText(sourceFile, contextToken.end,","));
         if (changes) {
             return {
                 sourceDisplay: undefined,
                 codeActions: [{
                     changes,
-                    description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
+                    description: diagnosticToString([Diagnostics.Add_missing_comma_for_an_object_member_completion_0, name]),
                 }],
             };
         }

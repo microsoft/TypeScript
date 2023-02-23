@@ -7720,5 +7720,9 @@
     "Compiler option '{0}' cannot be given an empty string.": {
         "category": "Error",
         "code": 18051
+    },
+    "Add missing comma for an object member completion '{0}'.": {
+        "category": "Message",
+        "code": 18052
     }
 }

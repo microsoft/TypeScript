@@ -10,23 +10,24 @@
 //// };
 
 verify.completions({
-    marker: "",
-    includes: [
-        {
-            name: "secondary",
-            sortText: completion.SortText.OptionalMember,
-            hasAction: true,
-        }],
-    preferences: {
-        allowIncompleteCompletions: true,
-        includeInsertTextCompletions: true,
-      },
+  marker: "",
+  includes: [{
+    name: "secondary",
+    sortText: completion.SortText.OptionalMember,
+    hasAction: true,
+    source: completion.CompletionSource.ObjectLiteralExpression,
+  }],
+  preferences: {
+    allowIncompleteCompletions: true,
+    includeInsertTextCompletions: true,
+  },
 });
 
 verify.applyCodeActionFromCompletion("", {
-    name: "secondary",
-    description: `Includes imports of types referenced by 'secondary'`,
-    newFileContent:
+  name: "secondary",
+  description: `Add missing comma for an object member completion 'secondary'.`,
+  source: completion.CompletionSource.ObjectLiteralExpression,
+  newFileContent:
   `interface ColorPalette {
     primary?: string;
     secondary?: string;
@@ -35,8 +36,8 @@ let colors: ColorPalette = {
     primary: "red",
     
 };`,
-    preferences: {
-      allowIncompleteCompletions: true,
-      includeInsertTextCompletions: true,
-    },
-  });
+  preferences: {
+    allowIncompleteCompletions: true,
+    includeInsertTextCompletions: true,
+  },
+});
