@@ -13508,7 +13508,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // we substitute an instantiation of E where P is replaced with X.
             return substituteIndexedMappedType(type.objectType as MappedType, type.indexType);
         }
-        const indexConstraint = getSimplifiedTypeOrConstraint(type.indexType);
+        const indexType = type.indexType;
+        let indexConstraint = getSimplifiedTypeOrConstraint(indexType);
+        if (indexConstraint && indexConstraint.flags & TypeFlags.Index) {
+            const constraint = getBaseConstraintOfType((indexConstraint as IndexType).type);
+            indexConstraint = constraint && constraint !== noConstraintType ? getIndexType(constraint) : keyofConstraintType;
+        }
         if (indexConstraint && indexConstraint !== type.indexType) {
             const indexedAccess = getIndexedAccessTypeOrUndefined(type.objectType, indexConstraint, type.accessFlags);
             if (indexedAccess) {
