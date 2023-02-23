@@ -1,0 +1,21 @@
+tests/cases/compiler/index.js(13,5): error TS7006: Parameter 'param' implicitly has an 'any' type.
+
+
+==== tests/cases/compiler/index.js (1 errors) ====
+    /**
+     * @param {any} v
+     */
+    function identity(v) {
+        return v;
+    }
+    
+    const x = identity(
+        /**
+         * @param {number} param
+         * @returns {number=}
+         */
+        param => param
+        ~~~~~
+!!! error TS7006: Parameter 'param' implicitly has an 'any' type.
+    );
+    
