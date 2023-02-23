@@ -1378,6 +1378,7 @@ export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums
 
 /** @internal */
 export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
+    // Why var? See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var getPackagesMap = memoize(() => {
         // A package name maps to true when we detect it has .d.ts files.

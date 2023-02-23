@@ -501,6 +501,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
 }
 
 function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
+    // Why var? See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var file: SourceFile;
     var options: CompilerOptions;
