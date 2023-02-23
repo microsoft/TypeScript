@@ -6683,8 +6683,6 @@ export interface Signature {
     /** @internal */
     canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
     /** @internal */
-    baseSignatureCache?: Signature;      // Base version of signature (deferred)
-    /** @internal */
     optionalCallSignatureCache?: { inner?: Signature, outer?: Signature }; // Optional chained call version of signature (deferred)
     /** @internal */
     isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
@@ -6793,7 +6791,8 @@ export interface InferenceContext {
     inferredTypeParameters?: readonly TypeParameter[]; // Inferred type parameters for function result
     intraExpressionInferenceSites?: IntraExpressionInferenceSite[];
     freeTypeVariables?: InferenceInfo[];           // Extra inferences made for type parameters found during inference
-    alternatives?: InferenceContext[];
+    freeTypeVariableSourceSignatures?: Map<object, Map<Signature, Signature>>; // For each recusion identity on the source stack, a cached mapping of signature copies made
+    alternatives?: InferenceContext[]
 }
 
 /** @internal */

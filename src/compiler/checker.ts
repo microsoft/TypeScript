@@ -14706,17 +14706,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isInJSFile(signature.declaration));
     }
 
-    function getBaseSignature(signature: Signature) {
-        const typeParameters = signature.typeParameters;
-        if (typeParameters) {
-            if (signature.baseSignatureCache) {
-                return signature.baseSignatureCache;
-            }
-            return signature.baseSignatureCache = instantiateSignature(signature, getTypeParameterConstraintMapper(typeParameters), /*eraseTypeParameters*/ true);
-        }
-        return signature;
-    }
-
     function getTypeParameterConstraintMapper(typeParameters: readonly TypeParameter[]) {
         const typeEraser = createTypeEraser(typeParameters);
         const baseConstraintMapper = createTypeMapper(typeParameters, map(typeParameters, tp => getConstraintOfTypeParameter(tp) || unknownType));
@@ -23581,7 +23570,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function cloneInferenceContext<T extends InferenceContext | undefined>(context: T, extraFlags: InferenceFlags = 0): InferenceContext | T & undefined {
-        return context && createInferenceContextWorker(map(context.inferences, cloneInferenceInfo), context.signature, context.flags | extraFlags, context.compareTypes);
+        const newContext = context && createInferenceContextWorker(map(context.inferences, cloneInferenceInfo), context.signature, context.flags | extraFlags, context.compareTypes);
+        if (context && context.freeTypeVariables) {
+            newContext.freeTypeVariables = map(context.freeTypeVariables, cloneInferenceInfo);
+            newContext.freeTypeVariableSourceSignatures = new Map(ts.mapIterator(context.freeTypeVariableSourceSignatures!.entries(), ([k, v]) => [k, new Map(v.entries())]));
+        }
+        return newContext;
     }
 
     function createInferenceContextWorker(inferences: InferenceInfo[], signature: Signature | undefined, flags: InferenceFlags, compareTypes: TypeComparer): InferenceContext {
@@ -23621,9 +23615,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!context.freeTypeVariables) return undefined;
         // make a seperate mapper for every free type variable so free type variables constrained to one another are instantiated
         // with any intermediate inferences found rather than the constraints
+        const baseMapper = getTypeParameterConstraintMapper(map(context.freeTypeVariables, i => i.typeParameter));
         return context.freeTypeVariables.reduceRight(
-            (previous, i) => combineTypeMappers(makeDeferredTypeMapper([i.typeParameter], [() => getInferredType(context, i)]), previous),
-            getTypeParameterConstraintMapper(map(context.freeTypeVariables, i => i.typeParameter))
+            (previous, i) => combineTypeMappers(makeDeferredTypeMapper([i.typeParameter], [() => hasInferenceCandidatesOrDefault(i) ? getInferredType(context, i) : instantiateType(i.typeParameter, baseMapper)]), previous),
+            baseMapper
         );
     }
 
@@ -24087,27 +24082,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let sourceStack: object[];
         let targetStack: object[];
         let expandingFlags = ExpandingFlags.None;
+        let useOnlyCachedAlternativeRoutes = false;
         inferFromTypes(originalSource, originalTarget);
         // second inference stage to the non-fixing-mapped target ensures we record mappings for
         // the free type variables in the context which come from signature inferences,
         // which we need so we can map the free type variables entirely out of the resulting inferred types
         // once inference is complete with a better mapping than their constraint.
-        forEachAlternative((context, oldContext) => {
+        useOnlyCachedAlternativeRoutes = true;
+        // For the followup passes, by using only cached alternative routes (and bailing on those alternatives which lack a cache entry),
+        // we can avoid creating a power set of combinations by only exploring the set of inferences where an overload is only influenced by itself, and
+        // not by sibling signatures from a prior pass.
+
+        const group = forkInferenceContext();
+        spawnAlternativeInferenceContext(group, () => {
             if (length(context.freeTypeVariables)) {
                 inferFromTypes(originalSource, instantiateType(originalTarget, context.nonFixingMapper))
-                mergeInferenceContexts(context, oldContext, /*clone*/ true);
             }
-        });
-
-        function forEachAlternative(action: (context: InferenceContext, oldContext: InferenceContext) => void) {
-            const ctxList = context.alternatives ? context.alternatives : [context];
-            const oldContext = context;
-            for (const ctx of ctxList) {
-                context = ctx;
-                action(context, oldContext);
-            }
-            context = oldContext;
-        }
+        }, /*fork*/ false);
+        joinInferenceContext(group);
 
         function inferFromTypes(source: Type, target: Type): void {
             if (!couldContainTypeVariables(target)) {
@@ -24212,6 +24204,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType) {
                         return;
                     }
+                    if (useOnlyCachedAlternativeRoutes && source === target) {
+                        // refrain from inferring a type to itself during a followup pass - it won't add extra information
+                        return;
+                    }
                     if (!inference.isFixed) {
                         if (inference.priority === undefined || priority < inference.priority) {
                             inference.candidates = undefined;
@@ -24240,15 +24236,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     inferencePriority = Math.min(inferencePriority, priority);
-
-                    // const constraint = getConstraintOfType(target);
-                    // if (constraint) {
-                    //     // By adding the constraint as an extra inference source, we allow type parameters within constraints to tie one
-                    //     // another together and create inference locations that are otherwise difficult. It basically lets a user capture a
-                    //     // whole (or part of a) parameter type into a type variable, and destructure it for use in other parameters and the
-                    //     // return type positions.
-                    //     inferFromTypes(source, constraint);
-                    // }
                     return;
                 }
                 // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
@@ -24813,20 +24800,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         /**
          * Performs the given action in every alternative inference context currently under consideration,
-         * and 
+         * and add the resulting context(s) to a new resultant context list.
+         * 
+         * Call multiple times to create multiple independent forks of the existing inference engine state.
+         * Call once with fork `false` to simply to do and action for every existing branch of the inference
+         * engine state, while handling if those actions produce further forks of the state.
          */
-        function spawnAlternativeInferenceContext(group: InferenceContext[], action: () => void) {
-            const oldContext: InferenceContext = context;
+        function spawnAlternativeInferenceContext(group: InferenceContext[], action: () => void, fork = true) {
+            const oldContext = context;
             // We want to keep a flat list of alternatives in the top-level inference context;
             // so we perform our new forking action for each existing alternative, and then when
             // we're done making all the new forks, we'll replace the existing alternative list
             // with the new one.
-            (oldContext.alternatives || [oldContext]).forEach(alternative => {
+            flattenInferenceContextAlternatives(context).forEach(alternative => {
                 // It's intentional that the `clone` here doesn't clone the `alternatives` - we want this
                 // fork to be ignorant to the other forks we'll be trying - only the outermost context
                 // should retain knowledge of the many linked inference attempts we're making.
-                const newContext = cloneInferenceContext(alternative);
-                mergeInferenceContexts(newContext, oldContext, /*clone*/ true);
+                const newContext = fork ? cloneInferenceContext(alternative) : alternative;
                 context = newContext;
                 action();
                 context = oldContext;
@@ -24843,8 +24833,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Only one alternative was tried - inline it as the new outer context.
                 mergeInferenceContexts(context, group[0]);
                 context.freeTypeVariables = group[0].freeTypeVariables;
+                context.freeTypeVariableSourceSignatures = group[0].freeTypeVariableSourceSignatures;
                 context.inferredTypeParameters = group[0].inferredTypeParameters;
                 context.flags = group[0].flags;
+                context.alternatives = undefined;
                 return;
             }
             context.alternatives = group;
@@ -24885,6 +24877,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // inference from a set of overloads to a single signature - produce matches for _every_ overload
                 const group = forkInferenceContext();
                 for (let i = 0; i < sourceLen; i++) {
+                    if (useOnlyCachedAlternativeRoutes && !context.freeTypeVariableSourceSignatures?.get(last(sourceStack))?.get(sourceSignatures[i])) {
+                        continue; // Doing a follow-up pass - ignore new alternatives that don't follow the same "route" as the first pass
+                    }
                     spawnAlternativeInferenceContext(group, () => 
                         inferFromSignature(sourceSignatures[i], targetSignatures[0])
                     );
@@ -24904,17 +24899,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function inferFromSignature(source: Signature, target: Signature) {
             target = getErasedSignature(target);
             if (source.typeParameters) {
-                if (some(context.freeTypeVariables, i => some(source.typeParameters, p => p.symbol === i.typeParameter.symbol))) {
-                    // already inferred from this sigature generically and then recured, infer to constraints this time
-                    source = getBaseSignature(source);
+                // Rather than getting the "base" signature, add the type parameters as free type variables to the inference list
+                // These get saved off so we can infer from the expression type to them after we apply contextual types, and then
+                // apply those mappings to our inference results.
+                // Create a fresh clone of the source with a fresh clone of the source's type parameters, so recursive invocations
+                // don't use the same type variable inferences (the noop mapper simply forces the clone)
+                // BUT we want to retain the same signature and type parameters between inference passes at the same depth,
+                // so we cache this signature on the context
+                let cache = (context.freeTypeVariableSourceSignatures ||= new Map()).get(last(sourceStack));
+                if (!cache) {
+                    context.freeTypeVariableSourceSignatures.set(last(sourceStack), cache = (new Map()));
+                }
+                const cached = cache.get(source);
+                if (cached) {
+                    source = cached; // The relevant free type variables should already be in the context, no need to add more
                 }
                 else {
-                    // Rather than getting the "base" signature, add the type parameters as free type variables to the inference list
-                    // These get saved off so we can infer from the expression type to them after we apply contextual types, and then
-                    // apply those mappings to our inference results.
-                    // Create a fresh clone of the source with a fresh clone of the source's type parameters, so recursive invocations
-                    // don't use the same type variable inferences (the noop mapper simply forces the clone)
+                    const originalSignature = source;
                     source = instantiateSignature(source, makeUnaryTypeMapper(unknownType, unknownType));
+                    cache.set(originalSignature, source);
                     (context.freeTypeVariables ||= []).push(...map(source.typeParameters!, createInferenceInfo));
                 }
             }
