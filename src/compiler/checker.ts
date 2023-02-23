@@ -18399,8 +18399,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function createBackreferenceMapper(context: InferenceContext, inference: InferenceInfo): TypeMapper {
         const inferences = context.inferences.indexOf(inference) >= 0 ? context.inferences : context.freeTypeVariables;
         Debug.assert(inferences, "Inference for backreference mapper must exist within provided context");
-        const index = inferences!.indexOf(inference);
-        const forwardInferences = inferences!.slice(index);
+        const index = inferences.indexOf(inference);
+        const forwardInferences = inferences.slice(index);
         return createTypeMapper(map(forwardInferences, i => i.typeParameter), map(forwardInferences, () => unknownType));
     }
 
@@ -24096,7 +24096,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const group = forkInferenceContext();
         spawnAlternativeInferenceContext(group, () => {
             if (length(context.freeTypeVariables)) {
-                inferFromTypes(originalSource, instantiateType(originalTarget, context.nonFixingMapper))
+                inferFromTypes(originalSource, instantiateType(originalTarget, context.nonFixingMapper));
             }
         }, /*fork*/ false);
         joinInferenceContext(group);
@@ -24801,7 +24801,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         /**
          * Performs the given action in every alternative inference context currently under consideration,
          * and add the resulting context(s) to a new resultant context list.
-         * 
+         *
          * Call multiple times to create multiple independent forks of the existing inference engine state.
          * Call once with fork `false` to simply to do and action for every existing branch of the inference
          * engine state, while handling if those actions produce further forks of the state.
@@ -24880,7 +24880,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (useOnlyCachedAlternativeRoutes && !context.freeTypeVariableSourceSignatures?.get(last(sourceStack))?.get(sourceSignatures[i])) {
                         continue; // Doing a follow-up pass - ignore new alternatives that don't follow the same "route" as the first pass
                     }
-                    spawnAlternativeInferenceContext(group, () => 
+                    spawnAlternativeInferenceContext(group, () =>
                         inferFromSignature(sourceSignatures[i], targetSignatures[0])
                     );
                 }
@@ -25091,8 +25091,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // introduced.
             const freeTypeVariableMapper = makeFreeTypeVariableMapperForContext(context);
             const result: Type[] = [];
-            for (let i = 0; i < context.inferences.length; i++) {
-                result.push(instantiateType(getInferredType(context, context.inferences[i]), freeTypeVariableMapper));
+            for (const inference of context.inferences) {
+                result.push(instantiateType(getInferredType(context, inference), freeTypeVariableMapper));
             }
             // Skip calling `accept` when there's only 1 alternative to try, as it can end up fixing expression types, which we can trivially avoid
             // in simple cases when the inference result has to be used since it's the only one.
