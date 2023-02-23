@@ -4,8 +4,8 @@
 //// }
 
 verify.codeFix({
-    description: "Change 'string?' to 'string | null | undefined'",
-    errorCode: 8020,
+    description: "Change 'string?' to 'string | undefined'",
+    errorCode: 17019,
     index: 1,
-    newRangeContent: "string | null | undefined",
+    newRangeContent: "string | undefined",
 });

@@ -8,7 +8,7 @@
     "'package.json' does not have a 'typesVersions' field.",
     "'package.json' does not have a 'typings' field.",
     "'package.json' has 'types' field 'dist/jquery.d.ts' that references '/a/node_modules/jquery/dist/jquery.d.ts'.",
-    "File '/a/node_modules/jquery/dist/jquery.d.ts' exist - use it as a name resolution result.",
+    "File '/a/node_modules/jquery/dist/jquery.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/a/node_modules/jquery/dist/jquery.d.ts', result '/a/node_modules/jquery/dist/jquery.d.ts'.",
     "======== Type reference directive 'jquery' was successfully resolved to '/a/node_modules/jquery/dist/jquery.d.ts', primary: false. ========"
 ]
