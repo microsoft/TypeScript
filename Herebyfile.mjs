@@ -569,17 +569,17 @@ export const watchLocal = task({
 
 const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
 
-const runTests = task({
-    name: "runtests-nolint",
+const doRunTests = task({
+    name: "do-runtests",
     description: "Runs the tests using the built run.js file.",
     dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false),
 });
 
-export const runTestsAndLint = task({
+export const runTests = task({
     name: "runtests",
     description: "Runs the tests using the built run.js file, linting in parallel if --lint=true.",
-    dependencies: [runTests].concat(cmdLineOptions.lint ? [lint] : []),
+    dependencies: [doRunTests].concat(cmdLineOptions.lint ? [lint] : []),
 });
 
 // task("runtests").flags = {
@@ -709,17 +709,17 @@ export const runTestsAndWatch = task({
     },
 });
 
-const runTestsParallel = task({
-    name: "runtests-parallel-nolint",
+const doRunTestsParallel = task({
+    name: "do-runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file.",
     dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
 
-export const runTestsParallelAndLint = task({
+export const runTestsParallel = task({
     name: "runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file, linting in parallel if --lint=true.",
-    dependencies: [runTestsParallel].concat(cmdLineOptions.lint ? [lint] : []),
+    dependencies: [doRunTestsParallel].concat(cmdLineOptions.lint ? [lint] : []),
 });
 
 // task("runtests-parallel").flags = {
