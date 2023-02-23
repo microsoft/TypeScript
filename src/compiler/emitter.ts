@@ -737,6 +737,8 @@ export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase:
 /** @internal */
 // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
 export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnly?: boolean | EmitOnly, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var compilerOptions = host.getCompilerOptions();
     var sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
@@ -1358,6 +1360,8 @@ export const createPrinterWithRemoveCommentsNeverAsciiEscape = /* @__PURE__ */ m
 export const createPrinterWithRemoveCommentsOmitTrailingSemicolon = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
 
 export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var {
         hasGlobalName,

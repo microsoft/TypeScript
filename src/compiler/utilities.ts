@@ -596,6 +596,8 @@ export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
 const stringWriter = createSingleLineStringWriter();
 
 function createSingleLineStringWriter(): EmitTextWriter {
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var str = "";
     /* eslint-enable no-var */
@@ -5812,6 +5814,8 @@ export function isNightly() {
 
 /** @internal */
 export function createTextWriter(newLine: string): EmitTextWriter {
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var output: string;
     var indent: number;
