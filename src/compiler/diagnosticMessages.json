@@ -4289,7 +4289,7 @@
         "category": "Error",
         "code": 5100
     },
-    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify 'ignoreDeprecations: \"{2}\"' to silence this error.": {
+    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '\"ignoreDeprecations\": \"{2}\"' to silence this error.": {
         "category": "Error",
         "code": 5101
     },
