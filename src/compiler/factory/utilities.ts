@@ -1751,6 +1751,8 @@ export function flattenCommaList(node: Expression) {
  * propagation of `TransformFlags.ContainsObjectRestOrSpread` since it isn't propagated by default in
  * ObjectLiteralExpression and ArrayLiteralExpression since we do not know whether they belong to an
  * AssignmentPattern at the time the nodes are parsed.
+ *
+ * @internal
  */
 export function containsObjectRestOrSpread(node: AssignmentPattern): boolean {
     if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) return true;
