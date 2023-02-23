@@ -1,0 +1,61 @@
+=== tests/cases/compiler/overloadedGenericInference.ts ===
+// #35501
+declare function fn(x: string): string;
+>fn : Symbol(fn, Decl(overloadedGenericInference.ts, 0, 0), Decl(overloadedGenericInference.ts, 1, 39))
+>x : Symbol(x, Decl(overloadedGenericInference.ts, 1, 20))
+
+declare function fn(x: string[]): string;
+>fn : Symbol(fn, Decl(overloadedGenericInference.ts, 0, 0), Decl(overloadedGenericInference.ts, 1, 39))
+>x : Symbol(x, Decl(overloadedGenericInference.ts, 2, 20))
+
+declare function map<A, R>(fn: (item: A) => R, list: A[]): R[];
+>map : Symbol(map, Decl(overloadedGenericInference.ts, 2, 41))
+>A : Symbol(A, Decl(overloadedGenericInference.ts, 4, 21))
+>R : Symbol(R, Decl(overloadedGenericInference.ts, 4, 23))
+>fn : Symbol(fn, Decl(overloadedGenericInference.ts, 4, 27))
+>item : Symbol(item, Decl(overloadedGenericInference.ts, 4, 32))
+>A : Symbol(A, Decl(overloadedGenericInference.ts, 4, 21))
+>R : Symbol(R, Decl(overloadedGenericInference.ts, 4, 23))
+>list : Symbol(list, Decl(overloadedGenericInference.ts, 4, 46))
+>A : Symbol(A, Decl(overloadedGenericInference.ts, 4, 21))
+>R : Symbol(R, Decl(overloadedGenericInference.ts, 4, 23))
+
+const mapped = map(fn, ['1']);
+>mapped : Symbol(mapped, Decl(overloadedGenericInference.ts, 6, 5))
+>map : Symbol(map, Decl(overloadedGenericInference.ts, 2, 41))
+>fn : Symbol(fn, Decl(overloadedGenericInference.ts, 0, 0), Decl(overloadedGenericInference.ts, 1, 39))
+
+// #30294 (partial fix)
+declare class C {
+>C : Symbol(C, Decl(overloadedGenericInference.ts, 6, 30))
+
+    static x(y: number): number;
+>x : Symbol(C.x, Decl(overloadedGenericInference.ts, 9, 17), Decl(overloadedGenericInference.ts, 10, 32))
+>y : Symbol(y, Decl(overloadedGenericInference.ts, 10, 13))
+
+    static x(): number;
+>x : Symbol(C.x, Decl(overloadedGenericInference.ts, 9, 17), Decl(overloadedGenericInference.ts, 10, 32))
+}
+C.x.call(C, 1); // ok
+>C.x.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>C.x : Symbol(C.x, Decl(overloadedGenericInference.ts, 9, 17), Decl(overloadedGenericInference.ts, 10, 32))
+>C : Symbol(C, Decl(overloadedGenericInference.ts, 6, 30))
+>x : Symbol(C.x, Decl(overloadedGenericInference.ts, 9, 17), Decl(overloadedGenericInference.ts, 10, 32))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(overloadedGenericInference.ts, 6, 30))
+
+C.x.call(C); // ok
+>C.x.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>C.x : Symbol(C.x, Decl(overloadedGenericInference.ts, 9, 17), Decl(overloadedGenericInference.ts, 10, 32))
+>C : Symbol(C, Decl(overloadedGenericInference.ts, 6, 30))
+>x : Symbol(C.x, Decl(overloadedGenericInference.ts, 9, 17), Decl(overloadedGenericInference.ts, 10, 32))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(overloadedGenericInference.ts, 6, 30))
+
+C.x.call(1); // ok (not an error because the `this` type of `x` is not constrained)
+>C.x.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>C.x : Symbol(C.x, Decl(overloadedGenericInference.ts, 9, 17), Decl(overloadedGenericInference.ts, 10, 32))
+>C : Symbol(C, Decl(overloadedGenericInference.ts, 6, 30))
+>x : Symbol(C.x, Decl(overloadedGenericInference.ts, 9, 17), Decl(overloadedGenericInference.ts, 10, 32))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+
