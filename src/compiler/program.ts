@@ -69,6 +69,7 @@ import {
     DirectoryStructureHost,
     emitFiles,
     EmitHost,
+    emitModuleKindIsNonNodeESM,
     EmitOnly,
     EmitResult,
     emptyArray,
@@ -4241,11 +4242,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.preserveValueImports && getEmitModuleKind(options) < ModuleKind.ES2015) {
-            createDiagnosticForOptionName(Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later, "preserveValueImports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_es2015_or_later, "preserveValueImports");
         }
 
+        const moduleKind = getEmitModuleKind(options);
         if (options.verbatimModuleSyntax) {
-            const moduleKind = getEmitModuleKind(options);
             if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
                 createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
             }
@@ -4266,13 +4267,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         const moduleResolution = getEmitModuleResolutionKind(options);
         if (options.resolvePackageJsonExports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("resolvePackageJsonExports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonExports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonExports");
         }
         if (options.resolvePackageJsonImports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("resolvePackageJsonImports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonImports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonImports");
         }
         if (options.customConditions && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("customConditions", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
+        }
+
+        if (moduleResolution === ModuleResolutionKind.Bundler && !emitModuleKindIsNonNodeESM(moduleKind)) {
+            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_es2015_or_later, "bundler");
         }
 
         // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files

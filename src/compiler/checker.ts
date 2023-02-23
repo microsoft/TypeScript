@@ -5019,7 +5019,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
              * @see https://github.com/microsoft/TypeScript/issues/42151
              */
             if (emitModuleKindIsNonNodeESM(moduleKind) || mode === ModuleKind.ESNext) {
-                return importSourceWithoutExtension + (tsExtension === Extension.Mts ? ".mjs" : tsExtension === Extension.Cts ? ".cjs" : ".js");
+                const preferTs = isDeclarationFileName(moduleReference) && shouldAllowImportingTsExtension(compilerOptions);
+                const ext =
+                    tsExtension === Extension.Mts || tsExtension === Extension.Dmts ? preferTs ? ".mts" : ".mjs" :
+                    tsExtension === Extension.Cts || tsExtension === Extension.Dmts ? preferTs ? ".cts" : ".cjs" :
+                    preferTs ? ".ts" : ".js";
+                return importSourceWithoutExtension + ext;
             }
             return importSourceWithoutExtension;
         }
@@ -43963,9 +43968,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Import equals declaration is deprecated in es6 or above
                     grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                 }
-                else if (!(node.flags & NodeFlags.Ambient) && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler) {
-                    grammarErrorOnNode(node, Diagnostics.Import_assignment_is_not_allowed_when_moduleResolution_is_set_to_bundler_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
-                }
             }
         }
     }
@@ -44207,9 +44209,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (moduleKind === ModuleKind.System && !(node.flags & NodeFlags.Ambient)) {
                 // system modules does not support export assignment
                 grammarErrorOnNode(node, Diagnostics.Export_assignment_is_not_supported_when_module_flag_is_system);
-            }
-            else if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler && !(node.flags & NodeFlags.Ambient)) {
-                grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_moduleResolution_is_set_to_bundler_Consider_using_export_default_or_another_module_format_instead);
             }
         }
     }
