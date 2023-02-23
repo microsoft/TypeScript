@@ -234,6 +234,7 @@ import {
     isArray,
     isArrayLiteralExpression,
     isArrowFunction,
+    isAutoAccessorPropertyDeclaration,
     isBigIntLiteral,
     isBinaryExpression,
     isBindingElement,
@@ -300,6 +301,7 @@ import {
     isMetaProperty,
     isMethodDeclaration,
     isMethodOrAccessor,
+    isModifierLike,
     isModuleDeclaration,
     isNamedDeclaration,
     isNamespaceExport,
@@ -333,6 +335,7 @@ import {
     isTypeElement,
     isTypeLiteralNode,
     isTypeNode,
+    isTypeParameterDeclaration,
     isTypeReferenceNode,
     isVariableDeclaration,
     isVariableStatement,
@@ -461,7 +464,6 @@ import {
     Signature,
     SignatureDeclaration,
     SignatureFlags,
-    SignatureKind,
     singleElementArray,
     singleOrUndefined,
     skipOuterExpressions,
@@ -594,7 +596,11 @@ export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
 const stringWriter = createSingleLineStringWriter();
 
 function createSingleLineStringWriter(): EmitTextWriter {
-    let str = "";
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var str = "";
+    /* eslint-enable no-var */
     const writeText: (text: string) => void = text => str += text;
     return {
         getText: () => str,
@@ -962,6 +968,30 @@ export function nodeIsMissing(node: Node | undefined): boolean {
 /** @internal */
 export function nodeIsPresent(node: Node | undefined): boolean {
     return !nodeIsMissing(node);
+}
+
+/**
+ * Tests whether `child` is a grammar error on `parent`.
+ * @internal
+ */
+export function isGrammarError(parent: Node, child: Node | NodeArray<Node>) {
+    if (isTypeParameterDeclaration(parent)) return child === parent.expression;
+    if (isClassStaticBlockDeclaration(parent)) return child === parent.modifiers;
+    if (isPropertySignature(parent)) return child === parent.initializer;
+    if (isPropertyDeclaration(parent)) return child === parent.questionToken && isAutoAccessorPropertyDeclaration(parent);
+    if (isPropertyAssignment(parent)) return child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    if (isShorthandPropertyAssignment(parent)) return child === parent.equalsToken || child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    if (isMethodDeclaration(parent)) return child === parent.exclamationToken;
+    if (isConstructorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isGetAccessorDeclaration(parent)) return child === parent.typeParameters || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isSetAccessorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isNamespaceExportDeclaration(parent)) return child === parent.modifiers || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    return false;
+}
+
+function isGrammarErrorElement<T extends Node>(nodeArray: NodeArray<T> | undefined, child: Node | NodeArray<Node>, isElement: (node: Node) => node is T) {
+    if (!nodeArray || isArray(child) || !isElement(child)) return false;
+    return contains(nodeArray, child);
 }
 
 function insertStatementsAfterPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined, isPrologueDirective: (node: Node) => boolean): T[] {
@@ -5784,12 +5814,16 @@ export function isNightly() {
 
 /** @internal */
 export function createTextWriter(newLine: string): EmitTextWriter {
-    let output: string;
-    let indent: number;
-    let lineStart: boolean;
-    let lineCount: number;
-    let linePos: number;
-    let hasTrailingComment = false;
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var output: string;
+    var indent: number;
+    var lineStart: boolean;
+    var lineCount: number;
+    var linePos: number;
+    var hasTrailingComment = false;
+    /* eslint-enable no-var */
 
     function updateLineCountAndPosFor(s: string) {
         const lineStartsOfS = computeLineStarts(s);
@@ -7616,11 +7650,6 @@ export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclar
 /** @internal */
 export function getObjectFlags(type: Type): ObjectFlags {
     return type.flags & TypeFlags.ObjectFlagsType ? (type as ObjectFlagsType).objectFlags : 0;
-}
-
-/** @internal */
-export function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker) {
-    return checker.getSignaturesOfType(type, SignatureKind.Call).length !== 0 || checker.getSignaturesOfType(type, SignatureKind.Construct).length !== 0;
 }
 
 /** @internal */

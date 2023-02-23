@@ -1401,18 +1401,22 @@ export function parseJSDocTypeExpressionForTests(content: string, start?: number
 // parser instances can actually be expensive enough to impact us on projects with many source
 // files.
 namespace Parser {
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+
     // Share a single scanner across all calls to parse a source file.  This helps speed things
     // up by avoiding the cost of creating/compiling scanners over and over again.
-    const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
+    var scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
-    const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
+    var disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
     // capture constructors in 'initializeState' to avoid null checks
-    let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
-    let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
-    let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
+    var NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    var TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    var IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
+    var PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
+    var SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
 
     function countNode(node: Node) {
         nodeCount++;
@@ -1421,7 +1425,7 @@ namespace Parser {
 
     // Rather than using `createBaseNodeFactory` here, we establish a `BaseNodeFactory` that closes over the
     // constructors above, which are reset each time `initializeState` is called.
-    const baseNodeFactory: BaseNodeFactory = {
+    var baseNodeFactory: BaseNodeFactory = {
         createBaseSourceFileNode: kind => countNode(new SourceFileConstructor(kind, /*pos*/ 0, /*end*/ 0)),
         createBaseIdentifierNode: kind => countNode(new IdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
         createBasePrivateIdentifierNode: kind => countNode(new PrivateIdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
@@ -1429,26 +1433,26 @@ namespace Parser {
         createBaseNode: kind => countNode(new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0))
     };
 
-    const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
+    var factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
 
-    let fileName: string;
-    let sourceFlags: NodeFlags;
-    let sourceText: string;
-    let languageVersion: ScriptTarget;
-    let scriptKind: ScriptKind;
-    let languageVariant: LanguageVariant;
-    let parseDiagnostics: DiagnosticWithDetachedLocation[];
-    let jsDocDiagnostics: DiagnosticWithDetachedLocation[];
-    let syntaxCursor: IncrementalParser.SyntaxCursor | undefined;
+    var fileName: string;
+    var sourceFlags: NodeFlags;
+    var sourceText: string;
+    var languageVersion: ScriptTarget;
+    var scriptKind: ScriptKind;
+    var languageVariant: LanguageVariant;
+    var parseDiagnostics: DiagnosticWithDetachedLocation[];
+    var jsDocDiagnostics: DiagnosticWithDetachedLocation[];
+    var syntaxCursor: IncrementalParser.SyntaxCursor | undefined;
 
-    let currentToken: SyntaxKind;
-    let nodeCount: number;
-    let identifiers: Map<string, string>;
-    let identifierCount: number;
+    var currentToken: SyntaxKind;
+    var nodeCount: number;
+    var identifiers: Map<string, string>;
+    var identifierCount: number;
 
-    let parsingContext: ParsingContext;
+    var parsingContext: ParsingContext;
 
-    let notParenthesizedArrow: Set<number> | undefined;
+    var notParenthesizedArrow: Set<number> | undefined;
 
     // Flags that dictate what parsing context we're in.  For example:
     // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
@@ -1496,10 +1500,10 @@ namespace Parser {
     // Note: it should not be necessary to save/restore these flags during speculative/lookahead
     // parsing.  These context flags are naturally stored and restored through normal recursive
     // descent parsing and unwinding.
-    let contextFlags: NodeFlags;
+    var contextFlags: NodeFlags;
 
     // Indicates whether we are currently parsing top-level statements.
-    let topLevel = true;
+    var topLevel = true;
 
     // Whether or not we've had a parse error since creating the last AST node.  If we have
     // encountered an error, it will be stored on the next AST node we create.  Parse errors
@@ -1528,7 +1532,8 @@ namespace Parser {
     //
     // Note: any errors at the end of the file that do not precede a regular node, should get
     // attached to the EOF token.
-    let parseErrorBeforeNextFinishedNode = false;
+    var parseErrorBeforeNextFinishedNode = false;
+    /* eslint-enable no-var */
 
     export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind, setExternalModuleIndicatorOverride?: (file: SourceFile) => void): SourceFile {
         scriptKind = ensureScriptKind(fileName, scriptKind);
@@ -2684,7 +2689,6 @@ namespace Parser {
                 return canFollowExportModifier();
             case SyntaxKind.DefaultKeyword:
                 return nextTokenCanFollowDefaultKeyword();
-            case SyntaxKind.AccessorKeyword:
             case SyntaxKind.StaticKeyword:
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
@@ -4360,13 +4364,13 @@ namespace Parser {
         const hasJSDoc = hasPrecedingJSDocComment();
         const modifiers = parseModifiersForConstructorType();
         const isConstructorType = parseOptional(SyntaxKind.NewKeyword);
+        Debug.assert(!modifiers || isConstructorType, "Per isStartOfFunctionOrConstructorType, a function type cannot have modifiers.");
         const typeParameters = parseTypeParameters();
         const parameters = parseParameters(SignatureFlags.Type);
         const type = parseReturnType(SyntaxKind.EqualsGreaterThanToken, /*isType*/ false);
         const node = isConstructorType
             ? factory.createConstructorTypeNode(modifiers, typeParameters, parameters, type)
             : factory.createFunctionTypeNode(typeParameters, parameters, type);
-        if (!isConstructorType) (node as Mutable<FunctionTypeNode>).modifiers = modifiers;
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -6152,10 +6156,7 @@ namespace Parser {
     function parseJsxClosingFragment(inExpressionContext: boolean): JsxClosingFragment {
         const pos = getNodePos();
         parseExpected(SyntaxKind.LessThanSlashToken);
-        if (tokenIsIdentifierOrKeyword(token())) {
-            parseErrorAtRange(parseJsxElementName(), Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment);
-        }
-        if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+        if (parseExpected(SyntaxKind.GreaterThanToken, Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment, /*shouldAdvance*/ false)) {
             // manually advance the scanner in order to look for jsx text inside jsx
             if (inExpressionContext) {
                 nextToken();
@@ -6168,7 +6169,7 @@ namespace Parser {
     }
 
     function parseTypeAssertion(): TypeAssertion {
-        Debug.assert(scriptKind === ScriptKind.TS, "Type assertions should never be parsed outside of TS; they should either be comparisons or JSX.");
+        Debug.assert(languageVariant !== LanguageVariant.JSX, "Type assertions should never be parsed in JSX; they should be parsed as comparisons or JSX elements/fragments.");
         const pos = getNodePos();
         parseExpected(SyntaxKind.LessThanToken);
         const type = parseType();

@@ -6171,6 +6171,13 @@ declare namespace ts {
          */
         triggerCharacter?: CompletionsTriggerCharacter;
         triggerKind?: CompletionTriggerKind;
+        /**
+         * Include a `symbol` property on each completion entry object.
+         * Symbols reference cyclic data structures and sometimes an entire TypeChecker instance,
+         * so use caution when serializing or retaining completion entries retrieved with this option.
+         * @default false
+         */
+        includeSymbol?: boolean;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
@@ -6728,6 +6735,12 @@ declare namespace ts {
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
         isImportStatementCompletion?: true;
+        /**
+         * For API purposes.
+         * Included for non-string completions only when `includeSymbol: true` option is passed to `getCompletionsAtPosition`.
+         * @example Get declaration of completion: `symbol.valueDeclaration`
+         */
+        symbol?: Symbol;
         /**
          * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
          * that allows TS Server to look up the symbol represented by the completion item, disambiguating

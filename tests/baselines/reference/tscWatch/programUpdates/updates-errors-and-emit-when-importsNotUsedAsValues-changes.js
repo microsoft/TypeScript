@@ -155,7 +155,7 @@ Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+[96mtsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
 
 [7m1[0m {"compilerOptions":{"importsNotUsedAsValues":"error"}}
@@ -219,7 +219,7 @@ Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+[96mtsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
 
 [7m1[0m {"compilerOptions":{"importsNotUsedAsValues":"preserve"}}
