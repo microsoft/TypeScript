@@ -45,7 +45,7 @@ tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts(4
       const result = foos == null ? {} : mapValues(foos, f => f.foo);
       // This line _should_ fail, because `result` is not the right type.
       return result;
-      ~~~~~~~~~~~~~~
+      ~~~~~~
 !!! error TS2322: Type 'Dictionary<string>' is not assignable to type 'Record<string, Bar>'.
 !!! error TS2322:   'string' index signatures are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'Bar'.

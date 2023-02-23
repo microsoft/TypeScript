@@ -143,7 +143,7 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS232
     function generic1<T extends { [s: string]: boolean }>(arg: T): boolean {
         // Should error
         return arg["blah"];
-        ~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
     }
     function generic2<T extends { [s: string]: boolean }>(arg: T): boolean {
@@ -153,7 +153,7 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS232
     function generic3<T extends string>(arg: T): boolean {
         // Should error
         return strMap[arg];
-        ~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
     }
     

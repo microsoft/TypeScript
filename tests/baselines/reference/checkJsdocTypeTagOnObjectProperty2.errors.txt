@@ -19,7 +19,7 @@ tests/cases/conformance/jsdoc/0.js(22,22): error TS2345: Argument of type 'strin
       /** @type {function(number): number} */
       method1(n1) {
           return "42";
-          ~~~~~~~~~~~~
+          ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
       },
       /** @type {function(number): number} */

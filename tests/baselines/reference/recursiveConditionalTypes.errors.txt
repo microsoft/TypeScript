@@ -231,7 +231,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'nu
     
     function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
         return value.length;  // Error
-        ~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'Enumerate<T["length"]>'.
     }
     

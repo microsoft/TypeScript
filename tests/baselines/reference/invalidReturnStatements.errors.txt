@@ -31,11 +31,11 @@ tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(1
         name: string;
     }
     function fn10(): D { return { id: 12 }; } 
-                         ~~~~~~~~~~~~~~~~~~
+                         ~~~~~~
 !!! error TS2739: Type '{ id: number; }' is missing the following properties from type 'D': name, dispose
     
     function fn11(): D { return new C(); }
-                         ~~~~~~~~~~~~~~~
+                         ~~~~~~
 !!! error TS2741: Property 'name' is missing in type 'C' but required in type 'D'.
 !!! related TS2728 tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts:14:5: 'name' is declared here.
     

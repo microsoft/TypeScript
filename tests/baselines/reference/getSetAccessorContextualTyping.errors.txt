@@ -10,7 +10,7 @@ tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyp
         set X(x: number) { }
         get X() {
             return "string";  // Error; get contextual type by set accessor parameter type annotation
-            ~~~~~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
         }
     

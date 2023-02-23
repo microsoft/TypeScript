@@ -22,7 +22,7 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2769: No overload 
 
 ==== tests/cases/compiler/recursiveFunctionTypes.ts (13 errors) ====
     function fn(): typeof fn { return 1; }
-                               ~~~~~~~~~
+                               ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type '() => typeof fn'.
     
     var x: number = fn; // error

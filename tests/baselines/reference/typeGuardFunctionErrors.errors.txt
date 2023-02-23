@@ -82,7 +82,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     
     function hasANonBooleanReturnStatement(x): x is A {
         return '';
-        ~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     }
     
@@ -247,9 +247,9 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
                             ~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'D'.
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }
         get m1(p1: A): p1 is C {
@@ -261,7 +261,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
                        ~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2408: Setters cannot return a value.
         }
     }

@@ -42,13 +42,13 @@ tests/cases/conformance/types/never/neverTypeErrors2.ts(24,17): error TS2407: Th
     
     function f2(): never {
         return;
-        ~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'undefined' is not assignable to type 'never'.
     }
     
     function f3(): never {
         return 1;
-        ~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'never'.
     }
     

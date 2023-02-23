@@ -51,7 +51,7 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOn
         foo: <U extends T, T extends A>(x: U): U => {
             var a = x['foo'](); // should be string
             return a + x.notHere();
-            ~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'string'.
                          ~~~~~~~
