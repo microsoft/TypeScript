@@ -248,7 +248,7 @@ export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile)
                 getLeadingCommentRanges(text, node.pos)
             )
             : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /* stopAfterLineBreak */ false, /* stopAtComments */ true));
-        return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges), currentSourceFile);
+        return some(commentRanges) && hasInternalAnnotation(last(commentRanges), currentSourceFile);
     }
     const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
     return !!forEach(leadingCommentRanges, range => {
