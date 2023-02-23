@@ -797,6 +797,7 @@ import {
     mangleScopedPackageName,
     map,
     mapDefined,
+    mapIterator,
     MappedSymbol,
     MappedType,
     MappedTypeNode,
@@ -912,6 +913,7 @@ import {
     resolveTripleslashReference,
     resolvingEmptyArray,
     RestTypeNode,
+    returnFalse,
     ReturnStatement,
     ReverseMappedSymbol,
     ReverseMappedType,
@@ -23687,7 +23689,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const newContext = context && createInferenceContextWorker(map(context.inferences, cloneInferenceInfo), context.signature, context.flags | extraFlags, context.compareTypes);
         if (context && context.freeTypeVariables) {
             newContext.freeTypeVariables = map(context.freeTypeVariables, cloneInferenceInfo);
-            newContext.freeTypeVariableSourceSignatures = new Map(ts.mapIterator(context.freeTypeVariableSourceSignatures!.entries(), ([k, v]) => [k, new Map(v.entries())]));
+            newContext.freeTypeVariableSourceSignatures = new Map(mapIterator(context.freeTypeVariableSourceSignatures!.entries(), ([k, v]) => [k, new Map(v.entries())]));
         }
         return newContext;
     }
@@ -23954,7 +23956,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         inferTypes(context, sourceType, templateType);
         // By passing `returnFalse` here, we select the last option inferred from any overload lists -
         // this matches historical behavior, but we can probably do better here. There's maybe a constraint we could check against?
-        return getInferredTypes(context, ts.returnFalse)[0] || unknownType;
+        return getInferredTypes(context, returnFalse)[0] || unknownType;
     }
 
     function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol> {
@@ -32281,7 +32283,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // We pass `returnFalse` as the acceptor so the last overload of all alternatives are chosen -
         // this matches historical precedent, but there's probably a better option here.
-        return getSignatureInstantiation(signature, getInferredTypes(context, ts.returnFalse), isInJSFile(contextualSignature.declaration));
+        return getSignatureInstantiation(signature, getInferredTypes(context, returnFalse), isInJSFile(contextualSignature.declaration));
     }
 
     function inferJsxTypeArguments(node: JsxOpeningLikeElement, signature: Signature, checkMode: CheckMode, context: InferenceContext, accept: (types: Type[]) => boolean): Type[] {
@@ -33397,7 +33399,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const inferenceContext = createInferenceContext(typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
         // By passing `returnFalse` for the `accept` function, we pick the last alternative for the error signature, which matches historic behavior.
         // A better, "closer" inference choice (by some heuristic) might be available, and may be a way to improve error messages.
-        const typeArgumentTypes = inferTypeArguments(node, candidate, args, checkMode | CheckMode.SkipContextSensitive | CheckMode.SkipGenericFunctions, inferenceContext, ts.returnFalse);
+        const typeArgumentTypes = inferTypeArguments(node, candidate, args, checkMode | CheckMode.SkipContextSensitive | CheckMode.SkipGenericFunctions, inferenceContext, returnFalse);
         return createSignatureInstantiation(candidate, typeArgumentTypes);
     }
 
