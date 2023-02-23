@@ -49,6 +49,7 @@
           "isImportStatementCompletion": true,
           "data": {
             "exportName": "foo",
+            "exportMapKey": "foo|*|",
             "moduleSpecifier": "./$foo",
             "fileName": "/tests/cases/fourslash/$foo.ts"
           },

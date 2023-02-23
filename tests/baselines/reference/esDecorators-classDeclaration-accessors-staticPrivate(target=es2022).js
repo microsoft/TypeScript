@@ -28,8 +28,8 @@ let C = (() => {
         static {
             _static_private_get_method1_decorators = [dec(1)];
             _static_private_set_method1_decorators = [dec(2)];
-            __esDecorate(this, _static_private_get_method1_descriptor = { get: __setFunctionName(function () { return 0; }, "#method1", "get") }, _static_private_get_method1_decorators, { kind: "getter", name: "#method1", static: true, private: true }, null, _staticExtraInitializers);
-            __esDecorate(this, _static_private_set_method1_descriptor = { set: __setFunctionName(function (value) { }, "#method1", "set") }, _static_private_set_method1_decorators, { kind: "setter", name: "#method1", static: true, private: true }, null, _staticExtraInitializers);
+            __esDecorate(this, _static_private_get_method1_descriptor = { get: __setFunctionName(function () { return 0; }, "#method1", "get") }, _static_private_get_method1_decorators, { kind: "getter", name: "#method1", static: true, private: true, access: { has: obj => #method1 in obj, get: obj => obj.#method1 } }, null, _staticExtraInitializers);
+            __esDecorate(this, _static_private_set_method1_descriptor = { set: __setFunctionName(function (value) { }, "#method1", "set") }, _static_private_set_method1_decorators, { kind: "setter", name: "#method1", static: true, private: true, access: { has: obj => #method1 in obj, set: (obj, value) => { obj.#method1 = value; } } }, null, _staticExtraInitializers);
             __runInitializers(this, _staticExtraInitializers);
         }
         static get #method1() { return _static_private_get_method1_descriptor.get.call(this); }

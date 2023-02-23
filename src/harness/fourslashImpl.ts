@@ -882,18 +882,28 @@ export class TestState {
 
     public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
         if (options.marker === undefined) {
-            this.verifyCompletionsWorker(options);
+            return this.verifyCompletionsWorker(options);
         }
         else {
-            for (const marker of toArray(options.marker)) {
-                this.goToMarker(marker);
-                this.verifyCompletionsWorker({ ...options, marker });
+            if (ts.isArray(options.marker)) {
+                for (const marker of options.marker) {
+                    this.goToMarker(marker);
+                    this.verifyCompletionsWorker({ ...options, marker });
+                }
+                return {
+                    andApplyCodeAction: () => {
+                        this.raiseError(`Cannot apply code action when multiple markers are specified.`);
+                    }
+                };
             }
+            this.goToMarker(options.marker);
+            return this.verifyCompletionsWorker({ ...options, marker: options.marker });
         }
     }
 
-    private verifyCompletionsWorker(options: FourSlashInterface.VerifyCompletionsOptions): void {
-        const actualCompletions = this.getCompletionListAtCaret({ ...options.preferences, triggerCharacter: options.triggerCharacter })!;
+    private verifyCompletionsWorker(options: FourSlashInterface.VerifyCompletionsOptions) {
+        const preferences = options.preferences;
+        const actualCompletions = this.getCompletionListAtCaret({ ...preferences, triggerCharacter: options.triggerCharacter })!;
         if (!actualCompletions) {
             if (ts.hasProperty(options, "exact") && (options.exact === undefined || ts.isArray(options.exact) && !options.exact.length)) {
                 return;
@@ -917,6 +927,7 @@ export class TestState {
         }
 
         const nameToEntries = new Map<string, ts.CompletionEntry[]>();
+        const nameAndSourceToData = new Map<string, ts.CompletionEntryData | false>();
         for (const entry of actualCompletions.entries) {
             const entries = nameToEntries.get(entry.name);
             if (!entries) {
@@ -933,6 +944,15 @@ export class TestState {
                     this.raiseError(`Duplicate completions for ${entry.name}`);
                 }
                 entries.push(entry);
+            }
+            if (entry.data && entry.source) {
+                const key = `${entry.name}|${entry.source}`;
+                if (nameAndSourceToData.has(key)) {
+                    nameAndSourceToData.set(key, false);
+                }
+                else {
+                    nameAndSourceToData.set(key, entry.data);
+                }
             }
         }
 
@@ -977,6 +997,26 @@ export class TestState {
                 }
             }
         }
+
+        return {
+            andApplyCodeAction: (options: {
+                name: string,
+                source: string,
+                description: string,
+                newFileContent?: string,
+                newRangeContent?: string,
+            }) => {
+                const { name, source, description, newFileContent, newRangeContent } = options;
+                const data = nameAndSourceToData.get(`${options.name}|${options.source}`);
+                if (data === false) {
+                    this.raiseError(`Multiple completion entries found for '${options.name}' from '${options.source}'. This API cannot be used. Use 'verify.applyCodeActionFromCompletion' instead.`);
+                }
+                if (data === undefined) {
+                    this.raiseError(`No completion entry found for '${options.name}' from '${options.source}'`);
+                }
+                this.applyCodeActionFromCompletion(/*markerName*/ undefined, { name, source, data, description, newFileContent, newRangeContent, preferences });
+            }
+        };
     }
 
     private verifyCompletionEntry(actual: ts.CompletionEntry, expected: FourSlashInterface.ExpectedCompletionEntry) {
@@ -2062,7 +2102,11 @@ export class TestState {
                 }
             }
         }
-        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
+        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result, (key, value) => {
+            return key === "exportMapKey"
+                ? value.replace(/\|[0-9]+/g, "|*")
+                : value;
+        }));
     }
 
     private annotateContentWithTooltips<T extends ts.QuickInfo | ts.SignatureHelpItems | {

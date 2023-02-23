@@ -24,7 +24,7 @@ let C = (() => {
     return class C {
         static {
             _static_private_field1_decorators = [dec];
-            __esDecorate(this, _static_private_field1_descriptor = { get: __setFunctionName(function () { return this.#field1_accessor_storage; }, "#field1", "get"), set: __setFunctionName(function (value) { this.#field1_accessor_storage = value; }, "#field1", "set") }, _static_private_field1_decorators, { kind: "accessor", name: "#field1", static: true, private: true }, _static_private_field1_initializers, _staticExtraInitializers);
+            __esDecorate(this, _static_private_field1_descriptor = { get: __setFunctionName(function () { return this.#field1_accessor_storage; }, "#field1", "get"), set: __setFunctionName(function (value) { this.#field1_accessor_storage = value; }, "#field1", "set") }, _static_private_field1_decorators, { kind: "accessor", name: "#field1", static: true, private: true, access: { has: obj => #field1 in obj, get: obj => obj.#field1, set: (obj, value) => { obj.#field1 = value; } } }, _static_private_field1_initializers, _staticExtraInitializers);
             __runInitializers(this, _staticExtraInitializers);
         }
         static #field1_accessor_storage = __runInitializers(this, _static_private_field1_initializers, 0);

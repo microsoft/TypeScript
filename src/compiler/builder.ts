@@ -44,6 +44,7 @@ import {
     generateDjb2Hash,
     getDirectoryPath,
     getEmitDeclarations,
+    getIsolatedModules,
     getNormalizedAbsolutePath,
     getOptionsNameMap,
     getOwnKeys,
@@ -764,7 +765,7 @@ function handleDtsMayChangeOfReferencingExportOfAffectedFile(
 
     // Since isolated modules dont change js files, files affected by change in signature is itself
     // But we need to cleanup semantic diagnostics and queue dts emit for affected files
-    if (state.compilerOptions.isolatedModules) {
+    if (getIsolatedModules(state.compilerOptions)) {
         const seenFileNamesMap = new Map<Path, true>();
         seenFileNamesMap.set(affectedFile.resolvedPath, true);
         const queue = BuilderState.getReferencedByPaths(state, affectedFile.resolvedPath);

@@ -1,0 +1,56 @@
+=== tests/cases/compiler/contextualTypeCaching.ts ===
+// Repro from #52575
+
+export interface Event<T> {
+    callback: (response: T) => void;
+>callback : (response: T) => void
+>response : T
+
+    nested: {
+>nested : { nestedCallback: (response: T) => void; }
+
+        nestedCallback: (response: T) => void;
+>nestedCallback : (response: T) => void
+>response : T
+    }
+}
+
+export type CustomEvents = {
+>CustomEvents : { a: Event<string>; b: Event<number>; }
+
+    a: Event<string>
+>a : Event<string>
+
+    b: Event<number>
+>b : Event<number>
+
+};
+
+declare function emit<T extends keyof CustomEvents>(type: T, data: CustomEvents[T]): void
+>emit : <T extends keyof CustomEvents>(type: T, data: CustomEvents[T]) => void
+>type : T
+>data : CustomEvents[T]
+
+emit('a', {
+>emit('a', {    callback: (r) => {},    nested: {        nestedCallback: (r) => {},    },}) : void
+>emit : <T extends keyof CustomEvents>(type: T, data: CustomEvents[T]) => void
+>'a' : "a"
+>{    callback: (r) => {},    nested: {        nestedCallback: (r) => {},    },} : { callback: (r: string) => void; nested: { nestedCallback: (r: string) => void; }; }
+
+    callback: (r) => {},
+>callback : (r: string) => void
+>(r) => {} : (r: string) => void
+>r : string
+
+    nested: {
+>nested : { nestedCallback: (r: string) => void; }
+>{        nestedCallback: (r) => {},    } : { nestedCallback: (r: string) => void; }
+
+        nestedCallback: (r) => {},
+>nestedCallback : (r: string) => void
+>(r) => {} : (r: string) => void
+>r : string
+
+    },
+});
+

@@ -1,0 +1,313 @@
+=== tests/cases/compiler/strictSubtypeAndNarrowing.ts ===
+// Check that `any` is a strict supertype of `unknown`
+
+declare const x11: { x: unknown };
+>x11 : Symbol(x11, Decl(strictSubtypeAndNarrowing.ts, 2, 13))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 2, 20))
+
+declare const x12: { x: any };
+>x12 : Symbol(x12, Decl(strictSubtypeAndNarrowing.ts, 3, 13))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 3, 20))
+
+const a11 = [x11, x12];
+>a11 : Symbol(a11, Decl(strictSubtypeAndNarrowing.ts, 5, 5))
+>x11 : Symbol(x11, Decl(strictSubtypeAndNarrowing.ts, 2, 13))
+>x12 : Symbol(x12, Decl(strictSubtypeAndNarrowing.ts, 3, 13))
+
+const a12 = [x12, x11];
+>a12 : Symbol(a12, Decl(strictSubtypeAndNarrowing.ts, 6, 5))
+>x12 : Symbol(x12, Decl(strictSubtypeAndNarrowing.ts, 3, 13))
+>x11 : Symbol(x11, Decl(strictSubtypeAndNarrowing.ts, 2, 13))
+
+declare const x21: { x: any };
+>x21 : Symbol(x21, Decl(strictSubtypeAndNarrowing.ts, 8, 13))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 8, 20))
+
+declare const x22: { x: unknown };
+>x22 : Symbol(x22, Decl(strictSubtypeAndNarrowing.ts, 9, 13))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 9, 20))
+
+const a21 = [x22, x21];
+>a21 : Symbol(a21, Decl(strictSubtypeAndNarrowing.ts, 11, 5))
+>x22 : Symbol(x22, Decl(strictSubtypeAndNarrowing.ts, 9, 13))
+>x21 : Symbol(x21, Decl(strictSubtypeAndNarrowing.ts, 8, 13))
+
+const a22 = [x21, x22];
+>a22 : Symbol(a22, Decl(strictSubtypeAndNarrowing.ts, 12, 5))
+>x21 : Symbol(x21, Decl(strictSubtypeAndNarrowing.ts, 8, 13))
+>x22 : Symbol(x22, Decl(strictSubtypeAndNarrowing.ts, 9, 13))
+
+// Strict subtype doesn't infer index signatures in non-fresh object types
+
+const x31 = { a: 1 };
+>x31 : Symbol(x31, Decl(strictSubtypeAndNarrowing.ts, 16, 5))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 16, 13))
+
+declare const x32: { [x: string]: unknown, a: number }
+>x32 : Symbol(x32, Decl(strictSubtypeAndNarrowing.ts, 17, 13))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 17, 22))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 17, 42))
+
+const a31 = [x31, x32];
+>a31 : Symbol(a31, Decl(strictSubtypeAndNarrowing.ts, 19, 5))
+>x31 : Symbol(x31, Decl(strictSubtypeAndNarrowing.ts, 16, 5))
+>x32 : Symbol(x32, Decl(strictSubtypeAndNarrowing.ts, 17, 13))
+
+const a32 = [x32, x31];
+>a32 : Symbol(a32, Decl(strictSubtypeAndNarrowing.ts, 20, 5))
+>x32 : Symbol(x32, Decl(strictSubtypeAndNarrowing.ts, 17, 13))
+>x31 : Symbol(x31, Decl(strictSubtypeAndNarrowing.ts, 16, 5))
+
+declare const x41: { [x: string]: unknown, a: number }
+>x41 : Symbol(x41, Decl(strictSubtypeAndNarrowing.ts, 22, 13))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 22, 22))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 22, 42))
+
+const x42 = { a: 1 };
+>x42 : Symbol(x42, Decl(strictSubtypeAndNarrowing.ts, 23, 5))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 23, 13))
+
+const a41 = [x42, x41];
+>a41 : Symbol(a41, Decl(strictSubtypeAndNarrowing.ts, 25, 5))
+>x42 : Symbol(x42, Decl(strictSubtypeAndNarrowing.ts, 23, 5))
+>x41 : Symbol(x41, Decl(strictSubtypeAndNarrowing.ts, 22, 13))
+
+const a42 = [x41, x42];
+>a42 : Symbol(a42, Decl(strictSubtypeAndNarrowing.ts, 26, 5))
+>x41 : Symbol(x41, Decl(strictSubtypeAndNarrowing.ts, 22, 13))
+>x42 : Symbol(x42, Decl(strictSubtypeAndNarrowing.ts, 23, 5))
+
+// (...args: A) => R, where A is any, any[], never, or never[] and R is any or unknown, is supertype of all function types.
+
+declare function isFunction<T>(x: unknown): x is T;
+>isFunction : Symbol(isFunction, Decl(strictSubtypeAndNarrowing.ts, 26, 23))
+>T : Symbol(T, Decl(strictSubtypeAndNarrowing.ts, 30, 28))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 30, 31))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 30, 31))
+>T : Symbol(T, Decl(strictSubtypeAndNarrowing.ts, 30, 28))
+
+type A = (...args: any) => unknown;
+>A : Symbol(A, Decl(strictSubtypeAndNarrowing.ts, 30, 51))
+>args : Symbol(args, Decl(strictSubtypeAndNarrowing.ts, 32, 10))
+
+type B = (...args: any[]) => unknown;
+>B : Symbol(B, Decl(strictSubtypeAndNarrowing.ts, 32, 35))
+>args : Symbol(args, Decl(strictSubtypeAndNarrowing.ts, 33, 10))
+
+type C = (...args: never) => unknown;
+>C : Symbol(C, Decl(strictSubtypeAndNarrowing.ts, 33, 37))
+>args : Symbol(args, Decl(strictSubtypeAndNarrowing.ts, 34, 10))
+
+type D = (...args: never[]) => unknown;
+>D : Symbol(D, Decl(strictSubtypeAndNarrowing.ts, 34, 37))
+>args : Symbol(args, Decl(strictSubtypeAndNarrowing.ts, 35, 10))
+
+type FnTypes = A | B | C | D;
+>FnTypes : Symbol(FnTypes, Decl(strictSubtypeAndNarrowing.ts, 35, 39))
+>A : Symbol(A, Decl(strictSubtypeAndNarrowing.ts, 30, 51))
+>B : Symbol(B, Decl(strictSubtypeAndNarrowing.ts, 32, 35))
+>C : Symbol(C, Decl(strictSubtypeAndNarrowing.ts, 33, 37))
+>D : Symbol(D, Decl(strictSubtypeAndNarrowing.ts, 34, 37))
+
+function fx1(f: (() => void) | undefined) {
+>fx1 : Symbol(fx1, Decl(strictSubtypeAndNarrowing.ts, 37, 29))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 39, 13))
+
+    if (isFunction<A>(f)) {
+>isFunction : Symbol(isFunction, Decl(strictSubtypeAndNarrowing.ts, 26, 23))
+>A : Symbol(A, Decl(strictSubtypeAndNarrowing.ts, 30, 51))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 39, 13))
+
+        f;  // () => void
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 39, 13))
+    }
+    else {
+        f;  // undefined
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 39, 13))
+    }
+    f;  // (() => void) | undefined
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 39, 13))
+}
+
+function fx2(f: (() => void) | undefined) {
+>fx2 : Symbol(fx2, Decl(strictSubtypeAndNarrowing.ts, 47, 1))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 49, 13))
+
+    if (isFunction<B>(f)) {
+>isFunction : Symbol(isFunction, Decl(strictSubtypeAndNarrowing.ts, 26, 23))
+>B : Symbol(B, Decl(strictSubtypeAndNarrowing.ts, 32, 35))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 49, 13))
+
+        f;  // () => void
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 49, 13))
+    }
+    else {
+        f;  // undefined
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 49, 13))
+    }
+    f;  // (() => void) | undefined
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 49, 13))
+}
+
+function fx3(f: (() => void) | undefined) {
+>fx3 : Symbol(fx3, Decl(strictSubtypeAndNarrowing.ts, 57, 1))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 59, 13))
+
+    if (isFunction<C>(f)) {
+>isFunction : Symbol(isFunction, Decl(strictSubtypeAndNarrowing.ts, 26, 23))
+>C : Symbol(C, Decl(strictSubtypeAndNarrowing.ts, 33, 37))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 59, 13))
+
+        f;  // () => void
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 59, 13))
+    }
+    else {
+        f;  // undefined
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 59, 13))
+    }
+    f;  // (() => void) | undefined
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 59, 13))
+}
+
+function fx4(f: (() => void) | undefined) {
+>fx4 : Symbol(fx4, Decl(strictSubtypeAndNarrowing.ts, 67, 1))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 69, 13))
+
+    if (isFunction<D>(f)) {
+>isFunction : Symbol(isFunction, Decl(strictSubtypeAndNarrowing.ts, 26, 23))
+>D : Symbol(D, Decl(strictSubtypeAndNarrowing.ts, 34, 37))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 69, 13))
+
+        f;  // () => void
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 69, 13))
+    }
+    else {
+        f;  // undefined
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 69, 13))
+    }
+    f;  // (() => void) | undefined
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 69, 13))
+}
+
+function checkA(f: FnTypes) {
+>checkA : Symbol(checkA, Decl(strictSubtypeAndNarrowing.ts, 77, 1))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 79, 16))
+>FnTypes : Symbol(FnTypes, Decl(strictSubtypeAndNarrowing.ts, 35, 39))
+
+    if (isFunction<A>(f)) {
+>isFunction : Symbol(isFunction, Decl(strictSubtypeAndNarrowing.ts, 26, 23))
+>A : Symbol(A, Decl(strictSubtypeAndNarrowing.ts, 30, 51))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 79, 16))
+
+        f;  // A | B
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 79, 16))
+    }
+    else {
+        f;  // C | D
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 79, 16))
+    }
+    f;  // FnTypes
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 79, 16))
+}
+
+function checkB(f: FnTypes) {
+>checkB : Symbol(checkB, Decl(strictSubtypeAndNarrowing.ts, 87, 1))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 89, 16))
+>FnTypes : Symbol(FnTypes, Decl(strictSubtypeAndNarrowing.ts, 35, 39))
+
+    if (isFunction<B>(f)) {
+>isFunction : Symbol(isFunction, Decl(strictSubtypeAndNarrowing.ts, 26, 23))
+>B : Symbol(B, Decl(strictSubtypeAndNarrowing.ts, 32, 35))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 89, 16))
+
+        f;  // A | B
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 89, 16))
+    }
+    else {
+        f;  // C | D
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 89, 16))
+    }
+    f;  // FnTypes
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 89, 16))
+}
+
+function checkC(f: FnTypes) {
+>checkC : Symbol(checkC, Decl(strictSubtypeAndNarrowing.ts, 97, 1))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 99, 16))
+>FnTypes : Symbol(FnTypes, Decl(strictSubtypeAndNarrowing.ts, 35, 39))
+
+    if (isFunction<C>(f)) {
+>isFunction : Symbol(isFunction, Decl(strictSubtypeAndNarrowing.ts, 26, 23))
+>C : Symbol(C, Decl(strictSubtypeAndNarrowing.ts, 33, 37))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 99, 16))
+
+        f;  // FnTypes
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 99, 16))
+    }
+    else {
+        f;  // never
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 99, 16))
+    }
+    f;  // FnTypes
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 99, 16))
+}
+
+function checkD(f: FnTypes) {
+>checkD : Symbol(checkD, Decl(strictSubtypeAndNarrowing.ts, 107, 1))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 109, 16))
+>FnTypes : Symbol(FnTypes, Decl(strictSubtypeAndNarrowing.ts, 35, 39))
+
+    if (isFunction<C>(f)) {
+>isFunction : Symbol(isFunction, Decl(strictSubtypeAndNarrowing.ts, 26, 23))
+>C : Symbol(C, Decl(strictSubtypeAndNarrowing.ts, 33, 37))
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 109, 16))
+
+        f;  // FnTypes
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 109, 16))
+    }
+    else {
+        f;  // never
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 109, 16))
+    }
+    f;  // FnTypes
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 109, 16))
+}
+
+// Type of x = y is y with freshness preserved
+
+function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
+>fx10 : Symbol(fx10, Decl(strictSubtypeAndNarrowing.ts, 117, 1))
+>obj1 : Symbol(obj1, Decl(strictSubtypeAndNarrowing.ts, 121, 14))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 121, 21))
+>obj2 : Symbol(obj2, Decl(strictSubtypeAndNarrowing.ts, 121, 35))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 121, 43))
+>y : Symbol(y, Decl(strictSubtypeAndNarrowing.ts, 121, 55))
+
+    obj1 = obj2 = { x: 1, y: 2 };
+>obj1 : Symbol(obj1, Decl(strictSubtypeAndNarrowing.ts, 121, 14))
+>obj2 : Symbol(obj2, Decl(strictSubtypeAndNarrowing.ts, 121, 35))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 122, 19))
+>y : Symbol(y, Decl(strictSubtypeAndNarrowing.ts, 122, 25))
+
+    obj2 = obj1 = { x: 1, y: 2 };
+>obj2 : Symbol(obj2, Decl(strictSubtypeAndNarrowing.ts, 121, 35))
+>obj1 : Symbol(obj1, Decl(strictSubtypeAndNarrowing.ts, 121, 14))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 123, 19))
+>y : Symbol(y, Decl(strictSubtypeAndNarrowing.ts, 123, 25))
+}
+
+function fx11(): { x?: number } {
+>fx11 : Symbol(fx11, Decl(strictSubtypeAndNarrowing.ts, 124, 1))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 126, 18))
+
+    let obj: { x?: number, y?: number };
+>obj : Symbol(obj, Decl(strictSubtypeAndNarrowing.ts, 127, 7))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 127, 14))
+>y : Symbol(y, Decl(strictSubtypeAndNarrowing.ts, 127, 26))
+
+    return obj = { x: 1, y: 2 };
+>obj : Symbol(obj, Decl(strictSubtypeAndNarrowing.ts, 127, 7))
+>x : Symbol(x, Decl(strictSubtypeAndNarrowing.ts, 128, 18))
+>y : Symbol(y, Decl(strictSubtypeAndNarrowing.ts, 128, 24))
+}
+

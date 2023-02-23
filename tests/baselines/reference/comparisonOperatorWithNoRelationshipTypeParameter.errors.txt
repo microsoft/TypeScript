@@ -7,37 +7,37 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(18,14): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(19,14): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(23,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(26,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(26,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(31,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(34,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(34,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(40,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(43,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(43,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(48,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(51,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(51,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(57,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(60,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(60,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(65,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(68,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(68,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(74,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(77,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(77,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(82,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(85,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(85,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(91,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(94,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(94,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(99,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(102,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(102,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(108,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(111,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(111,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(116,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(119,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(119,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(125,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(128,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(128,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(133,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(136,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(136,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(142,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(145,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(145,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(150,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(153,16): error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(153,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
 
 
 ==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts (40 errors) ====
@@ -86,7 +86,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r1a4 = t < d;
         var r1a5 = t < e;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r1a6 = t < f;
         var r1a7 = t < g;
     
@@ -98,7 +98,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r1b4 = d < t;
         var r1b5 = e < t;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r1b6 = f < t;
         var r1b7 = g < t;
     
@@ -111,7 +111,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r2a4 = t < d;
         var r2a5 = t < e;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r2a6 = t < f;
         var r2a7 = t < g;
     
@@ -123,7 +123,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r2b4 = d < t;
         var r2b5 = e < t;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r2b6 = f < t;
         var r2b7 = g < t;
     
@@ -136,7 +136,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r3a4 = t < d;
         var r3a5 = t < e;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r3a6 = t < f;
         var r3a7 = t < g;
     
@@ -148,7 +148,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r3b4 = d < t;
         var r3b5 = e < t;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r3b6 = f < t;
         var r3b7 = g < t;
     
@@ -161,7 +161,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r4a4 = t < d;
         var r4a5 = t < e;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r4a6 = t < f;
         var r4a7 = t < g;
     
@@ -173,7 +173,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r4b4 = d < t;
         var r4b5 = e < t;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r4b6 = f < t;
         var r4b7 = g < t;
     
@@ -186,7 +186,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r5a4 = t < d;
         var r5a5 = t < e;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r5a6 = t < f;
         var r5a7 = t < g;
     
@@ -198,7 +198,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r5b4 = d < t;
         var r5b5 = e < t;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r5b6 = f < t;
         var r5b7 = g < t;
     
@@ -211,7 +211,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r6a4 = t < d;
         var r6a5 = t < e;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r6a6 = t < f;
         var r6a7 = t < g;
     
@@ -223,7 +223,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r6b4 = d < t;
         var r6b5 = e < t;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r6b6 = f < t;
         var r6b7 = g < t;
     
@@ -236,7 +236,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r7a4 = t < d;
         var r7a5 = t < e;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r7a6 = t < f;
         var r7a7 = t < g;
     
@@ -248,7 +248,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r7b4 = d < t;
         var r7b5 = e < t;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r7b6 = f < t;
         var r7b7 = g < t;
     
@@ -261,7 +261,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r8a4 = t < d;
         var r8a5 = t < e;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'E'.
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r8a6 = t < f;
         var r8a7 = t < g;
     
@@ -273,7 +273,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
         var r8b4 = d < t;
         var r8b5 = e < t;
                    ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'E' and 'T'.
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r8b6 = f < t;
         var r8b7 = g < t;
     }

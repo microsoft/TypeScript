@@ -284,7 +284,13 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completions(...options: CompletionsOptions[]): void;
+        completions(...options: CompletionsOptions[]): { andApplyCodeAction(options: {
+            name: string,
+            source: string,
+            description: string,
+            newFileContent?: string,
+            newRangeContent?: string,
+        }): void };
         applyCodeActionFromCompletion(markerName: string | undefined, options: {
             name: string,
             source?: string,

@@ -15,6 +15,7 @@ import {
     getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleNameLiteral,
+    getIsolatedModules,
     hasSyntacticModifier,
     Identifier,
     idText,
@@ -77,7 +78,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             return node;
         }
 
-        if (isExternalModule(node) || compilerOptions.isolatedModules) {
+        if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
             currentSourceFile = node;
             importRequireStatements = undefined;
             let result = updateExternalModule(node);
@@ -287,7 +288,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
      */
     function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
         if (isSourceFile(node)) {
-            if ((isExternalModule(node) || compilerOptions.isolatedModules) && compilerOptions.importHelpers) {
+            if ((isExternalModule(node) || getIsolatedModules(compilerOptions)) && compilerOptions.importHelpers) {
                 helperNameSubstitutions = new Map<string, Identifier>();
             }
             previousOnEmitNode(hint, node, emitCallback);

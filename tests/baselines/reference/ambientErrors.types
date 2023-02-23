@@ -55,7 +55,7 @@ declare enum E2 {
 >E2 : E2
 
     x = 'foo'.length
->x : E2
+>x : E2.x
 >'foo'.length : number
 >'foo' : "foo"
 >length : number

@@ -25,7 +25,7 @@ let C = (() => {
         _C_field1_set = function _C_field1_set(value) { return _private_field1_descriptor.set.call(this, value); },
         (() => {
             _private_field1_decorators = [dec];
-            __esDecorate(_a, _private_field1_descriptor = { get: __setFunctionName(function () { return __classPrivateFieldGet(this, _C_field1_accessor_storage, "f"); }, "#field1", "get"), set: __setFunctionName(function (value) { __classPrivateFieldSet(this, _C_field1_accessor_storage, value, "f"); }, "#field1", "set") }, _private_field1_decorators, { kind: "accessor", name: "#field1", static: false, private: true }, _private_field1_initializers, _instanceExtraInitializers);
+            __esDecorate(_a, _private_field1_descriptor = { get: __setFunctionName(function () { return __classPrivateFieldGet(this, _C_field1_accessor_storage, "f"); }, "#field1", "get"), set: __setFunctionName(function (value) { __classPrivateFieldSet(this, _C_field1_accessor_storage, value, "f"); }, "#field1", "set") }, _private_field1_decorators, { kind: "accessor", name: "#field1", static: false, private: true, access: { has: obj => __classPrivateFieldIn(_C_instances, obj), get: obj => __classPrivateFieldGet(obj, _C_instances, "a", _C_field1_get), set: (obj, value) => { __classPrivateFieldSet(obj, _C_instances, value, "a", _C_field1_set); } } }, _private_field1_initializers, _instanceExtraInitializers);
         })(),
         _a;
 })();

@@ -88,3 +88,13 @@ g3.give('1');
 >give : (value: string | number) => string | number
 >'1' : "1"
 
+// repro from #35636
+class C<T> {}
+>C : C<T>
+
+const g4 = g(C);
+>g4 : C<unknown>
+>g(C) : C<unknown>
+>g : <T>(type: new () => T) => T
+>C : typeof C
+

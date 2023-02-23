@@ -53,6 +53,7 @@ import {
     getEmitScriptTarget,
     getFirstConstructorWithBody,
     getInitializedVariables,
+    getIsolatedModules,
     getOriginalNode,
     getParseTreeNode,
     getProperties,
@@ -2707,7 +2708,7 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function tryGetConstEnumValue(node: Node): string | number | undefined {
-        if (compilerOptions.isolatedModules) {
+        if (getIsolatedModules(compilerOptions)) {
             return undefined;
         }
 

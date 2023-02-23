@@ -12,6 +12,6 @@ declare var React: any;
 <>eof   // Error
 
 //// [file.js]
-React.createElement(React.Fragment, null, "hi") // Error
-    , // Error
-        React.createElement(React.Fragment, null, "eof   // Error");
+React.createElement(React.Fragment, null, "hi");
+div > // Error
+    React.createElement(React.Fragment, null, "eof   // Error");

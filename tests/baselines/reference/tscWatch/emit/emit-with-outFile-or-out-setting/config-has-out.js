@@ -27,7 +27,7 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 
 [7m1[0m {"compilerOptions":{"out":"/a/out.js"}}
 [7m [0m [91m                    ~~~~~[0m
@@ -85,7 +85,7 @@ Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 
 [7m1[0m {"compilerOptions":{"out":"/a/out.js"}}
 [7m [0m [91m                    ~~~~~[0m
@@ -143,7 +143,7 @@ Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 
 [7m1[0m {"compilerOptions":{"out":"/a/out.js"}}
 [7m [0m [91m                    ~~~~~[0m

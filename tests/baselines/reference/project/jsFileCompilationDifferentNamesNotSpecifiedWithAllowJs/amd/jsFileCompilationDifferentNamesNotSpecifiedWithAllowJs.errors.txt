@@ -1,4 +1,4 @@
-DifferentNamesNotSpecifiedWithAllowJs/tsconfig.json(3,5): error TS5101: Flag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+DifferentNamesNotSpecifiedWithAllowJs/tsconfig.json(3,5): error TS5101: Flag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 
 
 ==== DifferentNamesNotSpecifiedWithAllowJs/tsconfig.json (1 errors) ====
@@ -6,7 +6,7 @@ DifferentNamesNotSpecifiedWithAllowJs/tsconfig.json(3,5): error TS5101: Flag 'ou
       "compilerOptions": {
         "out": "test.js",
         ~~~~~
-!!! error TS5101: Flag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+!!! error TS5101: Flag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
         "allowJs": true
       }
     }

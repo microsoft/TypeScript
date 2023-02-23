@@ -580,3 +580,9 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >u2 : Symbol(u2, Decl(templateLiteralTypes3.ts, 185, 80))
 }
 
+// Repro from #52685
+
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+>Boom : Symbol(Boom, Decl(templateLiteralTypes3.ts, 189, 1))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+

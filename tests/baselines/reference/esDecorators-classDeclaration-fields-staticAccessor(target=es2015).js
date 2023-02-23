@@ -39,9 +39,9 @@ let C = (() => {
             static set [_b](value) { __classPrivateFieldSet(_a, _a, value, "f", _C__b_accessor_storage); }
         },
         (() => {
-            __esDecorate(_a, null, _static_field1_decorators, { kind: "accessor", name: "field1", static: true, private: false }, _static_field1_initializers, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_member_decorators, { kind: "accessor", name: "field2", static: true, private: false }, _static_member_initializers, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_member_decorators_1, { kind: "accessor", name: _b, static: true, private: false }, _static_member_initializers_1, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_field1_decorators, { kind: "accessor", name: "field1", static: true, private: false, access: { has: obj => "field1" in obj, get: obj => obj.field1, set: (obj, value) => { obj.field1 = value; } } }, _static_field1_initializers, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_member_decorators, { kind: "accessor", name: "field2", static: true, private: false, access: { has: obj => "field2" in obj, get: obj => obj["field2"], set: (obj, value) => { obj["field2"] = value; } } }, _static_member_initializers, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_member_decorators_1, { kind: "accessor", name: _b, static: true, private: false, access: { has: obj => _b in obj, get: obj => obj[_b], set: (obj, value) => { obj[_b] = value; } } }, _static_member_initializers_1, _staticExtraInitializers);
             __runInitializers(_a, _staticExtraInitializers);
         })(),
         _C_field1_accessor_storage = { value: __runInitializers(_a, _static_field1_initializers, 1) },

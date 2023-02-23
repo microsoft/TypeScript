@@ -37,12 +37,12 @@ let C = (() => {
             }
         },
         (() => {
-            __esDecorate(_a, null, _get_method1_decorators, { kind: "getter", name: "method1", static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _set_method1_decorators, { kind: "setter", name: "method1", static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _get_member_decorators, { kind: "getter", name: "method2", static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _set_member_decorators, { kind: "setter", name: "method2", static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _get_member_decorators_1, { kind: "getter", name: _b, static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _set_member_decorators_1, { kind: "setter", name: _c, static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _get_method1_decorators, { kind: "getter", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, get: obj => obj.method1 } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _set_method1_decorators, { kind: "setter", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, set: (obj, value) => { obj.method1 = value; } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _get_member_decorators, { kind: "getter", name: "method2", static: false, private: false, access: { has: obj => "method2" in obj, get: obj => obj["method2"] } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _set_member_decorators, { kind: "setter", name: "method2", static: false, private: false, access: { has: obj => "method2" in obj, set: (obj, value) => { obj["method2"] = value; } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _get_member_decorators_1, { kind: "getter", name: _b, static: false, private: false, access: { has: obj => _b in obj, get: obj => obj[_b] } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _set_member_decorators_1, { kind: "setter", name: _c, static: false, private: false, access: { has: obj => _c in obj, set: (obj, value) => { obj[_c] = value; } } }, null, _instanceExtraInitializers);
         })(),
         _a;
 })();

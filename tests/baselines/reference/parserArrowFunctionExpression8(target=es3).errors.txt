@@ -1,9 +1,9 @@
-error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileJs.js(1,1): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileTs.ts(1,1): error TS2304: Cannot find name 'x'.
 
 
-!!! error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+!!! error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 ==== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileJs.js (1 errors) ====
     x ? y => ({ y }) : z => ({ z }) // Legal JS
     ~

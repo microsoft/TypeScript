@@ -8,6 +8,7 @@ import {
     ExportedModulesFromDeclarationEmit,
     GetCanonicalFileName,
     getDirectoryPath,
+    getIsolatedModules,
     getSourceFileOfNode,
     HostForComputeHash,
     isDeclarationFileName,
@@ -636,7 +637,7 @@ export namespace BuilderState {
         }
 
         const compilerOptions = programOfThisState.getCompilerOptions();
-        if (compilerOptions && (compilerOptions.isolatedModules || outFile(compilerOptions))) {
+        if (compilerOptions && (getIsolatedModules(compilerOptions) || outFile(compilerOptions))) {
             return [sourceFileWithUpdatedShape];
         }
 

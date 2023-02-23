@@ -480,7 +480,7 @@ function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void
 function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
 >fn3 : Symbol(fn3, Decl(keyofAndIndexedAccess2.ts, 125, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 129, 13))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 2 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
 >param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 129, 46))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 129, 13))
 >cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 129, 55))
@@ -503,7 +503,7 @@ function fn4<K extends number>() {
 
     let y: ReadonlyArray<string>[K] = 'abc';
 >y : Symbol(y, Decl(keyofAndIndexedAccess2.ts, 135, 7))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 2 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
 >K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 133, 13))
 }
 
