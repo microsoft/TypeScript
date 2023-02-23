@@ -961,6 +961,8 @@ export function createScanner(languageVersion: ScriptTarget,
     start?: number,
     length?: number): Scanner {
 
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var text = textInitial!;
 

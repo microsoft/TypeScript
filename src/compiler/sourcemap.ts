@@ -35,6 +35,8 @@ export interface SourceMapGeneratorOptions {
 
 /** @internal */
 export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var { enter, exit } = generatorOptions.extendedDiagnostics
         ? performance.createTimer("Source Map", "beforeSourcemap", "afterSourcemap")

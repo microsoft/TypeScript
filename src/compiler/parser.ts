@@ -1401,6 +1401,8 @@ export function parseJSDocTypeExpressionForTests(content: string, start?: number
 // parser instances can actually be expensive enough to impact us on projects with many source
 // files.
 namespace Parser {
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
 
     // Share a single scanner across all calls to parse a source file.  This helps speed things
