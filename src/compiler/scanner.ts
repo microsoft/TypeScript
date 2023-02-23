@@ -327,6 +327,11 @@ const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)
  */
 const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
 
+/**
+ * Test for whether a comment contains a JSDoc tag needed by the checker when run in tsc.
+ */
+const semanticJSDocTagRegEx = /@(?:see|link)/i;
+
 function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
     // Bail out quickly if it couldn't possibly be in the map.
     if (code < map[0]) {
@@ -1829,7 +1834,6 @@ export function createScanner(languageVersion: ScriptTarget,
                     if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                         pos += 2;
                         const isJSDoc = text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash;
-                        let containsSeeOrLink = false;
 
                         let commentClosed = false;
                         let lastLineStart = tokenPos;
@@ -1842,36 +1846,6 @@ export function createScanner(languageVersion: ScriptTarget,
                                 break;
                             }
 
-                            if (skipJSDoc && isJSDoc && !containsSeeOrLink) {
-                                if (ch === CharacterCodes.at) {
-                                    const ch1 = text.charCodeAt(pos + 1);
-                                    const ch2 = text.charCodeAt(pos + 2);
-                                    const ch3 = text.charCodeAt(pos + 3);
-                                    if (ch1 === CharacterCodes.s || ch1 === CharacterCodes.S) {
-                                        if (
-                                            (ch2 === CharacterCodes.e || ch2 === CharacterCodes.E)
-                                            && (ch3 === CharacterCodes.e || ch3 === CharacterCodes.E)
-                                        ) {
-                                            containsSeeOrLink = true;
-                                            pos += 3;
-                                            continue;
-                                        }
-                                    }
-                                    else if (ch1 === CharacterCodes.l || ch1 === CharacterCodes.L) {
-                                        const ch4 = text.charCodeAt(pos + 4);
-                                        if (
-                                            (ch2 === CharacterCodes.i || ch2 === CharacterCodes.I)
-                                            && (ch3 === CharacterCodes.n || ch3 === CharacterCodes.N)
-                                            && (ch4 === CharacterCodes.k || ch4 === CharacterCodes.K)
-                                        ) {
-                                            containsSeeOrLink = true;
-                                            pos += 4;
-                                            continue;
-                                        }
-                                    }
-                                }
-                            }
-
                             pos++;
 
                             if (isLineBreak(ch)) {
@@ -1880,7 +1854,7 @@ export function createScanner(languageVersion: ScriptTarget,
                             }
                         }
 
-                        if (isJSDoc && (!skipJSDoc || containsSeeOrLink)) {
+                        if (isJSDoc && (!skipJSDoc || semanticJSDocTagRegEx.test(text.slice(tokenPos, pos)))) {
                             tokenFlags |= TokenFlags.PrecedingJSDocComment;
                         }
 
