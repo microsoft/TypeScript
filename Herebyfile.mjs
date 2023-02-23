@@ -569,12 +569,19 @@ export const watchLocal = task({
 
 const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
 
-export const runTests = task({
-    name: "runtests",
+const runTests = task({
+    name: "runtests-nolint",
     description: "Runs the tests using the built run.js file.",
     dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false),
 });
+
+export const runTestsAndLint = task({
+    name: "runtests",
+    description: "Runs the tests using the built run.js file, linting in parallel if --lint=true.",
+    dependencies: [runTests].concat(cmdLineOptions.lint ? [lint] : []),
+});
+
 // task("runtests").flags = {
 //     "-t --tests=<regex>": "Pattern for tests to run.",
 //     "   --failed": "Runs tests listed in '.failed-tests'.",
@@ -702,12 +709,19 @@ export const runTestsAndWatch = task({
     },
 });
 
-export const runTestsParallel = task({
-    name: "runtests-parallel",
+const runTestsParallel = task({
+    name: "runtests-parallel-nolint",
     description: "Runs all the tests in parallel using the built run.js file.",
     dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
+
+export const runTestsParallelAndLint = task({
+    name: "runtests-parallel",
+    description: "Runs all the tests in parallel using the built run.js file, linting in parallel if --lint=true.",
+    dependencies: [runTestsParallel].concat(cmdLineOptions.lint ? [lint] : []),
+});
+
 // task("runtests-parallel").flags = {
 //     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass.",
