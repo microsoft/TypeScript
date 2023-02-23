@@ -17,6 +17,7 @@ import cmdLineOptions from "./scripts/build/options.mjs";
 import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
 import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
 import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
+import assert from "assert";
 
 const glob = util.promisify(_glob);
 
@@ -214,6 +215,22 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                 }
             ];
         }
+
+        options.plugins = (options.plugins ?? []).concat({
+            name: "var-to-let",
+            setup: (build) => {
+                build.onEnd(async () => {
+                    let contents = await fs.promises.readFile(outfile, "utf-8");
+                    // Replace top-level vars with let
+                    const old = contents;
+                    contents = contents.replace(/^var /gm, "let ");
+                    // Fix enum emit which assumes var
+                    contents = contents.replace(/^\}\)\(\w+ \|\| \{\}\);/gm, "})({});");
+                    assert(old !== contents);
+                    await fs.promises.writeFile(outfile, contents);
+                });
+            },
+        });
 
         return options;
     });
