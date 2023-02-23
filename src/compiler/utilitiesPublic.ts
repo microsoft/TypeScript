@@ -2348,7 +2348,6 @@ export function isDeclaration(node: Node): node is NamedDeclaration {
     return isDeclarationKind(node.kind);
 }
 
-/** @internal */
 export function isDeclarationStatement(node: Node): node is DeclarationStatement {
     return isDeclarationStatementKind(node.kind);
 }

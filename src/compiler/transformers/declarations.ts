@@ -233,7 +233,6 @@ function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFil
     return stringContains(comment, "@internal");
 }
 
-/** @internal */
 export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
     const parseTreeNode = getParseTreeNode(node);
     if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
