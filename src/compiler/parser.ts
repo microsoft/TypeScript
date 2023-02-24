@@ -1881,7 +1881,7 @@ namespace Parser {
         }
 
         syntaxCursor = savedSyntaxCursor;
-        return factoryUpdateSourceFile(sourceFile, setTextRange(factoryCreateNodeArray(statements), sourceFile.statements));
+        return factory.updateSourceFile(sourceFile, setTextRange(factoryCreateNodeArray(statements), sourceFile.statements));
 
         function containsPossibleTopLevelAwait(node: Node) {
             return !(node.flags & NodeFlags.AwaitContext)
