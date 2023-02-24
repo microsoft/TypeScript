@@ -1,0 +1,19 @@
+tests/cases/compiler/numberWrapper.ts(5,5): error TS2322: Type 'Number' is not assignable to type 'number'.
+  'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+
+
+==== tests/cases/compiler/numberWrapper.ts (1 errors) ====
+    declare let aNumber: number;
+    declare let aNumberWrapper: Number;
+    
+    function a() {
+        aNumber = aNumberWrapper;
+        ~~~~~~~
+!!! error TS2322: Type 'Number' is not assignable to type 'number'.
+!!! error TS2322:   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+    }
+    
+    function b() {
+        aNumberWrapper = aNumber;
+    }
+    

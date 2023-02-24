@@ -1,0 +1,24 @@
+=== tests/cases/compiler/numberWrapper.ts ===
+declare let aNumber: number;
+>aNumber : Symbol(aNumber, Decl(numberWrapper.ts, 0, 11))
+
+declare let aNumberWrapper: Number;
+>aNumberWrapper : Symbol(aNumberWrapper, Decl(numberWrapper.ts, 1, 11))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function a() {
+>a : Symbol(a, Decl(numberWrapper.ts, 1, 35))
+
+    aNumber = aNumberWrapper;
+>aNumber : Symbol(aNumber, Decl(numberWrapper.ts, 0, 11))
+>aNumberWrapper : Symbol(aNumberWrapper, Decl(numberWrapper.ts, 1, 11))
+}
+
+function b() {
+>b : Symbol(b, Decl(numberWrapper.ts, 5, 1))
+
+    aNumberWrapper = aNumber;
+>aNumberWrapper : Symbol(aNumberWrapper, Decl(numberWrapper.ts, 1, 11))
+>aNumber : Symbol(aNumber, Decl(numberWrapper.ts, 0, 11))
+}
+

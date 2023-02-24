@@ -1,0 +1,25 @@
+=== tests/cases/compiler/numberWrapper.ts ===
+declare let aNumber: number;
+>aNumber : number
+
+declare let aNumberWrapper: Number;
+>aNumberWrapper : Number
+
+function a() {
+>a : () => void
+
+    aNumber = aNumberWrapper;
+>aNumber = aNumberWrapper : Number
+>aNumber : number
+>aNumberWrapper : Number
+}
+
+function b() {
+>b : () => void
+
+    aNumberWrapper = aNumber;
+>aNumberWrapper = aNumber : number
+>aNumberWrapper : Number
+>aNumber : number
+}
+
