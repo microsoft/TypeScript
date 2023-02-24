@@ -1435,6 +1435,35 @@ namespace Parser {
 
     var factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
 
+    var {
+        createNodeArray: factoryCreateNodeArray,
+        createNumericLiteral: factoryCreateNumericLiteral,
+        createStringLiteral: factoryCreateStringLiteral,
+        createLiteralLikeNode: factoryCreateLiteralLikeNode,
+        createIdentifier: factoryCreateIdentifier,
+        createPrivateIdentifier: factoryCreatePrivateIdentifier,
+        createToken: factoryCreateToken,
+        createArrayLiteralExpression: factoryCreateArrayLiteralExpression,
+        createObjectLiteralExpression: factoryCreateObjectLiteralExpression,
+        createPropertyAccessExpression: factoryCreatePropertyAccessExpression,
+        createPropertyAccessChain: factoryCreatePropertyAccessChain,
+        createElementAccessExpression: factoryCreateElementAccessExpression,
+        createElementAccessChain: factoryCreateElementAccessChain,
+        createCallExpression: factoryCreateCallExpression,
+        createCallChain: factoryCreateCallChain,
+        createNewExpression: factoryCreateNewExpression,
+        createParenthesizedExpression: factoryCreateParenthesizedExpression,
+        createBlock: factoryCreateBlock,
+        createVariableStatement: factoryCreateVariableStatement,
+        createExpressionStatement: factoryCreateExpressionStatement,
+        createIfStatement: factoryCreateIfStatement,
+        createWhileStatement: factoryCreateWhileStatement,
+        createForStatement: factoryCreateForStatement,
+        createForOfStatement: factoryCreateForOfStatement,
+        createVariableDeclaration: factoryCreateVariableDeclaration,
+        createVariableDeclarationList: factoryCreateVariableDeclarationList,
+    } = factory;
+
     var fileName: string;
     var sourceFlags: NodeFlags;
     var sourceText: string;
@@ -1631,8 +1660,8 @@ namespace Parser {
                 }
             }
 
-            const expression = isArray(expressions) ? finishNode(factory.createArrayLiteralExpression(expressions), pos) : Debug.checkDefined(expressions);
-            const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
+            const expression = isArray(expressions) ? finishNode(factoryCreateArrayLiteralExpression(expressions), pos) : Debug.checkDefined(expressions);
+            const statement = factoryCreateExpressionStatement(expression) as JsonObjectExpressionStatement;
             finishNode(statement, pos);
             statements = createNodeArray([statement], pos);
             endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token) as EndOfFileToken;
@@ -1853,7 +1882,7 @@ namespace Parser {
         }
 
         syntaxCursor = savedSyntaxCursor;
-        return factory.updateSourceFile(sourceFile, setTextRange(factory.createNodeArray(statements), sourceFile.statements));
+        return factory.updateSourceFile(sourceFile, setTextRange(factoryCreateNodeArray(statements), sourceFile.statements));
 
         function containsPossibleTopLevelAwait(node: Node) {
             return !(node.flags & NodeFlags.AwaitContext)
@@ -2470,14 +2499,14 @@ namespace Parser {
         const pos = getNodePos();
         const kind = token();
         nextToken();
-        return finishNode(factory.createToken(kind), pos) as T;
+        return finishNode(factoryCreateToken(kind), pos) as T;
     }
 
     function parseTokenNodeJSDoc<T extends Node>(): T {
         const pos = getNodePos();
         const kind = token();
         nextTokenJSDoc();
-        return finishNode(factory.createToken(kind), pos) as T;
+        return finishNode(factoryCreateToken(kind), pos) as T;
     }
 
     function canParseSemicolon() {
@@ -2508,7 +2537,7 @@ namespace Parser {
     }
 
     function createNodeArray<T extends Node>(elements: T[], pos: number, end?: number, hasTrailingComma?: boolean): NodeArray<T> {
-        const array = factory.createNodeArray(elements, hasTrailingComma);
+        const array = factoryCreateNodeArray(elements, hasTrailingComma);
         setTextRangePosEnd(array, pos, end ?? scanner.getStartPos());
         return array;
     }
@@ -2542,12 +2571,12 @@ namespace Parser {
 
         const pos = getNodePos();
         const result =
-            kind === SyntaxKind.Identifier ? factory.createIdentifier("", /*originalKeywordKind*/ undefined) :
+            kind === SyntaxKind.Identifier ? factoryCreateIdentifier("", /*originalKeywordKind*/ undefined) :
             isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, "", "", /*templateFlags*/ undefined) :
-            kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral("", /*numericLiteralFlags*/ undefined) :
-            kind === SyntaxKind.StringLiteral ? factory.createStringLiteral("", /*isSingleQuote*/ undefined) :
+            kind === SyntaxKind.NumericLiteral ? factoryCreateNumericLiteral("", /*numericLiteralFlags*/ undefined) :
+            kind === SyntaxKind.StringLiteral ? factoryCreateStringLiteral("", /*isSingleQuote*/ undefined) :
             kind === SyntaxKind.MissingDeclaration ? factory.createMissingDeclaration() :
-            factory.createToken(kind);
+            factoryCreateToken(kind);
         return finishNode(result, pos) as T;
     }
 
@@ -2571,7 +2600,7 @@ namespace Parser {
             const text = internIdentifier(scanner.getTokenValue());
             const hasExtendedUnicodeEscape = scanner.hasExtendedUnicodeEscape();
             nextTokenWithoutCheck();
-            return finishNode(factory.createIdentifier(text, originalKeywordKind, hasExtendedUnicodeEscape), pos);
+            return finishNode(factoryCreateIdentifier(text, originalKeywordKind, hasExtendedUnicodeEscape), pos);
         }
 
         if (token() === SyntaxKind.PrivateIdentifier) {
@@ -2656,7 +2685,7 @@ namespace Parser {
 
     function parsePrivateIdentifier(): PrivateIdentifier {
         const pos = getNodePos();
-        const node = factory.createPrivateIdentifier(internIdentifier(scanner.getTokenValue()));
+        const node = factoryCreatePrivateIdentifier(internIdentifier(scanner.getTokenValue()));
         nextToken();
         return finishNode(node, pos);
     }
@@ -3623,9 +3652,9 @@ namespace Parser {
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
-            kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral(scanner.getTokenValue(), scanner.getNumericLiteralFlags()) :
-            kind === SyntaxKind.StringLiteral ? factory.createStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape()) :
-            isLiteralKind(kind) ? factory.createLiteralLikeNode(kind, scanner.getTokenValue()) :
+            kind === SyntaxKind.NumericLiteral ? factoryCreateNumericLiteral(scanner.getTokenValue(), scanner.getNumericLiteralFlags()) :
+            kind === SyntaxKind.StringLiteral ? factoryCreateStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape()) :
+            isLiteralKind(kind) ? factoryCreateLiteralLikeNode(kind, scanner.getTokenValue()) :
             Debug.fail();
 
         if (scanner.hasExtendedUnicodeEscape()) {
@@ -4353,7 +4382,7 @@ namespace Parser {
         if (token() === SyntaxKind.AbstractKeyword) {
             const pos = getNodePos();
             nextToken();
-            const modifier = finishNode(factory.createToken(SyntaxKind.AbstractKeyword), pos);
+            const modifier = finishNode(factoryCreateToken(SyntaxKind.AbstractKeyword), pos);
             modifiers = createNodeArray<Modifier>([modifier], pos);
         }
         return modifiers;
@@ -5879,7 +5908,7 @@ namespace Parser {
         // If it wasn't then just try to parse out a '.' and report an error.
         parseExpectedToken(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
         // private names will never work with `super` (`super.#foo`), but that's a semantic error, not syntactic
-        return finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true)), pos);
+        return finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true)), pos);
     }
 
     function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment): JsxElement | JsxSelfClosingElement | JsxFragment {
@@ -5901,7 +5930,7 @@ namespace Parser {
                 const newLast = finishNode(factory.createJsxElement(
                     lastChild.openingElement,
                     lastChild.children,
-                    finishNode(factory.createJsxClosingElement(finishNode(factory.createIdentifier(""), end, end)), end, end)),
+                    finishNode(factory.createJsxClosingElement(finishNode(factoryCreateIdentifier(""), end, end)), end, end)),
                 lastChild.openingElement.pos,
                 end);
 
@@ -6070,7 +6099,7 @@ namespace Parser {
         let expression: JsxTagNameExpression = token() === SyntaxKind.ThisKeyword ?
             parseTokenNode<ThisExpression>() : parseIdentifierName();
         while (parseOptional(SyntaxKind.DotToken)) {
-            expression = finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false)), pos) as JsxTagNamePropertyAccess;
+            expression = finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false)), pos) as JsxTagNamePropertyAccess;
         }
         return expression;
     }
@@ -6216,8 +6245,8 @@ namespace Parser {
         const name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true);
         const isOptionalChain = questionDotToken || tryReparseOptionalChain(expression);
         const propertyAccess = isOptionalChain ?
-            factory.createPropertyAccessChain(expression, questionDotToken, name) :
-            factory.createPropertyAccessExpression(expression, name);
+            factoryCreatePropertyAccessChain(expression, questionDotToken, name) :
+            factoryCreatePropertyAccessExpression(expression, name);
         if (isOptionalChain && isPrivateIdentifier(propertyAccess.name)) {
             parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
         }
@@ -6245,8 +6274,8 @@ namespace Parser {
         parseExpected(SyntaxKind.CloseBracketToken);
 
         const indexedAccess = questionDotToken || tryReparseOptionalChain(expression) ?
-            factory.createElementAccessChain(expression, questionDotToken, argumentExpression) :
-            factory.createElementAccessExpression(expression, argumentExpression);
+            factoryCreateElementAccessChain(expression, questionDotToken, argumentExpression) :
+            factoryCreateElementAccessExpression(expression, argumentExpression);
         return finishNode(indexedAccess, pos);
     }
 
@@ -6337,15 +6366,15 @@ namespace Parser {
                 }
                 const argumentList = parseArgumentList();
                 const callExpr = questionDotToken || tryReparseOptionalChain(expression) ?
-                    factory.createCallChain(expression, questionDotToken, typeArguments, argumentList) :
-                    factory.createCallExpression(expression, typeArguments, argumentList);
+                    factoryCreateCallChain(expression, questionDotToken, typeArguments, argumentList) :
+                    factoryCreateCallExpression(expression, typeArguments, argumentList);
                 expression = finishNode(callExpr, pos);
                 continue;
             }
             if (questionDotToken) {
                 // We parsed `?.` but then failed to parse anything, so report a missing identifier here.
                 const name = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics.Identifier_expected);
-                expression = finishNode(factory.createPropertyAccessChain(expression, questionDotToken, name), pos);
+                expression = finishNode(factoryCreatePropertyAccessChain(expression, questionDotToken, name), pos);
             }
             break;
         }
@@ -6462,7 +6491,7 @@ namespace Parser {
         parseExpected(SyntaxKind.OpenParenToken);
         const expression = allowInAnd(parseExpression);
         parseExpected(SyntaxKind.CloseParenToken);
-        return withJSDoc(finishNode(factory.createParenthesizedExpression(expression), pos), hasJSDoc);
+        return withJSDoc(finishNode(factoryCreateParenthesizedExpression(expression), pos), hasJSDoc);
     }
 
     function parseSpreadElement(): Expression {
@@ -6489,7 +6518,7 @@ namespace Parser {
         const multiLine = scanner.hasPrecedingLineBreak();
         const elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
         parseExpectedMatchingBrackets(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken, openBracketParsed, openBracketPosition);
-        return finishNode(factory.createArrayLiteralExpression(elements, multiLine), pos);
+        return finishNode(factoryCreateArrayLiteralExpression(elements, multiLine), pos);
     }
 
     function parseObjectLiteralElement(): ObjectLiteralElementLike {
@@ -6555,7 +6584,7 @@ namespace Parser {
         const multiLine = scanner.hasPrecedingLineBreak();
         const properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
         parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBraceParsed, openBracePosition);
-        return finishNode(factory.createObjectLiteralExpression(properties, multiLine), pos);
+        return finishNode(factoryCreateObjectLiteralExpression(properties, multiLine), pos);
     }
 
     function parseFunctionExpression(): FunctionExpression {
@@ -6613,7 +6642,7 @@ namespace Parser {
             parseErrorAtCurrentToken(Diagnostics.Invalid_optional_chain_from_new_expression_Did_you_mean_to_call_0, getTextOfNodeFromSourceText(sourceText, expression));
         }
         const argumentList = token() === SyntaxKind.OpenParenToken ? parseArgumentList() : undefined;
-        return finishNode(factory.createNewExpression(expression, typeArguments, argumentList), pos);
+        return finishNode(factoryCreateNewExpression(expression, typeArguments, argumentList), pos);
     }
 
     // STATEMENTS
@@ -6626,7 +6655,7 @@ namespace Parser {
             const multiLine = scanner.hasPrecedingLineBreak();
             const statements = parseList(ParsingContext.BlockStatements, parseStatement);
             parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBraceParsed, openBracePosition);
-            const result = withJSDoc(finishNode(factory.createBlock(statements, multiLine), pos), hasJSDoc);
+            const result = withJSDoc(finishNode(factoryCreateBlock(statements, multiLine), pos), hasJSDoc);
             if (token() === SyntaxKind.EqualsToken) {
                 parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_whole_assignment_in_parentheses);
                 nextToken();
@@ -6636,7 +6665,7 @@ namespace Parser {
         }
         else {
             const statements = createMissingList<Statement>();
-            return withJSDoc(finishNode(factory.createBlock(statements, /*multiLine*/ undefined), pos), hasJSDoc);
+            return withJSDoc(finishNode(factoryCreateBlock(statements, /*multiLine*/ undefined), pos), hasJSDoc);
         }
     }
 
@@ -6687,7 +6716,7 @@ namespace Parser {
         parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
         const thenStatement = parseStatement();
         const elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
-        return withJSDoc(finishNode(factory.createIfStatement(expression, thenStatement, elseStatement), pos), hasJSDoc);
+        return withJSDoc(finishNode(factoryCreateIfStatement(expression, thenStatement, elseStatement), pos), hasJSDoc);
     }
 
     function parseDoStatement(): DoStatement {
@@ -6718,7 +6747,7 @@ namespace Parser {
         const expression = allowInAnd(parseExpression);
         parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
         const statement = parseStatement();
-        return withJSDoc(finishNode(factory.createWhileStatement(expression, statement), pos), hasJSDoc);
+        return withJSDoc(finishNode(factoryCreateWhileStatement(expression, statement), pos), hasJSDoc);
     }
 
     function parseForOrForInOrForOfStatement(): Statement {
@@ -6742,7 +6771,7 @@ namespace Parser {
         if (awaitToken ? parseExpected(SyntaxKind.OfKeyword) : parseOptional(SyntaxKind.OfKeyword)) {
             const expression = allowInAnd(() => parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true));
             parseExpected(SyntaxKind.CloseParenToken);
-            node = factory.createForOfStatement(awaitToken, initializer, expression, parseStatement());
+            node = factoryCreateForOfStatement(awaitToken, initializer, expression, parseStatement());
         }
         else if (parseOptional(SyntaxKind.InKeyword)) {
             const expression = allowInAnd(parseExpression);
@@ -6759,7 +6788,7 @@ namespace Parser {
                 ? allowInAnd(parseExpression)
                 : undefined;
             parseExpected(SyntaxKind.CloseParenToken);
-            node = factory.createForStatement(initializer, condition, incrementor, parseStatement());
+            node = factoryCreateForStatement(initializer, condition, incrementor, parseStatement());
         }
 
         return withJSDoc(finishNode(node, pos) as ForStatement | ForInOrOfStatement, hasJSDoc);
@@ -6857,7 +6886,7 @@ namespace Parser {
         let expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
         if (expression === undefined) {
             identifierCount++;
-            expression = finishNode(factory.createIdentifier(""), getNodePos());
+            expression = finishNode(factoryCreateIdentifier(""), getNodePos());
         }
         if (!tryParseSemicolon()) {
             parseErrorForMissingSemicolonAfter(expression);
@@ -6927,7 +6956,7 @@ namespace Parser {
             if (!tryParseSemicolon()) {
                 parseErrorForMissingSemicolonAfter(expression);
             }
-            node = factory.createExpressionStatement(expression);
+            node = factoryCreateExpressionStatement(expression);
             if (hasParen) {
                 // do not parse the same jsdoc twice
                 hasJSDoc = false;
@@ -7368,7 +7397,7 @@ namespace Parser {
         }
         const type = parseTypeAnnotation();
         const initializer = isInOrOfKeyword(token()) ? undefined : parseInitializer();
-        const node = factory.createVariableDeclaration(name, exclamationToken, type, initializer);
+        const node = factoryCreateVariableDeclaration(name, exclamationToken, type, initializer);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7414,7 +7443,7 @@ namespace Parser {
             setDisallowInContext(savedDisallowIn);
         }
 
-        return finishNode(factory.createVariableDeclarationList(declarations, flags), pos);
+        return finishNode(factoryCreateVariableDeclarationList(declarations, flags), pos);
     }
 
     function canFollowContextualOfKeyword(): boolean {
@@ -7424,7 +7453,7 @@ namespace Parser {
     function parseVariableStatement(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): VariableStatement {
         const declarationList = parseVariableDeclarationList(/*inForStatementInitializer*/ false);
         parseSemicolon();
-        const node = factory.createVariableStatement(modifiers, declarationList);
+        const node = factoryCreateVariableStatement(modifiers, declarationList);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -7696,7 +7725,7 @@ namespace Parser {
             }
         }
 
-        return finishNode(factory.createToken(kind as Modifier["kind"]), pos);
+        return finishNode(factoryCreateToken(kind as Modifier["kind"]), pos);
     }
 
     /*
@@ -7755,7 +7784,7 @@ namespace Parser {
         if (token() === SyntaxKind.AsyncKeyword) {
             const pos = getNodePos();
             nextToken();
-            const modifier = finishNode(factory.createToken(SyntaxKind.AsyncKeyword), pos);
+            const modifier = finishNode(factoryCreateToken(SyntaxKind.AsyncKeyword), pos);
             modifiers = createNodeArray<Modifier>([modifier], pos);
         }
         return modifiers;
@@ -8437,7 +8466,7 @@ namespace Parser {
             currentToken = scanner.scan();
             const jsDocTypeExpression = parseJSDocTypeExpression();
 
-            const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factory.createToken(SyntaxKind.EndOfFileToken), NodeFlags.None, noop);
+            const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factoryCreateToken(SyntaxKind.EndOfFileToken), NodeFlags.None, noop);
             const diagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
             if (jsDocDiagnostics) {
                 sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
@@ -9178,7 +9207,7 @@ namespace Parser {
                 let node: Identifier | PropertyAccessEntityNameExpression = parseJSDocIdentifierName();
                 while (parseOptional(SyntaxKind.DotToken)) {
                     const name = parseJSDocIdentifierName();
-                    node = finishNode(factory.createPropertyAccessExpression(node, name), pos) as PropertyAccessEntityNameExpression;
+                    node = finishNode(factoryCreatePropertyAccessExpression(node, name), pos) as PropertyAccessEntityNameExpression;
                 }
                 return node;
             }
@@ -9495,7 +9524,7 @@ namespace Parser {
                 const end = scanner.getTextPos();
                 const originalKeywordKind = token();
                 const text = internIdentifier(scanner.getTokenValue());
-                const result = finishNode(factory.createIdentifier(text, originalKeywordKind), pos, end);
+                const result = finishNode(factoryCreateIdentifier(text, originalKeywordKind), pos, end);
                 nextTokenJSDoc();
                 return result;
             }
