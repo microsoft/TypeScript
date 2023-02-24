@@ -569,17 +569,11 @@ export const watchLocal = task({
 
 const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
 
-const doRunTests = task({
-    name: "do-runtests",
+export const runTests = task({
+    name: "runtests",
     description: "Runs the tests using the built run.js file.",
     dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false),
-});
-
-export const runTests = task({
-    name: "runtests",
-    description: "Runs the tests using the built run.js file, linting in parallel if --lint=true.",
-    dependencies: [doRunTests].concat(cmdLineOptions.lint ? [lint] : []),
 });
 
 // task("runtests").flags = {
