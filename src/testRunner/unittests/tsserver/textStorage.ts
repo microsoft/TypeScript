@@ -25,7 +25,6 @@ describe("unittests:: tsserver:: Text storage", () => {
         const ts2 = new ts.server.TextStorage(host, getDummyScriptInfo(ts.server.asNormalizedPath(f.path)));
 
         ts1.useScriptVersionCache_TestOnly();
-        ts2.useText();
 
         const lineMap = ts.computeLineStarts(f.content);
 
@@ -64,7 +63,7 @@ describe("unittests:: tsserver:: Text storage", () => {
         ts1.edit(0, 5, "   ");
         assert.isTrue(ts1.hasScriptVersionCache_TestOnly(), "have script version cache - 1");
 
-        ts1.useText();
+        ts1.useText("");
         assert.isFalse(ts1.hasScriptVersionCache_TestOnly(), "should not have script version cache - 2");
 
         ts1.getAbsolutePositionAndLineText(0);

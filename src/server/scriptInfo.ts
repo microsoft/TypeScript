@@ -128,7 +128,7 @@ export class TextStorage {
     }
 
     /** Public for testing */
-    public useText(newText?: string) {
+    public useText(newText: string) {
         this.svc = undefined;
         this.text = newText;
         this.lineMap = undefined;
