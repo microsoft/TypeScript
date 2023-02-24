@@ -6,9 +6,11 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(5,1
 tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(6,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(7,16): error TS2378: A 'get' accessor must return a value.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(7,16): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(7,17): error TS2352: Conversion of type 'string' to type 'String' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts (8 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts (9 errors) ====
     var id;
     class C {
         [0 + 1]() { }
@@ -32,5 +34,8 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES5.ts(7,1
 !!! error TS2378: A 'get' accessor must return a value.
                    ~~~~~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+                    ~~~~~~~~~~
+!!! error TS2352: Conversion of type 'string' to type 'String' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
         static set [id.toString()](v) { }
     }

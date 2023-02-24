@@ -3,9 +3,13 @@ tests/cases/compiler/booleanAssignment.ts(3,1): error TS2322: Type 'string' is n
 tests/cases/compiler/booleanAssignment.ts(4,1): error TS2322: Type '{}' is not assignable to type 'Boolean'.
   The types returned by 'valueOf()' are incompatible between these types.
     Type 'Object' is not assignable to type 'boolean'.
+      The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+tests/cases/compiler/booleanAssignment.ts(9,1): error TS2322: Type 'boolean' is not assignable to type 'Boolean'.
+tests/cases/compiler/booleanAssignment.ts(12,1): error TS2322: Type 'boolean' is not assignable to type 'Boolean'.
+  'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.
 
 
-==== tests/cases/compiler/booleanAssignment.ts (3 errors) ====
+==== tests/cases/compiler/booleanAssignment.ts (5 errors) ====
     var b = new Boolean();
     b = 1; // Error
     ~
@@ -18,11 +22,17 @@ tests/cases/compiler/booleanAssignment.ts(4,1): error TS2322: Type '{}' is not a
 !!! error TS2322: Type '{}' is not assignable to type 'Boolean'.
 !!! error TS2322:   The types returned by 'valueOf()' are incompatible between these types.
 !!! error TS2322:     Type 'Object' is not assignable to type 'boolean'.
+!!! error TS2322:       The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     
     var o = {};
     o = b; // OK
     
     b = true; // OK
+    ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'Boolean'.
     
     var b2:boolean;
     b = b2; // OK
+    ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'Boolean'.
+!!! error TS2322:   'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.

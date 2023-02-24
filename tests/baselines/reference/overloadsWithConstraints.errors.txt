@@ -1,0 +1,12 @@
+tests/cases/compiler/overloadsWithConstraints.ts(4,11): error TS2344: Type 'string' does not satisfy the constraint 'String'.
+  'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
+
+
+==== tests/cases/compiler/overloadsWithConstraints.ts (1 errors) ====
+    declare function f<T extends Number>(x: T): T;
+    declare function f<T extends String>(x: T): T
+    
+    var v = f<string>("");
+              ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'String'.
+!!! error TS2344:   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.

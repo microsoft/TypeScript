@@ -11,7 +11,7 @@ if (var1.constructor === String) {
 >String : StringConstructor
 
     var1; // string
->var1 : string
+>var1 : never
 }
 if (var1.constructor === Number) {
 >var1.constructor === Number : boolean
@@ -21,7 +21,7 @@ if (var1.constructor === Number) {
 >Number : NumberConstructor
 
     var1; // number
->var1 : number
+>var1 : never
 }
 if (var1.constructor === Boolean) {
 >var1.constructor === Boolean : boolean
@@ -31,7 +31,7 @@ if (var1.constructor === Boolean) {
 >Boolean : BooleanConstructor
 
     var1; // boolean
->var1 : boolean
+>var1 : never
 }
 if (var1.constructor === Array) {
 >var1.constructor === Array : boolean
@@ -51,7 +51,7 @@ if (var1.constructor === Symbol) {
 >Symbol : SymbolConstructor
 
     var1; // symbol
->var1 : symbol
+>var1 : never
 }
 if (var1.constructor === BigInt) {
 >var1.constructor === BigInt : boolean
@@ -61,7 +61,7 @@ if (var1.constructor === BigInt) {
 >BigInt : BigIntConstructor
 
     var1; // bigint
->var1 : bigint
+>var1 : never
 }
 
 // Narrow a union of primitive object types

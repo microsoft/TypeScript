@@ -1,0 +1,26 @@
+tests/cases/compiler/superAccessCastedCall.ts(10,9): error TS2322: Type 'number' is not assignable to type 'Number'.
+
+
+==== tests/cases/compiler/superAccessCastedCall.ts (1 errors) ====
+    class Foo {
+        bar(): void {}
+    }
+    
+    class Bar extends Foo {
+        x: Number;
+    
+        constructor() {
+            super();
+            this.x = 2;
+            ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'Number'.
+        }
+    
+        bar() {
+            super.bar();
+            (super.bar as any)();
+        }
+    } 
+    
+    let b = new Bar();
+    b.bar()

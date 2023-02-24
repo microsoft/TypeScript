@@ -1,9 +1,14 @@
 tests/cases/compiler/primitiveMembers.ts(5,3): error TS2339: Property 'toBAZ' does not exist on type 'number'.
 tests/cases/compiler/primitiveMembers.ts(11,1): error TS2322: Type 'Number' is not assignable to type 'number'.
   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+tests/cases/compiler/primitiveMembers.ts(12,1): error TS2322: Type 'number' is not assignable to type 'Number'.
+  'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+tests/cases/compiler/primitiveMembers.ts(17,5): error TS2322: Type 'number' is not assignable to type 'Number'.
+tests/cases/compiler/primitiveMembers.ts(18,5): error TS2322: Type 'string' is not assignable to type 'String'.
+tests/cases/compiler/primitiveMembers.ts(19,5): error TS2322: Type 'boolean' is not assignable to type 'Boolean'.
 
 
-==== tests/cases/compiler/primitiveMembers.ts (2 errors) ====
+==== tests/cases/compiler/primitiveMembers.ts (6 errors) ====
     var x = 5;
     var r = /yo/;
     r.source;
@@ -21,13 +26,22 @@ tests/cases/compiler/primitiveMembers.ts(11,1): error TS2322: Type 'Number' is n
 !!! error TS2322: Type 'Number' is not assignable to type 'number'.
 !!! error TS2322:   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
     N = n; // should work
+    ~
+!!! error TS2322: Type 'number' is not assignable to type 'Number'.
+!!! error TS2322:   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
     
     var o: Object = {}
     var f: Function = (x: string) => x.length;
     var r2: RegExp = /./g;
     var n2: Number = 34;
+        ~~
+!!! error TS2322: Type 'number' is not assignable to type 'Number'.
     var s: String = "yo";
+        ~
+!!! error TS2322: Type 'string' is not assignable to type 'String'.
     var b: Boolean = true;
+        ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'Boolean'.
     
     var n3 = 5 || {};
     

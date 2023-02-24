@@ -1,0 +1,14 @@
+tests/cases/conformance/types/primitives/string/validStringAssignments.ts(6,5): error TS2322: Type 'string' is not assignable to type 'String'.
+  'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
+
+
+==== tests/cases/conformance/types/primitives/string/validStringAssignments.ts (1 errors) ====
+    var x = '';
+    
+    var a: any = x;
+    var b: Object = x;
+    var c: string = x;
+    var d: String = x;
+        ~
+!!! error TS2322: Type 'string' is not assignable to type 'String'.
+!!! error TS2322:   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.

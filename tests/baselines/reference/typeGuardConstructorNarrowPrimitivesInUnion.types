@@ -13,7 +13,7 @@ if (var1.constructor === Number) {
 >Number : NumberConstructor
 
     var1; // number
->var1 : number
+>var1 : never
 }
 
 if (var1.constructor === String) {
@@ -24,7 +24,7 @@ if (var1.constructor === String) {
 >String : StringConstructor
 
     var1; // "hello" | "world"
->var1 : "hello" | "world"
+>var1 : never
 }
 
 if (var1.constructor === Boolean) {
@@ -35,7 +35,7 @@ if (var1.constructor === Boolean) {
 >Boolean : BooleanConstructor
 
     var1; // boolean
->var1 : boolean
+>var1 : never
 }
 
 if (var1.constructor === Array) {

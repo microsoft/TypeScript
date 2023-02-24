@@ -20401,7 +20401,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if ((globalStringType === source && stringType === target) ||
                 (globalNumberType === source && numberType === target) ||
                 (globalBooleanType === source && booleanType === target) ||
-                (getGlobalESSymbolType() === source && esSymbolType === target)) {
+                (getGlobalESSymbolType() === source && esSymbolType === target) ||
+                (getGlobalBigIntType() === source && bigintType === target)) {
                 reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
             }
         }
@@ -20576,6 +20577,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
                 tryElaborateErrorsForPrimitivesAndObjects(source, target);
+            }
+            if (target.flags & TypeFlags.Object && source.flags & TypeFlags.Primitive) {
+                tryElaborateErrorsForPrimitivesAndObjects(target, source);
             }
             else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
                 reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
@@ -21570,8 +21574,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const sourceIsPrimitive = !!(sourceFlags & TypeFlags.Primitive);
                 if (relation !== identityRelation) {
+                    const originalSource = source
+                    const originalFlags = sourceFlags;
                     source = getApparentType(source);
                     sourceFlags = source.flags;
+                    if (source !== originalSource && originalFlags & TypeFlags.HasWrapper && !(sourceFlags & TypeFlags.HasWrapper) && source === target) {
+                        return Ternary.False;
+                    }
                 }
                 else if (isGenericMappedType(source)) {
                     return Ternary.False;

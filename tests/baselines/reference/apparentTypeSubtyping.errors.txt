@@ -1,9 +1,11 @@
+tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(9,31): error TS2344: Type 'string' does not satisfy the constraint 'String'.
+  'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(10,5): error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base<string>'.
   Type 'String' is not assignable to type 'string'.
     'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 
 
-==== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts (1 errors) ====
+==== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts (2 errors) ====
     // subtype checks use the apparent type of the target type
     // S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
     
@@ -13,6 +15,9 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtypi
     
     // is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
     class Derived<U> extends Base<string> { // error
+                                  ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'String'.
+!!! error TS2344:   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
         x: String;
         ~
 !!! error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base<string>'.

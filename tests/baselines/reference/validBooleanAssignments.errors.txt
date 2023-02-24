@@ -1,0 +1,12 @@
+tests/cases/conformance/types/primitives/boolean/validBooleanAssignments.ts(5,5): error TS2322: Type 'boolean' is not assignable to type 'Boolean'.
+
+
+==== tests/cases/conformance/types/primitives/boolean/validBooleanAssignments.ts (1 errors) ====
+    var x = true;
+    
+    var a: any = x;
+    var b: Object = x;
+    var c: Boolean = x;
+        ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'Boolean'.
+    var d: boolean = x;

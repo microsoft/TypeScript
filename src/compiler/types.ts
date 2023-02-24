@@ -6100,6 +6100,8 @@ export const enum TypeFlags {
     IncludesInstantiable = Substitution,
     /** @internal */
     NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | Object | Intersection | IncludesInstantiable,
+    /** @internal */
+    HasWrapper = StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbolLike,
 }
 
 export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;

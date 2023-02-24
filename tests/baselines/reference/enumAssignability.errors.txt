@@ -14,6 +14,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(41,9): error TS2322: Type 'E' is not assignable to type 'number[]'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(42,9): error TS2322: Type 'E' is not assignable to type '{ foo: string; }'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(43,9): error TS2322: Type 'E' is not assignable to type '<T>(x: T) => T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(44,9): error TS2322: Type 'E' is not assignable to type 'Number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(45,9): error TS2322: Type 'E' is not assignable to type 'String'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(48,9): error TS2322: Type 'E' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'E'.
@@ -22,12 +23,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(50,9): error TS2322: Type 'E' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'E'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(51,13): error TS2322: Type 'E' is not assignable to type 'A'.
-  'E' is assignable to the constraint of type 'A', but 'A' could be instantiated with a different subtype of constraint 'Number'.
+  'A' could be instantiated with an arbitrary type which could be unrelated to 'E'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(52,13): error TS2322: Type 'E' is not assignable to type 'B'.
   'E' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'E'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts (22 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts (23 errors) ====
     // enums assignable to number, any, Object, errors unless otherwise noted
     
     enum E { A }
@@ -104,6 +105,8 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
             ~
 !!! error TS2322: Type 'E' is not assignable to type '<T>(x: T) => T'.
         var p: Number = e;
+            ~
+!!! error TS2322: Type 'E' is not assignable to type 'Number'.
         var q: String = e;
             ~
 !!! error TS2322: Type 'E' is not assignable to type 'String'.
@@ -124,7 +127,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
             var a: A = e;
                 ~
 !!! error TS2322: Type 'E' is not assignable to type 'A'.
-!!! error TS2322:   'E' is assignable to the constraint of type 'A', but 'A' could be instantiated with a different subtype of constraint 'Number'.
+!!! error TS2322:   'A' could be instantiated with an arbitrary type which could be unrelated to 'E'.
             var b: B = e;
                 ~
 !!! error TS2322: Type 'E' is not assignable to type 'B'.

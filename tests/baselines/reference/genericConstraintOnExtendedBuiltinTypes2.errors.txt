@@ -1,0 +1,33 @@
+tests/cases/compiler/genericConstraintOnExtendedBuiltinTypes2.ts(22,19): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Number'.
+  'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+
+
+==== tests/cases/compiler/genericConstraintOnExtendedBuiltinTypes2.ts (1 errors) ====
+    module EndGate {
+        export interface ICloneable {
+            Clone(): any;
+        }
+    }
+    
+    interface Number extends EndGate.ICloneable { }
+    
+    module EndGate.Tweening {
+        export class Tween<T extends ICloneable>{
+            private _from: T;
+    
+            constructor(from: T) {
+                this._from = from.Clone();
+            }
+        }
+    }
+    
+    module EndGate.Tweening {
+        export class NumberTween extends Tween<Number>{
+            constructor(from: number) {
+                super(from);
+                      ~~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Number'.
+!!! error TS2345:   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+            }
+        }
+    }
