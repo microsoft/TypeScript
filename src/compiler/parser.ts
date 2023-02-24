@@ -1433,7 +1433,6 @@ namespace Parser {
 
     var factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
 
-    
     var {
         createNodeArray: factoryCreateNodeArray,
         createNumericLiteral: factoryCreateNumericLiteral,
