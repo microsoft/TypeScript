@@ -21574,7 +21574,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const sourceIsPrimitive = !!(sourceFlags & TypeFlags.Primitive);
                 if (relation !== identityRelation) {
-                    const originalSource = source
+                    const originalSource = source;
                     const originalFlags = sourceFlags;
                     source = getApparentType(source);
                     sourceFlags = source.flags;
