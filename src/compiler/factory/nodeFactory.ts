@@ -394,7 +394,6 @@ import {
     escapeLeadingUnderscores,
     getNameOfDeclaration,
     idText,
-    isAssignmentPattern,
     isCallChain,
     isElementAccessChain,
     isGeneratedIdentifier,
@@ -484,10 +483,9 @@ import {
     nullParenthesizerRules,
 } from "./parenthesizerRules";
 import {
+    containsObjectRestOrSpread,
     formatGeneratedName,
-    getElementsOfBindingOrAssignmentPattern,
     getJSDocTypeAliasName,
-    getTargetOfBindingOrAssignmentElement,
     isLocalName,
     startOnNewLine,
 } from "./utilities";
@@ -3348,24 +3346,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function propagateAssignmentPatternFlags(node: AssignmentPattern): TransformFlags {
-        if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) return TransformFlags.ContainsObjectRestOrSpread;
-        if (node.transformFlags & TransformFlags.ContainsES2018) {
-            // check for nested spread assignments, otherwise '{ x: { a, ...b } = foo } = c'
-            // will not be correctly interpreted by the ES2018 transformer
-            for (const element of getElementsOfBindingOrAssignmentPattern(node)) {
-                const target = getTargetOfBindingOrAssignmentElement(element);
-                if (target && isAssignmentPattern(target)) {
-                    if (target.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
-                        return TransformFlags.ContainsObjectRestOrSpread;
-                    }
-                    if (target.transformFlags & TransformFlags.ContainsES2018) {
-                        const flags = propagateAssignmentPatternFlags(target);
-                        if (flags) return flags;
-                    }
-                }
-            }
-        }
-        return TransformFlags.None;
+        return containsObjectRestOrSpread(node) ? TransformFlags.ContainsObjectRestOrSpread : TransformFlags.None;
     }
 
     // @api
