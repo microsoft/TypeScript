@@ -749,11 +749,11 @@ export function openFilesForSession(files: readonly (string | File | { readonly 
     }
 }
 
-export function closeFilesForSession(files: readonly File[], session: TestSession): void {
+export function closeFilesForSession(files: readonly (File | string)[], session: TestSession): void {
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({
             command: ts.server.protocol.CommandTypes.Close,
-            arguments: { file: file.path }
+            arguments: { file: ts.isString(file) ? file : file.path }
         });
     }
 }
