@@ -133,9 +133,9 @@ Info 18   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /pa
 Info 19   [00:00:42.000] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 20   [00:00:43.000] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info 21   [00:00:44.000] 	Files (3)
-	/packages/core/src/loading-indicator.ts
-	/packages/core/src/index.ts
-	/packages/babel-loader/src/index.ts
+	/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
+	/packages/core/src/index.ts Text-1 "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
+	/packages/babel-loader/src/index.ts SVC-1-0 "\nimport type { Foo } from \"../../core/src/index.js\";\n"
 
 
 	../core/src/loading-indicator.ts
@@ -233,8 +233,8 @@ Info 34   [00:01:03.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /pa
 Info 35   [00:01:04.000] Finishing updateGraphWorker: Project: /packages/core/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:05.000] Project '/packages/core/tsconfig.json' (Configured)
 Info 37   [00:01:06.000] 	Files (2)
-	/packages/core/src/loading-indicator.ts
-	/packages/core/src/index.ts
+	/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
+	/packages/core/src/index.ts SVC-1-0 "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
 
 
 	src/loading-indicator.ts
@@ -407,7 +407,7 @@ Info 46   [00:01:26.000] Starting updateGraphWorker: Project: /packages/babel-lo
 Info 47   [00:01:27.000] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 48   [00:01:28.000] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info 49   [00:01:29.000] 	Files (1)
-	/packages/babel-loader/src/index.ts
+	/packages/babel-loader/src/index.ts SVC-1-1 "\nimport type { Foo } from// comment \"../../core/src/index.js\";\n"
 
 
 	src/index.ts

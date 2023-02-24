@@ -50,8 +50,8 @@ Info 15   [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 16   [00:00:29.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:00:30.000] Project '/a/tsconfig.json' (Configured)
 Info 18   [00:00:31.000] 	Files (2)
-	/a/b.ts
-	/a/runtime/a.d.ts
+	/a/b.ts Text-1 "import { x } from './runtime/a;"
+	/a/runtime/a.d.ts SVC-1-0 "export const x: string;"
 
 
 	b.ts

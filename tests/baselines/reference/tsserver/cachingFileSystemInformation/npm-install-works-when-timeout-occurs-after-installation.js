@@ -81,8 +81,8 @@ Info 21   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:49.000] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:50.000] Project '/user/username/rootfolder/otherfolder/a/b/tsconfig.json' (Configured)
 Info 24   [00:00:51.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/rootfolder/otherfolder/a/b/app.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/rootfolder/otherfolder/a/b/app.ts SVC-1-0 "import _ from 'lodash';"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -1977,9 +1977,9 @@ Info 607  [00:14:10.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info 608  [00:14:11.000] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 609  [00:14:12.000] Project '/user/username/rootfolder/otherfolder/a/b/tsconfig.json' (Configured)
 Info 610  [00:14:13.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/index.d.ts
-	/user/username/rootfolder/otherfolder/a/b/app.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/index.d.ts Text-1 "\n// Stub for lodash\nexport = _;\nexport as namespace _;\ndeclare var _: _.LoDashStatic;\ndeclare namespace _ {\n    interface LoDashStatic {\n        someProp: string;\n    }\n    class SomeClass {\n        someMethod(): void;\n    }\n}"
+	/user/username/rootfolder/otherfolder/a/b/app.ts SVC-1-0 "import _ from 'lodash';"
 
 
 	../../../../../../a/lib/lib.d.ts

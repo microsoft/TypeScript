@@ -91,9 +91,9 @@ Info 21   [00:00:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:55.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:56.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info 24   [00:00:57.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.ts
-	/user/username/projects/myproject/projects/project2/class2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -182,10 +182,10 @@ Info 35   [00:01:16.000] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info 36   [00:01:17.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 37   [00:01:18.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info 38   [00:01:19.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.ts
-	/user/username/projects/myproject/projects/project1/class3.ts
-	/user/username/projects/myproject/projects/project2/class2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
+	/user/username/projects/myproject/projects/project1/class3.ts Text-1 "class class3 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
 	../../../../../../a/lib/lib.d.ts

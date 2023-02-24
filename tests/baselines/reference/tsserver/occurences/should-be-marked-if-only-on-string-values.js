@@ -31,7 +31,7 @@ Info 7    [00:00:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 8    [00:00:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 9    [00:00:18.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 10   [00:00:19.000] 	Files (1)
-	/a/b/file1.ts
+	/a/b/file1.ts SVC-1-0 "let t1 = \"div\";\nlet t2 = \"div\";\nlet t3 = { \"div\": 123 };\nlet t4 = t3[\"div\"];"
 
 
 	file1.ts

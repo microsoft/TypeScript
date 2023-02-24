@@ -82,8 +82,8 @@ Info 29   [00:01:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 30   [00:01:09.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 31   [00:01:10.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
 Info 32   [00:01:11.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts SVC-1-0 "import {C} from \"@microsoft/recognizers-text\";\nnew C();"
 
 
 	../../../../../../../a/lib/lib.d.ts
@@ -524,9 +524,9 @@ Info 67   [00:02:05.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info 68   [00:02:06.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 69   [00:02:07.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
 Info 70   [00:02:08.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts Text-1 "export class C { method(): number; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts SVC-1-0 "import {C} from \"@microsoft/recognizers-text\";\nnew C();"
 
 
 	../../../../../../../a/lib/lib.d.ts
@@ -909,30 +909,36 @@ Info 115  [00:03:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 116  [00:03:09.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
 Info 117  [00:03:10.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
 Info 118  [00:03:11.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 119  [00:03:12.000] Different program with same set of files
-Info 120  [00:03:13.000] event:
+Info 119  [00:03:12.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
+Info 120  [00:03:13.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts Text-1 "export class C { method(): number; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts SVC-1-0 "import {C} from \"@microsoft/recognizers-text\";\nnew C();"
+
+Info 121  [00:03:14.000] -----------------------------------------------
+Info 122  [00:03:15.000] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json"}}
-Info 121  [00:03:14.000] event:
+Info 123  [00:03:16.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json","configFile":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json","diagnostics":[]}}
-Info 122  [00:03:15.000] Running: *ensureProjectForOpenFiles*
-Info 123  [00:03:16.000] Before ensureProjectForOpenFiles:
-Info 124  [00:03:17.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
-Info 124  [00:03:18.000] 	Files (3)
+Info 124  [00:03:17.000] Running: *ensureProjectForOpenFiles*
+Info 125  [00:03:18.000] Before ensureProjectForOpenFiles:
+Info 126  [00:03:19.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
+Info 126  [00:03:20.000] 	Files (3)
 
-Info 124  [00:03:19.000] -----------------------------------------------
-Info 124  [00:03:20.000] Open files: 
-Info 124  [00:03:21.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
-Info 124  [00:03:22.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info 124  [00:03:23.000] After ensureProjectForOpenFiles:
-Info 125  [00:03:24.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
-Info 125  [00:03:25.000] 	Files (3)
+Info 126  [00:03:21.000] -----------------------------------------------
+Info 126  [00:03:22.000] Open files: 
+Info 126  [00:03:23.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
+Info 126  [00:03:24.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info 126  [00:03:25.000] After ensureProjectForOpenFiles:
+Info 127  [00:03:26.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
+Info 127  [00:03:27.000] 	Files (3)
 
-Info 125  [00:03:26.000] -----------------------------------------------
-Info 125  [00:03:27.000] Open files: 
-Info 125  [00:03:28.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
-Info 125  [00:03:29.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info 125  [00:03:30.000] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
-Info 126  [00:03:31.000] event:
+Info 127  [00:03:28.000] -----------------------------------------------
+Info 127  [00:03:29.000] Open files: 
+Info 127  [00:03:30.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
+Info 127  [00:03:31.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info 127  [00:03:32.000] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+Info 128  [00:03:33.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]}}
 After running timeout callbacks
 
@@ -990,7 +996,7 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
   {}
 
-Info 127  [00:03:32.000] event:
+Info 129  [00:03:34.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 After running timeout callbacks
 

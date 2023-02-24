@@ -60,8 +60,8 @@ Info 10   [00:00:27.000] Starting updateGraphWorker: Project: /a/jsconfig.json
 Info 11   [00:00:28.000] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 12   [00:00:29.000] Project '/a/jsconfig.json' (Configured)
 Info 13   [00:00:30.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/app.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/app.js SVC-1-0 "let x = 1;"
 
 
 	lib/lib.d.ts

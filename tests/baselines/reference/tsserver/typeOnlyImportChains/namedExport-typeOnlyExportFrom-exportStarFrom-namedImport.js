@@ -51,11 +51,11 @@ Info 8    [00:00:25.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 9    [00:00:26.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 10   [00:00:27.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 11   [00:00:28.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/a.ts
-	/b.ts
-	/c.ts
-	/d.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a.ts Text-1 "export class A {}"
+	/b.ts Text-1 "export type { A } from './a';"
+	/c.ts Text-1 "export * from './b';"
+	/d.ts SVC-1-0 "import { A } from './c'; new A();"
 
 
 	a/lib/lib.d.ts

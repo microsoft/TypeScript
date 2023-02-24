@@ -256,9 +256,9 @@ Info 17   [00:01:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 18   [00:01:21.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 19   [00:01:22.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 20   [00:01:23.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/decls/fns.d.ts
-	/user/username/projects/myproject/main/main.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/decls/fns.d.ts Text-1 "export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n//# sourceMappingURL=FnS.d.ts.map"
+	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -357,8 +357,8 @@ Info 37   [00:01:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 38   [00:01:47.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 39   [00:01:48.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
 Info 40   [00:01:49.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/random/random.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/random/random.ts SVC-1-0 "let a = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -713,7 +713,13 @@ FsWatchesRecursive::
 
 Info 50   [00:02:10.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
 Info 51   [00:02:11.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 52   [00:02:12.000] Different program with same set of files
+Info 52   [00:02:12.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 53   [00:02:13.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/decls/fns.d.ts Text-1 "export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n//# sourceMappingURL=FnS.d.ts.map"
+	/user/username/projects/myproject/main/main.ts SVC-1-1 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\nconst x = 10;"
+
+Info 54   [00:02:14.000] -----------------------------------------------
 After request
 
 PolledWatches::
@@ -746,7 +752,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 53   [00:02:13.000] response:
+Info 55   [00:02:15.000] response:
     {
       "response": {
         "definitions": [
@@ -783,7 +789,7 @@ Info 53   [00:02:13.000] response:
       },
       "responseRequired": true
     }
-Info 54   [00:02:14.000] request:
+Info 56   [00:02:16.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -858,7 +864,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 55   [00:02:15.000] response:
+Info 57   [00:02:17.000] response:
     {
       "response": {
         "definitions": [
@@ -895,7 +901,7 @@ Info 55   [00:02:15.000] response:
       },
       "responseRequired": true
     }
-Info 56   [00:02:16.000] request:
+Info 58   [00:02:18.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -970,7 +976,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 57   [00:02:17.000] response:
+Info 59   [00:02:19.000] response:
     {
       "response": {
         "definitions": [
@@ -1007,7 +1013,7 @@ Info 57   [00:02:17.000] response:
       },
       "responseRequired": true
     }
-Info 58   [00:02:18.000] request:
+Info 60   [00:02:20.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -1082,7 +1088,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 59   [00:02:19.000] response:
+Info 61   [00:02:21.000] response:
     {
       "response": {
         "definitions": [
@@ -1119,7 +1125,7 @@ Info 59   [00:02:19.000] response:
       },
       "responseRequired": true
     }
-Info 60   [00:02:20.000] request:
+Info 62   [00:02:22.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -1194,7 +1200,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 61   [00:02:21.000] response:
+Info 63   [00:02:23.000] response:
     {
       "response": {
         "definitions": [

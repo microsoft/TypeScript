@@ -64,9 +64,9 @@ Info 14   [00:00:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 15   [00:00:34.000] Finishing updateGraphWorker: Project: /a/b/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:35.000] Project '/a/b/project/tsconfig.json' (Configured)
 Info 17   [00:00:36.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/project/file1.ts
-	/a/b/project/file3.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/project/file1.ts SVC-1-0 "import a from \"file2\""
+	/a/b/project/file3.ts Text-1 "export class c { }"
 
 
 	../../lib/lib.d.ts
@@ -140,26 +140,32 @@ FsWatchesRecursive::
 Info 27   [00:00:55.000] Running: /a/b/project/tsconfig.json
 Info 28   [00:00:56.000] Starting updateGraphWorker: Project: /a/b/project/tsconfig.json
 Info 29   [00:00:57.000] Finishing updateGraphWorker: Project: /a/b/project/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 30   [00:00:58.000] Different program with same set of files
-Info 31   [00:00:59.000] Running: *ensureProjectForOpenFiles*
-Info 32   [00:01:00.000] Before ensureProjectForOpenFiles:
-Info 33   [00:01:01.000] Project '/a/b/project/tsconfig.json' (Configured)
-Info 33   [00:01:02.000] 	Files (3)
+Info 30   [00:00:58.000] Project '/a/b/project/tsconfig.json' (Configured)
+Info 31   [00:00:59.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/project/file1.ts SVC-1-0 "import a from \"file2\""
+	/a/b/project/file3.ts Text-2 "export class c { }export class d {}"
 
-Info 33   [00:01:03.000] -----------------------------------------------
-Info 33   [00:01:04.000] Open files: 
-Info 33   [00:01:05.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
-Info 33   [00:01:06.000] 		Projects: /a/b/project/tsconfig.json
-Info 33   [00:01:07.000] After ensureProjectForOpenFiles:
-Info 34   [00:01:08.000] Project '/a/b/project/tsconfig.json' (Configured)
-Info 34   [00:01:09.000] 	Files (3)
+Info 32   [00:01:00.000] -----------------------------------------------
+Info 33   [00:01:01.000] Running: *ensureProjectForOpenFiles*
+Info 34   [00:01:02.000] Before ensureProjectForOpenFiles:
+Info 35   [00:01:03.000] Project '/a/b/project/tsconfig.json' (Configured)
+Info 35   [00:01:04.000] 	Files (3)
 
-Info 34   [00:01:10.000] -----------------------------------------------
-Info 34   [00:01:11.000] Open files: 
-Info 34   [00:01:12.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
-Info 34   [00:01:13.000] 		Projects: /a/b/project/tsconfig.json
-Info 34   [00:01:14.000] got projects updated in background, updating diagnostics for /a/b/project/file1.ts
-Info 35   [00:01:15.000] event:
+Info 35   [00:01:05.000] -----------------------------------------------
+Info 35   [00:01:06.000] Open files: 
+Info 35   [00:01:07.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
+Info 35   [00:01:08.000] 		Projects: /a/b/project/tsconfig.json
+Info 35   [00:01:09.000] After ensureProjectForOpenFiles:
+Info 36   [00:01:10.000] Project '/a/b/project/tsconfig.json' (Configured)
+Info 36   [00:01:11.000] 	Files (3)
+
+Info 36   [00:01:12.000] -----------------------------------------------
+Info 36   [00:01:13.000] Open files: 
+Info 36   [00:01:14.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
+Info 36   [00:01:15.000] 		Projects: /a/b/project/tsconfig.json
+Info 36   [00:01:16.000] got projects updated in background, updating diagnostics for /a/b/project/file1.ts
+Info 37   [00:01:17.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/project/file1.ts"]}}
 After checking timeout queue length (2) and running
 

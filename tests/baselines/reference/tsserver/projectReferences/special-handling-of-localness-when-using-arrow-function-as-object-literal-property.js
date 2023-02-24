@@ -102,9 +102,9 @@ Info 21   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:01:06.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/api/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:01:07.000] Project '/user/username/projects/solution/api/tsconfig.json' (Configured)
 Info 24   [00:01:08.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/solution/shared/src/index.ts
-	/user/username/projects/solution/api/src/server.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/solution/shared/src/index.ts Text-1 "const local = { bar: () => { } };\nexport const foo = local;"
+	/user/username/projects/solution/api/src/server.ts SVC-1-0 "import * as shared from \"../../shared/dist\";\nshared.foo.bar();"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -215,8 +215,8 @@ Info 42   [00:01:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 43   [00:01:36.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/shared/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 44   [00:01:37.000] Project '/user/username/projects/solution/shared/tsconfig.json' (Configured)
 Info 45   [00:01:38.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/solution/shared/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/solution/shared/src/index.ts Text-1 "const local = { bar: () => { } };\nexport const foo = local;"
 
 
 	../../../../../a/lib/lib.d.ts

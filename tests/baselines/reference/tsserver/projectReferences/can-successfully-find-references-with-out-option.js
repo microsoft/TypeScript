@@ -413,9 +413,9 @@ Info 15   [00:01:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 16   [00:01:26.000] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:01:27.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info 18   [00:01:28.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
-	/user/username/projects/container/compositeExec/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
+	/user/username/projects/container/compositeExec/index.ts SVC-1-0 "namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -513,8 +513,8 @@ Info 35   [00:01:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 36   [00:01:55.000] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 37   [00:01:56.000] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
 Info 38   [00:01:57.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -562,20 +562,23 @@ Info 44   [00:02:03.000] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info 45   [00:02:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info 46   [00:02:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info 47   [00:02:06.000] Finishing updateGraphWorker: Project: /user/username/projects/container/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 48   [00:02:07.000] Different program with same set of files
-Info 49   [00:02:08.000] Creating configuration project /user/username/projects/container/exec/tsconfig.json
-Info 50   [00:02:09.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
-Info 51   [00:02:10.000] Starting updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json
-Info 52   [00:02:11.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 53   [00:02:12.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 54   [00:02:13.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 55   [00:02:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 56   [00:02:15.000] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 57   [00:02:16.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
-Info 58   [00:02:17.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
-	/user/username/projects/container/exec/index.ts
+Info 48   [00:02:07.000] Project '/user/username/projects/container/tsconfig.json' (Configured)
+Info 49   [00:02:08.000] 	Files (0)
+
+Info 50   [00:02:09.000] -----------------------------------------------
+Info 51   [00:02:10.000] Creating configuration project /user/username/projects/container/exec/tsconfig.json
+Info 52   [00:02:11.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
+Info 53   [00:02:12.000] Starting updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json
+Info 54   [00:02:13.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 55   [00:02:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 56   [00:02:15.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 57   [00:02:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 58   [00:02:17.000] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 59   [00:02:18.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
+Info 60   [00:02:19.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
+	/user/username/projects/container/exec/index.ts Text-1 "namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -585,9 +588,9 @@ Info 58   [00:02:17.000] 	Files (3)
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 59   [00:02:18.000] -----------------------------------------------
-Info 60   [00:02:19.000] Search path: /user/username/projects/container/lib
-Info 61   [00:02:20.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+Info 61   [00:02:20.000] -----------------------------------------------
+Info 62   [00:02:21.000] Search path: /user/username/projects/container/lib
+Info 63   [00:02:22.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
 After request
 
 PolledWatches::
@@ -618,7 +621,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 62   [00:02:21.000] response:
+Info 64   [00:02:23.000] response:
     {
       "response": {
         "info": {

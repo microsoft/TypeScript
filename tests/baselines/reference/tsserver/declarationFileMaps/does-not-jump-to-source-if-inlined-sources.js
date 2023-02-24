@@ -60,9 +60,9 @@ Info 9    [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 10   [00:00:41.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 11   [00:00:42.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 12   [00:00:43.000] 	Files (3)
-	/a/bin/a.d.ts
-	/b/bin/b.d.ts
-	/user/user.ts
+	/a/bin/a.d.ts Text-1 "export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# sourceMappingURL=a.d.ts.map"
+	/b/bin/b.d.ts Text-1 "export declare function fnB(): void;\n//# sourceMappingURL=b.d.ts.map"
+	/user/user.ts SVC-1-0 "import * as a from \"../a/bin/a\";\nimport * as b from \"../b/bin/b\";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
 
 
 	../a/bin/a.d.ts
@@ -380,7 +380,7 @@ Info 31   [00:01:12.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /du
 Info 32   [00:01:13.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 33   [00:01:14.000] Project '/dev/null/inferredProject2*' (Inferred)
 Info 34   [00:01:15.000] 	Files (1)
-	/dummy/dummy.ts
+	/dummy/dummy.ts SVC-1-0 "let a = 10;"
 
 
 	dummy.ts

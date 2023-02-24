@@ -83,7 +83,7 @@ Info 12   [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:50.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:51.000] Project '/a/tsconfig.json' (Configured)
 Info 15   [00:00:52.000] 	Files (1)
-	/a/a.ts
+	/a/a.ts SVC-1-0 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
 
 
 	a.ts
@@ -240,7 +240,7 @@ Info 34   [00:01:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/
 Info 35   [00:01:22.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:23.000] Project '/b/tsconfig.json' (Configured)
 Info 37   [00:01:24.000] 	Files (1)
-	/b/b.ts
+	/b/b.ts SVC-1-0 "export function fnB() {}"
 
 
 	b.ts
@@ -442,8 +442,8 @@ Info 79   [00:02:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 80   [00:02:18.000] Finishing updateGraphWorker: Project: /user/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 81   [00:02:19.000] Project '/user/tsconfig.json' (Configured)
 Info 82   [00:02:20.000] 	Files (2)
-	/a/a.ts
-	/user/user.ts
+	/a/a.ts Text-2 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
+	/user/user.ts SVC-1-0 "import * as a from \"../a/a\";\nimport * as b from \"../b/b\";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
 
 
 	../a/a.ts
@@ -730,7 +730,7 @@ Info 98   [00:02:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 99   [00:02:53.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 100  [00:02:54.000] Project '/a/tsconfig.json' (Configured)
 Info 101  [00:02:55.000] 	Files (1)
-	/a/a.ts
+	/a/a.ts SVC-2-0 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
 
 
 	a.ts
@@ -927,7 +927,7 @@ Info 115  [00:03:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /du
 Info 116  [00:03:32.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 117  [00:03:33.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 118  [00:03:34.000] 	Files (1)
-	/dummy/dummy.ts
+	/dummy/dummy.ts SVC-1-0 "let a = 10;"
 
 
 	dummy.ts

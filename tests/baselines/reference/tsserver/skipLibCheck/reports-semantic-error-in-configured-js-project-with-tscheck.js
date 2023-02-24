@@ -50,7 +50,7 @@ Info 12   [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:22.000] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:23.000] Project '/a/jsconfig.json' (Configured)
 Info 15   [00:00:24.000] 	Files (1)
-	/a/jsFile.js
+	/a/jsFile.js SVC-1-0 "let x = 1;\n                x === \"string\";"
 
 
 	jsFile.js

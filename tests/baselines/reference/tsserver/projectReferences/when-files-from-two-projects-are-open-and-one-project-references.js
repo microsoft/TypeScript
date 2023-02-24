@@ -337,8 +337,8 @@ Info 58   [00:02:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 59   [00:02:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 60   [00:02:53.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 61   [00:02:54.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/main/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/main/src/file1.ts SVC-1-0 "export const mainConst = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -504,8 +504,8 @@ Info 74   [00:03:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 75   [00:03:14.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/core/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 76   [00:03:15.000] Project '/user/username/projects/myproject/core/tsconfig.json' (Configured)
 Info 77   [00:03:16.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/core/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/core/src/file1.ts SVC-1-0 "export const coreConst = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -683,8 +683,8 @@ Info 90   [00:03:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 91   [00:03:41.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirect/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 92   [00:03:42.000] Project '/user/username/projects/myproject/indirect/tsconfig.json' (Configured)
 Info 93   [00:03:43.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/indirect/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/indirect/src/file1.ts Text-1 "export const indirectConst = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -703,8 +703,8 @@ Info 101  [00:03:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 102  [00:03:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/coreRef1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 103  [00:03:53.000] Project '/user/username/projects/myproject/coreRef1/tsconfig.json' (Configured)
 Info 104  [00:03:54.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/coreRef1/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/coreRef1/src/file1.ts Text-1 "export const coreRef1Const = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -723,8 +723,8 @@ Info 112  [00:04:02.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 113  [00:04:03.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 114  [00:04:04.000] Project '/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json' (Configured)
 Info 115  [00:04:05.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts Text-1 "export const indirectDisabledChildLoad1Const = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -743,8 +743,8 @@ Info 123  [00:04:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 124  [00:04:14.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 125  [00:04:15.000] Project '/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json' (Configured)
 Info 126  [00:04:16.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts Text-1 "export const indirectDisabledChildLoad2Const = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -763,8 +763,8 @@ Info 134  [00:04:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 135  [00:04:25.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 136  [00:04:26.000] Project '/user/username/projects/myproject/refToCoreRef3/tsconfig.json' (Configured)
 Info 137  [00:04:27.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/refToCoreRef3/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/refToCoreRef3/src/file1.ts Text-1 "export const refToCoreRef3Const = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -783,8 +783,8 @@ Info 145  [00:04:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 146  [00:04:36.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/coreRef3/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 147  [00:04:37.000] Project '/user/username/projects/myproject/coreRef3/tsconfig.json' (Configured)
 Info 148  [00:04:38.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/coreRef3/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/coreRef3/src/file1.ts Text-1 "export const coreRef3Const = 10;"
 
 
 	../../../../../a/lib/lib.d.ts

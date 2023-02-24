@@ -38,8 +38,8 @@ Info 12   [00:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:32.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:33.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 15   [00:00:34.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
 	../../../../lib/lib.d.ts
@@ -114,8 +114,8 @@ Info 40   [00:01:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 41   [00:01:08.000] Finishing updateGraphWorker: Project: /a/b/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 42   [00:01:09.000] Project '/a/b/projects/project/tsconfig.json' (Configured)
 Info 43   [00:01:10.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
 	../../../lib/lib.d.ts
@@ -230,8 +230,8 @@ Info 73   [00:02:05.500] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 74   [00:02:06.500] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 75   [00:02:07.500] Project '/dev/null/inferredProject1*' (Inferred)
 Info 76   [00:02:08.500] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
 	../../../../lib/lib.d.ts

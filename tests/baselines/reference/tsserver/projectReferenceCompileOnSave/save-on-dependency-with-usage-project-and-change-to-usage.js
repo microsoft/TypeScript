@@ -94,9 +94,9 @@ Info 21   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:51.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:52.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
 Info 24   [00:00:53.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/dependency/fns.ts
-	/user/username/projects/myproject/usage/usage.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/fns.ts Text-1 "export function fn1() { }\nexport function fn2() { }\n"
+	/user/username/projects/myproject/usage/usage.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n} from '../decls/fns'\nfn1();\nfn2();\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -191,8 +191,8 @@ Info 36   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 37   [00:01:12.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 38   [00:01:13.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 39   [00:01:14.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/dependency/fns.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/fns.ts SVC-1-0 "export function fn1() { }\nexport function fn2() { }\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -463,7 +463,13 @@ FsWatchesRecursive::
 
 Info 51   [00:01:59.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
 Info 52   [00:02:00.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 53   [00:02:01.000] Different program with same set of files
+Info 53   [00:02:01.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 54   [00:02:02.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/fns.ts SVC-1-0 "export function fn1() { }\nexport function fn2() { }\n"
+	/user/username/projects/myproject/usage/usage.ts SVC-1-1 "import {\n    fn1,\n    fn2,\n} from '../decls/fns'\nfn1();\nfn2();\nexport function fn3() { }"
+
+Info 55   [00:02:03.000] -----------------------------------------------
 After request
 
 PolledWatches::
@@ -490,7 +496,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 54   [00:02:02.000] response:
+Info 56   [00:02:04.000] response:
     {
       "response": [
         {
@@ -501,7 +507,7 @@ Info 54   [00:02:02.000] response:
       ],
       "responseRequired": true
     }
-Info 55   [00:02:03.000] request:
+Info 57   [00:02:05.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -563,12 +569,12 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 56   [00:02:04.000] response:
+Info 58   [00:02:06.000] response:
     {
       "response": false,
       "responseRequired": true
     }
-Info 57   [00:02:05.000] request:
+Info 59   [00:02:07.000] request:
     {
       "command": "emit-output",
       "arguments": {
@@ -630,7 +636,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 58   [00:02:06.000] response:
+Info 60   [00:02:08.000] response:
     {
       "response": {
         "emitSkipped": true,

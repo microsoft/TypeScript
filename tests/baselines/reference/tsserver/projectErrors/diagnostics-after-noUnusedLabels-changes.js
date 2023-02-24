@@ -42,7 +42,7 @@ Info 10   [00:00:17.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 11   [00:00:18.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 12   [00:00:19.000] Project '/tsconfig.json' (Configured)
 Info 13   [00:00:20.000] 	Files (1)
-	/a.ts
+	/a.ts SVC-1-0 "label: while (1) {}"
 
 
 	a.ts
@@ -108,24 +108,28 @@ Info 22   [00:00:37.000] Config: /tsconfig.json : {
 }
 Info 23   [00:00:38.000] Starting updateGraphWorker: Project: /tsconfig.json
 Info 24   [00:00:39.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 25   [00:00:40.000] Different program with same set of files
-Info 26   [00:00:41.000] Running: *ensureProjectForOpenFiles*
-Info 27   [00:00:42.000] Before ensureProjectForOpenFiles:
-Info 28   [00:00:43.000] Project '/tsconfig.json' (Configured)
-Info 28   [00:00:44.000] 	Files (1)
+Info 25   [00:00:40.000] Project '/tsconfig.json' (Configured)
+Info 26   [00:00:41.000] 	Files (1)
+	/a.ts SVC-1-0 "label: while (1) {}"
 
-Info 28   [00:00:45.000] -----------------------------------------------
-Info 28   [00:00:46.000] Open files: 
-Info 28   [00:00:47.000] 	FileName: /a.ts ProjectRootPath: undefined
-Info 28   [00:00:48.000] 		Projects: /tsconfig.json
-Info 28   [00:00:49.000] After ensureProjectForOpenFiles:
-Info 29   [00:00:50.000] Project '/tsconfig.json' (Configured)
-Info 29   [00:00:51.000] 	Files (1)
+Info 27   [00:00:42.000] -----------------------------------------------
+Info 28   [00:00:43.000] Running: *ensureProjectForOpenFiles*
+Info 29   [00:00:44.000] Before ensureProjectForOpenFiles:
+Info 30   [00:00:45.000] Project '/tsconfig.json' (Configured)
+Info 30   [00:00:46.000] 	Files (1)
 
-Info 29   [00:00:52.000] -----------------------------------------------
-Info 29   [00:00:53.000] Open files: 
-Info 29   [00:00:54.000] 	FileName: /a.ts ProjectRootPath: undefined
-Info 29   [00:00:55.000] 		Projects: /tsconfig.json
+Info 30   [00:00:47.000] -----------------------------------------------
+Info 30   [00:00:48.000] Open files: 
+Info 30   [00:00:49.000] 	FileName: /a.ts ProjectRootPath: undefined
+Info 30   [00:00:50.000] 		Projects: /tsconfig.json
+Info 30   [00:00:51.000] After ensureProjectForOpenFiles:
+Info 31   [00:00:52.000] Project '/tsconfig.json' (Configured)
+Info 31   [00:00:53.000] 	Files (1)
+
+Info 31   [00:00:54.000] -----------------------------------------------
+Info 31   [00:00:55.000] Open files: 
+Info 31   [00:00:56.000] 	FileName: /a.ts ProjectRootPath: undefined
+Info 31   [00:00:57.000] 		Projects: /tsconfig.json
 After running timeout callbacks
 
 PolledWatches::
@@ -140,7 +144,7 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 29   [00:00:56.000] request:
+Info 31   [00:00:58.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -177,7 +181,7 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 30   [00:00:57.000] response:
+Info 32   [00:00:59.000] response:
     {
       "response": [
         {

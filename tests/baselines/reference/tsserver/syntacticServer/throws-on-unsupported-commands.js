@@ -50,17 +50,14 @@ FsWatchesRecursive::
 
 Info 2    [00:00:33.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 3    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: false Elapsed:: *ms
-Info 4    [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 5    [00:00:36.000] 	Files (0) NoProgram
+Info 4    [00:00:35.000] Same program as before
+Info 5    [00:00:36.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 5    [00:00:37.000] 	Files (0) NoProgram
 
-Info 6    [00:00:37.000] -----------------------------------------------
-Info 7    [00:00:38.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 7    [00:00:39.000] 	Files (0) NoProgram
-
-Info 7    [00:00:40.000] -----------------------------------------------
-Info 7    [00:00:41.000] Open files: 
-Info 7    [00:00:42.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-Info 7    [00:00:43.000] 		Projects: /dev/null/inferredProject1*
+Info 5    [00:00:38.000] -----------------------------------------------
+Info 5    [00:00:39.000] Open files: 
+Info 5    [00:00:40.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info 5    [00:00:41.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
@@ -69,11 +66,11 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 7    [00:00:44.000] response:
+Info 5    [00:00:42.000] response:
     {
       "responseRequired": false
     }
-Info 8    [00:00:45.000] request:
+Info 6    [00:00:43.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -90,5 +87,5 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 9    [00:00:46.000] Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.Syntactic
-Info 10   [00:00:47.000] LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.Syntactic
+Info 7    [00:00:44.000] Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.Syntactic
+Info 8    [00:00:45.000] LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.Syntactic

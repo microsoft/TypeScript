@@ -82,9 +82,9 @@ Info 25   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 26   [00:01:17.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 27   [00:01:18.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
 Info 28   [00:01:19.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts Text-1 "export class C { method(): number; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts SVC-1-0 "import {C} from \"@microsoft/recognizers-text\";\nnew C();"
 
 
 	../../../../../../../a/lib/lib.d.ts
@@ -431,8 +431,8 @@ Info 52   [00:01:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 53   [00:01:53.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 54   [00:01:54.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
 Info 55   [00:01:55.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts SVC-1-0 "import {C} from \"@microsoft/recognizers-text\";\nnew C();"
 
 
 	../../../../../../../a/lib/lib.d.ts

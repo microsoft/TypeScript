@@ -92,9 +92,9 @@ Info 21   [00:00:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:55.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:56.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info 24   [00:00:57.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.d.ts
-	/user/username/projects/myproject/projects/project2/class2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.d.ts Text-1 "declare class class1 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -181,24 +181,30 @@ Info 33   [00:01:14.000] Running: /user/username/projects/myproject/projects/pro
 Info 34   [00:01:15.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 35   [00:01:16.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info 36   [00:01:17.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 37   [00:01:18.000] Different program with same set of files
-Info 38   [00:01:19.000] Running: *ensureProjectForOpenFiles*
-Info 39   [00:01:20.000] Before ensureProjectForOpenFiles:
-Info 40   [00:01:21.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 40   [00:01:22.000] 	Files (3)
+Info 37   [00:01:18.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 38   [00:01:19.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.d.ts Text-1 "declare class class1 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
-Info 40   [00:01:23.000] -----------------------------------------------
-Info 40   [00:01:24.000] Open files: 
-Info 40   [00:01:25.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
-Info 40   [00:01:26.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 40   [00:01:27.000] After ensureProjectForOpenFiles:
-Info 41   [00:01:28.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 41   [00:01:29.000] 	Files (3)
+Info 39   [00:01:20.000] -----------------------------------------------
+Info 40   [00:01:21.000] Running: *ensureProjectForOpenFiles*
+Info 41   [00:01:22.000] Before ensureProjectForOpenFiles:
+Info 42   [00:01:23.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 42   [00:01:24.000] 	Files (3)
 
-Info 41   [00:01:30.000] -----------------------------------------------
-Info 41   [00:01:31.000] Open files: 
-Info 41   [00:01:32.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
-Info 41   [00:01:33.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 42   [00:01:25.000] -----------------------------------------------
+Info 42   [00:01:26.000] Open files: 
+Info 42   [00:01:27.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
+Info 42   [00:01:28.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 42   [00:01:29.000] After ensureProjectForOpenFiles:
+Info 43   [00:01:30.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 43   [00:01:31.000] 	Files (3)
+
+Info 43   [00:01:32.000] -----------------------------------------------
+Info 43   [00:01:33.000] Open files: 
+Info 43   [00:01:34.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
+Info 43   [00:01:35.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
 After checking timeout queue length (2) and running
 
 PolledWatches::
@@ -227,14 +233,14 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
   {}
 
-Info 41   [00:01:36.000] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
-Info 42   [00:01:37.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
-Info 43   [00:01:38.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 44   [00:01:39.000] Scheduled: *ensureProjectForOpenFiles*
-Info 45   [00:01:40.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
-Info 46   [00:01:41.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
-Info 47   [00:01:42.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
-Info 48   [00:01:43.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Info 43   [00:01:38.000] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
+Info 44   [00:01:39.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
+Info 45   [00:01:40.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 46   [00:01:41.000] Scheduled: *ensureProjectForOpenFiles*
+Info 47   [00:01:42.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
+Info 48   [00:01:43.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Info 49   [00:01:44.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
+Info 50   [00:01:45.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Before checking timeout queue length (2) and running
 //// [/user/username/projects/myproject/projects/project1/class3.d.ts]
 declare class class3 {}
@@ -264,16 +270,16 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
   {}
 
-Info 49   [00:01:44.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 50   [00:01:45.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 51   [00:01:46.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
-Info 52   [00:01:47.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 53   [00:01:48.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 54   [00:01:49.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.d.ts
-	/user/username/projects/myproject/projects/project1/class3.d.ts
-	/user/username/projects/myproject/projects/project2/class2.ts
+Info 51   [00:01:46.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 52   [00:01:47.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 53   [00:01:48.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
+Info 54   [00:01:49.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 55   [00:01:50.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 56   [00:01:51.000] 	Files (4)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.d.ts Text-1 "declare class class1 {}"
+	/user/username/projects/myproject/projects/project1/class3.d.ts Text-1 "declare class class3 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -285,24 +291,24 @@ Info 54   [00:01:49.000] 	Files (4)
 	class2.ts
 	  Matched by default include pattern '**/*'
 
-Info 55   [00:01:50.000] -----------------------------------------------
-Info 56   [00:01:51.000] Running: *ensureProjectForOpenFiles*
-Info 57   [00:01:52.000] Before ensureProjectForOpenFiles:
-Info 58   [00:01:53.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 58   [00:01:54.000] 	Files (4)
+Info 57   [00:01:52.000] -----------------------------------------------
+Info 58   [00:01:53.000] Running: *ensureProjectForOpenFiles*
+Info 59   [00:01:54.000] Before ensureProjectForOpenFiles:
+Info 60   [00:01:55.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 60   [00:01:56.000] 	Files (4)
 
-Info 58   [00:01:55.000] -----------------------------------------------
-Info 58   [00:01:56.000] Open files: 
-Info 58   [00:01:57.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
-Info 58   [00:01:58.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 58   [00:01:59.000] After ensureProjectForOpenFiles:
-Info 59   [00:02:00.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 59   [00:02:01.000] 	Files (4)
+Info 60   [00:01:57.000] -----------------------------------------------
+Info 60   [00:01:58.000] Open files: 
+Info 60   [00:01:59.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
+Info 60   [00:02:00.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 60   [00:02:01.000] After ensureProjectForOpenFiles:
+Info 61   [00:02:02.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 61   [00:02:03.000] 	Files (4)
 
-Info 59   [00:02:02.000] -----------------------------------------------
-Info 59   [00:02:03.000] Open files: 
-Info 59   [00:02:04.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
-Info 59   [00:02:05.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 61   [00:02:04.000] -----------------------------------------------
+Info 61   [00:02:05.000] Open files: 
+Info 61   [00:02:06.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
+Info 61   [00:02:07.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
 After checking timeout queue length (2) and running
 
 PolledWatches::
@@ -331,12 +337,12 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
   {}
 
-Info 59   [00:02:09.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
-Info 60   [00:02:10.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp
-Info 61   [00:02:11.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
-Info 62   [00:02:13.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
-Info 63   [00:02:14.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp/file.d.ts
-Info 64   [00:02:15.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Info 61   [00:02:11.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Info 62   [00:02:12.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp
+Info 63   [00:02:13.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Info 64   [00:02:15.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Info 65   [00:02:16.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp/file.d.ts
+Info 66   [00:02:17.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Before checking timeout queue length (0) and running
 //// [/user/username/projects/myproject/projects/project1/temp/file.d.ts]
 declare class file {}
@@ -396,14 +402,14 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
   {}
 
-Info 65   [00:02:17.000] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
-Info 66   [00:02:18.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
-Info 67   [00:02:19.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 68   [00:02:20.000] Scheduled: *ensureProjectForOpenFiles*
-Info 69   [00:02:21.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
-Info 70   [00:02:22.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
-Info 71   [00:02:23.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
-Info 72   [00:02:24.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Info 67   [00:02:19.000] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
+Info 68   [00:02:20.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
+Info 69   [00:02:21.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 70   [00:02:22.000] Scheduled: *ensureProjectForOpenFiles*
+Info 71   [00:02:23.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
+Info 72   [00:02:24.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Info 73   [00:02:25.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
+Info 74   [00:02:26.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Before checking timeout queue length (2) and running
 //// [/user/username/projects/myproject/projects/project1/class3.d.ts] deleted
 
@@ -431,15 +437,15 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
   {}
 
-Info 73   [00:02:25.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 74   [00:02:26.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 75   [00:02:27.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
-Info 76   [00:02:28.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 77   [00:02:29.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 78   [00:02:30.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.d.ts
-	/user/username/projects/myproject/projects/project2/class2.ts
+Info 75   [00:02:27.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 76   [00:02:28.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 77   [00:02:29.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
+Info 78   [00:02:30.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 79   [00:02:31.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 80   [00:02:32.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.d.ts Text-1 "declare class class1 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -449,24 +455,24 @@ Info 78   [00:02:30.000] 	Files (3)
 	class2.ts
 	  Matched by default include pattern '**/*'
 
-Info 79   [00:02:31.000] -----------------------------------------------
-Info 80   [00:02:32.000] Running: *ensureProjectForOpenFiles*
-Info 81   [00:02:33.000] Before ensureProjectForOpenFiles:
-Info 82   [00:02:34.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 82   [00:02:35.000] 	Files (3)
+Info 81   [00:02:33.000] -----------------------------------------------
+Info 82   [00:02:34.000] Running: *ensureProjectForOpenFiles*
+Info 83   [00:02:35.000] Before ensureProjectForOpenFiles:
+Info 84   [00:02:36.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 84   [00:02:37.000] 	Files (3)
 
-Info 82   [00:02:36.000] -----------------------------------------------
-Info 82   [00:02:37.000] Open files: 
-Info 82   [00:02:38.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
-Info 82   [00:02:39.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 82   [00:02:40.000] After ensureProjectForOpenFiles:
-Info 83   [00:02:41.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 83   [00:02:42.000] 	Files (3)
+Info 84   [00:02:38.000] -----------------------------------------------
+Info 84   [00:02:39.000] Open files: 
+Info 84   [00:02:40.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
+Info 84   [00:02:41.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 84   [00:02:42.000] After ensureProjectForOpenFiles:
+Info 85   [00:02:43.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 85   [00:02:44.000] 	Files (3)
 
-Info 83   [00:02:43.000] -----------------------------------------------
-Info 83   [00:02:44.000] Open files: 
-Info 83   [00:02:45.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
-Info 83   [00:02:46.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 85   [00:02:45.000] -----------------------------------------------
+Info 85   [00:02:46.000] Open files: 
+Info 85   [00:02:47.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
+Info 85   [00:02:48.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
 After checking timeout queue length (2) and running
 
 PolledWatches::
@@ -495,14 +501,14 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
   {}
 
-Info 83   [00:02:49.000] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
-Info 84   [00:02:50.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
-Info 85   [00:02:51.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 86   [00:02:52.000] Scheduled: *ensureProjectForOpenFiles*
-Info 87   [00:02:53.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
-Info 88   [00:02:54.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
-Info 89   [00:02:55.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
-Info 90   [00:02:56.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Info 85   [00:02:51.000] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
+Info 86   [00:02:52.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
+Info 87   [00:02:53.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 88   [00:02:54.000] Scheduled: *ensureProjectForOpenFiles*
+Info 89   [00:02:55.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
+Info 90   [00:02:56.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Info 91   [00:02:57.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
+Info 92   [00:02:58.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Before checking timeout queue length (2) and running
 //// [/user/username/projects/myproject/projects/project1/class3.d.ts]
 declare class class3 {}
@@ -532,16 +538,16 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
   {}
 
-Info 91   [00:02:57.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 92   [00:02:58.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 93   [00:02:59.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
-Info 94   [00:03:00.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 95   [00:03:01.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 96   [00:03:02.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.d.ts
-	/user/username/projects/myproject/projects/project1/class3.d.ts
-	/user/username/projects/myproject/projects/project2/class2.ts
+Info 93   [00:02:59.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 94   [00:03:00.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 95   [00:03:01.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
+Info 96   [00:03:02.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 97   [00:03:03.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 98   [00:03:04.000] 	Files (4)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.d.ts Text-1 "declare class class1 {}"
+	/user/username/projects/myproject/projects/project1/class3.d.ts Text-2 "declare class class3 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -553,24 +559,24 @@ Info 96   [00:03:02.000] 	Files (4)
 	class2.ts
 	  Matched by default include pattern '**/*'
 
-Info 97   [00:03:03.000] -----------------------------------------------
-Info 98   [00:03:04.000] Running: *ensureProjectForOpenFiles*
-Info 99   [00:03:05.000] Before ensureProjectForOpenFiles:
-Info 100  [00:03:06.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 100  [00:03:07.000] 	Files (4)
+Info 99   [00:03:05.000] -----------------------------------------------
+Info 100  [00:03:06.000] Running: *ensureProjectForOpenFiles*
+Info 101  [00:03:07.000] Before ensureProjectForOpenFiles:
+Info 102  [00:03:08.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 102  [00:03:09.000] 	Files (4)
 
-Info 100  [00:03:08.000] -----------------------------------------------
-Info 100  [00:03:09.000] Open files: 
-Info 100  [00:03:10.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
-Info 100  [00:03:11.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info 100  [00:03:12.000] After ensureProjectForOpenFiles:
-Info 101  [00:03:13.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
-Info 101  [00:03:14.000] 	Files (4)
+Info 102  [00:03:10.000] -----------------------------------------------
+Info 102  [00:03:11.000] Open files: 
+Info 102  [00:03:12.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
+Info 102  [00:03:13.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 102  [00:03:14.000] After ensureProjectForOpenFiles:
+Info 103  [00:03:15.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
+Info 103  [00:03:16.000] 	Files (4)
 
-Info 101  [00:03:15.000] -----------------------------------------------
-Info 101  [00:03:16.000] Open files: 
-Info 101  [00:03:17.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
-Info 101  [00:03:18.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 103  [00:03:17.000] -----------------------------------------------
+Info 103  [00:03:18.000] Open files: 
+Info 103  [00:03:19.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
+Info 103  [00:03:20.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
 After checking timeout queue length (2) and running
 
 PolledWatches::

@@ -47,7 +47,7 @@ Info 12   [00:00:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:26.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:27.000] Project '/a/b/tsconfig.json' (Configured)
 Info 15   [00:00:28.000] 	Files (1)
-	/a/b/f1.ts
+	/a/b/f1.ts SVC-1-0 " "
 
 
 	f1.ts
@@ -134,8 +134,8 @@ Info 28   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 29   [00:00:48.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 30   [00:00:49.000] Project '/a/b/tsconfig.json' (Configured)
 Info 31   [00:00:50.000] 	Files (2)
-	/a/b/f1.ts
-	/a/b/f2.html
+	/a/b/f1.ts SVC-1-0 " "
+	/a/b/f2.html Text-1 ""
 
 
 	f1.ts
@@ -187,17 +187,22 @@ Info 38   [00:01:09.000] Search path: /a/b
 Info 39   [00:01:10.000] For info: /a/b/f2.html :: Config file name: /a/b/tsconfig.json
 Info 40   [00:01:11.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 41   [00:01:12.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 42   [00:01:13.000] Different program with same set of files
-Info 43   [00:01:14.000] Project '/a/b/tsconfig.json' (Configured)
-Info 43   [00:01:15.000] 	Files (2)
+Info 42   [00:01:13.000] Project '/a/b/tsconfig.json' (Configured)
+Info 43   [00:01:14.000] 	Files (2)
+	/a/b/f1.ts SVC-1-0 " "
+	/a/b/f2.html SVC-1-0 "var hello = \"hello\";"
 
-Info 43   [00:01:16.000] -----------------------------------------------
-Info 43   [00:01:17.000] Open files: 
-Info 43   [00:01:18.000] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
-Info 43   [00:01:19.000] 		Projects: /a/b/tsconfig.json
-Info 43   [00:01:20.000] 	FileName: /a/b/f2.html ProjectRootPath: undefined
-Info 43   [00:01:21.000] 		Projects: /a/b/tsconfig.json
-Info 43   [00:01:22.000] request:
+Info 44   [00:01:15.000] -----------------------------------------------
+Info 45   [00:01:16.000] Project '/a/b/tsconfig.json' (Configured)
+Info 45   [00:01:17.000] 	Files (2)
+
+Info 45   [00:01:18.000] -----------------------------------------------
+Info 45   [00:01:19.000] Open files: 
+Info 45   [00:01:20.000] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
+Info 45   [00:01:21.000] 		Projects: /a/b/tsconfig.json
+Info 45   [00:01:22.000] 	FileName: /a/b/f2.html ProjectRootPath: undefined
+Info 45   [00:01:23.000] 		Projects: /a/b/tsconfig.json
+Info 45   [00:01:24.000] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -223,11 +228,11 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 44   [00:01:23.000] getCompletionData: Get current token: *
-Info 45   [00:01:24.000] getCompletionData: Is inside comment: *
-Info 46   [00:01:25.000] getCompletionData: Get previous token: *
-Info 47   [00:01:26.000] getCompletionData: Semantic work: *
-Info 48   [00:01:27.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info 46   [00:01:25.000] getCompletionData: Get current token: *
+Info 47   [00:01:26.000] getCompletionData: Is inside comment: *
+Info 48   [00:01:27.000] getCompletionData: Get previous token: *
+Info 49   [00:01:28.000] getCompletionData: Semantic work: *
+Info 50   [00:01:29.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
 
 PolledWatches::
@@ -244,7 +249,7 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 49   [00:01:28.000] response:
+Info 51   [00:01:30.000] response:
     {
       "response": {
         "flags": 0,
@@ -658,14 +663,14 @@ Info 49   [00:01:28.000] response:
       },
       "responseRequired": true
     }
-Info 50   [00:01:29.000] Project '/a/b/tsconfig.json' (Configured)
-Info 50   [00:01:30.000] 	Files (2)
+Info 52   [00:01:31.000] Project '/a/b/tsconfig.json' (Configured)
+Info 52   [00:01:32.000] 	Files (2)
 
-Info 50   [00:01:31.000] -----------------------------------------------
-Info 50   [00:01:32.000] Open files: 
-Info 50   [00:01:33.000] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
-Info 50   [00:01:34.000] 		Projects: /a/b/tsconfig.json
-Info 50   [00:01:35.000] request:
+Info 52   [00:01:33.000] -----------------------------------------------
+Info 52   [00:01:34.000] Open files: 
+Info 52   [00:01:35.000] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
+Info 52   [00:01:36.000] 		Projects: /a/b/tsconfig.json
+Info 52   [00:01:37.000] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -691,14 +696,19 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 51   [00:01:36.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 52   [00:01:37.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 53   [00:01:38.000] Different program with same set of files
-Info 54   [00:01:39.000] getCompletionData: Get current token: *
-Info 55   [00:01:40.000] getCompletionData: Is inside comment: *
-Info 56   [00:01:41.000] getCompletionData: Get previous token: *
-Info 57   [00:01:42.000] getCompletionData: Semantic work: *
-Info 58   [00:01:43.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info 53   [00:01:38.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info 54   [00:01:39.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 55   [00:01:40.000] Project '/a/b/tsconfig.json' (Configured)
+Info 56   [00:01:41.000] 	Files (2)
+	/a/b/f1.ts SVC-1-0 " "
+	/a/b/f2.html Text-3 ""
+
+Info 57   [00:01:42.000] -----------------------------------------------
+Info 58   [00:01:43.000] getCompletionData: Get current token: *
+Info 59   [00:01:44.000] getCompletionData: Is inside comment: *
+Info 60   [00:01:45.000] getCompletionData: Get previous token: *
+Info 61   [00:01:46.000] getCompletionData: Semantic work: *
+Info 62   [00:01:47.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
 
 PolledWatches::
@@ -715,7 +725,7 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 59   [00:01:44.000] response:
+Info 63   [00:01:48.000] response:
     {
       "response": {
         "flags": 0,

@@ -47,8 +47,8 @@ Info 11   [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 12   [00:00:33.000] Finishing updateGraphWorker: Project: /a/b/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:34.000] Project '/a/b/projects/project/tsconfig.json' (Configured)
 Info 14   [00:00:35.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
 	../../../lib/lib.d.ts
@@ -115,8 +115,8 @@ Info 40   [00:01:11.500] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 41   [00:01:12.500] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 42   [00:01:13.500] Project '/dev/null/inferredProject1*' (Inferred)
 Info 43   [00:01:14.500] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
 	../../../../lib/lib.d.ts
@@ -214,8 +214,8 @@ Info 69   [00:01:48.500] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 70   [00:01:49.500] Finishing updateGraphWorker: Project: /a/b/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 71   [00:01:50.500] Project '/a/b/projects/project/tsconfig.json' (Configured)
 Info 72   [00:01:51.500] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
 	../../../lib/lib.d.ts

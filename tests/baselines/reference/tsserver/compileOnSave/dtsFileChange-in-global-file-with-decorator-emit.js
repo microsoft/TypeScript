@@ -50,8 +50,8 @@ Info 13   [00:00:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:27.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:28.000] Project '/a/tsconfig.json' (Configured)
 Info 16   [00:00:29.000] 	Files (2)
-	/a/b.ts
-	/a/runtime/a.d.ts
+	/a/b.ts Text-1 "var y = 1;"
+	/a/runtime/a.d.ts SVC-1-0 "declare const x: string;"
 
 
 	b.ts

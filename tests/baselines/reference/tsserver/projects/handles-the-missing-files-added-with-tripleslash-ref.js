@@ -43,8 +43,8 @@ Info 8    [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 9    [00:00:22.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 10   [00:00:23.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 11   [00:00:24.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/commonFile1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/commonFile1.ts SVC-1-0 "/// <reference path=\"commonFile2.ts\"/>\n                    let x = y"
 
 
 	../lib/lib.d.ts
@@ -173,9 +173,9 @@ Info 23   [00:00:44.000] FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 50
 Info 24   [00:00:45.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 25   [00:00:46.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 26   [00:00:47.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/commonFile2.ts
-	/a/b/commonFile1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/commonFile2.ts Text-1 "let y = 1"
+	/a/b/commonFile1.ts SVC-1-0 "/// <reference path=\"commonFile2.ts\"/>\n                    let x = y"
 
 
 	../lib/lib.d.ts

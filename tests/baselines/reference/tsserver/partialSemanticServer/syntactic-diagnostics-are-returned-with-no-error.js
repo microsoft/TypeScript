@@ -39,8 +39,8 @@ Info 2    [00:00:23.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 3    [00:00:24.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 4    [00:00:25.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 5    [00:00:26.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/a.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a.ts SVC-1-0 "if (a < (b + c) { }"
 
 
 	a/lib/lib.d.ts

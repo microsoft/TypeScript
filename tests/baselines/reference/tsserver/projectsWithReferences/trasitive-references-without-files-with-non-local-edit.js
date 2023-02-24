@@ -130,11 +130,11 @@ Info 32   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 33   [00:01:12.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 34   [00:01:13.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 35   [00:01:14.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/a/index.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/refs/a.d.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -203,24 +203,32 @@ FsWatchesRecursive::
 Info 41   [00:01:28.000] Running: /user/username/projects/myproject/c/tsconfig.json
 Info 42   [00:01:29.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
 Info 43   [00:01:30.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 44   [00:01:31.000] Different program with same set of files
-Info 45   [00:01:32.000] Running: *ensureProjectForOpenFiles*
-Info 46   [00:01:33.000] Before ensureProjectForOpenFiles:
-Info 47   [00:01:34.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
-Info 47   [00:01:35.000] 	Files (5)
+Info 44   [00:01:31.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 45   [00:01:32.000] 	Files (5)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-2 "import {A} from '@ref/a';\nexport const b = new A();export function gFoo() { }"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
-Info 47   [00:01:36.000] -----------------------------------------------
-Info 47   [00:01:37.000] Open files: 
-Info 47   [00:01:38.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
-Info 47   [00:01:39.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
-Info 47   [00:01:40.000] After ensureProjectForOpenFiles:
-Info 48   [00:01:41.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
-Info 48   [00:01:42.000] 	Files (5)
+Info 46   [00:01:33.000] -----------------------------------------------
+Info 47   [00:01:34.000] Running: *ensureProjectForOpenFiles*
+Info 48   [00:01:35.000] Before ensureProjectForOpenFiles:
+Info 49   [00:01:36.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 49   [00:01:37.000] 	Files (5)
 
-Info 48   [00:01:43.000] -----------------------------------------------
-Info 48   [00:01:44.000] Open files: 
-Info 48   [00:01:45.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
-Info 48   [00:01:46.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
+Info 49   [00:01:38.000] -----------------------------------------------
+Info 49   [00:01:39.000] Open files: 
+Info 49   [00:01:40.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
+Info 49   [00:01:41.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
+Info 49   [00:01:42.000] After ensureProjectForOpenFiles:
+Info 50   [00:01:43.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
+Info 50   [00:01:44.000] 	Files (5)
+
+Info 50   [00:01:45.000] -----------------------------------------------
+Info 50   [00:01:46.000] Open files: 
+Info 50   [00:01:47.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
+Info 50   [00:01:48.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
 After checking timeout queue length (2) and running
 
 PolledWatches::

@@ -48,8 +48,8 @@ Info 13   [00:00:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:27.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:28.000] Project '/a/b/tsconfig.json' (Configured)
 Info 16   [00:00:29.000] 	Files (2)
-	/a/b/moduleFile.ts
-	/a/b/file1.ts
+	/a/b/moduleFile.ts Text-1 "export function bar() { };"
+	/a/b/file1.ts SVC-1-0 "import * as T from './moduleFile'; T.bar();"
 
 
 	moduleFile.ts
@@ -181,8 +181,8 @@ Info 40   [00:01:02.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 41   [00:01:03.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 42   [00:01:04.000] Project '/a/b/tsconfig.json' (Configured)
 Info 43   [00:01:05.000] 	Files (2)
-	/a/b/file1.ts
-	/a/b/moduleFile1.ts
+	/a/b/file1.ts SVC-1-0 "import * as T from './moduleFile'; T.bar();"
+	/a/b/moduleFile1.ts Text-1 "export function bar() { };"
 
 
 	file1.ts
@@ -406,8 +406,8 @@ Info 78   [00:01:55.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/
 Info 79   [00:01:56.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 80   [00:01:57.000] Project '/a/b/tsconfig.json' (Configured)
 Info 81   [00:01:58.000] 	Files (2)
-	/a/b/moduleFile.ts
-	/a/b/file1.ts
+	/a/b/moduleFile.ts Text-2 "export function bar() { };"
+	/a/b/file1.ts SVC-1-0 "import * as T from './moduleFile'; T.bar();"
 
 
 	moduleFile.ts

@@ -52,8 +52,8 @@ Info 11   [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 12   [00:00:29.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:30.000] Project '/a/tsconfig.json' (Configured)
 Info 14   [00:00:31.000] 	Files (2)
-	/a/old.ts
-	/a/user.ts
+	/a/old.ts Text-1 "export const x = 0;"
+	/a/user.ts SVC-1-0 "import { x } from \"./old\";"
 
 
 	old.ts
@@ -136,8 +136,8 @@ Info 28   [00:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/
 Info 29   [00:00:52.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 30   [00:00:53.000] Project '/b/tsconfig.json' (Configured)
 Info 31   [00:00:54.000] 	Files (2)
-	/a/old.ts
-	/b/user.ts
+	/a/old.ts Text-1 "export const x = 0;"
+	/b/user.ts SVC-1-0 "import { x } from \"../a/old\";"
 
 
 	../a/old.ts

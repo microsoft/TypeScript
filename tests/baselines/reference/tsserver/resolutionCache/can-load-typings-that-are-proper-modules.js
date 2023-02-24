@@ -40,8 +40,8 @@ Info 24   [00:00:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 25   [00:00:44.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 26   [00:00:45.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 27   [00:00:46.000] 	Files (2)
-	/a/cache/node_modules/@types/lib/index.d.ts
-	/a/b/app.js
+	/a/cache/node_modules/@types/lib/index.d.ts Text-1 "export let x = 1"
+	/a/b/app.js SVC-1-0 "var x = require(\"lib\")"
 
 
 	../cache/node_modules/@types/lib/index.d.ts

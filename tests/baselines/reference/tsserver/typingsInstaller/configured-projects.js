@@ -38,7 +38,7 @@ Info 11   [00:00:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 12   [00:00:25.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:26.000] Project '/a/b/tsconfig.json' (Configured)
 Info 14   [00:00:27.000] 	Files (1)
-	/a/b/app.js
+	/a/b/app.js SVC-1-0 ""
 
 
 	app.js
@@ -87,8 +87,8 @@ Info 19   [00:00:50.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 20   [00:00:51.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 21   [00:00:52.000] Project '/a/b/tsconfig.json' (Configured)
 Info 22   [00:00:53.000] 	Files (2)
-	/a/b/app.js
-	/a/data/node_modules/@types/jquery/index.d.ts
+	/a/b/app.js SVC-1-0 ""
+	/a/data/node_modules/@types/jquery/index.d.ts Text-1 "declare const $: { x: number }"
 
 
 	app.js

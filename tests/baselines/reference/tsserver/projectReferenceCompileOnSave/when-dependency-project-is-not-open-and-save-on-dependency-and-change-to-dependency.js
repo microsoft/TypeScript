@@ -94,9 +94,9 @@ Info 21   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:51.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:52.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
 Info 24   [00:00:53.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/dependency/fns.ts
-	/user/username/projects/myproject/usage/usage.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/fns.ts Text-1 "export function fn1() { }\nexport function fn2() { }\n"
+	/user/username/projects/myproject/usage/usage.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n} from '../decls/fns'\nfn1();\nfn2();\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -280,23 +280,29 @@ FsWatchesRecursive::
 
 Info 36   [00:01:26.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
 Info 37   [00:01:27.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 38   [00:01:28.000] Different program with same set of files
-Info 39   [00:01:29.000] Before ensureProjectForOpenFiles:
-Info 40   [00:01:30.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 40   [00:01:31.000] 	Files (3)
+Info 38   [00:01:28.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 39   [00:01:29.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/fns.ts Text-2 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }"
+	/user/username/projects/myproject/usage/usage.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n} from '../decls/fns'\nfn1();\nfn2();\n"
 
-Info 40   [00:01:32.000] -----------------------------------------------
-Info 40   [00:01:33.000] Open files: 
-Info 40   [00:01:34.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 40   [00:01:35.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 40   [00:01:36.000] After ensureProjectForOpenFiles:
-Info 41   [00:01:37.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 41   [00:01:38.000] 	Files (3)
+Info 40   [00:01:30.000] -----------------------------------------------
+Info 41   [00:01:31.000] Before ensureProjectForOpenFiles:
+Info 42   [00:01:32.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 42   [00:01:33.000] 	Files (3)
 
-Info 41   [00:01:39.000] -----------------------------------------------
-Info 41   [00:01:40.000] Open files: 
-Info 41   [00:01:41.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 41   [00:01:42.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 42   [00:01:34.000] -----------------------------------------------
+Info 42   [00:01:35.000] Open files: 
+Info 42   [00:01:36.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 42   [00:01:37.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 42   [00:01:38.000] After ensureProjectForOpenFiles:
+Info 43   [00:01:39.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 43   [00:01:40.000] 	Files (3)
+
+Info 43   [00:01:41.000] -----------------------------------------------
+Info 43   [00:01:42.000] Open files: 
+Info 43   [00:01:43.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 43   [00:01:44.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 After request
 
 PolledWatches::
@@ -323,7 +329,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 41   [00:01:43.000] response:
+Info 43   [00:01:45.000] response:
     {
       "response": [
         {
@@ -336,7 +342,7 @@ Info 41   [00:01:43.000] response:
       ],
       "responseRequired": true
     }
-Info 42   [00:01:44.000] request:
+Info 44   [00:01:46.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -397,12 +403,12 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 43   [00:01:45.000] response:
+Info 45   [00:01:47.000] response:
     {
       "response": false,
       "responseRequired": true
     }
-Info 44   [00:01:46.000] request:
+Info 46   [00:01:48.000] request:
     {
       "command": "emit-output",
       "arguments": {
@@ -463,7 +469,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 45   [00:01:47.000] response:
+Info 47   [00:01:49.000] response:
     {
       "response": {
         "emitSkipped": true,

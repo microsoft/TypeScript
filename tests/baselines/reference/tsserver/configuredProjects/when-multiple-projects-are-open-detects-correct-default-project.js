@@ -82,9 +82,9 @@ Info 16   [00:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 17   [00:00:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/foo/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:00:53.000] Project '/user/username/projects/myproject/foo/tsconfig.json' (Configured)
 Info 19   [00:00:54.000] 	Files (3)
-	/a/lib/lib.es2017.d.ts
-	/user/username/projects/myproject/bar/index.ts
-	/user/username/projects/myproject/foo/index.ts
+	/a/lib/lib.es2017.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/bar/index.ts Text-1 "\nexport function bar() {\n  console.log(\"hello world\");\n}"
+	/user/username/projects/myproject/foo/index.ts SVC-1-0 "\nimport { bar } from \"bar\";\nbar();"
 
 
 	../../../../../a/lib/lib.es2017.d.ts
@@ -189,9 +189,9 @@ Info 38   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 39   [00:01:20.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/bar/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 40   [00:01:21.000] Project '/user/username/projects/myproject/bar/tsconfig.json' (Configured)
 Info 41   [00:01:22.000] 	Files (3)
-	/a/lib/lib.es2017.d.ts
-	/a/lib/lib.dom.d.ts
-	/user/username/projects/myproject/bar/index.ts
+	/a/lib/lib.es2017.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/lib/lib.dom.d.ts Text-1 "\ndeclare var console: {\n    log(...args: any[]): void;\n};"
+	/user/username/projects/myproject/bar/index.ts SVC-1-0 "\nexport function bar() {\n  console.log(\"hello world\");\n}"
 
 
 	../../../../../a/lib/lib.es2017.d.ts

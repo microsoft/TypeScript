@@ -43,7 +43,7 @@ Info 12   [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /pr
 Info 13   [00:00:22.000] Finishing updateGraphWorker: Project: /proj/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:23.000] Project '/proj/tsconfig.json' (Configured)
 Info 15   [00:00:24.000] 	Files (1)
-	/proj/a.ts
+	/proj/a.ts SVC-1-0 ""
 
 
 	a.ts
@@ -115,7 +115,7 @@ Info 25   [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /pr
 Info 26   [00:00:41.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 27   [00:00:42.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 28   [00:00:43.000] 	Files (1)
-	untitled:^Untitled-1
+	untitled:^Untitled-1 SVC-1-0 "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\nlet foo = 1;\nfooo/**/"
 
 
 	untitled:^Untitled-1

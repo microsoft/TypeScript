@@ -47,8 +47,8 @@ Info 5    [00:00:16.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 6    [00:00:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 7    [00:00:18.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 8    [00:00:19.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/file.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/file.js SVC-1-0 "\nclass Foo {\n    bar(a, b) {\n        if (a === b) {\n            return true;\n        }\n        return false;\n    }\n}"
 
 
 	a/lib/lib.d.ts

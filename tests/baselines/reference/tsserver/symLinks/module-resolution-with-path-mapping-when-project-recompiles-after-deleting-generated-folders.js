@@ -88,9 +88,9 @@ Info 23   [00:01:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 24   [00:01:15.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 25   [00:01:16.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
 Info 26   [00:01:17.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts Text-1 "export class C { method(): number; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts SVC-1-0 "import {C} from \"@microsoft/recognizers-text\";\nnew C();"
 
 
 	../../../../../../../a/lib/lib.d.ts
@@ -443,8 +443,8 @@ Info 56   [00:01:56.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 57   [00:01:57.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 58   [00:01:58.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
 Info 59   [00:01:59.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts SVC-1-0 "import {C} from \"@microsoft/recognizers-text\";\nnew C();"
 
 
 	../../../../../../../a/lib/lib.d.ts
@@ -1034,9 +1034,9 @@ Info 97   [00:02:55.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info 98   [00:02:56.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 99   [00:02:57.000] Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
 Info 100  [00:02:58.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts
-	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts Text-2 "export class C { method(): number; }"
+	/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts SVC-1-0 "import {C} from \"@microsoft/recognizers-text\";\nnew C();"
 
 
 	../../../../../../../a/lib/lib.d.ts

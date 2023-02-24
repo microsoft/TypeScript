@@ -72,10 +72,10 @@ Info 15   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 16   [00:00:53.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:00:54.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 18   [00:00:55.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js
-	/user/username/projects/myproject/apps/editor/src/src.js
-	/user/username/projects/myproject/mocks/cssMock.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js Text-1 "function bar() { }"
+	/user/username/projects/myproject/apps/editor/src/src.js Text-1 "function fooBar() { }"
+	/user/username/projects/myproject/mocks/cssMock.js SVC-1-0 "function foo() { }"
 
 
 	../../../../a/lib/lib.d.ts
@@ -246,8 +246,8 @@ Info 44   [00:01:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 45   [00:01:32.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/apps/editor/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 46   [00:01:33.000] Project '/user/username/projects/myproject/apps/editor/tsconfig.json' (Configured)
 Info 47   [00:01:34.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/apps/editor/src/src.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/apps/editor/src/src.js Text-1 "function fooBar() { }"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -312,8 +312,8 @@ Info 77   [00:02:10.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 78   [00:02:11.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 79   [00:02:12.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 80   [00:02:13.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js SVC-1-0 "function bar() { }"
 
 
 	../../../../../../../a/lib/lib.d.ts

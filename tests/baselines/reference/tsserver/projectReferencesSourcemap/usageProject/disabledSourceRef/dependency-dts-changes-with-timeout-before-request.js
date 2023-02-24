@@ -277,9 +277,9 @@ Info 21   [00:01:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:01:25.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:01:26.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 24   [00:01:27.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/decls/fns.d.ts
-	/user/username/projects/myproject/main/main.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/decls/fns.d.ts Text-1 "export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n//# sourceMappingURL=FnS.d.ts.map"
+	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -386,8 +386,8 @@ Info 41   [00:01:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 42   [00:01:51.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 43   [00:01:52.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
 Info 44   [00:01:53.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/random/random.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/random/random.ts SVC-1-0 "let a = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -615,36 +615,42 @@ FsWatchesRecursive::
 Info 55   [00:02:18.000] Running: /user/username/projects/myproject/main/tsconfig.json
 Info 56   [00:02:19.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
 Info 57   [00:02:20.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 58   [00:02:21.000] Different program with same set of files
-Info 59   [00:02:22.000] Running: *ensureProjectForOpenFiles*
-Info 60   [00:02:23.000] Before ensureProjectForOpenFiles:
-Info 61   [00:02:24.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 61   [00:02:25.000] 	Files (3)
+Info 58   [00:02:21.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 59   [00:02:22.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/decls/fns.d.ts Text-2 "export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\nexport declare function fn6(): void;\n//# sourceMappingURL=FnS.d.ts.map"
+	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
 
-Info 61   [00:02:26.000] -----------------------------------------------
-Info 61   [00:02:27.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 61   [00:02:28.000] 	Files (2)
+Info 60   [00:02:23.000] -----------------------------------------------
+Info 61   [00:02:24.000] Running: *ensureProjectForOpenFiles*
+Info 62   [00:02:25.000] Before ensureProjectForOpenFiles:
+Info 63   [00:02:26.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 63   [00:02:27.000] 	Files (3)
 
-Info 61   [00:02:29.000] -----------------------------------------------
-Info 61   [00:02:30.000] Open files: 
-Info 61   [00:02:31.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
-Info 61   [00:02:32.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
-Info 61   [00:02:33.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
-Info 61   [00:02:34.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
-Info 61   [00:02:35.000] After ensureProjectForOpenFiles:
-Info 62   [00:02:36.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 62   [00:02:37.000] 	Files (3)
+Info 63   [00:02:28.000] -----------------------------------------------
+Info 63   [00:02:29.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 63   [00:02:30.000] 	Files (2)
 
-Info 62   [00:02:38.000] -----------------------------------------------
-Info 62   [00:02:39.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 62   [00:02:40.000] 	Files (2)
+Info 63   [00:02:31.000] -----------------------------------------------
+Info 63   [00:02:32.000] Open files: 
+Info 63   [00:02:33.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
+Info 63   [00:02:34.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 63   [00:02:35.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
+Info 63   [00:02:36.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 63   [00:02:37.000] After ensureProjectForOpenFiles:
+Info 64   [00:02:38.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 64   [00:02:39.000] 	Files (3)
 
-Info 62   [00:02:41.000] -----------------------------------------------
-Info 62   [00:02:42.000] Open files: 
-Info 62   [00:02:43.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
-Info 62   [00:02:44.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
-Info 62   [00:02:45.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
-Info 62   [00:02:46.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 64   [00:02:40.000] -----------------------------------------------
+Info 64   [00:02:41.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 64   [00:02:42.000] 	Files (2)
+
+Info 64   [00:02:43.000] -----------------------------------------------
+Info 64   [00:02:44.000] Open files: 
+Info 64   [00:02:45.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
+Info 64   [00:02:46.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 64   [00:02:47.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
+Info 64   [00:02:48.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 After running timeout callbacks
 
 PolledWatches::
@@ -681,7 +687,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 62   [00:02:47.000] request:
+Info 64   [00:02:49.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -764,7 +770,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 63   [00:02:48.000] response:
+Info 65   [00:02:50.000] response:
     {
       "response": {
         "definitions": [
@@ -801,7 +807,7 @@ Info 63   [00:02:48.000] response:
       },
       "responseRequired": true
     }
-Info 64   [00:02:49.000] request:
+Info 66   [00:02:51.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -884,7 +890,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 65   [00:02:50.000] response:
+Info 67   [00:02:52.000] response:
     {
       "response": {
         "definitions": [
@@ -921,7 +927,7 @@ Info 65   [00:02:50.000] response:
       },
       "responseRequired": true
     }
-Info 66   [00:02:51.000] request:
+Info 68   [00:02:53.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -1004,7 +1010,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 67   [00:02:52.000] response:
+Info 69   [00:02:54.000] response:
     {
       "response": {
         "definitions": [
@@ -1041,7 +1047,7 @@ Info 67   [00:02:52.000] response:
       },
       "responseRequired": true
     }
-Info 68   [00:02:53.000] request:
+Info 70   [00:02:55.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -1124,7 +1130,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 69   [00:02:54.000] response:
+Info 71   [00:02:56.000] response:
     {
       "response": {
         "definitions": [
@@ -1161,7 +1167,7 @@ Info 69   [00:02:54.000] response:
       },
       "responseRequired": true
     }
-Info 70   [00:02:55.000] request:
+Info 72   [00:02:57.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -1244,7 +1250,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 71   [00:02:56.000] response:
+Info 73   [00:02:58.000] response:
     {
       "response": {
         "definitions": [

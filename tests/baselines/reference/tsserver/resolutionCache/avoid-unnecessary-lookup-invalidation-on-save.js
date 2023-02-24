@@ -86,10 +86,10 @@ Info 43   [00:01:18.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 44   [00:01:19.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 45   [00:01:20.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 46   [00:01:21.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/node_modules/module1/index.ts
-	/user/username/projects/myproject/node_modules/module2/index.ts
-	/user/username/projects/myproject/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/node_modules/module1/index.ts Text-1 "export function module1() {}"
+	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
+	/user/username/projects/myproject/src/file1.ts SVC-1-0 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
 
 
 	../../../../a/lib/lib.d.ts

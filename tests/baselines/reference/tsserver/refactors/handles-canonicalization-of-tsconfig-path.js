@@ -41,7 +41,7 @@ Info 10   [00:00:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Fo
 Info 11   [00:00:20.000] Finishing updateGraphWorker: Project: /Foo/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 12   [00:00:21.000] Project '/Foo/tsconfig.json' (Configured)
 Info 13   [00:00:22.000] 	Files (1)
-	/Foo/a.ts
+	/Foo/a.ts SVC-1-0 "const x = 0;"
 
 
 	a.ts

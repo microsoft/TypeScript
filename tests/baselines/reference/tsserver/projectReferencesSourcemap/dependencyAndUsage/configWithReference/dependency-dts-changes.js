@@ -276,9 +276,9 @@ Info 21   [00:01:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:01:22.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:01:23.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 24   [00:01:24.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/dependency/FnS.ts
-	/user/username/projects/myproject/main/main.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/FnS.ts Text-1 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -375,8 +375,8 @@ Info 38   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 39   [00:01:45.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 40   [00:01:46.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 41   [00:01:47.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/dependency/FnS.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/FnS.ts SVC-1-0 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -487,8 +487,8 @@ Info 58   [00:02:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 59   [00:02:16.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 60   [00:02:17.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
 Info 61   [00:02:18.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/random/random.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/random/random.ts SVC-1-0 "let a = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -891,7 +891,13 @@ FsWatchesRecursive::
 
 Info 78   [00:02:54.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
 Info 79   [00:02:55.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 80   [00:02:56.000] Different program with same set of files
+Info 80   [00:02:56.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 81   [00:02:57.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/FnS.ts SVC-1-0 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
+
+Info 82   [00:02:58.000] -----------------------------------------------
 After request
 
 PolledWatches::
@@ -928,7 +934,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 81   [00:02:57.000] response:
+Info 83   [00:02:59.000] response:
     {
       "response": {
         "definitions": [
@@ -965,7 +971,7 @@ Info 81   [00:02:57.000] response:
       },
       "responseRequired": true
     }
-Info 82   [00:02:58.000] request:
+Info 84   [00:03:00.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -1048,7 +1054,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 83   [00:02:59.000] response:
+Info 85   [00:03:01.000] response:
     {
       "response": {
         "definitions": [
@@ -1085,7 +1091,7 @@ Info 83   [00:02:59.000] response:
       },
       "responseRequired": true
     }
-Info 84   [00:03:00.000] request:
+Info 86   [00:03:02.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -1168,7 +1174,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 85   [00:03:01.000] response:
+Info 87   [00:03:03.000] response:
     {
       "response": {
         "definitions": [
@@ -1205,7 +1211,7 @@ Info 85   [00:03:01.000] response:
       },
       "responseRequired": true
     }
-Info 86   [00:03:02.000] request:
+Info 88   [00:03:04.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -1288,7 +1294,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 87   [00:03:03.000] response:
+Info 89   [00:03:05.000] response:
     {
       "response": {
         "definitions": [
@@ -1325,7 +1331,7 @@ Info 87   [00:03:03.000] response:
       },
       "responseRequired": true
     }
-Info 88   [00:03:04.000] request:
+Info 90   [00:03:06.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -1408,7 +1414,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 89   [00:03:05.000] response:
+Info 91   [00:03:07.000] response:
     {
       "response": {
         "definitions": [
@@ -1445,7 +1451,7 @@ Info 89   [00:03:05.000] response:
       },
       "responseRequired": true
     }
-Info 90   [00:03:06.000] request:
+Info 92   [00:03:08.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1492,10 +1498,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 91   [00:03:07.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
-Info 92   [00:03:08.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 93   [00:03:09.000] Search path: /user/username/projects/myproject/dependency
-Info 94   [00:03:10.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 93   [00:03:09.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
+Info 94   [00:03:10.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info 95   [00:03:11.000] Same program as before
+Info 96   [00:03:12.000] Search path: /user/username/projects/myproject/dependency
+Info 97   [00:03:13.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 After request
 
 PolledWatches::
@@ -1532,7 +1539,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 95   [00:03:11.000] response:
+Info 98   [00:03:14.000] response:
     {
       "response": {
         "info": {
@@ -1613,7 +1620,7 @@ Info 95   [00:03:11.000] response:
       },
       "responseRequired": true
     }
-Info 96   [00:03:12.000] request:
+Info 99   [00:03:15.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1660,8 +1667,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 97   [00:03:13.000] Search path: /user/username/projects/myproject/dependency
-Info 98   [00:03:14.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 100  [00:03:16.000] Search path: /user/username/projects/myproject/dependency
+Info 101  [00:03:17.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 After request
 
 PolledWatches::
@@ -1698,7 +1705,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 99   [00:03:15.000] response:
+Info 102  [00:03:18.000] response:
     {
       "response": {
         "info": {
@@ -1779,7 +1786,7 @@ Info 99   [00:03:15.000] response:
       },
       "responseRequired": true
     }
-Info 100  [00:03:16.000] request:
+Info 103  [00:03:19.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1826,8 +1833,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 101  [00:03:17.000] Search path: /user/username/projects/myproject/dependency
-Info 102  [00:03:18.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 104  [00:03:20.000] Search path: /user/username/projects/myproject/dependency
+Info 105  [00:03:21.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 After request
 
 PolledWatches::
@@ -1864,7 +1871,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 103  [00:03:19.000] response:
+Info 106  [00:03:22.000] response:
     {
       "response": {
         "info": {
@@ -1945,7 +1952,7 @@ Info 103  [00:03:19.000] response:
       },
       "responseRequired": true
     }
-Info 104  [00:03:20.000] request:
+Info 107  [00:03:23.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1992,8 +1999,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 105  [00:03:21.000] Search path: /user/username/projects/myproject/dependency
-Info 106  [00:03:22.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 108  [00:03:24.000] Search path: /user/username/projects/myproject/dependency
+Info 109  [00:03:25.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 After request
 
 PolledWatches::
@@ -2030,7 +2037,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 107  [00:03:23.000] response:
+Info 110  [00:03:26.000] response:
     {
       "response": {
         "info": {
@@ -2111,7 +2118,7 @@ Info 107  [00:03:23.000] response:
       },
       "responseRequired": true
     }
-Info 108  [00:03:24.000] request:
+Info 111  [00:03:27.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -2158,8 +2165,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 109  [00:03:25.000] Search path: /user/username/projects/myproject/dependency
-Info 110  [00:03:26.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 112  [00:03:28.000] Search path: /user/username/projects/myproject/dependency
+Info 113  [00:03:29.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 After request
 
 PolledWatches::
@@ -2196,7 +2203,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 111  [00:03:27.000] response:
+Info 114  [00:03:30.000] response:
     {
       "response": {
         "info": {

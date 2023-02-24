@@ -48,8 +48,8 @@ Info 11   [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 12   [00:00:29.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:30.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 14   [00:00:31.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/temp/a.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/temp/a.ts SVC-1-0 "import f = require(\"pad\"); f;"
 
 
 	../../../lib/lib.d.ts
@@ -311,9 +311,9 @@ Info 54   [00:01:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 55   [00:01:26.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 56   [00:01:27.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 57   [00:01:28.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/projects/temp/node_modules/@types/pad/index.d.ts
-	/a/b/projects/temp/a.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/temp/node_modules/@types/pad/index.d.ts Text-1 "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
+	/a/b/projects/temp/a.ts SVC-1-0 "import f = require(\"pad\"); f;"
 
 
 	../../../lib/lib.d.ts

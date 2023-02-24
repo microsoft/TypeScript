@@ -46,8 +46,8 @@ Info 7    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /src/somefile.d.ts 500
 Info 8    [00:00:33.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 9    [00:00:34.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 10   [00:00:35.000] 	Files (2)
-	/a/lib/lib.d.ts
-	untitled:Untitled-1
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	untitled:Untitled-1 SVC-1-0 "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />"
 
 
 	a/lib/lib.d.ts

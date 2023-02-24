@@ -76,10 +76,10 @@ Info 17   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 18   [00:00:51.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 19   [00:00:52.000] Project '/users/username/projects/myproject/tsconfig.json' (Configured)
 Info 20   [00:00:53.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/users/username/projects/myproject/node_modules/@custom/plugin/proposed.d.ts
-	/users/username/projects/myproject/node_modules/@custom/plugin/index.d.ts
-	/users/username/projects/myproject/src/a.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/myproject/node_modules/@custom/plugin/proposed.d.ts Text-1 "declare module '@custom/plugin' {\n    export const bar = 10;\n}"
+	/users/username/projects/myproject/node_modules/@custom/plugin/index.d.ts Text-1 "import './proposed';\ndeclare module '@custom/plugin' {\n    export const version: string;\n}"
+	/users/username/projects/myproject/src/a.ts SVC-1-0 "import * as myModule from \"@custom/plugin\";\nfunction foo() {\n  // hello\n}"
 
 
 	../../../../a/lib/lib.d.ts
@@ -457,8 +457,15 @@ FsWatchesRecursive::
 
 Info 36   [00:01:15.000] Starting updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json
 Info 37   [00:01:16.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 38   [00:01:17.000] Different program with same set of files
-Info 39   [00:01:18.000] event:
+Info 38   [00:01:17.000] Project '/users/username/projects/myproject/tsconfig.json' (Configured)
+Info 39   [00:01:18.000] 	Files (4)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/myproject/node_modules/@custom/plugin/proposed.d.ts Text-1 "declare module '@custom/plugin' {\n    export const bar = 10;\n}"
+	/users/username/projects/myproject/node_modules/@custom/plugin/index.d.ts Text-1 "import './proposed';\ndeclare module '@custom/plugin' {\n    export const version: string;\n}"
+	/users/username/projects/myproject/src/a.ts SVC-1-1 "import * as myModule from \"@custom/plugin\";\nfunction foo() {\n  // heollo\n}"
+
+Info 40   [00:01:19.000] -----------------------------------------------
+Info 41   [00:01:20.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
@@ -496,7 +503,7 @@ FsWatchesRecursive::
 /users/username/projects/myproject/node_modules:
   {}
 
-Info 40   [00:01:19.000] event:
+Info 42   [00:01:21.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
@@ -534,9 +541,9 @@ FsWatchesRecursive::
 /users/username/projects/myproject/node_modules:
   {}
 
-Info 41   [00:01:20.000] event:
+Info 43   [00:01:22.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
-Info 42   [00:01:21.000] event:
+Info 44   [00:01:23.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)
 

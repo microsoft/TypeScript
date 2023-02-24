@@ -101,12 +101,12 @@ Info 18   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/
 Info 19   [00:01:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 20   [00:01:18.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 21   [00:01:19.000] 	Files (6)
-	c:/a/lib/lib.d.ts
-	e:/myproject/node_modules/@types/prop-types/index.d.ts
-	e:/myproject/node_modules/@types/react/index.d.ts
-	c:/typescript/node_modules/@types/react/index.d.ts
-	c:/typescript/node_modules/@types/react-router-dom/index.d.ts
-	e:/myproject/src/app.js
+	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	e:/myproject/node_modules/@types/prop-types/index.d.ts Text-1 "export type ReactComponentLike =\n    | string\n    | ((props: any, context?: any) => any)\n    | (new (props: any, context?: any) => any);\n"
+	e:/myproject/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\n"
+	c:/typescript/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\n"
+	c:/typescript/node_modules/@types/react-router-dom/index.d.ts Text-1 "import * as React from 'react';\nexport interface BrowserRouterProps {\n    basename?: string;\n    getUserConfirmation?: ((message: string, callback: (ok: boolean) => void) => void);\n    forceRefresh?: boolean;\n    keyLength?: number;\n}"
+	e:/myproject/src/app.js SVC-1-0 "import React from 'react';\nimport {\n  BrowserRouter as Router,\n} from \"react-router-dom\";\n"
 
 
 	c:/a/lib/lib.d.ts

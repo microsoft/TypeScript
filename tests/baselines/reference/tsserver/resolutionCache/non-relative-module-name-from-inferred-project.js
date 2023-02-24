@@ -153,13 +153,13 @@ Info 112  [00:02:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 113  [00:02:40.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 114  [00:02:41.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 115  [00:02:42.000] 	Files (7)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/product/node_modules/module1/index.ts
-	/user/username/projects/myproject/node_modules/module2/index.ts
-	/user/username/projects/myproject/product/src/feature/file2.ts
-	/user/username/projects/myproject/product/test/file4.ts
-	/user/username/projects/myproject/product/test/src/file3.ts
-	/user/username/projects/myproject/product/src/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/product/node_modules/module1/index.ts Text-1 "export function module1() {}"
+	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
+	/user/username/projects/myproject/product/src/feature/file2.ts Text-1 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/test/file4.ts Text-1 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/test/src/file3.ts Text-1 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/src/file1.ts SVC-1-0 "import \"./feature/file2\"; import \"../test/file4\"; import \"../test/src/file3\"; import { module1 } from \"module1\";import { module2 } from \"module2\";"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -275,24 +275,34 @@ Info 139  [00:03:24.000] Reusing resolution of module 'module2' from '/user/user
 Info 140  [00:03:25.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
 Info 141  [00:03:26.000] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
 Info 142  [00:03:27.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 143  [00:03:28.000] Different program with same set of files
-Info 144  [00:03:29.000] Running: *ensureProjectForOpenFiles*
-Info 145  [00:03:30.000] Before ensureProjectForOpenFiles:
-Info 146  [00:03:31.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 146  [00:03:32.000] 	Files (7)
+Info 143  [00:03:28.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 144  [00:03:29.000] 	Files (7)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/product/node_modules/module1/index.ts Text-1 "export function module1() {}"
+	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
+	/user/username/projects/myproject/product/src/feature/file2.ts Text-2 "import { module1 } from \"module1\";import { module2 } from \"module2\";import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/test/file4.ts Text-2 "import { module1 } from \"module1\";import { module2 } from \"module2\";import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/test/src/file3.ts Text-2 "import { module1 } from \"module1\";import { module2 } from \"module2\";import { module1 } from \"module1\";import { module2 } from \"module2\";"
+	/user/username/projects/myproject/product/src/file1.ts SVC-1-0 "import \"./feature/file2\"; import \"../test/file4\"; import \"../test/src/file3\"; import { module1 } from \"module1\";import { module2 } from \"module2\";"
 
-Info 146  [00:03:33.000] -----------------------------------------------
-Info 146  [00:03:34.000] Open files: 
-Info 146  [00:03:35.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
-Info 146  [00:03:36.000] 		Projects: /dev/null/inferredProject1*
-Info 146  [00:03:37.000] After ensureProjectForOpenFiles:
-Info 147  [00:03:38.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 147  [00:03:39.000] 	Files (7)
+Info 145  [00:03:30.000] -----------------------------------------------
+Info 146  [00:03:31.000] Running: *ensureProjectForOpenFiles*
+Info 147  [00:03:32.000] Before ensureProjectForOpenFiles:
+Info 148  [00:03:33.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 148  [00:03:34.000] 	Files (7)
 
-Info 147  [00:03:40.000] -----------------------------------------------
-Info 147  [00:03:41.000] Open files: 
-Info 147  [00:03:42.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
-Info 147  [00:03:43.000] 		Projects: /dev/null/inferredProject1*
+Info 148  [00:03:35.000] -----------------------------------------------
+Info 148  [00:03:36.000] Open files: 
+Info 148  [00:03:37.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
+Info 148  [00:03:38.000] 		Projects: /dev/null/inferredProject1*
+Info 148  [00:03:39.000] After ensureProjectForOpenFiles:
+Info 149  [00:03:40.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 149  [00:03:41.000] 	Files (7)
+
+Info 149  [00:03:42.000] -----------------------------------------------
+Info 149  [00:03:43.000] Open files: 
+Info 149  [00:03:44.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
+Info 149  [00:03:45.000] 		Projects: /dev/null/inferredProject1*
 After running timeout callbacks
 
 PolledWatches::

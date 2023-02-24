@@ -29,7 +29,7 @@ Info 5    [00:00:12.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 6    [00:00:13.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 7    [00:00:14.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 8    [00:00:15.000] 	Files (1)
-	/a.ts
+	/a.ts SVC-1-0 "const x = 1; export { x };"
 
 
 	a.ts
@@ -83,8 +83,8 @@ Info 15   [00:00:28.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 16   [00:00:29.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:00:30.000] Project '/dev/null/inferredProject2*' (Inferred)
 Info 18   [00:00:31.000] 	Files (2)
-	/a.ts
-	/b.ts
+	/a.ts SVC-1-0 "const x = 1; export { x };"
+	/b.ts SVC-1-0 "import { x } from \"./a\"; const y = x + 1;"
 
 
 	a.ts

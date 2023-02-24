@@ -65,7 +65,7 @@ Info 12   [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:30.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:31.000] Project '/a/tsconfig.json' (Configured)
 Info 15   [00:00:32.000] 	Files (1)
-	/a/index.ts
+	/a/index.ts SVC-1-0 "export const abcdef = 1;"
 
 
 	index.ts
@@ -175,18 +175,21 @@ Info 29   [00:00:55.000] FileWatcher:: Added:: WatchInfo: /b/tsconfig.json 2000 
 Info 30   [00:00:56.000] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info 31   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info 32   [00:00:58.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 33   [00:00:59.000] Different program with same set of files
-Info 34   [00:01:00.000] Creating configuration project /b/tsconfig.json
-Info 35   [00:01:01.000] FileWatcher:: Added:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
-Info 36   [00:01:02.000] Starting updateGraphWorker: Project: /b/tsconfig.json
-Info 37   [00:01:03.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
-Info 38   [00:01:04.000] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
-Info 39   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
-Info 40   [00:01:06.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 41   [00:01:07.000] Project '/b/tsconfig.json' (Configured)
-Info 42   [00:01:08.000] 	Files (2)
-	/a/index.ts
-	/b/index.ts
+Info 33   [00:00:59.000] Project '/tsconfig.json' (Configured)
+Info 34   [00:01:00.000] 	Files (0)
+
+Info 35   [00:01:01.000] -----------------------------------------------
+Info 36   [00:01:02.000] Creating configuration project /b/tsconfig.json
+Info 37   [00:01:03.000] FileWatcher:: Added:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
+Info 38   [00:01:04.000] Starting updateGraphWorker: Project: /b/tsconfig.json
+Info 39   [00:01:05.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
+Info 40   [00:01:06.000] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
+Info 41   [00:01:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
+Info 42   [00:01:08.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 43   [00:01:09.000] Project '/b/tsconfig.json' (Configured)
+Info 44   [00:01:10.000] 	Files (2)
+	/a/index.ts SVC-1-0 "export const abcdef = 1;"
+	/b/index.ts Text-1 "import a = require(\"../a\");\nexport const ghijkl = a.abcdef;"
 
 
 	../a/index.ts
@@ -194,7 +197,7 @@ Info 42   [00:01:08.000] 	Files (2)
 	index.ts
 	  Matched by default include pattern '**/*'
 
-Info 43   [00:01:09.000] -----------------------------------------------
+Info 45   [00:01:11.000] -----------------------------------------------
 After request
 
 PolledWatches::
@@ -221,7 +224,7 @@ FsWatchesRecursive::
 /b:
   {}
 
-Info 44   [00:01:10.000] response:
+Info 46   [00:01:12.000] response:
     {
       "response": [
         {

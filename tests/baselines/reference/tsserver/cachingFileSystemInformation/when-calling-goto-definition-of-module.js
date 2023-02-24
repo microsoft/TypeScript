@@ -68,9 +68,9 @@ Info 14   [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 15   [00:00:38.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:39.000] Project '/a/b/tsconfig.json' (Configured)
 Info 17   [00:00:40.000] 	Files (3)
-	/a/b/utils/db.ts
-	/a/b/models/vessel.ts
-	/a/b/controllers/vessels/client.ts
+	/a/b/utils/db.ts Text-1 "export class Bookshelf { }"
+	/a/b/models/vessel.ts Text-1 "\n                    import { Bookshelf } from '~/utils/db';\n                    export class Vessel extends Bookshelf {}\n                "
+	/a/b/controllers/vessels/client.ts SVC-1-0 "\n                    import { Vessel } from '~/models/vessel';\n                    const v = new Vessel();\n                "
 
 
 	utils/db.ts

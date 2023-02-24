@@ -52,9 +52,9 @@ Info 12   [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:30.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:31.000] Project '/a/b/tsconfig.json' (Configured)
 Info 15   [00:00:32.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/file2.ts
-	/a/b/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/file2.ts Text-1 "export classc { method2a() { return 10; } }"
+	/a/b/file1.ts SVC-1-0 "import classc from \"file2\""
 
 
 	../lib/lib.d.ts
@@ -143,9 +143,9 @@ Info 27   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/
 Info 28   [00:00:53.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 29   [00:00:54.000] Project '/a/b/tsconfig.json' (Configured)
 Info 30   [00:00:55.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/file2.ts
-	/a/b/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/file2.ts Text-1 "export classc { method2() { return 10; } }"
+	/a/b/file1.ts SVC-1-0 "import classc from \"file2\""
 
 
 	../lib/lib.d.ts

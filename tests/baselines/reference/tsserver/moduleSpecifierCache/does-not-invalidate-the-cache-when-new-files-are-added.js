@@ -68,11 +68,11 @@ Info 14   [00:00:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 15   [00:00:42.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:43.000] Project '/tsconfig.json' (Configured)
 Info 17   [00:00:44.000] 	Files (5)
-	/src/a.ts
-	/src/ambient.d.ts
-	/src/b-link.ts
-	/src/b.ts
-	/src/c.ts
+	/src/a.ts SVC-1-0 "export const foo = 0;"
+	/src/ambient.d.ts Text-1 "declare module 'ambient' {}"
+	/src/b-link.ts Text-1 "foo"
+	/src/b.ts Text-1 "foo"
+	/src/c.ts Text-1 "import "
 
 
 	src/a.ts
@@ -95,7 +95,7 @@ Info 23   [00:00:50.000] Starting updateGraphWorker: Project: /dev/null/autoImpo
 Info 24   [00:00:51.000] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 25   [00:00:52.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info 26   [00:00:53.000] 	Files (1)
-	/node_modules/mobx/index.d.ts
+	/node_modules/mobx/index.d.ts Text-1 "export declare function observable(): unknown;"
 
 
 	node_modules/mobx/index.d.ts
@@ -895,12 +895,12 @@ Info 61   [00:02:03.000] Starting updateGraphWorker: Project: /tsconfig.json
 Info 62   [00:02:04.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 63   [00:02:05.000] Project '/tsconfig.json' (Configured)
 Info 64   [00:02:06.000] 	Files (6)
-	/src/a.ts
-	/src/ambient.d.ts
-	/src/b-link.ts
-	/src/b.ts
-	/src/c.ts
-	/src/a2.ts
+	/src/a.ts SVC-1-0 "export const foo = 0;"
+	/src/ambient.d.ts Text-1 "declare module 'ambient' {}"
+	/src/b-link.ts Text-1 "foo"
+	/src/b.ts SVC-1-0 "foo"
+	/src/c.ts SVC-1-0 "import "
+	/src/a2.ts Text-1 "export const foo = 0;"
 
 
 	src/a.ts

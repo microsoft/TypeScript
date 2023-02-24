@@ -35,8 +35,8 @@ Info 18   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 19   [00:00:40.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 20   [00:00:41.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 21   [00:00:42.000] 	Files (2)
-	/user/username/projects/node_modules/commander/index.js
-	/user/username/projects/a/b/app.js
+	/user/username/projects/node_modules/commander/index.js Text-1 "module.exports = 0"
+	/user/username/projects/a/b/app.js SVC-1-0 "\n                import * as commander from \"commander\";"
 
 
 	../../node_modules/commander/index.js
@@ -97,8 +97,8 @@ Info 28   [00:01:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 29   [00:01:08.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 30   [00:01:09.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 31   [00:01:10.000] 	Files (2)
-	/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts
-	/user/username/projects/a/b/app.js
+	/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts Text-1 ""
+	/user/username/projects/a/b/app.js SVC-1-0 "\n                import * as commander from \"commander\";"
 
 
 	../cache/node_modules/@types/commander/index.d.ts

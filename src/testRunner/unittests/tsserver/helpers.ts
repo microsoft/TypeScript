@@ -66,6 +66,7 @@ export function nullLogger(): Logger {
         endGroup: ts.noop,
         getLogFileName: ts.returnUndefined,
         log: ts.noop,
+        isTestLogger: true,
     };
 }
 

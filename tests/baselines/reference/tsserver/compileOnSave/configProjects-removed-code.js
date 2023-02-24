@@ -52,8 +52,8 @@ Info 13   [00:00:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:27.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:28.000] Project '/a/b/tsconfig.json' (Configured)
 Info 16   [00:00:29.000] 	Files (2)
-	/a/b/moduleFile1.ts
-	/a/b/referenceFile1.ts
+	/a/b/moduleFile1.ts Text-1 "export function Foo() { };"
+	/a/b/referenceFile1.ts SVC-1-0 "\n                    /// <reference path=\"./moduleFile1.ts\" />\n                    export var x = Foo();"
 
 
 	moduleFile1.ts
@@ -132,7 +132,7 @@ Info 30   [00:00:50.000] FileWatcher:: Added:: WatchInfo: /a/b/modulefile1.ts 50
 Info 31   [00:00:51.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 32   [00:00:52.000] Project '/a/b/tsconfig.json' (Configured)
 Info 33   [00:00:53.000] 	Files (1)
-	/a/b/referenceFile1.ts
+	/a/b/referenceFile1.ts SVC-1-0 "\n                    /// <reference path=\"./moduleFile1.ts\" />\n                    export var x = Foo();"
 
 
 	referenceFile1.ts

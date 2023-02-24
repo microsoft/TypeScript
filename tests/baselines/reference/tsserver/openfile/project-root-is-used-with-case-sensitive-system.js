@@ -40,7 +40,7 @@ Info 11   [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 12   [00:00:33.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:34.000] Project '/a/b/tsconfig.json' (Configured)
 Info 14   [00:00:35.000] 	Files (1)
-	/a/b/src/app.ts
+	/a/b/src/app.ts SVC-1-0 "let x = 10;"
 
 
 	src/app.ts
@@ -117,8 +117,8 @@ Info 35   [00:01:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 36   [00:01:27.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 37   [00:01:28.000] Project '/a/tsconfig.json' (Configured)
 Info 38   [00:01:29.000] 	Files (2)
-	/a/B/lib/module2.ts
-	/a/b/src/app.ts
+	/a/B/lib/module2.ts SVC-1-0 "let z = 10;"
+	/a/b/src/app.ts SVC-1-0 "let x = 10;"
 
 
 	B/lib/module2.ts

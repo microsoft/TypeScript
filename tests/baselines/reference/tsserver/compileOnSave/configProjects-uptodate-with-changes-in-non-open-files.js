@@ -78,12 +78,12 @@ Info 16   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 17   [00:00:40.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:00:41.000] Project '/a/b/tsconfig.json' (Configured)
 Info 19   [00:00:42.000] 	Files (6)
-	/a/lib/lib.d.ts
-	/a/b/moduleFile1.ts
-	/a/b/file1Consumer1.ts
-	/a/b/file1Consumer2.ts
-	/a/b/globalFile3.ts
-	/a/b/moduleFile2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/moduleFile1.ts SVC-1-0 "export function Foo() { };"
+	/a/b/file1Consumer1.ts Text-1 "import {Foo} from \"./moduleFile1\"; export var y = 10;"
+	/a/b/file1Consumer2.ts Text-1 "import {Foo} from \"./moduleFile1\"; let z = 10;"
+	/a/b/globalFile3.ts Text-1 "interface GlobalFoo { age: number }"
+	/a/b/moduleFile2.ts Text-1 "export var Foo4 = 10;"
 
 
 	../lib/lib.d.ts
@@ -319,7 +319,16 @@ FsWatchesRecursive::
 
 Info 31   [00:01:03.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 32   [00:01:04.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 33   [00:01:05.000] Different program with same set of files
+Info 33   [00:01:05.000] Project '/a/b/tsconfig.json' (Configured)
+Info 34   [00:01:06.000] 	Files (6)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/file1Consumer1.ts Text-2 "let y = 10;"
+	/a/b/moduleFile1.ts SVC-1-1 "export var T: number;export function Foo() { };"
+	/a/b/file1Consumer2.ts Text-1 "import {Foo} from \"./moduleFile1\"; let z = 10;"
+	/a/b/globalFile3.ts Text-1 "interface GlobalFoo { age: number }"
+	/a/b/moduleFile2.ts Text-1 "export var Foo4 = 10;"
+
+Info 35   [00:01:07.000] -----------------------------------------------
 After request
 
 PolledWatches::
@@ -344,7 +353,7 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 34   [00:01:06.000] response:
+Info 36   [00:01:08.000] response:
     {
       "response": [
         {

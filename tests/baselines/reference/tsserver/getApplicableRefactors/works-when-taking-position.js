@@ -26,7 +26,7 @@ Info 5    [00:00:10.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 6    [00:00:11.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 7    [00:00:12.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 8    [00:00:13.000] 	Files (1)
-	/a.ts
+	/a.ts SVC-1-0 ""
 
 
 	a.ts

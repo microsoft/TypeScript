@@ -47,8 +47,8 @@ Info 11   [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 12   [00:00:35.000] Finishing updateGraphWorker: Project: /user/someuser/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:36.000] Project '/user/someuser/projects/myproject/tsconfig.json' (Configured)
 Info 14   [00:00:37.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/someuser/projects/myproject/src/a.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/someuser/projects/myproject/src/a.ts SVC-1-0 "export const x = 0;"
 
 
 	../../../../a/lib/lib.d.ts
@@ -74,9 +74,9 @@ Info 22   [00:00:53.000] Starting updateGraphWorker: Project: /user/someuser/pro
 Info 23   [00:00:54.000] Finishing updateGraphWorker: Project: /user/someuser/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 24   [00:00:55.000] Project '/user/someuser/projects/myproject/tsconfig.json' (Configured)
 Info 25   [00:00:56.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/someuser/projects/myproject/src/a.ts
-	/user/someuser/projects/myproject/src/b.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/someuser/projects/myproject/src/a.ts SVC-1-0 "export const x = 0;"
+	/user/someuser/projects/myproject/src/b.ts SVC-1-0 "export {}; declare module \"./a\" {  export const y: number; }"
 
 
 	../../../../a/lib/lib.d.ts

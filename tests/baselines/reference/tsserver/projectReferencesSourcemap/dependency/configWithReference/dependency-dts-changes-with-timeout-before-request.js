@@ -254,8 +254,8 @@ Info 14   [00:01:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 15   [00:01:15.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:01:16.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 17   [00:01:17.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/dependency/FnS.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/FnS.ts SVC-1-0 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -344,8 +344,8 @@ Info 34   [00:01:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 35   [00:01:41.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:42.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
 Info 37   [00:01:43.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/random/random.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/random/random.ts SVC-1-0 "let a = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -552,35 +552,36 @@ FsWatchesRecursive::
 Info 48   [00:02:08.000] Running: /user/username/projects/myproject/dependency/tsconfig.json
 Info 49   [00:02:09.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
 Info 50   [00:02:10.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 51   [00:02:11.000] Running: *ensureProjectForOpenFiles*
-Info 52   [00:02:12.000] Before ensureProjectForOpenFiles:
-Info 53   [00:02:13.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 53   [00:02:14.000] 	Files (2)
+Info 51   [00:02:11.000] Same program as before
+Info 52   [00:02:12.000] Running: *ensureProjectForOpenFiles*
+Info 53   [00:02:13.000] Before ensureProjectForOpenFiles:
+Info 54   [00:02:14.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info 54   [00:02:15.000] 	Files (2)
 
-Info 53   [00:02:15.000] -----------------------------------------------
-Info 53   [00:02:16.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 53   [00:02:17.000] 	Files (2)
+Info 54   [00:02:16.000] -----------------------------------------------
+Info 54   [00:02:17.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 54   [00:02:18.000] 	Files (2)
 
-Info 53   [00:02:18.000] -----------------------------------------------
-Info 53   [00:02:19.000] Open files: 
-Info 53   [00:02:20.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
-Info 53   [00:02:21.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
-Info 53   [00:02:22.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
-Info 53   [00:02:23.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
-Info 53   [00:02:24.000] After ensureProjectForOpenFiles:
-Info 54   [00:02:25.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 54   [00:02:26.000] 	Files (2)
+Info 54   [00:02:19.000] -----------------------------------------------
+Info 54   [00:02:20.000] Open files: 
+Info 54   [00:02:21.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
+Info 54   [00:02:22.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
+Info 54   [00:02:23.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
+Info 54   [00:02:24.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 54   [00:02:25.000] After ensureProjectForOpenFiles:
+Info 55   [00:02:26.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info 55   [00:02:27.000] 	Files (2)
 
-Info 54   [00:02:27.000] -----------------------------------------------
-Info 54   [00:02:28.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 54   [00:02:29.000] 	Files (2)
+Info 55   [00:02:28.000] -----------------------------------------------
+Info 55   [00:02:29.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 55   [00:02:30.000] 	Files (2)
 
-Info 54   [00:02:30.000] -----------------------------------------------
-Info 54   [00:02:31.000] Open files: 
-Info 54   [00:02:32.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
-Info 54   [00:02:33.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
-Info 54   [00:02:34.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
-Info 54   [00:02:35.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 55   [00:02:31.000] -----------------------------------------------
+Info 55   [00:02:32.000] Open files: 
+Info 55   [00:02:33.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
+Info 55   [00:02:34.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
+Info 55   [00:02:35.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
+Info 55   [00:02:36.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 After running timeout callbacks
 
 PolledWatches::
@@ -609,7 +610,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 54   [00:02:36.000] request:
+Info 55   [00:02:37.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -676,7 +677,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 55   [00:02:37.000] response:
+Info 56   [00:02:38.000] response:
     {
       "response": {
         "info": {
@@ -724,7 +725,7 @@ Info 55   [00:02:37.000] response:
       },
       "responseRequired": true
     }
-Info 56   [00:02:38.000] request:
+Info 57   [00:02:39.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -791,7 +792,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 57   [00:02:39.000] response:
+Info 58   [00:02:40.000] response:
     {
       "response": {
         "info": {
@@ -839,7 +840,7 @@ Info 57   [00:02:39.000] response:
       },
       "responseRequired": true
     }
-Info 58   [00:02:40.000] request:
+Info 59   [00:02:41.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -906,7 +907,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 59   [00:02:41.000] response:
+Info 60   [00:02:42.000] response:
     {
       "response": {
         "info": {
@@ -954,7 +955,7 @@ Info 59   [00:02:41.000] response:
       },
       "responseRequired": true
     }
-Info 60   [00:02:42.000] request:
+Info 61   [00:02:43.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1021,7 +1022,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 61   [00:02:43.000] response:
+Info 62   [00:02:44.000] response:
     {
       "response": {
         "info": {
@@ -1069,7 +1070,7 @@ Info 61   [00:02:43.000] response:
       },
       "responseRequired": true
     }
-Info 62   [00:02:44.000] request:
+Info 63   [00:02:45.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1136,7 +1137,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 63   [00:02:45.000] response:
+Info 64   [00:02:46.000] response:
     {
       "response": {
         "info": {

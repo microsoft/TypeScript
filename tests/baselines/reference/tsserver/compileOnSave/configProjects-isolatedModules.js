@@ -67,9 +67,9 @@ Info 13   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:31.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:32.000] Project '/a/b/tsconfig.json' (Configured)
 Info 16   [00:00:33.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/moduleFile1.ts
-	/a/b/file1Consumer1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/moduleFile1.ts SVC-1-0 "export function Foo() { };"
+	/a/b/file1Consumer1.ts Text-1 "import {Foo} from \"./moduleFile1\"; export var y = 10;"
 
 
 	../lib/lib.d.ts
@@ -194,7 +194,13 @@ FsWatchesRecursive::
 
 Info 22   [00:00:45.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 23   [00:00:46.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 24   [00:00:47.000] Different program with same set of files
+Info 24   [00:00:47.000] Project '/a/b/tsconfig.json' (Configured)
+Info 25   [00:00:48.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/moduleFile1.ts SVC-1-1 "export function Foo() { };Point,"
+	/a/b/file1Consumer1.ts Text-1 "import {Foo} from \"./moduleFile1\"; export var y = 10;"
+
+Info 26   [00:00:49.000] -----------------------------------------------
 After request
 
 PolledWatches::
@@ -213,7 +219,7 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 25   [00:00:48.000] response:
+Info 27   [00:00:50.000] response:
     {
       "response": [
         {

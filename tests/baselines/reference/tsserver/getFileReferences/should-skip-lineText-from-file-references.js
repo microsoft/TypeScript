@@ -59,10 +59,10 @@ Info 15   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /pr
 Info 16   [00:00:31.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:00:32.000] Project '/project/tsconfig.json' (Configured)
 Info 18   [00:00:33.000] 	Files (4)
-	/project/a.ts
-	/project/b.ts
-	/project/c.ts
-	/project/d.ts
+	/project/a.ts SVC-1-0 "export const a = {};"
+	/project/b.ts Text-1 "import \"./a\";"
+	/project/c.ts Text-1 "import {} from \"./a\";"
+	/project/d.ts Text-1 "import { a } from \"/project/a\";\ntype T = typeof import(\"./a\").a;"
 
 
 	a.ts

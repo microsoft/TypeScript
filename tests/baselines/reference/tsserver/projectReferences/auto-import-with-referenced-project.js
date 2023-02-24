@@ -111,10 +111,10 @@ Info 33   [00:01:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 34   [00:01:21.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app/src/program/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 35   [00:01:22.000] Project '/user/username/projects/myproject/app/src/program/tsconfig.json' (Configured)
 Info 36   [00:01:23.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/shared/src/library/index.ts
-	/user/username/projects/myproject/app/src/program/bar.ts
-	/user/username/projects/myproject/app/src/program/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/shared/src/library/index.ts Text-1 "export function foo() {}"
+	/user/username/projects/myproject/app/src/program/bar.ts Text-1 "import {foo} from \"shared\";"
+	/user/username/projects/myproject/app/src/program/index.ts SVC-1-0 "foo"
 
 
 	../../../../../../../a/lib/lib.d.ts

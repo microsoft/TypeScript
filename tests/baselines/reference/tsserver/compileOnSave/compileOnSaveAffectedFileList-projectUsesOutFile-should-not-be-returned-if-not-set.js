@@ -48,8 +48,8 @@ Info 13   [00:00:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:25.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:26.000] Project '/a/tsconfig.json' (Configured)
 Info 16   [00:00:27.000] 	Files (2)
-	/a/a.ts
-	/a/b.ts
+	/a/a.ts SVC-1-0 "let x = 1"
+	/a/b.ts Text-1 "let y = 1"
 
 
 	a.ts

@@ -68,9 +68,9 @@ Info 13   [00:00:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 14   [00:00:47.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:48.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
 Info 16   [00:00:49.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/app1/app.ts
-	/user/username/projects/myproject/core/core.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/app1/app.ts SVC-1-0 "let x = 10;"
+	/user/username/projects/myproject/core/core.ts Text-1 "let z = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -159,9 +159,9 @@ Info 29   [00:01:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 30   [00:01:09.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 31   [00:01:10.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
 Info 32   [00:01:11.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/app2/app.ts
-	/user/username/projects/myproject/core/core.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/app2/app.ts SVC-1-0 "let y = 10;"
+	/user/username/projects/myproject/core/core.ts Text-1 "let z = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -433,42 +433,54 @@ FsWatchesRecursive::
 
 Info 45   [00:01:48.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json
 Info 46   [00:01:49.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 47   [00:01:50.000] Different program with same set of files
-Info 48   [00:01:51.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json
-Info 49   [00:01:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 50   [00:01:53.000] Different program with same set of files
-Info 51   [00:01:54.000] Before ensureProjectForOpenFiles:
-Info 52   [00:01:55.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
-Info 52   [00:01:56.000] 	Files (3)
+Info 47   [00:01:50.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
+Info 48   [00:01:51.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/app1/app.ts SVC-1-1 "let k = 1let x = 10;"
+	/user/username/projects/myproject/core/core.ts SVC-1-0 "let z = 10;"
 
-Info 52   [00:01:57.000] -----------------------------------------------
-Info 52   [00:01:58.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
-Info 52   [00:01:59.000] 	Files (3)
+Info 49   [00:01:52.000] -----------------------------------------------
+Info 50   [00:01:53.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json
+Info 51   [00:01:54.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 52   [00:01:55.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
+Info 53   [00:01:56.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/app2/app.ts SVC-1-1 "let k = 1let y = 10;"
+	/user/username/projects/myproject/core/core.ts SVC-1-0 "let z = 10;"
 
-Info 52   [00:02:00.000] -----------------------------------------------
-Info 52   [00:02:01.000] Open files: 
-Info 52   [00:02:02.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
-Info 52   [00:02:03.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
-Info 52   [00:02:04.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
-Info 52   [00:02:05.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
-Info 52   [00:02:06.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
-Info 52   [00:02:07.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
-Info 52   [00:02:08.000] After ensureProjectForOpenFiles:
-Info 53   [00:02:09.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
-Info 53   [00:02:10.000] 	Files (3)
+Info 54   [00:01:57.000] -----------------------------------------------
+Info 55   [00:01:58.000] Before ensureProjectForOpenFiles:
+Info 56   [00:01:59.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
+Info 56   [00:02:00.000] 	Files (3)
 
-Info 53   [00:02:11.000] -----------------------------------------------
-Info 53   [00:02:12.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
-Info 53   [00:02:13.000] 	Files (3)
+Info 56   [00:02:01.000] -----------------------------------------------
+Info 56   [00:02:02.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
+Info 56   [00:02:03.000] 	Files (3)
 
-Info 53   [00:02:14.000] -----------------------------------------------
-Info 53   [00:02:15.000] Open files: 
-Info 53   [00:02:16.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
-Info 53   [00:02:17.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
-Info 53   [00:02:18.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
-Info 53   [00:02:19.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
-Info 53   [00:02:20.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
-Info 53   [00:02:21.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
+Info 56   [00:02:04.000] -----------------------------------------------
+Info 56   [00:02:05.000] Open files: 
+Info 56   [00:02:06.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
+Info 56   [00:02:07.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
+Info 56   [00:02:08.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
+Info 56   [00:02:09.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
+Info 56   [00:02:10.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
+Info 56   [00:02:11.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
+Info 56   [00:02:12.000] After ensureProjectForOpenFiles:
+Info 57   [00:02:13.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
+Info 57   [00:02:14.000] 	Files (3)
+
+Info 57   [00:02:15.000] -----------------------------------------------
+Info 57   [00:02:16.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
+Info 57   [00:02:17.000] 	Files (3)
+
+Info 57   [00:02:18.000] -----------------------------------------------
+Info 57   [00:02:19.000] Open files: 
+Info 57   [00:02:20.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
+Info 57   [00:02:21.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
+Info 57   [00:02:22.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
+Info 57   [00:02:23.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
+Info 57   [00:02:24.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
+Info 57   [00:02:25.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
 After request
 
 PolledWatches::
@@ -489,7 +501,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 53   [00:02:22.000] response:
+Info 57   [00:02:26.000] response:
     {
       "response": [
         {
