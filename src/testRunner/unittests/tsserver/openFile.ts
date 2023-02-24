@@ -6,7 +6,6 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkProjectActualFiles,
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
@@ -24,71 +23,66 @@ describe("unittests:: tsserver:: Open-file", () => {
         };
         const projectFileName = "externalProject";
         const host = createServerHost([f]);
-        const projectService = createProjectService(host);
+        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         // create a project
         projectService.openExternalProject({ projectFileName, rootFiles: [toExternalFile(f.path)], options: {} });
-        projectService.checkNumberOfProjects({ externalProjects: 1 });
 
         const p = projectService.externalProjects[0];
         // force to load the content of the file
         p.updateGraph();
 
         const scriptInfo = p.getScriptInfo(f.path)!;
-        checkSnapLength(scriptInfo.getSnapshot(), f.content.length);
+        projectService.logger.log(`Snapshot size: ${scriptInfo.getSnapshot().getLength()}`);
 
         // open project and replace its content with empty string
         projectService.openClientFile(f.path, "");
-        checkSnapLength(scriptInfo.getSnapshot(), 0);
+        projectService.logger.log(`Snapshot size: ${scriptInfo.getSnapshot().getLength()}`);
+        baselineTsserverLogs("openfile", "realoaded with empty content", projectService);
     });
-    function checkSnapLength(snap: ts.IScriptSnapshot, expectedLength: number) {
-        assert.equal(snap.getLength(), expectedLength, "Incorrect snapshot size");
-    }
 
-    function verifyOpenFileWorks(useCaseSensitiveFileNames: boolean) {
-        const file1: File = {
-            path: "/a/b/src/app.ts",
-            content: "let x = 10;"
-        };
-        const file2: File = {
-            path: "/a/B/lib/module2.ts",
-            content: "let z = 10;"
-        };
-        const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: ""
-        };
-        const configFile2: File = {
-            path: "/a/tsconfig.json",
-            content: ""
-        };
-        const host = createServerHost([file1, file2, configFile, configFile2], {
-            useCaseSensitiveFileNames
+    function verifyOpenFileWorks(subScenario: string, useCaseSensitiveFileNames: boolean) {
+        it(subScenario, () => {
+            const file1: File = {
+                path: "/a/b/src/app.ts",
+                content: "let x = 10;"
+            };
+            const file2: File = {
+                path: "/a/B/lib/module2.ts",
+                content: "let z = 10;"
+            };
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: ""
+            };
+            const configFile2: File = {
+                path: "/a/tsconfig.json",
+                content: ""
+            };
+            const host = createServerHost([file1, file2, configFile, configFile2], {
+                useCaseSensitiveFileNames
+            });
+            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
+
+            // Open file1 -> configFile
+            verifyConfigFileName(file1, "/a");
+            verifyConfigFileName(file1, "/a/b");
+            verifyConfigFileName(file1, "/a/B");
+
+            // Open file2 use root "/a/b"
+            verifyConfigFileName(file2, "/a");
+            verifyConfigFileName(file2, "/a/b");
+            verifyConfigFileName(file2, "/a/B");
+
+            baselineTsserverLogs("openfile", subScenario, service);
+            function verifyConfigFileName(file: File, projectRoot: string) {
+                const { configFileName } = service.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRoot);
+                service.logger.log(`file: ${file.path} configFile: ${configFileName}`);
+                service.closeClientFile(file.path);
+            }
         });
-        const service = createProjectService(host);
-
-        // Open file1 -> configFile
-        verifyConfigFileName(file1, "/a", configFile);
-        verifyConfigFileName(file1, "/a/b", configFile);
-        verifyConfigFileName(file1, "/a/B", configFile);
-
-        // Open file2 use root "/a/b"
-        verifyConfigFileName(file2, "/a", useCaseSensitiveFileNames ? configFile2 : configFile);
-        verifyConfigFileName(file2, "/a/b", useCaseSensitiveFileNames ? configFile2 : configFile);
-        verifyConfigFileName(file2, "/a/B", useCaseSensitiveFileNames ? undefined : configFile);
-
-        function verifyConfigFileName(file: File, projectRoot: string, expectedConfigFile: File | undefined) {
-            const { configFileName } = service.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRoot);
-            assert.equal(configFileName, expectedConfigFile && expectedConfigFile.path);
-            service.closeClientFile(file.path);
-        }
     }
-    it("works when project root is used with case-sensitive system", () => {
-        verifyOpenFileWorks(/*useCaseSensitiveFileNames*/ true);
-    });
-
-    it("works when project root is used with case-insensitive system", () => {
-        verifyOpenFileWorks(/*useCaseSensitiveFileNames*/ false);
-    });
+    verifyOpenFileWorks("project root is used with case-sensitive system", /*useCaseSensitiveFileNames*/ true);
+    verifyOpenFileWorks("project root is used with case-insensitive system", /*useCaseSensitiveFileNames*/ false);
 
     it("uses existing project even if project refresh is pending", () => {
         const projectFolder = "/user/someuser/projects/myproject";
@@ -102,24 +96,16 @@ describe("unittests:: tsserver:: Open-file", () => {
         };
         const files = [aFile, configFile, libFile];
         const host = createServerHost(files);
-        const service = createProjectService(host);
+        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         service.openClientFile(aFile.path, /*fileContent*/ undefined, ts.ScriptKind.TS, projectFolder);
-        verifyProject();
 
         const bFile: File = {
             path: `${projectFolder}/src/b.ts`,
             content: `export {}; declare module "./a" {  export const y: number; }`
         };
-        files.push(bFile);
         host.writeFile(bFile.path, bFile.content);
         service.openClientFile(bFile.path, /*fileContent*/ undefined, ts.ScriptKind.TS, projectFolder);
-        verifyProject();
-
-        function verifyProject() {
-            assert.isDefined(service.configuredProjects.get(configFile.path));
-            const project = service.configuredProjects.get(configFile.path)!;
-            checkProjectActualFiles(project, files.map(f => f.path));
-        }
+        baselineTsserverLogs("openfile", "uses existing project even if project refresh is pending", service);
     });
 
     it("can open same file again", () => {
@@ -134,15 +120,14 @@ describe("unittests:: tsserver:: Open-file", () => {
         };
         const files = [aFile, configFile, libFile];
         const host = createServerHost(files);
-        const service = createProjectService(host);
+        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         verifyProject(aFile.content);
         verifyProject(`${aFile.content}export const y = 10;`);
+        baselineTsserverLogs("openfile", "can open same file again", service);
 
         function verifyProject(aFileContent: string) {
             service.openClientFile(aFile.path, aFileContent, ts.ScriptKind.TS, projectFolder);
-            const project = service.configuredProjects.get(configFile.path)!;
-            checkProjectActualFiles(project, files.map(f => f.path));
-            assert.equal(project.getCurrentProgram()?.getSourceFile(aFile.path)!.text, aFileContent);
+            service.logger.log(`aFileContent: ${service.configuredProjects.get(configFile.path)!.getCurrentProgram()?.getSourceFile(aFile.path)!.text}`);
         }
     });
 
