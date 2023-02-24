@@ -39,6 +39,7 @@ jobs:
     - run:  npm ci
 
     - name: Tests
+      # run tests, but lint separately
       run:  npm run test -- --no-lint --bundle=${{ matrix.bundle }}
 
   lint:
