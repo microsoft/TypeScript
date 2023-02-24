@@ -72,7 +72,7 @@ Info 12   [00:00:39.000] File '/user/username/projects/myproject/src/package.jso
 Info 13   [00:00:40.000] Found 'package.json' at '/user/username/projects/myproject/package.json'.
 Info 14   [00:00:41.000] ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Info 15   [00:00:42.000] Module resolution kind is not specified, using 'Node16'.
-Info 16   [00:00:43.000] Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Info 16   [00:00:43.000] Resolving in ESM mode with conditions 'import', 'types', 'node'.
 Info 17   [00:00:44.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 Info 18   [00:00:45.000] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info 19   [00:00:46.000] File '/user/username/projects/myproject/src/fileB.mts' exists - use it as a name resolution result.
@@ -242,7 +242,7 @@ Info 56   [00:01:32.000] File '/user/username/projects/myproject/src/package.jso
 Info 57   [00:01:33.000] File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 Info 58   [00:01:34.000] ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Info 59   [00:01:35.000] Module resolution kind is not specified, using 'Node16'.
-Info 60   [00:01:36.000] Resolving in CJS mode with conditions 'node', 'require', 'types'.
+Info 60   [00:01:36.000] Resolving in CJS mode with conditions 'require', 'types', 'node'.
 Info 61   [00:01:37.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 Info 62   [00:01:38.000] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info 63   [00:01:39.000] File '/user/username/projects/myproject/src/fileB.mts' exists - use it as a name resolution result.
@@ -607,7 +607,7 @@ Info 97   [00:02:28.000] File '/user/username/projects/myproject/src/package.jso
 Info 98   [00:02:29.000] File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 Info 99   [00:02:30.000] ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Info 100  [00:02:31.000] Module resolution kind is not specified, using 'Node16'.
-Info 101  [00:02:32.000] Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Info 101  [00:02:32.000] Resolving in ESM mode with conditions 'import', 'types', 'node'.
 Info 102  [00:02:33.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 Info 103  [00:02:34.000] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info 104  [00:02:35.000] File '/user/username/projects/myproject/src/fileB.mts' exists - use it as a name resolution result.
@@ -1360,7 +1360,7 @@ Info 180  [00:04:18.000] File '/user/username/projects/myproject/src/package.jso
 Info 181  [00:04:19.000] File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 Info 182  [00:04:20.000] ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Info 183  [00:04:21.000] Module resolution kind is not specified, using 'Node16'.
-Info 184  [00:04:22.000] Resolving in CJS mode with conditions 'node', 'require', 'types'.
+Info 184  [00:04:22.000] Resolving in CJS mode with conditions 'require', 'types', 'node'.
 Info 185  [00:04:23.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 Info 186  [00:04:24.000] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info 187  [00:04:25.000] File '/user/username/projects/myproject/src/fileB.mts' exists - use it as a name resolution result.

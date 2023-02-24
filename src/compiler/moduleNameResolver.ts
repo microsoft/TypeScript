@@ -708,11 +708,11 @@ export function getConditions(options: CompilerOptions, esmMode?: boolean) {
     const conditions = esmMode || getEmitModuleResolutionKind(options) === ModuleResolutionKind.Bundler
         ? ["import"]
         : ["require"];
-    if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler) {
-        conditions.unshift("node");
-    }
     if (!options.noDtsResolution) {
         conditions.push("types");
+    }
+    if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler) {
+        conditions.push("node");
     }
     return concatenate(conditions, options.customConditions);
 }
