@@ -85,7 +85,7 @@ File '/src/projects/b/src/package.json' does not exist.
 Found 'package.json' at '/src/projects/b/package.json'.
 ======== Resolving module 'pg' from '/src/projects/b/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/src/projects/b/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/b/package.json' exists according to earlier cached lookups.
 Loading module 'pg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
