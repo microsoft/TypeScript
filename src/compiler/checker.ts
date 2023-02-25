@@ -989,6 +989,7 @@ import {
     tokenToString,
     tracing,
     TracingNode,
+    TransformFlags,
     TransientSymbol,
     TransientSymbolLinks,
     tryAddToSet,
@@ -14434,6 +14435,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isOptionalParameter) {
                     minArgumentCount = parameters.length;
                 }
+            }
+
+            // infer a (this: this) or (this: typeof ClassName) signature for class method / static class methods that uses "this" lexically.
+            if (
+                !thisParameter &&
+                declaration.kind === SyntaxKind.MethodDeclaration &&
+                declaration.body &&
+                (declaration.parent.kind === SyntaxKind.ClassExpression ||
+                declaration.parent.kind === SyntaxKind.ClassDeclaration) &&
+                declaration.body.transformFlags & TransformFlags.ContainsLexicalThisOrSuper
+            ) {
+                const classNode = declaration.parent;
+                if (isStatic(declaration)) {
+                    const symbol = createSymbol(SymbolFlags.FunctionScopedVariable | SymbolFlags.ExportDoesNotSupportDefaultModifier | SymbolFlags.Transient, classNode.name ? classNode.name.escapedText : InternalSymbolName.Class);
+                    if (classNode.name) {
+                        symbol.links.type = checkExpression(classNode.name);
+                    }
+                    // TODO: handle anonymous class.
+                    // in this case, we cannot emit .d.ts for it, but we can still type check it.
+                    // maybe error at this node when --declaration: implicit type parameter "this" cannot be namely typed and require an explicit annotation.
+                    thisParameter = symbol;
+                }
+                else {
+                    const symbol = createSymbol(SymbolFlags.FunctionScopedVariable | SymbolFlags.ExportDoesNotSupportDefaultModifier | SymbolFlags.Transient, InternalSymbolName.This);
+                    symbol.links.type = getThisType(declaration.body);
+                    thisParameter = symbol;
+                }
+                hasThisParameter = true;
             }
 
             // If only one accessor includes a this-type annotation, the other behaves as if it had the same type annotation
