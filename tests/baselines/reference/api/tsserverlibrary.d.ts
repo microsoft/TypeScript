@@ -6674,6 +6674,7 @@ declare namespace ts {
         NonPrimitive = 67108864,
         TemplateLiteral = 134217728,
         StringMapping = 268435456,
+        NoInfer = 536870912,
         Literal = 2944,
         Unit = 109472,
         Freshable = 2976,
@@ -6689,11 +6690,11 @@ declare namespace ts {
         UnionOrIntersection = 3145728,
         StructuredType = 3670016,
         TypeVariable = 8650752,
-        InstantiableNonPrimitive = 58982400,
+        InstantiableNonPrimitive = 595853312,
         InstantiablePrimitive = 406847488,
-        Instantiable = 465829888,
-        StructuredOrInstantiable = 469499904,
-        Narrowable = 536624127
+        Instantiable = 1002700800,
+        StructuredOrInstantiable = 1006370816,
+        Narrowable = 1073495039
     }
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     interface Type {
@@ -6885,6 +6886,10 @@ declare namespace ts {
         types: readonly Type[];
     }
     interface StringMappingType extends InstantiableType {
+        symbol: Symbol;
+        type: Type;
+    }
+    interface NoInferType extends InstantiableType {
         symbol: Symbol;
         type: Type;
     }
