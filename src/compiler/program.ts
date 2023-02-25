@@ -4324,7 +4324,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const version = typeScriptVersion || versionMajorMinor;
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
-            if (ignoreDeprecations === DeprecationVersion.v5_0 && (version === DeprecationVersion.v5_0 || version === DeprecationVersion.v5_5)) {
+            if (ignoreDeprecations === DeprecationVersion.v5_0 && version.startsWith("5.")) {
                 return;
             }
             else if (reportInvalidIgnoreDeprecations) {
