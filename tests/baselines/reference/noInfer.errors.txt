@@ -8,11 +8,9 @@ tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(24,14):
   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(31,14): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
   Property 'foo' is missing in type '{}' but required in type '{ foo: number; }'.
-tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(41,9): error TS2322: Type 'NoInfer<T>' is not assignable to type 'T'.
-  'T' could be instantiated with an arbitrary type which could be unrelated to 'NoInfer<T>'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts (7 errors) ====
+==== tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts (6 errors) ====
     export declare function foo<T extends string>(a: T, b: NoInfer<T>): void
     
     foo('foo', 'foo') // ok
@@ -74,9 +72,6 @@ tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(41,9): 
     
         get value(): T {
             return this._value; // ok
-            ~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'NoInfer<T>' is not assignable to type 'T'.
-!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'NoInfer<T>'.
         }
     }
     export class OkClass2<T> {
