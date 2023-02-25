@@ -6330,7 +6330,7 @@ declare namespace ts {
         /** Note that the resulting nodes cannot be checked. */
         typeToTypeNode(type: Type, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeNode | undefined;
         /** Note that the resulting nodes cannot be checked. */
-        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): SignatureDeclaration & {
+        signatureToSignatureDeclaration(signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): SignatureDeclaration & {
             typeArguments?: NodeArray<TypeNode>;
         } | undefined;
         /** Note that the resulting nodes cannot be checked. */

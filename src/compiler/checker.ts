@@ -1453,8 +1453,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
 
     var checkBinaryExpression = createCheckBinaryExpression();
-    var emitResolver = createResolver();
-    var nodeBuilder = createNodeBuilder();
+    var emitResolver = memoize(() => createResolver());
+    var nodeBuilder = memoize(() => createNodeBuilder());
 
     var globals = createSymbolTable();
     var undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
@@ -1544,15 +1544,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getNonNullableType,
         getNonOptionalType: removeOptionalTypeMarker,
         getTypeArguments,
-        typeToTypeNode: nodeBuilder.typeToTypeNode,
-        indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
-        signatureToSignatureDeclaration: nodeBuilder.signatureToSignatureDeclaration,
-        symbolToEntityName: nodeBuilder.symbolToEntityName,
-        symbolToExpression: nodeBuilder.symbolToExpression,
-        symbolToNode: nodeBuilder.symbolToNode,
-        symbolToTypeParameterDeclarations: nodeBuilder.symbolToTypeParameterDeclarations,
-        symbolToParameterDeclaration: nodeBuilder.symbolToParameterDeclaration,
-        typeParameterToDeclaration: nodeBuilder.typeParameterToDeclaration,
+        typeToTypeNode: (type, enclosingDeclaration, flags, tracker?: SymbolTracker) => nodeBuilder().typeToTypeNode(type, enclosingDeclaration, flags, tracker),
+        indexInfoToIndexSignatureDeclaration: (indexInfo, enclosingDeclaration, flags, tracker?: SymbolTracker) => nodeBuilder().indexInfoToIndexSignatureDeclaration(indexInfo, enclosingDeclaration, flags, tracker),
+        signatureToSignatureDeclaration: (signature, kind, enclosingDeclaration, flags, tracker?: SymbolTracker) => nodeBuilder().signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, tracker),
+        symbolToEntityName: (symbol, meaning, enclosingDeclaration, flags) => nodeBuilder().symbolToEntityName(symbol, meaning, enclosingDeclaration, flags),
+        symbolToExpression: (symbol, meaning, enclosingDeclaration, flags) => nodeBuilder().symbolToExpression(symbol, meaning, enclosingDeclaration, flags),
+        symbolToNode: (symbol, meaning, enclosingDeclaration, flags) => nodeBuilder().symbolToNode(symbol, meaning, enclosingDeclaration, flags),
+        symbolToTypeParameterDeclarations: (symbol, enclosingDeclaration, flags) => nodeBuilder().symbolToTypeParameterDeclarations(symbol, enclosingDeclaration, flags),
+        symbolToParameterDeclaration: (symbol, enclosingDeclaration, flags) => nodeBuilder().symbolToParameterDeclaration(symbol, enclosingDeclaration, flags),
+        typeParameterToDeclaration: (parameter, enclosingDeclaration, flags) => nodeBuilder().typeParameterToDeclaration(parameter, enclosingDeclaration, flags),
         getSymbolsInScope: (locationIn, meaning) => {
             const location = getParseTreeNode(locationIn);
             return location ? getSymbolsInScope(location, meaning) : [];
@@ -2288,7 +2288,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Ensure we have all the type information in place for this file so that all the
         // emitter questions of this resolver will return the right information.
         getDiagnostics(sourceFile, cancellationToken);
-        return emitResolver;
+        return emitResolver();
     }
 
     function lookupOrIssueError(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
@@ -6143,7 +6143,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (flags & SymbolFormatFlags.WriteComputedProps) {
             nodeFlags |= NodeBuilderFlags.WriteComputedProps;
         }
-        const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToNode : nodeBuilder.symbolToEntityName;
+        const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder().symbolToNode : nodeBuilder().symbolToEntityName;
         return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
 
         function symbolToStringWorker(writer: EmitTextWriter) {
@@ -6169,7 +6169,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 sigOutput = kind === SignatureKind.Construct ? SyntaxKind.ConstructSignature : SyntaxKind.CallSignature;
             }
-            const sig = nodeBuilder.signatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
+            const sig = nodeBuilder().signatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
             const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, sig!, /*sourceFile*/ sourceFile, getTrailingSemicolonDeferringWriter(writer)); // TODO: GH#18217
@@ -6179,7 +6179,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer: EmitTextWriter = createTextWriter("")): string {
         const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
-        const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0));
+        const typeNode = nodeBuilder().typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0));
         if (typeNode === undefined) return Debug.fail("should always get typenode");
         // The unresolved type gets a synthesized comment on `any` to hint to users that it's not a plain `any`.
         // Otherwise, we always strip comments out.
@@ -9761,7 +9761,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const predicate = factory.createTypePredicateNode(
                 typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? factory.createToken(SyntaxKind.AssertsKeyword) : undefined,
                 typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? factory.createIdentifier(typePredicate.parameterName) : factory.createThisTypeNode(),
-                typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)! // TODO: GH#18217
+                typePredicate.type && nodeBuilder().typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)! // TODO: GH#18217
             );
             const printer = createPrinterWithRemoveComments();
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
@@ -33711,9 +33711,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We fake up a SFC signature for each intrinsic, however a more specific per-element signature drawn from the JSX declaration
         // file would probably be preferable.
         const typeSymbol = exports && getSymbol(exports, JsxNames.Element, SymbolFlags.Type);
-        const returnNode = typeSymbol && nodeBuilder.symbolToEntityName(typeSymbol, SymbolFlags.Type, node);
+        const returnNode = typeSymbol && nodeBuilder().symbolToEntityName(typeSymbol, SymbolFlags.Type, node);
         const declaration = factory.createFunctionTypeNode(/*typeParameters*/ undefined,
-            [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotdotdot*/ undefined, "props", /*questionMark*/ undefined, nodeBuilder.typeToTypeNode(result, node))],
+            [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotdotdot*/ undefined, "props", /*questionMark*/ undefined, nodeBuilder().typeToTypeNode(result, node))],
             returnNode ? factory.createTypeReferenceNode(returnNode, /*typeArguments*/ undefined) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
         );
         const parameterSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "props" as __String);
@@ -46052,7 +46052,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (addUndefined) {
             type = getOptionalType(type);
         }
-        return nodeBuilder.typeToTypeNode(type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
+        return nodeBuilder().typeToTypeNode(type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
 
     function createReturnTypeOfSignatureDeclaration(signatureDeclarationIn: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker) {
@@ -46061,7 +46061,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
         }
         const signature = getSignatureFromDeclaration(signatureDeclaration);
-        return nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
+        return nodeBuilder().typeToTypeNode(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
 
     function createTypeOfExpression(exprIn: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker) {
@@ -46070,7 +46070,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
         }
         const type = getWidenedType(getRegularTypeOfExpression(expr));
-        return nodeBuilder.typeToTypeNode(type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
+        return nodeBuilder().typeToTypeNode(type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
 
     function hasGlobalName(name: string): boolean {
@@ -46142,7 +46142,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
-        const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
+        const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder().symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
             : type === trueType ? factory.createTrue() : type === falseType && factory.createFalse();
         if (enumResult) return enumResult;
         const literalValue = (type as LiteralType).value;
@@ -46285,9 +46285,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 Debug.assert(n && n.kind === SyntaxKind.SourceFile, "Non-sourcefile node passed into getDeclarationsForSourceFile");
                 const sym = getSymbolOfDeclaration(node);
                 if (!sym) {
-                    return !node.locals ? [] : nodeBuilder.symbolTableToDeclarationStatements(node.locals, node, flags, tracker, bundled);
+                    return !node.locals ? [] : nodeBuilder().symbolTableToDeclarationStatements(node.locals, node, flags, tracker, bundled);
                 }
-                return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
+                return !sym.exports ? [] : nodeBuilder().symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
             },
             isImportRequiredByAugmentation,
         };
