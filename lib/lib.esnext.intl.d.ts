@@ -14,9 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 
-
 /// <reference no-default-lib="true"/>
-
 
 declare namespace Intl {
   interface NumberRangeFormatPart extends NumberFormatPart {

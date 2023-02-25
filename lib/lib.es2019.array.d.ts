@@ -14,9 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 
-
 /// <reference no-default-lib="true"/>
-
 
 type FlatArray<Arr, Depth extends number> = {
     "done": Arr,

@@ -14,9 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 
-
 /// <reference no-default-lib="true"/>
-
 
 interface String {
     /** Removes the trailing white space and line terminator characters from a string. */
