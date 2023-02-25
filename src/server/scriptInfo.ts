@@ -185,14 +185,13 @@ export class TextStorage {
     }
 
     /**
-     * Reloads the contents from the file if there is no pending reload from disk or the contents of file are same as file text
-     * returns true if text changed
+     * Schedule reload from the disk if its not already scheduled and its not own text
+     * returns true when scheduling reload
      */
-    public reloadFromDisk() {
-        if (!this.pendingReloadFromDisk && !this.ownFileText) {
-            return this.reloadWithFileText();
-        }
-        return false;
+    public scheduleReloadIfNeeded() {
+        return !this.pendingReloadFromDisk && !this.ownFileText ?
+            this.pendingReloadFromDisk = true :
+            false;
     }
 
     public delayReloadFromFileIntoText() {
@@ -438,7 +437,7 @@ export class ScriptInfo {
 
     public close(fileExists = true) {
         this.textStorage.isOpen = false;
-        if (fileExists && this.textStorage.reloadFromDisk()) {
+        if (fileExists && this.textStorage.scheduleReloadIfNeeded()) {
             this.markContainingProjectsAsDirty();
         }
     }

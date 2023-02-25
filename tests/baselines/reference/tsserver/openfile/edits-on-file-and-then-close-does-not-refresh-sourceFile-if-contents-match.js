@@ -357,7 +357,7 @@ Info 40   [00:01:19.000] response:
       "responseRequired": false
     }
 Info 41   [00:01:20.000] Starting updateGraphWorker: Project: /project/tsconfig.json
-Info 42   [00:01:21.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 42   [00:01:21.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 43   [00:01:22.000] Same program as before
 Info 44   [00:01:25.000] FileWatcher:: Triggered with /project/b.ts 1:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
 Info 45   [00:01:26.000] Scheduled: /project/tsconfig.json
@@ -386,7 +386,7 @@ FsWatchesRecursive::
 
 Info 48   [00:01:29.000] Running: /project/tsconfig.json
 Info 49   [00:01:30.000] Starting updateGraphWorker: Project: /project/tsconfig.json
-Info 50   [00:01:31.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 50   [00:01:31.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 5 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 51   [00:01:32.000] Project '/project/tsconfig.json' (Configured)
 Info 52   [00:01:33.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"

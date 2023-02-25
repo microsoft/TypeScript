@@ -115,7 +115,7 @@ describe("unittests:: tsserver:: Text storage", () => {
 
         const ts1 = new ts.server.TextStorage(host, scriptInfo!);
 
-        assert.isTrue(ts1.reloadFromDisk());
+        assert.isTrue(ts1.reloadWithFileText());
         assert.isFalse(ts1.hasScriptVersionCache_TestOnly());
 
         assert.strictEqual(largeFile.content.length, ts1.getTelemetryFileSize());
@@ -134,7 +134,7 @@ describe("unittests:: tsserver:: Text storage", () => {
         // Since script info is not used in these tests, just cheat by passing undefined
         const ts1 = new ts.server.TextStorage(host, getDummyScriptInfo(ts.server.asNormalizedPath(changingFile.path)));
 
-        assert.isTrue(ts1.reloadFromDisk());
+        assert.isTrue(ts1.reloadWithFileText());
 
         // Refresh the file and notify TextStorage
         host.writeFile(changingFile.path, newText);
