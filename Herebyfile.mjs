@@ -179,6 +179,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             treeShaking: taskOptions.treeShaking,
             packages: "external",
             logLevel: "warning",
+            minifySyntax: true,
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
         };
 
