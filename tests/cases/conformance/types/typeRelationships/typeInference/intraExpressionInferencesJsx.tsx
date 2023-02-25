@@ -84,3 +84,29 @@ const Component = <T extends Animations>({
     return "";
   }}
 />;
+
+// repro from #52786
+
+interface Props<T> {
+  a: (x: string) => T;
+  b: (arg: T) => void;
+}
+
+function Foo<T>(props: Props<T>) {
+  return <div />;
+}
+
+<Foo
+  a={() => 10}
+  b={(arg) => { arg.toString(); }}
+/>;
+
+<Foo
+  a={(x) => 10}
+  b={(arg) => { arg.toString(); }}
+/>;
+
+<Foo {...{
+  a: (x) => 10,
+  b: (arg) => { arg.toString(); },
+}} />;

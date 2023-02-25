@@ -197,3 +197,78 @@ const Component = <T extends Animations>({
   }}
 />;
 
+// repro from #52786
+
+interface Props<T> {
+>Props : Symbol(Props, Decl(intraExpressionInferencesJsx.tsx, 81, 3))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 85, 16))
+
+  a: (x: string) => T;
+>a : Symbol(Props.a, Decl(intraExpressionInferencesJsx.tsx, 85, 20))
+>x : Symbol(x, Decl(intraExpressionInferencesJsx.tsx, 86, 6))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 85, 16))
+
+  b: (arg: T) => void;
+>b : Symbol(Props.b, Decl(intraExpressionInferencesJsx.tsx, 86, 22))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 87, 6))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 85, 16))
+}
+
+function Foo<T>(props: Props<T>) {
+>Foo : Symbol(Foo, Decl(intraExpressionInferencesJsx.tsx, 88, 1))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 90, 13))
+>props : Symbol(props, Decl(intraExpressionInferencesJsx.tsx, 90, 16))
+>Props : Symbol(Props, Decl(intraExpressionInferencesJsx.tsx, 81, 3))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 90, 13))
+
+  return <div />;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+<Foo
+>Foo : Symbol(Foo, Decl(intraExpressionInferencesJsx.tsx, 88, 1))
+
+  a={() => 10}
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 94, 4))
+
+  b={(arg) => { arg.toString(); }}
+>b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 95, 14))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 96, 6))
+>arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 96, 6))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+/>;
+
+<Foo
+>Foo : Symbol(Foo, Decl(intraExpressionInferencesJsx.tsx, 88, 1))
+
+  a={(x) => 10}
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 99, 4))
+>x : Symbol(x, Decl(intraExpressionInferencesJsx.tsx, 100, 6))
+
+  b={(arg) => { arg.toString(); }}
+>b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 100, 15))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 101, 6))
+>arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 101, 6))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+/>;
+
+<Foo {...{
+>Foo : Symbol(Foo, Decl(intraExpressionInferencesJsx.tsx, 88, 1))
+
+  a: (x) => 10,
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 104, 10))
+>x : Symbol(x, Decl(intraExpressionInferencesJsx.tsx, 105, 6))
+
+  b: (arg) => { arg.toString(); },
+>b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 105, 15))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
+>arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+}} />;
+
