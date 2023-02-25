@@ -901,8 +901,8 @@ Info 71   [00:02:14.000] Project '/tsconfig.json' (Configured)
 Info 72   [00:02:15.000] 	Files (4)
 	/src/a.ts SVC-1-0 "export const foo = 0;"
 	/src/ambient.d.ts Text-1 "declare module 'ambient' {}"
-	/src/b.ts SVC-1-0 "foo"
-	/src/c.ts SVC-1-0 "import "
+	/src/b.ts Text-1 "foo"
+	/src/c.ts Text-1 "import "
 
 
 	src/a.ts

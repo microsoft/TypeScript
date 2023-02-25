@@ -171,7 +171,7 @@ export function countEachFileTypes(infos: ScriptInfo[], includeSizes = false): F
         deferred: 0, deferredSize: 0,
     };
     for (const info of infos) {
-        const fileSize = includeSizes ? info.getTelemetryFileSize() : 0;
+        const fileSize = includeSizes ? info.textStorage.getTelemetryFileSize() : 0;
         switch (info.scriptKind) {
             case ScriptKind.JS:
                 result.js += 1;

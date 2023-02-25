@@ -234,7 +234,7 @@ Info 35   [00:01:04.000] Finishing updateGraphWorker: Project: /packages/core/ts
 Info 36   [00:01:05.000] Project '/packages/core/tsconfig.json' (Configured)
 Info 37   [00:01:06.000] 	Files (2)
 	/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
-	/packages/core/src/index.ts SVC-1-0 "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
+	/packages/core/src/index.ts Text-1 "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
 
 
 	src/loading-indicator.ts

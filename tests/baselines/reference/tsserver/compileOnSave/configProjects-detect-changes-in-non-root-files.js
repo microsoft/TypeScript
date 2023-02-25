@@ -284,7 +284,7 @@ Info 29   [00:01:00.000] Project '/a/b/tsconfig.json' (Configured)
 Info 30   [00:01:01.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/moduleFile1.ts SVC-1-1 "export var T: number;export function Foo() { };"
-	/a/b/file1Consumer1.ts SVC-1-0 "import {Foo} from \"./moduleFile1\"; let y = Foo();"
+	/a/b/file1Consumer1.ts Text-1 "import {Foo} from \"./moduleFile1\"; let y = Foo();"
 
 Info 31   [00:01:02.000] -----------------------------------------------
 After request
@@ -391,7 +391,7 @@ Info 38   [00:01:09.000] Project '/a/b/tsconfig.json' (Configured)
 Info 39   [00:01:10.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/moduleFile1.ts SVC-1-2 "var T1: number;export var T: number;export function Foo() { };"
-	/a/b/file1Consumer1.ts SVC-1-0 "import {Foo} from \"./moduleFile1\"; let y = Foo();"
+	/a/b/file1Consumer1.ts Text-1 "import {Foo} from \"./moduleFile1\"; let y = Foo();"
 
 Info 40   [00:01:11.000] -----------------------------------------------
 After request

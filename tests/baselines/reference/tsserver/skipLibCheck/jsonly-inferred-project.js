@@ -217,7 +217,7 @@ Info 26   [00:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 27   [00:00:52.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 28   [00:00:53.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 29   [00:00:54.000] 	Files (1)
-	/a/b/file2.d.ts SVC-1-0 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
+	/a/b/file2.d.ts Text-1 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
 
 
 	file2.d.ts
@@ -386,7 +386,7 @@ Info 42   [00:01:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 43   [00:01:14.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 44   [00:01:15.000] Project '/dev/null/inferredProject2*' (Inferred)
 Info 45   [00:01:16.000] 	Files (2)
-	/a/b/file2.d.ts SVC-1-0 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
+	/a/b/file2.d.ts Text-1 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
 	/a/b/file1.js SVC-1-0 "\n                /// <reference path=\"file2.d.ts\" />\n                var x = 1;"
 
 

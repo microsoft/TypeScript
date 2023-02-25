@@ -730,7 +730,7 @@ Info 98   [00:02:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 99   [00:02:53.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 100  [00:02:54.000] Project '/a/tsconfig.json' (Configured)
 Info 101  [00:02:55.000] 	Files (1)
-	/a/a.ts SVC-2-0 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
+	/a/a.ts Text-2 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
 
 
 	a.ts

@@ -562,7 +562,7 @@ Info 79   [00:02:38.000] Finishing updateGraphWorker: Project: /dev/null/inferre
 Info 80   [00:02:39.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 81   [00:02:40.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/users/username/projects/project/sub/a.ts SVC-1-0 ""
+	/users/username/projects/project/sub/a.ts SVC-2-0 ""
 
 
 	../../../../../a/lib/lib.d.ts
@@ -872,7 +872,7 @@ Info 110  [00:03:47.000] Project '/users/username/projects/project/tsconfig.json
 Info 111  [00:03:48.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/users/username/projects/project/b.ts SVC-1-0 "export const b = 10;"
-	/users/username/projects/project/sub/a.ts SVC-1-0 ""
+	/users/username/projects/project/sub/a.ts SVC-2-0 ""
 
 
 	../../../../a/lib/lib.d.ts

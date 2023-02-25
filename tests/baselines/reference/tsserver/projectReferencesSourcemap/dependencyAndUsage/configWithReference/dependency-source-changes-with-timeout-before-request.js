@@ -376,7 +376,7 @@ Info 39   [00:01:45.000] Finishing updateGraphWorker: Project: /user/username/pr
 Info 40   [00:01:46.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 41   [00:01:47.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/dependency/FnS.ts SVC-1-0 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+	/user/username/projects/myproject/dependency/FnS.ts Text-1 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -1042,7 +1042,7 @@ Info 76   [00:02:49.000] Finishing updateGraphWorker: Project: /user/username/pr
 Info 77   [00:02:50.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 78   [00:02:51.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/dependency/FnS.ts SVC-1-1 "function fooBar() { }\nexport function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+	/user/username/projects/myproject/dependency/FnS.ts SVC-2-1 "function fooBar() { }\nexport function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
 
 Info 79   [00:02:52.000] -----------------------------------------------
@@ -1651,7 +1651,7 @@ Info 91   [00:03:04.000] Finishing updateGraphWorker: Project: /user/username/pr
 Info 92   [00:03:05.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 93   [00:03:06.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/dependency/FnS.ts SVC-1-1 "function fooBar() { }\nexport function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+	/user/username/projects/myproject/dependency/FnS.ts SVC-2-1 "function fooBar() { }\nexport function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 
 Info 94   [00:03:07.000] -----------------------------------------------
 Info 95   [00:03:08.000] Search path: /user/username/projects/myproject/dependency

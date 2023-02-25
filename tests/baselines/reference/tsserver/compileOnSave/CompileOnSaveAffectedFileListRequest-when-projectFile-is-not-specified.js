@@ -437,7 +437,7 @@ Info 47   [00:01:50.000] Project '/user/username/projects/myproject/app1/tsconfi
 Info 48   [00:01:51.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/app1/app.ts SVC-1-1 "let k = 1let x = 10;"
-	/user/username/projects/myproject/core/core.ts SVC-1-0 "let z = 10;"
+	/user/username/projects/myproject/core/core.ts Text-1 "let z = 10;"
 
 Info 49   [00:01:52.000] -----------------------------------------------
 Info 50   [00:01:53.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json
@@ -446,7 +446,7 @@ Info 52   [00:01:55.000] Project '/user/username/projects/myproject/app2/tsconfi
 Info 53   [00:01:56.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/app2/app.ts SVC-1-1 "let k = 1let y = 10;"
-	/user/username/projects/myproject/core/core.ts SVC-1-0 "let z = 10;"
+	/user/username/projects/myproject/core/core.ts Text-1 "let z = 10;"
 
 Info 54   [00:01:57.000] -----------------------------------------------
 Info 55   [00:01:58.000] Before ensureProjectForOpenFiles:

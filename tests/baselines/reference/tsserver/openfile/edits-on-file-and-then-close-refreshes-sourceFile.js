@@ -227,7 +227,7 @@ Info 28   [00:00:59.000] Project '/project/tsconfig.json' (Configured)
 Info 29   [00:01:00.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/project/a.ts SVC-1-1 "export const y = 10;export const a = 10;"
-	/project/b.ts SVC-1-0 "export const b = 10;"
+	/project/b.ts Text-1 "export const b = 10;"
 
 Info 30   [00:01:01.000] -----------------------------------------------
 Info 31   [00:01:02.000] request:
@@ -295,7 +295,7 @@ Info 35   [00:01:06.000] Project '/project/tsconfig.json' (Configured)
 Info 36   [00:01:07.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/project/a.ts SVC-1-1 "export const y = 10;export const a = 10;"
-	/project/b.ts SVC-1-1 "export const y = 10;export const b = 10;"
+	/project/b.ts SVC-2-1 "export const y = 10;export const b = 10;"
 
 Info 37   [00:01:08.000] -----------------------------------------------
 Info 38   [00:01:09.000] request:
@@ -359,7 +359,7 @@ Info 43   [00:01:20.000] Project '/project/tsconfig.json' (Configured)
 Info 44   [00:01:21.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/project/a.ts SVC-1-1 "export const y = 10;export const a = 10;"
-	/project/b.ts Text-2 "export const b = 10;"
+	/project/b.ts Text-3 "export const b = 10;"
 
 Info 45   [00:01:22.000] -----------------------------------------------
 Info 46   [00:01:25.000] FileWatcher:: Triggered with /project/b.ts 1:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
@@ -394,7 +394,7 @@ Info 53   [00:01:32.000] Project '/project/tsconfig.json' (Configured)
 Info 54   [00:01:33.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/project/a.ts SVC-1-1 "export const y = 10;export const a = 10;"
-	/project/b.ts Text-3 "export const b = 10;export const x = 10;"
+	/project/b.ts Text-4 "export const b = 10;export const x = 10;"
 
 Info 55   [00:01:34.000] -----------------------------------------------
 Info 56   [00:01:35.000] Running: *ensureProjectForOpenFiles*

@@ -190,7 +190,7 @@ Info 41   [00:01:12.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.jso
 Info 42   [00:01:13.000] Project '/a/b/tsconfig.json' (Configured)
 Info 43   [00:01:14.000] 	Files (2)
 	/a/b/f1.ts SVC-1-0 " "
-	/a/b/f2.html SVC-1-0 "var hello = \"hello\";"
+	/a/b/f2.html SVC-2-0 "var hello = \"hello\";"
 
 Info 44   [00:01:15.000] -----------------------------------------------
 Info 45   [00:01:16.000] Project '/a/b/tsconfig.json' (Configured)

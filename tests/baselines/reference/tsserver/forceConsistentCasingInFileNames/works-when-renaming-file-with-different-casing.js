@@ -610,7 +610,7 @@ Info 57   [00:01:48.000] Project '/user/username/projects/myproject/tsconfig.jso
 Info 58   [00:01:49.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/logger.ts SVC-1-0 "export class logger { }"
-	/user/username/projects/myproject/another.ts SVC-1-1 "import { logger } from \"./logger\"; new logger();"
+	/user/username/projects/myproject/another.ts SVC-2-1 "import { logger } from \"./logger\"; new logger();"
 
 Info 59   [00:01:50.000] -----------------------------------------------
 Info 60   [00:01:51.000] event:

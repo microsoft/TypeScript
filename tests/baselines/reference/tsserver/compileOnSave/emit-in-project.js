@@ -541,7 +541,7 @@ Info 49   [00:01:50.000] Project '/user/username/projects/myproject/tsconfig.jso
 Info 50   [00:01:51.000] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/file1.ts SVC-1-1 "const x = 1;\nfunction foo() {\n    return \"world\";\n}"
-	/user/username/projects/myproject/file2.ts SVC-1-0 "const y = 2;\nfunction bar() {\n    return \"world\";\n}"
+	/user/username/projects/myproject/file2.ts Text-1 "const y = 2;\nfunction bar() {\n    return \"world\";\n}"
 	/user/username/projects/myproject/file3.ts Text-1 "const xy = 3;"
 
 Info 51   [00:01:52.000] -----------------------------------------------
@@ -753,7 +753,7 @@ Info 62   [00:02:22.000] Project '/user/username/projects/myproject/tsconfig.jso
 Info 63   [00:02:23.000] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/file1.ts SVC-1-1 "const x = 1;\nfunction foo() {\n    return \"world\";\n}"
-	/user/username/projects/myproject/file2.ts SVC-1-1 "const y = 2;\nfunction bar() {\n    return \"hello\";\n}"
+	/user/username/projects/myproject/file2.ts SVC-2-1 "const y = 2;\nfunction bar() {\n    return \"hello\";\n}"
 	/user/username/projects/myproject/file3.ts Text-1 "const xy = 3;"
 
 Info 64   [00:02:24.000] -----------------------------------------------

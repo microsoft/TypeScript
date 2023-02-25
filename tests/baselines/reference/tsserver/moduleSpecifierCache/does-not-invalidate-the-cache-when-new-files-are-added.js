@@ -898,8 +898,8 @@ Info 64   [00:02:06.000] 	Files (6)
 	/src/a.ts SVC-1-0 "export const foo = 0;"
 	/src/ambient.d.ts Text-1 "declare module 'ambient' {}"
 	/src/b-link.ts Text-1 "foo"
-	/src/b.ts SVC-1-0 "foo"
-	/src/c.ts SVC-1-0 "import "
+	/src/b.ts Text-1 "foo"
+	/src/c.ts Text-1 "import "
 	/src/a2.ts Text-1 "export const foo = 0;"
 
 

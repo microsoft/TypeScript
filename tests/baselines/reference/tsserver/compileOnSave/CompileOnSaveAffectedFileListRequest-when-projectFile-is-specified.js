@@ -438,7 +438,7 @@ Info 47   [00:01:50.000] Project '/user/username/projects/myproject/app1/tsconfi
 Info 48   [00:01:51.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/app1/app.ts SVC-1-1 "let k = 1let x = 10;"
-	/user/username/projects/myproject/core/core.ts SVC-1-0 "let z = 10;"
+	/user/username/projects/myproject/core/core.ts Text-1 "let z = 10;"
 
 Info 49   [00:01:52.000] -----------------------------------------------
 After request

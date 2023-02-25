@@ -27,7 +27,7 @@ Info 8    [00:00:17.000] Starting updateGraphWorker: Project: projectFileName
 Info 9    [00:00:18.000] Finishing updateGraphWorker: Project: projectFileName Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 10   [00:00:19.000] Project 'projectFileName' (External)
 Info 11   [00:00:20.000] 	Files (1)
-	/a/b/f1.html SVC-1-0 "var x = 1;"
+	/a/b/f1.html SVC-2-0 "var x = 1;"
 
 Info 12   [00:00:21.000] -----------------------------------------------
 Info 13   [00:00:22.000] Project 'projectFileName' (External)

@@ -200,7 +200,7 @@ Info 42   [00:01:17.000] Finishing updateGraphWorker: Project: /user/username/pr
 Info 43   [00:01:18.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 44   [00:01:19.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/dependency/fns.ts SVC-1-0 "function fn1() { }\nfunction fn2() { }\n// Introduce error for fnErr import in main\n// function fnErr() { }\n// Error in dependency ts file\nlet x: string = 10;"
+	/user/username/projects/myproject/dependency/fns.ts Text-1 "function fn1() { }\nfunction fn2() { }\n// Introduce error for fnErr import in main\n// function fnErr() { }\n// Error in dependency ts file\nlet x: string = 10;"
 
 
 	../../../../../a/lib/lib.d.ts

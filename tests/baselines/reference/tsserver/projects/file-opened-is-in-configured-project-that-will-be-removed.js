@@ -372,7 +372,7 @@ Info 76   [00:02:13.000] Finishing updateGraphWorker: Project: /dev/null/inferre
 Info 77   [00:02:14.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 78   [00:02:15.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts SVC-1-0 "export function bar() { }"
+	/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts Text-1 "export function bar() { }"
 
 
 	../../../../../../../a/lib/lib.d.ts

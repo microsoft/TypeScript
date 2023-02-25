@@ -140,7 +140,7 @@ Info 25   [00:00:48.000] Project '/project/tsconfig.json' (Configured)
 Info 26   [00:00:49.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/project/a.ts SVC-1-0 "export const a = 10;"
-	/project/b.ts SVC-1-0 "export const newB = 10;"
+	/project/b.ts SVC-2-0 "export const newB = 10;"
 
 Info 27   [00:00:50.000] -----------------------------------------------
 Info 28   [00:00:51.000] Project '/project/tsconfig.json' (Configured)
@@ -237,7 +237,7 @@ Info 33   [00:01:04.000] Project '/project/tsconfig.json' (Configured)
 Info 34   [00:01:05.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/project/a.ts SVC-1-1 "export const y = 10;export const a = 10;"
-	/project/b.ts SVC-1-0 "export const newB = 10;"
+	/project/b.ts SVC-2-0 "export const newB = 10;"
 
 Info 35   [00:01:06.000] -----------------------------------------------
 Info 36   [00:01:07.000] request:

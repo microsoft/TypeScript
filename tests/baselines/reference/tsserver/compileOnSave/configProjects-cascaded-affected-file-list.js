@@ -411,7 +411,7 @@ Info 35   [00:01:10.000] Project '/a/b/tsconfig.json' (Configured)
 Info 36   [00:01:11.000] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/moduleFile1.ts SVC-1-1 "export var T: number;export function Foo() { };"
-	/a/b/file1Consumer1.ts SVC-1-1 "import {Foo} from \"./moduleFile1\"; export var y = 10;export var T: number;"
+	/a/b/file1Consumer1.ts SVC-2-1 "import {Foo} from \"./moduleFile1\"; export var y = 10;export var T: number;"
 	/a/b/file1Consumer1Consumer1.ts Text-1 "import {y} from \"./file1Consumer1\";"
 	/a/b/globalFile3.ts Text-1 "interface GlobalFoo { age: number }"
 

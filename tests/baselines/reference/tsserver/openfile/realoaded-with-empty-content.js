@@ -32,7 +32,7 @@ Info 12   [00:00:21.000] Starting updateGraphWorker: Project: externalProject
 Info 13   [00:00:22.000] Finishing updateGraphWorker: Project: externalProject Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 14   [00:00:23.000] Project 'externalProject' (External)
 Info 15   [00:00:24.000] 	Files (1)
-	/a/b/app.ts SVC-1-0 ""
+	/a/b/app.ts SVC-2-0 ""
 
 Info 16   [00:00:25.000] -----------------------------------------------
 Info 17   [00:00:26.000] Project 'externalProject' (External)

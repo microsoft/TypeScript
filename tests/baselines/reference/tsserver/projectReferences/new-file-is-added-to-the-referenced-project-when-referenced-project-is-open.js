@@ -193,7 +193,7 @@ Info 41   [00:01:20.000] Finishing updateGraphWorker: Project: /user/username/pr
 Info 42   [00:01:21.000] Project '/user/username/projects/myproject/projects/project1/tsconfig.json' (Configured)
 Info 43   [00:01:22.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/projects/project1/class1.ts SVC-1-0 "class class1 {}"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -289,7 +289,7 @@ Info 57   [00:01:49.000] Finishing updateGraphWorker: Project: /user/username/pr
 Info 58   [00:01:50.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info 59   [00:01:51.000] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/projects/project1/class1.ts SVC-1-0 "class class1 {}"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
 	/user/username/projects/myproject/projects/project1/class3.ts Text-1 "class class3 {}"
 	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
@@ -310,7 +310,7 @@ Info 63   [00:01:55.000] Finishing updateGraphWorker: Project: /user/username/pr
 Info 64   [00:01:56.000] Project '/user/username/projects/myproject/projects/project1/tsconfig.json' (Configured)
 Info 65   [00:01:57.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/projects/project1/class1.ts SVC-1-0 "class class1 {}"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
 	/user/username/projects/myproject/projects/project1/class3.ts Text-1 "class class3 {}"
 
 

@@ -192,7 +192,7 @@ Info 37   [00:01:12.000] Finishing updateGraphWorker: Project: /user/username/pr
 Info 38   [00:01:13.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 39   [00:01:14.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/dependency/fns.ts SVC-1-0 "export function fn1() { }\nexport function fn2() { }\n"
+	/user/username/projects/myproject/dependency/fns.ts Text-1 "export function fn1() { }\nexport function fn2() { }\n"
 
 
 	../../../../../a/lib/lib.d.ts

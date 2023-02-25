@@ -3065,10 +3065,6 @@ declare namespace ts {
             remove(path: NormalizedPath): void;
         }
         function isDynamicFileName(fileName: NormalizedPath): boolean;
-        interface ScriptInfoVersion {
-            svc: number;
-            text: number;
-        }
         class ScriptInfo {
             private readonly host;
             readonly fileName: NormalizedPath;
@@ -3081,10 +3077,9 @@ declare namespace ts {
             readonly containingProjects: Project[];
             private formatSettings;
             private preferences;
-            private textStorage;
-            constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
+            constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: number);
             isScriptOpen(): boolean;
-            open(newText: string): void;
+            open(newText: string | undefined): void;
             close(fileExists?: boolean): void;
             getSnapshot(): IScriptSnapshot;
             private ensureRealPath;

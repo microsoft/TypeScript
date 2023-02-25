@@ -191,7 +191,7 @@ Info 51   [00:02:01.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.jso
 Info 52   [00:02:02.000] Project '/a/b/tsconfig.json' (Configured)
 Info 53   [00:02:03.000] 	Files (3)
 	/a/b/src/file1.ts SVC-1-0 "let x = 1;"
-	/a/b/file3.ts SVC-1-0 "let z = 1;"
+	/a/b/file3.ts Text-1 "let z = 1;"
 	/a/b/src/file2.ts SVC-1-0 "let y = 1;"
 
 

@@ -227,7 +227,7 @@ Info 28   [00:00:59.000] Project '/project/tsconfig.json' (Configured)
 Info 29   [00:01:00.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/project/a.ts SVC-1-1 "export const y = 10;export const a = 10;"
-	/project/b.ts SVC-1-0 "export const b = 10;"
+	/project/b.ts Text-1 "export const b = 10;"
 
 Info 30   [00:01:01.000] -----------------------------------------------
 Info 31   [00:01:02.000] request:

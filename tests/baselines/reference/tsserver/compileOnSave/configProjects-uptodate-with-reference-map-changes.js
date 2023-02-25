@@ -438,7 +438,7 @@ Info 35   [00:01:12.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.jso
 Info 36   [00:01:13.000] Project '/a/b/tsconfig.json' (Configured)
 Info 37   [00:01:14.000] 	Files (6)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/a/b/file1Consumer1.ts SVC-1-1 "File1\"; export var y = 10;"
+	/a/b/file1Consumer1.ts SVC-2-1 "File1\"; export var y = 10;"
 	/a/b/moduleFile1.ts SVC-1-1 "export var T: number;export function Foo() { };"
 	/a/b/file1Consumer2.ts Text-1 "import {Foo} from \"./moduleFile1\"; let z = 10;"
 	/a/b/globalFile3.ts Text-1 "interface GlobalFoo { age: number }"
@@ -643,7 +643,7 @@ Info 47   [00:01:24.000] Project '/a/b/tsconfig.json' (Configured)
 Info 48   [00:01:25.000] 	Files (6)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/moduleFile1.ts SVC-1-2 "export var T2: string;export var T: number;export function Foo() { };"
-	/a/b/file1Consumer1.ts SVC-1-2 "import {Foo} from \"./moduleFile1\";File1\"; export var y = 10;"
+	/a/b/file1Consumer1.ts SVC-2-2 "import {Foo} from \"./moduleFile1\";File1\"; export var y = 10;"
 	/a/b/file1Consumer2.ts Text-1 "import {Foo} from \"./moduleFile1\"; let z = 10;"
 	/a/b/globalFile3.ts Text-1 "interface GlobalFoo { age: number }"
 	/a/b/moduleFile2.ts Text-1 "export var Foo4 = 10;"

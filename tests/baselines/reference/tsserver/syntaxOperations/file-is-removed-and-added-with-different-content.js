@@ -600,7 +600,7 @@ Info 68   [00:02:18.000] Project '/user/username/projects/myproject/tsconfig.jso
 Info 69   [00:02:19.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/app.ts SVC-1-0 "console.log('Hello world');"
-	/user/username/projects/myproject/unitTest1.ts Text-3 "import assert = require('assert');\n\nexport function Test1() {\n    assert.ok(true, \"This shouldn't fail\");\n};\n\nexport function Test2() {\n    assert.ok(1 === 1, \"This shouldn't fail\");\n    assert.ok(false, \"This should fail\");\n};"
+	/user/username/projects/myproject/unitTest1.ts Text-2 "import assert = require('assert');\n\nexport function Test1() {\n    assert.ok(true, \"This shouldn't fail\");\n};\n\nexport function Test2() {\n    assert.ok(1 === 1, \"This shouldn't fail\");\n    assert.ok(false, \"This should fail\");\n};"
 
 
 	../../../../a/lib/lib.d.ts

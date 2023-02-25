@@ -313,7 +313,7 @@ Info 78   [00:02:11.000] Finishing updateGraphWorker: Project: /dev/null/inferre
 Info 79   [00:02:12.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 80   [00:02:13.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js SVC-1-0 "function bar() { }"
+	/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js Text-1 "function bar() { }"
 
 
 	../../../../../../../a/lib/lib.d.ts

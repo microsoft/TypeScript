@@ -361,7 +361,7 @@ Info 55   [00:01:56.000] Finishing updateGraphWorker: Project: /dev/null/inferre
 Info 56   [00:01:57.000] Project '/dev/null/inferredProject2*' (Inferred)
 Info 57   [00:01:58.000] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/a/b/projects/files/file1.ts SVC-1-0 "export let a = 10;"
+	/a/b/projects/files/file1.ts Text-1 "export let a = 10;"
 
 
 	../../../lib/lib.d.ts

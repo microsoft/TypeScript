@@ -227,7 +227,7 @@ Info 28   [00:00:59.000] Project '/project/tsconfig.json' (Configured)
 Info 29   [00:01:00.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/project/a.ts SVC-1-1 "export const y = 10;export const a = 10;"
-	/project/b.ts SVC-1-0 "export const b = 10;"
+	/project/b.ts Text-1 "export const b = 10;"
 
 Info 30   [00:01:01.000] -----------------------------------------------
 Info 31   [00:01:02.000] request:
@@ -295,7 +295,7 @@ Info 35   [00:01:08.000] Project '/project/tsconfig.json' (Configured)
 Info 36   [00:01:09.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/project/a.ts SVC-1-1 "export const y = 10;export const a = 10;"
-	/project/b.ts SVC-1-1 "export const y = 10;export const b = 10;"
+	/project/b.ts SVC-2-1 "export const y = 10;export const b = 10;"
 
 Info 37   [00:01:10.000] -----------------------------------------------
 Info 38   [00:01:11.000] request:
@@ -357,18 +357,12 @@ Info 40   [00:01:19.000] response:
       "responseRequired": false
     }
 Info 41   [00:01:20.000] Starting updateGraphWorker: Project: /project/tsconfig.json
-Info 42   [00:01:21.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 43   [00:01:22.000] Project '/project/tsconfig.json' (Configured)
-Info 44   [00:01:23.000] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/project/a.ts SVC-1-1 "export const y = 10;export const a = 10;"
-	/project/b.ts Text-2 "export const y = 10;export const b = 10;"
-
-Info 45   [00:01:24.000] -----------------------------------------------
-Info 46   [00:01:27.000] FileWatcher:: Triggered with /project/b.ts 1:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
-Info 47   [00:01:28.000] Scheduled: /project/tsconfig.json
-Info 48   [00:01:29.000] Scheduled: *ensureProjectForOpenFiles*
-Info 49   [00:01:30.000] Elapsed:: *ms FileWatcher:: Triggered with /project/b.ts 1:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
+Info 42   [00:01:21.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 43   [00:01:22.000] Same program as before
+Info 44   [00:01:25.000] FileWatcher:: Triggered with /project/b.ts 1:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
+Info 45   [00:01:26.000] Scheduled: /project/tsconfig.json
+Info 46   [00:01:27.000] Scheduled: *ensureProjectForOpenFiles*
+Info 47   [00:01:28.000] Elapsed:: *ms FileWatcher:: Triggered with /project/b.ts 1:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
 Before running timeout callbacks
 //// [/project/b.ts]
 export const y = 10;export const b = 10;export const x = 10;
@@ -390,33 +384,33 @@ FsWatchesRecursive::
 /project:
   {}
 
-Info 50   [00:01:31.000] Running: /project/tsconfig.json
-Info 51   [00:01:32.000] Starting updateGraphWorker: Project: /project/tsconfig.json
-Info 52   [00:01:33.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 5 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 53   [00:01:34.000] Project '/project/tsconfig.json' (Configured)
-Info 54   [00:01:35.000] 	Files (3)
+Info 48   [00:01:29.000] Running: /project/tsconfig.json
+Info 49   [00:01:30.000] Starting updateGraphWorker: Project: /project/tsconfig.json
+Info 50   [00:01:31.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 51   [00:01:32.000] Project '/project/tsconfig.json' (Configured)
+Info 52   [00:01:33.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/project/a.ts SVC-1-1 "export const y = 10;export const a = 10;"
 	/project/b.ts Text-3 "export const y = 10;export const b = 10;export const x = 10;"
 
-Info 55   [00:01:36.000] -----------------------------------------------
-Info 56   [00:01:37.000] Running: *ensureProjectForOpenFiles*
-Info 57   [00:01:38.000] Before ensureProjectForOpenFiles:
-Info 58   [00:01:39.000] Project '/project/tsconfig.json' (Configured)
-Info 58   [00:01:40.000] 	Files (3)
+Info 53   [00:01:34.000] -----------------------------------------------
+Info 54   [00:01:35.000] Running: *ensureProjectForOpenFiles*
+Info 55   [00:01:36.000] Before ensureProjectForOpenFiles:
+Info 56   [00:01:37.000] Project '/project/tsconfig.json' (Configured)
+Info 56   [00:01:38.000] 	Files (3)
 
-Info 58   [00:01:41.000] -----------------------------------------------
-Info 58   [00:01:42.000] Open files: 
-Info 58   [00:01:43.000] 	FileName: /project/a.ts ProjectRootPath: undefined
-Info 58   [00:01:44.000] 		Projects: /project/tsconfig.json
-Info 58   [00:01:45.000] After ensureProjectForOpenFiles:
-Info 59   [00:01:46.000] Project '/project/tsconfig.json' (Configured)
-Info 59   [00:01:47.000] 	Files (3)
+Info 56   [00:01:39.000] -----------------------------------------------
+Info 56   [00:01:40.000] Open files: 
+Info 56   [00:01:41.000] 	FileName: /project/a.ts ProjectRootPath: undefined
+Info 56   [00:01:42.000] 		Projects: /project/tsconfig.json
+Info 56   [00:01:43.000] After ensureProjectForOpenFiles:
+Info 57   [00:01:44.000] Project '/project/tsconfig.json' (Configured)
+Info 57   [00:01:45.000] 	Files (3)
 
-Info 59   [00:01:48.000] -----------------------------------------------
-Info 59   [00:01:49.000] Open files: 
-Info 59   [00:01:50.000] 	FileName: /project/a.ts ProjectRootPath: undefined
-Info 59   [00:01:51.000] 		Projects: /project/tsconfig.json
+Info 57   [00:01:46.000] -----------------------------------------------
+Info 57   [00:01:47.000] Open files: 
+Info 57   [00:01:48.000] 	FileName: /project/a.ts ProjectRootPath: undefined
+Info 57   [00:01:49.000] 		Projects: /project/tsconfig.json
 After running timeout callbacks
 
 PolledWatches::

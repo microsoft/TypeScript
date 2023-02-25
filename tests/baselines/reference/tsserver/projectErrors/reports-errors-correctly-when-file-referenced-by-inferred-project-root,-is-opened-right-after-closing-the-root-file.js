@@ -1024,7 +1024,7 @@ Info 66   [00:01:59.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 67   [00:02:00.000] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/src/client/app.js SVC-1-0 ""
-	/user/username/projects/myproject/src/server/utilities.js SVC-1-0 "function getHostName() { return \"hello\"; } export { getHostName };"
+	/user/username/projects/myproject/src/server/utilities.js Text-1 "function getHostName() { return \"hello\"; } export { getHostName };"
 
 
 	../../../../a/lib/lib.d.ts
