@@ -1,13 +1,13 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    commonFile1,
+    commonFile2,
+} from "../tscWatch/helpers";
+import {
     createServerHost,
     File,
     libFile,
 } from "../virtualFileSystemWithWatch";
-import {
-    commonFile1,
-    commonFile2,
-} from "../tscWatch/helpers";
 import {
     baselineTsserverLogs,
     checkNumberOfConfiguredProjects,

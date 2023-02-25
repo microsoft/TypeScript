@@ -33,6 +33,7 @@ import {
     forEachAncestorDirectory,
     getBaseFileName,
     GetCanonicalFileName,
+    getConditions,
     getDirectoryPath,
     getEmitModuleResolutionKind,
     getModeForResolutionAtIndex,
@@ -46,6 +47,7 @@ import {
     getPathsBasePath,
     getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
+    getResolvePackageJsonExports,
     getSourceFileOfModule,
     getSupportedExtensions,
     getTextOfIdentifierOrLiteral,
@@ -369,7 +371,9 @@ function computeModuleSpecifiers(
     let redirectPathsSpecifiers: string[] | undefined;
     let relativeSpecifiers: string[] | undefined;
     for (const modulePath of modulePaths) {
-        const specifier = tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode);
+        const specifier = modulePath.isInNodeModules
+            ? tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)
+            : undefined;
         nodeModulesSpecifiers = append(nodeModulesSpecifiers, specifier);
         if (specifier && modulePath.isRedirect) {
             // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
@@ -945,10 +949,15 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
             const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
             const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
-            if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
-                const conditions = ["node", importMode === ModuleKind.ESNext ? "import" : "require", "types"];
-                const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string"
-                    ? tryGetModuleNameFromExports(options, path, packageRootPath, getPackageNameFromTypesPackageName(packageJsonContent.name), packageJsonContent.exports, conditions)
+            if (getResolvePackageJsonExports(options)) {
+                // The package name that we found in node_modules could be different from the package
+                // name in the package.json content via url/filepath dependency specifiers. We need to
+                // use the actual directory name, so don't look at `packageJsonContent.name` here.
+                const nodeModulesDirectoryName = packageRootPath.substring(parts.topLevelPackageNameIndex + 1);
+                const packageName = getPackageNameFromTypesPackageName(nodeModulesDirectoryName);
+                const conditions = getConditions(options, importMode === ModuleKind.ESNext);
+                const fromExports = packageJsonContent.exports
+                    ? tryGetModuleNameFromExports(options, path, packageRootPath, packageName, packageJsonContent.exports, conditions)
                     : undefined;
                 if (fromExports) {
                     const withJsExtension = !hasTSFileExtension(fromExports.moduleFileToTry)

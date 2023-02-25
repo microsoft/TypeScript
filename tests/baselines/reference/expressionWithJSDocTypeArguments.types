@@ -33,19 +33,19 @@ const ComeOnFoo = foo<?string?>;
 >foo : <T>(x: T) => T
 
 type TWhatFoo = typeof foo<?>;
->TWhatFoo : (x: any) => any
+>TWhatFoo : typeof foo<unknown>
 >foo : <T>(x: T) => T
 
 type THuhFoo = typeof foo<string?>;
->THuhFoo : (x: string | null) => string | null
+>THuhFoo : typeof foo<string | null>
 >foo : <T>(x: T) => T
 
 type TNopeFoo = typeof foo<?string>;
->TNopeFoo : (x: string | null) => string | null
+>TNopeFoo : typeof foo<string | null>
 >foo : <T>(x: T) => T
 
 type TComeOnFoo = typeof foo<?string?>;
->TComeOnFoo : (x: string | null) => string | null
+>TComeOnFoo : typeof foo<(string | null) | null>
 >foo : <T>(x: T) => T
 
 const WhatBar = Bar<?>;
@@ -69,18 +69,18 @@ const ComeOnBar = Bar<?string?>;
 >Bar : typeof Bar
 
 type TWhatBar = typeof Bar<?>;
->TWhatBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+>TWhatBar : typeof Bar<unknown>
 >Bar : typeof Bar
 
 type THuhBar = typeof Bar<string?>;
->THuhBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
+>THuhBar : typeof Bar<string | null>
 >Bar : typeof Bar
 
 type TNopeBar = typeof Bar<?string>;
->TNopeBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
+>TNopeBar : typeof Bar<string | null>
 >Bar : typeof Bar
 
 type TComeOnBar = typeof Bar<?string?>;
->TComeOnBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
+>TComeOnBar : typeof Bar<(string | null) | null>
 >Bar : typeof Bar
 

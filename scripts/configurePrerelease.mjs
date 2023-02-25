@@ -1,6 +1,6 @@
-import { normalize, relative } from "path";
 import assert from "assert";
 import { readFileSync, writeFileSync } from "fs";
+import { normalize, relative } from "path";
 import url from "url";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));

@@ -38,11 +38,11 @@ File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist.
 File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'lib-boilerplate' from '/Users/name/projects/lib-boilerplate/test/basic.spec.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist according to earlier cached lookups.
 File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath '.' with target './src/index.ts'.
-File '/Users/name/projects/lib-boilerplate/src/index.ts' exist - use it as a name resolution result.
+File '/Users/name/projects/lib-boilerplate/src/index.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/lib-boilerplate/src/index.ts', result '/Users/name/projects/lib-boilerplate/src/index.ts'.
 ======== Module name 'lib-boilerplate' was successfully resolved to '/Users/name/projects/lib-boilerplate/src/index.ts' with Package ID 'lib-boilerplate/src/index.ts@0.0.2'. ========
 File '/a/lib/package.json' does not exist.
