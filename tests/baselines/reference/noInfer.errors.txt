@@ -6,9 +6,9 @@ tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(23,22):
   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(24,14): error TS2345: Argument of type '{ x: number; y: number; }' is not assignable to parameter of type '{ x: number; }'.
   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
-tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(32,14): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
+tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(31,14): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
   Property 'foo' is missing in type '{}' but required in type '{ foo: number; }'.
-tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(42,9): error TS2322: Type 'NoInfer<T>' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(41,9): error TS2322: Type 'NoInfer<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'NoInfer<T>'.
 
 
@@ -20,19 +20,19 @@ tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(42,9): 
                ~~~~~
 !!! error TS2345: Argument of type '"bar"' is not assignable to parameter of type '"foo"'.
     
-    declare class Animal { move(): void }
-    declare class Dog extends Animal { woof(): void }
-    declare function doSomething<T>(value: T, getDefault: () => NoInfer<T>): void;
+    export declare class Animal { move(): void }
+    export declare class Dog extends Animal { woof(): void }
+    export declare function doSomething<T>(value: T, getDefault: () => NoInfer<T>): void;
     
     doSomething(new Animal(), () => new Animal()); // ok
     doSomething(new Animal(), () => new Dog()); // ok
     doSomething(new Dog(), () => new Animal()); // error
                                  ~~~~~~~~~~~~
 !!! error TS2741: Property 'woof' is missing in type 'Animal' but required in type 'Dog'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:7:36: 'woof' is declared here.
-!!! related TS6502 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:8:55: The expected type comes from the return type of this signature.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:7:43: 'woof' is declared here.
+!!! related TS6502 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:8:62: The expected type comes from the return type of this signature.
     
-    declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
+    export declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
     
     assertEqual({ x: 1 }, { x: 3 }); // ok
     const g = { x: 3, y: 2 };
@@ -42,8 +42,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(42,9): 
 !!! error TS2345:   Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:17:19: 'y' is declared here.
     
-    declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
-    declare function test(value: { x: number; }): number;
+    export declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
+    export declare function test(value: { x: number; }): number;
     
     invoke(test, { x: 1, y: 2 }); // error
                          ~~~~
@@ -54,23 +54,22 @@ tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(42,9): 
 !!! error TS2345: Argument of type '{ x: number; y: number; }' is not assignable to parameter of type '{ x: number; }'.
 !!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
     
-    
-    type Component<Props> = { props: Props; };
-    declare function doWork<Props>(Component: Component<Props>, props: NoInfer<Props>): void;
-    declare const comp: Component<{ foo: number }>;
+    export type Component<Props> = { props: Props; };
+    export declare function doWork<Props>(Component: Component<Props>, props: NoInfer<Props>): void;
+    export declare const comp: Component<{ foo: number }>;
     
     doWork(comp, { foo: 42 }); // ok
     doWork(comp, {}); // error
                  ~~
 !!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
 !!! error TS2345:   Property 'foo' is missing in type '{}' but required in type '{ foo: number; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:29:33: 'foo' is declared here.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:28:40: 'foo' is declared here.
     
-    declare function mutate<T>(callback: (a: NoInfer<T>, b: number) => T): T;
-    const mutate1 = mutate((a, b) => b);
+    export declare function mutate<T>(callback: (a: NoInfer<T>, b: number) => T): T;
+    export const mutate1 = mutate((a, b) => b);
     
-    declare class ExampleClass<T> {}
-    class OkClass<T> {
+    export declare class ExampleClass<T> {}
+    export class OkClass<T> {
         constructor(private clazz: ExampleClass<T>, private _value: NoInfer<T>) {}
     
         get value(): T {
@@ -80,5 +79,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(42,9): 
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'NoInfer<T>'.
         }
     }
-    
+    export class OkClass2<T> {
+        constructor(private clazz: ExampleClass<T>, public _value: NoInfer<T>) {}
+    }
     

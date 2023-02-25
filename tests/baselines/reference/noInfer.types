@@ -16,16 +16,16 @@ foo('foo', 'bar') // error
 >'foo' : "foo"
 >'bar' : "bar"
 
-declare class Animal { move(): void }
+export declare class Animal { move(): void }
 >Animal : Animal
 >move : () => void
 
-declare class Dog extends Animal { woof(): void }
+export declare class Dog extends Animal { woof(): void }
 >Dog : Dog
 >Animal : Animal
 >woof : () => void
 
-declare function doSomething<T>(value: T, getDefault: () => NoInfer<T>): void;
+export declare function doSomething<T>(value: T, getDefault: () => NoInfer<T>): void;
 >doSomething : <T>(value: T, getDefault: () => NoInfer<T>) => void
 >value : T
 >getDefault : () => NoInfer<T>
@@ -57,7 +57,7 @@ doSomething(new Dog(), () => new Animal()); // error
 >new Animal() : Animal
 >Animal : typeof Animal
 
-declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
+export declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
 >assertEqual : <T>(actual: T, expected: NoInfer<T>) => boolean
 >actual : T
 >expected : NoInfer<T>
@@ -88,13 +88,13 @@ assertEqual(g, { x: 3 }); // error
 >x : number
 >3 : 3
 
-declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
+export declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
 >invoke : <T, R>(func: (value: T) => R, value: NoInfer<T>) => R
 >func : (value: T) => R
 >value : T
 >value : NoInfer<T>
 
-declare function test(value: { x: number; }): number;
+export declare function test(value: { x: number; }): number;
 >test : (value: {    x: number;}) => number
 >value : { x: number; }
 >x : number
@@ -118,17 +118,16 @@ test({ x: 1, y: 2 }); // error
 >y : number
 >2 : 2
 
-
-type Component<Props> = { props: Props; };
+export type Component<Props> = { props: Props; };
 >Component : Component<Props>
 >props : Props
 
-declare function doWork<Props>(Component: Component<Props>, props: NoInfer<Props>): void;
+export declare function doWork<Props>(Component: Component<Props>, props: NoInfer<Props>): void;
 >doWork : <Props>(Component: Component<Props>, props: NoInfer<Props>) => void
 >Component : Component<Props>
 >props : NoInfer<Props>
 
-declare const comp: Component<{ foo: number }>;
+export declare const comp: Component<{ foo: number }>;
 >comp : Component<{ foo: number; }>
 >foo : number
 
@@ -146,13 +145,13 @@ doWork(comp, {}); // error
 >comp : Component<{ foo: number; }>
 >{} : {}
 
-declare function mutate<T>(callback: (a: NoInfer<T>, b: number) => T): T;
+export declare function mutate<T>(callback: (a: NoInfer<T>, b: number) => T): T;
 >mutate : <T>(callback: (a: NoInfer<T>, b: number) => T) => T
 >callback : (a: NoInfer<T>, b: number) => T
 >a : NoInfer<T>
 >b : number
 
-const mutate1 = mutate((a, b) => b);
+export const mutate1 = mutate((a, b) => b);
 >mutate1 : unknown
 >mutate((a, b) => b) : unknown
 >mutate : <T>(callback: (a: NoInfer<T>, b: number) => T) => T
@@ -161,10 +160,10 @@ const mutate1 = mutate((a, b) => b);
 >b : number
 >b : number
 
-declare class ExampleClass<T> {}
+export declare class ExampleClass<T> {}
 >ExampleClass : ExampleClass<T>
 
-class OkClass<T> {
+export class OkClass<T> {
 >OkClass : OkClass<T>
 
     constructor(private clazz: ExampleClass<T>, private _value: NoInfer<T>) {}
@@ -180,5 +179,11 @@ class OkClass<T> {
 >_value : NoInfer<T>
     }
 }
+export class OkClass2<T> {
+>OkClass2 : OkClass2<T>
 
+    constructor(private clazz: ExampleClass<T>, public _value: NoInfer<T>) {}
+>clazz : ExampleClass<T>
+>_value : NoInfer<T>
+}
 
