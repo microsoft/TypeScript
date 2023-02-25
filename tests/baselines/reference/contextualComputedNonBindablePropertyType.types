@@ -48,3 +48,50 @@ forceMatch2({
 
 });
 
+// repro #52954
+
+type Original = { foo: 'expects a string literal', baz: boolean, bar: number }
+>Original : { foo: 'expects a string literal'; baz: boolean; bar: number; }
+>foo : "expects a string literal"
+>baz : boolean
+>bar : number
+
+type Mapped = {
+>Mapped : { foo: (arg: "expects a string literal") => "expects a string literal"; baz: (arg: boolean) => boolean; bar: (arg: number) => number; }
+
+  [prop in keyof Original]: (arg: Original[prop]) => Original[prop]
+>arg : Original[prop]
+}
+
+const propSelector =  <propName extends string>(propName: propName): propName => propName;
+>propSelector : <propName extends string>(propName: propName) => propName
+><propName extends string>(propName: propName): propName => propName : <propName extends string>(propName: propName) => propName
+>propName : propName
+>propName : propName
+
+const unexpectedlyFailingExample: Mapped = {
+>unexpectedlyFailingExample : Mapped
+>{  foo: (arg) => 'expects a string literal',  baz: (arg) => true,  [propSelector('bar')]: (arg) => 51345} : { foo: (arg: "expects a string literal") => "expects a string literal"; baz: (arg: boolean) => true; bar: (arg: number) => number; }
+
+  foo: (arg) => 'expects a string literal',
+>foo : (arg: "expects a string literal") => "expects a string literal"
+>(arg) => 'expects a string literal' : (arg: "expects a string literal") => "expects a string literal"
+>arg : "expects a string literal"
+>'expects a string literal' : "expects a string literal"
+
+  baz: (arg) => true,
+>baz : (arg: boolean) => true
+>(arg) => true : (arg: boolean) => true
+>arg : boolean
+>true : true
+
+  [propSelector('bar')]: (arg) => 51345
+>[propSelector('bar')] : (arg: number) => number
+>propSelector('bar') : "bar"
+>propSelector : <propName extends string>(propName: propName) => propName
+>'bar' : "bar"
+>(arg) => 51345 : (arg: number) => number
+>arg : number
+>51345 : 51345
+}
+

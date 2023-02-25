@@ -20,3 +20,19 @@ declare function forceMatch2<T>(matched: {
 forceMatch2({
   [testD()]: ({ key }) => {},
 });
+
+// repro #52954
+
+type Original = { foo: 'expects a string literal', baz: boolean, bar: number }
+
+type Mapped = {
+  [prop in keyof Original]: (arg: Original[prop]) => Original[prop]
+}
+
+const propSelector =  <propName extends string>(propName: propName): propName => propName;
+
+const unexpectedlyFailingExample: Mapped = {
+  foo: (arg) => 'expects a string literal',
+  baz: (arg) => true,
+  [propSelector('bar')]: (arg) => 51345
+}
