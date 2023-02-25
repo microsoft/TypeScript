@@ -349,7 +349,8 @@ Info 36   [00:01:13.000] request:
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/logger.ts",
-        "projectRootPath": "/user/username/projects/myproject"
+        "projectRootPath": "/user/username/projects/myproject",
+        "fileContent": "export class logger { }"
       },
       "seq": 4,
       "type": "request"

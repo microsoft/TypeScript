@@ -732,16 +732,17 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 }
 
-export function openFilesForSession(files: readonly (string | File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: TestSession): void {
+export function openFilesForSession(files: readonly (string | File | { readonly file: File | string, readonly projectRootPath?: string, content?: string })[], session: TestSession): void {
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
             arguments: ts.isString(file) ?
                 { file } :
-                "projectRootPath" in file ? // eslint-disable-line local/no-in-operator
+                "file" in file ? // eslint-disable-line local/no-in-operator
                     {
                         file: typeof file.file === "string" ? file.file : file.file.path,
-                        projectRootPath: file.projectRootPath
+                        projectRootPath: file.projectRootPath,
+                        fileContent: file.content,
                     } :
                     { file: file.path }
         });
