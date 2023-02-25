@@ -117,8 +117,8 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
                 }
             }
 
-            if (codefix.containsJSDocTypedef(node)) {
-                const jsdocTypedefNode = codefix.getJSDocTypedefNode(node);
+            const jsdocTypedefNode = codefix.getJSDocTypedefNode(node);
+            if (jsdocTypedefNode) {
                 diags.push(createDiagnosticForNode(jsdocTypedefNode, Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type));
             }
 

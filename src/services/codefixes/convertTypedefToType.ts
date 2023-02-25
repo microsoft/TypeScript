@@ -1,18 +1,17 @@
 import {
     Diagnostics,
     factory,
-    flatMap,
+    forEach,
     getSynthesizedDeepClone,
     getTokenAtPosition,
-    HasJSDoc,
     hasJSDocNodes,
     InterfaceDeclaration,
-    isInJSDoc,
     isJSDocTypedefTag,
-    JSDocPropertyTag,
+    JSDocPropertyLikeTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
+    isJSDocTypeLiteral,
     mapDefined,
     Node,
     PropertySignature,
@@ -56,7 +55,7 @@ registerCodeFix({
 });
 
 function doChange(changes: textChanges.ChangeTracker, node: Node, sourceFile: SourceFile) {
-    if (containsTypeDefTag(node)) {
+    if (isJSDocTypedefTag(node)) {
         fixSingleTypeDef(changes, node, sourceFile);
     }
 }
@@ -133,15 +132,15 @@ function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): Property
     const propertyTags = typeLiteral.jsDocPropertyTags;
     if (!some(propertyTags)) return;
 
-    const getSignature = (tag: JSDocPropertyTag) => {
+    const getSignature = (tag: JSDocPropertyLikeTag) => {
         const name = getPropertyName(tag);
         const type = tag.typeExpression?.type;
         const isOptional = tag.isBracketed;
         let typeReference;
 
         // Recursively handle nested object type
-        if (type && type.kind === SyntaxKind.JSDocTypeLiteral) {
-            const signatures = createSignatureFromTypeLiteral(type as JSDocTypeLiteral);
+        if (type && isJSDocTypeLiteral(type)) {
+            const signatures = createSignatureFromTypeLiteral(type);
             typeReference = factory.createTypeLiteralNode(signatures);
         }
         // Leaf node, where type.kind === SyntaxKind.JSDocTypeExpression
@@ -162,43 +161,18 @@ function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): Property
         }
     };
 
-    const props = mapDefined(propertyTags as JSDocPropertyTag[], getSignature);
+    const props = mapDefined(propertyTags, getSignature);
     return props;
 }
 
-function getPropertyName(tag: JSDocPropertyTag): string | undefined {
-    const { name } = tag;
-    if (!name) return;
+function getPropertyName(tag: JSDocPropertyLikeTag): string | undefined {
+    return tag.name.kind === SyntaxKind.Identifier ? tag.name.text : tag.name.right.text;
+}
 
-    let propertyName;
-    // for "@property {string} parent.child" or "@property {string} parent.child.grandchild" in nested object type
-    // We'll get "child" in the first example or "grandchild" in the second example as the prop name
-    if (name.kind === SyntaxKind.QualifiedName) {
-        propertyName = name.right.text;
+/** @internal */
+export function getJSDocTypedefNode(node: Node): JSDocTypedefTag | undefined {
+    if (hasJSDocNodes(node)) {
+        return forEach(node.jsDoc, (node) => node.tags?.find(isJSDocTypedefTag));
     }
-    else {
-        propertyName = tag.name.getText();
-    }
-    return propertyName;
-}
-
-
-/** @internal */
-export function containsJSDocTypedef(node: Node): node is HasJSDoc {
-    return hasJSDocNodes(node) && some(node.jsDoc, node => some(node.tags, tag => isJSDocTypedefTag(tag)));
-}
-
-/** @internal */
-export function getJSDocTypedefNode(node: HasJSDoc): JSDocTypedefTag {
-    const jsDocNodes = node.jsDoc || [];
-
-    return flatMap(jsDocNodes, (node) => {
-        const tags = node.tags || [];
-        return tags.filter((tag) => isJSDocTypedefTag(tag));
-    })[0] as unknown as JSDocTypedefTag;
-}
-
-/** @internal */
-export function containsTypeDefTag(node: Node): node is JSDocTypedefTag {
-    return isInJSDoc(node) && isJSDocTypedefTag(node);
+    return undefined;
 }
