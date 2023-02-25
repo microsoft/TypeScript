@@ -6039,6 +6039,7 @@ export const enum TypeFlags {
     NonPrimitive    = 1 << 26,  // intrinsic object type
     TemplateLiteral = 1 << 27,  // Template literal type
     StringMapping   = 1 << 28,  // Uppercase/Lowercase type
+    NoInfer         = 1 << 29,  // NoInfer type
 
     /** @internal */
     AnyOrUnknown = Any | Unknown,
@@ -6071,7 +6072,7 @@ export const enum TypeFlags {
     UnionOrIntersection = Union | Intersection,
     StructuredType = Object | Union | Intersection,
     TypeVariable = TypeParameter | IndexedAccess,
-    InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
+    InstantiableNonPrimitive = TypeVariable | Conditional | Substitution | NoInfer,
     InstantiablePrimitive = Index | TemplateLiteral | StringMapping,
     Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
     StructuredOrInstantiable = StructuredType | Instantiable,
@@ -6602,6 +6603,11 @@ export interface TemplateLiteralType extends InstantiableType {
 }
 
 export interface StringMappingType extends InstantiableType {
+    symbol: Symbol;
+    type: Type;
+}
+
+export interface NoInferType extends InstantiableType {
     symbol: Symbol;
     type: Type;
 }

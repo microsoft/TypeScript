@@ -845,6 +845,7 @@ import {
     nodeModulesPathPart,
     nodeStartsNewLexicalEnvironment,
     NodeWithTypeArguments,
+    NoInferType,
     NonNullChain,
     NonNullExpression,
     not,
@@ -1328,18 +1329,18 @@ const enum MinArgumentCountFlags {
     VoidIsNonOptional = 1 << 1,
 }
 
-const enum IntrinsicTypeKind {
+const enum StringMappingTypeKind {
     Uppercase,
     Lowercase,
     Capitalize,
     Uncapitalize
 }
 
-const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Object.entries({
-    Uppercase: IntrinsicTypeKind.Uppercase,
-    Lowercase: IntrinsicTypeKind.Lowercase,
-    Capitalize: IntrinsicTypeKind.Capitalize,
-    Uncapitalize: IntrinsicTypeKind.Uncapitalize
+const stringMappingTypeKinds: ReadonlyMap<string, StringMappingTypeKind> = new Map(Object.entries({
+    Uppercase: StringMappingTypeKind.Uppercase,
+    Lowercase: StringMappingTypeKind.Lowercase,
+    Capitalize: StringMappingTypeKind.Capitalize,
+    Uncapitalize: StringMappingTypeKind.Uncapitalize
 }));
 
 const SymbolLinks = class implements SymbolLinks {
@@ -1876,7 +1877,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var enumLiteralTypes = new Map<string, LiteralType>();
     var indexedAccessTypes = new Map<string, IndexedAccessType>();
     var templateLiteralTypes = new Map<string, TemplateLiteralType>();
-    var stringMappingTypes = new Map<string, StringMappingType>();
+    var intrinsicWrapperTypes = new Map<string, StringMappingType | NoInferType>();
     var substitutionTypes = new Map<string, SubstitutionType>();
     var subtypeReductionCache = new Map<string, Type[]>();
     var decoratorContextOverrideTypeCache = new Map<string, Type>();
@@ -6525,6 +6526,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.StringMapping) {
                 const typeNode = typeToTypeNodeHelper((type as StringMappingType).type, context);
                 return symbolToTypeNode((type as StringMappingType).symbol, context, SymbolFlags.Type, [typeNode]);
+            }
+            if (type.flags & TypeFlags.NoInfer) {
+                const typeNode = typeToTypeNodeHelper((type as NoInferType).type, context);
+                return symbolToTypeNode((type as NoInferType).symbol, context, SymbolFlags.Type, [typeNode]);
             }
             if (type.flags & TypeFlags.IndexedAccess) {
                 const objectTypeNode = typeToTypeNodeHelper((type as IndexedAccessType).objectType, context);
@@ -13727,6 +13732,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const constraint = getBaseConstraint((t as StringMappingType).type);
                 return constraint && constraint !== (t as StringMappingType).type ? getStringMappingType((t as StringMappingType).symbol, constraint) : stringType;
             }
+            if (t.flags & TypeFlags.NoInfer) {
+                return getBaseConstraint((t as NoInferType).type);
+            }
             if (t.flags & TypeFlags.IndexedAccess) {
                 if (isMappedTypeGenericIndexedAccess(t)) {
                     // For indexed access types of the form { [P in K]: E }[X], where K is non-generic and X is generic,
@@ -15168,8 +15176,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         const type = getDeclaredTypeOfSymbol(symbol);
-        if (type === intrinsicMarkerType && intrinsicTypeKinds.has(symbol.escapedName as string) && typeArguments && typeArguments.length === 1) {
-            return getStringMappingType(symbol, typeArguments[0]);
+        if (type === intrinsicMarkerType && typeArguments && typeArguments.length === 1) {
+            if (stringMappingTypeKinds.has(symbol.escapedName as string)) {
+                return getStringMappingType(symbol, typeArguments[0]);
+            }
+            return getNoInferType(symbol, typeArguments[0]);
         }
         const links = getSymbolLinks(symbol);
         const typeParameters = links.typeParameters!;
@@ -17071,37 +17082,55 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type;
     }
 
+    function getNoInferType(symbol: Symbol, type: Type): Type {
+        if (!isGenericType(type)) {
+            return type;
+        }
+        const id = `${getSymbolId(symbol)},${getTypeId(type)}`;
+        let result = intrinsicWrapperTypes.get(id);
+        if (!result) {
+            intrinsicWrapperTypes.set(id, result = createNoInferType(symbol, type));
+        }
+        return result;
+    }
+
     function applyStringMapping(symbol: Symbol, str: string) {
-        switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
-            case IntrinsicTypeKind.Uppercase: return str.toUpperCase();
-            case IntrinsicTypeKind.Lowercase: return str.toLowerCase();
-            case IntrinsicTypeKind.Capitalize: return str.charAt(0).toUpperCase() + str.slice(1);
-            case IntrinsicTypeKind.Uncapitalize: return str.charAt(0).toLowerCase() + str.slice(1);
+        switch (stringMappingTypeKinds.get(symbol.escapedName as string)) {
+            case StringMappingTypeKind.Uppercase: return str.toUpperCase();
+            case StringMappingTypeKind.Lowercase: return str.toLowerCase();
+            case StringMappingTypeKind.Capitalize: return str.charAt(0).toUpperCase() + str.slice(1);
+            case StringMappingTypeKind.Uncapitalize: return str.charAt(0).toLowerCase() + str.slice(1);
         }
         return str;
     }
 
     function applyTemplateStringMapping(symbol: Symbol, texts: readonly string[], types: readonly Type[]): [texts: readonly string[], types: readonly Type[]] {
-        switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
-            case IntrinsicTypeKind.Uppercase: return [texts.map(t => t.toUpperCase()), types.map(t => getStringMappingType(symbol, t))];
-            case IntrinsicTypeKind.Lowercase: return [texts.map(t => t.toLowerCase()), types.map(t => getStringMappingType(symbol, t))];
-            case IntrinsicTypeKind.Capitalize: return [texts[0] === "" ? texts : [texts[0].charAt(0).toUpperCase() + texts[0].slice(1), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
-            case IntrinsicTypeKind.Uncapitalize: return [texts[0] === "" ? texts : [texts[0].charAt(0).toLowerCase() + texts[0].slice(1), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
+        switch (stringMappingTypeKinds.get(symbol.escapedName as string)) {
+            case StringMappingTypeKind.Uppercase: return [texts.map(t => t.toUpperCase()), types.map(t => getStringMappingType(symbol, t))];
+            case StringMappingTypeKind.Lowercase: return [texts.map(t => t.toLowerCase()), types.map(t => getStringMappingType(symbol, t))];
+            case StringMappingTypeKind.Capitalize: return [texts[0] === "" ? texts : [texts[0].charAt(0).toUpperCase() + texts[0].slice(1), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
+            case StringMappingTypeKind.Uncapitalize: return [texts[0] === "" ? texts : [texts[0].charAt(0).toLowerCase() + texts[0].slice(1), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
         }
         return [texts, types];
     }
 
     function getStringMappingTypeForGenericType(symbol: Symbol, type: Type): Type {
         const id = `${getSymbolId(symbol)},${getTypeId(type)}`;
-        let result = stringMappingTypes.get(id);
+        let result = intrinsicWrapperTypes.get(id);
         if (!result) {
-            stringMappingTypes.set(id, result = createStringMappingType(symbol, type));
+            intrinsicWrapperTypes.set(id, result = createStringMappingType(symbol, type));
         }
         return result;
     }
 
     function createStringMappingType(symbol: Symbol, type: Type) {
         const result = createTypeWithSymbol(TypeFlags.StringMapping, symbol) as StringMappingType;
+        result.type = type;
+        return result;
+    }
+
+    function createNoInferType(symbol: Symbol, type: Type) {
+        const result = createTypeWithSymbol(TypeFlags.NoInfer, symbol) as NoInferType;
         result.type = type;
         return result;
     }
@@ -18930,6 +18959,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (flags & TypeFlags.StringMapping) {
             return getStringMappingType((type as StringMappingType).symbol, instantiateType((type as StringMappingType).type, mapper));
+        }
+        if (flags & TypeFlags.NoInfer) {
+            return getNoInferType((type as NoInferType).symbol, instantiateType((type as NoInferType).type, mapper));
         }
         if (flags & TypeFlags.IndexedAccess) {
             const newAliasSymbol = aliasSymbol || type.aliasSymbol;
@@ -24169,7 +24201,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         inferFromTypes(originalSource, originalTarget);
 
         function inferFromTypes(source: Type, target: Type): void {
-            if (!couldContainTypeVariables(target)) {
+            if (!couldContainTypeVariables(target) || source.flags & TypeFlags.NoInfer) {
                 return;
             }
             if (source === wildcardType) {
@@ -43190,7 +43222,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkExportsOnMergedDeclarations(node);
         checkTypeParameters(node.typeParameters);
         if (node.type.kind === SyntaxKind.IntrinsicKeyword) {
-            if (!intrinsicTypeKinds.has(node.name.escapedText as string) || length(node.typeParameters) !== 1) {
+            if (!stringMappingTypeKinds.has(node.name.escapedText as string) || length(node.typeParameters) !== 1) {
                 error(node.type, Diagnostics.The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types);
             }
         }

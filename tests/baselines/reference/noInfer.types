@@ -1,0 +1,184 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts ===
+export declare function foo<T extends string>(a: T, b: NoInfer<T>): void
+>foo : <T extends string>(a: T, b: NoInfer<T>) => void
+>a : T
+>b : NoInfer<T>
+
+foo('foo', 'foo') // ok
+>foo('foo', 'foo') : void
+>foo : <T extends string>(a: T, b: NoInfer<T>) => void
+>'foo' : "foo"
+>'foo' : "foo"
+
+foo('foo', 'bar') // error
+>foo('foo', 'bar') : void
+>foo : <T extends string>(a: T, b: NoInfer<T>) => void
+>'foo' : "foo"
+>'bar' : "bar"
+
+declare class Animal { move(): void }
+>Animal : Animal
+>move : () => void
+
+declare class Dog extends Animal { woof(): void }
+>Dog : Dog
+>Animal : Animal
+>woof : () => void
+
+declare function doSomething<T>(value: T, getDefault: () => NoInfer<T>): void;
+>doSomething : <T>(value: T, getDefault: () => NoInfer<T>) => void
+>value : T
+>getDefault : () => NoInfer<T>
+
+doSomething(new Animal(), () => new Animal()); // ok
+>doSomething(new Animal(), () => new Animal()) : void
+>doSomething : <T>(value: T, getDefault: () => NoInfer<T>) => void
+>new Animal() : Animal
+>Animal : typeof Animal
+>() => new Animal() : () => Animal
+>new Animal() : Animal
+>Animal : typeof Animal
+
+doSomething(new Animal(), () => new Dog()); // ok
+>doSomething(new Animal(), () => new Dog()) : void
+>doSomething : <T>(value: T, getDefault: () => NoInfer<T>) => void
+>new Animal() : Animal
+>Animal : typeof Animal
+>() => new Dog() : () => Dog
+>new Dog() : Dog
+>Dog : typeof Dog
+
+doSomething(new Dog(), () => new Animal()); // error
+>doSomething(new Dog(), () => new Animal()) : void
+>doSomething : <T>(value: T, getDefault: () => NoInfer<T>) => void
+>new Dog() : Dog
+>Dog : typeof Dog
+>() => new Animal() : () => Animal
+>new Animal() : Animal
+>Animal : typeof Animal
+
+declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
+>assertEqual : <T>(actual: T, expected: NoInfer<T>) => boolean
+>actual : T
+>expected : NoInfer<T>
+
+assertEqual({ x: 1 }, { x: 3 }); // ok
+>assertEqual({ x: 1 }, { x: 3 }) : boolean
+>assertEqual : <T>(actual: T, expected: NoInfer<T>) => boolean
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+>{ x: 3 } : { x: number; }
+>x : number
+>3 : 3
+
+const g = { x: 3, y: 2 };
+>g : { x: number; y: number; }
+>{ x: 3, y: 2 } : { x: number; y: number; }
+>x : number
+>3 : 3
+>y : number
+>2 : 2
+
+assertEqual(g, { x: 3 }); // error
+>assertEqual(g, { x: 3 }) : boolean
+>assertEqual : <T>(actual: T, expected: NoInfer<T>) => boolean
+>g : { x: number; y: number; }
+>{ x: 3 } : { x: number; }
+>x : number
+>3 : 3
+
+declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
+>invoke : <T, R>(func: (value: T) => R, value: NoInfer<T>) => R
+>func : (value: T) => R
+>value : T
+>value : NoInfer<T>
+
+declare function test(value: { x: number; }): number;
+>test : (value: {    x: number;}) => number
+>value : { x: number; }
+>x : number
+
+invoke(test, { x: 1, y: 2 }); // error
+>invoke(test, { x: 1, y: 2 }) : number
+>invoke : <T, R>(func: (value: T) => R, value: NoInfer<T>) => R
+>test : (value: { x: number; }) => number
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+
+test({ x: 1, y: 2 }); // error
+>test({ x: 1, y: 2 }) : number
+>test : (value: { x: number; }) => number
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+
+
+type Component<Props> = { props: Props; };
+>Component : Component<Props>
+>props : Props
+
+declare function doWork<Props>(Component: Component<Props>, props: NoInfer<Props>): void;
+>doWork : <Props>(Component: Component<Props>, props: NoInfer<Props>) => void
+>Component : Component<Props>
+>props : NoInfer<Props>
+
+declare const comp: Component<{ foo: number }>;
+>comp : Component<{ foo: number; }>
+>foo : number
+
+doWork(comp, { foo: 42 }); // ok
+>doWork(comp, { foo: 42 }) : void
+>doWork : <Props>(Component: Component<Props>, props: NoInfer<Props>) => void
+>comp : Component<{ foo: number; }>
+>{ foo: 42 } : { foo: number; }
+>foo : number
+>42 : 42
+
+doWork(comp, {}); // error
+>doWork(comp, {}) : void
+>doWork : <Props>(Component: Component<Props>, props: NoInfer<Props>) => void
+>comp : Component<{ foo: number; }>
+>{} : {}
+
+declare function mutate<T>(callback: (a: NoInfer<T>, b: number) => T): T;
+>mutate : <T>(callback: (a: NoInfer<T>, b: number) => T) => T
+>callback : (a: NoInfer<T>, b: number) => T
+>a : NoInfer<T>
+>b : number
+
+const mutate1 = mutate((a, b) => b);
+>mutate1 : unknown
+>mutate((a, b) => b) : unknown
+>mutate : <T>(callback: (a: NoInfer<T>, b: number) => T) => T
+>(a, b) => b : (a: unknown, b: number) => number
+>a : unknown
+>b : number
+>b : number
+
+declare class ExampleClass<T> {}
+>ExampleClass : ExampleClass<T>
+
+class OkClass<T> {
+>OkClass : OkClass<T>
+
+    constructor(private clazz: ExampleClass<T>, private _value: NoInfer<T>) {}
+>clazz : ExampleClass<T>
+>_value : NoInfer<T>
+
+    get value(): T {
+>value : T
+
+        return this._value; // ok
+>this._value : NoInfer<T>
+>this : this
+>_value : NoInfer<T>
+    }
+}
+
+

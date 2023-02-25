@@ -1630,6 +1630,11 @@ type Capitalize<S extends string> = intrinsic;
 type Uncapitalize<S extends string> = intrinsic;
 
 /**
+ * Blocks the contained type from participating in type inference.
+ */
+type NoInfer<T> = intrinsic;
+
+/**
  * Marker for contextual 'this' type
  */
 interface ThisType<T> { }

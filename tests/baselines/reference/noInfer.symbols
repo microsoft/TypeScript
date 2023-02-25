@@ -1,0 +1,179 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts ===
+export declare function foo<T extends string>(a: T, b: NoInfer<T>): void
+>foo : Symbol(foo, Decl(noInfer.ts, 0, 0))
+>T : Symbol(T, Decl(noInfer.ts, 0, 28))
+>a : Symbol(a, Decl(noInfer.ts, 0, 46))
+>T : Symbol(T, Decl(noInfer.ts, 0, 28))
+>b : Symbol(b, Decl(noInfer.ts, 0, 51))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInfer.ts, 0, 28))
+
+foo('foo', 'foo') // ok
+>foo : Symbol(foo, Decl(noInfer.ts, 0, 0))
+
+foo('foo', 'bar') // error
+>foo : Symbol(foo, Decl(noInfer.ts, 0, 0))
+
+declare class Animal { move(): void }
+>Animal : Symbol(Animal, Decl(noInfer.ts, 3, 17))
+>move : Symbol(Animal.move, Decl(noInfer.ts, 5, 22))
+
+declare class Dog extends Animal { woof(): void }
+>Dog : Symbol(Dog, Decl(noInfer.ts, 5, 37))
+>Animal : Symbol(Animal, Decl(noInfer.ts, 3, 17))
+>woof : Symbol(Dog.woof, Decl(noInfer.ts, 6, 34))
+
+declare function doSomething<T>(value: T, getDefault: () => NoInfer<T>): void;
+>doSomething : Symbol(doSomething, Decl(noInfer.ts, 6, 49))
+>T : Symbol(T, Decl(noInfer.ts, 7, 29))
+>value : Symbol(value, Decl(noInfer.ts, 7, 32))
+>T : Symbol(T, Decl(noInfer.ts, 7, 29))
+>getDefault : Symbol(getDefault, Decl(noInfer.ts, 7, 41))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInfer.ts, 7, 29))
+
+doSomething(new Animal(), () => new Animal()); // ok
+>doSomething : Symbol(doSomething, Decl(noInfer.ts, 6, 49))
+>Animal : Symbol(Animal, Decl(noInfer.ts, 3, 17))
+>Animal : Symbol(Animal, Decl(noInfer.ts, 3, 17))
+
+doSomething(new Animal(), () => new Dog()); // ok
+>doSomething : Symbol(doSomething, Decl(noInfer.ts, 6, 49))
+>Animal : Symbol(Animal, Decl(noInfer.ts, 3, 17))
+>Dog : Symbol(Dog, Decl(noInfer.ts, 5, 37))
+
+doSomething(new Dog(), () => new Animal()); // error
+>doSomething : Symbol(doSomething, Decl(noInfer.ts, 6, 49))
+>Dog : Symbol(Dog, Decl(noInfer.ts, 5, 37))
+>Animal : Symbol(Animal, Decl(noInfer.ts, 3, 17))
+
+declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
+>assertEqual : Symbol(assertEqual, Decl(noInfer.ts, 11, 43))
+>T : Symbol(T, Decl(noInfer.ts, 13, 29))
+>actual : Symbol(actual, Decl(noInfer.ts, 13, 32))
+>T : Symbol(T, Decl(noInfer.ts, 13, 29))
+>expected : Symbol(expected, Decl(noInfer.ts, 13, 42))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInfer.ts, 13, 29))
+
+assertEqual({ x: 1 }, { x: 3 }); // ok
+>assertEqual : Symbol(assertEqual, Decl(noInfer.ts, 11, 43))
+>x : Symbol(x, Decl(noInfer.ts, 15, 13))
+>x : Symbol(x, Decl(noInfer.ts, 15, 23))
+
+const g = { x: 3, y: 2 };
+>g : Symbol(g, Decl(noInfer.ts, 16, 5))
+>x : Symbol(x, Decl(noInfer.ts, 16, 11))
+>y : Symbol(y, Decl(noInfer.ts, 16, 17))
+
+assertEqual(g, { x: 3 }); // error
+>assertEqual : Symbol(assertEqual, Decl(noInfer.ts, 11, 43))
+>g : Symbol(g, Decl(noInfer.ts, 16, 5))
+>x : Symbol(x, Decl(noInfer.ts, 17, 16))
+
+declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
+>invoke : Symbol(invoke, Decl(noInfer.ts, 17, 25))
+>T : Symbol(T, Decl(noInfer.ts, 19, 24))
+>R : Symbol(R, Decl(noInfer.ts, 19, 26))
+>func : Symbol(func, Decl(noInfer.ts, 19, 30))
+>value : Symbol(value, Decl(noInfer.ts, 19, 37))
+>T : Symbol(T, Decl(noInfer.ts, 19, 24))
+>R : Symbol(R, Decl(noInfer.ts, 19, 26))
+>value : Symbol(value, Decl(noInfer.ts, 19, 52))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInfer.ts, 19, 24))
+>R : Symbol(R, Decl(noInfer.ts, 19, 26))
+
+declare function test(value: { x: number; }): number;
+>test : Symbol(test, Decl(noInfer.ts, 19, 75))
+>value : Symbol(value, Decl(noInfer.ts, 20, 22))
+>x : Symbol(x, Decl(noInfer.ts, 20, 30))
+
+invoke(test, { x: 1, y: 2 }); // error
+>invoke : Symbol(invoke, Decl(noInfer.ts, 17, 25))
+>test : Symbol(test, Decl(noInfer.ts, 19, 75))
+>x : Symbol(x, Decl(noInfer.ts, 22, 14))
+>y : Symbol(y, Decl(noInfer.ts, 22, 20))
+
+test({ x: 1, y: 2 }); // error
+>test : Symbol(test, Decl(noInfer.ts, 19, 75))
+>x : Symbol(x, Decl(noInfer.ts, 23, 6))
+>y : Symbol(y, Decl(noInfer.ts, 23, 12))
+
+
+type Component<Props> = { props: Props; };
+>Component : Symbol(Component, Decl(noInfer.ts, 23, 21))
+>Props : Symbol(Props, Decl(noInfer.ts, 26, 15))
+>props : Symbol(props, Decl(noInfer.ts, 26, 25))
+>Props : Symbol(Props, Decl(noInfer.ts, 26, 15))
+
+declare function doWork<Props>(Component: Component<Props>, props: NoInfer<Props>): void;
+>doWork : Symbol(doWork, Decl(noInfer.ts, 26, 42))
+>Props : Symbol(Props, Decl(noInfer.ts, 27, 24))
+>Component : Symbol(Component, Decl(noInfer.ts, 27, 31))
+>Component : Symbol(Component, Decl(noInfer.ts, 23, 21))
+>Props : Symbol(Props, Decl(noInfer.ts, 27, 24))
+>props : Symbol(props, Decl(noInfer.ts, 27, 59))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(noInfer.ts, 27, 24))
+
+declare const comp: Component<{ foo: number }>;
+>comp : Symbol(comp, Decl(noInfer.ts, 28, 13))
+>Component : Symbol(Component, Decl(noInfer.ts, 23, 21))
+>foo : Symbol(foo, Decl(noInfer.ts, 28, 31))
+
+doWork(comp, { foo: 42 }); // ok
+>doWork : Symbol(doWork, Decl(noInfer.ts, 26, 42))
+>comp : Symbol(comp, Decl(noInfer.ts, 28, 13))
+>foo : Symbol(foo, Decl(noInfer.ts, 30, 14))
+
+doWork(comp, {}); // error
+>doWork : Symbol(doWork, Decl(noInfer.ts, 26, 42))
+>comp : Symbol(comp, Decl(noInfer.ts, 28, 13))
+
+declare function mutate<T>(callback: (a: NoInfer<T>, b: number) => T): T;
+>mutate : Symbol(mutate, Decl(noInfer.ts, 31, 17))
+>T : Symbol(T, Decl(noInfer.ts, 33, 24))
+>callback : Symbol(callback, Decl(noInfer.ts, 33, 27))
+>a : Symbol(a, Decl(noInfer.ts, 33, 38))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInfer.ts, 33, 24))
+>b : Symbol(b, Decl(noInfer.ts, 33, 52))
+>T : Symbol(T, Decl(noInfer.ts, 33, 24))
+>T : Symbol(T, Decl(noInfer.ts, 33, 24))
+
+const mutate1 = mutate((a, b) => b);
+>mutate1 : Symbol(mutate1, Decl(noInfer.ts, 34, 5))
+>mutate : Symbol(mutate, Decl(noInfer.ts, 31, 17))
+>a : Symbol(a, Decl(noInfer.ts, 34, 24))
+>b : Symbol(b, Decl(noInfer.ts, 34, 26))
+>b : Symbol(b, Decl(noInfer.ts, 34, 26))
+
+declare class ExampleClass<T> {}
+>ExampleClass : Symbol(ExampleClass, Decl(noInfer.ts, 34, 36))
+>T : Symbol(T, Decl(noInfer.ts, 36, 27))
+
+class OkClass<T> {
+>OkClass : Symbol(OkClass, Decl(noInfer.ts, 36, 32))
+>T : Symbol(T, Decl(noInfer.ts, 37, 14))
+
+    constructor(private clazz: ExampleClass<T>, private _value: NoInfer<T>) {}
+>clazz : Symbol(OkClass.clazz, Decl(noInfer.ts, 38, 16))
+>ExampleClass : Symbol(ExampleClass, Decl(noInfer.ts, 34, 36))
+>T : Symbol(T, Decl(noInfer.ts, 37, 14))
+>_value : Symbol(OkClass._value, Decl(noInfer.ts, 38, 47))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInfer.ts, 37, 14))
+
+    get value(): T {
+>value : Symbol(OkClass.value, Decl(noInfer.ts, 38, 78))
+>T : Symbol(T, Decl(noInfer.ts, 37, 14))
+
+        return this._value; // ok
+>this._value : Symbol(OkClass._value, Decl(noInfer.ts, 38, 47))
+>this : Symbol(OkClass, Decl(noInfer.ts, 36, 32))
+>_value : Symbol(OkClass._value, Decl(noInfer.ts, 38, 47))
+    }
+}
+
+
