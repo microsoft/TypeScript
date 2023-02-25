@@ -37,11 +37,14 @@ Output::
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 ======== Resolving module '@this/package' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
 Matched 'exports' condition 'default'.
 Using 'exports' subpath '.' with target './dist/index.js'.
-File '/user/username/projects/myproject/index.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
+Resolved under condition 'default'.
+Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/index.ts', result '/user/username/projects/myproject/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
@@ -140,10 +143,10 @@ Reusing resolution of module '@this/package' from '/user/username/projects/mypro
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './index.js' from '/user/username/projects/myproject/index2.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/index.js', target file types: TypeScript, JavaScript, Declaration.
 File name '/user/username/projects/myproject/index.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/index.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
 ======== Module name './index.js' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.

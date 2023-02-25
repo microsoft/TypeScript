@@ -45,6 +45,6 @@ class C2 {
     constructor() {
         _C2__e_accessor_storage.set(this, 1);
     }
-    get [(_C2__e_accessor_storage = new WeakMap(), _b = f(), _b)]() { return __classPrivateFieldGet(this, _C2__e_accessor_storage, "f"); }
+    get [(_C2__e_accessor_storage = new WeakMap(), _b = f())]() { return __classPrivateFieldGet(this, _C2__e_accessor_storage, "f"); }
     set [_b](value) { __classPrivateFieldSet(this, _C2__e_accessor_storage, value, "f"); }
 }

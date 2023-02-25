@@ -1,11 +1,11 @@
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title: string;
 }
 
 //// [/user/username/projects/myproject/lib1/tools/public.ts]
-export * from "./tools.interface";
+export * from "./toolsinterface";
 
 //// [/user/username/projects/myproject/app.ts]
 import { Data } from "lib2/public";
@@ -63,7 +63,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"co
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -72,7 +72,7 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -81,7 +81,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (used version)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (used version)
 /user/username/projects/myproject/lib1/tools/public.ts (used version)
 /user/username/projects/myproject/lib1/public.ts (used version)
 /user/username/projects/myproject/lib2/data.ts (used version)
@@ -105,7 +105,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/lib1/tools/public.ts:
   {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts:
   {}
 /a/lib/lib.d.ts:
   {}
@@ -114,7 +114,7 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -136,7 +136,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./tools.interface"), exports);
+__exportStar(require("./toolsinterface"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/public.js]
@@ -215,7 +215,7 @@ exports.App = App;
 Change:: Rename property title to title2 of interface ITest to initialize signatures
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title2: string;
 }
@@ -240,7 +240,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"co
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -248,7 +248,7 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -256,7 +256,7 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/app.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/public.ts (computed .d.ts)
 /user/username/projects/myproject/lib2/data.ts (computed .d.ts)
@@ -280,7 +280,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/lib1/tools/public.ts:
   {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts:
   {}
 /a/lib/lib.d.ts:
   {}
@@ -289,7 +289,7 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
 //// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
 //// [/user/username/projects/myproject/lib1/public.js] file written with same contents
 //// [/user/username/projects/myproject/lib2/data.js] file written with same contents
@@ -299,7 +299,7 @@ exitCode:: ExitStatus.undefined
 Change:: Rename property title2 to title of interface ITest to revert back to original text
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title: string;
 }
@@ -318,7 +318,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"co
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -326,7 +326,7 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -334,7 +334,7 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/app.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/public.ts (used version)
 /user/username/projects/myproject/lib2/data.ts (used version)
@@ -358,7 +358,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/lib1/tools/public.ts:
   {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts:
   {}
 /a/lib/lib.d.ts:
   {}
@@ -367,13 +367,13 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
 //// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
 
 Change:: Rename property title to title2 of interface ITest
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title2: string;
 }
@@ -398,7 +398,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"co
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -406,7 +406,7 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -414,7 +414,7 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/app.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/public.ts (used version)
 /user/username/projects/myproject/lib2/data.ts (used version)
@@ -438,7 +438,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/lib1/tools/public.ts:
   {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts:
   {}
 /a/lib/lib.d.ts:
   {}
@@ -447,5 +447,5 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
 //// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents

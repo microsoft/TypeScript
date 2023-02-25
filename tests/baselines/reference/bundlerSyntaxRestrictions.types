@@ -3,6 +3,31 @@ declare var require: (...args: any[]) => any;
 >require : (...args: any[]) => any
 >args : any[]
 
+=== /ambient.d.ts ===
+declare module "fs" {
+>"fs" : typeof import("fs")
+
+    export function readFileSync(path: string, encoding?: string): string;
+>readFileSync : (path: string, encoding?: string) => string
+>path : string
+>encoding : string
+}
+declare module "path" {
+>"path" : typeof import("path")
+
+    import fs = require("fs"); // ok
+>fs : typeof fs
+
+    namespace path {
+>path : typeof path
+
+        export const sep: string;
+>sep : string
+    }
+    export = path; // ok
+>path : typeof path
+}
+
 === /mainJs.js ===
 import {} from "./a";
 import("./a");

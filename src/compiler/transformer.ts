@@ -27,6 +27,7 @@ import {
     getJSXTransformEnabled,
     getParseTreeNode,
     getSourceFileOfNode,
+    getUseDefineForClassFields,
     Identifier,
     isBundle,
     isSourceFile,
@@ -54,6 +55,7 @@ import {
     transformECMAScriptModule,
     Transformer,
     TransformerFactory,
+    transformES5,
     transformES2015,
     transformES2016,
     transformES2017,
@@ -61,7 +63,7 @@ import {
     transformES2019,
     transformES2020,
     transformES2021,
-    transformES5,
+    transformESDecorators,
     transformESNext,
     transformGenerators,
     transformJsx,
@@ -119,12 +121,20 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
 
     const languageVersion = getEmitScriptTarget(compilerOptions);
     const moduleKind = getEmitModuleKind(compilerOptions);
+    const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
     const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
 
     addRange(transformers, customTransformers && map(customTransformers.before, wrapScriptTransformerFactory));
 
     transformers.push(transformTypeScript);
-    transformers.push(transformLegacyDecorators);
+
+    if (compilerOptions.experimentalDecorators) {
+        transformers.push(transformLegacyDecorators);
+    }
+    else if (languageVersion < ScriptTarget.ESNext || !useDefineForClassFields) {
+        transformers.push(transformESDecorators);
+    }
+
     transformers.push(transformClassFields);
 
     if (getJSXTransformEnabled(compilerOptions)) {

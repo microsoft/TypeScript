@@ -11,7 +11,6 @@ import {
     Debug,
     DiagnosticMessage,
     Diagnostics,
-    getEntries,
     identity,
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
@@ -192,9 +191,9 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     of: SyntaxKind.OfKeyword,
 };
 
-const textToKeyword = new Map(getEntries(textToKeywordObj));
+const textToKeyword = new Map(Object.entries(textToKeywordObj));
 
-const textToToken = new Map(getEntries({
+const textToToken = new Map(Object.entries({
     ...textToKeywordObj,
     "{": SyntaxKind.OpenBraceToken,
     "}": SyntaxKind.CloseBraceToken,
@@ -885,28 +884,24 @@ function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, 
 export function forEachLeadingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
 export function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
 export function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U | undefined {
-    return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ false, cb, state);
+    return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ false, cb, state!);
 }
 
 export function forEachTrailingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
 export function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
 export function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U | undefined {
-    return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ true, cb, state);
+    return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ true, cb, state!);
 }
 
-export function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U) {
+export function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U) {
     return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ false, cb, state, initial);
 }
 
-export function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U) {
+export function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U) {
     return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ true, cb, state, initial);
 }
 
-function appendCommentRange(pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, _state: any, comments: CommentRange[]) {
-    if (!comments) {
-        comments = [];
-    }
-
+function appendCommentRange(pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, _state: any, comments: CommentRange[] = []) {
     comments.push({ kind, pos, end, hasTrailingNewLine });
     return comments;
 }
@@ -966,31 +961,34 @@ export function createScanner(languageVersion: ScriptTarget,
     start?: number,
     length?: number): Scanner {
 
-    let text = textInitial!;
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var text = textInitial!;
 
     // Current position (end position of text of current token)
-    let pos: number;
+    var pos: number;
 
 
     // end of text
-    let end: number;
+    var end: number;
 
     // Start position of whitespace before current token
-    let startPos: number;
+    var startPos: number;
 
     // Start position of text of current token
-    let tokenPos: number;
+    var tokenPos: number;
 
-    let token: SyntaxKind;
-    let tokenValue!: string;
-    let tokenFlags: TokenFlags;
+    var token: SyntaxKind;
+    var tokenValue!: string;
+    var tokenFlags: TokenFlags;
 
-    let commentDirectives: CommentDirective[] | undefined;
-    let inJSDocType = 0;
+    var commentDirectives: CommentDirective[] | undefined;
+    var inJSDocType = 0;
 
     setText(text, start, length);
 
-    const scanner: Scanner = {
+    var scanner: Scanner = {
         getStartPos: () => startPos,
         getTextPos: () => pos,
         getToken: () => token,
@@ -1035,6 +1033,7 @@ export function createScanner(languageVersion: ScriptTarget,
         lookAhead,
         scanRange,
     };
+    /* eslint-enable no-var */
 
     if (Debug.isDebugging) {
         Object.defineProperty(scanner, "__debugShowCurrentPositionInText", {
