@@ -15,5 +15,5 @@ export declare enum Position {
 >Position : Position
 
     top,
->top : Position
+>top : Position.top
 }

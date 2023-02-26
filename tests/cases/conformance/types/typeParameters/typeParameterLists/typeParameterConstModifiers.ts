@@ -39,6 +39,8 @@ class C1<const T> {
 const c71 = new C1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
 const c72 = c71.foo(['a', ['b', 'c']]);
 
+const C2 = class <const T> {}
+
 const fx1 = <const T>(x: T) => x;
 const fx2 = <const T,>(x: T) => x;
 
@@ -70,3 +72,13 @@ declare let obj: Obj;
 declare let value: "123";
 
 set(obj, ['a', 'b', 'c'], value);
+
+// Repro from #52007
+
+declare function inners<const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]): T;
+
+const test = inners(1,2,3,4,5);
+
+declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
+
+const test2 = inners2([1,2,3,4,5]);

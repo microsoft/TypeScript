@@ -194,7 +194,7 @@ module m {
 >Enum : Enum
 
         claw = (()
->claw : Enum
+>claw : Enum.claw
 >(()            => 10)() : number
 >(()            => 10) : () => number
 >()            => 10 : () => number

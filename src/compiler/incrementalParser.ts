@@ -1,9 +1,37 @@
-import { append, AssertionLevel } from "./core";
+import {
+    append,
+    AssertionLevel,
+} from "./core";
 import { Debug } from "./debug";
-import { fixupParentReferences, forEachChild, parseSourceFile } from "./parser";
-import { CommentDirective, IncrementalElement, IncrementalNode, Node, NodeArray, SourceFile, SyntaxCursor, SyntaxKind, TextChangeRange } from "./types";
-import { getLastChild, nodeIsMissing, setTextRangePosEnd } from "./utilities";
-import { createTextChangeRange, createTextSpanFromBounds, hasJSDocNodes, textChangeRangeIsUnchanged, textChangeRangeNewSpan, textSpanEnd } from "./utilitiesPublic";
+import {
+    fixupParentReferences,
+    forEachChild,
+    parseSourceFile,
+} from "./parser";
+import {
+    CommentDirective,
+    IncrementalElement,
+    IncrementalNode,
+    Node,
+    NodeArray,
+    SourceFile,
+    SyntaxCursor,
+    SyntaxKind,
+    TextChangeRange,
+} from "./types";
+import {
+    getLastChild,
+    nodeIsMissing,
+    setTextRangePosEnd,
+} from "./utilities";
+import {
+    createTextChangeRange,
+    createTextSpanFromBounds,
+    hasJSDocNodes,
+    textChangeRangeIsUnchanged,
+    textChangeRangeNewSpan,
+    textSpanEnd,
+} from "./utilitiesPublic";
 
 function getNewCommentDirectives(
     oldDirectives: CommentDirective[] | undefined,
@@ -54,7 +82,9 @@ function getNewCommentDirectives(
     }
 }
 
-function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+function moveElementEntirelyPastChangeRange(element: IncrementalNode, isArray: false, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+function moveElementEntirelyPastChangeRange(element: IncrementalNodeArray, isArray: true, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+function moveElementEntirelyPastChangeRange(element: IncrementalNode | IncrementalNodeArray, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
     if (isArray) {
         visitArray(element as IncrementalNodeArray);
     }
@@ -81,7 +111,7 @@ function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray
             Debug.assert(text === newText.substring(node.pos, node.end));
         }
 
-        forEachChild(node, visitNode, visitArray);
+        forEachChild(node, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
         if (hasJSDocNodes(node)) {
             for (const jsDocComment of node.jsDoc!) {
                 visitNode(jsDocComment as Node as IncrementalNode);
@@ -234,7 +264,7 @@ function updateTokenPositionsAndMarkElements(
 
             // Adjust the pos or end (or both) of the intersecting element accordingly.
             adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-            forEachChild(child, visitNode, visitArray);
+            forEachChild(child, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
             if (hasJSDocNodes(child)) {
                 for (const jsDocComment of child.jsDoc!) {
                     visitNode(jsDocComment as Node as IncrementalNode);

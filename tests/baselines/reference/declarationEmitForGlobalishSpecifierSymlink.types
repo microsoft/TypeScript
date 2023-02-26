@@ -6,7 +6,7 @@ export enum A {
 >A : A
 
     Val
->Val : A
+>Val : A.Val
 }
 === /p1/node_modules/typescript-fsa/index.d.ts ===
 
@@ -19,7 +19,7 @@ export enum A {
 >A : A
 
     Val
->Val : A
+>Val : A.Val
 }
 === /p2/node_modules/typescript-fsa/index.d.ts ===
 

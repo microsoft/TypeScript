@@ -9,7 +9,7 @@
     "'package.json' does not have a 'typesVersions' field.",
     "'package.json' does not have a 'typings' field.",
     "'package.json' has 'types' field 'types.d.ts' that references '/node_modules/@foo/bar/types.d.ts'.",
-    "File '/node_modules/@foo/bar/types.d.ts' exist - use it as a name resolution result.",
+    "File '/node_modules/@foo/bar/types.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/node_modules/@foo/bar/types.d.ts', result '/node_modules/@foo/bar/types.d.ts'.",
     "======== Module name '@foo/bar' was successfully resolved to '/node_modules/@foo/bar/types.d.ts'. ========"
 ]
