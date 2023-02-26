@@ -1,5 +1,6 @@
 import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 import {
+    __String,
     AnyImportOrRequireStatement,
     append,
     ApplicableRefactorInfo,
@@ -26,6 +27,7 @@ import {
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
+    ExportAssignment,
     Expression,
     ExpressionStatement,
     extensionFromPath,
@@ -64,12 +66,16 @@ import {
     isBinaryExpression,
     isBindingElement,
     isDeclarationName,
+    isExportAssignment,
+    isExportDeclaration,
+    isExportSpecifier,
     isExpressionStatement,
     isExternalModuleReference,
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isNamedDeclaration,
+    isNamedExports,
     isObjectLiteralExpression,
     isOmittedExpression,
     isPrologueDirective,
@@ -666,6 +672,7 @@ interface UsageInfo {
     readonly unusedImportsFromOldFile: ReadonlySymbolSet;
 }
 function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker): UsageInfo {
+    const useEsModuleSyntax = !!oldFile.externalModuleIndicator;
     const movedSymbols = new SymbolSet();
     const oldImportsNeededByNewFile = new SymbolSet();
     const newFileImportsFromOldFile = new SymbolSet();
@@ -676,9 +683,20 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
         oldImportsNeededByNewFile.add(jsxNamespaceSymbol);
     }
 
+    const symbolsExportedLaterInOldFile = new Map<string, Symbol>();
+
     for (const statement of toMove) {
         forEachTopLevelDeclaration(statement, decl => {
-            movedSymbols.add(Debug.checkDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
+            const symbol = Debug.checkDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here");
+            const name = nameOfTopLevelDeclaration(decl);
+            const top = getTopLevelDeclarationStatement(decl);
+            // exported later in export that is not going to be moved, skip updating symbol imports in other files
+            const skipSymbolUpdating = name && isExportedLaterInOldFile(oldFile, top, useEsModuleSyntax, name, toMove);
+            if (skipSymbolUpdating) {
+                symbolsExportedLaterInOldFile.set(name.text, symbol);
+                return;
+            }
+            movedSymbols.add(symbol);
         });
     }
     for (const statement of toMove) {
@@ -706,8 +724,13 @@ function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker
             unusedImportsFromOldFile.delete(jsxNamespaceSymbol);
         }
 
-        forEachReference(statement, checker, symbol => {
-            if (movedSymbols.has(symbol)) oldFileImportsFromNewFile.add(symbol);
+        forEachReference(statement, checker, (symbol, isExportSymbol) => {
+            if (movedSymbols.has(symbol)) {
+                oldFileImportsFromNewFile.add(symbol);
+            }
+            else if ((isExportSymbol && (symbolsExportedLaterInOldFile.has(symbol.name)))) {
+                oldFileImportsFromNewFile.add(symbolsExportedLaterInOldFile.get(symbol.name)!);
+            }
             unusedImportsFromOldFile.delete(symbol);
         });
     }
@@ -798,11 +821,12 @@ function filterBindingName(name: BindingName, keep: (name: Identifier) => boolea
     }
 }
 
-function forEachReference(node: Node, checker: TypeChecker, onReference: (s: Symbol) => void) {
+function forEachReference(node: Node, checker: TypeChecker, onReference: (s: Symbol, isExportSymbol: boolean) => void) {
     node.forEachChild(function cb(node) {
-        if (isIdentifier(node) && !isDeclarationName(node)) {
+        const isExportSymbol = isExportSpecifier(node.parent) || isExportAssignment(node.parent);
+        if (isIdentifier(node) && (!isDeclarationName(node) || isExportSymbol)) {
             const sym = checker.getSymbolAtLocation(node);
-            if (sym) onReference(sym);
+            if (sym) onReference(sym, isExportSymbol);
         }
         else {
             node.forEachChild(cb);
@@ -952,6 +976,24 @@ function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, 
     }
     return !!sourceFile.symbol && !!sourceFile.symbol.exports &&
         getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
+}
+
+function getDefaultExportName(sourceFile: SourceFile) {
+    return tryCast((sourceFile.symbol.exports?.get("default" as __String)?.declarations?.[0] as undefined | ExportAssignment)?.expression, isIdentifier);
+}
+
+function isExportedLaterInOldFile(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name: Identifier, toMove: readonly Statement[]): boolean {
+    if (useEs6Exports) {
+        return !isExpressionStatement(decl)
+            && !hasSyntacticModifier(decl, ModifierFlags.Export)
+            && (!!sourceFile.symbol.exports?.has(name.escapedText) || getDefaultExportName(sourceFile)?.escapedText === name.escapedText)
+            && !toMove.some((node) =>
+                (isExportDeclaration(node) && tryCast(node.exportClause, isNamedExports)?.elements.some(el => el.name.text === name.text))
+                || (isExportAssignment(node) && tryCast(node.expression, isIdentifier)?.text === name.text));
+    }
+    return false;
+    // return !!sourceFile.symbol && !!sourceFile.symbol.exports &&
+    //     getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
 }
 
 function addExport(decl: TopLevelDeclarationStatement, useEs6Exports: boolean): readonly Statement[] | undefined {
