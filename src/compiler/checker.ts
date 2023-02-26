@@ -19108,6 +19108,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isTypeRelatedTo(source, target, subtypeRelation);
     }
 
+    function isTypeStrictSubtypeOf(source: Type, target: Type): boolean {
+        return isTypeRelatedTo(source, target, strictSubtypeRelation);
+    }
+
     function isTypeAssignableTo(source: Type, target: Type): boolean {
         return isTypeRelatedTo(source, target, assignableRelation);
     }
@@ -27250,7 +27254,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // We first attempt to filter the current type, narrowing constituents as appropriate and removing
             // constituents that are unrelated to the candidate.
-            const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
+            const isRelated = checkDerived ? isTypeDerivedFrom : isTypeStrictSubtypeOf;
             const keyPropertyName = type.flags & TypeFlags.Union ? getKeyPropertyName(type as UnionType) : undefined;
             const narrowedType = mapType(candidate, c => {
                 // If a discriminant property is available, use that to reduce the type.
@@ -27260,9 +27264,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // specific of the two. When t and c are related in both directions, we prefer c for type predicates
                 // because that is the asserted type, but t for `instanceof` because generics aren't reflected in
                 // prototype object types.
-                const directlyRelated = mapType(matching || type, checkDerived ?
-                    t => isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType :
-                    t => isTypeSubtypeOf(c, t) && !isTypeIdenticalTo(c, t) ? c : isTypeSubtypeOf(t, c) ? t : neverType);
+                const directlyRelated = mapType(matching || type, t => isRelated(t, c) ? t : isRelated(c, t) ? c : neverType);
                 // If no constituents are directly related, create intersections for any generic constituents that
                 // are related by constraint.
                 return directlyRelated.flags & TypeFlags.Never ?
@@ -27272,7 +27274,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If filtering produced a non-empty type, return that. Otherwise, pick the most specific of the two
             // based on assignability, or as a last resort produce an intersection.
             return !(narrowedType.flags & TypeFlags.Never) ? narrowedType :
-                isTypeSubtypeOf(candidate, type) ? candidate :
+                isTypeStrictSubtypeOf(candidate, type) ? candidate :
                 isTypeAssignableTo(type, candidate) ? type :
                 isTypeAssignableTo(candidate, type) ? candidate :
                 getIntersectionType([type, candidate]);
