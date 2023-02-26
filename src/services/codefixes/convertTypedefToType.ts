@@ -104,10 +104,10 @@ function createInterfaceForTypeLiteral(
     const propertySignatures = createSignatureFromTypeLiteral(typeLiteral);
     if (!some(propertySignatures)) return;
     const interfaceDeclaration = factory.createInterfaceDeclaration(
-        /*nameOfParameter*/ undefined,
+        /*modifiers*/ undefined,
         typeName,
-        /*nameOfParameter*/ undefined,
-        /*nameOfParameter*/ undefined,
+        /*typeParameters*/ undefined,
+        /*heritageClauses*/ undefined,
         propertySignatures,
     );
     return interfaceDeclaration;
@@ -120,9 +120,9 @@ function createTypeAliasForTypeExpression(
     const typeReference = getSynthesizedDeepClone(typeExpression.type);
     if (!typeReference) return;
     const declaration = factory.createTypeAliasDeclaration(
-        /*nameOfParameter*/ undefined,
+        /*modifiers*/ undefined,
         factory.createIdentifier(typeName),
-        /*nameOfParameter*/ undefined,
+        /*typeParameters*/ undefined,
         typeReference
     );
     return declaration;
@@ -151,7 +151,7 @@ function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): Property
         if (typeReference && name) {
             const questionToken = isOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
             const prop = factory.createPropertySignature(
-                /*nameOfParameter*/ undefined,
+                /*modifiers*/ undefined,
                 name,
                 questionToken,
                 typeReference
