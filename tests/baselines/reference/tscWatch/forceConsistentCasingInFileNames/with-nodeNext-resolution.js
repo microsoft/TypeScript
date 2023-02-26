@@ -41,7 +41,7 @@ File '/Users/package.json' does not exist.
 File '/package.json' does not exist.
 ======== Resolving module 'yargs' from '/Users/name/projects/web/src/bin.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
-Resolving in CJS mode with conditions 'node', 'require', 'types'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/Users/name/projects/web/src/package.json' does not exist according to earlier cached lookups.
 File '/Users/name/projects/web/package.json' does not exist according to earlier cached lookups.
 File '/Users/name/projects/package.json' does not exist according to earlier cached lookups.

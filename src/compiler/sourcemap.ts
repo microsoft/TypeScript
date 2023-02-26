@@ -35,39 +35,43 @@ export interface SourceMapGeneratorOptions {
 
 /** @internal */
 export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
-    const { enter, exit } = generatorOptions.extendedDiagnostics
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var { enter, exit } = generatorOptions.extendedDiagnostics
         ? performance.createTimer("Source Map", "beforeSourcemap", "afterSourcemap")
         : performance.nullTimer;
 
     // Current source map file and its index in the sources list
-    const rawSources: string[] = [];
-    const sources: string[] = [];
-    const sourceToSourceIndexMap = new Map<string, number>();
-    let sourcesContent: (string | null)[] | undefined;
+    var rawSources: string[] = [];
+    var sources: string[] = [];
+    var sourceToSourceIndexMap = new Map<string, number>();
+    var sourcesContent: (string | null)[] | undefined;
 
-    const names: string[] = [];
-    let nameToNameIndexMap: Map<string, number> | undefined;
-    const mappingCharCodes: number[] = [];
-    let mappings = "";
+    var names: string[] = [];
+    var nameToNameIndexMap: Map<string, number> | undefined;
+    var mappingCharCodes: number[] = [];
+    var mappings = "";
 
     // Last recorded and encoded mappings
-    let lastGeneratedLine = 0;
-    let lastGeneratedCharacter = 0;
-    let lastSourceIndex = 0;
-    let lastSourceLine = 0;
-    let lastSourceCharacter = 0;
-    let lastNameIndex = 0;
-    let hasLast = false;
+    var lastGeneratedLine = 0;
+    var lastGeneratedCharacter = 0;
+    var lastSourceIndex = 0;
+    var lastSourceLine = 0;
+    var lastSourceCharacter = 0;
+    var lastNameIndex = 0;
+    var hasLast = false;
 
-    let pendingGeneratedLine = 0;
-    let pendingGeneratedCharacter = 0;
-    let pendingSourceIndex = 0;
-    let pendingSourceLine = 0;
-    let pendingSourceCharacter = 0;
-    let pendingNameIndex = 0;
-    let hasPending = false;
-    let hasPendingSource = false;
-    let hasPendingName = false;
+    var pendingGeneratedLine = 0;
+    var pendingGeneratedCharacter = 0;
+    var pendingSourceIndex = 0;
+    var pendingSourceLine = 0;
+    var pendingSourceCharacter = 0;
+    var pendingNameIndex = 0;
+    var hasPending = false;
+    var hasPendingSource = false;
+    var hasPendingName = false;
+    /* eslint-enable no-var */
 
     return {
         getSources: () => rawSources,

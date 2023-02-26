@@ -37,6 +37,7 @@ import {
     isWriteAccess,
     ModifierFlags,
     ModifierLike,
+    Mutable,
     Node,
     nodeOverlapsWithStartEnd,
     ObjectLiteralExpression,
@@ -258,7 +259,14 @@ function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, fil
 }
 
 function updatePropertyAssignmentDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyAssignment, fieldName: AcceptedNameType) {
-    const assignment = factory.updatePropertyAssignment(declaration, fieldName, declaration.initializer);
+    let assignment = factory.updatePropertyAssignment(declaration, fieldName, declaration.initializer);
+    // Remove grammar errors from assignment
+    if (assignment.modifiers || assignment.questionToken || assignment.exclamationToken) {
+        if (assignment === declaration) assignment = factory.cloneNode(assignment);
+        (assignment as Mutable<PropertyAssignment>).modifiers = undefined;
+        (assignment as Mutable<PropertyAssignment>).questionToken = undefined;
+        (assignment as Mutable<PropertyAssignment>).exclamationToken = undefined;
+    }
     changeTracker.replacePropertyAssignment(file, declaration, assignment);
 }
 

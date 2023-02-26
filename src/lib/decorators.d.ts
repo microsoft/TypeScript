@@ -1,5 +1,5 @@
 /**
- * The decorator context types provided to class member decorators.
+ * The decorator context types provided to class element decorators.
  */
 type ClassMemberDecoratorContext =
     | ClassMethodDecoratorContext
@@ -60,34 +60,37 @@ interface ClassMethodDecoratorContext<
     This = unknown,
     Value extends (this: This, ...args: any) => any = (this: This, ...args: any) => any,
 > {
-    /** The kind of class member that was decorated. */
+    /** The kind of class element that was decorated. */
     readonly kind: "method";
 
-    /** The name of the decorated class member. */
+    /** The name of the decorated class element. */
     readonly name: string | symbol;
 
-    /** A value indicating whether the class member is a static (`true`) or instance (`false`) member. */
+    /** A value indicating whether the class element is a static (`true`) or instance (`false`) element. */
     readonly static: boolean;
 
-    /** A value indicating whether the class member has a private name. */
+    /** A value indicating whether the class element has a private name. */
     readonly private: boolean;
 
-    // NOTE: Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
-    // /** An object that can be used to access the current value of the class member at runtime. */
-    // readonly access: {
-    //     /**
-    //      * Gets the current value of the method from the provided receiver.
-    //      *
-    //      * @example
-    //      * let fn = context.access.get.call(instance);
-    //      */
-    //     get(this: This): Value;
-    // };
+    /** An object that can be used to access the current value of the class element at runtime. */
+    readonly access: {
+        /**
+         * Determines whether an object has a property with the same name as the decorated element.
+         */
+        has(object: This): boolean;
+        /**
+         * Gets the current value of the method from the provided object.
+         *
+         * @example
+         * let fn = context.access.get(instance);
+         */
+        get(object: This): Value;
+    };
 
     /**
      * Adds a callback to be invoked either before static initializers are run (when
-     * decorating a `static` member), or before instance initializers are run (when
-     * decorating a non-`static` member).
+     * decorating a `static` element), or before instance initializers are run (when
+     * decorating a non-`static` element).
      *
      * @example
      * ```ts
@@ -121,34 +124,37 @@ interface ClassGetterDecoratorContext<
     This = unknown,
     Value = unknown,
 > {
-    /** The kind of class member that was decorated. */
+    /** The kind of class element that was decorated. */
     readonly kind: "getter";
 
-    /** The name of the decorated class member. */
+    /** The name of the decorated class element. */
     readonly name: string | symbol;
 
-    /** A value indicating whether the class member is a static (`true`) or instance (`false`) member. */
+    /** A value indicating whether the class element is a static (`true`) or instance (`false`) element. */
     readonly static: boolean;
 
-    /** A value indicating whether the class member has a private name. */
+    /** A value indicating whether the class element has a private name. */
     readonly private: boolean;
 
-    // NOTE: Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
-    // /** An object that can be used to access the current value of the class member at runtime. */
-    // readonly access: {
-    //     /**
-    //      * Invokes the getter on the provided receiver.
-    //      *
-    //      * @example
-    //      * let value = context.access.get.call(instance);
-    //      */
-    //     get(this: This): Value;
-    // };
+    /** An object that can be used to access the current value of the class element at runtime. */
+    readonly access: {
+        /**
+         * Determines whether an object has a property with the same name as the decorated element.
+         */
+        has(object: This): boolean;
+        /**
+         * Invokes the getter on the provided object.
+         *
+         * @example
+         * let value = context.access.get(instance);
+         */
+        get(object: This): Value;
+    };
 
     /**
      * Adds a callback to be invoked either before static initializers are run (when
-     * decorating a `static` member), or before instance initializers are run (when
-     * decorating a non-`static` member).
+     * decorating a `static` element), or before instance initializers are run (when
+     * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
 }
@@ -163,34 +169,37 @@ interface ClassSetterDecoratorContext<
     This = unknown,
     Value = unknown,
 > {
-    /** The kind of class member that was decorated. */
+    /** The kind of class element that was decorated. */
     readonly kind: "setter";
 
-    /** The name of the decorated class member. */
+    /** The name of the decorated class element. */
     readonly name: string | symbol;
 
-    /** A value indicating whether the class member is a static (`true`) or instance (`false`) member. */
+    /** A value indicating whether the class element is a static (`true`) or instance (`false`) element. */
     readonly static: boolean;
 
-    /** A value indicating whether the class member has a private name. */
+    /** A value indicating whether the class element has a private name. */
     readonly private: boolean;
 
-    // NOTE: Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
-    /** An object that can be used to access the current value of the class member at runtime. */
-    // readonly access: {
-    //     /**
-    //      * Invokes the setter on the provided receiver.
-    //      *
-    //      * @example
-    //      * context.access.set.call(instance, value);
-    //      */
-    //     set(this: This, value: Value): void;
-    // };
+    /** An object that can be used to access the current value of the class element at runtime. */
+    readonly access: {
+        /**
+         * Determines whether an object has a property with the same name as the decorated element.
+         */
+        has(object: This): boolean;
+        /**
+         * Invokes the setter on the provided object.
+         *
+         * @example
+         * context.access.set(instance, value);
+         */
+        set(object: This, value: Value): void;
+    };
 
     /**
      * Adds a callback to be invoked either before static initializers are run (when
-     * decorating a `static` member), or before instance initializers are run (when
-     * decorating a non-`static` member).
+     * decorating a `static` element), or before instance initializers are run (when
+     * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
 }
@@ -205,42 +214,46 @@ interface ClassAccessorDecoratorContext<
     This = unknown,
     Value = unknown,
 > {
-    /** The kind of class member that was decorated. */
+    /** The kind of class element that was decorated. */
     readonly kind: "accessor";
 
-    /** The name of the decorated class member. */
+    /** The name of the decorated class element. */
     readonly name: string | symbol;
 
-    /** A value indicating whether the class member is a static (`true`) or instance (`false`) member. */
+    /** A value indicating whether the class element is a static (`true`) or instance (`false`) element. */
     readonly static: boolean;
 
-    /** A value indicating whether the class member has a private name. */
+    /** A value indicating whether the class element has a private name. */
     readonly private: boolean;
 
-    // NOTE: Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
-    // /** An object that can be used to access the current value of the class member at runtime. */
-    // readonly access: {
-    //     /**
-    //      * Invokes the getter on the provided receiver.
-    //      *
-    //      * @example
-    //      * let value = context.access.get.call(instance);
-    //      */
-    //     get(this: This): Value;
+    /** An object that can be used to access the current value of the class element at runtime. */
+    readonly access: {
+        /**
+         * Determines whether an object has a property with the same name as the decorated element.
+         */
+        has(object: This): boolean;
 
-    //     /**
-    //      * Invokes the setter on the provided receiver.
-    //      *
-    //      * @example
-    //      * context.access.set.call(instance, value);
-    //      */
-    //     set(this: This, value: Value): void;
-    // };
+        /**
+         * Invokes the getter on the provided object.
+         *
+         * @example
+         * let value = context.access.get(instance);
+         */
+        get(object: This): Value;
+
+        /**
+         * Invokes the setter on the provided object.
+         *
+         * @example
+         * context.access.set(instance, value);
+         */
+        set(object: This, value: Value): void;
+    };
 
     /**
      * Adds a callback to be invoked either before static initializers are run (when
-     * decorating a `static` member), or before instance initializers are run (when
-     * decorating a non-`static` member).
+     * decorating a `static` element), or before instance initializers are run (when
+     * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
 }
@@ -302,36 +315,40 @@ interface ClassFieldDecoratorContext<
     This = unknown,
     Value = unknown,
 > {
-    /** The kind of class member that was decorated. */
+    /** The kind of class element that was decorated. */
     readonly kind: "field";
 
-    /** The name of the decorated class member. */
+    /** The name of the decorated class element. */
     readonly name: string | symbol;
 
-    /** A value indicating whether the class member is a static (`true`) or instance (`false`) member. */
+    /** A value indicating whether the class element is a static (`true`) or instance (`false`) element. */
     readonly static: boolean;
 
-    /** A value indicating whether the class member has a private name. */
+    /** A value indicating whether the class element has a private name. */
     readonly private: boolean;
 
-    // NOTE: Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
-    // /** An object that can be used to access the current value of the class member at runtime. */
-    // readonly access: {
-    //     /**
-    //      * Gets the value of the field on the provided receiver.
-    //      */
-    //     get(this: This): Value;
+    /** An object that can be used to access the current value of the class element at runtime. */
+    readonly access: {
+        /**
+         * Determines whether an object has a property with the same name as the decorated element.
+         */
+        has(object: This): boolean;
 
-    //     /**
-    //      * Sets the value of the field on the provided receiver.
-    //      */
-    //     set(this: This, value: Value): void;
-    // };
+        /**
+         * Gets the value of the field on the provided object.
+         */
+        get(object: This): Value;
+
+        /**
+         * Sets the value of the field on the provided object.
+         */
+        set(object: This, value: Value): void;
+    };
 
     /**
      * Adds a callback to be invoked either before static initializers are run (when
-     * decorating a `static` member), or before instance initializers are run (when
-     * decorating a non-`static` member).
+     * decorating a `static` element), or before instance initializers are run (when
+     * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
 }

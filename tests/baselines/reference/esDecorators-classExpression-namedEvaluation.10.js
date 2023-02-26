@@ -200,7 +200,7 @@ var _a, _b;
                 static {
                     __setFunctionName(this, "x");
                     _y_decorators = [dec];
-                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false }, _y_initializers, _instanceExtraInitializers);
+                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers);
                 }
                 y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
             };
@@ -217,7 +217,7 @@ var _a, _b;
                 static {
                     __setFunctionName(this, "x");
                     _y_decorators = [dec];
-                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false }, _y_initializers, _instanceExtraInitializers_1);
+                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers_1);
                 }
                 y = (__runInitializers(this, _instanceExtraInitializers_1), __runInitializers(this, _y_initializers, void 0));
             };
@@ -234,7 +234,7 @@ var _a, _b;
                 static {
                     __setFunctionName(this, "0");
                     _y_decorators = [dec];
-                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false }, _y_initializers, _instanceExtraInitializers_2);
+                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers_2);
                 }
                 y = (__runInitializers(this, _instanceExtraInitializers_2), __runInitializers(this, _y_initializers, void 0));
             };
@@ -251,7 +251,7 @@ var _a, _b;
                 static {
                     __setFunctionName(this, "x");
                     _y_decorators = [dec];
-                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false }, _y_initializers, _instanceExtraInitializers_3);
+                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers_3);
                 }
                 y = (__runInitializers(this, _instanceExtraInitializers_3), __runInitializers(this, _y_initializers, void 0));
             };
@@ -268,7 +268,7 @@ var _a, _b;
                 static {
                     __setFunctionName(this, "0");
                     _y_decorators = [dec];
-                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false }, _y_initializers, _instanceExtraInitializers_4);
+                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers_4);
                 }
                 y = (__runInitializers(this, _instanceExtraInitializers_4), __runInitializers(this, _y_initializers, void 0));
             };
@@ -306,7 +306,7 @@ var _a, _b;
                 static {
                     __setFunctionName(this, "__proto__");
                     _y_decorators = [dec];
-                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false }, _y_initializers, _instanceExtraInitializers_5);
+                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers_5);
                 }
                 y = (__runInitializers(this, _instanceExtraInitializers_5), __runInitializers(this, _y_initializers, void 0));
             };
@@ -323,7 +323,7 @@ var _a, _b;
                 static {
                     __setFunctionName(this, "__proto__");
                     _y_decorators = [dec];
-                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false }, _y_initializers, _instanceExtraInitializers_6);
+                    __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers_6);
                 }
                 y = (__runInitializers(this, _instanceExtraInitializers_6), __runInitializers(this, _y_initializers, void 0));
             };
@@ -339,7 +339,7 @@ var _a, _b;
         return class C {
             static {
                 _static_x_decorators = [dec];
-                __esDecorate(null, null, _static_x_decorators, { kind: "field", name: "x", static: true, private: false }, _static_x_initializers, _staticExtraInitializers);
+                __esDecorate(null, null, _static_x_decorators, { kind: "field", name: "x", static: true, private: false, access: { has: obj => "x" in obj, get: obj => obj.x, set: (obj, value) => { obj.x = value; } } }, _static_x_initializers, _staticExtraInitializers);
                 __runInitializers(this, _staticExtraInitializers);
             }
             static x = __runInitializers(this, _static_x_initializers, (() => {
