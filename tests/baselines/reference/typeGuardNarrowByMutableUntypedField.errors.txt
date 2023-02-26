@@ -1,0 +1,11 @@
+tests/cases/compiler/typeGuardNarrowByMutableUntypedField.ts(4,9): error TS2322: Type 'unknown' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/typeGuardNarrowByMutableUntypedField.ts (1 errors) ====
+    declare function hasOwnProperty<P extends PropertyKey>(target: {}, property: P): target is { [K in P]: unknown };
+    declare const arrayLikeOrIterable: ArrayLike<any> | Iterable<any>;
+    if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
+        let x: number = arrayLikeOrIterable.length;
+            ~
+!!! error TS2322: Type 'unknown' is not assignable to type 'number'.
+    }

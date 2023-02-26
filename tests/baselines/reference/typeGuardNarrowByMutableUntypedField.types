@@ -15,7 +15,7 @@ if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
 
     let x: number = arrayLikeOrIterable.length;
 >x : number
->arrayLikeOrIterable.length : number
->arrayLikeOrIterable : ArrayLike<any>
->length : number
+>arrayLikeOrIterable.length : unknown
+>arrayLikeOrIterable : (ArrayLike<any> | Iterable<any>) & { length: unknown; }
+>length : unknown
 }
