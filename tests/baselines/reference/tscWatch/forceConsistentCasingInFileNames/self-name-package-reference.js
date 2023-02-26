@@ -33,7 +33,7 @@ Output::
 Found 'package.json' at '/Users/name/projects/web/package.json'.
 ======== Resolving module '@this/package' from '/Users/name/projects/web/index.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/Users/name/projects/web/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath '.' with target './dist/index.js'.
 File '/Users/name/projects/web/index.ts' exists - use it as a name resolution result.
