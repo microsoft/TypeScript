@@ -118,6 +118,7 @@ import {
     getResolveJsonModule,
     hostGetCanonicalFileName,
     matchPatternOrExact,
+    moduleResolutionSupportsPackageJsonExportsAndImports,
     packageIdToString,
     tryParsePatterns,
 } from "./utilities";
@@ -721,10 +722,13 @@ export function getConditions(options: CompilerOptions, esmMode?: boolean) {
     // conditions are only used by the node16/nodenext/bundler resolvers - there's no priority order in the list,
     // it's essentially a set (priority is determined by object insertion order in the object we look at).
     const conditions = esmMode || getEmitModuleResolutionKind(options) === ModuleResolutionKind.Bundler
-        ? ["node", "import"]
-        : ["node", "require"];
+        ? ["import"]
+        : ["require"];
     if (!options.noDtsResolution) {
         conditions.push("types");
+    }
+    if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler) {
+        conditions.push("node");
     }
     return concatenate(conditions, options.customConditions);
 }
@@ -1717,7 +1721,7 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         candidateIsFromPackageJsonField: false,
     };
 
-    if (traceEnabled && getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) <= ModuleResolutionKind.NodeNext) {
+    if (traceEnabled && moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(compilerOptions))) {
         trace(host, Diagnostics.Resolving_in_0_mode_with_conditions_1, features & NodeResolutionFeatures.EsmMode ? "ESM" : "CJS", conditions.map(c => `'${c}'`).join(", "));
     }
 
