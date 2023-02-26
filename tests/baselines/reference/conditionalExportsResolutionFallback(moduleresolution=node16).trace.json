@@ -3,7 +3,7 @@
     "Found 'package.json' at '/node_modules/dep/package.json'.",
     "======== Resolving module 'dep' from '/index.mts'. ========",
     "Explicitly specified module resolution kind: 'Node16'.",
-    "Resolving in ESM mode with conditions 'node', 'import', 'types'.",
+    "Resolving in ESM mode with conditions 'import', 'types', 'node'.",
     "File '/package.json' does not exist.",
     "Loading module 'dep' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.",
     "File '/node_modules/dep/package.json' exists according to earlier cached lookups.",

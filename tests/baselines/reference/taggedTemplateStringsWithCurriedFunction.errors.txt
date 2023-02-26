@@ -1,7 +1,7 @@
-error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 
 
-!!! error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+!!! error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 ==== tests/cases/compiler/taggedTemplateStringsWithCurriedFunction.ts (0 errors) ====
     // Originated from #38558
     

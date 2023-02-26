@@ -6,7 +6,7 @@
 // back if contextual typing is not taking effect.
 
 type FuncType = (x: <T>(p: T) => T) => typeof x;
->FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T
+>FuncType : (x: <T>(p: T) => T) => typeof x
 >x : <T>(p: T) => T
 >p : T
 >x : <T>(p: T) => T

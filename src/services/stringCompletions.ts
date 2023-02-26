@@ -192,7 +192,8 @@ export function getStringLiteralCompletions(
     host: LanguageServiceHost,
     program: Program,
     log: Log,
-    preferences: UserPreferences): CompletionInfo | undefined {
+    preferences: UserPreferences,
+    includeSymbol: boolean): CompletionInfo | undefined {
     if (isInReferenceComment(sourceFile, position)) {
         const entries = getTripleSlashReferenceCompletion(sourceFile, position, options, host);
         return entries && convertPathCompletions(entries);
@@ -200,7 +201,7 @@ export function getStringLiteralCompletions(
     if (isInString(sourceFile, position, contextToken)) {
         if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
         const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, program.getTypeChecker(), options, host, preferences);
-        return convertStringLiteralCompletions(entries, contextToken, sourceFile, host, program, log, options, preferences, position);
+        return convertStringLiteralCompletions(entries, contextToken, sourceFile, host, program, log, options, preferences, position, includeSymbol);
     }
 }
 
@@ -214,6 +215,7 @@ function convertStringLiteralCompletions(
     options: CompilerOptions,
     preferences: UserPreferences,
     position: number,
+    includeSymbol: boolean,
 ): CompletionInfo | undefined {
     if (completion === undefined) {
         return undefined;
@@ -241,6 +243,17 @@ function convertStringLiteralCompletions(
                 preferences,
                 options,
                 /*formatContext*/ undefined,
+                /*isTypeOnlyLocation */ undefined,
+                /*propertyAccessToConvert*/ undefined,
+                /*jsxIdentifierExpected*/ undefined,
+                /*isJsxInitializer*/ undefined,
+                /*importStatementCompletion*/ undefined,
+                /*recommendedCompletion*/ undefined,
+                /*symbolToOriginInfoMap*/ undefined,
+                /*symbolToSortTextMap*/ undefined,
+                /*isJsxIdentifierExpected*/ undefined,
+                /*isRightOfOpenTag*/ undefined,
+                includeSymbol
             ); // Target will not be used, so arbitrary
             return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, optionalReplacementSpan, entries };
         }
@@ -274,7 +287,7 @@ function stringLiteralCompletionDetails(name: string, location: Node, completion
         }
         case StringLiteralCompletionKind.Properties: {
             const match = find(completion.symbols, s => s.name === name);
-            return match && createCompletionDetailsForSymbol(match, checker, sourceFile, location, cancellationToken);
+            return match && createCompletionDetailsForSymbol(match, match.name, checker, sourceFile, location, cancellationToken);
         }
         case StringLiteralCompletionKind.Types:
             return find(completion.types, t => t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.string, [textPart(name)]) : undefined;
@@ -379,7 +392,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 //      });
                 return stringLiteralCompletionsForObjectLiteral(typeChecker, parent.parent);
             }
-            return fromContextualType();
+            return fromContextualType() || fromContextualType(ContextFlags.None);
 
         case SyntaxKind.ElementAccessExpression: {
             const { expression, argumentExpression } = parent as ElementAccessExpression;
@@ -418,17 +431,25 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             //      export * from "/*completion position*/";
             return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker, preferences) };
         case SyntaxKind.CaseClause:
-            const tracker = newCaseClauseTracker(typeChecker, (node.parent as CaseClause).parent.clauses);
-            const literals = fromContextualType().types.filter(literal => !tracker.hasValue(literal.value));
+            const tracker = newCaseClauseTracker(typeChecker, (parent as CaseClause).parent.clauses);
+            const contextualTypes = fromContextualType();
+            if (!contextualTypes) {
+                return;
+            }
+            const literals = contextualTypes.types.filter(literal => !tracker.hasValue(literal.value));
             return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
         default:
             return fromContextualType();
     }
 
-    function fromContextualType(): StringLiteralCompletionsFromTypes {
+    function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
-        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, ContextFlags.Completions)), isNewIdentifier: false };
+        const types = getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
+        if (!types.length) {
+            return;
+        }
+        return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false };
     }
 }
 

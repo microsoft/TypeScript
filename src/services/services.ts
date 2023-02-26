@@ -1990,7 +1990,8 @@ export function createLanguageService(
             options.triggerCharacter,
             options.triggerKind,
             cancellationToken,
-            formattingSettings && formatting.getFormatContext(formattingSettings, host));
+            formattingSettings && formatting.getFormatContext(formattingSettings, host),
+            options.includeSymbol);
     }
 
     function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {

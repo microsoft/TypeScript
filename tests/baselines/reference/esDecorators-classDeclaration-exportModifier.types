@@ -4,13 +4,13 @@ var dec;
 >dec : any
 
 === tests/cases/conformance/esDecorators/classDeclaration/file1.js ===
-// error
+// ok
 @dec export class C1 { }
 >dec : any
 >C1 : C1
 
 === tests/cases/conformance/esDecorators/classDeclaration/file2.js ===
-// error
+// ok
 @dec export default class C2 {}
 >dec : any
 >C2 : C2
@@ -32,4 +32,18 @@ export @dec class C4 {}
 export default @dec class C5 {}
 >dec : any
 >C5 : C5
+
+=== tests/cases/conformance/esDecorators/classDeclaration/file6.js ===
+// error
+@dec export @dec class C6 {}
+>dec : any
+>dec : any
+>C6 : C6
+
+=== tests/cases/conformance/esDecorators/classDeclaration/file7.js ===
+// error
+@dec export default @dec class C7 {}
+>dec : any
+>dec : any
+>C7 : C7
 
