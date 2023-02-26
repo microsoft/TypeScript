@@ -333,6 +333,7 @@ unbox({ value: { value: { get value() { return this; } }}});  // { readonly valu
 >value : Symbol(value, Decl(recursiveConditionalTypes.ts, 82, 7))
 >value : Symbol(value, Decl(recursiveConditionalTypes.ts, 82, 16))
 >value : Symbol(value, Decl(recursiveConditionalTypes.ts, 82, 25))
+>this : Symbol(__object, Decl(recursiveConditionalTypes.ts, 82, 23))
 
 // Inference from nested instantiations of same generic types
 

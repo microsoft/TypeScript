@@ -7,7 +7,7 @@ function fib(x:number) { return x <= 1 ? x : fib(x - 1) + fib(x - 2); }
 >x : number
 >1 : 1
 >x : number
->fib(x - 1) + fib(x - 2) : any
+>fib(x - 1) + fib(x - 2) : error
 >fib(x - 1) : any
 >fib : (x: number) => any
 >x - 1 : number

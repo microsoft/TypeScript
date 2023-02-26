@@ -589,7 +589,7 @@ const Component = registerComponent('test-component', {
 >parse : () => boolean[]
 
 				return [true];
->[true] : true[]
+>[true] : boolean[]
 >true : true
 			}
 		},

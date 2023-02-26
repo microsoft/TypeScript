@@ -10,7 +10,7 @@ type Before = {
 
     [placeType in PlaceType]: void;
 >[placeType in PlaceType] : void
->placeType in PlaceType : boolean
+>placeType in PlaceType : any
 >placeType : any
 >PlaceType : any
 }
@@ -57,7 +57,7 @@ type AfterImplicitQ = {
 interface I {
     [P in PlaceType]: any
 >[P in PlaceType] : any
->P in PlaceType : boolean
+>P in PlaceType : any
 >P : any
 >PlaceType : any
 }
@@ -66,7 +66,7 @@ class C {
 
     [P in PlaceType]: any
 >[P in PlaceType] : any
->P in PlaceType : boolean
+>P in PlaceType : any
 >P : any
 >PlaceType : any
 }
@@ -76,7 +76,7 @@ const D = class {
 
     [P in PlaceType]: any
 >[P in PlaceType] : any
->P in PlaceType : boolean
+>P in PlaceType : any
 >P : any
 >PlaceType : any
 }

@@ -42,7 +42,7 @@ var result1 = true ? x : a;
 
 //Expr1 and Expr2 are literals
 true ? {} : 1;
->true ? {} : 1 : 1 | {}
+>true ? {} : 1 : {} | 1
 >true : true
 >{} : {}
 >1 : 1
