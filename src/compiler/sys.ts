@@ -537,7 +537,7 @@ export function getFileWatcherEventKind(oldTime: number, newTime: number) {
 /** @internal */
 export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
 
-let curSysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
+let curSysLog: (s: string) => void = noop;
 
 /** @internal */
 export function sysLog(s: string) {
@@ -1465,7 +1465,6 @@ export function getNodeMajorVersion(): number | undefined {
 }
 
 // TODO: GH#18217 this is used as if it's certainly defined in many places.
-// eslint-disable-next-line prefer-const
 export let sys: System = (() => {
     // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
     // byte order mark from the specified encoding. Using any other byte order mark does

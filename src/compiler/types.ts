@@ -4723,7 +4723,7 @@ export interface Program extends ScriptReferenceHost {
      */
     emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
     /** @internal */
-    emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult; // eslint-disable-line @typescript-eslint/unified-signatures
+    emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult;
 
     getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
     getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
@@ -5915,7 +5915,7 @@ export const enum InternalSymbolName {
  * with a normal string (which is good, it cannot be misused on assignment or on usage),
  * while still being comparable with a normal string via === (also good) and castable from a string.
  */
-export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName; // eslint-disable-line @typescript-eslint/naming-convention
+export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
 
 /** ReadonlyMap where keys are `__String`s. */
 export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
