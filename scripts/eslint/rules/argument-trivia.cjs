@@ -97,7 +97,11 @@ module.exports = createRule({
                 if (signature) {
                     const expectedName = signature.parameters[i]?.escapedName;
                     if (expectedName) {
-                        return ts.unescapeLeadingUnderscores(expectedName);
+                        const name = ts.unescapeLeadingUnderscores(expectedName);
+                        // If a parameter is unused, we prepend an underscore. Ignore this
+                        // so that we can switch between used and unused without modifying code,
+                        // requiring that arugments are tagged with the non-underscored name.
+                        return name.startsWith("_") ? name.slice(1) : name;
                     }
                 }
                 return undefined;
