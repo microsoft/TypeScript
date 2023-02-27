@@ -4335,20 +4335,20 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function checkDeprecations(
-        deprecatedIn: Version,
-        removedIn: Version,
+        deprecatedIn: string,
+        removedIn: string,
         createDiagnostic: (name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) => void,
         fn: (createDeprecatedDiagnostic: (name: string, value?: string, useInstead?: string) => void) => void,
     ) {
+        const deprecatedInVersion = new Version(deprecatedIn);
+        const removedInVersion = new Version(removedIn);
         const typescriptVersion = new Version(typeScriptVersion || versionMajorMinor);
         const ignoreDeprecationsVersion = getIgnoreDeprecationsVersion();
 
-        const mustBeRemoved = !(removedIn.compareTo(typescriptVersion) === Comparison.GreaterThan);
-        const canBeSilenced = !mustBeRemoved && ignoreDeprecationsVersion.compareTo(deprecatedIn) === Comparison.LessThan;
+        const mustBeRemoved = !(removedInVersion.compareTo(typescriptVersion) === Comparison.GreaterThan);
+        const canBeSilenced = !mustBeRemoved && ignoreDeprecationsVersion.compareTo(deprecatedInVersion) === Comparison.LessThan;
 
         if (mustBeRemoved || canBeSilenced) {
-            const deprecatedInVersion = `${deprecatedIn.major}.${deprecatedIn.minor}`;
-            const removedInVersion = `${removedIn.major}.${removedIn.minor}`;
             fn((name, value, useInstead) => {
                 if (mustBeRemoved) {
                     if (value === undefined) {
@@ -4360,10 +4360,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
                 else {
                     if (value === undefined) {
-                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, removedInVersion, deprecatedInVersion);
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, removedIn, deprecatedIn);
                     }
                     else {
-                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, removedInVersion, deprecatedInVersion);
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, removedIn, deprecatedIn);
                     }
                 }
             });
@@ -4382,7 +4382,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        checkDeprecations(new Version(5, 0), new Version(5, 5), createDiagnostic, createDeprecatedDiagnostic => {
+        checkDeprecations("5.0", "5.5", createDiagnostic, createDeprecatedDiagnostic => {
             if (options.target === ScriptTarget.ES3) {
                 createDeprecatedDiagnostic("target", "ES3");
             }
@@ -4421,7 +4421,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createDiagnosticForReference(parentFile, index, message, arg0, arg1, arg2, arg3);
         }
 
-        checkDeprecations(new Version(5, 0), new Version(5, 5), createDiagnostic, createDeprecatedDiagnostic => {
+        checkDeprecations("5.0", "5.5", createDiagnostic, createDeprecatedDiagnostic => {
             if (ref.prepend) {
                 createDeprecatedDiagnostic("prepend");
             }
