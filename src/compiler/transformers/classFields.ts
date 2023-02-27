@@ -1750,7 +1750,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function visitExpressionWithTypeArgumentsInHeritageClause(node: ExpressionWithTypeArguments) {
         const facts = lexicalEnvironment?.data?.facts || ClassFacts.None;
         if (facts & ClassFacts.NeedsClassSuperReference) {
-            const temp = factory.createTempVariable(hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
+            const temp = factory.createTempVariable(hoistVariableDeclaration, /*reserveInNestedScopes*/ true);
             getClassLexicalEnvironment().superClassReference = temp;
             return factory.updateExpressionWithTypeArguments(
                 node,
@@ -2857,7 +2857,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const identifier =
             typeof name === "object" ? factory.getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes, prefix, suffix) :
             typeof name === "string" ? factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic, prefix, suffix) :
-            factory.createTempVariable(/*recordTempVariable*/ undefined, /*reservedInNestedScopes*/ true, prefix, suffix);
+            factory.createTempVariable(/*recordTempVariable*/ undefined, /*reserveInNestedScopes*/ true, prefix, suffix);
 
         if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) {
             addBlockScopedVariable(identifier);

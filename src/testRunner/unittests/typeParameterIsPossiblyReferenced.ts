@@ -11,7 +11,7 @@ describe("unittests :: internalApi :: typeParameterIsPossiblyReferenced", () => 
             `;
             const host = new fakes.CompilerHost(vfs.createFromFileSystem(
                 Harness.IO,
-                /*ignoreCase*/ true,
+                /*ignoreCases*/ true,
                 {
                     documents: [
                         new documents.TextDocument("/file.ts", content)

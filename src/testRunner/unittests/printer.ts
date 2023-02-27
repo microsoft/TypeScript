@@ -159,7 +159,7 @@ describe("unittests:: PrinterAPI", () => {
                 [ts.factory.createPropertyDeclaration(
                     ts.factory.createNodeArray([ts.factory.createToken(ts.SyntaxKind.PublicKeyword)]),
                     ts.factory.createIdentifier("prop"),
-                    /*questionOrExclamationToken*/ undefined,
+                    /*questionToken*/ undefined,
                     /*type*/ undefined,
                     /*initializer*/ undefined
                 )]
@@ -254,7 +254,7 @@ describe("unittests:: PrinterAPI", () => {
             ts.EmitHint.Unspecified,
             ts.setEmitFlags(ts.factory.createTupleTypeNode([
                 ts.factory.createFunctionTypeNode(
-                    /*typeParameters*/ undefined,
+                    /*typeArguments*/ undefined,
                     [ts.factory.createParameterDeclaration(
                         /*modifiers*/ undefined,
                         /*dotDotDotToken*/ undefined,
@@ -272,7 +272,7 @@ describe("unittests:: PrinterAPI", () => {
                     ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword)
                 ),
                 ts.factory.createFunctionTypeNode(
-                    /*typeParameters*/ undefined,
+                    /*typeArguments*/ undefined,
                     [ts.factory.createParameterDeclaration(
                         /*modifiers*/ undefined,
                         ts.factory.createToken(ts.SyntaxKind.DotDotDotToken),
@@ -281,7 +281,7 @@ describe("unittests:: PrinterAPI", () => {
                     ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword)
                 ),
                 ts.factory.createFunctionTypeNode(
-                    /*typeParameters*/ undefined,
+                    /*typeArguments*/ undefined,
                     [ts.factory.createParameterDeclaration(
                         /*modifiers*/ undefined,
                         /*dotDotDotToken*/ undefined,
@@ -291,7 +291,7 @@ describe("unittests:: PrinterAPI", () => {
                     ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword)
                 ),
                 ts.factory.createFunctionTypeNode(
-                    /*typeParameters*/ undefined,
+                    /*typeArguments*/ undefined,
                     [ts.factory.createParameterDeclaration(
                         /*modifiers*/ undefined,
                         /*dotDotDotToken*/ undefined,
@@ -302,7 +302,7 @@ describe("unittests:: PrinterAPI", () => {
                     ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword)
                 ),
                 ts.factory.createFunctionTypeNode(
-                    /*typeParameters*/ undefined,
+                    /*typeArguments*/ undefined,
                     [ts.factory.createParameterDeclaration(
                         /*modifiers*/ undefined,
                         /*dotDotDotToken*/ undefined,

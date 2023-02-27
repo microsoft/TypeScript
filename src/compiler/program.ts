@@ -2127,7 +2127,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (structureIsReused === StructureIsReused.Not) {
             // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
             // the best we can do is fallback to the default logic.
-            return resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFile, /*reusedNames*/ undefined);
+            return resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFile, /*resuedNames*/ undefined);
         }
 
         const oldSourceFile = !isString(containingFile) ? oldProgram && oldProgram.getSourceFile(containingFile.fileName) : undefined;
@@ -2534,7 +2534,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             getEmitHost(writeFileCallback),
             /*targetSourceFile*/ undefined,
             /*transformers*/ noTransformers,
-            /*emitOnly*/ false,
+            /*emitOnlyDtsFiles*/ false,
             /*onlyBuildInfo*/ true
         );
 
@@ -3269,7 +3269,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const r = /import|require/g;
             while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
                 const node = getNodeAtPosition(file, r.lastIndex);
-                if (shouldProcessRequires && isRequireCall(node, /*requireStringLiteralLikeArgument*/ true)) {
+                if (shouldProcessRequires && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                     imports = append(imports, node.arguments[0]);
                 }
@@ -3954,7 +3954,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (host.getParsedCommandLine) {
             commandLine = host.getParsedCommandLine(refPath);
             if (!commandLine) {
-                addFileToFilesByName(/*file*/ undefined, sourceFilePath, /*redirectedPath*/ undefined);
+                addFileToFilesByName(/*sourceFile*/ undefined, sourceFilePath, /*redirectedPath*/ undefined);
                 projectReferenceRedirects.set(sourceFilePath, false);
                 return undefined;
             }

@@ -3306,7 +3306,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
         else if (hasDynamicName(node)) {
             bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
-            const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
+            const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototype*/ false, /*containerIsClass*/ false);
             addLateBoundAssignmentDeclarationToSymbol(node, sym);
         }
         else {
@@ -3477,7 +3477,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindCallExpression(node: CallExpression) {
         // We're only inspecting call expressions to detect CommonJS modules, so we can skip
         // this check if we've already seen the module indicator
-        if (!file.commonJsModuleIndicator && isRequireCall(node, /*requireStringLiteralLikeArgument*/ false)) {
+        if (!file.commonJsModuleIndicator && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ false)) {
             setCommonJsModuleIndicator(node);
         }
     }

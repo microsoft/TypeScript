@@ -889,7 +889,7 @@ function performCompilation(
     config: ParsedCommandLine
 ) {
     const { fileNames, options, projectReferences } = config;
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys);
+    const host = createCompilerHostWorker(options, /*setParentPos*/ undefined, sys);
     const currentDirectory = host.getCurrentDirectory();
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -909,7 +909,7 @@ function performCompilation(
         s => sys.write(s + sys.newLine),
         createReportErrorSummary(sys, options)
     );
-    reportStatistics(sys, program, /*solutionPerformance*/ undefined);
+    reportStatistics(sys, program, /*builder*/ undefined);
     cb(program);
     return sys.exit(exitStatus);
 }
@@ -933,7 +933,7 @@ function performIncrementalCompilation(
         reportDiagnostic,
         reportErrorSummary: createReportErrorSummary(sys, options),
         afterProgramEmitAndDiagnostics: builderProgram => {
-            reportStatistics(sys, builderProgram.getProgram(), /*solutionPerformance*/ undefined);
+            reportStatistics(sys, builderProgram.getProgram(), /*builder*/ undefined);
             cb(builderProgram);
         }
     });
@@ -978,7 +978,7 @@ function updateWatchCompilationHost(
     const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
     watchCompilerHost.afterProgramCreate = builderProgram => {
         emitFilesUsingBuilder(builderProgram);
-        reportStatistics(sys, builderProgram.getProgram(), /*solutionPerformance*/ undefined);
+        reportStatistics(sys, builderProgram.getProgram(), /*builder*/ undefined);
         cb(builderProgram);
     };
 }

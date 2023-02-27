@@ -1646,7 +1646,7 @@ function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: 
         /*cache*/ undefined,
         Extensions.JavaScript,
         /*isConfigLookup*/ false,
-        /*redirectedReference*/ undefined);
+        /*redirectedReferences*/ undefined);
 }
 
 export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations {
@@ -2139,7 +2139,7 @@ function loadEntrypointsFromExportMap(
             }
             const resolvedTarget = combinePaths(scope.packageDirectory, target);
             const finalPath = getNormalizedAbsolutePath(resolvedTarget, state.host.getCurrentDirectory?.());
-            const result = loadFileNameFromPackageJsonField(extensions, finalPath, /*onlyRecordFailures*/ false, state);
+            const result = loadFileNameFromPackageJsonField(extensions, finalPath, /*recordOnlyFailures*/ false, state);
             if (result) {
                 entrypoints = appendIfUnique(entrypoints, result, (a, b) => a.path === b.path);
                 return true;

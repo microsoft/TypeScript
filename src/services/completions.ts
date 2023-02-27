@@ -1528,11 +1528,11 @@ function getEntryForMemberCompletion(
         // if it has one, so that the cursor ends up in the body once the completion is inserted.
         // Note: this assumes we won't have more than one body in the completion nodes, which should be the case.
         const emptyStmt = factory.createEmptyStatement();
-        body = factory.createBlock([emptyStmt], /*multiLine*/ true);
+        body = factory.createBlock([emptyStmt], /* multiline */ true);
         setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
     }
     else {
-        body = factory.createBlock([], /*multiLine*/ true);
+        body = factory.createBlock([], /* multiline */ true);
     }
 
     let modifiers = ModifierFlags.None;
@@ -1761,11 +1761,11 @@ function createObjectLiteralMethod(
             let body;
             if (preferences.includeCompletionsWithSnippetText) {
                 const emptyStmt = factory.createEmptyStatement();
-                body = factory.createBlock([emptyStmt], /*multiLine*/ true);
+                body = factory.createBlock([emptyStmt], /* multiline */ true);
                 setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
             }
             else {
-                body = factory.createBlock([], /*multiLine*/ true);
+                body = factory.createBlock([], /* multiline */ true);
             }
 
             const parameters = typeNode.parameters.map(typedParam =>
@@ -3818,7 +3818,7 @@ function getCompletionData(
                 const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                 if (!typeForObject) return GlobalsSearch.Fail;
                 typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter(propertySymbol => {
-                    return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*isWrite*/ false, typeForObject, propertySymbol);
+                    return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*writing*/ false, typeForObject, propertySymbol);
                 });
                 existingMembers = objectLikeContainer.elements;
             }

@@ -2148,7 +2148,7 @@ export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRang
 
 /** @internal */
 export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
-    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, pos);
+    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
     scanner.scan();
     const start = scanner.getTokenPos();
     return createTextSpanFromBounds(start, scanner.getTextPos());
@@ -2156,7 +2156,7 @@ export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): T
 
 /** @internal */
 export function scanTokenAtPosition(sourceFile: SourceFile, pos: number) {
-    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, pos);
+    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
     scanner.scan();
     return scanner.getToken();
 }
@@ -3648,7 +3648,7 @@ export function isSameEntityName(name: Expression, initializer: Expression): boo
 
 /** @internal */
 export function getRightMostAssignedExpression(node: Expression): Expression {
-    while (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
+    while (isAssignmentExpression(node, /*excludeCompoundAssignments*/ true)) {
         node = node.right;
     }
     return node;
@@ -3927,7 +3927,7 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
         case SyntaxKind.ExternalModuleReference:
             return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
         case SyntaxKind.CallExpression:
-            return isImportCall(node.parent) || isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) ? node.parent as RequireOrImportCall : undefined;
+            return isImportCall(node.parent) || isRequireCall(node.parent, /*checkArg*/ false) ? node.parent as RequireOrImportCall : undefined;
         case SyntaxKind.LiteralType:
             Debug.assert(isStringLiteral(node));
             return tryCast(node.parent.parent, isImportTypeNode) as ValidImportTypeNode | undefined;
@@ -6732,7 +6732,7 @@ export function getEffectiveModifierFlags(node: Node): ModifierFlags {
 
 /** @internal */
 export function getEffectiveModifierFlagsAlwaysIncludeJSDoc(node: Node): ModifierFlags {
-    return getModifierFlagsWorker(node, /*includeJSDoc*/ true, /*alwaysIncludeJSDoc*/ true);
+    return getModifierFlagsWorker(node, /*includeJSDOc*/ true, /*alwaysIncludeJSDOc*/ true);
 }
 
 /**

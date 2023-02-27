@@ -421,7 +421,7 @@ export namespace BuilderState {
                 ), sourceFiles!);
             },
             cancellationToken,
-            /*emitOnly*/ true,
+            /*emitOnlyDtsFiles*/ true,
             /*customTransformers*/ undefined,
             /*forceDtsEmit*/ true
         );

@@ -11,7 +11,7 @@ import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
-    const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
+    const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
     const langSvc: any = info.languageService;
     for (const k of Object.keys(langSvc)) {
         // eslint-disable-next-line local/only-arrow-functions

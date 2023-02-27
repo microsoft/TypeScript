@@ -2331,7 +2331,7 @@ export class AutoImportProviderProject extends Project {
                 //    allow processing JS from node_modules, go back to the implementation
                 //    package and load the JS.
                 if (packageJson && compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
-                    const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*resolveJs*/ true);
+                    const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*allowJs*/ true);
                     rootNames = concatenate(rootNames, entrypoints);
                     dependenciesAdded += entrypoints?.length ? 1 : 0;
                 }

@@ -470,7 +470,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             const diagnostics = ts.sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics());
             diagnostics.forEach(reportDiagnostic);
             // Buildinfo should still have affectedFilesPendingEmit since we are only emitting dts files
-            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDts*/ true);
             reportWatchStatus(
                 ts.createCompilerDiagnostic(ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
                 sys.newLine,

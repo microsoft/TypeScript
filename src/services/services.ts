@@ -1759,7 +1759,7 @@ export function createLanguageService(
                 result,
                 parseConfigHost,
                 getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory),
-                /*existingOptions*/ undefined,
+                /*optionsToExtend*/ undefined,
                 getNormalizedAbsolutePath(configFileName, currentDirectory),
             );
         }

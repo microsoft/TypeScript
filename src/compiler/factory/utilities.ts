@@ -1670,7 +1670,7 @@ export function createAccessorPropertySetRedirector(factory: NodeFactory, node: 
         name,
         [factory.createParameterDeclaration(
             /*modifiers*/ undefined,
-            /*dotDotDotToken*/ undefined,
+            /*dotdotDotToken*/ undefined,
             "value"
         )],
         factory.createBlock([

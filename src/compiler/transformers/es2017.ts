@@ -993,7 +993,7 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                         /* typeArguments */ undefined,
                         [
                             factory.createNull(),
-                            factory.createObjectLiteralExpression(accessors, /*multiLine*/ true)
+                            factory.createObjectLiteralExpression(accessors, /* multiline */ true)
                         ]
                     )
                 )

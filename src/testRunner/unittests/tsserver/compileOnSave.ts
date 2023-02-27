@@ -871,13 +871,13 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
 
     describe("compile on save emit with and without richResponse", () => {
         it("without rich Response", () => {
-            verify(/*richResponse*/ undefined);
+            verify(/*richRepsonse*/ undefined);
         });
         it("with rich Response set to false", () => {
-            verify(/*richResponse*/ false);
+            verify(/*richRepsonse*/ false);
         });
         it("with rich Repsonse", () => {
-            verify(/*richResponse*/ true);
+            verify(/*richRepsonse*/ true);
         });
 
         function verify(richResponse: boolean | undefined) {

@@ -1570,7 +1570,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
                 return Comparison.LessThan;
             }
 
-            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDocComment*/ true);
+            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDoc*/ true);
             if (start > position) {
                 return Comparison.GreaterThan;
             }
@@ -1609,7 +1609,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
         if (end < position) {
             return false;
         }
-        start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDocComment*/ true);
+        start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
         if (start > position) {
             // If this child begins after position, then all subsequent children will as well.
             return false;
@@ -3000,7 +3000,7 @@ export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, e
 export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
     flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
-        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer);
+        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
     });
 }
 
@@ -3938,8 +3938,8 @@ export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTa
     if (needsNameFromDeclaration(symbol)) {
         const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
         if (fromDeclaration) return fromDeclaration;
-        const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
-        const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
+        const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ false);
+        const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ true);
         if (fileNameCase === capitalized) return fileNameCase;
         return [fileNameCase, capitalized];
     }

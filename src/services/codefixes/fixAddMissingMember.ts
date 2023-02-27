@@ -424,7 +424,7 @@ function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, sourceFi
         const property = factory.createPropertyDeclaration(
             /*modifiers*/ undefined,
             tokenName,
-            /*questionOrExclamationToken*/ undefined,
+            /*questionToken*/ undefined,
             /*type*/ undefined,
             /*initializer*/ undefined);
 
@@ -488,7 +488,7 @@ function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, source
     const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
 
     const property = isClassLike(node)
-        ? factory.createPropertyDeclaration(modifiers, tokenName, /*questionOrExclamationToken*/ undefined, typeNode, /*initializer*/ undefined)
+        ? factory.createPropertyDeclaration(modifiers, tokenName, /*questionToken*/ undefined, typeNode, /*initializer*/ undefined)
         : factory.createPropertySignature(/*modifiers*/ undefined, tokenName, /*questionToken*/ undefined, typeNode);
 
     const lastProp = getNodeToInsertPropertyAfter(node);
