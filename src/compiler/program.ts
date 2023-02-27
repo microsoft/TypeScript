@@ -4337,7 +4337,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function checkDeprecations(
         deprecatedIn: Version,
         removedIn: Version,
-        createDiagnostic: (name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, arg3?: string) => void,
+        createDiagnostic: (name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) => void,
         fn: (createDeprecatedDiagnostic: (name: string, value?: string, useInstead?: string) => void) => void,
     ) {
         const typescriptVersion = new Version(typeScriptVersion || versionMajorMinor);
@@ -4371,7 +4371,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function verifyDeprecatedCompilerOptions() {
-        function createDiagnostic(name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, arg3?: string) {
+        function createDiagnostic(name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
             if (useInstead) {
                 const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
                 const chain = chainDiagnosticMessages(details, message, arg0, arg1, arg2, arg3);
@@ -4417,7 +4417,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function verifyDeprecatedProjectReference(ref: ProjectReference, parentFile: JsonSourceFile | undefined, index: number) {
-        function createDiagnostic(_name: string, _value: string | undefined, _useInstead: string | undefined, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, arg3?: string) {
+        function createDiagnostic(_name: string, _value: string | undefined, _useInstead: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
             createDiagnosticForReference(parentFile, index, message, arg0, arg1, arg2, arg3);
         }
 
