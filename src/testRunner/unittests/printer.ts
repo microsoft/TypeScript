@@ -99,7 +99,7 @@ describe("unittests:: PrinterAPI", () => {
 
     describe("No duplicate ref directives when emiting .d.ts->.d.ts", () => {
         it("without statements", () => {
-            const host = new fakes.CompilerHost(new vfs.FileSystem(true, {
+            const host = new fakes.CompilerHost(new vfs.FileSystem(/*ignoreCase*/ true, {
                 files: {
                     "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\n`
                 }
@@ -111,7 +111,7 @@ describe("unittests:: PrinterAPI", () => {
             assert.equal(output.split(/\r?\n/g).length, 3);
         });
         it("with statements", () => {
-            const host = new fakes.CompilerHost(new vfs.FileSystem(true, {
+            const host = new fakes.CompilerHost(new vfs.FileSystem(/*ignoreCase*/ true, {
                 files: {
                     "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\nvar a: number;\n`
                 }

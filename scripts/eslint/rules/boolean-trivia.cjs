@@ -37,7 +37,7 @@ module.exports = createRule({
             return false;
         };
 
-        /** @type {(node: TSESTree.CallExpression) => boolean} */
+        /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => boolean} */
         const shouldIgnoreCalledExpression = (node) => {
             if (node.callee && node.callee.type === AST_NODE_TYPES.MemberExpression) {
                 const methodName = node.callee.property.type === AST_NODE_TYPES.Identifier
@@ -91,7 +91,7 @@ module.exports = createRule({
             }
         };
 
-        /** @type {(node: TSESTree.CallExpression) => void} */
+        /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => void} */
         const checkBooleanTrivia = (node) => {
             if (shouldIgnoreCalledExpression(node)) {
                 return;
@@ -104,6 +104,7 @@ module.exports = createRule({
 
         return {
             CallExpression: checkBooleanTrivia,
+            NewExpression: checkBooleanTrivia,
         };
     },
 });

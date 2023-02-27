@@ -78,7 +78,7 @@ function testProjectReferences(spec: TestSpecification, entryPointConfigFileName
         }
     }
 
-    const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": libFile.content } });
+    const vfsys = new vfs.FileSystem(/*ignoreCase*/ false, { files: { "/lib.d.ts": libFile.content } });
     files.forEach((v, k) => {
         vfsys.mkdirpSync(ts.getDirectoryPath(k));
         vfsys.writeFileSync(k, v);
