@@ -58,14 +58,7 @@ module.exports = createRule({
                     return true;
                 }
 
-                return [
-                    "createImportSpecifier",
-                    "createAnonymousType",
-                    "createSignature",
-                    "createProperty",
-                    "resolveName",
-                    "contains",
-                ].indexOf(functionName) >= 0;
+                return ["contains"].indexOf(functionName) >= 0;
             }
 
             return false;
@@ -78,13 +71,19 @@ module.exports = createRule({
             }
 
             const comments = sourceCode.getCommentsBefore(node);
-            if (!comments || comments.length !== 1 || comments[0].type !== "Block") {
+            if (!comments || comments.length === 0) {
+                context.report({ messageId: "booleanTriviaArgumentError", node });
+                return;
+            }
+
+            const last = comments[comments.length - 1];
+            if (last.type !== "Block") {
                 context.report({ messageId: "booleanTriviaArgumentError", node });
                 return;
             }
 
             const argRangeStart = node.range[0];
-            const commentRangeEnd = comments[0].range[1];
+            const commentRangeEnd = last.range[1];
             const hasNewLine = sourceCodeText.slice(commentRangeEnd, argRangeStart).indexOf("\n") >= 0;
 
             if (argRangeStart !== commentRangeEnd + 1 && !hasNewLine) {
