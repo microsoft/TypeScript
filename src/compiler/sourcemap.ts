@@ -103,7 +103,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         return sourceIndex;
     }
 
-    /* eslint-disable local/parameter-trivia, no-null/no-null */
+    /* eslint-disable local/argument-trivia, no-null/no-null */
     function setSourceContent(sourceIndex: number, content: string | null) {
         enter();
         if (content !== null) {
@@ -115,7 +115,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         }
         exit();
     }
-    /* eslint-enable local/parameter-trivia, no-null/no-null */
+    /* eslint-enable local/argument-trivia, no-null/no-null */
 
     function addName(name: string) {
         enter();

@@ -21,7 +21,7 @@ function memoize(fn) {
 
 
 module.exports = createRule({
-    name: "parameter-trivia",
+    name: "argument-trivia",
     meta: {
         docs: {
             description: ``,

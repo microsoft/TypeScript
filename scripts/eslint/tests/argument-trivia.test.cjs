@@ -1,5 +1,5 @@
 const { RuleTester } = require("./support/RuleTester.cjs");
-const rule = require("../rules/parameter-trivia.cjs");
+const rule = require("../rules/argument-trivia.cjs");
 
 const ruleTester = new RuleTester({
     parserOptions: {
@@ -8,7 +8,7 @@ const ruleTester = new RuleTester({
     parser: require.resolve("@typescript-eslint/parser"),
 });
 
-ruleTester.run("parameter-trivia", rule, {
+ruleTester.run("argument-trivia", rule, {
     valid: [
         {
             code: `
