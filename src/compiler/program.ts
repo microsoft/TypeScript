@@ -4337,7 +4337,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function checkDeprecations(
         deprecatedIn: Version,
         removedIn: Version,
-        createDiagnostic: (name: string, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, arg3?: string, value?: string, useInstead?: string) => void,
+        createDiagnostic: (name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, arg3?: string) => void,
         fn: (createDeprecatedDiagnostic: (name: string, value?: string, useInstead?: string) => void) => void,
     ) {
         const typescriptVersion = new Version(typeScriptVersion || versionMajorMinor);
@@ -4352,18 +4352,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             fn((name, value, useInstead) => {
                 if (mustBeRemoved) {
                     if (value === undefined) {
-                        createDiagnostic(name, Diagnostics.Option_0_has_been_removed_Please_remove_it_from_your_configuration, name, /*arg1*/ undefined, /*arg2*/ undefined, /*arg3*/ undefined, value, useInstead);
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_has_been_removed_Please_remove_it_from_your_configuration, name);
                     }
                     else {
-                        createDiagnostic(name, Diagnostics.Option_0_1_has_been_removed_Please_remove_it_from_your_configuration, name, value, /*arg2*/ undefined, /*arg3*/ undefined, value, useInstead);
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_has_been_removed_Please_remove_it_from_your_configuration, name, value);
                     }
                 }
                 else {
                     if (value === undefined) {
-                        createDiagnostic(name, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, removedInVersion, deprecatedInVersion, /*arg3*/ undefined, value, useInstead);
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, removedInVersion, deprecatedInVersion);
                     }
                     else {
-                        createDiagnostic(name, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, removedInVersion, deprecatedInVersion, value, useInstead);
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, removedInVersion, deprecatedInVersion);
                     }
                 }
             });
@@ -4371,7 +4371,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function verifyDeprecatedCompilerOptions() {
-        function createDiagnostic(name: string, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, arg3?: string, value?: string, useInstead?: string) {
+        function createDiagnostic(name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, arg3?: string) {
             if (useInstead) {
                 const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
                 const chain = chainDiagnosticMessages(details, message, arg0, arg1, arg2, arg3);
@@ -4417,8 +4417,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function verifyDeprecatedProjectReference(ref: ProjectReference, parentFile: JsonSourceFile | undefined, index: number) {
-        function createDiagnostic(_name: string, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, _value?: string, _useInstead?: string) {
-            createDiagnosticForReference(parentFile, index, message, arg0, arg1, arg2);
+        function createDiagnostic(_name: string, _value: string | undefined, _useInstead: string | undefined, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, arg3?: string) {
+            createDiagnosticForReference(parentFile, index, message, arg0, arg1, arg2, arg3);
         }
 
         checkDeprecations(new Version(5, 0), new Version(5, 5), createDiagnostic, createDeprecatedDiagnostic => {
@@ -4663,14 +4663,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0, arg1);
     }
 
-    function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
+    function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
         const referencesSyntax = firstDefined(getTsConfigPropArray(sourceFile || options.configFile, "references"),
             property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
         if (referencesSyntax && referencesSyntax.elements.length > index) {
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, arg0, arg1, arg2));
+            programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, arg0, arg1, arg2, arg3));
         }
         else {
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2, arg3));
         }
     }
 
