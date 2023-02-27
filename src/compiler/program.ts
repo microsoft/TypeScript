@@ -4322,11 +4322,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function getTypeScriptVersion(): [version: Version, versionString: string] {
-        const versionString = typeScriptVersion || versionMajorMinor;
-        return [new Version(versionString), versionString];
-    }
-
     function getIgnoreDeprecationsVersion(): Version {
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
@@ -4345,7 +4340,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         createDiagnostic: (name: string, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, arg3?: string, value?: string, useInstead?: string) => void,
         fn: (createDeprecatedDiagnostic: (name: string, value?: string, useInstead?: string) => void) => void,
     ) {
-        const [typescriptVersion, _typescriptVersionString] = getTypeScriptVersion();
+        const typescriptVersion = new Version(typeScriptVersion || versionMajorMinor);
         const ignoreDeprecationsVersion = getIgnoreDeprecationsVersion();
 
         const mustBeRemoved = !(removedIn.compareTo(typescriptVersion) === Comparison.GreaterThan);
