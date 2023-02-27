@@ -128,12 +128,7 @@ module.exports = createRule({
             const commentRangeEnd = comment.range[1];
             const expectedName = getExpectedName();
             if (expectedName) {
-                let got = comment.value.trim();
-                if (got[0] === "*") {
-                    // Accept JSDoc style comments
-                    got = got.slice(1);
-                }
-
+                const got = comment.value.trim();
                 if (got !== expectedName) {
                     context.report({
                         messageId: "argumentTriviaArgumentNameError",
