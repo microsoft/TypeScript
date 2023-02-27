@@ -2,6 +2,24 @@ const { AST_NODE_TYPES, TSESTree, ESLintUtils } = require("@typescript-eslint/ut
 const { createRule } = require("./utils.cjs");
 const ts = require("typescript");
 
+const unset = Symbol();
+/**
+ * @template T
+ * @param {() => T} fn
+ * @returns {() => T}
+ */
+function memoize(fn) {
+    /** @type {T | unset} */
+    let value = unset;
+    return () => {
+        if (value === unset) {
+            value = fn();
+        }
+        return value;
+    };
+}
+
+
 module.exports = createRule({
     name: "parameter-trivia",
     meta: {
@@ -74,39 +92,58 @@ module.exports = createRule({
                 return;
             }
 
-            const comments = sourceCode.getCommentsBefore(node);
-            if (!comments || comments.length === 0) {
-                // TODO(jakebailey): quick fix
-                context.report({ messageId: "parameterTriviaArgumentError", node });
-                return;
-            }
+            const getExpectedName = memoize(() => {
+                const signature = getSignature();
+                if (signature) {
+                    const expectedName = signature.parameters[i]?.escapedName;
+                    if (expectedName) {
+                        return ts.unescapeLeadingUnderscores(expectedName);
+                    }
+                }
+                return undefined;
+            });
 
+            const comments = sourceCode.getCommentsBefore(node);
+            /** @type {TSESTree.Comment | undefined} */
             const comment = comments[comments.length - 1];
-            if (comment.type !== "Block") {
-                // TODO(jakebailey): quick fix
-                context.report({ messageId: "parameterTriviaArgumentError", node });
+
+            if (!comment || comment.type !== "Block") {
+                const expectedName = getExpectedName();
+                if (expectedName) {
+                    context.report({
+                        messageId: "parameterTriviaArgumentError",
+                        node,
+                        fix: (fixer) => {
+                            return fixer.insertTextBefore(node, `/*${expectedName}*/ `);
+                        }
+                    });
+                }
+                else {
+                    context.report({ messageId: "parameterTriviaArgumentError", node });
+                }
                 return;
             }
 
             const argRangeStart = node.range[0];
             const commentRangeEnd = comment.range[1];
-            const signature = getSignature();
-            if (signature) {
-                const expectedName = signature.parameters[i]?.escapedName;
-                if (expectedName) {
-                    const got = comment.value.trim();
-                    const want = ts.unescapeLeadingUnderscores(expectedName);
-                    if (got !== want) {
-                        context.report({
-                            messageId: "parameterTriviaArgumentNameError",
-                            data: { got, want },
-                            node: comment,
-                            fix: (fixer) => {
-                                return fixer.replaceText(comment, `/*${expectedName}*/`);
-                            },
-                        });
-                        return;
-                    }
+            const expectedName = getExpectedName();
+            if (expectedName) {
+                let got = comment.value.trim();
+                if (got[0] === "*") {
+                    // Accept JSDoc style comments
+                    got = got.slice(1);
+                }
+
+                if (got !== expectedName) {
+                    context.report({
+                        messageId: "parameterTriviaArgumentNameError",
+                        data: { got, want: expectedName },
+                        node: comment,
+                        fix: (fixer) => {
+                            return fixer.replaceText(comment, `/*${expectedName}*/`);
+                        },
+                    });
+                    return;
                 }
             }
 
@@ -131,22 +168,15 @@ module.exports = createRule({
                 return;
             }
 
-            /** @type {ts.Signature | undefined} */
-            let signature;
-            const getSignature = () => {
-                if (signature) {
-                    return signature;
-                }
-
+            const getSignature = memoize(() => {
                 if (context.parserServices?.hasFullTypeInformation) {
                     const parserServices = ESLintUtils.getParserServices(context);
                     const checker = parserServices.program.getTypeChecker();
                     const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
-                    return signature = checker.getResolvedSignature(tsNode);
+                    return checker.getResolvedSignature(tsNode);
                 }
-
                 return undefined;
-            };
+            });
 
             for (let i = 0; i < node.arguments.length; i++) {
                 const arg = node.arguments[i];
