@@ -485,7 +485,7 @@ function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg:
             }
         }
         isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
-        return getStringLiteralTypes(type, uniques);
+        return getStringLiteralTypes(type, uniques, arg.text);
     });
     return length(types) ? { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier } : undefined;
 }
@@ -517,11 +517,11 @@ function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLi
     };
 }
 
-function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
+function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>(), alreadyTyped = ""): readonly StringLiteralType[] {
     if (!type) return emptyArray;
     type = skipConstraint(type);
-    return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques)) :
-        type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
+    return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques, alreadyTyped)) :
+        type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && type.value.startsWith(alreadyTyped) && addToSeen(uniques, type.value) ? [type] : emptyArray;
 }
 
 interface NameAndKind {
