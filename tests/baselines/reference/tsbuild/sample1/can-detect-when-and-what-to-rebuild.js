@@ -714,7 +714,7 @@ Output::
 
 [[90m12:01:03 AM[0m] Building project '/src/tests/tsconfig.json'...
 
-[96msrc/tests/tsconfig.json[0m:[93m8[0m:[93m38[0m - [91merror[0m[90m TS5101: [0mFlag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96msrc/tests/tsconfig.json[0m:[93m8[0m:[93m38[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 
 [7m8[0m         "composite": true, "target": "es3",
 [7m [0m [91m                                     ~~~~~[0m
