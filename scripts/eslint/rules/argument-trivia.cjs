@@ -147,8 +147,6 @@ module.exports = createRule({
                 }
             }
 
-            // TODO(jakebailey): check last.value[0] === "*" and error/quickfix
-
             const hasNewLine = sourceCodeText.slice(commentRangeEnd, argRangeStart).indexOf("\n") >= 0;
             if (argRangeStart !== commentRangeEnd + 1 && !hasNewLine) {
                 // TODO(jakebailey): range should be whitespace
