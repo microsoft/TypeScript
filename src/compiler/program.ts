@@ -56,7 +56,6 @@ import {
     CustomTransformers,
     Debug,
     DeclarationWithTypeParameterChildren,
-    DeprecationVersion,
     Diagnostic,
     DiagnosticCategory,
     diagnosticCategoryName,
@@ -318,6 +317,7 @@ import {
     UnparsedSource,
     VariableDeclaration,
     VariableStatement,
+    Version,
     versionMajorMinor,
     walkUpParenthesizedExpressions,
     WriteFileCallback,
@@ -1444,6 +1444,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
     const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
     let { oldProgram } = createProgramOptions;
+
+    const reportInvalidIgnoreDeprecations = memoize(() => createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations));
 
     let processingDefaultLibFiles: SourceFile[] | undefined;
     let processingOtherFiles: SourceFile[] | undefined;
@@ -4320,97 +4322,105 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function getVersionForDeprecationDiagnostics(reportInvalidIgnoreDeprecations: boolean) {
-        const version = typeScriptVersion || versionMajorMinor;
+    function getTypeScriptVersion(): [version: Version, versionString: string] {
+        const versionString = typeScriptVersion || versionMajorMinor;
+        return [new Version(versionString), versionString];
+    }
+
+    function getIgnoreDeprecationsVersion(): Version {
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
-            if (ignoreDeprecations === DeprecationVersion.v5_0 && (version === DeprecationVersion.v5_0 || version === DeprecationVersion.v5_5)) {
-                return;
+            const parsed = Version.tryParse(ignoreDeprecations);
+            if (parsed) {
+                return parsed;
             }
-            else if (reportInvalidIgnoreDeprecations) {
-                createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
-            }
+            reportInvalidIgnoreDeprecations();
         }
-        return version;
+        return Version.zero;
+    }
+
+    function checkDeprecations(
+        deprecatedIn: Version,
+        removedIn: Version,
+        createDiagnostic: (name: string, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, value?: string, useInstead?: string) => void,
+        fn: (createDeprecatedDiagnostic: (name: string, value?: string, useInstead?: string) => void) => void,
+    ) {
+        const [typescriptVersion, _typescriptVersionString] = getTypeScriptVersion();
+        const ignoreDeprecationsVersion = getIgnoreDeprecationsVersion();
+
+        const mustBeRemoved = !(removedIn.compareTo(typescriptVersion) === Comparison.GreaterThan);
+        const canBeSilenced = !mustBeRemoved && ignoreDeprecationsVersion.compareTo(deprecatedIn) === Comparison.LessThan;
+
+        if (mustBeRemoved || canBeSilenced) {
+            const deprecatedInVersion = `${deprecatedIn.major}.${deprecatedIn.minor}`;
+            const removedInVersion = `${removedIn.major}.${removedIn.minor}`;
+            fn((name, value, useInstead) => {
+                if (mustBeRemoved) {
+                    createDiagnostic(name, Diagnostics.Flag_0_is_has_been_removed_Please_remove_it_from_your_configuration, value || name, /*arg1*/ undefined, /*arg2*/ undefined, value, useInstead);
+                }
+                else {
+                    createDiagnostic(name, Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, removedInVersion, deprecatedInVersion, value, useInstead);
+                }
+            });
+        }
     }
 
     function verifyDeprecatedCompilerOptions() {
-        const version = getVersionForDeprecationDiagnostics(/*reportInvalidIgnoreDeprecations*/ true);
-        if (!version) return;
-        if (options.target === ScriptTarget.ES3) {
-            createDeprecatedDiagnosticForOption(version, "target", "ES3");
+        function createDiagnostic(name: string, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, value?: string, useInstead?: string) {
+            if (useInstead) {
+                const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
+                const chain = chainDiagnosticMessages(details, message, arg0, arg1, arg2);
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
+            }
+            else {
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, message, arg0, arg1, arg2);
+            }
         }
-        if (options.noImplicitUseStrict) {
-            createDeprecatedDiagnosticForOption(version, "noImplicitUseStrict");
-        }
-        if (options.keyofStringsOnly) {
-            createDeprecatedDiagnosticForOption(version, "keyofStringsOnly");
-        }
-        if (options.suppressExcessPropertyErrors) {
-            createDeprecatedDiagnosticForOption(version, "suppressExcessPropertyErrors");
-        }
-        if (options.suppressImplicitAnyIndexErrors) {
-            createDeprecatedDiagnosticForOption(version, "suppressImplicitAnyIndexErrors");
-        }
-        if (options.noStrictGenericChecks) {
-            createDeprecatedDiagnosticForOption(version, "noStrictGenericChecks");
-        }
-        if (options.charset) {
-            createDeprecatedDiagnosticForOption(version, "charset");
-        }
-        if (options.out) {
-            createDeprecatedDiagnosticForOption(version, "out");
-        }
-        if (options.importsNotUsedAsValues) {
-            createDeprecatedDiagnosticForOption(version, "importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
-        }
-        if (options.preserveValueImports) {
-            createDeprecatedDiagnosticForOption(version, "preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
-        }
+
+        checkDeprecations(new Version(5, 0), new Version(5, 5), createDiagnostic, createDeprecatedDiagnostic => {
+            if (options.target === ScriptTarget.ES3) {
+                createDeprecatedDiagnostic("target", "ES3");
+            }
+            if (options.noImplicitUseStrict) {
+                createDeprecatedDiagnostic("noImplicitUseStrict");
+            }
+            if (options.keyofStringsOnly) {
+                createDeprecatedDiagnostic("keyofStringsOnly");
+            }
+            if (options.suppressExcessPropertyErrors) {
+                createDeprecatedDiagnostic("suppressExcessPropertyErrors");
+            }
+            if (options.suppressImplicitAnyIndexErrors) {
+                createDeprecatedDiagnostic("suppressImplicitAnyIndexErrors");
+            }
+            if (options.noStrictGenericChecks) {
+                createDeprecatedDiagnostic("noStrictGenericChecks");
+            }
+            if (options.charset) {
+                createDeprecatedDiagnostic("charset");
+            }
+            if (options.out) {
+                createDeprecatedDiagnostic("out");
+            }
+            if (options.importsNotUsedAsValues) {
+                createDeprecatedDiagnostic("importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
+            }
+            if (options.preserveValueImports) {
+                createDeprecatedDiagnostic("preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
+            }
+        });
     }
 
     function verifyDeprecatedProjectReference(ref: ProjectReference, parentFile: JsonSourceFile | undefined, index: number) {
-        if (ref.prepend) {
-            const version = getVersionForDeprecationDiagnostics(/*reportInvalidIgnoreDeprecations*/ false);
-            if (version) {
-                createDeprecatedOptionForVersionDiagnostic(
-                    version,
-                    (message, arg0, arg1, arg2) => createDiagnosticForReference(parentFile, index, message, arg0, arg1, arg2),
-                    "prepend",
-                );
+        function createDiagnostic(_name: string, message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string, _value?: string, _useInstead?: string) {
+            createDiagnosticForReference(parentFile, index, message, arg0, arg1, arg2);
+        }
+
+        checkDeprecations(new Version(5, 0), new Version(5, 5), createDiagnostic, createDeprecatedDiagnostic => {
+            if (ref.prepend) {
+                createDeprecatedDiagnostic("prepend");
             }
-        }
-    }
-
-    function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string, useInstead?: string) {
-        return createDeprecatedOptionForVersionDiagnostic(
-            version,
-            (message, arg0, arg1, arg2) => {
-                if (useInstead) {
-                    const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
-                    const chain = chainDiagnosticMessages(details, message, arg0, arg1, arg2);
-                    createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
-                }
-                else {
-                    createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, message, arg0, arg1, arg2);
-                }
-            },
-            name,
-            value,
-        );
-    }
-
-    function createDeprecatedOptionForVersionDiagnostic(
-        version: string,
-        createDiagnostic: (message: DiagnosticMessage, arg0: string, arg1?: string, arg2?: string) => void,
-        name: string,
-        value?: string) {
-        if (version === DeprecationVersion.v6_0) {
-            createDiagnostic(Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
-        }
-        else {
-            createDiagnostic(Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
-        }
+        });
     }
 
     function createDiagnosticExplainingFile(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: (string | number | undefined)[] | undefined): Diagnostic {
