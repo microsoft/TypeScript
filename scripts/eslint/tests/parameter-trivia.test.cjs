@@ -8,7 +8,7 @@ const ruleTester = new RuleTester({
     parser: require.resolve("@typescript-eslint/parser"),
 });
 
-ruleTester.run("boolean-trivia", rule, {
+ruleTester.run("parameter-trivia", rule, {
     valid: [
         {
             code: `
