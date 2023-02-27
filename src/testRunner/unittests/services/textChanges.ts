@@ -553,7 +553,6 @@ import {
     x
 } from "bar"`;
         runSingleFileTest("insertNodeInListAfter12", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
             changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier("a")));
         });
     }
@@ -563,7 +562,6 @@ import {
     x // this is x
 } from "bar"`;
         runSingleFileTest("insertNodeInListAfter13", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
             changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier("a")));
         });
     }
@@ -594,7 +592,6 @@ import {
     x
 } from "bar"`;
         runSingleFileTest("insertNodeInListAfter16", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
             changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier("a")));
         });
     }
@@ -605,7 +602,6 @@ import {
     x // this is x
 } from "bar"`;
         runSingleFileTest("insertNodeInListAfter17", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
             changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier("a")));
         });
     }
@@ -615,14 +611,12 @@ import {
     x0, x
 } from "bar"`;
         runSingleFileTest("insertNodeInListAfter18", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
             changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier("a")));
         });
     }
     {
         const runTest = (name: string, text: string) => runSingleFileTest(name, /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
             for (const specifier of ["x3", "x4", "x5"]) {
-                // eslint-disable-next-line local/boolean-trivia
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x2", sourceFile), ts.factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, ts.factory.createIdentifier(specifier)));
             }
         });
@@ -642,7 +636,6 @@ class A {
             const newNodes = [];
             for (let i = 0; i < 11 /*error doesn't occur with fewer nodes*/; ++i) {
                 newNodes.push(
-                    // eslint-disable-next-line local/boolean-trivia
                     ts.factory.createPropertyDeclaration(undefined, i + "", undefined, undefined, undefined));
             }
             const insertAfter = findChild("x", sourceFile);
@@ -658,7 +651,6 @@ class A {
 }
 `;
         runSingleFileTest("insertNodeAfterInClass1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
             changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), ts.factory.createPropertyDeclaration(undefined, "a", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword), undefined));
         });
     }
@@ -669,7 +661,6 @@ class A {
 }
 `;
         runSingleFileTest("insertNodeAfterInClass2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            // eslint-disable-next-line local/boolean-trivia
             changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), ts.factory.createPropertyDeclaration(undefined, "a", undefined, ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword), undefined));
         });
     }
