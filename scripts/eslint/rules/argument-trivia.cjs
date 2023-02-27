@@ -130,13 +130,13 @@ module.exports = createRule({
             if (expectedName) {
                 const got = comment.value.trim();
                 if (got !== expectedName) {
-                    // Try and preserve whitespace.
-                    const newComment = comment.value.replace(got, expectedName);
                     context.report({
                         messageId: "argumentTriviaArgumentNameError",
                         data: { got, want: expectedName },
                         node: comment,
                         fix: (fixer) => {
+                            // Try and preserve whitespace.
+                            const newComment = comment.value.replace(got, expectedName);
                             return fixer.replaceText(comment, `/*${newComment}*/`);
                         },
                     });
