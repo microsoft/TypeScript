@@ -2426,14 +2426,14 @@ export class TestState {
             languageVersion: ts.ScriptTarget.Latest,
             impliedNodeFormat: ts.getImpliedNodeFormatForFile(
                 ts.toPath(this.activeFile.fileName, this.languageServiceAdapterHost.sys.getCurrentDirectory(), ts.hostGetCanonicalFileName(this.languageServiceAdapterHost)),
-                /*cache*/ undefined,
+                /*packageJsonInfoCache*/ undefined,
                 this.languageServiceAdapterHost,
                 this.languageService.getProgram()?.getCompilerOptions() || {}
             ),
             setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
         };
         const referenceSourceFile = ts.createLanguageServiceSourceFile(
-            this.activeFile.fileName, createScriptSnapShot(content), options, /*version:*/ "0", /*setNodeParents:*/ false);
+            this.activeFile.fileName, createScriptSnapShot(content), options, /*version:*/ "0", /*setNodeParents*/ false);
         const referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 
         Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
@@ -3202,7 +3202,7 @@ export class TestState {
             }
         }
         else {
-            this.verifyRangeIs(newRangeContent!, /*includeWhitespace*/ true);
+            this.verifyRangeIs(newRangeContent!, /*includeWhiteSpace*/ true);
         }
     }
 

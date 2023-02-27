@@ -63,7 +63,7 @@ export class Test262BaselineRunner extends RunnerBase {
                 testState.compilerResult = Compiler.compileFiles(
                     [Test262BaselineRunner.helperFile].concat(inputFiles),
                     /*otherFiles*/ [],
-                    /* harnessOptions */ undefined,
+                    /* harnessSettings */ undefined,
                     Test262BaselineRunner.options,
                     /* currentDirectory */ undefined);
             });

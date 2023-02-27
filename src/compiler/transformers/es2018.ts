@@ -1042,7 +1042,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 ? undefined
                 : node.asteriskToken,
             visitNode(node.name, visitor, isPropertyName),
-            visitNode(/*questionToken*/ undefined, visitor, isQuestionToken),
+            visitNode(/*node*/ undefined, visitor, isQuestionToken),
             /*typeParameters*/ undefined,
             visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
@@ -1283,7 +1283,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     context,
                     FlattenLevel.ObjectRest,
                     factory.getGeneratedNameForNode(parameter),
-                    /*doNotRecordTempVariablesInLine*/ false,
+                    /*hoistTempVariables*/ false,
                     /*skipInitializer*/ true,
                 );
                 if (some(declarations)) {
