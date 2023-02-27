@@ -1,5 +1,6 @@
-const { AST_NODE_TYPES, TSESTree } = require("@typescript-eslint/utils");
+const { AST_NODE_TYPES, TSESTree, ESLintUtils } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
+const ts = require("typescript");
 
 module.exports = createRule({
     name: "boolean-trivia",
@@ -11,6 +12,7 @@ module.exports = createRule({
         messages: {
             booleanTriviaArgumentError: `Tag argument with parameter name`,
             booleanTriviaArgumentSpaceError: `There should be 1 space between an argument and its comment`,
+            booleanTriviaArgumentNameError: `Argument name {{ got }} does not match expected name {{ want }}`,
         },
         schema: [],
         type: "problem",
@@ -64,8 +66,9 @@ module.exports = createRule({
             return false;
         };
 
-        /** @type {(node: TSESTree.Node) => void} */
-        const checkArg = (node) => {
+
+        /** @type {(node: TSESTree.Node, i: number, getSignature: () => ts.Signature | undefined) => void} */
+        const checkArg = (node, i, getSignature) => {
             if (!isTrivia(node)) {
                 return;
             }
@@ -84,8 +87,21 @@ module.exports = createRule({
 
             const argRangeStart = node.range[0];
             const commentRangeEnd = last.range[1];
-            const hasNewLine = sourceCodeText.slice(commentRangeEnd, argRangeStart).indexOf("\n") >= 0;
+            const signature = getSignature();
+            if (signature) {
+                const expectedName = signature.parameters[i]?.escapedName;
+                if (expectedName) {
+                    const got = last.value.trim();
+                    const want = ts.unescapeLeadingUnderscores(expectedName);
+                    if (got !== want) {
+                        // TODO(jakebailey): new quick fix
+                        context.report({ messageId: "booleanTriviaArgumentNameError", data: { got, want }, node });
+                        return;
+                    }
+                }
+            }
 
+            const hasNewLine = sourceCodeText.slice(commentRangeEnd, argRangeStart).indexOf("\n") >= 0;
             if (argRangeStart !== commentRangeEnd + 1 && !hasNewLine) {
                 context.report({ messageId: "booleanTriviaArgumentSpaceError", node });
             }
@@ -97,8 +113,26 @@ module.exports = createRule({
                 return;
             }
 
-            for (const arg of node.arguments) {
-                checkArg(arg);
+            /** @type {ts.Signature | undefined} */
+            let signature;
+            const getSignature = () => {
+                if (signature) {
+                    return signature;
+                }
+
+                if (context.parserServices?.hasFullTypeInformation) {
+                    const parserServices = ESLintUtils.getParserServices(context);
+                    const checker = parserServices.program.getTypeChecker();
+                    const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+                    return signature = checker.getResolvedSignature(tsNode);
+                }
+
+                return undefined;
+            };
+
+            for (let i = 0; i < node.arguments.length; i++) {
+                const arg = node.arguments[i];
+                checkArg(arg, i, getSignature);
             }
         };
 
