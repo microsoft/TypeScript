@@ -311,3 +311,76 @@ function fx11(): { x?: number } {
 >y : Symbol(y, Decl(strictSubtypeAndNarrowing.ts, 128, 24))
 }
 
+// Repros from #52827
+
+declare function isArrayLike(value: any): value is { length: number };
+>isArrayLike : Symbol(isArrayLike, Decl(strictSubtypeAndNarrowing.ts, 129, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 133, 29))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 133, 29))
+>length : Symbol(length, Decl(strictSubtypeAndNarrowing.ts, 133, 52))
+
+function ff1(value: { [index: number]: boolean, length: number } | undefined) {
+>ff1 : Symbol(ff1, Decl(strictSubtypeAndNarrowing.ts, 133, 70))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 135, 13))
+>index : Symbol(index, Decl(strictSubtypeAndNarrowing.ts, 135, 23))
+>length : Symbol(length, Decl(strictSubtypeAndNarrowing.ts, 135, 47))
+
+    if (isArrayLike(value)) {
+>isArrayLike : Symbol(isArrayLike, Decl(strictSubtypeAndNarrowing.ts, 129, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 135, 13))
+
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 135, 13))
+
+    } else {
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 135, 13))
+    }
+    value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 135, 13))
+}
+
+function ff2(value: { [index: number]: boolean, length: number } | string) {
+>ff2 : Symbol(ff2, Decl(strictSubtypeAndNarrowing.ts, 142, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 144, 13))
+>index : Symbol(index, Decl(strictSubtypeAndNarrowing.ts, 144, 23))
+>length : Symbol(length, Decl(strictSubtypeAndNarrowing.ts, 144, 47))
+
+    if (isArrayLike(value)) {
+>isArrayLike : Symbol(isArrayLike, Decl(strictSubtypeAndNarrowing.ts, 129, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 144, 13))
+
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 144, 13))
+
+    } else {
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 144, 13))
+    }
+    value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 144, 13))
+}
+
+function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
+>ff3 : Symbol(ff3, Decl(strictSubtypeAndNarrowing.ts, 151, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 153, 13))
+>index : Symbol(index, Decl(strictSubtypeAndNarrowing.ts, 153, 43))
+>length : Symbol(length, Decl(strictSubtypeAndNarrowing.ts, 153, 67))
+>length : Symbol(length, Decl(strictSubtypeAndNarrowing.ts, 153, 117))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 153, 138))
+
+    if (isArrayLike(value)) {
+>isArrayLike : Symbol(isArrayLike, Decl(strictSubtypeAndNarrowing.ts, 129, 1))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 153, 13))
+
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 153, 13))
+
+    } else {
+        value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 153, 13))
+    }
+    value;
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 153, 13))
+}
+

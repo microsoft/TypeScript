@@ -130,3 +130,34 @@ function fx11(): { x?: number } {
     let obj: { x?: number, y?: number };
     return obj = { x: 1, y: 2 };
 }
+
+// Repros from #52827
+
+declare function isArrayLike(value: any): value is { length: number };
+
+function ff1(value: { [index: number]: boolean, length: number } | undefined) {
+    if (isArrayLike(value)) {
+        value;
+    } else {
+        value;
+    }
+    value;
+}
+
+function ff2(value: { [index: number]: boolean, length: number } | string) {
+    if (isArrayLike(value)) {
+        value;
+    } else {
+        value;
+    }
+    value;
+}
+
+function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
+    if (isArrayLike(value)) {
+        value;
+    } else {
+        value;
+    }
+    value;
+}
