@@ -2457,7 +2457,7 @@ export function convertToObjectWorker(
                 else {
                     return validateValue(convertObjectLiteralExpressionToJson(
                         objectLiteralExpression, /* knownOptions*/ undefined,
-                        /*extraKeyDiagnosticMessage */ undefined, /*parentOption*/ undefined));
+                        /*extraKeyDiagnostics*/ undefined, /*parentOption*/ undefined));
                 }
 
             case SyntaxKind.ArrayLiteralExpression:

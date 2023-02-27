@@ -674,7 +674,7 @@ export function baselineBuildInfo(
     generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
 
     if (!ts.outFile(options)) return;
-    const { jsFilePath, declarationFilePath } = ts.getOutputPathsForBundle(options, /*forceDts*/ false);
+    const { jsFilePath, declarationFilePath } = ts.getOutputPathsForBundle(options, /*forceDtsPaths*/ false);
     const bundle = buildInfo.bundle;
     if (!bundle || (!ts.length(bundle.js && bundle.js.sections) && !ts.length(bundle.dts && bundle.dts.sections))) return;
 
