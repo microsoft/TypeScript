@@ -48,6 +48,12 @@ const fn = (prop: boolean) => {};
 fn.apply(null, true);
         `,
         },
+        {
+            code: `
+const fn = (prop: boolean) => {};
+fn(/* first comment */ /* second comment */ false);
+            `,
+        },
     ],
 
     invalid: [
@@ -56,28 +62,25 @@ fn.apply(null, true);
 const fn = (prop: null) => {};
 fn(null);
             `,
-            errors: [{ messageId: "parameterTriviaArgumentError" }],
+            errors: [{ messageId: "argumentTriviaArgumentError" }],
         },
         {
             code: `
 const fn = (prop: boolean) => {};
 fn(false);
             `,
-            errors: [{ messageId: "parameterTriviaArgumentError" }],
+            errors: [{ messageId: "argumentTriviaArgumentError" }],
         },
         {
             code: `
 const fn = (prop: boolean) => {};
 fn(/* boolean arg */false);
             `,
-            errors: [{ messageId: "parameterTriviaArgumentSpaceError" }],
-        },
-        {
-            code: `
+            errors: [{ messageId: "argumentTriviaArgumentSpaceError" }],
+            output:`
 const fn = (prop: boolean) => {};
-fn(/* first comment */ /* second comment */ false);
-            `,
-            errors: [{ messageId: "parameterTriviaArgumentError" }],
+fn(/* boolean arg */ false);
+            `
         },
     ],
 });

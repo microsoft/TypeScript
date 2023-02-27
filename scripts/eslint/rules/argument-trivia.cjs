@@ -28,9 +28,9 @@ module.exports = createRule({
             recommended: "error",
         },
         messages: {
-            parameterTriviaArgumentError: `Tag argument with parameter name`,
-            parameterTriviaArgumentSpaceError: `There should be 1 space between an argument and its comment`,
-            parameterTriviaArgumentNameError: `Argument name "{{ got }}" does not match expected name "{{ want }}"`,
+            argumentTriviaArgumentError: `Tag argument with parameter name`,
+            argumentTriviaArgumentSpaceError: `There should be 1 space between an argument and its comment`,
+            argumentTriviaArgumentNameError: `Argument name "{{ got }}" does not match expected name "{{ want }}"`,
         },
         schema: [],
         type: "problem",
@@ -111,7 +111,7 @@ module.exports = createRule({
                 const expectedName = getExpectedName();
                 if (expectedName) {
                     context.report({
-                        messageId: "parameterTriviaArgumentError",
+                        messageId: "argumentTriviaArgumentError",
                         node,
                         fix: (fixer) => {
                             return fixer.insertTextBefore(node, `/*${expectedName}*/ `);
@@ -119,7 +119,7 @@ module.exports = createRule({
                     });
                 }
                 else {
-                    context.report({ messageId: "parameterTriviaArgumentError", node });
+                    context.report({ messageId: "argumentTriviaArgumentError", node });
                 }
                 return;
             }
@@ -136,7 +136,7 @@ module.exports = createRule({
 
                 if (got !== expectedName) {
                     context.report({
-                        messageId: "parameterTriviaArgumentNameError",
+                        messageId: "argumentTriviaArgumentNameError",
                         data: { got, want: expectedName },
                         node: comment,
                         fix: (fixer) => {
@@ -151,7 +151,7 @@ module.exports = createRule({
             if (argRangeStart !== commentRangeEnd + 1 && !hasNewLine) {
                 // TODO(jakebailey): range should be whitespace
                 context.report({
-                    messageId: "parameterTriviaArgumentSpaceError",
+                    messageId: "argumentTriviaArgumentSpaceError",
                     node,
                     fix: (fixer) => {
                         return fixer.replaceTextRange([commentRangeEnd, argRangeStart], " ");
@@ -161,7 +161,7 @@ module.exports = createRule({
         };
 
         /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => void} */
-        const checkparameterTrivia = (node) => {
+        const checkargumentTrivia = (node) => {
             if (shouldIgnoreCalledExpression(node)) {
                 return;
             }
@@ -183,8 +183,8 @@ module.exports = createRule({
         };
 
         return {
-            CallExpression: checkparameterTrivia,
-            NewExpression: checkparameterTrivia,
+            CallExpression: checkargumentTrivia,
+            NewExpression: checkargumentTrivia,
         };
     },
 });
