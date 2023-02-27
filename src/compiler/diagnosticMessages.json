@@ -1589,6 +1589,10 @@
         "category": "Error",
         "code": 1485
     },
+    "Decorator used before 'export' here.": {
+        "category": "Error",
+        "code": 1486
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3026,10 +3030,6 @@
         "category": "Error",
         "code": 2690
     },
-    "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
-        "category": "Error",
-        "code": 2691
-    },
     "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
         "category": "Error",
         "code": 2692
@@ -4265,7 +4265,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
+    "Option '{0}' can only be used when 'module' is set to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },
@@ -4281,15 +4281,7 @@
         "category": "Error",
         "code": 5098
     },
-    "Import assignment is not allowed when 'moduleResolution' is set to 'bundler'. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
-        "category": "Error",
-        "code": 5099
-    },
-    "Export assignment cannot be used when 'moduleResolution' is set to 'bundler'. Consider using 'export default' or another module format instead.": {
-        "category": "Error",
-        "code": 5100
-    },
-    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify 'ignoreDeprecations: \"{2}\"' to silence this error.": {
+    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '\"ignoreDeprecations\": \"{2}\"' to silence this error.": {
         "category": "Error",
         "code": 5101
     },
@@ -5562,6 +5554,22 @@
         "category": "Message",
         "code": 6412
     },
+    "Entering conditional exports.": {
+        "category": "Message",
+        "code": 6413
+    },
+    "Resolved under condition '{0}'.": {
+        "category": "Message",
+        "code": 6414
+    },
+    "Failed to resolve under condition '{0}'.": {
+        "category": "Message",
+        "code": 6415
+    },
+    "Exiting conditional exports.": {
+        "category": "Message",
+        "code": 6416
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -6548,7 +6556,7 @@
         "category": "Error",
         "code": 8037
     },
-    "Decorators must come after 'export' or 'export default' in JavaScript files.": {
+    "Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.": {
         "category": "Error",
         "code": 8038
     },

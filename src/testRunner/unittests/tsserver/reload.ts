@@ -1,8 +1,8 @@
+import * as ts from "../../_namespaces/ts";
 import {
     createServerHost,
     libFile,
 } from "../virtualFileSystemWithWatch";
-import * as ts from "../../_namespaces/ts";
 import {
     checkNumberOfProjects,
     createSession,

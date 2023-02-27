@@ -1,21 +1,22 @@
 // @ts-check
-import path from "path";
-import fs from "fs";
-import del from "del";
-import { task } from "hereby";
-import _glob from "glob";
-import util from "util";
+import { CancelToken } from "@esfx/canceltoken";
 import chalk from "chalk";
+import chokidar from "chokidar";
+import del from "del";
+import esbuild from "esbuild";
+import { EventEmitter } from "events";
+import fs from "fs";
 import fsExtra from "fs-extra";
-import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
-import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
-import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import _glob from "glob";
+import { task } from "hereby";
+import path from "path";
+import util from "util";
+
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
-import esbuild from "esbuild";
-import chokidar from "chokidar";
-import { EventEmitter } from "events";
-import { CancelToken } from "@esfx/canceltoken";
+import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
+import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
 
@@ -701,12 +702,19 @@ export const runTestsAndWatch = task({
     },
 });
 
-export const runTestsParallel = task({
-    name: "runtests-parallel",
+const doRunTestsParallel = task({
+    name: "do-runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file.",
     dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
+
+export const runTestsParallel = task({
+    name: "runtests-parallel",
+    description: "Runs all the tests in parallel using the built run.js file, linting in parallel if --lint=true.",
+    dependencies: [doRunTestsParallel].concat(cmdLineOptions.lint ? [lint] : []),
+});
+
 // task("runtests-parallel").flags = {
 //     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass.",

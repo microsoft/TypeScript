@@ -14,7 +14,7 @@ let C = (() => {
     return class C {
         static {
             _private_field1_decorators = [dec];
-            __esDecorate(null, null, _private_field1_decorators, { kind: "field", name: "#field1", static: false, private: true }, _private_field1_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _private_field1_decorators, { kind: "field", name: "#field1", static: false, private: true, access: { has: obj => #field1 in obj, get: obj => obj.#field1, set: (obj, value) => { obj.#field1 = value; } } }, _private_field1_initializers, _instanceExtraInitializers);
         }
         #field1 = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _private_field1_initializers, 0));
     };

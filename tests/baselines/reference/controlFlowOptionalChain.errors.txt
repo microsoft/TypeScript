@@ -774,3 +774,20 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
     }
     
+    
+    // Repro from #51941
+    
+    type Test5 = {
+      main?: {
+        childs: Record<string, Test5>;
+      };
+    };
+    
+    function f50(obj: Test5) {
+       for (const key in obj.main?.childs) {
+          if (obj.main.childs[key] === obj) {
+            return obj;
+          }
+       }
+       return null;
+    }

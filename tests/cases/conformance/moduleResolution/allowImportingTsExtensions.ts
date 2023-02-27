@@ -27,3 +27,6 @@ import type {} from "./tsx.d.ts";
 import {} from "./dts.js";
 import {} from "./dts.ts";
 import type {} from "./dts.d.ts";
+
+// @Filename: /c.ts
+import {} from "./thisfiledoesnotexist.ts";

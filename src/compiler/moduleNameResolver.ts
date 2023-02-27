@@ -70,6 +70,7 @@ import {
     ModuleResolutionHost,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
+    moduleResolutionSupportsPackageJsonExportsAndImports,
     noop,
     noopPush,
     normalizePath,
@@ -103,8 +104,8 @@ import {
     tryExtractTSExtension,
     tryGetExtensionFromPath,
     tryParsePatterns,
-    version,
     Version,
+    version,
     versionMajorMinor,
     VersionRange,
 } from "./_namespaces/ts";
@@ -204,6 +205,38 @@ function resolvedTypeScriptOnly(resolved: Resolved | undefined): PathAndPackageI
     }
     Debug.assert(extensionIsTS(resolved.extension));
     return { fileName: resolved.path, packageId: resolved.packageId };
+}
+
+function createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
+    moduleName: string,
+    resolved: Resolved | undefined,
+    isExternalLibraryImport: boolean | undefined,
+    failedLookupLocations: string[],
+    affectingLocations: string[],
+    diagnostics: Diagnostic[],
+    state: ModuleResolutionState,
+    legacyResult?: string,
+): ResolvedModuleWithFailedLookupLocations {
+    // If this is from node_modules for non relative name, always respect preserveSymlinks
+    if (!state.resultFromCache &&
+        !state.compilerOptions.preserveSymlinks &&
+        resolved &&
+        isExternalLibraryImport &&
+        !resolved.originalPath &&
+        !isExternalModuleNameRelative(moduleName)
+    ) {
+        const { resolvedFileName, originalPath } = getOriginalAndResolvedFileName(resolved.path, state.host, state.traceEnabled);
+        if (originalPath) resolved = { ...resolved, path: resolvedFileName, originalPath };
+    }
+    return createResolvedModuleWithFailedLookupLocations(
+        resolved,
+        isExternalLibraryImport,
+        failedLookupLocations,
+        affectingLocations,
+        diagnostics,
+        state.resultFromCache,
+        legacyResult,
+    );
 }
 
 function createResolvedModuleWithFailedLookupLocations(
@@ -450,6 +483,16 @@ function arePathsEqual(path1: string, path2: string, host: ModuleResolutionHost)
     return comparePaths(path1, path2, !useCaseSensitiveFileNames) === Comparison.EqualTo;
 }
 
+function getOriginalAndResolvedFileName(fileName: string, host: ModuleResolutionHost, traceEnabled: boolean) {
+    const resolvedFileName = realPath(fileName, host, traceEnabled);
+    const pathsAreEqual = arePathsEqual(fileName, resolvedFileName, host);
+    return {
+        // If the fileName and realpath are differing only in casing prefer fileName so that we can issue correct errors for casing under forceConsistentCasingInFileNames
+        resolvedFileName: pathsAreEqual ? fileName : resolvedFileName,
+        originalPath: pathsAreEqual ? undefined : fileName,
+    };
+}
+
 /**
  * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
  * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
@@ -541,13 +584,12 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
     let resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
     if (resolved) {
         const { fileName, packageId } = resolved;
-        const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
-        const pathsAreEqual = arePathsEqual(fileName, resolvedFileName, host);
+        let resolvedFileName = fileName, originalPath: string | undefined;
+        if (!options.preserveSymlinks) ({ resolvedFileName, originalPath } = getOriginalAndResolvedFileName(fileName, host, traceEnabled));
         resolvedTypeReferenceDirective = {
             primary,
-            // If the fileName and realpath are differing only in casing prefer fileName so that we can issue correct errors for casing under forceConsistentCasingInFileNames
-            resolvedFileName: pathsAreEqual ? fileName : resolvedFileName,
-            originalPath: pathsAreEqual ? undefined : fileName,
+            resolvedFileName,
+            originalPath,
             packageId,
             isExternalLibraryImport: pathContainsNodeModules(fileName),
         };
@@ -664,10 +706,13 @@ export function getConditions(options: CompilerOptions, esmMode?: boolean) {
     // conditions are only used by the node16/nodenext/bundler resolvers - there's no priority order in the list,
     // it's essentially a set (priority is determined by object insertion order in the object we look at).
     const conditions = esmMode || getEmitModuleResolutionKind(options) === ModuleResolutionKind.Bundler
-        ? ["node", "import"]
-        : ["node", "require"];
+        ? ["import"]
+        : ["require"];
     if (!options.noDtsResolution) {
         conditions.push("types");
+    }
+    if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler) {
+        conditions.push("node");
     }
     return concatenate(conditions, options.customConditions);
 }
@@ -1660,7 +1705,7 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         candidateIsFromPackageJsonField: false,
     };
 
-    if (traceEnabled && getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) <= ModuleResolutionKind.NodeNext) {
+    if (traceEnabled && moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(compilerOptions))) {
         trace(host, Diagnostics.Resolving_in_0_mode_with_conditions_1, features & NodeResolutionFeatures.EsmMode ? "ESM" : "CJS", conditions.map(c => `'${c}'`).join(", "));
     }
 
@@ -1702,13 +1747,14 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         }
     }
 
-    return createResolvedModuleWithFailedLookupLocations(
+    return createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
+        moduleName,
         result?.value?.resolved,
         result?.value?.isExternalLibraryImport,
         failedLookupLocations,
         affectingLocations,
         diagnostics,
-        state.resultFromCache,
+        state,
         legacyResult,
     );
 
@@ -1733,18 +1779,8 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
                 }
                 resolved = loadModuleFromNearestNodeModulesDirectory(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
             }
-            if (!resolved) return undefined;
-
-            let resolvedValue = resolved.value;
-            if (!compilerOptions.preserveSymlinks && resolvedValue && !resolvedValue.originalPath) {
-                const path = realPath(resolvedValue.path, host, traceEnabled);
-                const pathsAreEqual = arePathsEqual(path, resolvedValue.path, host);
-                const originalPath = pathsAreEqual ? undefined : resolvedValue.path;
-                // If the path and realpath are differing only in casing prefer path so that we can issue correct errors for casing under forceConsistentCasingInFileNames
-                resolvedValue = { ...resolvedValue, path: pathsAreEqual ? resolvedValue.path : path, originalPath };
-            }
             // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
-            return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
+            return resolved && { value: resolved.value && { resolved: resolved.value, isExternalLibraryImport: true } };
         }
         else {
             const { path: candidate, parts } = normalizePathForCJSResolution(containingDirectory, moduleName);
@@ -2552,19 +2588,26 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
         }
         else if (typeof target === "object" && target !== null) { // eslint-disable-line no-null/no-null
             if (!Array.isArray(target)) {
+                traceIfEnabled(state, Diagnostics.Entering_conditional_exports);
                 for (const condition of getOwnKeys(target as MapLike<unknown>)) {
                     if (condition === "default" || state.conditions.indexOf(condition) >= 0 || isApplicableVersionedTypesKey(state.conditions, condition)) {
                         traceIfEnabled(state, Diagnostics.Matched_0_condition_1, isImports ? "imports" : "exports", condition);
                         const subTarget = (target as MapLike<unknown>)[condition];
                         const result = loadModuleFromTargetImportOrExport(subTarget, subpath, pattern, key);
                         if (result) {
+                            traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
+                            traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
                             return result;
+                        }
+                        else {
+                            traceIfEnabled(state, Diagnostics.Failed_to_resolve_under_condition_0, condition);
                         }
                     }
                     else {
                         traceIfEnabled(state, Diagnostics.Saw_non_matching_condition_0, condition);
                     }
                 }
+                traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
                 return undefined;
             }
             else {
@@ -2991,13 +3034,14 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
         tryResolve(Extensions.TypeScript | Extensions.Declaration) ||
         tryResolve(Extensions.JavaScript | (compilerOptions.resolveJsonModule ? Extensions.Json : 0));
     // No originalPath because classic resolution doesn't resolve realPath
-    return createResolvedModuleWithFailedLookupLocations(
+    return createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
+        moduleName,
         resolved && resolved.value,
         resolved?.value && pathContainsNodeModules(resolved.value.path),
         failedLookupLocations,
         affectingLocations,
         diagnostics,
-        state.resultFromCache
+        state,
     );
 
     function tryResolve(extensions: Extensions): SearchResult<Resolved> {
@@ -3033,6 +3077,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
 
 // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,
 // so this function doesn't check them to avoid propagating errors.
+/** @internal */
 export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string) {
     return !!compilerOptions.allowImportingTsExtensions || fromFileName && isDeclarationFileName(fromFileName);
 }

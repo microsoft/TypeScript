@@ -730,6 +730,12 @@ function getPerProjectReferences<TResult>(
             if (resultsMap.has(project)) continue;
             if (isLocationProjectReferenceRedirect(project, location)) continue;
 
+            // The project could be dirty and could no longer contain the location's file after it's updated,
+            // so we need to update the project and check if it still contains the file.
+            updateProjectIfDirty(project);
+            if (!project.containsFile(toNormalizedPath(location.fileName))) {
+                continue;
+            }
             const projectResults = searchPosition(project, location);
             resultsMap.set(project, projectResults ?? emptyArray);
             searchedProjectKeys.add(getProjectKey(project));

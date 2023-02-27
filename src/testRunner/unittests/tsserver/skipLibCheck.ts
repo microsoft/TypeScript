@@ -1,5 +1,5 @@
-import { createServerHost } from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
+import { createServerHost } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
