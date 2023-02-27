@@ -1,5 +1,5 @@
 const { RuleTester } = require("./support/RuleTester.cjs");
-const rule = require("../rules/boolean-trivia.cjs");
+const rule = require("../rules/parameter-trivia.cjs");
 
 const ruleTester = new RuleTester({
     parserOptions: {
@@ -56,28 +56,28 @@ fn.apply(null, true);
 const fn = (prop: null) => {};
 fn(null);
             `,
-            errors: [{ messageId: "booleanTriviaArgumentError" }],
+            errors: [{ messageId: "parameterTriviaArgumentError" }],
         },
         {
             code: `
 const fn = (prop: boolean) => {};
 fn(false);
             `,
-            errors: [{ messageId: "booleanTriviaArgumentError" }],
+            errors: [{ messageId: "parameterTriviaArgumentError" }],
         },
         {
             code: `
 const fn = (prop: boolean) => {};
 fn(/* boolean arg */false);
             `,
-            errors: [{ messageId: "booleanTriviaArgumentSpaceError" }],
+            errors: [{ messageId: "parameterTriviaArgumentSpaceError" }],
         },
         {
             code: `
 const fn = (prop: boolean) => {};
 fn(/* first comment */ /* second comment */ false);
             `,
-            errors: [{ messageId: "booleanTriviaArgumentError" }],
+            errors: [{ messageId: "parameterTriviaArgumentError" }],
         },
     ],
 });

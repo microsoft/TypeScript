@@ -3,19 +3,20 @@ const { createRule } = require("./utils.cjs");
 const ts = require("typescript");
 
 module.exports = createRule({
-    name: "boolean-trivia",
+    name: "parameter-trivia",
     meta: {
         docs: {
             description: ``,
             recommended: "error",
         },
         messages: {
-            booleanTriviaArgumentError: `Tag argument with parameter name`,
-            booleanTriviaArgumentSpaceError: `There should be 1 space between an argument and its comment`,
-            booleanTriviaArgumentNameError: `Argument name {{ got }} does not match expected name {{ want }}`,
+            parameterTriviaArgumentError: `Tag argument with parameter name`,
+            parameterTriviaArgumentSpaceError: `There should be 1 space between an argument and its comment`,
+            parameterTriviaArgumentNameError: `Argument name "{{ got }}" does not match expected name "{{ want }}"`,
         },
         schema: [],
         type: "problem",
+        fixable: "code",
     },
     defaultOptions: [],
 
@@ -75,40 +76,57 @@ module.exports = createRule({
 
             const comments = sourceCode.getCommentsBefore(node);
             if (!comments || comments.length === 0) {
-                context.report({ messageId: "booleanTriviaArgumentError", node });
+                // TODO(jakebailey): quick fix
+                context.report({ messageId: "parameterTriviaArgumentError", node });
                 return;
             }
 
-            const last = comments[comments.length - 1];
-            if (last.type !== "Block") {
-                context.report({ messageId: "booleanTriviaArgumentError", node });
+            const comment = comments[comments.length - 1];
+            if (comment.type !== "Block") {
+                // TODO(jakebailey): quick fix
+                context.report({ messageId: "parameterTriviaArgumentError", node });
                 return;
             }
 
             const argRangeStart = node.range[0];
-            const commentRangeEnd = last.range[1];
+            const commentRangeEnd = comment.range[1];
             const signature = getSignature();
             if (signature) {
                 const expectedName = signature.parameters[i]?.escapedName;
                 if (expectedName) {
-                    const got = last.value.trim();
+                    const got = comment.value.trim();
                     const want = ts.unescapeLeadingUnderscores(expectedName);
                     if (got !== want) {
-                        // TODO(jakebailey): new quick fix
-                        context.report({ messageId: "booleanTriviaArgumentNameError", data: { got, want }, node });
+                        context.report({
+                            messageId: "parameterTriviaArgumentNameError",
+                            data: { got, want },
+                            node: comment,
+                            fix: (fixer) => {
+                                return fixer.replaceText(comment, `/*${expectedName}*/`);
+                            },
+                        });
                         return;
                     }
                 }
             }
 
+            // TODO(jakebailey): check last.value[0] === "*" and error/quickfix
+
             const hasNewLine = sourceCodeText.slice(commentRangeEnd, argRangeStart).indexOf("\n") >= 0;
             if (argRangeStart !== commentRangeEnd + 1 && !hasNewLine) {
-                context.report({ messageId: "booleanTriviaArgumentSpaceError", node });
+                // TODO(jakebailey): range should be whitespace
+                context.report({
+                    messageId: "parameterTriviaArgumentSpaceError",
+                    node,
+                    fix: (fixer) => {
+                        return fixer.replaceTextRange([commentRangeEnd, argRangeStart], " ");
+                    }
+                });
             }
         };
 
         /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => void} */
-        const checkBooleanTrivia = (node) => {
+        const checkparameterTrivia = (node) => {
             if (shouldIgnoreCalledExpression(node)) {
                 return;
             }
@@ -137,8 +155,8 @@ module.exports = createRule({
         };
 
         return {
-            CallExpression: checkBooleanTrivia,
-            NewExpression: checkBooleanTrivia,
+            CallExpression: checkparameterTrivia,
+            NewExpression: checkparameterTrivia,
         };
     },
 });
