@@ -73,9 +73,6 @@ module.exports = createRule({
                     case "apply":
                     case "call":
                     case "equal":
-                    case "fail":
-                    case "isTrue":
-                    case "output":
                     case "stringify":
                     case "push":
                         return true;
