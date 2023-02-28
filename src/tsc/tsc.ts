@@ -21,5 +21,8 @@ if (ts.sys.setBlocking) {
     ts.sys.setBlocking();
 }
 
-ts.sys.args.push("--skipJSDocParsing");
+if (!ts.sys.args.find(arg => /^--?skipJSDocParsing$/.test(arg))) {
+    ts.sys.args.push("--skipJSDocParsing");
+}
+
 ts.executeCommandLine(ts.sys, ts.noop, ts.sys.args);
