@@ -27489,7 +27489,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
-        error(node, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(node.escapedText));
         if (isThisInTypeQuery(node)) {
             return checkThisExpression(node);
         }
@@ -44484,6 +44483,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Fully type check a source file and collect the relevant diagnostics.
     function checkSourceFileWorker(node: SourceFile) {
+        error(node, Diagnostics.A_file_cannot_have_a_reference_to_itself);
         const links = getNodeLinks(node);
         if (!(links.flags & NodeCheckFlags.TypeChecked)) {
             if (skipTypeChecking(node, compilerOptions, host)) {
