@@ -2370,6 +2370,7 @@ export function isPartOfTypeNode(node: Node): boolean {
         case SyntaxKind.SymbolKeyword:
         case SyntaxKind.ObjectKeyword:
         case SyntaxKind.UndefinedKeyword:
+        case SyntaxKind.NullKeyword:
         case SyntaxKind.NeverKeyword:
             return true;
         case SyntaxKind.VoidKeyword:
