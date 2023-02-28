@@ -1,3 +1,16 @@
+=== /project/usage.ts ===
+// import { HtmlModuleThing } from "./";
+//                                    ^
+// | ----------------------------------------------------------------------
+// | mod.html
+// | node_modules
+// | ----------------------------------------------------------------------
+// import { PackageHtmlModuleThing } from "package/";
+//                                                 ^
+// | ----------------------------------------------------------------------
+// | mod.html
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +18,7 @@
       "position": 35,
       "name": "1"
     },
-    "completionList": {
+    "item": {
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -45,7 +58,7 @@
       "position": 86,
       "name": "2"
     },
-    "completionList": {
+    "item": {
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,

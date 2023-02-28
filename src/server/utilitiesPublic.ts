@@ -39,10 +39,6 @@ export enum Msg {
     Info = "Info",
     Perf = "Perf",
 }
-export namespace Msg {
-    /** @deprecated Only here for backwards-compatibility. Prefer just `Msg`. */
-    export type Types = Msg;
-}
 
 export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
     return {

@@ -282,7 +282,7 @@ function getNewStatementsAndRemoveFromOldFile(
     const quotePreference = getQuotePreference(oldFile, preferences);
     const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newFilename, program, host, useEsModuleSyntax, quotePreference);
     if (importsFromNewFile) {
-        insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
+        insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true, preferences);
     }
 
     deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
@@ -762,7 +762,7 @@ function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, ke
             const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
             const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
             return defaultImport || namedBindings
-                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImport, namedBindings), moduleSpecifier, /*assertClause*/ undefined)
+                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings), moduleSpecifier, /*assertClause*/ undefined)
                 : undefined;
         }
         case SyntaxKind.ImportEqualsDeclaration:

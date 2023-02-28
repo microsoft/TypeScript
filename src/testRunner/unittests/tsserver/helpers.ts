@@ -1,5 +1,6 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
@@ -9,7 +10,6 @@ import {
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
 } from "../virtualFileSystemWithWatch";
-import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 
 const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
 export function mapOutputToJson(s: string) {
@@ -739,7 +739,7 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
 export function openFilesForSession(files: readonly (string | File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: TestSession): void {
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
-            command: ts.server.CommandNames.Open,
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: ts.isString(file) ?
                 { file } :
                 "projectRootPath" in file ? // eslint-disable-line local/no-in-operator
@@ -755,7 +755,7 @@ export function openFilesForSession(files: readonly (string | File | { readonly 
 export function closeFilesForSession(files: readonly File[], session: TestSession): void {
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({
-            command: ts.server.CommandNames.Close,
+            command: ts.server.protocol.CommandTypes.Close,
             arguments: { file: file.path }
         });
     }

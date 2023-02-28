@@ -5,14 +5,14 @@
 ////const myNamespace  = {};
 /////*1*/myNamespace.myExport = function(x) {};
 
-verify.docCommentTemplateAt("0", 8,
+verify.docCommentTemplateAt("0", 7,
 `/**
  * 
  * @param {any} a
  */
 `);
 
-verify.docCommentTemplateAt("1", 8,
+verify.docCommentTemplateAt("1", 7,
 `/**
  * 
  * @param {any} x

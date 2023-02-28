@@ -24,6 +24,7 @@ const myVar = 30;
 //// [/src/app/tsconfig.json]
 {
     "compilerOptions": {
+        "ignoreDeprecations": "5.0",
         "target": "es5",
         "module": "amd",
         "composite": true,
@@ -151,7 +152,7 @@ sourceFile:../lib/file1.ts
 5 >                 ^
 6 >                  ^^^^^
 7 >                       ^
-8 >                        ^^^->
+8 >                        ^^->
 1 >
 2 >    export
 3 >           
@@ -184,7 +185,7 @@ sourceFile:../lib/file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ prop: string;
@@ -473,7 +474,7 @@ sourceFile:../lib/file0.ts
 6 >                        ^^^
 7 >                           ^^
 8 >                             ^
-9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >/*@internal*/
 3 >              
@@ -506,7 +507,7 @@ sourceFile:../lib/file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->export const 
 2 >    
 3 >            x
@@ -522,7 +523,7 @@ sourceFile:../lib/file1.ts
 ---
 >>>    var normalC = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 1->Emitted(7, 5) Source(2, 1) + SourceIndex(1)
@@ -542,7 +543,7 @@ sourceFile:../lib/file1.ts
 >>>        }
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >        }
 1 >Emitted(9, 9) Source(3, 35) + SourceIndex(1)
@@ -577,7 +578,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 3 >                              ^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                    ^^^^^^^->
+4 >                                                    ^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >        get 
@@ -643,7 +644,7 @@ sourceFile:../lib/file1.ts
 >>>            configurable: true
 >>>        });
 1 >^^^^^^^^^^^
-2 >           ^^^^^^^^^^^^^->
+2 >           ^^^^^^^^^^^^->
 1 >
 1 >Emitted(16, 12) Source(6, 41) + SourceIndex(1)
 ---
@@ -662,7 +663,7 @@ sourceFile:../lib/file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -691,7 +692,7 @@ sourceFile:../lib/file1.ts
 2 >    ^^^^
 3 >        ^^^^^^^
 4 >               ^
-5 >                ^^^^^^^^^^->
+5 >                ^^^^^^^^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ prop: string;
@@ -721,7 +722,7 @@ sourceFile:../lib/file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^
-4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    export namespace 
 3 >               normalN
@@ -733,7 +734,7 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^
 3 >                     ^
-4 >                      ^^^^^->
+4 >                      ^^^^->
 1-> {
   >    
 2 >        /*@internal*/
@@ -744,14 +745,14 @@ sourceFile:../lib/file1.ts
 ---
 >>>            function C() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(23, 13) Source(10, 19) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^->
+3 >             ^^^^^^^^->
 1->export class C { 
 2 >            }
 1->Emitted(24, 13) Source(10, 36) + SourceIndex(1)
@@ -770,7 +771,7 @@ sourceFile:../lib/file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^->
+5 >             ^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -785,7 +786,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^^^^^^
 3 >                 ^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^^^^^^^^^^->
+5 >                      ^^^^^^^^^^^^^^^^^^->
 1->
 2 >        C
 3 >                  { }
@@ -824,7 +825,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^^^^^^->
+5 >                          ^^^^^^^^^^^^^^->
 1 >
 2 >        foo
 3 >                   () {}
@@ -859,7 +860,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^->
 1 >
 2 >        export namespace 
 3 >                   someNamespace
@@ -869,20 +870,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>            var C = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(32, 13) Source(12, 52) + SourceIndex(1)
 ---
 >>>                function C() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(33, 17) Source(12, 52) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^->
+3 >                 ^^^^^^^^->
 1->export class C {
 2 >                }
 1->Emitted(34, 17) Source(12, 68) + SourceIndex(1)
@@ -901,7 +902,7 @@ sourceFile:../lib/file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -916,7 +917,7 @@ sourceFile:../lib/file1.ts
 2 >            ^^^^^^^^^^^^^^^
 3 >                           ^^^^
 4 >                               ^
-5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            C
 3 >                            {}
@@ -992,7 +993,7 @@ sourceFile:../lib/file1.ts
 2 >            ^^^^
 3 >                ^^^^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^->
+5 >                          ^^^^^^^^^->
 1 >.
 2 >            
 3 >                something
@@ -1006,7 +1007,7 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            
 3 >                       something
@@ -1016,20 +1017,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>                var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(43, 17) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    function someClass() {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^->
+2 >                    ^->
 1->
 1->Emitted(44, 21) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    }
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
-3 >                     ^^^^^^^^^^^^^^^^^->
+3 >                     ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                    }
 1->Emitted(45, 21) Source(13, 82) + SourceIndex(1)
@@ -1048,7 +1049,7 @@ sourceFile:../lib/file1.ts
 2 >                ^
 3 >                 
 4 >                 ^^^^
-5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >                }
 3 >                 
@@ -1063,7 +1064,7 @@ sourceFile:../lib/file1.ts
 2 >                ^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >                someClass
 3 >                                    {}
@@ -1208,7 +1209,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^
-4 >                               ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                               ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        export enum 
 3 >                   internalEnum
@@ -1220,7 +1221,6 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
 1-> { 
 2 >            a
 3 >                                                     
@@ -1229,26 +1229,25 @@ sourceFile:../lib/file1.ts
 3 >Emitted(55, 55) Source(17, 47) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
-1->, 
+1 >, 
 2 >            b
 3 >                                                     
-1->Emitted(56, 13) Source(17, 49) + SourceIndex(1)
+1 >Emitted(56, 13) Source(17, 49) + SourceIndex(1)
 2 >Emitted(56, 54) Source(17, 50) + SourceIndex(1)
 3 >Emitted(56, 55) Source(17, 50) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >            c
 3 >                                                     
-1->Emitted(57, 13) Source(17, 52) + SourceIndex(1)
+1 >Emitted(57, 13) Source(17, 52) + SourceIndex(1)
 2 >Emitted(57, 54) Source(17, 53) + SourceIndex(1)
 3 >Emitted(57, 55) Source(17, 53) + SourceIndex(1)
 ---
@@ -1291,7 +1290,7 @@ sourceFile:../lib/file1.ts
 7 >                                ^^^^^
 8 >                                     ^^^^^^^^^^^^^^^
 9 >                                                    ^^^^^^^^
-10>                                                            ^^^->
+10>                                                            ^^->
 1 >
   >
 2 >    }
@@ -1325,7 +1324,7 @@ sourceFile:../lib/file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^
-4 >                  ^^^^^^^^^^^^^->
+4 >                  ^^^^^^^^^^^^->
 1->
   >
 2 >    /*@internal*/
@@ -1336,14 +1335,14 @@ sourceFile:../lib/file1.ts
 ---
 >>>        function internalC() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(61, 9) Source(19, 15) + SourceIndex(1)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^->
 1->export class internalC {
 2 >        }
 1->Emitted(62, 9) Source(19, 39) + SourceIndex(1)
@@ -1362,7 +1361,7 @@ sourceFile:../lib/file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -1375,7 +1374,7 @@ sourceFile:../lib/file1.ts
 >>>    exports.internalC = internalC;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                  ^^^^^^^^^^^->
+3 >                                  ^^^^^^^^^^->
 1->
 2 >    internalC
 1->Emitted(65, 5) Source(19, 28) + SourceIndex(1)
@@ -1408,7 +1407,7 @@ sourceFile:../lib/file1.ts
 >>>    exports.internalfoo = internalfoo;
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                      ^^^->
+3 >                                      ^^->
 1 >
 2 >    export function internalfoo() {}
 1 >Emitted(67, 5) Source(20, 15) + SourceIndex(1)
@@ -1439,7 +1438,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export namespace 
 3 >               internalNamespace
@@ -1449,20 +1448,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>        var someClass = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(70, 9) Source(21, 52) + SourceIndex(1)
 ---
 >>>            function someClass() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(71, 13) Source(21, 52) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^^^^^^^^^->
+3 >             ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >            }
 1->Emitted(72, 13) Source(21, 76) + SourceIndex(1)
@@ -1481,7 +1480,7 @@ sourceFile:../lib/file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -1496,7 +1495,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        someClass
 3 >                                    {}
@@ -1572,7 +1571,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^
 3 >            ^^^^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^->
+5 >                      ^^^^^^^^^->
 1 >.
 2 >        
 3 >            something
@@ -1586,7 +1585,7 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   something
@@ -1596,20 +1595,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>            var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(81, 13) Source(22, 58) + SourceIndex(1)
 ---
 >>>                function someClass() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(82, 17) Source(22, 58) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                }
 1->Emitted(83, 17) Source(22, 82) + SourceIndex(1)
@@ -1628,7 +1627,7 @@ sourceFile:../lib/file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -1643,7 +1642,7 @@ sourceFile:../lib/file1.ts
 2 >            ^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            someClass
 3 >                                {}
@@ -1794,7 +1793,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export enum 
 3 >               internalEnum
@@ -1806,7 +1805,6 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
 1-> { 
 2 >        a
 3 >                                                 
@@ -1815,26 +1813,25 @@ sourceFile:../lib/file1.ts
 3 >Emitted(93, 51) Source(26, 43) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
-1->, 
+1 >, 
 2 >        b
 3 >                                                 
-1->Emitted(94, 9) Source(26, 45) + SourceIndex(1)
+1 >Emitted(94, 9) Source(26, 45) + SourceIndex(1)
 2 >Emitted(94, 50) Source(26, 46) + SourceIndex(1)
 3 >Emitted(94, 51) Source(26, 46) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >        c
 3 >                                                 
-1->Emitted(95, 9) Source(26, 48) + SourceIndex(1)
+1 >Emitted(95, 9) Source(26, 48) + SourceIndex(1)
 2 >Emitted(95, 50) Source(26, 49) + SourceIndex(1)
 3 >Emitted(95, 51) Source(26, 49) + SourceIndex(1)
 ---
@@ -1908,7 +1905,7 @@ sourceFile:../lib/global.ts
 4 >               ^^^
 5 >                  ^^
 6 >                    ^
-7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    globalConst
@@ -1979,15 +1976,15 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4382,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4382,"kind":"text"}]},{"pos":4382,"end":4608,"kind":"text"}],"mapHash":"16771957534-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-90621758844-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n});\r\nvar myVar = 30;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":217,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":217,"kind":"text"}]},{"pos":217,"end":299,"kind":"text"}],"mapHash":"12507664209-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";IAAA,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;KAMnB;IACD,MAAM,WAAW,OAAO,CAAC;KASxB;;;ICjBD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}","hash":"17014126216-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","-2588783191-export const z = 30;\r\nimport { x } from \"file1\";","1463681686-const myVar = 30;"],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"21439035937-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4278,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4278,"kind":"text"}]},{"pos":4278,"end":4497,"kind":"text"}],"mapHash":"16771957534-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-4029941727-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n});\nvar myVar = 30;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":206,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":206,"kind":"text"}]},{"pos":206,"end":284,"kind":"text"}],"mapHash":"12507664209-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";IAAA,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;KAMnB;IACD,MAAM,WAAW,OAAO,CAAC;KASxB;;;ICjBD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}","hash":"13934920901-declare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","-2588783191-export const z = 30;\r\nimport { x } from \"file1\";","1463681686-const myVar = 30;"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"13415316958-declare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-prepend: (0-4382):: ../lib/module.js texts:: 1
+prepend: (0-4278):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-4382)
+text: (0-4278)
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -2094,7 +2091,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (4382-4608)
+text: (4278-4497)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2107,9 +2104,9 @@ var myVar = 30;
 ======================================================================
 File:: /src/app/module.d.ts
 ----------------------------------------------------------------------
-prepend: (0-217):: ../lib/module.d.ts texts:: 1
+prepend: (0-206):: ../lib/module.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-217)
+text: (0-206)
 declare module "file1" {
     export const x = 10;
     export class normalC {
@@ -2123,7 +2120,7 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (217-299)
+text: (206-284)
 declare module "file3" {
     export const z = 30;
 }
@@ -2143,48 +2140,48 @@ declare const myVar = 30;
       "sections": [
         {
           "pos": 0,
-          "end": 4382,
+          "end": 4278,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
               "pos": 0,
-              "end": 4382,
+              "end": 4278,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 4382,
-          "end": 4608,
+          "pos": 4278,
+          "end": 4497,
           "kind": "text"
         }
       ],
-      "hash": "-90621758844-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n});\r\nvar myVar = 30;\r\n//# sourceMappingURL=module.js.map",
+      "hash": "-4029941727-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n});\nvar myVar = 30;\n//# sourceMappingURL=module.js.map",
       "mapHash": "16771957534-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 217,
+          "end": 206,
           "kind": "prepend",
           "data": "../lib/module.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 217,
+              "end": 206,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 217,
-          "end": 299,
+          "pos": 206,
+          "end": 284,
           "kind": "text"
         }
       ],
-      "hash": "17014126216-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "13934920901-declare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "12507664209-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";IAAA,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;KAMnB;IACD,MAAM,WAAW,OAAO,CAAC;KASxB;;;ICjBD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}"
     }
   },
@@ -2197,10 +2194,20 @@ declare const myVar = 30;
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../lib/module.d.ts": "16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+      "../lib/module.d.ts": "-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
       "./file3.ts": "-2588783191-export const z = 30;\r\nimport { x } from \"file1\";",
       "./file4.ts": "1463681686-const myVar = 30;"
     },
+    "root": [
+      [
+        3,
+        "./file3.ts"
+      ],
+      [
+        4,
+        "./file4.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -2211,11 +2218,11 @@ declare const myVar = 30;
       "stripInternal": true,
       "target": 1
     },
-    "outSignature": "21439035937-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n",
+    "outSignature": "13415316958-declare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 11248
+  "size": 10869
 }
 
 //// [/src/lib/module.d.ts]
@@ -2323,7 +2330,7 @@ sourceFile:file1.ts
 5 >                 ^
 6 >                  ^^^^^
 7 >                       ^
-8 >                        ^^^->
+8 >                        ^^->
 1 >
 2 >    export
 3 >           
@@ -2361,7 +2368,7 @@ sourceFile:file1.ts
 3 >            ^^
 4 >              ^^^^^^
 5 >                    ^
-6 >                     ^^^->
+6 >                     ^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ 
@@ -2378,7 +2385,7 @@ sourceFile:file1.ts
 >>>        method(): void;
 1->^^^^^^^^
 2 >        ^^^^^^
-3 >              ^^^^^^^^^^^->
+3 >              ^^^^^^^^^^->
 1->
   >    /*@internal*/ 
 2 >        method
@@ -2392,7 +2399,7 @@ sourceFile:file1.ts
 4 >             ^^^^
 5 >                 ^^^^^^
 6 >                       ^
-7 >                        ^^^^->
+7 >                        ^^^->
 1->() { }
   >    /*@internal*/ 
 2 >        get 
@@ -2434,7 +2441,7 @@ sourceFile:file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(10, 6) Source(8, 2) + SourceIndex(1)
@@ -2471,7 +2478,7 @@ sourceFile:file1.ts
 ---
 >>>        }
 1 >^^^^^^^^^
-2 >         ^^^^^^^^^^^^^^^^^^^^^->
+2 >         ^^^^^^^^^^^^^^^^^^^^->
 1 > { }
 1 >Emitted(13, 10) Source(10, 37) + SourceIndex(1)
 ---
@@ -2480,7 +2487,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^
 3 >                 ^^^
 4 >                    ^^^^^^^^^
-5 >                             ^^^^^->
+5 >                             ^^^^->
 1->
   >    /*@internal*/ 
 2 >        export function 
@@ -2524,7 +2531,7 @@ sourceFile:file1.ts
 ---
 >>>        }
 1 >^^^^^^^^^
-2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(18, 10) Source(12, 71) + SourceIndex(1)
 ---
@@ -2567,7 +2574,7 @@ sourceFile:file1.ts
 ---
 >>>        }
 1 >^^^^^^^^^
-2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(22, 10) Source(13, 85) + SourceIndex(1)
 ---
@@ -2656,7 +2663,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^^^^^
 2 >            ^
 3 >             ^^^^
-4 >                 ^^->
+4 >                 ^->
 1 > { 
 2 >            a
 3 >             
@@ -2668,7 +2675,6 @@ sourceFile:file1.ts
 1->^^^^^^^^^^^^
 2 >            ^
 3 >             ^^^^
-4 >                 ^->
 1->, 
 2 >            b
 3 >             
@@ -2677,13 +2683,13 @@ sourceFile:file1.ts
 3 >Emitted(28, 18) Source(17, 50) + SourceIndex(1)
 ---
 >>>            c = 2
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^
 3 >             ^^^^
-1->, 
+1 >, 
 2 >            c
 3 >             
-1->Emitted(29, 13) Source(17, 52) + SourceIndex(1)
+1 >Emitted(29, 13) Source(17, 52) + SourceIndex(1)
 2 >Emitted(29, 14) Source(17, 53) + SourceIndex(1)
 3 >Emitted(29, 18) Source(17, 53) + SourceIndex(1)
 ---
@@ -2694,7 +2700,7 @@ sourceFile:file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(31, 6) Source(18, 2) + SourceIndex(1)
@@ -2716,7 +2722,7 @@ sourceFile:file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > {}
 1 >Emitted(33, 6) Source(19, 40) + SourceIndex(1)
 ---
@@ -2726,7 +2732,6 @@ sourceFile:file1.ts
 3 >          ^^^^^^^^^^
 4 >                    ^^^^^^^^^^^
 5 >                               ^^^^^^^^^
-6 >                                        ^->
 1->
   >/*@internal*/ 
 2 >    export
@@ -2740,18 +2745,18 @@ sourceFile:file1.ts
 5 >Emitted(34, 41) Source(20, 47) + SourceIndex(1)
 ---
 >>>    export namespace internalNamespace {
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^
 3 >          ^^^^^^^^^^^
 4 >                     ^^^^^^^^^^^^^^^^^
 5 >                                      ^
-1->
+1 >
   >/*@internal*/ 
 2 >    export
 3 >           namespace 
 4 >                     internalNamespace
 5 >                                       
-1->Emitted(35, 5) Source(21, 15) + SourceIndex(1)
+1 >Emitted(35, 5) Source(21, 15) + SourceIndex(1)
 2 >Emitted(35, 11) Source(21, 21) + SourceIndex(1)
 3 >Emitted(35, 22) Source(21, 32) + SourceIndex(1)
 4 >Emitted(35, 39) Source(21, 49) + SourceIndex(1)
@@ -2775,7 +2780,7 @@ sourceFile:file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(38, 6) Source(21, 79) + SourceIndex(1)
 ---
@@ -2821,7 +2826,7 @@ sourceFile:file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(42, 6) Source(22, 85) + SourceIndex(1)
 ---
@@ -2922,7 +2927,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^
-4 >             ^^->
+4 >             ^->
 1 > { 
 2 >        a
 3 >         
@@ -2934,7 +2939,6 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^
 3 >         ^^^^
-4 >             ^->
 1->, 
 2 >        b
 3 >         
@@ -2943,13 +2947,13 @@ sourceFile:file1.ts
 3 >Emitted(48, 14) Source(26, 46) + SourceIndex(1)
 ---
 >>>        c = 2
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^
-1->, 
+1 >, 
 2 >        c
 3 >         
-1->Emitted(49, 9) Source(26, 48) + SourceIndex(1)
+1 >Emitted(49, 9) Source(26, 48) + SourceIndex(1)
 2 >Emitted(49, 10) Source(26, 49) + SourceIndex(1)
 3 >Emitted(49, 14) Source(26, 49) + SourceIndex(1)
 ---
@@ -3145,7 +3149,7 @@ sourceFile:file0.ts
 6 >                        ^^^
 7 >                           ^^
 8 >                             ^
-9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >/*@internal*/
 3 >              
@@ -3178,7 +3182,7 @@ sourceFile:file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->export const 
 2 >    
 3 >            x
@@ -3194,7 +3198,7 @@ sourceFile:file1.ts
 ---
 >>>    var normalC = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 1->Emitted(7, 5) Source(2, 1) + SourceIndex(1)
@@ -3214,7 +3218,7 @@ sourceFile:file1.ts
 >>>        }
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >        }
 1 >Emitted(9, 9) Source(3, 35) + SourceIndex(1)
@@ -3249,7 +3253,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 3 >                              ^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                    ^^^^^^^->
+4 >                                                    ^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >        get 
@@ -3315,7 +3319,7 @@ sourceFile:file1.ts
 >>>            configurable: true
 >>>        });
 1 >^^^^^^^^^^^
-2 >           ^^^^^^^^^^^^^->
+2 >           ^^^^^^^^^^^^->
 1 >
 1 >Emitted(16, 12) Source(6, 41) + SourceIndex(1)
 ---
@@ -3334,7 +3338,7 @@ sourceFile:file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -3363,7 +3367,7 @@ sourceFile:file1.ts
 2 >    ^^^^
 3 >        ^^^^^^^
 4 >               ^
-5 >                ^^^^^^^^^^->
+5 >                ^^^^^^^^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ prop: string;
@@ -3393,7 +3397,7 @@ sourceFile:file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^
-4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    export namespace 
 3 >               normalN
@@ -3405,7 +3409,7 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^
 3 >                     ^
-4 >                      ^^^^^->
+4 >                      ^^^^->
 1-> {
   >    
 2 >        /*@internal*/
@@ -3416,14 +3420,14 @@ sourceFile:file1.ts
 ---
 >>>            function C() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(23, 13) Source(10, 19) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^->
+3 >             ^^^^^^^^->
 1->export class C { 
 2 >            }
 1->Emitted(24, 13) Source(10, 36) + SourceIndex(1)
@@ -3442,7 +3446,7 @@ sourceFile:file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^->
+5 >             ^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -3457,7 +3461,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^
 3 >                 ^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^^^^^^^^^^->
+5 >                      ^^^^^^^^^^^^^^^^^^->
 1->
 2 >        C
 3 >                  { }
@@ -3496,7 +3500,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^^^^^^->
+5 >                          ^^^^^^^^^^^^^^->
 1 >
 2 >        foo
 3 >                   () {}
@@ -3531,7 +3535,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^->
 1 >
 2 >        export namespace 
 3 >                   someNamespace
@@ -3541,20 +3545,20 @@ sourceFile:file1.ts
 ---
 >>>            var C = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(32, 13) Source(12, 52) + SourceIndex(1)
 ---
 >>>                function C() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(33, 17) Source(12, 52) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^->
+3 >                 ^^^^^^^^->
 1->export class C {
 2 >                }
 1->Emitted(34, 17) Source(12, 68) + SourceIndex(1)
@@ -3573,7 +3577,7 @@ sourceFile:file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -3588,7 +3592,7 @@ sourceFile:file1.ts
 2 >            ^^^^^^^^^^^^^^^
 3 >                           ^^^^
 4 >                               ^
-5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            C
 3 >                            {}
@@ -3664,7 +3668,7 @@ sourceFile:file1.ts
 2 >            ^^^^
 3 >                ^^^^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^->
+5 >                          ^^^^^^^^^->
 1 >.
 2 >            
 3 >                something
@@ -3678,7 +3682,7 @@ sourceFile:file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            
 3 >                       something
@@ -3688,20 +3692,20 @@ sourceFile:file1.ts
 ---
 >>>                var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(43, 17) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    function someClass() {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^->
+2 >                    ^->
 1->
 1->Emitted(44, 21) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    }
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
-3 >                     ^^^^^^^^^^^^^^^^^->
+3 >                     ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                    }
 1->Emitted(45, 21) Source(13, 82) + SourceIndex(1)
@@ -3720,7 +3724,7 @@ sourceFile:file1.ts
 2 >                ^
 3 >                 
 4 >                 ^^^^
-5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >                }
 3 >                 
@@ -3735,7 +3739,7 @@ sourceFile:file1.ts
 2 >                ^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >                someClass
 3 >                                    {}
@@ -3880,7 +3884,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^
-4 >                               ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                               ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        export enum 
 3 >                   internalEnum
@@ -3892,7 +3896,6 @@ sourceFile:file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
 1-> { 
 2 >            a
 3 >                                                     
@@ -3901,26 +3904,25 @@ sourceFile:file1.ts
 3 >Emitted(55, 55) Source(17, 47) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
-1->, 
+1 >, 
 2 >            b
 3 >                                                     
-1->Emitted(56, 13) Source(17, 49) + SourceIndex(1)
+1 >Emitted(56, 13) Source(17, 49) + SourceIndex(1)
 2 >Emitted(56, 54) Source(17, 50) + SourceIndex(1)
 3 >Emitted(56, 55) Source(17, 50) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >            c
 3 >                                                     
-1->Emitted(57, 13) Source(17, 52) + SourceIndex(1)
+1 >Emitted(57, 13) Source(17, 52) + SourceIndex(1)
 2 >Emitted(57, 54) Source(17, 53) + SourceIndex(1)
 3 >Emitted(57, 55) Source(17, 53) + SourceIndex(1)
 ---
@@ -3963,7 +3965,7 @@ sourceFile:file1.ts
 7 >                                ^^^^^
 8 >                                     ^^^^^^^^^^^^^^^
 9 >                                                    ^^^^^^^^
-10>                                                            ^^^->
+10>                                                            ^^->
 1 >
   >
 2 >    }
@@ -3997,7 +3999,7 @@ sourceFile:file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^
-4 >                  ^^^^^^^^^^^^^->
+4 >                  ^^^^^^^^^^^^->
 1->
   >
 2 >    /*@internal*/
@@ -4008,14 +4010,14 @@ sourceFile:file1.ts
 ---
 >>>        function internalC() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(61, 9) Source(19, 15) + SourceIndex(1)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^->
 1->export class internalC {
 2 >        }
 1->Emitted(62, 9) Source(19, 39) + SourceIndex(1)
@@ -4034,7 +4036,7 @@ sourceFile:file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -4047,7 +4049,7 @@ sourceFile:file1.ts
 >>>    exports.internalC = internalC;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                  ^^^^^^^^^^^->
+3 >                                  ^^^^^^^^^^->
 1->
 2 >    internalC
 1->Emitted(65, 5) Source(19, 28) + SourceIndex(1)
@@ -4080,7 +4082,7 @@ sourceFile:file1.ts
 >>>    exports.internalfoo = internalfoo;
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                      ^^^->
+3 >                                      ^^->
 1 >
 2 >    export function internalfoo() {}
 1 >Emitted(67, 5) Source(20, 15) + SourceIndex(1)
@@ -4111,7 +4113,7 @@ sourceFile:file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export namespace 
 3 >               internalNamespace
@@ -4121,20 +4123,20 @@ sourceFile:file1.ts
 ---
 >>>        var someClass = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(70, 9) Source(21, 52) + SourceIndex(1)
 ---
 >>>            function someClass() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(71, 13) Source(21, 52) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^^^^^^^^^->
+3 >             ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >            }
 1->Emitted(72, 13) Source(21, 76) + SourceIndex(1)
@@ -4153,7 +4155,7 @@ sourceFile:file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -4168,7 +4170,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        someClass
 3 >                                    {}
@@ -4244,7 +4246,7 @@ sourceFile:file1.ts
 2 >        ^^^^
 3 >            ^^^^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^->
+5 >                      ^^^^^^^^^->
 1 >.
 2 >        
 3 >            something
@@ -4258,7 +4260,7 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   something
@@ -4268,20 +4270,20 @@ sourceFile:file1.ts
 ---
 >>>            var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(81, 13) Source(22, 58) + SourceIndex(1)
 ---
 >>>                function someClass() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(82, 17) Source(22, 58) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                }
 1->Emitted(83, 17) Source(22, 82) + SourceIndex(1)
@@ -4300,7 +4302,7 @@ sourceFile:file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -4315,7 +4317,7 @@ sourceFile:file1.ts
 2 >            ^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            someClass
 3 >                                {}
@@ -4466,7 +4468,7 @@ sourceFile:file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export enum 
 3 >               internalEnum
@@ -4478,7 +4480,6 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
 1-> { 
 2 >        a
 3 >                                                 
@@ -4487,26 +4488,25 @@ sourceFile:file1.ts
 3 >Emitted(93, 51) Source(26, 43) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
-1->, 
+1 >, 
 2 >        b
 3 >                                                 
-1->Emitted(94, 9) Source(26, 45) + SourceIndex(1)
+1 >Emitted(94, 9) Source(26, 45) + SourceIndex(1)
 2 >Emitted(94, 50) Source(26, 46) + SourceIndex(1)
 3 >Emitted(94, 51) Source(26, 46) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >        c
 3 >                                                 
-1->Emitted(95, 9) Source(26, 48) + SourceIndex(1)
+1 >Emitted(95, 9) Source(26, 48) + SourceIndex(1)
 2 >Emitted(95, 50) Source(26, 49) + SourceIndex(1)
 3 >Emitted(95, 51) Source(26, 49) + SourceIndex(1)
 ---
@@ -4597,13 +4597,13 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4382,"kind":"text"}],"mapHash":"9404225414-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-103876932274-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":28,"end":108,"kind":"text"},{"pos":108,"end":233,"kind":"internal"},{"pos":235,"end":274,"kind":"text"},{"pos":274,"end":742,"kind":"internal"},{"pos":744,"end":751,"kind":"text"},{"pos":751,"end":1240,"kind":"internal"},{"pos":1242,"end":1333,"kind":"text"}],"mapHash":"-20111650778-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAhC,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;QACN,IAAI,CAAC,IACM,MAAM,CADK;QACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;KACvC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"6923704418-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4331635807-/*@internal*/ const myGlob = 20;","21054576574-export const x = 10;\nexport class normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nexport namespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ export class internalC {}\n/*@internal*/ export function internalfoo() {}\n/*@internal*/ export namespace internalNamespace { export class someClass {} }\n/*@internal*/ export namespace internalOther.something { export class someClass {} }\n/*@internal*/ export import internalImport = internalNamespace.someClass;\n/*@internal*/ export type internalType = internalC;\n/*@internal*/ export const internalConst = 10;\n/*@internal*/ export enum internalEnum { a, b, c }","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4278,"kind":"text"}],"mapHash":"9404225414-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-29124493082-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":27,"end":104,"kind":"text"},{"pos":104,"end":225,"kind":"internal"},{"pos":226,"end":263,"kind":"text"},{"pos":263,"end":713,"kind":"internal"},{"pos":714,"end":720,"kind":"text"},{"pos":720,"end":1191,"kind":"internal"},{"pos":1192,"end":1278,"kind":"text"}],"mapHash":"-20111650778-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAhC,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;QACN,IAAI,CAAC,IACM,MAAM,CADK;QACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;KACvC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"-60625246569-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4331635807-/*@internal*/ const myGlob = 20;","21054576574-export const x = 10;\nexport class normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nexport namespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ export class internalC {}\n/*@internal*/ export function internalfoo() {}\n/*@internal*/ export namespace internalNamespace { export class someClass {} }\n/*@internal*/ export namespace internalOther.something { export class someClass {} }\n/*@internal*/ export import internalImport = internalNamespace.someClass;\n/*@internal*/ export type internalType = internalC;\n/*@internal*/ export const internalConst = 10;\n/*@internal*/ export enum internalEnum { a, b, c }","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/lib/module.js
 ----------------------------------------------------------------------
-text: (0-4382)
+text: (0-4278)
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -4716,25 +4716,25 @@ File:: /src/lib/module.d.ts
 internal: (0-26)
 declare const myGlob = 20;
 ----------------------------------------------------------------------
-text: (28-108)
+text: (27-104)
 declare module "file1" {
     export const x = 10;
     export class normalC {
 
 ----------------------------------------------------------------------
-internal: (108-233)
+internal: (104-225)
         constructor();
         prop: string;
         method(): void;
         get c(): number;
         set c(val: number);
 ----------------------------------------------------------------------
-text: (235-274)
+text: (226-263)
     }
     export namespace normalN {
 
 ----------------------------------------------------------------------
-internal: (274-742)
+internal: (263-713)
         class C {
         }
         function foo(): void;
@@ -4755,11 +4755,11 @@ internal: (274-742)
             c = 2
         }
 ----------------------------------------------------------------------
-text: (744-751)
+text: (714-720)
     }
 
 ----------------------------------------------------------------------
-internal: (751-1240)
+internal: (720-1191)
     export class internalC {
     }
     export function internalfoo(): void;
@@ -4780,7 +4780,7 @@ internal: (751-1240)
         c = 2
     }
 ----------------------------------------------------------------------
-text: (1242-1333)
+text: (1192-1278)
 }
 declare module "file2" {
     export const y = 20;
@@ -4803,11 +4803,11 @@ declare const globalConst = 10;
       "sections": [
         {
           "pos": 0,
-          "end": 4382,
+          "end": 4278,
           "kind": "text"
         }
       ],
-      "hash": "-103876932274-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map",
+      "hash": "-29124493082-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map",
       "mapHash": "9404225414-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
@@ -4818,42 +4818,42 @@ declare const globalConst = 10;
           "kind": "internal"
         },
         {
-          "pos": 28,
-          "end": 108,
+          "pos": 27,
+          "end": 104,
           "kind": "text"
         },
         {
-          "pos": 108,
-          "end": 233,
+          "pos": 104,
+          "end": 225,
           "kind": "internal"
         },
         {
-          "pos": 235,
-          "end": 274,
+          "pos": 226,
+          "end": 263,
           "kind": "text"
         },
         {
-          "pos": 274,
-          "end": 742,
+          "pos": 263,
+          "end": 713,
           "kind": "internal"
         },
         {
-          "pos": 744,
-          "end": 751,
+          "pos": 714,
+          "end": 720,
           "kind": "text"
         },
         {
-          "pos": 751,
-          "end": 1240,
+          "pos": 720,
+          "end": 1191,
           "kind": "internal"
         },
         {
-          "pos": 1242,
-          "end": 1333,
+          "pos": 1192,
+          "end": 1278,
           "kind": "text"
         }
       ],
-      "hash": "6923704418-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "-60625246569-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "-20111650778-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAhC,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;QACN,IAAI,CAAC,IACM,MAAM,CADK;QACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;KACvC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}"
     }
   },
@@ -4872,6 +4872,20 @@ declare const globalConst = 10;
       "./file2.ts": "-13729954175-export const y = 20;",
       "./global.ts": "1028229885-const globalConst = 10;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./file0.ts",
+          "./file1.ts",
+          "./file2.ts",
+          "./global.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -4881,11 +4895,11 @@ declare const globalConst = 10;
       "strict": false,
       "target": 1
     },
-    "outSignature": "16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "outSignature": "-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 13651
+  "size": 13240
 }
 
 
@@ -5077,7 +5091,7 @@ sourceFile:../lib/file0.ts
 6 >                        ^^^
 7 >                           ^^
 8 >                             ^
-9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >/*@internal*/
 3 >              
@@ -5110,7 +5124,7 @@ sourceFile:../lib/file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->export const 
 2 >    
 3 >            x
@@ -5126,7 +5140,7 @@ sourceFile:../lib/file1.ts
 ---
 >>>    var normalC = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 1->Emitted(7, 5) Source(2, 1) + SourceIndex(1)
@@ -5146,7 +5160,7 @@ sourceFile:../lib/file1.ts
 >>>        }
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >        }
 1 >Emitted(9, 9) Source(3, 35) + SourceIndex(1)
@@ -5181,7 +5195,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 3 >                              ^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                    ^^^^^^^->
+4 >                                                    ^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >        get 
@@ -5247,7 +5261,7 @@ sourceFile:../lib/file1.ts
 >>>            configurable: true
 >>>        });
 1 >^^^^^^^^^^^
-2 >           ^^^^^^^^^^^^^->
+2 >           ^^^^^^^^^^^^->
 1 >
 1 >Emitted(16, 12) Source(6, 41) + SourceIndex(1)
 ---
@@ -5266,7 +5280,7 @@ sourceFile:../lib/file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -5295,7 +5309,7 @@ sourceFile:../lib/file1.ts
 2 >    ^^^^
 3 >        ^^^^^^^
 4 >               ^
-5 >                ^^^^^^^^^^->
+5 >                ^^^^^^^^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ prop: string;
@@ -5325,7 +5339,7 @@ sourceFile:../lib/file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^
-4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    export namespace 
 3 >               normalN
@@ -5337,7 +5351,7 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^
 3 >                     ^
-4 >                      ^^^^^->
+4 >                      ^^^^->
 1-> {
   >    
 2 >        /*@internal*/
@@ -5348,14 +5362,14 @@ sourceFile:../lib/file1.ts
 ---
 >>>            function C() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(23, 13) Source(10, 19) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^->
+3 >             ^^^^^^^^->
 1->export class C { 
 2 >            }
 1->Emitted(24, 13) Source(10, 36) + SourceIndex(1)
@@ -5374,7 +5388,7 @@ sourceFile:../lib/file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^->
+5 >             ^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -5389,7 +5403,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^^^^^^
 3 >                 ^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^^^^^^^^^^->
+5 >                      ^^^^^^^^^^^^^^^^^^->
 1->
 2 >        C
 3 >                  { }
@@ -5428,7 +5442,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^^^^^^->
+5 >                          ^^^^^^^^^^^^^^->
 1 >
 2 >        foo
 3 >                   () {}
@@ -5463,7 +5477,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^->
 1 >
 2 >        export namespace 
 3 >                   someNamespace
@@ -5473,20 +5487,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>            var C = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(32, 13) Source(12, 52) + SourceIndex(1)
 ---
 >>>                function C() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(33, 17) Source(12, 52) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^->
+3 >                 ^^^^^^^^->
 1->export class C {
 2 >                }
 1->Emitted(34, 17) Source(12, 68) + SourceIndex(1)
@@ -5505,7 +5519,7 @@ sourceFile:../lib/file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -5520,7 +5534,7 @@ sourceFile:../lib/file1.ts
 2 >            ^^^^^^^^^^^^^^^
 3 >                           ^^^^
 4 >                               ^
-5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            C
 3 >                            {}
@@ -5596,7 +5610,7 @@ sourceFile:../lib/file1.ts
 2 >            ^^^^
 3 >                ^^^^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^->
+5 >                          ^^^^^^^^^->
 1 >.
 2 >            
 3 >                something
@@ -5610,7 +5624,7 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            
 3 >                       something
@@ -5620,20 +5634,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>                var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(43, 17) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    function someClass() {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^->
+2 >                    ^->
 1->
 1->Emitted(44, 21) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    }
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
-3 >                     ^^^^^^^^^^^^^^^^^->
+3 >                     ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                    }
 1->Emitted(45, 21) Source(13, 82) + SourceIndex(1)
@@ -5652,7 +5666,7 @@ sourceFile:../lib/file1.ts
 2 >                ^
 3 >                 
 4 >                 ^^^^
-5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >                }
 3 >                 
@@ -5667,7 +5681,7 @@ sourceFile:../lib/file1.ts
 2 >                ^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >                someClass
 3 >                                    {}
@@ -5812,7 +5826,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^
-4 >                               ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                               ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        export enum 
 3 >                   internalEnum
@@ -5824,7 +5838,6 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
 1-> { 
 2 >            a
 3 >                                                     
@@ -5833,26 +5846,25 @@ sourceFile:../lib/file1.ts
 3 >Emitted(55, 55) Source(17, 47) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
-1->, 
+1 >, 
 2 >            b
 3 >                                                     
-1->Emitted(56, 13) Source(17, 49) + SourceIndex(1)
+1 >Emitted(56, 13) Source(17, 49) + SourceIndex(1)
 2 >Emitted(56, 54) Source(17, 50) + SourceIndex(1)
 3 >Emitted(56, 55) Source(17, 50) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >            c
 3 >                                                     
-1->Emitted(57, 13) Source(17, 52) + SourceIndex(1)
+1 >Emitted(57, 13) Source(17, 52) + SourceIndex(1)
 2 >Emitted(57, 54) Source(17, 53) + SourceIndex(1)
 3 >Emitted(57, 55) Source(17, 53) + SourceIndex(1)
 ---
@@ -5895,7 +5907,7 @@ sourceFile:../lib/file1.ts
 7 >                                ^^^^^
 8 >                                     ^^^^^^^^^^^^^^^
 9 >                                                    ^^^^^^^^
-10>                                                            ^^^->
+10>                                                            ^^->
 1 >
   >
 2 >    }
@@ -5929,7 +5941,7 @@ sourceFile:../lib/file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^
-4 >                  ^^^^^^^^^^^^^->
+4 >                  ^^^^^^^^^^^^->
 1->
   >
 2 >    /*@internal*/
@@ -5940,14 +5952,14 @@ sourceFile:../lib/file1.ts
 ---
 >>>        function internalC() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(61, 9) Source(19, 15) + SourceIndex(1)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^->
 1->export class internalC {
 2 >        }
 1->Emitted(62, 9) Source(19, 39) + SourceIndex(1)
@@ -5966,7 +5978,7 @@ sourceFile:../lib/file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -5979,7 +5991,7 @@ sourceFile:../lib/file1.ts
 >>>    exports.internalC = internalC;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                  ^^^^^^^^^^^->
+3 >                                  ^^^^^^^^^^->
 1->
 2 >    internalC
 1->Emitted(65, 5) Source(19, 28) + SourceIndex(1)
@@ -6012,7 +6024,7 @@ sourceFile:../lib/file1.ts
 >>>    exports.internalfoo = internalfoo;
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                      ^^^->
+3 >                                      ^^->
 1 >
 2 >    export function internalfoo() {}
 1 >Emitted(67, 5) Source(20, 15) + SourceIndex(1)
@@ -6043,7 +6055,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export namespace 
 3 >               internalNamespace
@@ -6053,20 +6065,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>        var someClass = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(70, 9) Source(21, 52) + SourceIndex(1)
 ---
 >>>            function someClass() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(71, 13) Source(21, 52) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^^^^^^^^^->
+3 >             ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >            }
 1->Emitted(72, 13) Source(21, 76) + SourceIndex(1)
@@ -6085,7 +6097,7 @@ sourceFile:../lib/file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -6100,7 +6112,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        someClass
 3 >                                    {}
@@ -6176,7 +6188,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^
 3 >            ^^^^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^->
+5 >                      ^^^^^^^^^->
 1 >.
 2 >        
 3 >            something
@@ -6190,7 +6202,7 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   something
@@ -6200,20 +6212,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>            var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(81, 13) Source(22, 58) + SourceIndex(1)
 ---
 >>>                function someClass() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(82, 17) Source(22, 58) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                }
 1->Emitted(83, 17) Source(22, 82) + SourceIndex(1)
@@ -6232,7 +6244,7 @@ sourceFile:../lib/file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -6247,7 +6259,7 @@ sourceFile:../lib/file1.ts
 2 >            ^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            someClass
 3 >                                {}
@@ -6398,7 +6410,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export enum 
 3 >               internalEnum
@@ -6410,7 +6422,6 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
 1-> { 
 2 >        a
 3 >                                                 
@@ -6419,26 +6430,25 @@ sourceFile:../lib/file1.ts
 3 >Emitted(93, 51) Source(26, 43) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
-1->, 
+1 >, 
 2 >        b
 3 >                                                 
-1->Emitted(94, 9) Source(26, 45) + SourceIndex(1)
+1 >Emitted(94, 9) Source(26, 45) + SourceIndex(1)
 2 >Emitted(94, 50) Source(26, 46) + SourceIndex(1)
 3 >Emitted(94, 51) Source(26, 46) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >        c
 3 >                                                 
-1->Emitted(95, 9) Source(26, 48) + SourceIndex(1)
+1 >Emitted(95, 9) Source(26, 48) + SourceIndex(1)
 2 >Emitted(95, 50) Source(26, 49) + SourceIndex(1)
 3 >Emitted(95, 51) Source(26, 49) + SourceIndex(1)
 ---
@@ -6538,7 +6548,7 @@ sourceFile:../lib/global.ts
 4 >               ^^^
 5 >                  ^^
 6 >                    ^
-7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    globalConst
@@ -6609,15 +6619,15 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4411,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4411,"kind":"text"}]},{"pos":4411,"end":4637,"kind":"text"}],"mapHash":"-21544975008-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-25974477915-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n});\r\nvar myVar = 30;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":217,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":217,"kind":"text"}]},{"pos":217,"end":299,"kind":"text"}],"mapHash":"12507664209-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";IAAA,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;KAMnB;IACD,MAAM,WAAW,OAAO,CAAC;KASxB;;;ICjBD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}","hash":"17014126216-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","-2588783191-export const z = 30;\r\nimport { x } from \"file1\";","1463681686-const myVar = 30;"],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"21439035937-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4306,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4306,"kind":"text"}]},{"pos":4306,"end":4525,"kind":"text"}],"mapHash":"-21544975008-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-27054221579-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n});\nvar myVar = 30;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":206,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":206,"kind":"text"}]},{"pos":206,"end":284,"kind":"text"}],"mapHash":"12507664209-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";IAAA,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;KAMnB;IACD,MAAM,WAAW,OAAO,CAAC;KASxB;;;ICjBD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}","hash":"13934920901-declare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","-2588783191-export const z = 30;\r\nimport { x } from \"file1\";","1463681686-const myVar = 30;"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"13415316958-declare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-prepend: (0-4411):: ../lib/module.js texts:: 1
+prepend: (0-4306):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-4411)
+text: (0-4306)
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -6725,7 +6735,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (4411-4637)
+text: (4306-4525)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6738,9 +6748,9 @@ var myVar = 30;
 ======================================================================
 File:: /src/app/module.d.ts
 ----------------------------------------------------------------------
-prepend: (0-217):: ../lib/module.d.ts texts:: 1
+prepend: (0-206):: ../lib/module.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-217)
+text: (0-206)
 declare module "file1" {
     export const x = 10;
     export class normalC {
@@ -6754,7 +6764,7 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (217-299)
+text: (206-284)
 declare module "file3" {
     export const z = 30;
 }
@@ -6774,48 +6784,48 @@ declare const myVar = 30;
       "sections": [
         {
           "pos": 0,
-          "end": 4411,
+          "end": 4306,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
               "pos": 0,
-              "end": 4411,
+              "end": 4306,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 4411,
-          "end": 4637,
+          "pos": 4306,
+          "end": 4525,
           "kind": "text"
         }
       ],
-      "hash": "-25974477915-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n});\r\nvar myVar = 30;\r\n//# sourceMappingURL=module.js.map",
+      "hash": "-27054221579-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n});\nvar myVar = 30;\n//# sourceMappingURL=module.js.map",
       "mapHash": "-21544975008-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 217,
+          "end": 206,
           "kind": "prepend",
           "data": "../lib/module.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 217,
+              "end": 206,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 217,
-          "end": 299,
+          "pos": 206,
+          "end": 284,
           "kind": "text"
         }
       ],
-      "hash": "17014126216-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "13934920901-declare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "12507664209-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";IAAA,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;KAMnB;IACD,MAAM,WAAW,OAAO,CAAC;KASxB;;;ICjBD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}"
     }
   },
@@ -6828,10 +6838,20 @@ declare const myVar = 30;
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../lib/module.d.ts": "16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+      "../lib/module.d.ts": "-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
       "./file3.ts": "-2588783191-export const z = 30;\r\nimport { x } from \"file1\";",
       "./file4.ts": "1463681686-const myVar = 30;"
     },
+    "root": [
+      [
+        3,
+        "./file3.ts"
+      ],
+      [
+        4,
+        "./file4.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -6842,11 +6862,11 @@ declare const myVar = 30;
       "stripInternal": true,
       "target": 1
     },
-    "outSignature": "21439035937-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n",
+    "outSignature": "13415316958-declare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 11320
+  "size": 10940
 }
 
 //// [/src/lib/module.d.ts.map] file written with same contents
@@ -6982,7 +7002,7 @@ sourceFile:file0.ts
 6 >                        ^^^
 7 >                           ^^
 8 >                             ^
-9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >/*@internal*/
 3 >              
@@ -7015,7 +7035,7 @@ sourceFile:file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->export const 
 2 >    
 3 >            x
@@ -7031,7 +7051,7 @@ sourceFile:file1.ts
 ---
 >>>    var normalC = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 1->Emitted(7, 5) Source(2, 1) + SourceIndex(1)
@@ -7051,7 +7071,7 @@ sourceFile:file1.ts
 >>>        }
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >        }
 1 >Emitted(9, 9) Source(3, 35) + SourceIndex(1)
@@ -7086,7 +7106,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 3 >                              ^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                    ^^^^^^^->
+4 >                                                    ^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >        get 
@@ -7152,7 +7172,7 @@ sourceFile:file1.ts
 >>>            configurable: true
 >>>        });
 1 >^^^^^^^^^^^
-2 >           ^^^^^^^^^^^^^->
+2 >           ^^^^^^^^^^^^->
 1 >
 1 >Emitted(16, 12) Source(6, 41) + SourceIndex(1)
 ---
@@ -7171,7 +7191,7 @@ sourceFile:file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -7200,7 +7220,7 @@ sourceFile:file1.ts
 2 >    ^^^^
 3 >        ^^^^^^^
 4 >               ^
-5 >                ^^^^^^^^^^->
+5 >                ^^^^^^^^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ prop: string;
@@ -7230,7 +7250,7 @@ sourceFile:file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^
-4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    export namespace 
 3 >               normalN
@@ -7242,7 +7262,7 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^
 3 >                     ^
-4 >                      ^^^^^->
+4 >                      ^^^^->
 1-> {
   >    
 2 >        /*@internal*/
@@ -7253,14 +7273,14 @@ sourceFile:file1.ts
 ---
 >>>            function C() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(23, 13) Source(10, 19) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^->
+3 >             ^^^^^^^^->
 1->export class C { 
 2 >            }
 1->Emitted(24, 13) Source(10, 36) + SourceIndex(1)
@@ -7279,7 +7299,7 @@ sourceFile:file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^->
+5 >             ^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -7294,7 +7314,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^
 3 >                 ^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^^^^^^^^^^->
+5 >                      ^^^^^^^^^^^^^^^^^^->
 1->
 2 >        C
 3 >                  { }
@@ -7333,7 +7353,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^^^^^^->
+5 >                          ^^^^^^^^^^^^^^->
 1 >
 2 >        foo
 3 >                   () {}
@@ -7368,7 +7388,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^->
 1 >
 2 >        export namespace 
 3 >                   someNamespace
@@ -7378,20 +7398,20 @@ sourceFile:file1.ts
 ---
 >>>            var C = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(32, 13) Source(12, 52) + SourceIndex(1)
 ---
 >>>                function C() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(33, 17) Source(12, 52) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^->
+3 >                 ^^^^^^^^->
 1->export class C {
 2 >                }
 1->Emitted(34, 17) Source(12, 68) + SourceIndex(1)
@@ -7410,7 +7430,7 @@ sourceFile:file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -7425,7 +7445,7 @@ sourceFile:file1.ts
 2 >            ^^^^^^^^^^^^^^^
 3 >                           ^^^^
 4 >                               ^
-5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            C
 3 >                            {}
@@ -7501,7 +7521,7 @@ sourceFile:file1.ts
 2 >            ^^^^
 3 >                ^^^^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^->
+5 >                          ^^^^^^^^^->
 1 >.
 2 >            
 3 >                something
@@ -7515,7 +7535,7 @@ sourceFile:file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            
 3 >                       something
@@ -7525,20 +7545,20 @@ sourceFile:file1.ts
 ---
 >>>                var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(43, 17) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    function someClass() {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^->
+2 >                    ^->
 1->
 1->Emitted(44, 21) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    }
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
-3 >                     ^^^^^^^^^^^^^^^^^->
+3 >                     ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                    }
 1->Emitted(45, 21) Source(13, 82) + SourceIndex(1)
@@ -7557,7 +7577,7 @@ sourceFile:file1.ts
 2 >                ^
 3 >                 
 4 >                 ^^^^
-5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >                }
 3 >                 
@@ -7572,7 +7592,7 @@ sourceFile:file1.ts
 2 >                ^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >                someClass
 3 >                                    {}
@@ -7717,7 +7737,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^
-4 >                               ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                               ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        export enum 
 3 >                   internalEnum
@@ -7729,7 +7749,6 @@ sourceFile:file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
 1-> { 
 2 >            a
 3 >                                                     
@@ -7738,26 +7757,25 @@ sourceFile:file1.ts
 3 >Emitted(55, 55) Source(17, 47) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
-1->, 
+1 >, 
 2 >            b
 3 >                                                     
-1->Emitted(56, 13) Source(17, 49) + SourceIndex(1)
+1 >Emitted(56, 13) Source(17, 49) + SourceIndex(1)
 2 >Emitted(56, 54) Source(17, 50) + SourceIndex(1)
 3 >Emitted(56, 55) Source(17, 50) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >            c
 3 >                                                     
-1->Emitted(57, 13) Source(17, 52) + SourceIndex(1)
+1 >Emitted(57, 13) Source(17, 52) + SourceIndex(1)
 2 >Emitted(57, 54) Source(17, 53) + SourceIndex(1)
 3 >Emitted(57, 55) Source(17, 53) + SourceIndex(1)
 ---
@@ -7800,7 +7818,7 @@ sourceFile:file1.ts
 7 >                                ^^^^^
 8 >                                     ^^^^^^^^^^^^^^^
 9 >                                                    ^^^^^^^^
-10>                                                            ^^^->
+10>                                                            ^^->
 1 >
   >
 2 >    }
@@ -7834,7 +7852,7 @@ sourceFile:file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^
-4 >                  ^^^^^^^^^^^^^->
+4 >                  ^^^^^^^^^^^^->
 1->
   >
 2 >    /*@internal*/
@@ -7845,14 +7863,14 @@ sourceFile:file1.ts
 ---
 >>>        function internalC() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(61, 9) Source(19, 15) + SourceIndex(1)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^->
 1->export class internalC {
 2 >        }
 1->Emitted(62, 9) Source(19, 39) + SourceIndex(1)
@@ -7871,7 +7889,7 @@ sourceFile:file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -7884,7 +7902,7 @@ sourceFile:file1.ts
 >>>    exports.internalC = internalC;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                  ^^^^^^^^^^^->
+3 >                                  ^^^^^^^^^^->
 1->
 2 >    internalC
 1->Emitted(65, 5) Source(19, 28) + SourceIndex(1)
@@ -7917,7 +7935,7 @@ sourceFile:file1.ts
 >>>    exports.internalfoo = internalfoo;
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                      ^^^->
+3 >                                      ^^->
 1 >
 2 >    export function internalfoo() {}
 1 >Emitted(67, 5) Source(20, 15) + SourceIndex(1)
@@ -7948,7 +7966,7 @@ sourceFile:file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export namespace 
 3 >               internalNamespace
@@ -7958,20 +7976,20 @@ sourceFile:file1.ts
 ---
 >>>        var someClass = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(70, 9) Source(21, 52) + SourceIndex(1)
 ---
 >>>            function someClass() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(71, 13) Source(21, 52) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^^^^^^^^^->
+3 >             ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >            }
 1->Emitted(72, 13) Source(21, 76) + SourceIndex(1)
@@ -7990,7 +8008,7 @@ sourceFile:file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -8005,7 +8023,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        someClass
 3 >                                    {}
@@ -8081,7 +8099,7 @@ sourceFile:file1.ts
 2 >        ^^^^
 3 >            ^^^^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^->
+5 >                      ^^^^^^^^^->
 1 >.
 2 >        
 3 >            something
@@ -8095,7 +8113,7 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   something
@@ -8105,20 +8123,20 @@ sourceFile:file1.ts
 ---
 >>>            var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(81, 13) Source(22, 58) + SourceIndex(1)
 ---
 >>>                function someClass() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(82, 17) Source(22, 58) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                }
 1->Emitted(83, 17) Source(22, 82) + SourceIndex(1)
@@ -8137,7 +8155,7 @@ sourceFile:file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -8152,7 +8170,7 @@ sourceFile:file1.ts
 2 >            ^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            someClass
 3 >                                {}
@@ -8303,7 +8321,7 @@ sourceFile:file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export enum 
 3 >               internalEnum
@@ -8315,7 +8333,6 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
 1-> { 
 2 >        a
 3 >                                                 
@@ -8324,26 +8341,25 @@ sourceFile:file1.ts
 3 >Emitted(93, 51) Source(26, 43) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
-1->, 
+1 >, 
 2 >        b
 3 >                                                 
-1->Emitted(94, 9) Source(26, 45) + SourceIndex(1)
+1 >Emitted(94, 9) Source(26, 45) + SourceIndex(1)
 2 >Emitted(94, 50) Source(26, 46) + SourceIndex(1)
 3 >Emitted(94, 51) Source(26, 46) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >        c
 3 >                                                 
-1->Emitted(95, 9) Source(26, 48) + SourceIndex(1)
+1 >Emitted(95, 9) Source(26, 48) + SourceIndex(1)
 2 >Emitted(95, 50) Source(26, 49) + SourceIndex(1)
 3 >Emitted(95, 51) Source(26, 49) + SourceIndex(1)
 ---
@@ -8460,13 +8476,13 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4411,"kind":"text"}],"mapHash":"13458659400-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-60704068049-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":28,"end":108,"kind":"text"},{"pos":108,"end":233,"kind":"internal"},{"pos":235,"end":274,"kind":"text"},{"pos":274,"end":742,"kind":"internal"},{"pos":744,"end":751,"kind":"text"},{"pos":751,"end":1240,"kind":"internal"},{"pos":1242,"end":1333,"kind":"text"}],"mapHash":"-20111650778-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAhC,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;QACN,IAAI,CAAC,IACM,MAAM,CADK;QACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;KACvC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"6923704418-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4331635807-/*@internal*/ const myGlob = 20;","15501672357-export const x = 10;\nexport class normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nexport namespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ export class internalC {}\n/*@internal*/ export function internalfoo() {}\n/*@internal*/ export namespace internalNamespace { export class someClass {} }\n/*@internal*/ export namespace internalOther.something { export class someClass {} }\n/*@internal*/ export import internalImport = internalNamespace.someClass;\n/*@internal*/ export type internalType = internalC;\n/*@internal*/ export const internalConst = 10;\n/*@internal*/ export enum internalEnum { a, b, c }console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4306,"kind":"text"}],"mapHash":"13458659400-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-27362126790-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":27,"end":104,"kind":"text"},{"pos":104,"end":225,"kind":"internal"},{"pos":226,"end":263,"kind":"text"},{"pos":263,"end":713,"kind":"internal"},{"pos":714,"end":720,"kind":"text"},{"pos":720,"end":1191,"kind":"internal"},{"pos":1192,"end":1278,"kind":"text"}],"mapHash":"-20111650778-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAhC,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;QACN,IAAI,CAAC,IACM,MAAM,CADK;QACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;KACvC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"-60625246569-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4331635807-/*@internal*/ const myGlob = 20;","15501672357-export const x = 10;\nexport class normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nexport namespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ export class internalC {}\n/*@internal*/ export function internalfoo() {}\n/*@internal*/ export namespace internalNamespace { export class someClass {} }\n/*@internal*/ export namespace internalOther.something { export class someClass {} }\n/*@internal*/ export import internalImport = internalNamespace.someClass;\n/*@internal*/ export type internalType = internalC;\n/*@internal*/ export const internalConst = 10;\n/*@internal*/ export enum internalEnum { a, b, c }console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/lib/module.js
 ----------------------------------------------------------------------
-text: (0-4411)
+text: (0-4306)
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -8580,25 +8596,25 @@ File:: /src/lib/module.d.ts
 internal: (0-26)
 declare const myGlob = 20;
 ----------------------------------------------------------------------
-text: (28-108)
+text: (27-104)
 declare module "file1" {
     export const x = 10;
     export class normalC {
 
 ----------------------------------------------------------------------
-internal: (108-233)
+internal: (104-225)
         constructor();
         prop: string;
         method(): void;
         get c(): number;
         set c(val: number);
 ----------------------------------------------------------------------
-text: (235-274)
+text: (226-263)
     }
     export namespace normalN {
 
 ----------------------------------------------------------------------
-internal: (274-742)
+internal: (263-713)
         class C {
         }
         function foo(): void;
@@ -8619,11 +8635,11 @@ internal: (274-742)
             c = 2
         }
 ----------------------------------------------------------------------
-text: (744-751)
+text: (714-720)
     }
 
 ----------------------------------------------------------------------
-internal: (751-1240)
+internal: (720-1191)
     export class internalC {
     }
     export function internalfoo(): void;
@@ -8644,7 +8660,7 @@ internal: (751-1240)
         c = 2
     }
 ----------------------------------------------------------------------
-text: (1242-1333)
+text: (1192-1278)
 }
 declare module "file2" {
     export const y = 20;
@@ -8667,11 +8683,11 @@ declare const globalConst = 10;
       "sections": [
         {
           "pos": 0,
-          "end": 4411,
+          "end": 4306,
           "kind": "text"
         }
       ],
-      "hash": "-60704068049-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map",
+      "hash": "-27362126790-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map",
       "mapHash": "13458659400-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
@@ -8682,42 +8698,42 @@ declare const globalConst = 10;
           "kind": "internal"
         },
         {
-          "pos": 28,
-          "end": 108,
+          "pos": 27,
+          "end": 104,
           "kind": "text"
         },
         {
-          "pos": 108,
-          "end": 233,
+          "pos": 104,
+          "end": 225,
           "kind": "internal"
         },
         {
-          "pos": 235,
-          "end": 274,
+          "pos": 226,
+          "end": 263,
           "kind": "text"
         },
         {
-          "pos": 274,
-          "end": 742,
+          "pos": 263,
+          "end": 713,
           "kind": "internal"
         },
         {
-          "pos": 744,
-          "end": 751,
+          "pos": 714,
+          "end": 720,
           "kind": "text"
         },
         {
-          "pos": 751,
-          "end": 1240,
+          "pos": 720,
+          "end": 1191,
           "kind": "internal"
         },
         {
-          "pos": 1242,
-          "end": 1333,
+          "pos": 1192,
+          "end": 1278,
           "kind": "text"
         }
       ],
-      "hash": "6923704418-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "-60625246569-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "-20111650778-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAhC,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IACpB,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;QACN,IAAI,CAAC,IACM,MAAM,CADK;QACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;KACvC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}"
     }
   },
@@ -8736,6 +8752,20 @@ declare const globalConst = 10;
       "./file2.ts": "-13729954175-export const y = 20;",
       "./global.ts": "1028229885-const globalConst = 10;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./file0.ts",
+          "./file1.ts",
+          "./file2.ts",
+          "./global.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -8745,11 +8775,11 @@ declare const globalConst = 10;
       "strict": false,
       "target": 1
     },
-    "outSignature": "16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "outSignature": "-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 13737
+  "size": 13325
 }
 
 
@@ -8852,7 +8882,7 @@ sourceFile:../lib/file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ prop: string;
@@ -9142,7 +9172,7 @@ sourceFile:../lib/file0.ts
 6 >                        ^^^
 7 >                           ^^
 8 >                             ^
-9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >/*@internal*/
 3 >              
@@ -9177,7 +9207,7 @@ sourceFile:../lib/file1.ts
 6 >                           ^^^
 7 >                              ^^
 8 >                                ^
-9 >                                 ^^^^^^^^^^^^^^->
+9 >                                 ^^^^^^^^^^^^^->
 1->
 2 >    /*@internal*/
 3 >                  export const 
@@ -9197,7 +9227,7 @@ sourceFile:../lib/file1.ts
 ---
 >>>    var normalC = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 1->Emitted(7, 5) Source(2, 1) + SourceIndex(1)
@@ -9217,7 +9247,7 @@ sourceFile:../lib/file1.ts
 >>>        }
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >        }
 1 >Emitted(9, 9) Source(3, 35) + SourceIndex(1)
@@ -9252,7 +9282,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 3 >                              ^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                    ^^^^^^^->
+4 >                                                    ^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >        get 
@@ -9318,7 +9348,7 @@ sourceFile:../lib/file1.ts
 >>>            configurable: true
 >>>        });
 1 >^^^^^^^^^^^
-2 >           ^^^^^^^^^^^^^->
+2 >           ^^^^^^^^^^^^->
 1 >
 1 >Emitted(16, 12) Source(6, 41) + SourceIndex(1)
 ---
@@ -9337,7 +9367,7 @@ sourceFile:../lib/file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -9366,7 +9396,7 @@ sourceFile:../lib/file1.ts
 2 >    ^^^^
 3 >        ^^^^^^^
 4 >               ^
-5 >                ^^^^^^^^^^->
+5 >                ^^^^^^^^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ prop: string;
@@ -9396,7 +9426,7 @@ sourceFile:../lib/file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^
-4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    export namespace 
 3 >               normalN
@@ -9408,7 +9438,7 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^
 3 >                     ^
-4 >                      ^^^^^->
+4 >                      ^^^^->
 1-> {
   >    
 2 >        /*@internal*/
@@ -9419,14 +9449,14 @@ sourceFile:../lib/file1.ts
 ---
 >>>            function C() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(23, 13) Source(10, 19) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^->
+3 >             ^^^^^^^^->
 1->export class C { 
 2 >            }
 1->Emitted(24, 13) Source(10, 36) + SourceIndex(1)
@@ -9445,7 +9475,7 @@ sourceFile:../lib/file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^->
+5 >             ^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -9460,7 +9490,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^^^^^^
 3 >                 ^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^^^^^^^^^^->
+5 >                      ^^^^^^^^^^^^^^^^^^->
 1->
 2 >        C
 3 >                  { }
@@ -9499,7 +9529,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^^^^^^->
+5 >                          ^^^^^^^^^^^^^^->
 1 >
 2 >        foo
 3 >                   () {}
@@ -9534,7 +9564,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^->
 1 >
 2 >        export namespace 
 3 >                   someNamespace
@@ -9544,20 +9574,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>            var C = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(32, 13) Source(12, 52) + SourceIndex(1)
 ---
 >>>                function C() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(33, 17) Source(12, 52) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^->
+3 >                 ^^^^^^^^->
 1->export class C {
 2 >                }
 1->Emitted(34, 17) Source(12, 68) + SourceIndex(1)
@@ -9576,7 +9606,7 @@ sourceFile:../lib/file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -9591,7 +9621,7 @@ sourceFile:../lib/file1.ts
 2 >            ^^^^^^^^^^^^^^^
 3 >                           ^^^^
 4 >                               ^
-5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            C
 3 >                            {}
@@ -9667,7 +9697,7 @@ sourceFile:../lib/file1.ts
 2 >            ^^^^
 3 >                ^^^^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^->
+5 >                          ^^^^^^^^^->
 1 >.
 2 >            
 3 >                something
@@ -9681,7 +9711,7 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            
 3 >                       something
@@ -9691,20 +9721,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>                var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(43, 17) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    function someClass() {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^->
+2 >                    ^->
 1->
 1->Emitted(44, 21) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    }
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
-3 >                     ^^^^^^^^^^^^^^^^^->
+3 >                     ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                    }
 1->Emitted(45, 21) Source(13, 82) + SourceIndex(1)
@@ -9723,7 +9753,7 @@ sourceFile:../lib/file1.ts
 2 >                ^
 3 >                 
 4 >                 ^^^^
-5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >                }
 3 >                 
@@ -9738,7 +9768,7 @@ sourceFile:../lib/file1.ts
 2 >                ^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >                someClass
 3 >                                    {}
@@ -9883,7 +9913,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^
-4 >                               ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                               ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        export enum 
 3 >                   internalEnum
@@ -9895,7 +9925,6 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
 1-> { 
 2 >            a
 3 >                                                     
@@ -9904,26 +9933,25 @@ sourceFile:../lib/file1.ts
 3 >Emitted(55, 55) Source(17, 47) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
-1->, 
+1 >, 
 2 >            b
 3 >                                                     
-1->Emitted(56, 13) Source(17, 49) + SourceIndex(1)
+1 >Emitted(56, 13) Source(17, 49) + SourceIndex(1)
 2 >Emitted(56, 54) Source(17, 50) + SourceIndex(1)
 3 >Emitted(56, 55) Source(17, 50) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >            c
 3 >                                                     
-1->Emitted(57, 13) Source(17, 52) + SourceIndex(1)
+1 >Emitted(57, 13) Source(17, 52) + SourceIndex(1)
 2 >Emitted(57, 54) Source(17, 53) + SourceIndex(1)
 3 >Emitted(57, 55) Source(17, 53) + SourceIndex(1)
 ---
@@ -9966,7 +9994,7 @@ sourceFile:../lib/file1.ts
 7 >                                ^^^^^
 8 >                                     ^^^^^^^^^^^^^^^
 9 >                                                    ^^^^^^^^
-10>                                                            ^^^->
+10>                                                            ^^->
 1 >
   >
 2 >    }
@@ -10000,7 +10028,7 @@ sourceFile:../lib/file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^
-4 >                  ^^^^^^^^^^^^^->
+4 >                  ^^^^^^^^^^^^->
 1->
   >
 2 >    /*@internal*/
@@ -10011,14 +10039,14 @@ sourceFile:../lib/file1.ts
 ---
 >>>        function internalC() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(61, 9) Source(19, 15) + SourceIndex(1)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^->
 1->export class internalC {
 2 >        }
 1->Emitted(62, 9) Source(19, 39) + SourceIndex(1)
@@ -10037,7 +10065,7 @@ sourceFile:../lib/file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -10050,7 +10078,7 @@ sourceFile:../lib/file1.ts
 >>>    exports.internalC = internalC;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                  ^^^^^^^^^^^->
+3 >                                  ^^^^^^^^^^->
 1->
 2 >    internalC
 1->Emitted(65, 5) Source(19, 28) + SourceIndex(1)
@@ -10083,7 +10111,7 @@ sourceFile:../lib/file1.ts
 >>>    exports.internalfoo = internalfoo;
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                      ^^^->
+3 >                                      ^^->
 1 >
 2 >    export function internalfoo() {}
 1 >Emitted(67, 5) Source(20, 15) + SourceIndex(1)
@@ -10114,7 +10142,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export namespace 
 3 >               internalNamespace
@@ -10124,20 +10152,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>        var someClass = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(70, 9) Source(21, 52) + SourceIndex(1)
 ---
 >>>            function someClass() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(71, 13) Source(21, 52) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^^^^^^^^^->
+3 >             ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >            }
 1->Emitted(72, 13) Source(21, 76) + SourceIndex(1)
@@ -10156,7 +10184,7 @@ sourceFile:../lib/file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -10171,7 +10199,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        someClass
 3 >                                    {}
@@ -10247,7 +10275,7 @@ sourceFile:../lib/file1.ts
 2 >        ^^^^
 3 >            ^^^^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^->
+5 >                      ^^^^^^^^^->
 1 >.
 2 >        
 3 >            something
@@ -10261,7 +10289,7 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   something
@@ -10271,20 +10299,20 @@ sourceFile:../lib/file1.ts
 ---
 >>>            var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(81, 13) Source(22, 58) + SourceIndex(1)
 ---
 >>>                function someClass() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(82, 17) Source(22, 58) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                }
 1->Emitted(83, 17) Source(22, 82) + SourceIndex(1)
@@ -10303,7 +10331,7 @@ sourceFile:../lib/file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -10318,7 +10346,7 @@ sourceFile:../lib/file1.ts
 2 >            ^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            someClass
 3 >                                {}
@@ -10469,7 +10497,7 @@ sourceFile:../lib/file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export enum 
 3 >               internalEnum
@@ -10481,7 +10509,6 @@ sourceFile:../lib/file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
 1-> { 
 2 >        a
 3 >                                                 
@@ -10490,26 +10517,25 @@ sourceFile:../lib/file1.ts
 3 >Emitted(93, 51) Source(26, 43) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
-1->, 
+1 >, 
 2 >        b
 3 >                                                 
-1->Emitted(94, 9) Source(26, 45) + SourceIndex(1)
+1 >Emitted(94, 9) Source(26, 45) + SourceIndex(1)
 2 >Emitted(94, 50) Source(26, 46) + SourceIndex(1)
 3 >Emitted(94, 51) Source(26, 46) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >        c
 3 >                                                 
-1->Emitted(95, 9) Source(26, 48) + SourceIndex(1)
+1 >Emitted(95, 9) Source(26, 48) + SourceIndex(1)
 2 >Emitted(95, 50) Source(26, 49) + SourceIndex(1)
 3 >Emitted(95, 51) Source(26, 49) + SourceIndex(1)
 ---
@@ -10609,7 +10635,7 @@ sourceFile:../lib/global.ts
 4 >               ^^^
 5 >                  ^^
 6 >                    ^
-7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    globalConst
@@ -10680,15 +10706,15 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4425,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4425,"kind":"text"}]},{"pos":4425,"end":4651,"kind":"text"}],"mapHash":"59653473212-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-28060741068-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    /*@internal*/ exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n});\r\nvar myVar = 30;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":191,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":191,"kind":"text"}]},{"pos":191,"end":273,"kind":"text"}],"mapHash":"-49236694807-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";IACA,MAAM,OAAO,OAAO;KAMnB;IACD,MAAM,WAAW,OAAO,CAAC;KASxB;;;ICjBD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}","hash":"20887384567-declare module \"file1\" {\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","-2588783191-export const z = 30;\r\nimport { x } from \"file1\";","1463681686-const myVar = 30;"],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"22164052496-declare module \"file1\" {\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4320,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4320,"kind":"text"}]},{"pos":4320,"end":4539,"kind":"text"}],"mapHash":"59653473212-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,aAAa,CAAC,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAhC,aAAa,CAAc,QAAA,CAAC,GAAG,EAAE,CAAC;IAClC;QACI,aAAa,CAAC;QAAgB,CAAC;QAE/B,aAAa,CAAC,wBAAM,GAAN,cAAW,CAAC;QACZ,sBAAI,sBAAC;YAAnB,aAAa,MAAC,cAAU,OAAO,EAAE,CAAC,CAAC,CAAC;YACpC,aAAa,MAAC,UAAM,GAAW,IAAI,CAAC;;;WADA;QAExC,cAAC;IAAD,CAAC,AAND,IAMC;IANY,0BAAO;IAOpB,IAAiB,OAAO,CASvB;IATD,WAAiB,OAAO;QACpB,aAAa,CAAC;YAAA;YAAiB,CAAC;YAAD,QAAC;QAAD,CAAC,AAAlB,IAAkB;QAAL,SAAC,IAAI,CAAA;QAChC,aAAa,CAAC,SAAgB,GAAG,KAAI,CAAC;QAAR,WAAG,MAAK,CAAA;QACtC,aAAa,CAAC,IAAiB,aAAa,CAAsB;QAApD,WAAiB,aAAa;YAAG;gBAAA;gBAAgB,CAAC;gBAAD,QAAC;YAAD,CAAC,AAAjB,IAAiB;YAAJ,eAAC,IAAG,CAAA;QAAC,CAAC,EAAnC,aAAa,GAAb,qBAAa,KAAb,qBAAa,QAAsB;QAClE,aAAa,CAAC,IAAiB,SAAS,CAAwC;QAAlE,WAAiB,SAAS;YAAC,IAAA,SAAS,CAA8B;YAAvC,WAAA,SAAS;gBAAG;oBAAA;oBAAwB,CAAC;oBAAD,gBAAC;gBAAD,CAAC,AAAzB,IAAyB;gBAAZ,mBAAS,YAAG,CAAA;YAAC,CAAC,EAAvC,SAAS,GAAT,mBAAS,KAAT,mBAAS,QAA8B;QAAD,CAAC,EAAjD,SAAS,GAAT,iBAAS,KAAT,iBAAS,QAAwC;QAChF,aAAa,CAAe,kBAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAEzD,aAAa,CAAc,qBAAa,GAAG,EAAE,CAAC;QAC9C,aAAa,CAAC,IAAY,YAAwB;QAApC,WAAY,YAAY;YAAG,yCAAC,CAAA;YAAE,yCAAC,CAAA;YAAE,yCAAC,CAAA;QAAC,CAAC,EAAxB,YAAY,GAAZ,oBAAY,KAAZ,oBAAY,QAAY;IACtD,CAAC,EATgB,OAAO,GAAP,eAAO,KAAP,eAAO,QASvB;IACD,aAAa,CAAC;QAAA;QAAwB,CAAC;QAAD,gBAAC;IAAD,CAAC,AAAzB,IAAyB;IAAZ,8BAAS;IACpC,aAAa,CAAC,SAAgB,WAAW,KAAI,CAAC;IAAhC,kCAAgC;IAC9C,aAAa,CAAC,IAAiB,iBAAiB,CAA8B;IAAhE,WAAiB,iBAAiB;QAAG;YAAA;YAAwB,CAAC;YAAD,gBAAC;QAAD,CAAC,AAAzB,IAAyB;QAAZ,2BAAS,YAAG,CAAA;IAAC,CAAC,EAA/C,iBAAiB,GAAjB,yBAAiB,KAAjB,yBAAiB,QAA8B;IAC9E,aAAa,CAAC,IAAiB,aAAa,CAAwC;IAAtE,WAAiB,aAAa;QAAC,IAAA,SAAS,CAA8B;QAAvC,WAAA,SAAS;YAAG;gBAAA;gBAAwB,CAAC;gBAAD,gBAAC;YAAD,CAAC,AAAzB,IAAyB;YAAZ,mBAAS,YAAG,CAAA;QAAC,CAAC,EAAvC,SAAS,GAAT,uBAAS,KAAT,uBAAS,QAA8B;IAAD,CAAC,EAArD,aAAa,GAAb,qBAAa,KAAb,qBAAa,QAAwC;IACpF,aAAa,CAAe,QAAA,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAEzE,aAAa,CAAc,QAAA,aAAa,GAAG,EAAE,CAAC;IAC9C,aAAa,CAAC,IAAY,YAAwB;IAApC,WAAY,YAAY;QAAG,yCAAC,CAAA;QAAE,yCAAC,CAAA;QAAE,yCAAC,CAAA;IAAC,CAAC,EAAxB,YAAY,GAAZ,oBAAY,KAAZ,oBAAY,QAAY;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICzBpD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC\"}","hash":"3786495780-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    /*@internal*/ exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n});\nvar myVar = 30;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":181,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":181,"kind":"text"}]},{"pos":181,"end":259,"kind":"text"}],"mapHash":"-49236694807-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";IACA,MAAM,OAAO,OAAO;KAMnB;IACD,MAAM,WAAW,OAAO,CAAC;KASxB;;;ICjBD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}","hash":"4211667041-declare module \"file1\" {\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","-2588783191-export const z = 30;\r\nimport { x } from \"file1\";","1463681686-const myVar = 30;"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"-10240160902-declare module \"file1\" {\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-prepend: (0-4425):: ../lib/module.js texts:: 1
+prepend: (0-4320):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-4425)
+text: (0-4320)
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -10796,7 +10822,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (4425-4651)
+text: (4320-4539)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -10809,9 +10835,9 @@ var myVar = 30;
 ======================================================================
 File:: /src/app/module.d.ts
 ----------------------------------------------------------------------
-prepend: (0-191):: ../lib/module.d.ts texts:: 1
+prepend: (0-181):: ../lib/module.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-191)
+text: (0-181)
 declare module "file1" {
     export class normalC {
     }
@@ -10824,7 +10850,7 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (191-273)
+text: (181-259)
 declare module "file3" {
     export const z = 30;
 }
@@ -10844,48 +10870,48 @@ declare const myVar = 30;
       "sections": [
         {
           "pos": 0,
-          "end": 4425,
+          "end": 4320,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
               "pos": 0,
-              "end": 4425,
+              "end": 4320,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 4425,
-          "end": 4651,
+          "pos": 4320,
+          "end": 4539,
           "kind": "text"
         }
       ],
-      "hash": "-28060741068-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    /*@internal*/ exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n});\r\nvar myVar = 30;\r\n//# sourceMappingURL=module.js.map",
+      "hash": "3786495780-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    /*@internal*/ exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n});\nvar myVar = 30;\n//# sourceMappingURL=module.js.map",
       "mapHash": "59653473212-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 191,
+          "end": 181,
           "kind": "prepend",
           "data": "../lib/module.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 191,
+              "end": 181,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 191,
-          "end": 273,
+          "pos": 181,
+          "end": 259,
           "kind": "text"
         }
       ],
-      "hash": "20887384567-declare module \"file1\" {\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "4211667041-declare module \"file1\" {\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "-49236694807-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";IACA,MAAM,OAAO,OAAO;KAMnB;IACD,MAAM,WAAW,OAAO,CAAC;KASxB;;;ICjBD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}"
     }
   },
@@ -10898,10 +10924,20 @@ declare const myVar = 30;
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../lib/module.d.ts": "16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+      "../lib/module.d.ts": "-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
       "./file3.ts": "-2588783191-export const z = 30;\r\nimport { x } from \"file1\";",
       "./file4.ts": "1463681686-const myVar = 30;"
     },
+    "root": [
+      [
+        3,
+        "./file3.ts"
+      ],
+      [
+        4,
+        "./file4.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -10912,11 +10948,11 @@ declare const myVar = 30;
       "stripInternal": true,
       "target": 1
     },
-    "outSignature": "22164052496-declare module \"file1\" {\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n",
+    "outSignature": "-10240160902-declare module \"file1\" {\n    export class normalC {\n    }\n    export namespace normalN {\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 11252
+  "size": 10874
 }
 
 //// [/src/lib/module.d.ts.map]
@@ -10966,7 +11002,7 @@ sourceFile:file1.ts
 5 >                 ^
 6 >                  ^^^^^
 7 >                       ^
-8 >                        ^^^->
+8 >                        ^^->
 1 >/*@internal*/ 
 2 >    export
 3 >           
@@ -11004,7 +11040,7 @@ sourceFile:file1.ts
 3 >            ^^
 4 >              ^^^^^^
 5 >                    ^
-6 >                     ^^^->
+6 >                     ^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ 
@@ -11021,7 +11057,7 @@ sourceFile:file1.ts
 >>>        method(): void;
 1->^^^^^^^^
 2 >        ^^^^^^
-3 >              ^^^^^^^^^^^->
+3 >              ^^^^^^^^^^->
 1->
   >    /*@internal*/ 
 2 >        method
@@ -11035,7 +11071,7 @@ sourceFile:file1.ts
 4 >             ^^^^
 5 >                 ^^^^^^
 6 >                       ^
-7 >                        ^^^^->
+7 >                        ^^^->
 1->() { }
   >    /*@internal*/ 
 2 >        get 
@@ -11077,7 +11113,7 @@ sourceFile:file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(10, 6) Source(8, 2) + SourceIndex(1)
@@ -11114,7 +11150,7 @@ sourceFile:file1.ts
 ---
 >>>        }
 1 >^^^^^^^^^
-2 >         ^^^^^^^^^^^^^^^^^^^^^->
+2 >         ^^^^^^^^^^^^^^^^^^^^->
 1 > { }
 1 >Emitted(13, 10) Source(10, 37) + SourceIndex(1)
 ---
@@ -11123,7 +11159,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^
 3 >                 ^^^
 4 >                    ^^^^^^^^^
-5 >                             ^^^^^->
+5 >                             ^^^^->
 1->
   >    /*@internal*/ 
 2 >        export function 
@@ -11167,7 +11203,7 @@ sourceFile:file1.ts
 ---
 >>>        }
 1 >^^^^^^^^^
-2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(18, 10) Source(12, 71) + SourceIndex(1)
 ---
@@ -11210,7 +11246,7 @@ sourceFile:file1.ts
 ---
 >>>        }
 1 >^^^^^^^^^
-2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(22, 10) Source(13, 85) + SourceIndex(1)
 ---
@@ -11299,7 +11335,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^^^^^
 2 >            ^
 3 >             ^^^^
-4 >                 ^^->
+4 >                 ^->
 1 > { 
 2 >            a
 3 >             
@@ -11311,7 +11347,6 @@ sourceFile:file1.ts
 1->^^^^^^^^^^^^
 2 >            ^
 3 >             ^^^^
-4 >                 ^->
 1->, 
 2 >            b
 3 >             
@@ -11320,13 +11355,13 @@ sourceFile:file1.ts
 3 >Emitted(28, 18) Source(17, 50) + SourceIndex(1)
 ---
 >>>            c = 2
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^
 3 >             ^^^^
-1->, 
+1 >, 
 2 >            c
 3 >             
-1->Emitted(29, 13) Source(17, 52) + SourceIndex(1)
+1 >Emitted(29, 13) Source(17, 52) + SourceIndex(1)
 2 >Emitted(29, 14) Source(17, 53) + SourceIndex(1)
 3 >Emitted(29, 18) Source(17, 53) + SourceIndex(1)
 ---
@@ -11337,7 +11372,7 @@ sourceFile:file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(31, 6) Source(18, 2) + SourceIndex(1)
@@ -11359,7 +11394,7 @@ sourceFile:file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > {}
 1 >Emitted(33, 6) Source(19, 40) + SourceIndex(1)
 ---
@@ -11369,7 +11404,6 @@ sourceFile:file1.ts
 3 >          ^^^^^^^^^^
 4 >                    ^^^^^^^^^^^
 5 >                               ^^^^^^^^^
-6 >                                        ^->
 1->
   >/*@internal*/ 
 2 >    export
@@ -11383,18 +11417,18 @@ sourceFile:file1.ts
 5 >Emitted(34, 41) Source(20, 47) + SourceIndex(1)
 ---
 >>>    export namespace internalNamespace {
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^
 3 >          ^^^^^^^^^^^
 4 >                     ^^^^^^^^^^^^^^^^^
 5 >                                      ^
-1->
+1 >
   >/*@internal*/ 
 2 >    export
 3 >           namespace 
 4 >                     internalNamespace
 5 >                                       
-1->Emitted(35, 5) Source(21, 15) + SourceIndex(1)
+1 >Emitted(35, 5) Source(21, 15) + SourceIndex(1)
 2 >Emitted(35, 11) Source(21, 21) + SourceIndex(1)
 3 >Emitted(35, 22) Source(21, 32) + SourceIndex(1)
 4 >Emitted(35, 39) Source(21, 49) + SourceIndex(1)
@@ -11418,7 +11452,7 @@ sourceFile:file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(38, 6) Source(21, 79) + SourceIndex(1)
 ---
@@ -11464,7 +11498,7 @@ sourceFile:file1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(42, 6) Source(22, 85) + SourceIndex(1)
 ---
@@ -11565,7 +11599,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^
-4 >             ^^->
+4 >             ^->
 1 > { 
 2 >        a
 3 >         
@@ -11577,7 +11611,6 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^
 3 >         ^^^^
-4 >             ^->
 1->, 
 2 >        b
 3 >         
@@ -11586,13 +11619,13 @@ sourceFile:file1.ts
 3 >Emitted(48, 14) Source(26, 46) + SourceIndex(1)
 ---
 >>>        c = 2
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^
-1->, 
+1 >, 
 2 >        c
 3 >         
-1->Emitted(49, 9) Source(26, 48) + SourceIndex(1)
+1 >Emitted(49, 9) Source(26, 48) + SourceIndex(1)
 2 >Emitted(49, 10) Source(26, 49) + SourceIndex(1)
 3 >Emitted(49, 14) Source(26, 49) + SourceIndex(1)
 ---
@@ -11789,7 +11822,7 @@ sourceFile:file0.ts
 6 >                        ^^^
 7 >                           ^^
 8 >                             ^
-9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >/*@internal*/
 3 >              
@@ -11824,7 +11857,7 @@ sourceFile:file1.ts
 6 >                           ^^^
 7 >                              ^^
 8 >                                ^
-9 >                                 ^^^^^^^^^^^^^^->
+9 >                                 ^^^^^^^^^^^^^->
 1->
 2 >    /*@internal*/
 3 >                  export const 
@@ -11844,7 +11877,7 @@ sourceFile:file1.ts
 ---
 >>>    var normalC = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 1->Emitted(7, 5) Source(2, 1) + SourceIndex(1)
@@ -11864,7 +11897,7 @@ sourceFile:file1.ts
 >>>        }
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >        }
 1 >Emitted(9, 9) Source(3, 35) + SourceIndex(1)
@@ -11899,7 +11932,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 3 >                              ^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                    ^^^^^^^->
+4 >                                                    ^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >        get 
@@ -11965,7 +11998,7 @@ sourceFile:file1.ts
 >>>            configurable: true
 >>>        });
 1 >^^^^^^^^^^^
-2 >           ^^^^^^^^^^^^^->
+2 >           ^^^^^^^^^^^^->
 1 >
 1 >Emitted(16, 12) Source(6, 41) + SourceIndex(1)
 ---
@@ -11984,7 +12017,7 @@ sourceFile:file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -12013,7 +12046,7 @@ sourceFile:file1.ts
 2 >    ^^^^
 3 >        ^^^^^^^
 4 >               ^
-5 >                ^^^^^^^^^^->
+5 >                ^^^^^^^^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ prop: string;
@@ -12043,7 +12076,7 @@ sourceFile:file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^
-4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    export namespace 
 3 >               normalN
@@ -12055,7 +12088,7 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^
 3 >                     ^
-4 >                      ^^^^^->
+4 >                      ^^^^->
 1-> {
   >    
 2 >        /*@internal*/
@@ -12066,14 +12099,14 @@ sourceFile:file1.ts
 ---
 >>>            function C() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(23, 13) Source(10, 19) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^->
+3 >             ^^^^^^^^->
 1->export class C { 
 2 >            }
 1->Emitted(24, 13) Source(10, 36) + SourceIndex(1)
@@ -12092,7 +12125,7 @@ sourceFile:file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^->
+5 >             ^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -12107,7 +12140,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^
 3 >                 ^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^^^^^^^^^^->
+5 >                      ^^^^^^^^^^^^^^^^^^->
 1->
 2 >        C
 3 >                  { }
@@ -12146,7 +12179,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^^^^^^->
+5 >                          ^^^^^^^^^^^^^^->
 1 >
 2 >        foo
 3 >                   () {}
@@ -12181,7 +12214,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^->
 1 >
 2 >        export namespace 
 3 >                   someNamespace
@@ -12191,20 +12224,20 @@ sourceFile:file1.ts
 ---
 >>>            var C = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(32, 13) Source(12, 52) + SourceIndex(1)
 ---
 >>>                function C() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(33, 17) Source(12, 52) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^->
+3 >                 ^^^^^^^^->
 1->export class C {
 2 >                }
 1->Emitted(34, 17) Source(12, 68) + SourceIndex(1)
@@ -12223,7 +12256,7 @@ sourceFile:file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -12238,7 +12271,7 @@ sourceFile:file1.ts
 2 >            ^^^^^^^^^^^^^^^
 3 >                           ^^^^
 4 >                               ^
-5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            C
 3 >                            {}
@@ -12314,7 +12347,7 @@ sourceFile:file1.ts
 2 >            ^^^^
 3 >                ^^^^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^->
+5 >                          ^^^^^^^^^->
 1 >.
 2 >            
 3 >                something
@@ -12328,7 +12361,7 @@ sourceFile:file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            
 3 >                       something
@@ -12338,20 +12371,20 @@ sourceFile:file1.ts
 ---
 >>>                var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(43, 17) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    function someClass() {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^->
+2 >                    ^->
 1->
 1->Emitted(44, 21) Source(13, 58) + SourceIndex(1)
 ---
 >>>                    }
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
-3 >                     ^^^^^^^^^^^^^^^^^->
+3 >                     ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                    }
 1->Emitted(45, 21) Source(13, 82) + SourceIndex(1)
@@ -12370,7 +12403,7 @@ sourceFile:file1.ts
 2 >                ^
 3 >                 
 4 >                 ^^^^
-5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >                }
 3 >                 
@@ -12385,7 +12418,7 @@ sourceFile:file1.ts
 2 >                ^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >                someClass
 3 >                                    {}
@@ -12530,7 +12563,7 @@ sourceFile:file1.ts
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^
-4 >                               ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                               ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        export enum 
 3 >                   internalEnum
@@ -12542,7 +12575,6 @@ sourceFile:file1.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
 1-> { 
 2 >            a
 3 >                                                     
@@ -12551,26 +12583,25 @@ sourceFile:file1.ts
 3 >Emitted(55, 55) Source(17, 47) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^->
-1->, 
+1 >, 
 2 >            b
 3 >                                                     
-1->Emitted(56, 13) Source(17, 49) + SourceIndex(1)
+1 >Emitted(56, 13) Source(17, 49) + SourceIndex(1)
 2 >Emitted(56, 54) Source(17, 50) + SourceIndex(1)
 3 >Emitted(56, 55) Source(17, 50) + SourceIndex(1)
 ---
 >>>            internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                     ^
-4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >            c
 3 >                                                     
-1->Emitted(57, 13) Source(17, 52) + SourceIndex(1)
+1 >Emitted(57, 13) Source(17, 52) + SourceIndex(1)
 2 >Emitted(57, 54) Source(17, 53) + SourceIndex(1)
 3 >Emitted(57, 55) Source(17, 53) + SourceIndex(1)
 ---
@@ -12613,7 +12644,7 @@ sourceFile:file1.ts
 7 >                                ^^^^^
 8 >                                     ^^^^^^^^^^^^^^^
 9 >                                                    ^^^^^^^^
-10>                                                            ^^^->
+10>                                                            ^^->
 1 >
   >
 2 >    }
@@ -12647,7 +12678,7 @@ sourceFile:file1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^
-4 >                  ^^^^^^^^^^^^^->
+4 >                  ^^^^^^^^^^^^->
 1->
   >
 2 >    /*@internal*/
@@ -12658,14 +12689,14 @@ sourceFile:file1.ts
 ---
 >>>        function internalC() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(61, 9) Source(19, 15) + SourceIndex(1)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^->
 1->export class internalC {
 2 >        }
 1->Emitted(62, 9) Source(19, 39) + SourceIndex(1)
@@ -12684,7 +12715,7 @@ sourceFile:file1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -12697,7 +12728,7 @@ sourceFile:file1.ts
 >>>    exports.internalC = internalC;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                  ^^^^^^^^^^^->
+3 >                                  ^^^^^^^^^^->
 1->
 2 >    internalC
 1->Emitted(65, 5) Source(19, 28) + SourceIndex(1)
@@ -12730,7 +12761,7 @@ sourceFile:file1.ts
 >>>    exports.internalfoo = internalfoo;
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                      ^^^->
+3 >                                      ^^->
 1 >
 2 >    export function internalfoo() {}
 1 >Emitted(67, 5) Source(20, 15) + SourceIndex(1)
@@ -12761,7 +12792,7 @@ sourceFile:file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export namespace 
 3 >               internalNamespace
@@ -12771,20 +12802,20 @@ sourceFile:file1.ts
 ---
 >>>        var someClass = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(70, 9) Source(21, 52) + SourceIndex(1)
 ---
 >>>            function someClass() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(71, 13) Source(21, 52) + SourceIndex(1)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^^^^^^^^^->
+3 >             ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >            }
 1->Emitted(72, 13) Source(21, 76) + SourceIndex(1)
@@ -12803,7 +12834,7 @@ sourceFile:file1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -12818,7 +12849,7 @@ sourceFile:file1.ts
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                   ^^^^^^^^^^^^
 4 >                                               ^
-5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        someClass
 3 >                                    {}
@@ -12894,7 +12925,7 @@ sourceFile:file1.ts
 2 >        ^^^^
 3 >            ^^^^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^->
+5 >                      ^^^^^^^^^->
 1 >.
 2 >        
 3 >            something
@@ -12908,7 +12939,7 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   something
@@ -12918,20 +12949,20 @@ sourceFile:file1.ts
 ---
 >>>            var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(81, 13) Source(22, 58) + SourceIndex(1)
 ---
 >>>                function someClass() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(82, 17) Source(22, 58) + SourceIndex(1)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                }
 1->Emitted(83, 17) Source(22, 82) + SourceIndex(1)
@@ -12950,7 +12981,7 @@ sourceFile:file1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -12965,7 +12996,7 @@ sourceFile:file1.ts
 2 >            ^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            someClass
 3 >                                {}
@@ -13116,7 +13147,7 @@ sourceFile:file1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export enum 
 3 >               internalEnum
@@ -13128,7 +13159,6 @@ sourceFile:file1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
 1-> { 
 2 >        a
 3 >                                                 
@@ -13137,26 +13167,25 @@ sourceFile:file1.ts
 3 >Emitted(93, 51) Source(26, 43) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
-1->, 
+1 >, 
 2 >        b
 3 >                                                 
-1->Emitted(94, 9) Source(26, 45) + SourceIndex(1)
+1 >Emitted(94, 9) Source(26, 45) + SourceIndex(1)
 2 >Emitted(94, 50) Source(26, 46) + SourceIndex(1)
 3 >Emitted(94, 51) Source(26, 46) + SourceIndex(1)
 ---
 >>>        internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >        c
 3 >                                                 
-1->Emitted(95, 9) Source(26, 48) + SourceIndex(1)
+1 >Emitted(95, 9) Source(26, 48) + SourceIndex(1)
 2 >Emitted(95, 50) Source(26, 49) + SourceIndex(1)
 3 >Emitted(95, 51) Source(26, 49) + SourceIndex(1)
 ---
@@ -13273,13 +13302,13 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4425,"kind":"text"}],"mapHash":"-54033237660-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-22692085506-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    /*@internal*/ exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":28,"end":54,"kind":"text"},{"pos":54,"end":78,"kind":"internal"},{"pos":80,"end":108,"kind":"text"},{"pos":108,"end":233,"kind":"internal"},{"pos":235,"end":274,"kind":"text"},{"pos":274,"end":742,"kind":"internal"},{"pos":744,"end":751,"kind":"text"},{"pos":751,"end":1240,"kind":"internal"},{"pos":1242,"end":1333,"kind":"text"}],"mapHash":"58024379814-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IAClC,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;QACN,IAAI,CAAC,IACM,MAAM,CADK;QACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;KACvC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"6923704418-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4331635807-/*@internal*/ const myGlob = 20;","40359149204-/*@internal*/ export const x = 10;\nexport class normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nexport namespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ export class internalC {}\n/*@internal*/ export function internalfoo() {}\n/*@internal*/ export namespace internalNamespace { export class someClass {} }\n/*@internal*/ export namespace internalOther.something { export class someClass {} }\n/*@internal*/ export import internalImport = internalNamespace.someClass;\n/*@internal*/ export type internalType = internalC;\n/*@internal*/ export const internalConst = 10;\n/*@internal*/ export enum internalEnum { a, b, c }console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4320,"kind":"text"}],"mapHash":"-54033237660-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-43417328183-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    /*@internal*/ exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":27,"end":52,"kind":"text"},{"pos":52,"end":76,"kind":"internal"},{"pos":77,"end":104,"kind":"text"},{"pos":104,"end":225,"kind":"internal"},{"pos":226,"end":263,"kind":"text"},{"pos":263,"end":713,"kind":"internal"},{"pos":714,"end":720,"kind":"text"},{"pos":720,"end":1191,"kind":"internal"},{"pos":1192,"end":1278,"kind":"text"}],"mapHash":"58024379814-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IAClC,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;QACN,IAAI,CAAC,IACM,MAAM,CADK;QACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;KACvC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"-60625246569-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4331635807-/*@internal*/ const myGlob = 20;","40359149204-/*@internal*/ export const x = 10;\nexport class normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nexport namespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ export class internalC {}\n/*@internal*/ export function internalfoo() {}\n/*@internal*/ export namespace internalNamespace { export class someClass {} }\n/*@internal*/ export namespace internalOther.something { export class someClass {} }\n/*@internal*/ export import internalImport = internalNamespace.someClass;\n/*@internal*/ export type internalType = internalC;\n/*@internal*/ export const internalConst = 10;\n/*@internal*/ export enum internalEnum { a, b, c }console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/lib/module.js
 ----------------------------------------------------------------------
-text: (0-4425)
+text: (0-4320)
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -13393,30 +13422,30 @@ File:: /src/lib/module.d.ts
 internal: (0-26)
 declare const myGlob = 20;
 ----------------------------------------------------------------------
-text: (28-54)
+text: (27-52)
 declare module "file1" {
 
 ----------------------------------------------------------------------
-internal: (54-78)
+internal: (52-76)
     export const x = 10;
 ----------------------------------------------------------------------
-text: (80-108)
+text: (77-104)
     export class normalC {
 
 ----------------------------------------------------------------------
-internal: (108-233)
+internal: (104-225)
         constructor();
         prop: string;
         method(): void;
         get c(): number;
         set c(val: number);
 ----------------------------------------------------------------------
-text: (235-274)
+text: (226-263)
     }
     export namespace normalN {
 
 ----------------------------------------------------------------------
-internal: (274-742)
+internal: (263-713)
         class C {
         }
         function foo(): void;
@@ -13437,11 +13466,11 @@ internal: (274-742)
             c = 2
         }
 ----------------------------------------------------------------------
-text: (744-751)
+text: (714-720)
     }
 
 ----------------------------------------------------------------------
-internal: (751-1240)
+internal: (720-1191)
     export class internalC {
     }
     export function internalfoo(): void;
@@ -13462,7 +13491,7 @@ internal: (751-1240)
         c = 2
     }
 ----------------------------------------------------------------------
-text: (1242-1333)
+text: (1192-1278)
 }
 declare module "file2" {
     export const y = 20;
@@ -13485,11 +13514,11 @@ declare const globalConst = 10;
       "sections": [
         {
           "pos": 0,
-          "end": 4425,
+          "end": 4320,
           "kind": "text"
         }
       ],
-      "hash": "-22692085506-/*@internal*/ var myGlob = 20;\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\r\n    /*@internal*/ exports.x = 10;\r\n    var normalC = /** @class */ (function () {\r\n        /*@internal*/ function normalC() {\r\n        }\r\n        /*@internal*/ normalC.prototype.method = function () { };\r\n        Object.defineProperty(normalC.prototype, \"c\", {\r\n            /*@internal*/ get: function () { return 10; },\r\n            /*@internal*/ set: function (val) { },\r\n            enumerable: false,\r\n            configurable: true\r\n        });\r\n        return normalC;\r\n    }());\r\n    exports.normalC = normalC;\r\n    var normalN;\r\n    (function (normalN) {\r\n        /*@internal*/ var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        normalN.C = C;\r\n        /*@internal*/ function foo() { }\r\n        normalN.foo = foo;\r\n        /*@internal*/ var someNamespace;\r\n        (function (someNamespace) {\r\n            var C = /** @class */ (function () {\r\n                function C() {\r\n                }\r\n                return C;\r\n            }());\r\n            someNamespace.C = C;\r\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n        /*@internal*/ var someOther;\r\n        (function (someOther) {\r\n            var something;\r\n            (function (something) {\r\n                var someClass = /** @class */ (function () {\r\n                    function someClass() {\r\n                    }\r\n                    return someClass;\r\n                }());\r\n                something.someClass = someClass;\r\n            })(something = someOther.something || (someOther.something = {}));\r\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n        /*@internal*/ normalN.someImport = someNamespace.C;\r\n        /*@internal*/ normalN.internalConst = 10;\r\n        /*@internal*/ var internalEnum;\r\n        (function (internalEnum) {\r\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n    })(normalN = exports.normalN || (exports.normalN = {}));\r\n    /*@internal*/ var internalC = /** @class */ (function () {\r\n        function internalC() {\r\n        }\r\n        return internalC;\r\n    }());\r\n    exports.internalC = internalC;\r\n    /*@internal*/ function internalfoo() { }\r\n    exports.internalfoo = internalfoo;\r\n    /*@internal*/ var internalNamespace;\r\n    (function (internalNamespace) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        internalNamespace.someClass = someClass;\r\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\r\n    /*@internal*/ var internalOther;\r\n    (function (internalOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = internalOther.something || (internalOther.something = {}));\r\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\r\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\r\n    /*@internal*/ exports.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map",
+      "hash": "-43417328183-/*@internal*/ var myGlob = 20;\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.internalEnum = exports.internalConst = exports.internalImport = exports.internalOther = exports.internalNamespace = exports.internalfoo = exports.internalC = exports.normalN = exports.normalC = exports.x = void 0;\n    /*@internal*/ exports.x = 10;\n    var normalC = /** @class */ (function () {\n        /*@internal*/ function normalC() {\n        }\n        /*@internal*/ normalC.prototype.method = function () { };\n        Object.defineProperty(normalC.prototype, \"c\", {\n            /*@internal*/ get: function () { return 10; },\n            /*@internal*/ set: function (val) { },\n            enumerable: false,\n            configurable: true\n        });\n        return normalC;\n    }());\n    exports.normalC = normalC;\n    var normalN;\n    (function (normalN) {\n        /*@internal*/ var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        normalN.C = C;\n        /*@internal*/ function foo() { }\n        normalN.foo = foo;\n        /*@internal*/ var someNamespace;\n        (function (someNamespace) {\n            var C = /** @class */ (function () {\n                function C() {\n                }\n                return C;\n            }());\n            someNamespace.C = C;\n        })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n        /*@internal*/ var someOther;\n        (function (someOther) {\n            var something;\n            (function (something) {\n                var someClass = /** @class */ (function () {\n                    function someClass() {\n                    }\n                    return someClass;\n                }());\n                something.someClass = someClass;\n            })(something = someOther.something || (someOther.something = {}));\n        })(someOther = normalN.someOther || (normalN.someOther = {}));\n        /*@internal*/ normalN.someImport = someNamespace.C;\n        /*@internal*/ normalN.internalConst = 10;\n        /*@internal*/ var internalEnum;\n        (function (internalEnum) {\n            internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n            internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n            internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n        })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n    })(normalN = exports.normalN || (exports.normalN = {}));\n    /*@internal*/ var internalC = /** @class */ (function () {\n        function internalC() {\n        }\n        return internalC;\n    }());\n    exports.internalC = internalC;\n    /*@internal*/ function internalfoo() { }\n    exports.internalfoo = internalfoo;\n    /*@internal*/ var internalNamespace;\n    (function (internalNamespace) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        internalNamespace.someClass = someClass;\n    })(internalNamespace = exports.internalNamespace || (exports.internalNamespace = {}));\n    /*@internal*/ var internalOther;\n    (function (internalOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = internalOther.something || (internalOther.something = {}));\n    })(internalOther = exports.internalOther || (exports.internalOther = {}));\n    /*@internal*/ exports.internalImport = internalNamespace.someClass;\n    /*@internal*/ exports.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = exports.internalEnum || (exports.internalEnum = {}));\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map",
       "mapHash": "-54033237660-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
@@ -13500,52 +13529,52 @@ declare const globalConst = 10;
           "kind": "internal"
         },
         {
-          "pos": 28,
-          "end": 54,
+          "pos": 27,
+          "end": 52,
           "kind": "text"
         },
         {
-          "pos": 54,
-          "end": 78,
+          "pos": 52,
+          "end": 76,
           "kind": "internal"
         },
         {
-          "pos": 80,
-          "end": 108,
+          "pos": 77,
+          "end": 104,
           "kind": "text"
         },
         {
-          "pos": 108,
-          "end": 233,
+          "pos": 104,
+          "end": 225,
           "kind": "internal"
         },
         {
-          "pos": 235,
-          "end": 274,
+          "pos": 226,
+          "end": 263,
           "kind": "text"
         },
         {
-          "pos": 274,
-          "end": 742,
+          "pos": 263,
+          "end": 713,
           "kind": "internal"
         },
         {
-          "pos": 744,
-          "end": 751,
+          "pos": 714,
+          "end": 720,
           "kind": "text"
         },
         {
-          "pos": 751,
-          "end": 1240,
+          "pos": 720,
+          "end": 1191,
           "kind": "internal"
         },
         {
-          "pos": 1242,
-          "end": 1333,
+          "pos": 1192,
+          "end": 1278,
           "kind": "text"
         }
       ],
-      "hash": "6923704418-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "-60625246569-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "58024379814-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IAClC,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;QACN,IAAI,CAAC,IACM,MAAM,CADK;QACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;KACvC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}"
     }
   },
@@ -13564,6 +13593,20 @@ declare const globalConst = 10;
       "./file2.ts": "-13729954175-export const y = 20;",
       "./global.ts": "1028229885-const globalConst = 10;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./file0.ts",
+          "./file1.ts",
+          "./file2.ts",
+          "./global.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -13573,10 +13616,10 @@ declare const globalConst = 10;
       "strict": false,
       "target": 1
     },
-    "outSignature": "16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "outSignature": "-51705233744-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n    export class normalC {\n        constructor();\n        prop: string;\n        method(): void;\n        get c(): number;\n        set c(val: number);\n    }\n    export namespace normalN {\n        class C {\n        }\n        function foo(): void;\n        namespace someNamespace {\n            class C {\n            }\n        }\n        namespace someOther.something {\n            class someClass {\n            }\n        }\n        export import someImport = someNamespace.C;\n        type internalType = internalC;\n        const internalConst = 10;\n        enum internalEnum {\n            a = 0,\n            b = 1,\n            c = 2\n        }\n    }\n    export class internalC {\n    }\n    export function internalfoo(): void;\n    export namespace internalNamespace {\n        class someClass {\n        }\n    }\n    export namespace internalOther.something {\n        class someClass {\n        }\n    }\n    export import internalImport = internalNamespace.someClass;\n    export type internalType = internalC;\n    export const internalConst = 10;\n    export enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 13847
+  "size": 13435
 }
 

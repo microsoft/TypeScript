@@ -66,7 +66,7 @@ var h = h();
 >h : () => any
 
 var i: (x: typeof i) => typeof x;
->i : (x: typeof i) => any
+>i : (x: typeof i) => typeof x
 >x : (x: typeof i) => any
 >i : (x: any) => any
 >x : (x: any) => typeof x
@@ -99,7 +99,7 @@ var h2 = new h2();
 >h2 : new () => any
 
 var i2: new (x: typeof i2) => typeof x;
->i2 : new (x: typeof i2) => any
+>i2 : new (x: typeof i2) => typeof x
 >x : new (x: typeof i2) => any
 >i2 : new (x: any) => any
 >x : new (x: any) => typeof x
