@@ -69,7 +69,19 @@ module.exports = createRule({
                     return true;
                 }
 
-                return ["apply", "call", "equal", "fail", "isTrue", "output", "stringify", "push"].indexOf(methodName) >= 0;
+                switch (methodName) {
+                    case "apply":
+                    case "call":
+                    case "equal":
+                    case "fail":
+                    case "isTrue":
+                    case "output":
+                    case "stringify":
+                    case "push":
+                        return true;
+                }
+
+                return false;
             }
 
             if (node.callee && node.callee.type === AST_NODE_TYPES.Identifier) {
@@ -79,7 +91,12 @@ module.exports = createRule({
                     return true;
                 }
 
-                return ["contains"].indexOf(functionName) >= 0;
+                switch (functionName) {
+                    case "contains":
+                        return true;
+                }
+
+                return false;
             }
 
             return false;
@@ -162,7 +179,7 @@ module.exports = createRule({
         };
 
         /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => void} */
-        const checkargumentTrivia = (node) => {
+        const checkArgumentTrivia = (node) => {
             if (shouldIgnoreCalledExpression(node)) {
                 return;
             }
@@ -184,8 +201,8 @@ module.exports = createRule({
         };
 
         return {
-            CallExpression: checkargumentTrivia,
-            NewExpression: checkargumentTrivia,
+            CallExpression: checkArgumentTrivia,
+            NewExpression: checkArgumentTrivia,
         };
     },
 });
