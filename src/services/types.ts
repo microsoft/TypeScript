@@ -567,10 +567,8 @@ export interface LanguageService {
     getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
     /** @internal */
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
     getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: false, stopAtAlias: boolean): readonly DefinitionInfo[] | undefined;
     /** @internal */
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
     getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean, stopAtAlias: false): readonly DefinitionInfo[] | undefined;
     getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
     getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;

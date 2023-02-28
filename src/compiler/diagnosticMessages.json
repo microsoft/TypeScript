@@ -4265,7 +4265,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
+    "Option '{0}' can only be used when 'module' is set to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },
@@ -4280,14 +4280,6 @@
     "Option '{0}' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.": {
         "category": "Error",
         "code": 5098
-    },
-    "Import assignment is not allowed when 'moduleResolution' is set to 'bundler'. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
-        "category": "Error",
-        "code": 5099
-    },
-    "Export assignment cannot be used when 'moduleResolution' is set to 'bundler'. Consider using 'export default' or another module format instead.": {
-        "category": "Error",
-        "code": 5100
     },
     "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '\"ignoreDeprecations\": \"{2}\"' to silence this error.": {
         "category": "Error",
