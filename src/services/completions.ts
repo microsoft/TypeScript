@@ -2927,7 +2927,10 @@ function getCompletionData(
     log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
     const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
 
-    const literals = mapDefined(
+    // exclude literal suggestions after <input type="text" [||] /> (#51667) and after closing quote (#52675)
+    // for strings getStringLiteralCompletions handles completions
+    const isLiteralExpected = !tryCast(previousToken, isStringLiteralLike) && !isJsxIdentifierExpected;
+    const literals = !isLiteralExpected ? [] : mapDefined(
         contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
         t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined);
 
