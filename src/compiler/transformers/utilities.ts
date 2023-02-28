@@ -1,4 +1,5 @@
 import {
+    __String,
     AccessorDeclaration,
     AllDecorators,
     append,
@@ -81,7 +82,6 @@ import {
     SuperCall,
     SyntaxKind,
     TransformationContext,
-    UnderscoreEscapedMap,
     VariableDeclaration,
     VariableStatement,
 } from "../_namespaces/ts";
@@ -652,7 +652,7 @@ export interface PrivateEnvironment<TData, TEntry> {
     /**
      * A mapping of private names to information needed for transformation.
      */
-    identifiers?: UnderscoreEscapedMap<TEntry>;
+    identifiers?: Map<__String, TEntry>;
 
     /**
      * A mapping of generated private names to information needed for transformation.
