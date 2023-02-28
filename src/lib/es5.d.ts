@@ -1,3 +1,6 @@
+/// <reference lib="decorators" />
+/// <reference lib="decorators.legacy" />
+
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
@@ -423,8 +426,8 @@ interface String {
 
     /**
      * Replaces text in a string, using a regular expression or search string.
-     * @param searchValue A string to search for.
-     * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+     * @param searchValue A string or regular expression to search for.
+     * @param replaceValue A string containing the text to replace. When the {@linkcode searchValue} is a `RegExp`, all matches are replaced if the `g` flag is set (or only those matches at the beginning, if the `y` flag is also present). Otherwise, only the first match of {@linkcode searchValue} is replaced.
      */
     replace(searchValue: string | RegExp, replaceValue: string): string;
 
@@ -741,7 +744,7 @@ interface Date {
     toLocaleTimeString(): string;
     /** Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC. */
     valueOf(): number;
-    /** Gets the time value in milliseconds. */
+    /** Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC. */
     getTime(): number;
     /** Gets the year, using local time. */
     getFullYear(): number;
@@ -911,6 +914,7 @@ interface DateConstructor {
      * @param ms A number from 0 to 999 that specifies the milliseconds.
      */
     UTC(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
+    /** Returns the number of milliseconds elapsed since midnight, January 1, 1970 Universal Coordinated Time (UTC). */
     now(): number;
 }
 
@@ -940,6 +944,10 @@ interface RegExpExecArray extends Array<string> {
      * A copy of the search string.
      */
     input: string;
+    /**
+     * The first match. This will always be present because `null` will be returned if there are no matches.
+     */
+    0: string;
 }
 
 interface RegExp {
@@ -1477,11 +1485,6 @@ interface TypedPropertyDescriptor<T> {
     get?: () => T;
     set?: (value: T) => void;
 }
-
-declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
-declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
-declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
-declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 
 declare type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
 

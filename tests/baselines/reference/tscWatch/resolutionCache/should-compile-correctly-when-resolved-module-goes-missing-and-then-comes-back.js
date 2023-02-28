@@ -46,26 +46,26 @@ Shape signatures in builder refreshed for::
 /a/bar.d.ts (used version)
 /a/foo.ts (used version)
 
-WatchedFiles::
-/a/foo.ts:
-  {"fileName":"/a/foo.ts","pollingInterval":250}
-/a/bar.d.ts:
-  {"fileName":"/a/bar.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/foo.ts:
+  {}
+/a/bar.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/foo.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 
@@ -79,7 +79,7 @@ Output::
 >> Screen clear
 [[90m12:00:18 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/foo.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+[96ma/foo.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 [7m1[0m import {x} from "bar"
 [7m [0m [91m                ~~~~~[0m
@@ -101,21 +101,21 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/foo.ts (computed .d.ts)
 
-WatchedFiles::
-/a/foo.ts:
-  {"fileName":"/a/foo.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /node_modules:
-  {"fileName":"/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/foo.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /:
-  {"directoryName":""}
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -152,19 +152,19 @@ Shape signatures in builder refreshed for::
 /a/bar.d.ts (used version)
 /a/foo.ts (computed .d.ts)
 
-WatchedFiles::
-/a/foo.ts:
-  {"fileName":"/a/foo.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/bar.d.ts:
-  {"fileName":"/a/bar.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/foo.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/bar.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

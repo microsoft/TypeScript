@@ -35,6 +35,26 @@ function f12({ kind, payload }: Action) {
     }
 }
 
+// repro #50206
+function f13<T extends Action>({ kind, payload }: T) {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
+function f14<T extends Action>(t: T) {
+    const { kind, payload } = t;
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
 type Action2 =
     | { kind: 'A', payload: number | undefined }
     | { kind: 'B', payload: string | undefined };
@@ -367,6 +387,21 @@ const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) 
     }
 }
 
+// Repro from #52152
+
+interface ClientEvents {
+    warn: [message: string];
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+}
+  
+declare class Client {
+    public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+}
+
+const bot = new Client();
+bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+
 
 //// [dependentDestructuredVariables.js]
 "use strict";
@@ -418,6 +453,24 @@ function f12({ kind, payload }) {
             break;
         default:
             payload; // never
+    }
+}
+// repro #50206
+function f13({ kind, payload }) {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+function f14(t) {
+    const { kind, payload } = t;
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
     }
 }
 function f20({ kind, payload }) {
@@ -649,6 +702,9 @@ const fa3 = (guard, value) => {
         }
     }
 };
+const bot = new Client();
+bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
 
 
 //// [dependentDestructuredVariables.d.ts]
@@ -662,6 +718,8 @@ type Action = {
 declare function f10({ kind, payload }: Action): void;
 declare function f11(action: Action): void;
 declare function f12({ kind, payload }: Action): void;
+declare function f13<T extends Action>({ kind, payload }: T): void;
+declare function f14<T extends Action>(t: T): void;
 type Action2 = {
     kind: 'A';
     payload: number | undefined;
@@ -787,3 +845,11 @@ declare function fa2(x: {
     value: string;
 }): void;
 declare const fa3: (...args: [true, number] | [false, string]) => void;
+interface ClientEvents {
+    warn: [message: string];
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+}
+declare class Client {
+    on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+}
+declare const bot: Client;

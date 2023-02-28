@@ -87,6 +87,12 @@ declare let ab: AB<string>;
 
 let z = foo(ab);  // [AB<string>, string]
 
+// Repro from #51399
+
+declare let a: <T>() => (T extends true ? true : false) & boolean;
+declare let b: <T>() => (T extends true ? true : false) & boolean;
+a = b;
+
 
 //// [unionAndIntersectionInference3.js]
 // Repro from #30720
@@ -105,4 +111,5 @@ let x2 = foo2(sa); // unknown
 let y2 = foo2(sx); // { extra: number }
 withRouter(MyComponent);
 let z = foo(ab); // [AB<string>, string]
+a = b;
 export {};
