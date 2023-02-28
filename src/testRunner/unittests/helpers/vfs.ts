@@ -1,47 +1,54 @@
 import * as Harness from "../../_namespaces/Harness";
+import { getDirectoryPath } from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import * as vpath from "../../_namespaces/vpath";
 import { libContent } from "./contents";
 
+export interface FsOptions {
+    libContentToAppend?: string;
+    cwd?: string;
+    executingFilePath?: string;
+}
+export type FsOptionsOrLibContentsToAppend = FsOptions | string;
+
+function valueOfFsOptions(options: FsOptionsOrLibContentsToAppend | undefined, key: keyof FsOptions) {
+    return typeof options === "string" ?
+        key === "libContentToAppend" ? options : undefined :
+        options?.[key];
+}
+
 /**
  * Load project from disk into /src folder
  */
-
 export function loadProjectFromDisk(
     root: string,
-    libContentToAppend?: string
+    options?: FsOptionsOrLibContentsToAppend
 ): vfs.FileSystem {
     const resolver = vfs.createResolver(Harness.IO);
-    const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
-        files: {
-            ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver)
-        },
-        cwd: "/",
-        meta: { defaultLibLocation: "/lib" },
-    });
-    addLibAndMakeReadonly(fs, libContentToAppend);
-    return fs;
+    return loadProjectFromFiles({
+        ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver)
+    }, options);
 }
+
 /**
  * All the files must be in /src
  */
-
 export function loadProjectFromFiles(
     files: vfs.FileSet,
-    libContentToAppend?: string
+    options?: FsOptionsOrLibContentsToAppend,
 ): vfs.FileSystem {
+    const executingFilePath = valueOfFsOptions(options, "executingFilePath");
+    const defaultLibLocation = executingFilePath ? getDirectoryPath(executingFilePath) : "/lib";
     const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
         files,
-        cwd: "/",
-        meta: { defaultLibLocation: "/lib" },
+        cwd: valueOfFsOptions(options, "cwd") || "/",
+        meta: { defaultLibLocation },
     });
-    addLibAndMakeReadonly(fs, libContentToAppend);
-    return fs;
-}
-function addLibAndMakeReadonly(fs: vfs.FileSystem, libContentToAppend?: string) {
-    fs.mkdirSync("/lib");
-    fs.writeFileSync("/lib/lib.d.ts", libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
+    const libContentToAppend = valueOfFsOptions(options, "libContentToAppend");
+    fs.mkdirpSync(defaultLibLocation);
+    fs.writeFileSync(`${defaultLibLocation}/lib.d.ts`, libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
     fs.makeReadonly();
+    return fs;
 }
 
 export function replaceText(fs: vfs.FileSystem, path: string, oldText: string, newText: string) {

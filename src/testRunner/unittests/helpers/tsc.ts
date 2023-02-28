@@ -69,7 +69,7 @@ export function testTscCompileLike(input: TestTscCompileLike) {
     const fs = inputFs.shadow();
 
     // Create system
-    const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc", env: environmentVariables }) as TscCompileSystem;
+    const sys = new fakes.System(fs, { executingFilePath: `${fs.meta.get("defaultLibLocation")}/tsc`, env: environmentVariables }) as TscCompileSystem;
     sys.storeFilesChangingSignatureDuringEmit = true;
     sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
     sys.exit = exitCode => sys.exitCode = exitCode;

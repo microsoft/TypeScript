@@ -19,3 +19,7 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 `;
+
+export interface FsContents {
+    [path: string]: string;
+}
