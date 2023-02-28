@@ -21117,7 +21117,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 //
                 else if (result && isNonGenericObjectType(target) && !isArrayOrTupleType(target) &&
                     source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType &&
-                    !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
+                    !some((source as IntersectionType).types, t => t === target || !!(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
                     result &= propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, /*optionalsOnly*/ true, intersectionState);
                 }
             }
