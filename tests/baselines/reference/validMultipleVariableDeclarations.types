@@ -114,7 +114,6 @@ var fn = <(s: string) => number> null;
 >fn : (s: string) => number
 ><(s: string) => number> null : (s: string) => number
 >s : string
->null : null
 
 var fn: typeof fn;
 >fn : (s: string) => number

@@ -36,7 +36,6 @@ function awaitNull() {
 
     await null;
 >await null : null
->null : null
 }
 
 function awaitUndefined() {

@@ -17,7 +17,6 @@ class C {
     public get Goo(v:string):string {return null;} // error - getters must not have a parameter
 >Goo : string
 >v : string
->null : null
 
     public set Goo(v:string):string {} // error - setters must not specify a return type
 >Goo : string

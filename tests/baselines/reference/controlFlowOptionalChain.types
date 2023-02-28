@@ -724,7 +724,6 @@ function f10(o: Thing | undefined, value: number) {
 function f11(o: Thing | null, value: number) {
 >f11 : (o: Thing | null, value: number) => void
 >o : Thing | null
->null : null
 >value : number
 
     if (o?.foo === value) {
@@ -888,7 +887,6 @@ function f12a(o: Thing | undefined, value: number | null) {
 >f12a : (o: Thing | undefined, value: number | null) => void
 >o : Thing | undefined
 >value : number | null
->null : null
 
     if (o?.foo === value) {
 >o?.foo === value : boolean
@@ -1055,7 +1053,6 @@ function f13a(o: Thing | undefined) {
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
->null : null
 
         o.foo;  // Error
 >o.foo : string | number
@@ -1067,7 +1064,6 @@ function f13a(o: Thing | undefined) {
 >o?.["foo"] : string | number | undefined
 >o : Thing | undefined
 >"foo" : "foo"
->null : null
 
         o["foo"];  // Error
 >o["foo"] : string | number
@@ -1080,7 +1076,6 @@ function f13a(o: Thing | undefined) {
 >o?.bar : (() => number) | undefined
 >o : Thing | undefined
 >bar : (() => number) | undefined
->null : null
 
         o.bar;  // Error
 >o.bar : () => number
@@ -1092,7 +1087,6 @@ function f13a(o: Thing | undefined) {
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
->null : null
 
         o.foo;
 >o.foo : string | number
@@ -1104,7 +1098,6 @@ function f13a(o: Thing | undefined) {
 >o?.["foo"] : string | number | undefined
 >o : Thing | undefined
 >"foo" : "foo"
->null : null
 
         o["foo"];
 >o["foo"] : string | number
@@ -1117,7 +1110,6 @@ function f13a(o: Thing | undefined) {
 >o?.bar : (() => number) | undefined
 >o : Thing | undefined
 >bar : (() => number) | undefined
->null : null
 
         o.bar;
 >o.bar : () => number
@@ -1129,7 +1121,6 @@ function f13a(o: Thing | undefined) {
 function f14(o: Thing | null) {
 >f14 : (o: Thing | null) => void
 >o : Thing | null
->null : null
 
     if (o?.foo !== undefined) {
 >o?.foo !== undefined : boolean
@@ -1467,7 +1458,6 @@ function f20(o: Thing | undefined) {
 function f21(o: Thing | null) {
 >f21 : (o: Thing | null) => void
 >o : Thing | null
->null : null
 
     if (typeof o?.foo === "number") {
 >typeof o?.foo === "number" : boolean
@@ -2116,5 +2106,4 @@ function f50(obj: Test5) {
       }
    }
    return null;
->null : null
 }

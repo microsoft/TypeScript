@@ -20,5 +20,4 @@ if (a) {
 
 export const a: number | null;
 >a : number | null
->null : null
 

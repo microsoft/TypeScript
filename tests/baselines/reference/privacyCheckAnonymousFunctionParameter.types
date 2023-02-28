@@ -15,7 +15,6 @@ module Query {
 >test : Iterator<T>
 
         return null;
->null : null
     }
 
     function fromOrderBy() {

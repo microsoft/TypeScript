@@ -35,10 +35,8 @@ class MyClass {
 >params : { a: {    key: string;}; } | null
 >null as any as { a: { key: string } } | null : { a: {    key: string;}; } | null
 >null as any : any
->null : null
 >a : { key: string; }
 >key : string
->null : null
 
         assert(params);
 >assert(params) : void

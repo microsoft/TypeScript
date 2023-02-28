@@ -304,7 +304,6 @@ function foo17() {
 
         await null
 >await null : null
->null : null
 
         promise
 >promise : Promise<void>

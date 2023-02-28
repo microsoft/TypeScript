@@ -54,8 +54,6 @@ var ra5 = e < e;
 var ra6 = null < null;
 >ra6 : boolean
 >null < null : boolean
->null : null
->null : null
 
 var ra7 = undefined < undefined;
 >ra7 : boolean
@@ -97,8 +95,6 @@ var rb5 = e > e;
 var rb6 = null > null;
 >rb6 : boolean
 >null > null : boolean
->null : null
->null : null
 
 var rb7 = undefined > undefined;
 >rb7 : boolean
@@ -140,8 +136,6 @@ var rc5 = e <= e;
 var rc6 = null <= null;
 >rc6 : boolean
 >null <= null : boolean
->null : null
->null : null
 
 var rc7 = undefined <= undefined;
 >rc7 : boolean
@@ -183,8 +177,6 @@ var rd5 = e >= e;
 var rd6 = null >= null;
 >rd6 : boolean
 >null >= null : boolean
->null : null
->null : null
 
 var rd7 = undefined >= undefined;
 >rd7 : boolean
@@ -226,8 +218,6 @@ var re5 = e == e;
 var re6 = null == null;
 >re6 : boolean
 >null == null : boolean
->null : null
->null : null
 
 var re7 = undefined == undefined;
 >re7 : boolean
@@ -269,8 +259,6 @@ var rf5 = e != e;
 var rf6 = null != null;
 >rf6 : boolean
 >null != null : boolean
->null : null
->null : null
 
 var rf7 = undefined != undefined;
 >rf7 : boolean
@@ -312,8 +300,6 @@ var rg5 = e === e;
 var rg6 = null === null;
 >rg6 : boolean
 >null === null : boolean
->null : null
->null : null
 
 var rg7 = undefined === undefined;
 >rg7 : boolean
@@ -355,8 +341,6 @@ var rh5 = e !== e;
 var rh6 = null !== null;
 >rh6 : boolean
 >null !== null : boolean
->null : null
->null : null
 
 var rh7 = undefined !== undefined;
 >rh7 : boolean

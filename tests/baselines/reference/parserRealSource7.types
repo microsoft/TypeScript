@@ -38,7 +38,6 @@ module TypeScript {
             if (baseTypeLinks == null) {
 >baseTypeLinks == null : boolean
 >baseTypeLinks : TypeLink[]
->null : null
 
                 baseTypeLinks = new TypeLink[];
 >baseTypeLinks = new TypeLink[] : any
@@ -297,7 +296,6 @@ module TypeScript {
 
         var sig: Signature = null;
 >sig : Signature
->null : null
 
         if (!parent.construct) {
 >!parent.construct : boolean
@@ -459,7 +457,6 @@ module TypeScript {
 >symbol == null && scopeChain.previous : any
 >symbol == null : boolean
 >symbol : any
->null : null
 >scopeChain.previous : any
 >scopeChain : ScopeChain
 >previous : any
@@ -486,7 +483,6 @@ module TypeScript {
 
         var symbol: Symbol = null;
 >symbol : Symbol
->null : null
 
         switch (alias.nodeType) {
 >alias.nodeType : any
@@ -675,11 +671,9 @@ module TypeScript {
 
         var typeSymbol: TypeSymbol = null;
 >typeSymbol : TypeSymbol
->null : null
 
         var modType: ModuleType = null;
 >modType : ModuleType
->null : null
 
         var importDecl = <ImportDeclaration>ast;
 >importDecl : ImportDeclaration
@@ -709,7 +703,6 @@ module TypeScript {
 >topLevelScope : any
 >scopeChain : any
 >members : null
->null : null
 >tcContext : TypeCollectionContext
 >context : TypeCollectionContext
 
@@ -961,18 +954,15 @@ module TypeScript {
 
         var typeSymbol: TypeSymbol = null;
 >typeSymbol : TypeSymbol
->null : null
 
         var modType: ModuleType = null;
 >modType : ModuleType
->null : null
 
         if ((symbol == null) || (symbol.kind() != SymbolKind.Type)) {
 >(symbol == null) || (symbol.kind() != SymbolKind.Type) : boolean
 >(symbol == null) : boolean
 >symbol == null : boolean
 >symbol : any
->null : null
 >(symbol.kind() != SymbolKind.Type) : boolean
 >symbol.kind() != SymbolKind.Type : boolean
 >symbol.kind() : any
@@ -986,7 +976,6 @@ module TypeScript {
             if (modType == null) {
 >modType == null : boolean
 >modType : ModuleType
->null : null
 
                 var enclosedTypes = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
 >enclosedTypes : any
@@ -1234,7 +1223,6 @@ module TypeScript {
 >(publicEnclosedTypes == null) : boolean
 >publicEnclosedTypes == null : boolean
 >publicEnclosedTypes : any
->null : null
 >new StringHashTable() : any
 >StringHashTable : any
 >publicEnclosedTypes : any
@@ -1266,7 +1254,6 @@ module TypeScript {
 >(publicEnclosedAmbientTypes == null) : boolean
 >publicEnclosedAmbientTypes == null : boolean
 >publicEnclosedAmbientTypes : any
->null : null
 >new StringHashTable() : any
 >StringHashTable : any
 >publicEnclosedAmbientTypes : any
@@ -1297,7 +1284,6 @@ module TypeScript {
 >(publicMembers == null) : boolean
 >publicMembers == null : boolean
 >publicMembers : any
->null : null
 >new StringHashTable() : any
 >StringHashTable : any
 >publicMembers : any
@@ -1328,7 +1314,6 @@ module TypeScript {
 >(publicAmbientMembers == null) : boolean
 >publicAmbientMembers == null : boolean
 >publicAmbientMembers : any
->null : null
 >new StringHashTable() : any
 >StringHashTable : any
 >publicAmbientMembers : any
@@ -1505,8 +1490,6 @@ module TypeScript {
 
                                 context, null, null, moduleDecl);
 >context : TypeCollectionContext
->null : null
->null : null
 >moduleDecl : ModuleDeclaration
 
         return true;
@@ -1538,7 +1521,6 @@ module TypeScript {
 
         var typeSymbol: TypeSymbol = null;
 >typeSymbol : TypeSymbol
->null : null
 
         var className = (<Identifier>classDecl.name).text;
 >className : any
@@ -1757,13 +1739,11 @@ module TypeScript {
             typeSymbol = null;
 >typeSymbol = null : null
 >typeSymbol : TypeSymbol
->null : null
         }
 
         if (typeSymbol == null) {
 >typeSymbol == null : boolean
 >typeSymbol : TypeSymbol
->null : null
 
             var valueSymbol = scopeChain.scope.findLocal(className, false, false);
 >valueSymbol : any
@@ -2023,7 +2003,6 @@ module TypeScript {
             if (valueSymbol == null) {
 >valueSymbol == null : boolean
 >valueSymbol : any
->null : null
 
                 context.scopeChain.scope.enter(context.scopeChain.container, ast, typeSymbol,
 >context.scopeChain.scope.enter(context.scopeChain.container, ast, typeSymbol,                                            context.checker.errorReporter, isExported || isGlobal, false, isAmbient) : any
@@ -2069,7 +2048,6 @@ module TypeScript {
 >classType.instanceType : any
 >classType : Type
 >instanceType : any
->null : null
 
                 classType.instanceType = new Type();
 >classType.instanceType = new Type() : any
@@ -2255,14 +2233,11 @@ module TypeScript {
 >instanceType.ambientMembers : any
 >instanceType : Type
 >ambientMembers : any
->null : null
->null : null
 
                                 context, instanceType, classType, null);
 >context : TypeCollectionContext
 >instanceType : Type
 >classType : Type
->null : null
 
         return true;
 >true : true
@@ -2287,11 +2262,9 @@ module TypeScript {
 
         var interfaceSymbol: TypeSymbol = null;
 >interfaceSymbol : TypeSymbol
->null : null
 
         var interfaceType: Type = null;
 >interfaceType : Type
->null : null
 
         var isExported = hasFlag(interfaceDecl.varFlags, VarFlags.Exported);
 >isExported : any
@@ -2354,7 +2327,6 @@ module TypeScript {
         if (interfaceSymbol == null) {
 >interfaceSymbol == null : boolean
 >interfaceSymbol : TypeSymbol
->null : null
 
             interfaceType = new Type();
 >interfaceType = new Type() : any
@@ -2554,14 +2526,10 @@ module TypeScript {
 >interfaceType.ambientMembers : any
 >interfaceType : Type
 >ambientMembers : any
->null : null
->null : null
 
                                 context, interfaceType, null, null);
 >context : TypeCollectionContext
 >interfaceType : Type
->null : null
->null : null
 
         return true;
 >true : true
@@ -2727,7 +2695,6 @@ module TypeScript {
 >argDecl.init : any
 >argDecl : ArgDecl
 >init : any
->null : null
 
             argDecl.sym = fieldSymbol;
 >argDecl.sym = fieldSymbol : any
@@ -2929,7 +2896,6 @@ module TypeScript {
 >varDecl.id : any
 >varDecl : VarDecl
 >id : any
->null : null
 
                 context.checker.errorReporter.simpleError(varDecl, "Expected variable identifier at this location");
 >context.checker.errorReporter.simpleError(varDecl, "Expected variable identifier at this location") : any
@@ -3227,7 +3193,6 @@ module TypeScript {
 >varDecl.init : any
 >varDecl : VarDecl
 >init : any
->null : null
 
             varDecl.sym = fieldSymbol;
 >varDecl.sym = fieldSymbol : any
@@ -3278,7 +3243,6 @@ module TypeScript {
 
         var fgSym: TypeSymbol = null;
 >fgSym : TypeSymbol
->null : null
 
         var nameText = funcDecl.getNameText();
 >nameText : any
@@ -3578,7 +3542,6 @@ module TypeScript {
                     if (fgSym == null) {
 >fgSym == null : boolean
 >fgSym : TypeSymbol
->null : null
 
                         fgSym = <TypeSymbol>containerScope.findLocal(nameText, false, true);
 >fgSym = <TypeSymbol>containerScope.findLocal(nameText, false, true) : TypeSymbol
@@ -3633,7 +3596,6 @@ module TypeScript {
                        fgSym = null;
 >fgSym = null : null
 >fgSym : TypeSymbol
->null : null
                     }
                 }                
             }
@@ -3647,7 +3609,6 @@ module TypeScript {
             if (fgSym == null) {
 >fgSym == null : boolean
 >fgSym : TypeSymbol
->null : null
 
                 if (!(funcDecl.isSpecialFn())) {                    
 >!(funcDecl.isSpecialFn()) : boolean
@@ -3672,7 +3633,6 @@ module TypeScript {
 >funcDecl : FuncDecl
 >containerSym : TypeSymbol
 >containerScope : SymbolScope
->null : null
 >!foundSymbol : boolean
 >foundSymbol : boolean
 >declAST : any
@@ -3710,7 +3670,6 @@ module TypeScript {
 >fgSym.declAST : any
 >fgSym : TypeSymbol
 >declAST : any
->null : null
 >!funcDecl.isSpecialFn() : boolean
 >funcDecl.isSpecialFn() : any
 >funcDecl.isSpecialFn : any
@@ -3873,7 +3832,6 @@ module TypeScript {
                     if (fgSym == null) {
 >fgSym == null : boolean
 >fgSym : TypeSymbol
->null : null
 
                         fgSym = <TypeSymbol>containerScope.findLocal(nameText, false, false);
 >fgSym = <TypeSymbol>containerScope.findLocal(nameText, false, false) : TypeSymbol
@@ -3933,7 +3891,6 @@ module TypeScript {
                         fgSym = null;
 >fgSym = null : null
 >fgSym : TypeSymbol
->null : null
 
                         foundSymbol = false;
 >foundSymbol = false : false
@@ -3998,7 +3955,6 @@ module TypeScript {
 >signatures : any
 >0 : 0
 >declAST : any
->null : null
 
                     !hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient)) &&
 >!hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient) : boolean

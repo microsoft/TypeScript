@@ -16,7 +16,6 @@ var a = function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: a
 >value : string
 >onReject : (reason: any) => U
 >reason : any
->null : null
 
 var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U): Promise<U> { return null };
 >b : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
@@ -26,7 +25,6 @@ var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: a
 >value : number
 >onReject : (reason: any) => U
 >reason : any
->null : null
 
 a = b; // error because number is not assignable to string
 >a = b : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>

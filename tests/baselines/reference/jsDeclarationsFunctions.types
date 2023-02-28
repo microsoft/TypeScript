@@ -32,7 +32,6 @@ export function d(a, b) { return /** @type {*} */(null); }
 >a : number
 >b : number
 >(null) : any
->null : null
 
 /**
  * @template T,U
@@ -45,7 +44,6 @@ export function e(a, b) { return /** @type {*} */(null); }
 >a : T
 >b : U
 >(null) : any
->null : null
 
 /**
  * @template T

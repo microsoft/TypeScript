@@ -38,7 +38,6 @@ let [a3 = <any>undefined, b3 = <any>null, c3 = <any>undefined] = [1, 2, 3]; // n
 >undefined : undefined
 >b3 : any
 ><any>null : any
->null : null
 >c3 : any
 ><any>undefined : any
 >undefined : undefined
@@ -55,13 +54,11 @@ let [a4] = [<any>undefined], [b4] = [<any>null], c4 = <any>undefined, d4 = <any>
 >b4 : any
 >[<any>null] : [any]
 ><any>null : any
->null : null
 >c4 : any
 ><any>undefined : any
 >undefined : undefined
 >d4 : any
 ><any>null : any
->null : null
 
 let {x, y, z} = { x: 1, y: 2, z: 3 }; // no error
 >x : number
@@ -111,7 +108,6 @@ let {x3 = <any>undefined, y3 = <any>null, z3 = <any>undefined} = { x3: 1, y3: 2,
 >undefined : undefined
 >y3 : any
 ><any>null : any
->null : null
 >z3 : any
 ><any>undefined : any
 >undefined : undefined
@@ -133,5 +129,4 @@ let {x4} = { x4: <any>undefined }, {y4} = { y4: <any>null }; // no error
 >{ y4: <any>null } : { y4: any; }
 >y4 : any
 ><any>null : any
->null : null
 

@@ -23,38 +23,32 @@ var d: string;
 var r1: any = null + a;
 >r1 : any
 >null + a : any
->null : null
 >a : any
 
 var r2: any = a + null;
 >r2 : any
 >a + null : any
 >a : any
->null : null
 
 // null + number/enum
 var r3 = null + b;
 >r3 : any
 >null + b : any
->null : null
 >b : number
 
 var r4 = null + 1;
 >r4 : any
 >null + 1 : any
->null : null
 >1 : 1
 
 var r5 = null + c;
 >r5 : any
 >null + c : any
->null : null
 >c : E
 
 var r6 = null + E.a;
 >r6 : any
 >null + E.a : any
->null : null
 >E.a : E.a
 >E : typeof E
 >a : E.a
@@ -62,7 +56,6 @@ var r6 = null + E.a;
 var r7 = null + E['a'];
 >r7 : any
 >null + E['a'] : any
->null : null
 >E['a'] : E.a
 >E : typeof E
 >'a' : "a"
@@ -71,19 +64,16 @@ var r8 = b + null;
 >r8 : any
 >b + null : any
 >b : number
->null : null
 
 var r9 = 1 + null;
 >r9 : any
 >1 + null : any
 >1 : 1
->null : null
 
 var r10 = c + null
 >r10 : any
 >c + null : any
 >c : E
->null : null
 
 var r11 = E.a + null;
 >r11 : any
@@ -91,7 +81,6 @@ var r11 = E.a + null;
 >E.a : E.a
 >E : typeof E
 >a : E.a
->null : null
 
 var r12 = E['a'] + null;
 >r12 : any
@@ -99,30 +88,25 @@ var r12 = E['a'] + null;
 >E['a'] : E.a
 >E : typeof E
 >'a' : "a"
->null : null
 
 // null + string
 var r13 = null + d;
 >r13 : string
 >null + d : string
->null : null
 >d : string
 
 var r14 = null + '';
 >r14 : string
 >null + '' : string
->null : null
 >'' : ""
 
 var r15 = d + null;
 >r15 : string
 >d + null : string
 >d : string
->null : null
 
 var r16 = '' + null;
 >r16 : string
 >'' + null : string
 >'' : ""
->null : null
 

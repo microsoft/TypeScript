@@ -69,7 +69,6 @@ for(var anObject: Object = new Object();;){}
 
 for(var anAny: any = null;;){}
 >anAny : any
->null : null
 
 for(var aSecondAny: any = undefined;;){}
 >aSecondAny : any

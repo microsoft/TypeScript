@@ -9,7 +9,6 @@ module A {
 >createB : () => number
 
             return null;
->null : null
         }
     }
 

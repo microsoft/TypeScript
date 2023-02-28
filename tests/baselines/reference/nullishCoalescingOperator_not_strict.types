@@ -1,41 +1,32 @@
 === tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator_not_strict.ts ===
 declare const a1: 'literal' | undefined | null
 >a1 : "literal"
->null : null
 
 declare const a2: '' | undefined | null
 >a2 : ""
->null : null
 
 declare const a3: 1 | undefined | null
 >a3 : 1
->null : null
 
 declare const a4: 0 | undefined | null
 >a4 : 0
->null : null
 
 declare const a5: true | undefined | null
 >a5 : true
 >true : true
->null : null
 
 declare const a6: false | undefined | null
 >a6 : false
 >false : false
->null : null
 
 declare const a7: unknown | null
 >a7 : unknown
->null : null
 
 declare const a8: never | null
 >a8 : null
->null : null
 
 declare const a9: any | null
 >a9 : any
->null : null
 
 
 const aa1 = a1 ?? 'whatever'

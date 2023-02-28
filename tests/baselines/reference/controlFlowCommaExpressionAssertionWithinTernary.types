@@ -6,8 +6,6 @@ declare function assert(value: any): asserts value;
 function foo2(param: number | null | undefined): number | null {
 >foo2 : (param: number | null | undefined) => number | null
 >param : number | null | undefined
->null : null
->null : null
 
     const val = param !== undefined;
 >val : boolean
@@ -26,7 +24,6 @@ function foo2(param: number | null | undefined): number | null {
 >param : number | null
 >undefined : undefined
 >param : number | null
->null : null
 
     // ^^^^^ Still typed as number | null | undefined
 }

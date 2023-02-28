@@ -19,8 +19,6 @@ type ErrorMsg<INPUT> =
 >ErrorMsg : ErrorMsg<INPUT>
 
     | (string | number | boolean | symbol | null | undefined | object)
->null : null
-
     | ((value: INPUT, field: string) => any);
 >value : INPUT
 >field : string

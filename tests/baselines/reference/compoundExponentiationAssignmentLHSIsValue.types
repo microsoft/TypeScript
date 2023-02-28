@@ -76,7 +76,6 @@ foo **= value;
 // literals
 null **= value;
 >null **= value : number
->null : null
 >value : any
 
 true **= value;
@@ -209,7 +208,6 @@ foo() **= value;
 (null) **= value;
 >(null) **= value : number
 >(null) : null
->null : null
 >value : any
 
 (true) **= value;

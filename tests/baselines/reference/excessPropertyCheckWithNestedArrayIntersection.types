@@ -5,7 +5,6 @@ interface ValueOnlyFields {
 
         value: number | null;
 >value : number
->null : null
 
     }>;
 }
@@ -15,11 +14,9 @@ interface ValueAndKeyFields {
 
         key: string | null;
 >key : string
->null : null
 
         value: number | null;
 >value : number
->null : null
 
     }>;
 }
@@ -46,7 +43,6 @@ const repro: BugRepro = {
 
       value: null,
 >value : null
->null : null
 
     }],
   }

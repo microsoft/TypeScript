@@ -43,7 +43,6 @@ type AlsoWeird = unknown extends infer U ? U : never;
 
 const a: Weird = null;
 >a : any
->null : null
 
 const b: string = a;
 >b : string

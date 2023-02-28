@@ -98,7 +98,6 @@ export const func = null as any as Func<SegmentAnnotated>;
 >func : Func<SegmentAnnotated>
 >null as any as Func<SegmentAnnotated> : Func<SegmentAnnotated>
 >null as any : any
->null : null
 
 export function useState<T>(initial: T): [value: T, setter: (T) => void] {
 >useState : <T>(initial: T) => [value: T, setter: (T: any) => void]
@@ -107,7 +106,6 @@ export function useState<T>(initial: T): [value: T, setter: (T) => void] {
 
     return null as any;
 >null as any : any
->null : null
 }
 
 
@@ -124,7 +122,6 @@ export const val = null as any as Parameters<typeof readSegment>[0];
 >val : [number, number]
 >null as any as Parameters<typeof readSegment>[0] : [number, number]
 >null as any : any
->null : null
 >readSegment : ([length, count]: [number, number]) => void
 
 export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];

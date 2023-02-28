@@ -22,7 +22,6 @@ class c {
 >key : string
 
         return null;
->null : null
     }
 }
 var a2: c;

@@ -169,7 +169,6 @@ export var x: d;
 
 export function foo(): d { return null; }
 >foo : () => d
->null : null
 
 === tests/cases/compiler/importDecl_require1.ts ===
 export class d {
@@ -183,7 +182,6 @@ var x: d;
 
 export function foo(): d { return null; }
 >foo : () => d
->null : null
 
 === tests/cases/compiler/importDecl_require2.ts ===
 export class d {
@@ -197,7 +195,6 @@ export var x: d;
 
 export function foo(): d { return null; }
 >foo : () => d
->null : null
 
 === tests/cases/compiler/importDecl_require3.ts ===
 export class d {
@@ -211,7 +208,6 @@ export var x: d;
 
 export function foo(): d { return null; }
 >foo : () => d
->null : null
 
 === tests/cases/compiler/importDecl_require4.ts ===
 import m4 = require("./importDecl_require");
@@ -220,5 +216,4 @@ import m4 = require("./importDecl_require");
 export function foo2(): m4.d { return null; }
 >foo2 : () => m4.d
 >m4 : any
->null : null
 

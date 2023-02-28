@@ -5,7 +5,6 @@ function f6<T>(x: (a: T) => T) {
 >a : T
 
     return null;
->null : null
 } 
 f6(x => f6(y => x = y));
 >f6(x => f6(y => x = y)) : any

@@ -32,6 +32,5 @@ class C {
 
     set [null](v) { }
 >[null] : any
->null : null
 >v : any
 }

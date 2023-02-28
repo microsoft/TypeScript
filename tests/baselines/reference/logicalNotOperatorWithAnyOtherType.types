@@ -100,7 +100,6 @@ var ResultIsBoolean7 = !undefined;
 var ResultIsBoolean8 = !null;
 >ResultIsBoolean8 : boolean
 >!null : true
->null : null
 
 // any type expressions
 var ResultIsBoolean9 = !ANY2[0];
@@ -165,7 +164,6 @@ var ResultIsBoolean17 = !(null + undefined);
 >!(null + undefined) : boolean
 >(null + undefined) : any
 >null + undefined : any
->null : null
 >undefined : undefined
 
 var ResultIsBoolean18 = !(null + null);
@@ -173,8 +171,6 @@ var ResultIsBoolean18 = !(null + null);
 >!(null + null) : boolean
 >(null + null) : any
 >null + null : any
->null : null
->null : null
 
 var ResultIsBoolean19 = !(undefined + undefined);
 >ResultIsBoolean19 : boolean

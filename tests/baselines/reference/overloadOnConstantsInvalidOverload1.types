@@ -27,7 +27,6 @@ function foo(name: "DIV"): Derived2 {
 >name : "DIV"
 
     return null;
->null : null
 }
 
 foo("HI");

@@ -30,7 +30,6 @@ class A {
 >foo : <T extends U, U extends One>(x: T, y: U) => string
 >x : T
 >y : U
->null : null
 }
 
 class B<T extends U, U extends Two> {
@@ -40,7 +39,6 @@ class B<T extends U, U extends Two> {
 >foo : (x: T, y: U) => string
 >x : T
 >y : U
->null : null
 }
 
 class C<T extends U, U extends Three> {
@@ -50,7 +48,6 @@ class C<T extends U, U extends Three> {
 >foo : (x: T, y: U) => string
 >x : T
 >y : U
->null : null
 }
 
 class D<T extends U, U extends Four<string>> {
@@ -60,7 +57,6 @@ class D<T extends U, U extends Four<string>> {
 >foo : (x: T, y: U) => string
 >x : T
 >y : U
->null : null
 }
 
 interface I<T extends U, U extends Five<string>> {

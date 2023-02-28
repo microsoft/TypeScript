@@ -2,17 +2,14 @@
 function f1(x: string): number { return null; }
 >f1 : (x: string) => number
 >x : string
->null : null
 
 function f2(x: string): string { return null; }
 >f2 : (x: string) => string
 >x : string
->null : null
 
 function f3(x: number): number { return null; }
 >f3 : (x: number) => number
 >x : number
->null : null
 
 function f4(x: string): string;
 >f4 : { (x: string): string; (x: number): number; }

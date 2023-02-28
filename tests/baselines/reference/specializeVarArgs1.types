@@ -17,7 +17,6 @@ interface ObservableArray<T> extends Observable<T[]>
 
 function observableArray<T>(): ObservableArray<T> { return null;}
 >observableArray : <T>() => ObservableArray<T>
->null : null
 
  
 

@@ -6,7 +6,6 @@ function factory(a: any): {new(): Object} {
 >a : any
 
   return null;
->null : null
 }
 
 class C extends factory(A) {}

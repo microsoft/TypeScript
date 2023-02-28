@@ -66,12 +66,10 @@ bools("other");
 
 type Pat<T extends string | null | undefined> = `${T}`
 >Pat : `${T}`
->null : null
 
 declare function nullishes(x: Pat<null | undefined>): void;
 >nullishes : (x: Pat<null | undefined>) => void
 >x : "undefined" | "null"
->null : null
 
 // ok
 nullishes("null");
@@ -529,13 +527,11 @@ const shouldWork1: AGen<string> = null as any as AGen<"yes">;
 >shouldWork1 : AGen<string>
 >null as any as AGen<"yes"> : AGen<"yes">
 >null as any : any
->null : null
 
 const shouldWork2: AGen<string> = null as any as AGen<number>;
 >shouldWork2 : AGen<string>
 >null as any as AGen<number> : AGen<number>
 >null as any : any
->null : null
 
 // validates concatenation of patterns
 type A = `${number}`;

@@ -11,7 +11,6 @@ function f1<T extends string | number, U extends string | number>(x: T & U) {
 
 function f2<T extends string | number | undefined, U extends string | null | undefined>(x: T & U) {
 >f2 : <T extends string | number | undefined, U extends string | null | undefined>(x: T & U) => void
->null : null
 >x : T & U
 
     let y1: string | number = x;     // Error
@@ -20,7 +19,6 @@ function f2<T extends string | number | undefined, U extends string | null | und
 
     let y2: string | null = x;       // Error
 >y2 : string | null
->null : null
 >x : string | undefined
 
     let y3: string | undefined = x;
@@ -29,7 +27,6 @@ function f2<T extends string | number | undefined, U extends string | null | und
 
     let y4: number | null = x;       // Error
 >y4 : number | null
->null : null
 >x : string | undefined
 
     let y5: number | undefined = x;  // Error
@@ -38,13 +35,11 @@ function f2<T extends string | number | undefined, U extends string | null | und
 
     let y6: null | undefined = x;    // Error
 >y6 : null | undefined
->null : null
 >x : string | undefined
 }
 
 type T1 = (string | number | undefined) & (string | null | undefined);  // string | undefined
 >T1 : string | undefined
->null : null
 
 function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
 >f3 : <T extends string | number | undefined>(x: T & (number | object | undefined)) => void

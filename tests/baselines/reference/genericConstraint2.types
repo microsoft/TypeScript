@@ -13,11 +13,9 @@ function compare<T extends Comparable<T>>(x: T, y: T): number {
     if (x == null) return y == null ? 0 : -1;
 >x == null : boolean
 >x : T
->null : null
 >y == null ? 0 : -1 : 0 | -1
 >y == null : boolean
 >y : T
->null : null
 >0 : 0
 >-1 : -1
 >1 : 1
@@ -25,7 +23,6 @@ function compare<T extends Comparable<T>>(x: T, y: T): number {
     if (y == null) return 1;
 >y == null : boolean
 >y : T
->null : null
 >1 : 1
 
     return x.comparer(y);

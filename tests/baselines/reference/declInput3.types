@@ -15,7 +15,6 @@ class bar {
 >{a: <bar>null, b: undefined, c: void 4 } : { a: bar; b: undefined; c: undefined; }
 >a : bar
 ><bar>null : bar
->null : null
 >b : undefined
 >undefined : undefined
 >c : undefined
@@ -27,7 +26,6 @@ class bar {
 >x : number
 >4 : 4
 >y : any
->null : null
 >z : string
 >'' : ""
 >x++ : number

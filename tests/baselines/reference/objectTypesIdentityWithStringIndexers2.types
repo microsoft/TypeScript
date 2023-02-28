@@ -58,7 +58,6 @@ var b: { [x: string]: Derived; } = { foo: <Derived>null };
 >{ foo: <Derived>null } : { foo: Derived; }
 >foo : Derived
 ><Derived>null : Derived
->null : null
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

@@ -15,7 +15,6 @@ function foo() {
 >seriesExtent : (series: any) => any
 >(series) => null : (series: any) => any
 >series : any
->null : null
 
     var series2: number[];
 >series2 : number[]
@@ -28,7 +27,6 @@ function foo() {
 >seriesExtent : (series: any) => any
 
     return null;
->null : null
 }
 
 

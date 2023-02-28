@@ -58,7 +58,6 @@ export function C() {
 >C : typeof C
 
   return null;
->null : null
 }
 
 C.A = A;

@@ -31,7 +31,6 @@ type T13 = { readonly [P in keyof Item]?: Item[P] };
 
 type T20 = { [P in keyof Item]: Item[P] | null };
 >T20 : { a: string | null; b: number | null; c: boolean | null; }
->null : null
 
 type T21 = { [P in keyof Item]: Array<Item[P]> };
 >T21 : { a: string[]; b: number[]; c: boolean[]; }
@@ -53,7 +52,6 @@ type T34 = { [P in keyof undefined]: void };
 
 type T35 = { [P in keyof null]: void };
 >T35 : {}
->null : null
 
 type T36 = { [P in keyof void]: void };
 >T36 : {}

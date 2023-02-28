@@ -46,7 +46,6 @@ var r3 = foo(<any>null); // any
 >foo(<any>null) : any
 >foo : { (x: E): E; (x: number): number; (x: any): any; }
 ><any>null : any
->null : null
 
 declare function foo2(x: string): string;
 >foo2 : { (x: string): string; (x: E): E; }

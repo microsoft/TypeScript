@@ -55,7 +55,6 @@ const hypertextNode: HypertextNode =
 
 type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 >Json : string | number | boolean | Json[] | { [key: string]: Json; } | null
->null : null
 >key : string
 
 let data: Json = {
@@ -81,7 +80,6 @@ let data: Json = {
 >[10, 20] : number[]
 >10 : 10
 >20 : 20
->null : null
 
 };
 

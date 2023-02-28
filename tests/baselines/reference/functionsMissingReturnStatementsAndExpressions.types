@@ -45,7 +45,6 @@ function f7(): void {
 
     // Fine since we are typed void and return null
     return null;
->null : null
 }
 
 function f8(): void {
@@ -68,7 +67,6 @@ function f10(): void {
 
     // Fine since we are typed any and return null
     return null;
->null : null
 }
 
 function f11(): string {
@@ -104,7 +102,6 @@ function f14(): number {
 >undefined : undefined
 
     throw null;
->null : null
 }
 
 function f15(): number {
@@ -115,8 +112,6 @@ function f15(): number {
 >undefined : undefined
 
     throw null;
->null : null
-
     return;
 }
 
@@ -187,7 +182,6 @@ class C {
 
         // Fine since this consists of a single throw statement.
         throw null;
->null : null
     }
 
     public get m5() {
@@ -196,8 +190,6 @@ class C {
         // Not fine, since we can *only* consist of a single throw statement
         // if no return statements are present but we are a get accessor.
         throw null;
->null : null
-
         throw undefined.
 >undefined. : any
 >undefined : undefined

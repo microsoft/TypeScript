@@ -80,7 +80,6 @@ function f2(x: 0 | 1 | 2) {
 type Falsy = false | 0 | "" | null | undefined;
 >Falsy : false | "" | 0 | null | undefined
 >false : false
->null : null
 
 function f3(x: Falsy) {
 >f3 : (x: Falsy) => void
@@ -131,8 +130,6 @@ function f4(x: 0 | 1 | true | string) {
 
             break;
         case null:
->null : null
-
             x;
 >x : never
 

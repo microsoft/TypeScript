@@ -60,7 +60,6 @@ export class E {
     get f1() { return /** @type {*} */(null); }
 >f1 : U
 >(null) : any
->null : null
 
     /**
      * @param {U} _p
@@ -75,7 +74,6 @@ export class E {
     get f2() { return /** @type {*} */(null); }
 >f2 : U
 >(null) : any
->null : null
 
     /**
      * @param {U} _p
@@ -238,7 +236,6 @@ export class L extends K {}
 
 export class M extends null {
 >M : M
->null : null
 
     constructor() {
         this.prop = 12;
@@ -308,7 +305,6 @@ export class O extends N {
 var x = /** @type {*} */(null);
 >x : any
 >(null) : any
->null : null
 
 export class VariableBase extends x {}
 >VariableBase : VariableBase

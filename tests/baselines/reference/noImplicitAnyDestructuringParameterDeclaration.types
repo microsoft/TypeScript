@@ -11,11 +11,9 @@ function f2([a = undefined], {b = null}, c = undefined, d = null) { // error
 >a : any
 >undefined : undefined
 >b : any
->null : null
 >c : any
 >undefined : undefined
 >d : any
->null : null
 }
 function f3([a]: [any], {b}: { b: any }, c: any, d: any) {
 >f3 : ([a]: [any], { b }: {    b: any;}, c: any, d: any) => void
@@ -40,9 +38,7 @@ function f5([a1] = [undefined], {b1} = { b1: null }, c1 = undefined, d1 = null) 
 >b1 : any
 >{ b1: null } : { b1: null; }
 >b1 : null
->null : null
 >c1 : any
 >undefined : undefined
 >d1 : any
->null : null
 }

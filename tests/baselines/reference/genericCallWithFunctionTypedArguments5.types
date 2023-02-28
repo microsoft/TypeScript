@@ -12,7 +12,6 @@ function foo<T, U>(arg: { cb: (t: T) => U }) {
 >arg.cb : (t: T) => U
 >arg : { cb: (t: T) => U; }
 >cb : (t: T) => U
->null : null
 }
 
 var arg = { cb: <T>(x: T) => '' };
@@ -64,8 +63,6 @@ function foo2<T, U>(arg: { cb: (t: T, t2: T) => U }) {
 >arg.cb : (t: T, t2: T) => U
 >arg : { cb: (t: T, t2: T) => U; }
 >cb : (t: T, t2: T) => U
->null : null
->null : null
 }
 
 // fewer args ok

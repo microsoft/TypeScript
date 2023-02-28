@@ -2,23 +2,19 @@
 var x = <() => number>null;
 >x : () => number
 ><() => number>null : () => number
->null : null
 
 var y = <{(): number; }>null;
 >y : () => number
 ><{(): number; }>null : () => number
->null : null
 
 var z = <{new(): number; }>null
 >z : new () => number
 ><{new(): number; }>null : new () => number
->null : null
 
 var w = <{[x:number]: number; }>null
 >w : { [x: number]: number; }
 ><{[x:number]: number; }>null : { [x: number]: number; }
 >x : number
->null : null
 
 function f() { return 3 };
 >f : () => number

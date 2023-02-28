@@ -45,7 +45,6 @@ declare class ConflictTarget<Cols> {
 const bookTable: Table<BookReq, BookDef> = null as any
 >bookTable : Table<BookReq, BookDef>
 >null as any : any
->null : null
 
 interface BookReq {
     readonly title: string;
@@ -61,7 +60,6 @@ interface BookDef {
 
     readonly numPages: number | null;
 >numPages : number
->null : null
 }
 
 

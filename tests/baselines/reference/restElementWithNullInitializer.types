@@ -2,7 +2,6 @@
 function foo1([...r] = null) {
 >foo1 : ([...r]?: any) => void
 >r : any[]
->null : null
 }
 
 function foo2([...r] = undefined) {

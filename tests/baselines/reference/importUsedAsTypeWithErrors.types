@@ -7,5 +7,4 @@ export interface T {
 === tests/cases/compiler/main.ts ===
 export const a: import("./test") = null;
 >a : any
->null : null
 

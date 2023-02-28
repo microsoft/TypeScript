@@ -4,18 +4,15 @@ var a: object
 
 declare var b: object | null
 >b : object | null
->null : null
 
 declare var c: object | undefined
 >c : object | undefined
 
 declare var d: object | null | undefined
 >d : object | null | undefined
->null : null
 
 var e: object | null
 >e : object | null
->null : null
 
 a.toString; // error
 >a.toString : () => string
@@ -30,7 +27,6 @@ a = undefined; // error
 a = null; // error
 >a = null : null
 >a : object
->null : null
 
 a = b; // error
 >a = b : object | null
@@ -110,7 +106,6 @@ if (typeof d === 'object') {
 if (d == null) {
 >d == null : boolean
 >d : object | null | undefined
->null : null
 
     d.toString(); // error, undefined | null
 >d.toString() : any
@@ -129,7 +124,6 @@ if (d == null) {
 if (d === null) {
 >d === null : boolean
 >d : object | null | undefined
->null : null
 
     d.toString(); // error, null
 >d.toString() : any
@@ -172,7 +166,6 @@ var x: Proxy<number>; // error
 
 var y: Proxy<null>; // error
 >y : Proxy<null>
->null : null
 
 var z: Proxy<undefined>; // error
 >z : Proxy<undefined>

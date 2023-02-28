@@ -122,7 +122,6 @@ function foo<T, U>(t: T, u: U) {
 >r15 : any
 >t + null : any
 >t : T
->null : null
 
     var r16 = t + undefined;
 >r16 : any

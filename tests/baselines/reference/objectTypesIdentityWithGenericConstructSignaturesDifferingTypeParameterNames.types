@@ -6,7 +6,6 @@ class B<U> {
 
     constructor(x: U) { return null; }
 >x : U
->null : null
 }
 
 class C<V> {
@@ -14,7 +13,6 @@ class C<V> {
 
     constructor(x: V) { return null; }
 >x : V
->null : null
 }
 
 interface I<X> {

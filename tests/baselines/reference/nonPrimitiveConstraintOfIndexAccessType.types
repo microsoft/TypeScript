@@ -12,7 +12,6 @@ function f<T extends object, P extends keyof T>(s: string, tp: T[P]): void {
 }
 function g<T extends null, P extends keyof T>(s: string, tp: T[P]): void {
 >g : <T extends null, P extends keyof T>(s: string, tp: T[P]) => void
->null : null
 >s : string
 >tp : T[P]
 

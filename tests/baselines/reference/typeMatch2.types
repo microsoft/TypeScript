@@ -130,7 +130,6 @@ function f4() {
     i = null; 
 >i = null : null
 >i : number
->null : null
 
     i = undefined;
 >i = undefined : undefined
@@ -152,7 +151,6 @@ function f4() {
 >x : number
 >1 : 1
 >y : null
->null : null
 
     a = { x: 1, y: undefined }; 
 >a = { x: 1, y: undefined } : { x: number; y: undefined; }

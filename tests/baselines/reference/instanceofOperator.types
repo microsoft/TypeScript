@@ -18,7 +18,6 @@ module test {
     4 instanceof null;
 >4 instanceof null : boolean
 >4 : 4
->null : null
 
     // Error and should be error
     obj instanceof 4;
@@ -34,8 +33,6 @@ module test {
     // Error on left hand side
     null instanceof null;
 >null instanceof null : boolean
->null : null
->null : null
 
     obj instanceof Object;
 >obj instanceof Object : boolean

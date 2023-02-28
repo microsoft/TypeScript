@@ -9,11 +9,9 @@ var [a1 = undefined], {b1 = null}, c1 = undefined, d1 = null; // error
 >a1 : any
 >undefined : undefined
 >b1 : any
->null : null
 >c1 : any
 >undefined : undefined
 >d1 : any
->null : null
 
 var [a2]: [any], {b2}: { b2: any }, c2: any, d2: any;
 >a2 : any
@@ -35,11 +33,9 @@ var [a4] = [undefined], {b4} = { b4: null }, c4 = undefined, d4 = null; // error
 >b4 : any
 >{ b4: null } : { b4: null; }
 >b4 : null
->null : null
 >c4 : any
 >undefined : undefined
 >d4 : any
->null : null
 
 var [a5 = undefined] = []; // error
 >a5 : any

@@ -85,11 +85,9 @@ function i<T extends M.E>(x: T) { }
 var j = <C>null;
 >j : any
 ><C>null : any
->null : null
 
 var k = <M.E>null;
 >k : any
 ><M.E>null : any
 >M : any
->null : null
 

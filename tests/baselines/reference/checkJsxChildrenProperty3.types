@@ -43,7 +43,6 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
 >result : any
 
             : null;
->null : null
     }
 }
 

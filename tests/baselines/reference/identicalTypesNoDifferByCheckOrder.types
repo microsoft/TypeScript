@@ -33,8 +33,6 @@ type Validator<T> = {(): boolean, opt?: T};
 
 type WeakValidationMap<T> = {[K in keyof T]?: null extends T[K] ? Validator<T[K] | null | undefined> : Validator<T[K]>};
 >WeakValidationMap : WeakValidationMap<T>
->null : null
->null : null
 
 interface FunctionComponent1<P> {
     (props: P & { children?: unknown }): void;
@@ -61,7 +59,6 @@ function needsComponentOfSomeProps3(...x: SomePropsClone[]): void {}
 const comp3: FunctionComponent2<SomePropsCloneX> = null as any;
 >comp3 : FunctionComponent2<SomePropsCloneX>
 >null as any : any
->null : null
 
 needsComponentOfSomeProps3({ renderAs: comp3 });
 >needsComponentOfSomeProps3({ renderAs: comp3 }) : void
@@ -77,7 +74,6 @@ function needsComponentOfSomeProps2(...x: SomeProps[]): void {}
 const comp2: FunctionComponent1<SomePropsX> = null as any;
 >comp2 : FunctionComponent1<SomePropsX>
 >null as any : any
->null : null
 
 needsComponentOfSomeProps2({ renderAs: comp2 });
 >needsComponentOfSomeProps2({ renderAs: comp2 }) : void

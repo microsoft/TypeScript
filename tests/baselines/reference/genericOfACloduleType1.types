@@ -32,7 +32,6 @@ module M {
 >g1.bar : (x: C) => C
 >g1 : G<C>
 >bar : (x: C) => C
->null : null
 >foo : () => void
 }
 var g2 = new G<M.C>() // was: error Type reference cannot refer to container 'M.C'.

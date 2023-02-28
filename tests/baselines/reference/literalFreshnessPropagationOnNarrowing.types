@@ -36,17 +36,14 @@ function f2() {
     let el: Element = null as any;
 >el : string | false
 >null as any : any
->null : null
 
     let arr: Element[] = null as any;
 >arr : (string | false)[]
 >null as any : any
->null : null
 
     let elOrA: ElementOrArray = null as any;
 >elOrA : (string | false) | (string | false)[]
 >null as any : any
->null : null
 
     // Desired/actual: All OK
     let a1: ElementOrArray = el;

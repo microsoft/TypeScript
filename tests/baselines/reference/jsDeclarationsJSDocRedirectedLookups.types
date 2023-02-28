@@ -22,7 +22,6 @@
 
 /** @type {Null} */const f = null;
 >f : null
->null : null
 
 /** @type {Function} */const g = () => void 0;
 >g : Function

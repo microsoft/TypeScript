@@ -4,7 +4,6 @@
 function f<T>(x: T): T { return null; }
 >f : <T>(x: T) => T
 >x : T
->null : null
 
 var r = f(1);
 >r : number
@@ -16,7 +15,6 @@ var f2 = <T>(x: T): T => { return null; }
 >f2 : <T>(x: T) => T
 ><T>(x: T): T => { return null; } : <T>(x: T) => T
 >x : T
->null : null
 
 var r2 = f2(1);
 >r2 : number
@@ -42,7 +40,6 @@ class C {
 >x : T
 
         return null;
->null : null
     }
 }
 var r4 = (new C()).f(1);
@@ -79,7 +76,6 @@ class C2<T> {
 >x : T
 
         return null;
->null : null
     }
 }
 var r6 = (new C2()).f(1);

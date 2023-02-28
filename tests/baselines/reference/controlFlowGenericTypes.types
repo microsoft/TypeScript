@@ -61,7 +61,6 @@ function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
 function f2<T>(x: Extract<T, string | undefined> | null): string {
 >f2 : <T>(x: Extract<T, string | undefined> | null) => string
 >x : Extract<T, string | undefined> | null
->null : null
 
     if (x) {
 >x : Extract<T, string | undefined> | null
@@ -327,7 +326,6 @@ function notWorking<T extends Union>(object: T) {
 interface A {
     a: number | null;
 >a : number | null
->null : null
 
 };
 
@@ -345,7 +343,6 @@ function get<K extends keyof A>(key: K, obj: A): number {
     if (value !== null) {
 >value !== null : boolean
 >value : A[K]
->null : null
 
         return value;
 >value : number
@@ -466,21 +463,18 @@ class TableBaseEnum<
 >iSpec : InternalSpec
 >null! as InternalSpec : InternalSpec
 >null! : never
->null : null
 
         iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
 >iSpec[null! as keyof InternalSpec] : Record<keyof PublicSpec, any>[keyof InternalSpec]
 >iSpec : Record<keyof PublicSpec, any> | undefined
 >null! as keyof InternalSpec : keyof InternalSpec
 >null! : never
->null : null
 
         iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
 >iSpec[null! as keyof PublicSpec] : Record<keyof PublicSpec, any>[keyof PublicSpec]
 >iSpec : Record<keyof PublicSpec, any> | undefined
 >null! as keyof PublicSpec : keyof PublicSpec
 >null! : never
->null : null
 
         if (iSpec === undefined) {
 >iSpec === undefined : boolean
@@ -494,14 +488,12 @@ class TableBaseEnum<
 >iSpec : Record<keyof PublicSpec, any>
 >null! as keyof InternalSpec : keyof InternalSpec
 >null! : never
->null : null
 
         iSpec[null! as keyof PublicSpec];
 >iSpec[null! as keyof PublicSpec] : Record<keyof PublicSpec, any>[keyof PublicSpec]
 >iSpec : Record<keyof PublicSpec, any>
 >null! as keyof PublicSpec : keyof PublicSpec
 >null! : never
->null : null
     }
 }
 

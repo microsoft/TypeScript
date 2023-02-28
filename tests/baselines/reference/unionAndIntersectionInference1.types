@@ -127,7 +127,6 @@ function get<U>(x: U | void): U {
 >x : void | U
 
    return null; // just an example
->null : null
 }
 
 let foo: Maybe<string>;

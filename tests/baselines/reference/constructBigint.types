@@ -37,7 +37,6 @@ BigInt({ e: 1, m: 1 })
 BigInt(null);
 >BigInt(null) : bigint
 >BigInt : BigIntConstructor
->null : null
 
 BigInt(undefined)
 >BigInt(undefined) : bigint

@@ -13,5 +13,4 @@ export default {
 
   baz: null
 >baz : null
->null : null
 }

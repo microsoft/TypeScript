@@ -177,7 +177,6 @@ class B2 extends Base {
 let target: Base = null as any;
 >target : Base
 >null as any : any
->null : null
 
 while (target) {
 >target : Base

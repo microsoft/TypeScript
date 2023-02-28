@@ -42,7 +42,6 @@ class C {
 >x : number
         }
         return null
->null : null
     }
     // modifier mistakes
     static constructor() { }

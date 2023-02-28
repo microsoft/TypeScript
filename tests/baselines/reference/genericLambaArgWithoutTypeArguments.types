@@ -8,7 +8,6 @@ function foo(a) {
 >a : any
 
    return null;
->null : null
 }
 foo((arg: Foo) => { return arg.x; });
 >foo((arg: Foo) => { return arg.x; }) : any

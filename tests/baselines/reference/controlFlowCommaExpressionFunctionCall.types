@@ -7,7 +7,6 @@ const otherValue = () => true;
 const value : number | string = null as any;
 >value : string | number
 >null as any : any
->null : null
 
 function isNumber(obj: any): obj is number {
 >isNumber : (obj: any) => obj is number

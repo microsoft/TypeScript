@@ -87,7 +87,6 @@ module Generic {
 >y : U
 
             return null;
->null : null
         }
         set y(v: U) { }
 >y : U

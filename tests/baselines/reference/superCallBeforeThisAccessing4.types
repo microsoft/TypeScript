@@ -1,7 +1,6 @@
 === tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing4.ts ===
 class D extends null {
 >D : D
->null : null
 
     private _t;
 >_t : any
@@ -20,7 +19,6 @@ class D extends null {
 
 class E extends null {
 >E : E
->null : null
 
     private _t;
 >_t : any

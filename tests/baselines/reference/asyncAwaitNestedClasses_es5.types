@@ -18,7 +18,6 @@ class A {
 >resolve : (value: void | PromiseLike<void>) => void
 >resolve(null) : void
 >resolve : (value: void | PromiseLike<void>) => void
->null : null
         }
         static C = class C {
 >C : typeof C

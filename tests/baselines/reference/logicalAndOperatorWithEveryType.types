@@ -83,7 +83,6 @@ var ra8 = a8 && a1;
 var ra9 = null && a1;
 >ra9 : any
 >null && a1 : null
->null : null
 >a1 : any
 
 var ra10 = undefined && a1;
@@ -143,7 +142,6 @@ var rb8 = a8 && a2;
 var rb9 = null && a2;
 >rb9 : any
 >null && a2 : null
->null : null
 >a2 : boolean
 
 var rb10 = undefined && a2;
@@ -203,7 +201,6 @@ var rc8 = a8 && a3;
 var rc9 = null && a3;
 >rc9 : any
 >null && a3 : null
->null : null
 >a3 : number
 
 var rc10 = undefined && a3;
@@ -263,7 +260,6 @@ var rd8 = a8 && a4;
 var rd9 = null && a4;
 >rd9 : any
 >null && a4 : null
->null : null
 >a4 : string
 
 var rd10 = undefined && a4;
@@ -323,7 +319,6 @@ var re8 = a8 && a5;
 var re9 = null && a5;
 >re9 : any
 >null && a5 : null
->null : null
 >a5 : void
 
 var re10 = undefined && a5;
@@ -383,7 +378,6 @@ var rf8 = a8 && a6;
 var rf9 = null && a6;
 >rf9 : any
 >null && a6 : null
->null : null
 >a6 : E
 
 var rf10 = undefined && a6;
@@ -443,7 +437,6 @@ var rg8 = a8 && a7;
 var rg9 = null && a7;
 >rg9 : any
 >null && a7 : null
->null : null
 >a7 : {}
 
 var rg10 = undefined && a7;
@@ -503,7 +496,6 @@ var rh8 = a8 && a8;
 var rh9 = null && a8;
 >rh9 : any
 >null && a8 : null
->null : null
 >a8 : string[]
 
 var rh10 = undefined && a8;
@@ -516,61 +508,50 @@ var ri1 = a1 && null;
 >ri1 : any
 >a1 && null : null
 >a1 : any
->null : null
 
 var ri2 = a2 && null;
 >ri2 : any
 >a2 && null : null
 >a2 : boolean
->null : null
 
 var ri3 = a3 && null;
 >ri3 : any
 >a3 && null : null
 >a3 : number
->null : null
 
 var ri4 = a4 && null;
 >ri4 : any
 >a4 && null : null
 >a4 : string
->null : null
 
 var ri5 = a5 && null;
 >ri5 : void
 >a5 && null : void
 >a5 : void
->null : null
 
 var ri6 = a6 && null;
 >ri6 : any
 >a6 && null : null
 >a6 : E
->null : null
 
 var ri7 = a7 && null;
 >ri7 : any
 >a7 && null : null
 >a7 : {}
->null : null
 
 var ri8 = a8 && null;
 >ri8 : any
 >a8 && null : null
 >a8 : string[]
->null : null
 
 var ri9 = null && null;
 >ri9 : any
 >null && null : null
->null : null
->null : null
 
 var ri10 = undefined && null;
 >ri10 : any
 >undefined && null : undefined
 >undefined : undefined
->null : null
 
 var rj1 = a1 && undefined;
 >rj1 : any
@@ -623,7 +604,6 @@ var rj8 = a8 && undefined;
 var rj9 = null && undefined;
 >rj9 : any
 >null && undefined : null
->null : null
 >undefined : undefined
 
 var rj10 = undefined && undefined;

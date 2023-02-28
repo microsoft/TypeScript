@@ -9,7 +9,6 @@ declare module "./argument.js" {
 
         default: null;
 >default : null
->null : null
     }
 }
 === tests/cases/conformance/jsdoc/declarations/base.js ===

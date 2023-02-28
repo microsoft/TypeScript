@@ -28,12 +28,10 @@ interface I<T> {
 const i: I<A & B> = null as any;
 >i : I<A & B>
 >null as any : any
->null : null
 
 const p2: P2<A> = null as any;
 >p2 : P2<A>
 >null as any : any
->null : null
 
 // Commenting out the below line will remove the error on the `const _i: I<A> = i;`
 i.fn(null as any, p2);
@@ -42,7 +40,6 @@ i.fn(null as any, p2);
 >i : I<A & B>
 >fn : <K extends "a" | "b">(p1: P1<Pick<A & B, K>>, p2: P2<Pick<A & B, K>>) => void
 >null as any : any
->null : null
 >p2 : P2<A>
 
 const _i: I<A> = i;

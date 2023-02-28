@@ -195,7 +195,6 @@ function f7() {
 
     let x = null;
 >x : any
->null : null
 
     if (cond()) {
 >cond() : boolean

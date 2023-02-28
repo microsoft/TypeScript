@@ -135,7 +135,6 @@ typeof "123" == "string" ? exprBoolean1 : exprBoolean2;
 null === undefined ? exprString1 : exprString2;
 >null === undefined ? exprString1 : exprString2 : string
 >null === undefined : boolean
->null : null
 >undefined : undefined
 >exprString1 : string
 >exprString2 : string
@@ -151,7 +150,6 @@ true || false ? exprIsObject1 : exprIsObject2;
 null === undefined ? exprString1 : exprBoolean1; // union
 >null === undefined ? exprString1 : exprBoolean1 : string | boolean
 >null === undefined : boolean
->null : null
 >undefined : undefined
 >exprString1 : string
 >exprBoolean1 : boolean
@@ -279,7 +277,6 @@ var resultIsString3 = null === undefined ? exprString1 : exprString2;
 >resultIsString3 : string
 >null === undefined ? exprString1 : exprString2 : string
 >null === undefined : boolean
->null : null
 >undefined : undefined
 >exprString1 : string
 >exprString2 : string

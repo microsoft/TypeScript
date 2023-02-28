@@ -4,15 +4,12 @@
 export function assertIsElement(node: Node | null): node is Element {
 >assertIsElement : (node: Node | null) => node is Element
 >node : Node | null
->null : null
 
     let nodeType = node === null ? null : node.nodeType;
 >nodeType : number | null
 >node === null ? null : node.nodeType : number | null
 >node === null : boolean
 >node : Node | null
->null : null
->null : null
 >node.nodeType : number
 >node : Node
 >nodeType : number
@@ -29,7 +26,6 @@ export function assertNodeTagName<
     T extends keyof ElementTagNameMap,
     U extends ElementTagNameMap[T]>(node: Node | null, tagName: T): node is U {
 >node : Node | null
->null : null
 >tagName : T
 
     if (assertIsElement(node)) {
@@ -62,7 +58,6 @@ export function assertNodeProperty<
     P extends keyof ElementTagNameMap[T],
     V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) {
 >node : Node | null
->null : null
 >tagName : T
 >prop : P
 >value : V

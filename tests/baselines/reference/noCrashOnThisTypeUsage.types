@@ -2,7 +2,6 @@
 interface IListenable {
     changeListeners: Function[] | null
 >changeListeners : Function[] | null
->null : null
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean): void
 >observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) => void
@@ -32,7 +31,6 @@ export class ObservableValue<T> {
 
         const oldValue: any = null;
 >oldValue : any
->null : null
 
         notifyListeners(this, {
 >notifyListeners(this, {            type: "update",            object: this,            newValue,            oldValue        }) : void
@@ -58,7 +56,6 @@ export class ObservableValue<T> {
     }
     changeListeners: Function[] | null = [];
 >changeListeners : Function[] | null
->null : null
 >[] : never[]
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) {}

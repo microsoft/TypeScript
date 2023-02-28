@@ -12,7 +12,6 @@ const MyComponent = () => /* @type {any} */(null);
 >MyComponent : StatelessComponent<MyComponentProps>
 >() => /* @type {any} */(null) : { (): any; defaultProps: Partial<MyComponentProps>; }
 >(null) : null
->null : null
 
 MyComponent.defaultProps = {
 >MyComponent.defaultProps = {    color: "red"} : { color: "red"; }
@@ -30,7 +29,6 @@ MyComponent.defaultProps = {
 const MyComponent2 = () => null;
 >MyComponent2 : { (): any; defaultProps: MyComponentProps; }
 >() => null : { (): any; defaultProps: MyComponentProps; }
->null : null
 
 /**
  * @type {MyComponentProps}

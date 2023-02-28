@@ -1,7 +1,6 @@
 === tests/cases/compiler/json.stringify.ts ===
 var value = null;
 >value : null
->null : null
 
 JSON.stringify(value, undefined, 2);
 >JSON.stringify(value, undefined, 2) : string
@@ -18,7 +17,6 @@ JSON.stringify(value, null, 2);
 >JSON : JSON
 >stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >value : null
->null : null
 >2 : 2
 
 JSON.stringify(value, ["a", 1], 2);

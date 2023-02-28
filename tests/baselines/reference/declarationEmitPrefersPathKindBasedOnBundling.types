@@ -11,7 +11,6 @@ export function scalar(value: string): Scalar {
 
 	return null as any;
 >null as any : any
->null : null
 }
 === tests/cases/compiler/src/settings/spacing.ts ===
 import { scalar } from '../lib/operators/scalar';

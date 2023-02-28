@@ -84,7 +84,6 @@ function other<T extends List<U>, U>() {
     function foo5<V>(x: any): any { return null; }
 >foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
 >x : any
->null : null
 
     var list: List<string>;
 >list : List<string>

@@ -36,7 +36,7 @@ export = Date || String; // Ok
 >String : StringConstructor
 
 === tests/cases/conformance/externalModules/foo8.ts ===
+
 export = null; // Ok
->null : null
 
 

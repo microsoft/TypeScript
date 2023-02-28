@@ -13,7 +13,6 @@ class RC1 extends React.Component<{x : number}, {}> {
 >render : () => any
 
         return null;
->null : null
     }
 }
 
@@ -28,7 +27,6 @@ class RC2 extends React.Component<{ x: string }, {}> {
 >render : () => any
 
         return null;
->null : null
     }
     private method() { }
 >method : () => void
@@ -44,7 +42,6 @@ class RC3 extends React.Component<{}, {}> {
 >render : () => any
 
         return null;
->null : null
     }
 }
 
@@ -58,7 +55,6 @@ class RC4 extends React.Component<{}, {}> {
 >render : () => any
 
         return null;
->null : null
     }
 }
 

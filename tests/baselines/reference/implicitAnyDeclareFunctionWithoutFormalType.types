@@ -22,7 +22,6 @@ function func3(...args) { };     // error at "args"
 function func4(z= null, w= undefined) { };  // error at "z,w"
 >func4 : (z?: any, w?: any) => void
 >z : any
->null : null
 >w : any
 >undefined : undefined
 

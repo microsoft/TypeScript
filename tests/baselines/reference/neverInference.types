@@ -38,7 +38,6 @@ type Node<T> = { value: T, next: Node<T> } | null
 >Node : Node<T>
 >value : T
 >next : Node<T>
->null : null
 
 declare function compareNumbers(x: number, y: number): number;
 >compareNumbers : (x: number, y: number) => number

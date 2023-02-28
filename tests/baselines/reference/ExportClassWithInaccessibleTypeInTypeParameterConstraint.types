@@ -50,7 +50,6 @@ module A {
 >p : Point
 
             return null;
->null : null
         }
     }
 }

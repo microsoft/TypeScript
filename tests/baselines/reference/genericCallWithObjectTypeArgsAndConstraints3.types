@@ -94,7 +94,6 @@ function f3<T extends Base>(y: (a: T) => T, x: T) {
     return y(null);
 >y(null) : T
 >y : (a: T) => T
->null : null
 }
 
 // all ok - second argument is processed before x is fixed
@@ -125,5 +124,4 @@ var r6 = f3(x => x, null);
 >x => x : (x: any) => any
 >x : any
 >x : any
->null : null
 

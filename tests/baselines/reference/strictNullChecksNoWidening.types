@@ -1,7 +1,6 @@
 === tests/cases/conformance/types/typeRelationships/widenedTypes/strictNullChecksNoWidening.ts ===
 var a1 = null;
 >a1 : null
->null : null
 
 var a2 = undefined;
 >a2 : undefined
@@ -47,7 +46,6 @@ var c1 = f(null);
 >c1 : null
 >f(null) : null
 >f : <T>(x: T) => T
->null : null
 
 var c2 = f(undefined);
 >c2 : undefined

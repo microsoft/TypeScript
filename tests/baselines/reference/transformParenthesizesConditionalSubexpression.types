@@ -14,7 +14,6 @@ var a = { p  : (true ? { [K] : 'v'}        : null) }
 >[K] : string
 >K : string
 >'v' : "v"
->null : null
 
 var b = { p  : (true ? { [K] : 'v'} as any : null) }
 >b : { p: any; }
@@ -28,5 +27,4 @@ var b = { p  : (true ? { [K] : 'v'} as any : null) }
 >[K] : string
 >K : string
 >'v' : "v"
->null : null
 

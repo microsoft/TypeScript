@@ -16,7 +16,6 @@ type T04 = NonNullable<string | number | undefined>;  // string | number
 
 type T05 = NonNullable<(() => string) | string[] | null | undefined>;  // (() => string) | string[]
 >T05 : (() => string) | string[]
->null : null
 
 function f1<T>(x: T, y: NonNullable<T>) {
 >f1 : <T>(x: T, y: NonNullable<T>) => void

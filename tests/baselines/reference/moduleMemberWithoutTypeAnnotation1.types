@@ -10,7 +10,6 @@ module TypeScript.Parser {
 >currentNode : () => SyntaxNode
 
             return null;
->null : null
         }
     }
 }
@@ -65,12 +64,10 @@ module TypeScript {
 >this.findTokenInternal : (x: any, y: any, z: any) => any
 >this : this
 >findTokenInternal : (x: any, y: any, z: any) => any
->null : null
 >position : number
 >0 : 0
 
             return null;
->null : null
         }
         findTokenInternal(x, y, z) {
 >findTokenInternal : (x: any, y: any, z: any) => any
@@ -79,7 +76,6 @@ module TypeScript {
 >z : any
 
             return null;
->null : null
         }
     }
 }

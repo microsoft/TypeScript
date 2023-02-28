@@ -34,7 +34,6 @@ class C<T> {
 >temp(<T>null) : T
 >temp : <U>(a: U) => T
 ><T>null : T
->null : null
     }
 }
 
@@ -52,7 +51,6 @@ c.data = c.x(null);
 >c.x : <U>(a: U) => number
 >c : C<number>
 >x : <U>(a: U) => number
->null : null
 
 c.data = c.foo();
 >c.data = c.foo() : number

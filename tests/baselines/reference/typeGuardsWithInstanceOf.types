@@ -37,7 +37,6 @@ interface OnChanges {
 interface Validator {
     validate(): null | Record<string, unknown>;
 >validate : () => null | Record<string, unknown>
->null : null
 }
 
 class C {
@@ -57,7 +56,6 @@ function foo() {
     let v: Validator & Partial<OnChanges> = null as any;
 >v : Validator & Partial<OnChanges>
 >null as any : any
->null : null
 
     if (v instanceof C) {
 >v instanceof C : boolean

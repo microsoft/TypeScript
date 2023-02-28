@@ -7,6 +7,5 @@ class C<T extends C<T>> {
 >x : U
 
         return null;
->null : null
     }
 }

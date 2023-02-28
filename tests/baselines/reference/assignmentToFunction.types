@@ -20,6 +20,5 @@ module foo {
         bar = null;
 >bar = null : null
 >bar : any
->null : null
     }
 }

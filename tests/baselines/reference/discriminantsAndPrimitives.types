@@ -72,7 +72,6 @@ function f2(x: Foo | Bar | string | undefined) {
 function f3(x: Foo | Bar | string | null) {
 >f3 : (x: Foo | Bar | string | null) => void
 >x : string | Foo | Bar | null
->null : null
 
     if (x && typeof x !== "string") {
 >x && typeof x !== "string" : boolean | "" | null
@@ -101,7 +100,6 @@ function f3(x: Foo | Bar | string | null) {
 function f4(x: Foo | Bar | string | number | null) {
 >f4 : (x: Foo | Bar | string | number | null) => void
 >x : string | number | Foo | Bar | null
->null : null
 
     if (x && typeof x === "object") {
 >x && typeof x === "object" : boolean | "" | 0 | null

@@ -16,7 +16,6 @@ function f2() {
 >f2 : () => null
 
     return null;
->null : null
 }
 const b = f2()
 >b : null

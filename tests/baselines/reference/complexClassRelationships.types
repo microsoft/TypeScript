@@ -43,7 +43,6 @@ class Thing {
 
     public get Components(): ComponentCollection<any> { return null }
 >Components : ComponentCollection<any>
->null : null
 }
 
 class ComponentCollection<T> {

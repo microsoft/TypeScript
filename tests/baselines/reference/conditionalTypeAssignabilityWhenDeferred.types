@@ -32,7 +32,6 @@ export function func<XX extends string>(x: XX, tipos: { value: XX }[]) {
 
 declare function onlyNullablePlease<T extends null extends T ? any : never>(
 >onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
->null : null
 
   value: T
 >value : T
@@ -43,14 +42,11 @@ declare function onlyNullablePlease2<
 >onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
 
   T extends [null] extends [T] ? any : never
->null : null
-
 >(value: T): void;
 >value : T
 
 declare var z: string | null;
 >z : string | null
->null : null
 
 onlyNullablePlease(z); // works as expected
 >onlyNullablePlease(z) : void
@@ -81,7 +77,6 @@ function f<T>(t: T) {
 
   var x: T | null = Math.random() > 0.5 ? null : t;
 >x : T | null
->null : null
 >Math.random() > 0.5 ? null : t : T | null
 >Math.random() > 0.5 : boolean
 >Math.random() : number
@@ -89,7 +84,6 @@ function f<T>(t: T) {
 >Math : Math
 >random : () => number
 >0.5 : 0.5
->null : null
 >t : T
 
   onlyNullablePlease(x); // should work

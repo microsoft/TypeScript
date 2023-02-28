@@ -9,8 +9,6 @@ class A {
 
 let a: A | null = null;
 >a : A | null
->null : null
->null : null
 
 try {
   a = new A();

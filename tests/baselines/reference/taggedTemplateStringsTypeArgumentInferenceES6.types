@@ -114,7 +114,6 @@ someGenerics4 `${4}${ () => null }`;
 >`${4}${ () => null }` : string
 >4 : 4
 >() => null : () => any
->null : null
 
 someGenerics4 `${''}${ () => 3 }`;
 >someGenerics4 `${''}${ () => 3 }` : void
@@ -128,8 +127,6 @@ someGenerics4 `${ null }${ null }`;
 >someGenerics4 `${ null }${ null }` : void
 >someGenerics4 : <T, U>(strs: TemplateStringsArray, n: T, f: (x: U) => void) => void
 >`${ null }${ null }` : string
->null : null
->null : null
 
 // 2 parameter generic tag with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 function someGenerics5<U, T>(strs: TemplateStringsArray, n: T, f: (x: U) => void) { }
@@ -145,7 +142,6 @@ someGenerics5 `${ 4 } ${ () => null }`;
 >`${ 4 } ${ () => null }` : string
 >4 : 4
 >() => null : () => any
->null : null
 
 someGenerics5 `${ '' }${ () => 3 }`;
 >someGenerics5 `${ '' }${ () => 3 }` : void
@@ -159,8 +155,6 @@ someGenerics5 `${null}${null}`;
 >someGenerics5 `${null}${null}` : void
 >someGenerics5 : <U, T>(strs: TemplateStringsArray, n: T, f: (x: U) => void) => void
 >`${null}${null}` : string
->null : null
->null : null
 
 // Generic tag with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6<A>(strs: TemplateStringsArray, a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
@@ -286,9 +280,6 @@ x `${null}${null}${null}`;
 >x `${null}${null}${null}` : void
 >x : <A, B, C>(strs: TemplateStringsArray, a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
 >`${null}${null}${null}` : string
->null : null
->null : null
->null : null
 
 // Generic tag with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9<T>(strs: TemplateStringsArray, a: T, b: T, c: T): T {
@@ -299,7 +290,6 @@ function someGenerics9<T>(strs: TemplateStringsArray, a: T, b: T, c: T): T {
 >c : T
 
     return null;
->null : null
 }
 var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
 >a9a : string
@@ -393,7 +383,6 @@ var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
 >`${ [] }${ null }${ undefined }` : string
 >[] : undefined[]
->null : null
 >undefined : undefined
 
 var arr: any[];

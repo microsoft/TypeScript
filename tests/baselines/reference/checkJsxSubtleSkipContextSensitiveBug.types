@@ -24,7 +24,6 @@ class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
 
     render() { return null; }
 >render : () => null
->null : null
 }
 
 async function load(): Promise<{ success: true } | ErrorResult> {

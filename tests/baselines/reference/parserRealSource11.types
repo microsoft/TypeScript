@@ -27,7 +27,6 @@ module TypeScript {
 
         public type: Type = null;
 >type : Type
->null : null
 
         public flags = ASTFlags.Writeable;
 >flags : any
@@ -44,11 +43,9 @@ module TypeScript {
 
         public preComments: Comment[] = null;
 >preComments : Comment[]
->null : null
 
         public postComments: Comment[] = null;
 >postComments : Comment[]
->null : null
 
         public isParenthesized = false;
 >isParenthesized : boolean
@@ -511,7 +508,6 @@ module TypeScript {
 >context.parser : any
 >context : PrintContext
 >parser : any
->null : null
 
                 context.parser.getSourceLineCol(lineCol, this.minChar);
 >context.parser.getSourceLineCol(lineCol, this.minChar) : any
@@ -833,7 +829,6 @@ module TypeScript {
 
         public enclosingScope: SymbolScope = null;
 >enclosingScope : SymbolScope
->null : null
 
         public members: AST[] = new AST[];
 >members : AST[]
@@ -1019,7 +1014,6 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptList : any
 >this : this
->null : null
 >TokenID.Semicolon : any
 >TokenID : any
 >Semicolon : any
@@ -1104,7 +1098,6 @@ module TypeScript {
 
         public sym: Symbol = null;
 >sym : Symbol
->null : null
 
         public cloId = -1;
 >cloId : number
@@ -1440,11 +1433,9 @@ module TypeScript {
 
         public targetType: Type = null; // Target type for an object literal (null if no target type)
 >targetType : Type
->null : null
 
         public castTerm: AST = null;
 >castTerm : AST
->null : null
 
         constructor (nodeType: NodeType, public operand: AST) {
 >nodeType : NodeType
@@ -1717,7 +1708,6 @@ module TypeScript {
 >this : this
 >castTerm : AST
 >type : Type
->null : null
 
                     typeFlow.checker.typeCheckWithContextualType(targetType, typeFlow.checker.inProvisionalTypecheckMode(), true, this.operand);
 >typeFlow.checker.typeCheckWithContextualType(targetType, typeFlow.checker.inProvisionalTypecheckMode(), true, this.operand) : any
@@ -2303,7 +2293,6 @@ module TypeScript {
 
         public signature: Signature = null;
 >signature : Signature
->null : null
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
@@ -2583,7 +2572,6 @@ module TypeScript {
 >this.operand2 : AST
 >this : this
 >operand2 : AST
->null : null
 >(this.operand2.nodeType == NodeType.Null) : boolean
 >this.operand2.nodeType == NodeType.Null : boolean
 >this.operand2.nodeType : NodeType
@@ -4039,11 +4027,9 @@ module TypeScript {
 
         public init: AST = null;
 >init : AST
->null : null
 
         public typeExpr: AST = null;
 >typeExpr : AST
->null : null
 
         public varFlags = VarFlags.None;
 >varFlags : any
@@ -4053,7 +4039,6 @@ module TypeScript {
 
         public sym: Symbol = null;
 >sym : Symbol
->null : null
 
         constructor (public id: Identifier, nodeType: NodeType, public nestingLevel: number) {
 >id : Identifier
@@ -4252,7 +4237,6 @@ module TypeScript {
 
         public parameterPropertySym: FieldSymbol = null;
 >parameterPropertySym : FieldSymbol
->null : null
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
@@ -4313,7 +4297,6 @@ module TypeScript {
 
         public hint: string = null;
 >hint : string
->null : null
 
         public fncFlags = FncFlags.None;
 >fncFlags : any
@@ -4323,7 +4306,6 @@ module TypeScript {
 
         public returnTypeAnnotation: AST = null;
 >returnTypeAnnotation : AST
->null : null
 
         public symbols: IHashTable;
 >symbols : IHashTable
@@ -4340,11 +4322,9 @@ module TypeScript {
 
         public jumpRefs: Identifier[] = null;
 >jumpRefs : Identifier[]
->null : null
 
         public internalNameCache: string = null;
 >internalNameCache : string
->null : null
 
         public tmp1Declared = false;
 >tmp1Declared : boolean
@@ -4352,7 +4332,6 @@ module TypeScript {
 
         public enclosingFnc: FuncDecl = null;
 >enclosingFnc : FuncDecl
->null : null
 
         public freeVariables: Symbol[] = [];
 >freeVariables : Symbol[]
@@ -4365,11 +4344,9 @@ module TypeScript {
 
         public classDecl: NamedDeclaration = null;
 >classDecl : NamedDeclaration
->null : null
 
         public boundToProperty: VarDecl = null;
 >boundToProperty : VarDecl
->null : null
 
         public isOverload = false;
 >isOverload : boolean
@@ -4389,7 +4366,6 @@ module TypeScript {
 
         public accessorSymbol: Symbol = null;
 >accessorSymbol : Symbol
->null : null
 
         public leftCurlyCount = 0;
 >leftCurlyCount : number
@@ -4405,11 +4381,9 @@ module TypeScript {
 
         public scopeType: Type = null; // Type of the FuncDecl, before target typing
 >scopeType : Type
->null : null
 
         public endingToken: ASTSpan = null;
 >endingToken : ASTSpan
->null : null
 
         constructor (public name: Identifier, public bod: ASTList, public isConstructor: boolean,
 >name : Identifier
@@ -4439,7 +4413,6 @@ module TypeScript {
 >this.internalNameCache : string
 >this : this
 >internalNameCache : string
->null : null
 
                 var extName = this.getNameText();
 >extName : string
@@ -4509,7 +4482,6 @@ module TypeScript {
 >this.envids : Identifier[]
 >this : this
 >envids : Identifier[]
->null : null
 
                 this.envids = new Identifier[];
 >this.envids = new Identifier[] : any
@@ -4591,7 +4563,6 @@ module TypeScript {
 >this.jumpRefs : Identifier[]
 >this : this
 >jumpRefs : Identifier[]
->null : null
 
                 this.jumpRefs = new Identifier[];
 >this.jumpRefs = new Identifier[] : any
@@ -4641,7 +4612,6 @@ module TypeScript {
 >this : this
 >addCloRef : (id: Identifier, sym: Symbol) => number
 >id : Identifier
->null : null
         }
 
         public buildControlFlow(): ControlFlowContext {
@@ -4692,8 +4662,6 @@ module TypeScript {
 >getAstWalkerFactory : any
 >getWalker : any
 >controlFlowPrefix : (ast: AST, parent: AST, walker: IAstWalker) => AST
->null : null
->null : null
 >context : any
 
             context.walker = walker;
@@ -4840,7 +4808,6 @@ module TypeScript {
 >this.name : Identifier
 >this : this
 >name : Identifier
->null : null
 
         public isAccessor() { return hasFlag(this.fncFlags, FncFlags.GetAccessor) || hasFlag(this.fncFlags, FncFlags.SetAccessor); }
 >isAccessor : () => any
@@ -4947,7 +4914,6 @@ module TypeScript {
 >this.name : Identifier
 >this : this
 >name : Identifier
->null : null
 
                 return "funcExpr";
 >"funcExpr" : "funcExpr"
@@ -5034,7 +5000,6 @@ module TypeScript {
 >new LocationInfo("unknown", null, -1) : LocationInfo
 >LocationInfo : typeof LocationInfo
 >"unknown" : "unknown"
->null : null
 >-1 : -1
 >1 : 1
 
@@ -5044,7 +5009,6 @@ module TypeScript {
 
         public locationInfo: LocationInfo = null;
 >locationInfo : LocationInfo
->null : null
 
         public referencedFiles: IFileReference[] = [];
 >referencedFiles : IFileReference[]
@@ -5072,7 +5036,6 @@ module TypeScript {
 
         public topLevelMod: ModuleDeclaration = null;
 >topLevelMod : ModuleDeclaration
->null : null
 
         public leftCurlyCount = 0;
 >leftCurlyCount : number
@@ -5107,12 +5070,9 @@ module TypeScript {
 >new Identifier("script") : Identifier
 >Identifier : typeof Identifier
 >"script" : "script"
->null : null
 >false : false
->null : null
 >vars : ASTList
 >scopes : ASTList
->null : null
 >NodeType.Script : any
 >NodeType : any
 >Script : any
@@ -5361,7 +5321,6 @@ module TypeScript {
 >this.bod : ASTList
 >this : this
 >bod : ASTList
->null : null
 >TokenID.Semicolon : any
 >TokenID : any
 >Semicolon : any
@@ -5684,7 +5643,6 @@ module TypeScript {
 
         public constructorDecl: FuncDecl = null;
 >constructorDecl : FuncDecl
->null : null
 
         public constructorNestingLevel = 0;
 >constructorNestingLevel : number
@@ -5692,7 +5650,6 @@ module TypeScript {
 
         public endingToken: ASTSpan = null;
 >endingToken : ASTSpan
->null : null
 
         constructor (name: Identifier,
 >name : Identifier
@@ -6107,7 +6064,6 @@ module TypeScript {
 >this.statements : ASTList
 >this : this
 >statements : ASTList
->null : null
 >TokenID.Semicolon : any
 >TokenID : any
 >Semicolon : any
@@ -6264,7 +6220,6 @@ module TypeScript {
 >this.statements : ASTList
 >this : this
 >statements : ASTList
->null : null
 >(this.statements.members.length == 0) : boolean
 >this.statements.members.length == 0 : boolean
 >this.statements.members.length : number
@@ -6310,7 +6265,6 @@ module TypeScript {
 
         public target: string = null;
 >target : string
->null : null
 
         public hasExplicitTarget() { return (this.target); }
 >hasExplicitTarget : () => string
@@ -6321,7 +6275,6 @@ module TypeScript {
 
         public resolvedTarget: Statement = null;
 >resolvedTarget : Statement
->null : null
 
         constructor (nodeType: NodeType) {
 >nodeType : NodeType
@@ -6533,7 +6486,6 @@ module TypeScript {
 
         public body: AST = null;
 >body : AST
->null : null
 
         constructor (public cond: AST) {
 >cond : AST
@@ -6703,7 +6655,6 @@ module TypeScript {
 
             var targetInfo: ITargetInfo = null;
 >targetInfo : ITargetInfo
->null : null
 
             if (this.body) {
 >this.body : AST
@@ -6815,15 +6766,12 @@ module TypeScript {
 
         public body: AST = null;
 >body : AST
->null : null
 
         public whileAST: AST = null;
 >whileAST : AST
->null : null
 
         public cond: AST = null;
 >cond : AST
->null : null
 
         public isLoop() { return true; }
 >isLoop : () => boolean
@@ -7008,7 +6956,6 @@ module TypeScript {
 
             var targetInfo: ITargetInfo = null;
 >targetInfo : ITargetInfo
->null : null
 
             if (this.body) {
 >this.body : AST
@@ -7118,7 +7065,6 @@ module TypeScript {
 
         public elseBod: AST = null;
 >elseBod : AST
->null : null
 
         public statement: ASTSpan = new ASTSpan();
 >statement : ASTSpan
@@ -7518,7 +7464,6 @@ module TypeScript {
 
         public returnExpression: AST = null;
 >returnExpression : AST
->null : null
 
         constructor () {
             super(NodeType.Return);
@@ -7726,7 +7671,6 @@ module TypeScript {
 
                 var singleItem: AST = null;
 >singleItem : AST
->null : null
 
                 if (this.body.nodeType == NodeType.List) {
 >this.body.nodeType == NodeType.List : boolean
@@ -7777,7 +7721,6 @@ module TypeScript {
                 if (singleItem !== null) {
 >singleItem !== null : boolean
 >singleItem : AST
->null : null
 
                     if (singleItem.nodeType == NodeType.Block) {
 >singleItem.nodeType == NodeType.Block : boolean
@@ -7800,7 +7743,6 @@ module TypeScript {
 >block.statements : ASTList
 >block : Block
 >statements : ASTList
->null : null
 >(block.statements.members.length == 1) : boolean
 >block.statements.members.length == 1 : boolean
 >block.statements.members.length : number
@@ -7943,7 +7885,6 @@ module TypeScript {
 >(args !== null) : boolean
 >args !== null : boolean
 >args : ASTList
->null : null
 >(args.members.length == 1) : boolean
 >args.members.length == 1 : boolean
 >args.members.length : number
@@ -8449,7 +8390,6 @@ module TypeScript {
 >this.init : AST
 >this : this
 >init : AST
->null : null
 >TokenID.For : any
 >TokenID : any
 >For : any
@@ -8601,7 +8541,6 @@ module TypeScript {
 
             var condBlock: BasicBlock = null;
 >condBlock : BasicBlock
->null : null
 
             var continueTarget = loopStart;
 >continueTarget : any
@@ -8609,7 +8548,6 @@ module TypeScript {
 
             var incrBB: BasicBlock = null;
 >incrBB : BasicBlock
->null : null
 
             if (this.incr) {
 >this.incr : AST
@@ -8667,7 +8605,6 @@ module TypeScript {
             }
             var targetInfo: ITargetInfo = null;
 >targetInfo : ITargetInfo
->null : null
 
             if (this.body) {
 >this.body : AST
@@ -8844,7 +8781,6 @@ module TypeScript {
 
         public withSym: WithSymbol = null;
 >withSym : WithSymbol
->null : null
 
         constructor (public expr: AST) {
 >expr : AST
@@ -8960,7 +8896,6 @@ module TypeScript {
 
         public defaultCase: CaseStatement = null;
 >defaultCase : CaseStatement
->null : null
 
         public statement: ASTSpan = new ASTSpan();
 >statement : ASTSpan
@@ -9336,14 +9271,12 @@ module TypeScript {
 >this.defaultCase : CaseStatement
 >this : this
 >defaultCase : CaseStatement
->null : null
 
             if (this.defaultCase == null) {
 >this.defaultCase == null : boolean
 >this.defaultCase : CaseStatement
 >this : this
 >defaultCase : CaseStatement
->null : null
 
                 condBlock.addSuccessor(afterSwitch);
 >condBlock.addSuccessor(afterSwitch) : any
@@ -9402,7 +9335,6 @@ module TypeScript {
 
         public expr: AST = null;
 >expr : AST
->null : null
 
         public body: ASTList;
 >body : ASTList
@@ -9953,7 +9885,6 @@ module TypeScript {
 >context : ControlFlowContext
 >pushStatement : any
 >this : this
->null : null
 >afterFinally : any
 
             context.walk(this.finallyNode, this);
@@ -10151,7 +10082,6 @@ module TypeScript {
 >context : ControlFlowContext
 >pushStatement : any
 >this : this
->null : null
 >afterTryCatch : any
 
             context.walk(this.tryNode, this);
@@ -10475,7 +10405,6 @@ module TypeScript {
 
         public containedScope: SymbolScope = null;
 >containedScope : SymbolScope
->null : null
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
@@ -10784,7 +10713,6 @@ module TypeScript {
 >exceptVar : any
 >symbol : any
 >container : any
->null : null
             }
             this.param.sym = exceptVar.symbol;
 >this.param.sym = exceptVar.symbol : any
@@ -11036,7 +10964,6 @@ module TypeScript {
 
         public text: string[] = null;
 >text : string[]
->null : null
 
         constructor (public content: string, public isBlockComment: boolean, public endsLine) {
 >content : string
@@ -11059,7 +10986,6 @@ module TypeScript {
 >this.text : string[]
 >this : this
 >text : string[]
->null : null
 
                 if (this.isBlockComment) {
 >this.isBlockComment : boolean

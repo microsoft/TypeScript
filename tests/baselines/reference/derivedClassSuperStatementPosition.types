@@ -109,7 +109,6 @@ class DerivedComments extends Object {
 >this.x : any
 >this : this
 >x : any
->null : null
 
         // c7
     }
@@ -145,7 +144,6 @@ class DerivedCommentsInvalidThis extends Object {
 >this.x : any
 >this : this
 >x : any
->null : null
 
         // c7
     }

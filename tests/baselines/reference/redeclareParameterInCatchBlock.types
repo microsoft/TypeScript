@@ -6,7 +6,6 @@ try {
 
     const e = null;
 >e : any
->null : null
 }
 
 try {

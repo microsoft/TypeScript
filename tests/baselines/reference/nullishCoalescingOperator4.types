@@ -1,7 +1,6 @@
 === tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator4.ts ===
 declare const a1: 'literal' | undefined | null
 >a1 : "literal" | null | undefined
->null : null
 
 const aa1 = a1 ?? a1.toLowerCase()
 >aa1 : any

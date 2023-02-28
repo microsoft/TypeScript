@@ -52,7 +52,6 @@ export let {
 
 } = null as any;
 >null as any : any
->null : null
 
 declare global {
 >global : any

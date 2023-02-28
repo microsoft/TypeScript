@@ -13,5 +13,4 @@ const z9 = 0, z10 :string = "", z11 = null;
 >z10 : string
 >"" : ""
 >z11 : any
->null : null
 

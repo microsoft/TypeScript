@@ -118,7 +118,6 @@ xx = (null, xx);
 >xx : any
 >(null, xx) : any
 >null, xx : any
->null : null
 >xx : any
 
 xx = (undefined, 10);

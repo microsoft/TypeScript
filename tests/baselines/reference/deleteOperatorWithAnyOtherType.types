@@ -100,7 +100,6 @@ var ResultIsBoolean7 = delete undefined;
 var ResultIsBoolean8 = delete null;
 >ResultIsBoolean8 : boolean
 >delete null : boolean
->null : null
 
 // any type expressions
 var ResultIsBoolean9 = delete ANY2[0];
@@ -165,7 +164,6 @@ var ResultIsBoolean17 = delete (null + undefined);
 >delete (null + undefined) : boolean
 >(null + undefined) : any
 >null + undefined : any
->null : null
 >undefined : undefined
 
 var ResultIsBoolean18 = delete (null + null);
@@ -173,8 +171,6 @@ var ResultIsBoolean18 = delete (null + null);
 >delete (null + null) : boolean
 >(null + null) : any
 >null + null : any
->null : null
->null : null
 
 var ResultIsBoolean19 = delete (undefined + undefined);
 >ResultIsBoolean19 : boolean

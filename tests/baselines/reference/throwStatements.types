@@ -83,7 +83,6 @@ throw anObject;
 
 var anAny = null;
 >anAny : any
->null : null
 
 throw anAny;
 >anAny : any
@@ -200,8 +199,6 @@ throw false;
 >false : false
 
 throw null;
->null : null
-
 throw undefined;
 >undefined : undefined
 

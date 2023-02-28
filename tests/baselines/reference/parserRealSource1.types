@@ -22,7 +22,6 @@ module TypeScript {
 
         export var diagnosticWriter: IDiagnosticWriter = null;
 >diagnosticWriter : IDiagnosticWriter
->null : null
 
         export var analysisPass: number = 0;
 >analysisPass : number

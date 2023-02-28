@@ -279,7 +279,6 @@ declare module "Union/NonNullable" {
 
     export type NonNullable<U extends Union> = Exclude<U, undefined | null>;
 >NonNullable : NonNullable<U>
->null : null
 }
 declare module "Object/ListOf" {
 >"Object/ListOf" : typeof import("Object/ListOf")

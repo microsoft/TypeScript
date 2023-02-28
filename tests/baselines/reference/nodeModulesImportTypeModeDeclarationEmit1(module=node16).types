@@ -10,14 +10,12 @@ export const a = (null as any as import("pkg", { assert: {"resolution-mode": "re
 >(null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
 >null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
 >null as any : any
->null : null
 
 export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
 >b : import("/node_modules/pkg/import").ImportInterface
 >(null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface) : import("/node_modules/pkg/import").ImportInterface
 >null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface : import("/node_modules/pkg/import").ImportInterface
 >null as any : any
->null : null
 
 === /node_modules/pkg/import.d.ts ===
 

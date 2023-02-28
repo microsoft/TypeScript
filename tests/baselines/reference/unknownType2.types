@@ -79,11 +79,9 @@ if (u === undefined) {
 if (u === null) {
 >u === null : boolean
 >u : unknown
->null : null
 
     const someNull: null = u;
 >someNull : null
->null : null
 >u : null
 }
 
@@ -491,11 +489,8 @@ function switchTestLiterals(x: unknown) {
 
             break;
         case null:
->null : null
-
             const llun: null = x;
 >llun : null
->null : null
 >x : null
 
             break;

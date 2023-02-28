@@ -38,7 +38,6 @@ function testcase() {
 >Array : ArrayConstructor
 >false : false
 >undefined : undefined
->null : null
 >"0" : "0"
 >obj : { toString: () => number; }
 >-1.3333333333333 : -1.3333333333333

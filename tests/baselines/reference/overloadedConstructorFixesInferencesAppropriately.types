@@ -40,7 +40,6 @@ function load(): Box<{ success: true } | ErrorResult> {
 
     return null as any;
 >null as any : any
->null : null
 }
 
 new AsyncLoader({

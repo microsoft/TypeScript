@@ -44,7 +44,6 @@ doSomething(null as CtorOnly);
 >doSomething(null as CtorOnly) : void
 >doSomething : (settings: Settings) => void
 >null as CtorOnly : CtorOnly
->null : null
 
 doSomething(12);
 >doSomething(12) : void

@@ -6,20 +6,16 @@ enum E { x }
 var x1 = null + null;
 >x1 : any
 >null + null : any
->null : null
->null : null
 
 var x2 = null + undefined;
 >x2 : any
 >null + undefined : any
->null : null
 >undefined : undefined
 
 var x3 = undefined + null;
 >x3 : any
 >undefined + null : any
 >undefined : undefined
->null : null
 
 var x4 = undefined + undefined;
 >x4 : any
@@ -31,7 +27,6 @@ var x5 = 1 + null;
 >x5 : any
 >1 + null : any
 >1 : 1
->null : null
 
 var x6 = 1 + undefined;
 >x6 : any
@@ -42,7 +37,6 @@ var x6 = 1 + undefined;
 var x7 = null + 1;
 >x7 : any
 >null + 1 : any
->null : null
 >1 : 1
 
 var x8 = undefined + 1;
@@ -55,7 +49,6 @@ var x9 = "test" + null;
 >x9 : string
 >"test" + null : string
 >"test" : "test"
->null : null
 
 var x10 = "test" + undefined;
 >x10 : string
@@ -66,7 +59,6 @@ var x10 = "test" + undefined;
 var x11 = null + "test";
 >x11 : string
 >null + "test" : string
->null : null
 >"test" : "test"
 
 var x12 = undefined + "test";
@@ -78,7 +70,6 @@ var x12 = undefined + "test";
 var x13 = null + E.x
 >x13 : any
 >null + E.x : any
->null : null
 >E.x : E
 >E : typeof E
 >x : E
@@ -97,7 +88,6 @@ var x15 = E.x + null
 >E.x : E
 >E : typeof E
 >x : E
->null : null
 
 var x16 = E.x + undefined
 >x16 : any

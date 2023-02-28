@@ -209,7 +209,6 @@ var b: { [x: string]: string; } = {
     f: <MyString>null, 
 >f : MyString
 ><MyString>null : MyString
->null : null
 
     get X() { 
 >X : string

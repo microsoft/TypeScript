@@ -15,7 +15,6 @@ interface IFoo {
 ><IFoo>{ a: null } : IFoo
 >{ a: null } : { a: null; }
 >a : null
->null : null
 
 // Expr type assignable to target type
 (<IFoo>{ a: 2, b: undefined });
@@ -33,5 +32,4 @@ interface IFoo {
 ><IFoo>{ c: null } : IFoo
 >{ c: null } : { c: null; }
 >c : null
->null : null
 

@@ -146,7 +146,6 @@ function f2<T extends Item | undefined>(obj: T | undefined) {
 function f3<T extends Item | undefined>(obj: T | null) {
 >f3 : <T extends Item | undefined>(obj: T | null) => void
 >obj : T | null
->null : null
 
     if (obj) {
 >obj : T | null

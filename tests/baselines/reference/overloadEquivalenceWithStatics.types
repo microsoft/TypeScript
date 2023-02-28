@@ -15,7 +15,6 @@ static B<S>(v: any): A1<S> {
 >v : any
 
 return null;
->null : null
 }
 }
 

@@ -27,5 +27,4 @@ class C {
 
     static [null]() { }
 >[null] : () => void
->null : null
 }

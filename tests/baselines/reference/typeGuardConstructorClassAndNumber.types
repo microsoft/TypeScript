@@ -334,14 +334,12 @@ function foo(instance: Function | object) {
 >instance.prototype : any
 >instance : Function
 >prototype : any
->null : null
 >instance.prototype.constructor == null : boolean
 >instance.prototype.constructor : any
 >instance.prototype : any
 >instance : Function
 >prototype : any
 >constructor : any
->null : null
 
             return instance.length;
 >instance.length : number

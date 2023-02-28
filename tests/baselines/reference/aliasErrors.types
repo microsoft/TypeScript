@@ -48,7 +48,6 @@ import o = "s";
 import q = null;
 >q : any
 > : any
->null : null
 
 import r = undefined;
 >r : any

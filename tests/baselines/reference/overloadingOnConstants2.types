@@ -33,7 +33,6 @@ function foo(x: string, items: string[]): C {
 >items : string[]
 
    return null;
->null : null
 }
 var a: D = foo("hi", []); // D
 >a : D
@@ -74,7 +73,6 @@ function bar(x: string, items: string[]): C {
 >items : string[]
 
    return null;
->null : null
 }
 
 var d: D = bar("hi", []); // D

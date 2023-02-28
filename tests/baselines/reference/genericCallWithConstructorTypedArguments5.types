@@ -12,7 +12,6 @@ function foo<T, U>(arg: { cb: new(t: T) => U }) {
 >arg.cb : new (t: T) => U
 >arg : { cb: new (t: T) => U; }
 >cb : new (t: T) => U
->null : null
 }
 
 var arg: { cb: new<T>(x: T) => string };
@@ -63,8 +62,6 @@ function foo2<T, U>(arg: { cb: new(t: T, t2: T) => U }) {
 >arg.cb : new (t: T, t2: T) => U
 >arg : { cb: new (t: T, t2: T) => U; }
 >cb : new (t: T, t2: T) => U
->null : null
->null : null
 }
 
 // fewer args ok

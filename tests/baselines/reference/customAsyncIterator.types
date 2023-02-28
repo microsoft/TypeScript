@@ -13,7 +13,6 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
         if (value != null) {
 >value != null : boolean
 >value : T
->null : null
 
             throw new Error("ConstantIterator.prototype.next may not take any values");
 >new Error("ConstantIterator.prototype.next may not take any values") : Error
