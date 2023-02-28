@@ -222,7 +222,7 @@ export class TextStorage {
 
     public getAbsolutePositionAndLineText(oneBasedLine: number): AbsolutePositionAndLineText {
         const svc = this.tryUseScriptVersionCache();
-        if (svc) svc.getAbsolutePositionAndLineText(oneBasedLine);
+        if (svc) return svc.getAbsolutePositionAndLineText(oneBasedLine);
         const lineMap = this.getLineMap();
         return oneBasedLine <= lineMap.length ?
             {
