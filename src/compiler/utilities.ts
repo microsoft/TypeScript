@@ -7936,7 +7936,6 @@ function SourceMapSource(this: SourceMapSource, fileName: string, text: string, 
     this.skipTrivia = skipTrivia || (pos => pos);
 }
 
-// eslint-disable-next-line prefer-const
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
     getNodeConstructor: () => Node as any,

@@ -702,12 +702,19 @@ export const runTestsAndWatch = task({
     },
 });
 
-export const runTestsParallel = task({
-    name: "runtests-parallel",
+const doRunTestsParallel = task({
+    name: "do-runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file.",
     dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
+
+export const runTestsParallel = task({
+    name: "runtests-parallel",
+    description: "Runs all the tests in parallel using the built run.js file, linting in parallel if --lint=true.",
+    dependencies: [doRunTestsParallel].concat(cmdLineOptions.lint ? [lint] : []),
+});
+
 // task("runtests-parallel").flags = {
 //     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass.",
