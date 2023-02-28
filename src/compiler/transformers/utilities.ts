@@ -160,7 +160,7 @@ export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): bool
 /** @internal */
 export function collectExternalModuleInfo(context: TransformationContext, sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
     const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-    const exportSpecifiers = createMultiMap<ExportSpecifier>();
+    const exportSpecifiers = createMultiMap<string, ExportSpecifier>();
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
     let exportedNames: Identifier[] | undefined;

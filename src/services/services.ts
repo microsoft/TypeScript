@@ -1089,7 +1089,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     }
 
     private computeNamedDeclarations(): Map<string, Declaration[]> {
-        const result = createMultiMap<Declaration>();
+        const result = createMultiMap<string, Declaration>();
 
         this.forEachChild(visit);
 
