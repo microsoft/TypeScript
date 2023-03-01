@@ -9187,7 +9187,7 @@ namespace Parser {
             }
 
             function parseAuthorNameAndEmail(): JSDocText {
-                const comments: string[] = [];
+                let comments = "";
                 let inEmail = false;
                 let token = scanner.getToken();
                 while (token !== SyntaxKind.EndOfFileToken && token !== SyntaxKind.NewLineTrivia) {
@@ -9198,15 +9198,15 @@ namespace Parser {
                         break;
                     }
                     else if (token === SyntaxKind.GreaterThanToken && inEmail) {
-                        comments.push(scanner.getTokenText());
+                        comments += scanner.getTokenText();
                         scanner.setTextPos(scanner.getTokenPos() + 1);
                         break;
                     }
-                    comments.push(scanner.getTokenText());
+                    comments += scanner.getTokenText();
                     token = nextTokenJSDoc();
                 }
 
-                return factory.createJSDocText(comments.join(""));
+                return factory.createJSDocText(comments);
             }
 
             function parseImplementsTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocImplementsTag {
