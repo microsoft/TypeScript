@@ -55,11 +55,14 @@ Before request
 
 Info 13   [00:00:28.000] request:
     {
-      "command": "occurrences",
+      "command": "documentHighlights",
       "arguments": {
         "file": "/a/b/file1.ts",
         "line": 1,
-        "offset": 11
+        "offset": 11,
+        "filesToSearch": [
+          "/a/b/file1.ts"
+        ]
       },
       "seq": 2,
       "type": "request"
@@ -68,64 +71,61 @@ Info 14   [00:00:29.000] response:
     {
       "response": [
         {
-          "start": {
-            "line": 1,
-            "offset": 11
-          },
-          "end": {
-            "line": 1,
-            "offset": 14
-          },
           "file": "/a/b/file1.ts",
-          "isWriteAccess": false,
-          "isInString": true
-        },
-        {
-          "start": {
-            "line": 2,
-            "offset": 11
-          },
-          "end": {
-            "line": 2,
-            "offset": 14
-          },
-          "file": "/a/b/file1.ts",
-          "isWriteAccess": false,
-          "isInString": true
-        },
-        {
-          "start": {
-            "line": 3,
-            "offset": 13
-          },
-          "end": {
-            "line": 3,
-            "offset": 16
-          },
-          "contextStart": {
-            "line": 3,
-            "offset": 12
-          },
-          "contextEnd": {
-            "line": 3,
-            "offset": 22
-          },
-          "file": "/a/b/file1.ts",
-          "isWriteAccess": true,
-          "isInString": true
-        },
-        {
-          "start": {
-            "line": 4,
-            "offset": 14
-          },
-          "end": {
-            "line": 4,
-            "offset": 17
-          },
-          "file": "/a/b/file1.ts",
-          "isWriteAccess": false,
-          "isInString": true
+          "highlightSpans": [
+            {
+              "start": {
+                "line": 1,
+                "offset": 11
+              },
+              "end": {
+                "line": 1,
+                "offset": 14
+              },
+              "kind": "reference"
+            },
+            {
+              "start": {
+                "line": 2,
+                "offset": 11
+              },
+              "end": {
+                "line": 2,
+                "offset": 14
+              },
+              "kind": "reference"
+            },
+            {
+              "start": {
+                "line": 3,
+                "offset": 13
+              },
+              "end": {
+                "line": 3,
+                "offset": 16
+              },
+              "contextStart": {
+                "line": 3,
+                "offset": 12
+              },
+              "contextEnd": {
+                "line": 3,
+                "offset": 22
+              },
+              "kind": "writtenReference"
+            },
+            {
+              "start": {
+                "line": 4,
+                "offset": 14
+              },
+              "end": {
+                "line": 4,
+                "offset": 17
+              },
+              "kind": "reference"
+            }
+          ]
         }
       ],
       "responseRequired": true
@@ -136,11 +136,14 @@ Before request
 
 Info 15   [00:00:30.000] request:
     {
-      "command": "occurrences",
+      "command": "documentHighlights",
       "arguments": {
         "file": "/a/b/file1.ts",
         "line": 3,
-        "offset": 13
+        "offset": 13,
+        "filesToSearch": [
+          "/a/b/file1.ts"
+        ]
       },
       "seq": 3,
       "type": "request"
@@ -149,36 +152,39 @@ Info 16   [00:00:31.000] response:
     {
       "response": [
         {
-          "start": {
-            "line": 3,
-            "offset": 13
-          },
-          "end": {
-            "line": 3,
-            "offset": 16
-          },
-          "contextStart": {
-            "line": 3,
-            "offset": 12
-          },
-          "contextEnd": {
-            "line": 3,
-            "offset": 22
-          },
           "file": "/a/b/file1.ts",
-          "isWriteAccess": true
-        },
-        {
-          "start": {
-            "line": 4,
-            "offset": 14
-          },
-          "end": {
-            "line": 4,
-            "offset": 17
-          },
-          "file": "/a/b/file1.ts",
-          "isWriteAccess": false
+          "highlightSpans": [
+            {
+              "start": {
+                "line": 3,
+                "offset": 13
+              },
+              "end": {
+                "line": 3,
+                "offset": 16
+              },
+              "contextStart": {
+                "line": 3,
+                "offset": 12
+              },
+              "contextEnd": {
+                "line": 3,
+                "offset": 22
+              },
+              "kind": "writtenReference"
+            },
+            {
+              "start": {
+                "line": 4,
+                "offset": 14
+              },
+              "end": {
+                "line": 4,
+                "offset": 17
+              },
+              "kind": "reference"
+            }
+          ]
         }
       ],
       "responseRequired": true
@@ -189,11 +195,14 @@ Before request
 
 Info 17   [00:00:32.000] request:
     {
-      "command": "occurrences",
+      "command": "documentHighlights",
       "arguments": {
         "file": "/a/b/file1.ts",
         "line": 4,
-        "offset": 14
+        "offset": 14,
+        "filesToSearch": [
+          "/a/b/file1.ts"
+        ]
       },
       "seq": 4,
       "type": "request"
@@ -202,36 +211,39 @@ Info 18   [00:00:33.000] response:
     {
       "response": [
         {
-          "start": {
-            "line": 3,
-            "offset": 13
-          },
-          "end": {
-            "line": 3,
-            "offset": 16
-          },
-          "contextStart": {
-            "line": 3,
-            "offset": 12
-          },
-          "contextEnd": {
-            "line": 3,
-            "offset": 22
-          },
           "file": "/a/b/file1.ts",
-          "isWriteAccess": true
-        },
-        {
-          "start": {
-            "line": 4,
-            "offset": 14
-          },
-          "end": {
-            "line": 4,
-            "offset": 17
-          },
-          "file": "/a/b/file1.ts",
-          "isWriteAccess": false
+          "highlightSpans": [
+            {
+              "start": {
+                "line": 3,
+                "offset": 13
+              },
+              "end": {
+                "line": 3,
+                "offset": 16
+              },
+              "contextStart": {
+                "line": 3,
+                "offset": 12
+              },
+              "contextEnd": {
+                "line": 3,
+                "offset": 22
+              },
+              "kind": "writtenReference"
+            },
+            {
+              "start": {
+                "line": 4,
+                "offset": 14
+              },
+              "end": {
+                "line": 4,
+                "offset": 17
+              },
+              "kind": "reference"
+            }
+          ]
         }
       ],
       "responseRequired": true

@@ -62,8 +62,9 @@ Output::
 
 [[90m12:00:24 AM[0m] Building project '/src/projects/a/tsconfig.json'...
 
-======== Resolving type reference directive 'pg', containing file '/src/projects/a/__inferred type names__.ts', root directory '/src/projects/node_modules/@types'. ========
-Resolving with primary search path '/src/projects/node_modules/@types'.
+======== Resolving type reference directive 'pg', containing file '/src/projects/a/__inferred type names__.ts', root directory '/src/projects/a/node_modules/@types,/src/projects/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/src/projects/a/node_modules/@types, /src/projects/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
+Directory '/src/projects/a/node_modules/@types' does not exist, skipping all lookups in it.
 Found 'package.json' at '/src/projects/node_modules/@types/pg/package.json'.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -98,8 +99,9 @@ File '/src/projects/node_modules/@types/pg/index.d.ts' exists - use it as a name
 Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
 ======== Module name 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts'. ========
 File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
-======== Resolving type reference directive 'pg', containing file '/src/projects/b/__inferred type names__.ts', root directory '/src/projects/node_modules/@types'. ========
-Resolving with primary search path '/src/projects/node_modules/@types'.
+======== Resolving type reference directive 'pg', containing file '/src/projects/b/__inferred type names__.ts', root directory '/src/projects/b/node_modules/@types,/src/projects/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/src/projects/b/node_modules/@types, /src/projects/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
+Directory '/src/projects/b/node_modules/@types' does not exist, skipping all lookups in it.
 File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/src/projects/node_modules/@types/pg/index.d.ts'.

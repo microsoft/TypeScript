@@ -9473,7 +9473,6 @@ export interface EmitTextWriter extends SymbolWriter {
 }
 
 export interface GetEffectiveTypeRootsHost {
-    directoryExists?(directoryName: string): boolean;
     getCurrentDirectory?(): string;
 }
 
