@@ -50,6 +50,17 @@ type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*exp
 type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
 >T15 : string | number
 
+type TUndefined = Awaited<undefined>;
+>TUndefined : undefined
+
+type TNull = Awaited<null>;
+>TNull : null
+>null : null
+
+type TNullOrUndefined = Awaited<null | undefined>;
+>TNullOrUndefined : null
+>null : null
+
 interface BadPromise { then(cb: (value: BadPromise) => void): void; }
 >then : (cb: (value: BadPromise) => void) => void
 >cb : (value: BadPromise) => void

@@ -380,7 +380,7 @@ function createDynamicPriorityPollingWatchFile(host: {
 
 function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSensitiveFileNames: boolean): HostWatchFile {
     // One file can have multiple watchers
-    const fileWatcherCallbacks = createMultiMap<FileWatcherCallback>();
+    const fileWatcherCallbacks = createMultiMap<string, FileWatcherCallback>();
     const dirWatchers = new Map<string, DirectoryWatcher>();
     const toCanonicalName = createGetCanonicalFileName(useCaseSensitiveFileNames);
     return nonPollingWatchFile;

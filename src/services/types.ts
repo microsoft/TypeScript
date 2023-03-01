@@ -159,7 +159,7 @@ declare module "../compiler/types" {
     export interface SourceFile {
         /** @internal */ version: string;
         /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
-        /** @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
+        /** @internal */ nameTable: Map<__String, number> | undefined;
 
         /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
 

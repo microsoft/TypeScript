@@ -2692,7 +2692,7 @@ export class TestState {
 
     public rangesByText(): Map<string, Range[]> {
         if (this.testData.rangesByText) return this.testData.rangesByText;
-        const result = ts.createMultiMap<Range>();
+        const result = ts.createMultiMap<string, Range>();
         this.testData.rangesByText = result;
         for (const range of this.getRanges()) {
             const text = this.rangeText(range);

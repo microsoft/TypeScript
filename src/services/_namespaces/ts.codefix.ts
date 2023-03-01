@@ -17,6 +17,7 @@ export * from "../codefixes/convertToEsModule";
 export * from "../codefixes/correctQualifiedNameToIndexedAccessType";
 export * from "../codefixes/convertToTypeOnlyExport";
 export * from "../codefixes/convertToTypeOnlyImport";
+export * from "../codefixes/convertTypedefToType";
 export * from "../codefixes/convertLiteralTypeToMappedType";
 export * from "../codefixes/fixClassIncorrectlyImplementsInterface";
 export * from "../codefixes/importFixes";

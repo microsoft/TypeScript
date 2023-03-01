@@ -110,6 +110,7 @@ import {
     createGetCanonicalFileName,
     createGetSymbolWalker,
     createModeAwareCacheKey,
+    createMultiMap,
     createPrinterWithDefaults,
     createPrinterWithRemoveComments,
     createPrinterWithRemoveCommentsNeverAsciiEscape,
@@ -117,7 +118,6 @@ import {
     createPropertyNameNodeForIdentifierOrLiteral,
     createSymbolTable,
     createTextWriter,
-    createUnderscoreEscapedMultiMap,
     Debug,
     Declaration,
     DeclarationName,
@@ -1034,7 +1034,6 @@ import {
     TypeReferenceType,
     TypeVariable,
     UnaryExpression,
-    UnderscoreEscapedMap,
     unescapeLeadingUnderscores,
     UnionOrIntersectionType,
     UnionOrIntersectionTypeNode,
@@ -5259,7 +5258,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         exportsWithDuplicate?: ExportDeclaration[];
     }
 
-    type ExportCollisionTrackerTable = UnderscoreEscapedMap<ExportCollisionTracker>;
+    type ExportCollisionTrackerTable = Map<__String, ExportCollisionTracker>;
 
     /**
      * Extends one symbol table with another while collecting information on name collisions for error message generation into the `lookupTable` argument
@@ -5293,7 +5292,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getExportsOfModuleWorker(moduleSymbol: Symbol) {
         const visitedSymbols: Symbol[] = [];
-        let typeOnlyExportStarMap: UnderscoreEscapedMap<ExportDeclaration & { readonly isTypeOnly: true }> | undefined;
+        let typeOnlyExportStarMap: Map<__String, ExportDeclaration & { readonly isTypeOnly: true }> | undefined;
         const nonTypeOnlyNames = new Set<__String>();
 
         // A module defined by an 'export=' consists of one export that needs to be resolved
@@ -5706,7 +5705,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // The below is used to lookup type parameters within a class or interface, as they are added to the class/interface locals
                     // These can never be latebound, so the symbol's raw members are sufficient. `getMembersOfNode` cannot be used, as it would
                     // trigger resolving late-bound names, which we may already be in the process of doing while we're here!
-                    let table: UnderscoreEscapedMap<Symbol> | undefined;
+                    let table: Map<__String, Symbol> | undefined;
                     // TODO: Should this filtered table be cached in some way?
                     (getSymbolOfDeclaration(location as ClassLikeDeclaration | InterfaceDeclaration).members || emptySymbols).forEach((memberSymbol, key) => {
                         if (memberSymbol.flags & (SymbolFlags.Type & ~SymbolFlags.Assignment)) {
@@ -7187,7 +7186,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const mayHaveNameCollisions = !(context.flags & NodeBuilderFlags.UseFullyQualifiedType);
                 /** Map from type reference identifier text to [type, index in `result` where the type node is] */
-                const seenNames = mayHaveNameCollisions ? createUnderscoreEscapedMultiMap<[Type, number]>() : undefined;
+                const seenNames = mayHaveNameCollisions ? createMultiMap<__String, [Type, number]>() : undefined;
                 const result: TypeNode[] = [];
                 let i = 0;
                 for (const type of types) {
@@ -12354,7 +12353,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param lateSymbols The late-bound symbols of the parent.
      * @param decl The member to bind.
      */
-    function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: UnderscoreEscapedMap<TransientSymbol>, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
+    function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: Map<__String, TransientSymbol>, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
         Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
         const links = getNodeLinks(decl);
         if (!links.resolvedSymbol) {
@@ -12398,7 +12397,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedSymbol;
     }
 
-    function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: MembersOrExportsResolutionKind): UnderscoreEscapedMap<Symbol> {
+    function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: MembersOrExportsResolutionKind): Map<__String, Symbol> {
         const links = getSymbolLinks(symbol);
         if (!links[resolutionKind]) {
             const isStatic = resolutionKind === MembersOrExportsResolutionKind.resolvedExports;
@@ -12412,7 +12411,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links[resolutionKind] = earlySymbols || emptySymbols;
 
             // fill in any as-yet-unresolved late-bound members.
-            const lateSymbols = createSymbolTable() as UnderscoreEscapedMap<TransientSymbol>;
+            const lateSymbols = createSymbolTable() as Map<__String, TransientSymbol>;
             for (const decl of symbol.declarations || emptyArray) {
                 const members = getMembersOfDeclaration(decl);
                 if (members) {
@@ -13013,7 +13012,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (symbol.exports) {
             members = getExportsOfSymbol(symbol);
             if (symbol === globalThisSymbol) {
-                const varsOnly = new Map<string, Symbol>() as SymbolTable;
+                const varsOnly = new Map<__String, Symbol>();
                 members.forEach(p => {
                     if (!(p.flags & SymbolFlags.BlockScoped) && !(p.flags & SymbolFlags.ValueModule && p.declarations?.length && every(p.declarations, isAmbientModule))) {
                         varsOnly.set(p.escapedName, p);
@@ -23426,7 +23425,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getPropertiesOfContext(context: WideningContext): Symbol[] {
         if (!context.resolvedProperties) {
-            const names = new Map<string, Symbol>() as UnderscoreEscapedMap<Symbol>;
+            const names = new Map<__String, Symbol>();
             for (const t of getSiblingsOfContext(context)) {
                 if (isObjectLiteralType(t) && !(getObjectFlags(t) & ObjectFlags.ContainsSpread)) {
                     for (const prop of getPropertiesOfType(t)) {
@@ -34610,7 +34609,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getNonArrayRestType(signature: Signature) {
         const restType = getEffectiveRestType(signature);
-        return restType && !isArrayType(restType) && !isTypeAny(restType) && (getReducedType(restType).flags & TypeFlags.Never) === 0 ? restType : undefined;
+        return restType && !isArrayType(restType) && !isTypeAny(restType) ? restType : undefined;
     }
 
     function getTypeOfFirstParameterOfSignature(signature: Signature) {
@@ -37912,7 +37911,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function addName(names: UnderscoreEscapedMap<DeclarationMeaning>, location: Node, name: __String, meaning: DeclarationMeaning) {
+        function addName(names: Map<__String, DeclarationMeaning>, location: Node, name: __String, meaning: DeclarationMeaning) {
             const prev = names.get(name);
             if (prev) {
                 // For private identifiers, do not allow mixing of static and instance members with the same name

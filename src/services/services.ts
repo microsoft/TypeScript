@@ -238,7 +238,6 @@ import {
     PrivateIdentifier,
     Program,
     PropertyName,
-    Push,
     QuickInfo,
     refactor,
     RefactorContext,
@@ -309,7 +308,6 @@ import {
     TypePredicate,
     TypeReference,
     typeToDisplayParts,
-    UnderscoreEscapedMap,
     UnionOrIntersectionType,
     UnionType,
     updateSourceFile,
@@ -489,7 +487,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
     return children;
 }
 
-function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: Node): void {
+function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node): void {
     scanner.setTextPos(pos);
     while (pos < end) {
         const token = scanner.scan();
@@ -1030,7 +1028,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public languageVersion!: ScriptTarget;
     public languageVariant!: LanguageVariant;
     public identifiers!: Map<string, string>;
-    public nameTable: UnderscoreEscapedMap<number> | undefined;
+    public nameTable: Map<__String, number> | undefined;
     public resolvedModules: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
     public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     public imports!: readonly StringLiteralLike[];
@@ -1090,7 +1088,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     }
 
     private computeNamedDeclarations(): Map<string, Declaration[]> {
-        const result = createMultiMap<Declaration>();
+        const result = createMultiMap<string, Declaration>();
 
         this.forEachChild(visit);
 
@@ -3082,7 +3080,7 @@ export function createLanguageService(
  *
  * @internal
  */
-export function getNameTable(sourceFile: SourceFile): UnderscoreEscapedMap<number> {
+export function getNameTable(sourceFile: SourceFile): Map<__String, number> {
     if (!sourceFile.nameTable) {
         initializeNameTable(sourceFile);
     }
