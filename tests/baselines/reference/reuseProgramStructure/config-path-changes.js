@@ -27,6 +27,10 @@ typerefs: {
   "failedLookupLocations": [
     "/a/b/node_modules/@types/typerefs/package.json",
     "/a/b/node_modules/@types/typerefs/index.d.ts",
+    "/a/node_modules/@types/typerefs/package.json",
+    "/a/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
     "node_modules/typerefs/package.json",
     "node_modules/typerefs.d.ts",
     "node_modules/typerefs/index.d.ts",
@@ -73,6 +77,10 @@ typerefs: {
   "failedLookupLocations": [
     "/a/c/node_modules/@types/typerefs/package.json",
     "/a/c/node_modules/@types/typerefs/index.d.ts",
+    "/a/node_modules/@types/typerefs/package.json",
+    "/a/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
     "node_modules/typerefs/package.json",
     "node_modules/typerefs.d.ts",
     "node_modules/typerefs/index.d.ts",
