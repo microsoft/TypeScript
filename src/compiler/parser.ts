@@ -8682,7 +8682,6 @@ namespace Parser {
             });
 
             function removeLeadingNewlines(comments: string) {
-                // TODO: Also a regex would work, and perhaps faster
                 let i = 0;
                 while (i < comments.length && (comments[i] === "\n" || comments[i] === "\r")) {
                     i++;
