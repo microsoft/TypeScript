@@ -1,10 +1,10 @@
-import * as ts from "../../../_namespaces/ts";
 import * as Harness from "../../../_namespaces/Harness";
+import * as ts from "../../../_namespaces/ts";
+import { createProjectService } from "../../tsserver/helpers";
 import {
     createServerHost,
     libFile,
 } from "../../virtualFileSystemWithWatch";
-import { createProjectService } from "../../tsserver/helpers";
 
 interface Range {
     pos: number;

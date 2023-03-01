@@ -25,7 +25,7 @@ import {
     textChanges,
 } from "./_namespaces/ts";
 
-const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
+const errorCodeToFixes = createMultiMap<string, CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();
 
 /** @internal */

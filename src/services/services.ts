@@ -1,6 +1,4 @@
 import * as ts from "./_namespaces/ts";
-import * as NavigateTo from "./_namespaces/ts.NavigateTo";
-import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 import {
     __String,
     ApplicableRefactorInfo,
@@ -182,8 +180,8 @@ import {
     isTextWhiteSpaceLike,
     isThisTypeParameter,
     isTransientSymbol,
-    JsDoc,
     JSDoc,
+    JsDoc,
     JSDocContainer,
     JSDocTagInfo,
     JsonSourceFile,
@@ -311,13 +309,14 @@ import {
     TypePredicate,
     TypeReference,
     typeToDisplayParts,
-    UnderscoreEscapedMap,
     UnionOrIntersectionType,
     UnionType,
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
 } from "./_namespaces/ts";
+import * as NavigateTo from "./_namespaces/ts.NavigateTo";
+import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
@@ -1030,7 +1029,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public languageVersion!: ScriptTarget;
     public languageVariant!: LanguageVariant;
     public identifiers!: Map<string, string>;
-    public nameTable: UnderscoreEscapedMap<number> | undefined;
+    public nameTable: Map<__String, number> | undefined;
     public resolvedModules: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
     public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     public imports!: readonly StringLiteralLike[];
@@ -1090,7 +1089,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     }
 
     private computeNamedDeclarations(): Map<string, Declaration[]> {
-        const result = createMultiMap<Declaration>();
+        const result = createMultiMap<string, Declaration>();
 
         this.forEachChild(visit);
 
@@ -1990,7 +1989,8 @@ export function createLanguageService(
             options.triggerCharacter,
             options.triggerKind,
             cancellationToken,
-            formattingSettings && formatting.getFormatContext(formattingSettings, host));
+            formattingSettings && formatting.getFormatContext(formattingSettings, host),
+            options.includeSymbol);
     }
 
     function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
@@ -2436,8 +2436,9 @@ export function createLanguageService(
             : Promise.reject("Host does not implement `installPackage`");
     }
 
-    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
-        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, /*formatSettings*/ undefined), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
+    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined {
+        const formatSettings = formatOptions ? formatting.getFormatContext(formatOptions, host).options : undefined;
+        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, formatSettings), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
     }
 
     function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
@@ -3080,7 +3081,7 @@ export function createLanguageService(
  *
  * @internal
  */
-export function getNameTable(sourceFile: SourceFile): UnderscoreEscapedMap<number> {
+export function getNameTable(sourceFile: SourceFile): Map<__String, number> {
     if (!sourceFile.nameTable) {
         initializeNameTable(sourceFile);
     }
