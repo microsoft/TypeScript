@@ -2661,14 +2661,12 @@ declare namespace ts {
     }) | (void & {
         __escapedIdentifier: void;
     }) | InternalSymbolName;
-    /** ReadonlyMap where keys are `__String`s. */
-    interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
-    }
-    /** Map where keys are `__String`s. */
-    interface UnderscoreEscapedMap<T> extends Map<__String, T> {
-    }
+    /** @deprecated Use ReadonlyMap<__String, T> instead. */
+    type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
+    /** @deprecated Use Map<__String, T> instead. */
+    type UnderscoreEscapedMap<T> = Map<__String, T>;
     /** SymbolTable based on ES6 Map interface. */
-    type SymbolTable = UnderscoreEscapedMap<Symbol>;
+    type SymbolTable = Map<__String, Symbol>;
     enum TypeFlags {
         Any = 1,
         Unknown = 2,

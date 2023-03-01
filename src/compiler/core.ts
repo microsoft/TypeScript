@@ -1626,10 +1626,6 @@ export interface MultiMap<K, V> extends Map<K, V[]> {
 }
 
 /** @internal */
-export function createMultiMap<K, V>(): MultiMap<K, V>;
-/** @internal */
-export function createMultiMap<V>(): MultiMap<string, V>;
-/** @internal */
 export function createMultiMap<K, V>(): MultiMap<K, V> {
     const map = new Map<K, V[]>() as MultiMap<K, V>;
     map.add = multiMapAdd;

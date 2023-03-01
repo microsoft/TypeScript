@@ -5811,7 +5811,7 @@ export interface SymbolLinks {
     deferralParent?: Type;                      // Source union/intersection of a deferred type
     cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
     typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
-    typeOnlyExportStarMap?: UnderscoreEscapedMap<ExportDeclaration & { readonly isTypeOnly: true }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
+    typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
     typeOnlyExportStarName?: __String;          // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name
     isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
     tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
@@ -5917,16 +5917,14 @@ export const enum InternalSymbolName {
  */
 export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
 
-/** ReadonlyMap where keys are `__String`s. */
-export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
-}
+/** @deprecated Use ReadonlyMap<__String, T> instead. */
+export type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
 
-/** Map where keys are `__String`s. */
-export interface UnderscoreEscapedMap<T> extends Map<__String, T> {
-}
+/** @deprecated Use Map<__String, T> instead. */
+export type UnderscoreEscapedMap<T> = Map<__String, T>;
 
 /** SymbolTable based on ES6 Map interface. */
-export type SymbolTable = UnderscoreEscapedMap<Symbol>;
+export type SymbolTable = Map<__String, Symbol>;
 
 /**
  * Used to track a `declare module "foo*"`-like declaration.
