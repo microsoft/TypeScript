@@ -56,27 +56,27 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/file1consumer1.ts:
+/a/b/file1consumer1.ts: *new*
   {}
-/a/b/modulefile1.ts:
+/a/b/modulefile1.ts: *new*
   {}
-/a/b/file1consumer2.ts:
+/a/b/file1consumer2.ts: *new*
   {}
-/a/b/globalfile3.ts:
+/a/b/globalfile3.ts: *new*
   {}
-/a/b/modulefile2.ts:
+/a/b/modulefile2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -159,30 +159,6 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 exitCode:: ExitStatus.undefined
 

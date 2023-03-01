@@ -19,12 +19,6 @@ let a = 1;
 let b = 1;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:30.000] Search path: /user/username/projects/myproject/a
 Info 2    [00:00:31.000] For info: /user/username/projects/myproject/a/a.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
 Info 3    [00:00:32.000] Creating configuration project /user/username/projects/myproject/a/tsconfig.json
@@ -114,26 +108,24 @@ Before checking timeout queue length (3) and running
 
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
+/user/username/projects/myproject/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
+/user/username/projects/myproject/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
+/user/username/projects/myproject/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/extended/alpha.tsconfig.json:
+/user/username/projects/myproject/extended/alpha.tsconfig.json: *new*
   {}
-/user/username/projects/myproject/b/tsconfig.json:
+/user/username/projects/myproject/b/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/extended/bravo.tsconfig.json:
+/user/username/projects/myproject/extended/bravo.tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 38   [00:01:27.000] Running: /user/username/projects/myproject/a/tsconfig.json
 Info 39   [00:01:28.000] Reloading configured project /user/username/projects/myproject/a/tsconfig.json
@@ -202,28 +194,6 @@ Info 57   [00:02:06.000] 	FileName: /user/username/projects/myproject/b/b.ts Pro
 Info 57   [00:02:07.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
 After checking timeout queue length (3) and running
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/extended/alpha.tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/extended/bravo.tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 57   [00:02:11.000] FileWatcher:: Triggered with /user/username/projects/myproject/extended/bravo.tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/extended/bravo.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/b/tsconfig.json WatchType: Extended config file
 Info 58   [00:02:12.000] Scheduled: /user/username/projects/myproject/b/tsconfig.json
 Info 59   [00:02:13.000] Scheduled: *ensureProjectForOpenFiles*
@@ -232,28 +202,6 @@ Before checking timeout queue length (2) and running
 //// [/user/username/projects/myproject/extended/bravo.tsconfig.json]
 {"extends":"./alpha.tsconfig.json","compilerOptions":{"strict":false}}
 
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/extended/alpha.tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/extended/bravo.tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 61   [00:02:15.000] Running: /user/username/projects/myproject/b/tsconfig.json
 Info 62   [00:02:16.000] Reloading configured project /user/username/projects/myproject/b/tsconfig.json
@@ -304,28 +252,6 @@ Info 72   [00:02:46.000] 	FileName: /user/username/projects/myproject/b/b.ts Pro
 Info 72   [00:02:47.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
 After checking timeout queue length (2) and running
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/extended/alpha.tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/extended/bravo.tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 72   [00:02:51.000] FileWatcher:: Triggered with /user/username/projects/myproject/b/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Config file
 Info 73   [00:02:52.000] Scheduled: /user/username/projects/myproject/b/tsconfig.json
 Info 74   [00:02:53.000] Scheduled: *ensureProjectForOpenFiles*
@@ -334,28 +260,6 @@ Before checking timeout queue length (2) and running
 //// [/user/username/projects/myproject/b/tsconfig.json]
 {"extends":"../extended/alpha.tsconfig.json"}
 
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/extended/alpha.tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/extended/bravo.tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 Info 76   [00:02:55.000] Running: /user/username/projects/myproject/b/tsconfig.json
 Info 77   [00:02:56.000] Reloading configured project /user/username/projects/myproject/b/tsconfig.json
@@ -427,8 +331,12 @@ FsWatches::
 /user/username/projects/myproject/b/tsconfig.json:
   {}
 
+FsWatches *deleted*::
+/user/username/projects/myproject/extended/bravo.tsconfig.json:
+  {}
+
 FsWatchesRecursive::
-/user/username/projects/myproject/b:
+/user/username/projects/myproject/b: *new*
   {}
 
 Info 90   [00:03:34.000] FileWatcher:: Triggered with /user/username/projects/myproject/extended/alpha.tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/extended/alpha.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Extended config file
@@ -440,28 +348,6 @@ Before checking timeout queue length (3) and running
 //// [/user/username/projects/myproject/extended/alpha.tsconfig.json]
 {}
 
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/extended/alpha.tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/b:
-  {}
 
 Info 95   [00:03:39.000] Running: /user/username/projects/myproject/a/tsconfig.json
 Info 96   [00:03:40.000] Reloading configured project /user/username/projects/myproject/a/tsconfig.json
@@ -527,25 +413,3 @@ Info 114  [00:04:17.000] 		Projects: /user/username/projects/myproject/a/tsconfi
 Info 114  [00:04:18.000] 	FileName: /user/username/projects/myproject/b/b.ts ProjectRootPath: undefined
 Info 114  [00:04:19.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
 After checking timeout queue length (3) and running
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/extended/alpha.tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/b:
-  {}

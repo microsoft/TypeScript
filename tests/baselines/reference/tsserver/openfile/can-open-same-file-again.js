@@ -20,12 +20,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:24.000] Search path: /user/someuser/projects/myproject/src
 Info 2    [00:00:25.000] For info: /user/someuser/projects/myproject/src/a.ts :: Config file name: /user/someuser/projects/myproject/tsconfig.json
 Info 3    [00:00:26.000] Creating configuration project /user/someuser/projects/myproject/tsconfig.json

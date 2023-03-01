@@ -1,13 +1,4 @@
 Info 0    [00:00:44.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:45.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/solution/b/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -68,12 +59,15 @@ interface Array<T> { length: number; [n: number]: T; }
                 
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:45.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/solution/b/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:46.000] Search path: /user/username/projects/solution/b
 Info 3    [00:00:47.000] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
 Info 4    [00:00:48.000] Creating configuration project /user/username/projects/solution/b/tsconfig.json
@@ -149,36 +143,38 @@ Info 30   [00:01:19.000] -----------------------------------------------
 Info 30   [00:01:20.000] Open files: 
 Info 30   [00:01:21.000] 	FileName: /user/username/projects/solution/b/index.ts ProjectRootPath: undefined
 Info 30   [00:01:22.000] 		Projects: /user/username/projects/solution/b/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/solution/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/b/tsconfig.json:
-  {}
-/user/username/projects/solution/a/tsconfig.json:
-  {}
-/user/username/projects/solution/a/index.ts:
-  {}
-/user/username/projects/solution:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/solution/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/solution/a:
-  {}
-
 Info 30   [00:01:23.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/solution/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/b/tsconfig.json: *new*
+  {}
+/user/username/projects/solution/a/tsconfig.json: *new*
+  {}
+/user/username/projects/solution/a/index.ts: *new*
+  {}
+/user/username/projects/solution: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/solution/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/solution/a: *new*
+  {}
+
+Before request
+
 Info 31   [00:01:24.000] request:
     {
       "command": "references",
@@ -190,32 +186,6 @@ Info 31   [00:01:24.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/solution/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/b/tsconfig.json:
-  {}
-/user/username/projects/solution/a/tsconfig.json:
-  {}
-/user/username/projects/solution/a/index.ts:
-  {}
-/user/username/projects/solution:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/solution/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/solution/a:
-  {}
-
 Info 32   [00:01:25.000] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/b/tsconfig.json
 Info 33   [00:01:26.000] Search path: /user/username/projects/solution/a
 Info 34   [00:01:27.000] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
@@ -406,50 +376,6 @@ Info 121  [00:02:54.000] Search path: /user/username/projects/solution/c
 Info 122  [00:02:55.000] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
 Info 123  [00:02:56.000] Search path: /user/username/projects/solution/c
 Info 124  [00:02:57.000] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/solution/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/d/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/b/tsconfig.json:
-  {}
-/user/username/projects/solution/a/tsconfig.json:
-  {}
-/user/username/projects/solution/a/index.ts:
-  {}
-/user/username/projects/solution:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/solution/tsconfig.json:
-  {}
-/user/username/projects/solution/c/tsconfig.json:
-  {}
-/user/username/projects/solution/d/tsconfig.json:
-  {}
-/user/username/projects/solution/c/index.ts:
-  {}
-/user/username/projects/solution/d/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/solution/a:
-  {}
-/user/username/projects/solution/b:
-  {}
-/user/username/projects/solution/c:
-  {}
-
 Info 125  [00:02:58.000] response:
     {
       "response": {
@@ -584,29 +510,18 @@ Info 125  [00:02:58.000] response:
       },
       "responseRequired": true
     }
-Info 126  [00:02:59.000] request:
-    {
-      "command": "references",
-      "arguments": {
-        "file": "/user/username/projects/solution/b/index.ts",
-        "line": 4,
-        "offset": 43
-      },
-      "seq": 3,
-      "type": "request"
-    }
-Before request
+After request
 
 PolledWatches::
 /user/username/projects/solution/b/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/solution/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/solution/a/node_modules/@types:
+/user/username/projects/solution/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/solution/c/node_modules/@types:
+/user/username/projects/solution/c/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/solution/d/node_modules/@types:
+/user/username/projects/solution/d/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -622,23 +537,36 @@ FsWatches::
   {}
 /user/username/projects/solution/tsconfig.json:
   {}
-/user/username/projects/solution/c/tsconfig.json:
+/user/username/projects/solution/c/tsconfig.json: *new*
   {}
-/user/username/projects/solution/d/tsconfig.json:
+/user/username/projects/solution/d/tsconfig.json: *new*
   {}
-/user/username/projects/solution/c/index.ts:
+/user/username/projects/solution/c/index.ts: *new*
   {}
-/user/username/projects/solution/d/index.ts:
+/user/username/projects/solution/d/index.ts: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/solution/a:
   {}
-/user/username/projects/solution/b:
+/user/username/projects/solution/b: *new*
   {}
-/user/username/projects/solution/c:
+/user/username/projects/solution/c: *new*
   {}
 
+Before request
+
+Info 126  [00:02:59.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/solution/b/index.ts",
+        "line": 4,
+        "offset": 43
+      },
+      "seq": 3,
+      "type": "request"
+    }
 Info 127  [00:03:00.000] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/b/tsconfig.json
 Info 128  [00:03:01.000] Search path: /user/username/projects/solution/a
 Info 129  [00:03:02.000] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
@@ -673,50 +601,6 @@ Info 157  [00:03:30.000] For info: /user/username/projects/solution/c/index.ts :
 Info 158  [00:03:31.000] Search path: /user/username/projects/solution/c
 Info 159  [00:03:32.000] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
 Info 160  [00:03:33.000] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/a/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/solution/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/c/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/d/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/b/tsconfig.json:
-  {}
-/user/username/projects/solution/a/tsconfig.json:
-  {}
-/user/username/projects/solution/a/index.ts:
-  {}
-/user/username/projects/solution:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/solution/tsconfig.json:
-  {}
-/user/username/projects/solution/c/tsconfig.json:
-  {}
-/user/username/projects/solution/d/tsconfig.json:
-  {}
-/user/username/projects/solution/c/index.ts:
-  {}
-/user/username/projects/solution/d/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/solution/a:
-  {}
-/user/username/projects/solution/b:
-  {}
-/user/username/projects/solution/c:
-  {}
-
 Info 161  [00:03:34.000] response:
     {
       "response": {
@@ -851,3 +735,4 @@ Info 161  [00:03:34.000] response:
       },
       "responseRequired": true
     }
+After request

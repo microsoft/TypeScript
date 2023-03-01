@@ -17,12 +17,6 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:24.000] Search path: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace
 Info 2    [00:00:25.000] For info: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js :: No config files found.
 Info 3    [00:00:26.000] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root

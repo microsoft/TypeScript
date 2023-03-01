@@ -25,12 +25,6 @@ let dummy = 1;
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:36.000] Search path: /user/username/projects/myproject/a
 Info 2    [00:00:37.000] For info: /user/username/projects/myproject/a/a.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
 Info 3    [00:00:38.000] Creating configuration project /user/username/projects/myproject/a/tsconfig.json

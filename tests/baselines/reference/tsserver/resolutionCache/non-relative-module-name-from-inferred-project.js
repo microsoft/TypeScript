@@ -32,12 +32,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:48.000] Search path: /user/username/projects/myproject/product/src
 Info 2    [00:00:49.000] For info: /user/username/projects/myproject/product/src/file1.ts :: No config files found.
 Info 3    [00:00:50.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -218,47 +212,47 @@ import { module1 } from "module1";import { module2 } from "module2";import { mod
 
 
 PolledWatches::
-/user/username/projects/myproject/product/src/tsconfig.json:
+/user/username/projects/myproject/product/src/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/product/src/jsconfig.json:
+/user/username/projects/myproject/product/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/product/tsconfig.json:
+/user/username/projects/myproject/product/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/product/jsconfig.json:
+/user/username/projects/myproject/product/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
+/user/username/projects/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/product/src/node_modules:
+/user/username/projects/myproject/product/src/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/product/test/node_modules:
+/user/username/projects/myproject/product/test/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/product/test/src/node_modules:
+/user/username/projects/myproject/product/test/src/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/product/src/node_modules/@types:
+/user/username/projects/myproject/product/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/product/node_modules/@types:
+/user/username/projects/myproject/product/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/product/src/feature/file2.ts:
+/user/username/projects/myproject/product/src/feature/file2.ts: *new*
   {}
-/user/username/projects/myproject/product/test/file4.ts:
+/user/username/projects/myproject/product/test/file4.ts: *new*
   {}
-/user/username/projects/myproject/product/test/src/file3.ts:
+/user/username/projects/myproject/product/test/src/file3.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/product/node_modules:
+/user/username/projects/myproject/product/node_modules: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/product/src/feature:
+/user/username/projects/myproject/product/src/feature: *new*
   {}
 
 Info 129  [00:03:14.000] Running: /dev/null/inferredProject1*
@@ -304,47 +298,3 @@ Info 149  [00:03:43.000] Open files:
 Info 149  [00:03:44.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
 Info 149  [00:03:45.000] 		Projects: /dev/null/inferredProject1*
 After running timeout callbacks
-
-PolledWatches::
-/user/username/projects/myproject/product/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/product/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/product/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/product/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/product/src/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/product/test/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/product/test/src/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/product/src/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/product/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/product/src/feature/file2.ts:
-  {}
-/user/username/projects/myproject/product/test/file4.ts:
-  {}
-/user/username/projects/myproject/product/test/src/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/product/node_modules:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/product/src/feature:
-  {}

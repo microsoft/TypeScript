@@ -1,13 +1,4 @@
 Info 0    [00:00:53.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:54.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/SiblingClass/Source.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -270,12 +261,15 @@ declare module Hmi {
 ======================================================================
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:54.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/SiblingClass/Source.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:55.000] Search path: /user/username/projects/myproject/SiblingClass
 Info 3    [00:00:56.000] For info: /user/username/projects/myproject/SiblingClass/Source.ts :: Config file name: /user/username/projects/myproject/SiblingClass/tsconfig.json
 Info 4    [00:00:57.000] Creating configuration project /user/username/projects/myproject/SiblingClass/tsconfig.json
@@ -342,32 +336,32 @@ Info 23   [00:01:18.000] -----------------------------------------------
 Info 23   [00:01:19.000] Open files: 
 Info 23   [00:01:20.000] 	FileName: /user/username/projects/myproject/SiblingClass/Source.ts ProjectRootPath: undefined
 Info 23   [00:01:21.000] 		Projects: /user/username/projects/myproject/SiblingClass/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/SiblingClass/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/SiblingClass/tsconfig.json:
-  {}
-/user/username/projects/myproject/tsbase.json:
-  {}
-/user/username/projects/myproject/buttonClass/tsconfig.json:
-  {}
-/user/username/projects/myproject/buttonClass/Source.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 23   [00:01:22.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/SiblingClass/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/SiblingClass/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/tsbase.json: *new*
+  {}
+/user/username/projects/myproject/buttonClass/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/buttonClass/Source.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Before request
+
 Info 24   [00:01:23.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -378,54 +372,11 @@ Info 24   [00:01:23.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/SiblingClass/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/SiblingClass/tsconfig.json:
-  {}
-/user/username/projects/myproject/tsbase.json:
-  {}
-/user/username/projects/myproject/buttonClass/tsconfig.json:
-  {}
-/user/username/projects/myproject/buttonClass/Source.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
-After request
-//// [/user/username/projects/myproject/SiblingClass/Source.js] file written with same contents
-//// [/user/username/projects/myproject/SiblingClass/Source.d.ts] file written with same contents
-
-PolledWatches::
-/user/username/projects/myproject/SiblingClass/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/SiblingClass/tsconfig.json:
-  {}
-/user/username/projects/myproject/tsbase.json:
-  {}
-/user/username/projects/myproject/buttonClass/tsconfig.json:
-  {}
-/user/username/projects/myproject/buttonClass/Source.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 25   [00:01:30.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+//// [/user/username/projects/myproject/SiblingClass/Source.js] file written with same contents
+//// [/user/username/projects/myproject/SiblingClass/Source.d.ts] file written with same contents

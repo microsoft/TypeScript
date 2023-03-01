@@ -1,14 +1,4 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:22.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/app.ts",
-        "fileContent": "console.log('Hello world');"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/app.ts]
 console.log('Hello world');
@@ -30,12 +20,16 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/app.ts",
+        "fileContent": "console.log('Hello world');"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:23.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:24.000] For info: /user/username/projects/myproject/app.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -74,26 +68,26 @@ Info 17   [00:00:40.000] -----------------------------------------------
 Info 17   [00:00:41.000] Open files: 
 Info 17   [00:00:42.000] 	FileName: /user/username/projects/myproject/app.ts ProjectRootPath: undefined
 Info 17   [00:00:43.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 17   [00:00:44.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
 Info 18   [00:00:47.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/unitTest1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 19   [00:00:48.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 20   [00:00:49.000] Scheduled: *ensureProjectForOpenFiles*
@@ -113,20 +107,6 @@ describe("Test Suite 1", () => {
     });
 });
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 Info 22   [00:00:51.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 23   [00:00:52.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/unitTest1.ts 500 undefined WatchType: Closed Script info
@@ -171,7 +151,7 @@ After running timeout callbacks
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -179,12 +159,14 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/unittest1.ts:
+/user/username/projects/myproject/unittest1.ts: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
+
+Before request
 
 Info 34   [00:01:15.000] request:
     {
@@ -196,26 +178,6 @@ Info 34   [00:01:15.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/unittest1.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 35   [00:01:16.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/unitTest1.ts 500 undefined WatchType: Closed Script info
 Info 36   [00:01:17.000] Search path: /user/username/projects/myproject
 Info 37   [00:01:18.000] For info: /user/username/projects/myproject/unitTest1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
@@ -228,6 +190,10 @@ Info 38   [00:01:23.000] 	FileName: /user/username/projects/myproject/app.ts Pro
 Info 38   [00:01:24.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 38   [00:01:25.000] 	FileName: /user/username/projects/myproject/unitTest1.ts ProjectRootPath: undefined
 Info 38   [00:01:26.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 38   [00:01:27.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -242,14 +208,16 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/user/username/projects/myproject/unittest1.ts:
+  {}
+
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 38   [00:01:27.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 39   [00:01:28.000] request:
     {
       "command": "navbar-full",
@@ -259,42 +227,6 @@ Info 39   [00:01:28.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 40   [00:01:29.000] response:
     {
       "response": [
@@ -393,44 +325,16 @@ Info 40   [00:01:29.000] response:
       ],
       "responseRequired": true
     }
+After request
+
 Info 41   [00:01:31.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/unitTest1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 42   [00:01:32.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/unitTest1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Before checking timeout queue length (0) and running
 //// [/user/username/projects/myproject/unitTest1.ts] deleted
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 After checking timeout queue length (0) and running
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
+Before request
 
 Info 43   [00:01:33.000] request:
     {
@@ -441,24 +345,6 @@ Info 43   [00:01:33.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 44   [00:01:34.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 45   [00:01:35.000] Scheduled: *ensureProjectForOpenFiles*
 Info 46   [00:01:36.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -468,45 +354,13 @@ Info 46   [00:01:38.000] -----------------------------------------------
 Info 46   [00:01:39.000] Open files: 
 Info 46   [00:01:40.000] 	FileName: /user/username/projects/myproject/app.ts ProjectRootPath: undefined
 Info 46   [00:01:41.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 46   [00:01:42.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (2) and running
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 Info 47   [00:01:43.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 48   [00:01:44.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -548,6 +402,10 @@ PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/user/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {}
@@ -575,20 +433,6 @@ export function Test2() {
     assert.ok(false, "This should fail");
 };
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 Info 62   [00:02:12.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 63   [00:02:13.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/unitTest1.ts 500 undefined WatchType: Closed Script info
@@ -633,7 +477,7 @@ After running timeout callbacks
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -641,12 +485,14 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/unittest1.ts:
+/user/username/projects/myproject/unittest1.ts: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
+
+Before request
 
 Info 74   [00:02:36.000] request:
     {
@@ -658,26 +504,6 @@ Info 74   [00:02:36.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/unittest1.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 75   [00:02:37.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/unitTest1.ts 500 undefined WatchType: Closed Script info
 Info 76   [00:02:38.000] Search path: /user/username/projects/myproject
 Info 77   [00:02:39.000] For info: /user/username/projects/myproject/unitTest1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
@@ -690,6 +516,10 @@ Info 78   [00:02:44.000] 	FileName: /user/username/projects/myproject/app.ts Pro
 Info 78   [00:02:45.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 78   [00:02:46.000] 	FileName: /user/username/projects/myproject/unitTest1.ts ProjectRootPath: undefined
 Info 78   [00:02:47.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 78   [00:02:48.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -704,14 +534,16 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/user/username/projects/myproject/unittest1.ts:
+  {}
+
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 78   [00:02:48.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 79   [00:02:49.000] request:
     {
       "command": "navbar-full",
@@ -721,42 +553,6 @@ Info 79   [00:02:49.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 Info 80   [00:02:50.000] response:
     {
       "response": [
@@ -854,3 +650,4 @@ Info 80   [00:02:50.000] response:
       ],
       "responseRequired": true
     }
+After request

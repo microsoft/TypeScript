@@ -1,13 +1,4 @@
 Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:16.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/app.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/app.ts]
 let x = 10
@@ -31,12 +22,15 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:16.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/app.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:17.000] Search path: /a/b
 Info 3    [00:00:18.000] For info: /a/b/app.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:19.000] Creating configuration project /a/b/tsconfig.json
@@ -83,26 +77,26 @@ Info 21   [00:00:38.000] -----------------------------------------------
 Info 21   [00:00:39.000] Open files: 
 Info 21   [00:00:40.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 21   [00:00:41.000] 		Projects: /a/b/tsconfig.json
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 21   [00:00:42.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
 Info 22   [00:00:46.000] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info 23   [00:00:47.000] Scheduled: /a/b/tsconfig.json
 Info 24   [00:00:48.000] Scheduled: *ensureProjectForOpenFiles*
@@ -115,20 +109,6 @@ Before running timeout callbacks
                 }
             }
 
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 26   [00:00:50.000] Running: /a/b/tsconfig.json
 Info 27   [00:00:51.000] Reloading configured project /a/b/tsconfig.json
@@ -176,20 +156,6 @@ Info 41   [00:01:17.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/app.ts"]}}
 After running timeout callbacks
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 42   [00:01:21.000] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info 43   [00:01:22.000] Scheduled: /a/b/tsconfig.json
 Info 44   [00:01:23.000] Scheduled: *ensureProjectForOpenFiles*
@@ -200,20 +166,6 @@ Before running timeout callbacks
                 "compilerOptions": {}
             }
 
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 46   [00:01:25.000] Reloading configured project /a/b/tsconfig.json
 Info 47   [00:01:26.000] event:
@@ -262,17 +214,3 @@ Info 61   [00:01:52.000] got projects updated in background, updating diagnostic
 Info 62   [00:01:53.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/app.ts"]}}
 After running timeout callbacks
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}

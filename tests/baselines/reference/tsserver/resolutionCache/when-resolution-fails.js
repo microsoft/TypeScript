@@ -34,12 +34,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:32.000] Search path: /user/username/projects/myproject/src/somefolder
 Info 2    [00:00:33.000] For info: /user/username/projects/myproject/src/somefolder/srcfile.ts :: Config file name: /user/username/projects/myproject/src/tsconfig.json
 Info 3    [00:00:34.000] Creating configuration project /user/username/projects/myproject/src/tsconfig.json

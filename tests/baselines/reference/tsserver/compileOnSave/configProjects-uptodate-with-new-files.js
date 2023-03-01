@@ -1,13 +1,4 @@
 Info 0    [00:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:24.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/moduleFile1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -43,12 +34,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:24.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/moduleFile1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:25.000] Search path: /a/b
 Info 3    [00:00:26.000] For info: /a/b/moduleFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /a/b/tsconfig.json
@@ -109,34 +103,36 @@ Info 21   [00:00:46.000] -----------------------------------------------
 Info 21   [00:00:47.000] Open files: 
 Info 21   [00:00:48.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefined
 Info 21   [00:00:49.000] 		Projects: /a/b/tsconfig.json
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 21   [00:00:50.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/file1consumer1.ts: *new*
+  {}
+/a/b/file1consumer2.ts: *new*
+  {}
+/a/b/globalfile3.ts: *new*
+  {}
+/a/b/modulefile2.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Before request
+
 Info 22   [00:00:51.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -147,54 +143,6 @@ Info 22   [00:00:51.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 23   [00:00:52.000] response:
     {
       "response": [
@@ -210,6 +158,8 @@ Info 23   [00:00:52.000] response:
       ],
       "responseRequired": true
     }
+After request
+
 Info 24   [00:00:55.000] DirectoryWatcher:: Triggered with /a/b/file1Consumer3.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info 25   [00:00:56.000] Scheduled: /a/b/tsconfig.json
 Info 26   [00:00:57.000] Scheduled: *ensureProjectForOpenFiles*
@@ -218,28 +168,6 @@ Before running timeout callbacks
 //// [/a/b/file1Consumer3.ts]
 import {Foo} from "./moduleFile1"; let y = Foo();
 
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Info 28   [00:00:59.000] Running: /a/b/tsconfig.json
 Info 29   [00:01:00.000] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer3.ts 500 undefined WatchType: Closed Script info
@@ -311,12 +239,14 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/file1consumer3.ts:
+/a/b/file1consumer3.ts: *new*
   {}
 
 FsWatchesRecursive::
 /a/b:
   {}
+
+Before request
 
 Info 38   [00:01:21.000] request:
     {
@@ -332,62 +262,14 @@ Info 38   [00:01:21.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/file1consumer3.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/file1consumer3.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 39   [00:01:22.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 40   [00:01:23.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -398,32 +280,6 @@ Info 40   [00:01:23.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/file1consumer3.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 41   [00:01:24.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 42   [00:01:25.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 43   [00:01:26.000] Project '/a/b/tsconfig.json' (Configured)
@@ -437,32 +293,6 @@ Info 44   [00:01:27.000] 	Files (7)
 	/a/b/file1Consumer3.ts Text-1 "import {Foo} from \"./moduleFile1\"; let y = Foo();"
 
 Info 45   [00:01:28.000] -----------------------------------------------
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/file1consumer3.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 46   [00:01:29.000] response:
     {
       "response": [
@@ -479,3 +309,4 @@ Info 46   [00:01:29.000] response:
       ],
       "responseRequired": true
     }
+After request

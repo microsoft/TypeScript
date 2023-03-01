@@ -13,12 +13,6 @@ let z = 10;
 
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:20.000] Search path: /a/b/src
 Info 2    [00:00:21.000] For info: /a/b/src/app.ts :: Config file name: /a/b/tsconfig.json
 Info 3    [00:00:22.000] Creating configuration project /a/b/tsconfig.json

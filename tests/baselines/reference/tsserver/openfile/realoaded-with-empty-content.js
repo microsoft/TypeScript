@@ -4,12 +4,6 @@ Creating project service
 let x = 1
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:10.000] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info 2    [00:00:11.000] Starting updateGraphWorker: Project: externalProject
 Info 3    [00:00:12.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: externalProject WatchType: Missing file

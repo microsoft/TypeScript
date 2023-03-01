@@ -4,12 +4,6 @@ Creating project service
 <html><script language="javascript">var x = 1;</></html>
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:10.000] Starting updateGraphWorker: Project: projectFileName
 Info 2    [00:00:11.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: projectFileName WatchType: Missing file
 Info 3    [00:00:12.000] Finishing updateGraphWorker: Project: projectFileName Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms

@@ -23,12 +23,6 @@ export { foo } from "./foo";
 export function foo(): string;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:30.000] Search path: /user/username/projects/myproject/src
 Info 2    [00:00:31.000] For info: /user/username/projects/myproject/src/main.ts :: No config files found.
 Info 3    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root

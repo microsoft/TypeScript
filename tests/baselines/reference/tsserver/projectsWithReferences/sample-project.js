@@ -88,12 +88,6 @@ export const m = mod;
 
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:40.000] Search path: /user/username/projects/sample1/tests
 Info 2    [00:00:41.000] For info: /user/username/projects/sample1/tests/index.ts :: Config file name: /user/username/projects/sample1/tests/tsconfig.json
 Info 3    [00:00:42.000] Creating configuration project /user/username/projects/sample1/tests/tsconfig.json
@@ -217,31 +211,31 @@ function foo() {}
 
 
 PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types:
+/user/username/projects/sample1/tests/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
+/user/username/projects/sample1/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
+/user/username/projects/sample1/tests/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/core/tsconfig.json:
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/logic/tsconfig.json:
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/core/index.ts:
+/user/username/projects/sample1/core/index.ts: *new*
   {}
-/user/username/projects/sample1/logic/index.ts:
+/user/username/projects/sample1/logic/index.ts: *new*
   {}
-/user/username/projects/sample1/core/anothermodule.ts:
+/user/username/projects/sample1/core/anothermodule.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/core:
+/user/username/projects/sample1/core: *new*
   {}
-/user/username/projects/sample1/logic:
+/user/username/projects/sample1/logic: *new*
   {}
 
 Info 33   [00:01:20.000] Running: /user/username/projects/sample1/tests/tsconfig.json
@@ -275,34 +269,6 @@ Info 42   [00:01:39.000] 	FileName: /user/username/projects/sample1/tests/index.
 Info 42   [00:01:40.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
 After checking timeout queue length (2) and running
 
-PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
-
 Info 42   [00:01:43.000] FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
 Info 43   [00:01:44.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
 Info 44   [00:01:45.000] Scheduled: *ensureProjectForOpenFiles*
@@ -317,34 +283,6 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 function foo() {}export function gfoo() {}
 
-
-PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 Info 46   [00:01:47.000] Running: /user/username/projects/sample1/tests/tsconfig.json
 Info 47   [00:01:48.000] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
@@ -377,34 +315,6 @@ Info 55   [00:02:06.000] 	FileName: /user/username/projects/sample1/tests/index.
 Info 55   [00:02:07.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
 After checking timeout queue length (2) and running
 
-PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
-
 Info 55   [00:02:11.000] FileWatcher:: Triggered with /user/username/projects/sample1/logic/tsconfig.json 1:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
 Info 56   [00:02:12.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
 Info 57   [00:02:13.000] Scheduled: *ensureProjectForOpenFiles*
@@ -413,34 +323,6 @@ Before checking timeout queue length (2) and running
 //// [/user/username/projects/sample1/logic/tsconfig.json]
 {"compilerOptions":{"composite":true,"declaration":true,"declarationDir":"decls"},"references":[{"path":"../core"}]}
 
-
-PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 Info 59   [00:02:15.000] Running: /user/username/projects/sample1/tests/tsconfig.json
 Info 60   [00:02:16.000] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
@@ -489,31 +371,3 @@ Info 69   [00:02:34.000] Open files:
 Info 69   [00:02:35.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
 Info 69   [00:02:36.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
 After checking timeout queue length (2) and running
-
-PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}

@@ -34,9 +34,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra r
             content: "export let x = 1"
         };
         const host: TestServerHost & ts.ModuleResolutionHost = createServerHost([file1, lib]);
+        const logger = createLoggerWithInMemoryLogs(host);
         const projectService = createProjectService(host, {
-            typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host),
-            logger: createLoggerWithInMemoryLogs(host)
+            typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host, logger),
+            logger
         });
 
         projectService.setCompilerOptionsForInferredProjects({ traceResolution: true, allowJs: true });
@@ -345,27 +346,32 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         projectService.checkNumberOfProjects({ configuredProjects: 1 });
     });
 
-    it("types should load from config file path if config exists", () => {
-        const f1 = {
-            path: "/a/b/app.ts",
-            content: "let x = 1"
-        };
-        const config = {
-            path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: [] } })
-        };
-        const node = {
-            path: "/a/b/node_modules/@types/node/index.d.ts",
-            content: "declare var process: any"
-        };
-        const cwd = {
-            path: "/a/c"
-        };
-        const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
-        const projectService = createProjectService(host);
-        projectService.openClientFile(f1.path);
-        projectService.checkNumberOfProjects({ configuredProjects: 1 });
-        checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, node.path, config.path]);
+    describe("types from config file", () => {
+        function verifyTypesLoad(subScenario: string, includeTypeRoots: boolean) {
+            it(subScenario, () => {
+                const f1 = {
+                    path: "/a/b/app.ts",
+                    content: "let x = 1"
+                };
+                const config = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } })
+                };
+                const node = {
+                    path: "/a/b/node_modules/@types/node/index.d.ts",
+                    content: "declare var process: any"
+                };
+                const cwd = {
+                    path: "/a/c"
+                };
+                const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
+                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
+                projectService.openClientFile(f1.path);
+                baselineTsserverLogs("resolutionCache", subScenario, projectService);
+            });
+        }
+        verifyTypesLoad("types should load from config file path if config exists", /*includeTypeRoots*/ false);
+        verifyTypesLoad("types should not load from config file path if config exists but does not specifies typeRoots", /*includeTypeRoots*/ true);
     });
 });
 

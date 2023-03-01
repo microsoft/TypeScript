@@ -1,13 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/tsconfig.json]
 {
@@ -37,12 +28,15 @@ export const ghijkl = a.abcdef;
 {"references":[{"path":"./a"},{"path":"./b"}],"files":[]}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /a
 Info 3    [00:00:20.000] For info: /a/index.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /a/tsconfig.json
@@ -89,28 +83,30 @@ Info 23   [00:00:45.000] -----------------------------------------------
 Info 23   [00:00:46.000] Open files: 
 Info 23   [00:00:47.000] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info 23   [00:00:48.000] 		Projects: /a/tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 Info 23   [00:00:49.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a: *new*
+  {}
+
+Before request
+
 Info 24   [00:00:50.000] request:
     {
       "command": "navto",
@@ -120,24 +116,6 @@ Info 24   [00:00:50.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 Info 25   [00:00:51.000] Loading configured project /tsconfig.json
 Info 26   [00:00:52.000] Config: /tsconfig.json : {
  "rootNames": [],
@@ -198,32 +176,6 @@ Info 44   [00:01:10.000] 	Files (2)
 	  Matched by default include pattern '**/*'
 
 Info 45   [00:01:11.000] -----------------------------------------------
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/tsconfig.json:
-  {}
-/b/tsconfig.json:
-  {}
-/b/index.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-/b:
-  {}
-
 Info 46   [00:01:12.000] response:
     {
       "response": [
@@ -246,3 +198,28 @@ Info 46   [00:01:12.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/node_modules/@types:
+  {"pollingInterval":500}
+/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json:
+  {}
+/tsconfig.json:
+  {}
+/b/tsconfig.json: *new*
+  {}
+/b/index.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a:
+  {}
+/b: *new*
+  {}

@@ -50,13 +50,11 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (used version)
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
-FsWatches::
-
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -76,16 +74,6 @@ Input::
 
 Output::
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -97,16 +85,6 @@ var zz30 = 100;
 
 
 Output::
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -140,16 +118,6 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (computed .d.ts)
 /a/b/commonfile2.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js]
@@ -163,16 +131,6 @@ Change:: The timeout is to check the status of all files
 Input::
 
 Output::
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 exitCode:: ExitStatus.undefined
 

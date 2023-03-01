@@ -1,13 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/project/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/project/a.ts]
 export const a = 10;
@@ -32,12 +23,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/project/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /project
 Info 3    [00:00:20.000] For info: /project/a.ts :: Config file name: /project/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /project/tsconfig.json
@@ -81,28 +75,30 @@ Info 18   [00:00:37.000] -----------------------------------------------
 Info 18   [00:00:38.000] Open files: 
 Info 18   [00:00:39.000] 	FileName: /project/a.ts ProjectRootPath: undefined
 Info 18   [00:00:40.000] 		Projects: /project/tsconfig.json
-After request
-
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/project/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
-
 Info 18   [00:00:41.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/project/tsconfig.json: *new*
+  {}
+/project/b.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/project: *new*
+  {}
+
+Before request
+
 Info 19   [00:00:42.000] request:
     {
       "command": "open",
@@ -113,24 +109,6 @@ Info 19   [00:00:42.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/project/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
-
 Info 20   [00:00:43.000] FileWatcher:: Close:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
 Info 21   [00:00:44.000] Search path: /project
 Info 22   [00:00:45.000] For info: /project/b.ts :: Config file name: /project/tsconfig.json
@@ -152,6 +130,10 @@ Info 28   [00:00:55.000] 	FileName: /project/a.ts ProjectRootPath: undefined
 Info 28   [00:00:56.000] 		Projects: /project/tsconfig.json
 Info 28   [00:00:57.000] 	FileName: /project/b.ts ProjectRootPath: undefined
 Info 28   [00:00:58.000] 		Projects: /project/tsconfig.json
+Info 28   [00:00:59.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -164,14 +146,16 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/project/b.ts:
+  {}
+
 FsWatchesRecursive::
 /project:
   {}
 
-Info 28   [00:00:59.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 29   [00:01:00.000] request:
     {
       "command": "applyChangedToOpenFiles",
@@ -194,43 +178,13 @@ Info 29   [00:01:00.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
-
-After request
-
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
-
 Info 30   [00:01:01.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
 Info 31   [00:01:02.000] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info 32   [00:01:03.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 33   [00:01:04.000] Project '/project/tsconfig.json' (Configured)
@@ -240,6 +194,8 @@ Info 34   [00:01:05.000] 	Files (3)
 	/project/b.ts SVC-2-0 "export const newB = 10;"
 
 Info 35   [00:01:06.000] -----------------------------------------------
+Before request
+
 Info 36   [00:01:07.000] request:
     {
       "command": "close",
@@ -249,22 +205,6 @@ Info 36   [00:01:07.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
-
 Info 37   [00:01:08.000] FileWatcher:: Added:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
 Info 38   [00:01:09.000] Project '/project/tsconfig.json' (Configured)
 Info 38   [00:01:10.000] 	Files (3)
@@ -273,6 +213,10 @@ Info 38   [00:01:11.000] -----------------------------------------------
 Info 38   [00:01:12.000] Open files: 
 Info 38   [00:01:13.000] 	FileName: /project/a.ts ProjectRootPath: undefined
 Info 38   [00:01:14.000] 		Projects: /project/tsconfig.json
+Info 38   [00:01:15.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -284,17 +228,13 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/project/b.ts:
+/project/b.ts: *new*
   {}
 
 FsWatchesRecursive::
 /project:
   {}
 
-Info 38   [00:01:15.000] response:
-    {
-      "responseRequired": false
-    }
 Info 39   [00:01:16.000] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info 40   [00:01:17.000] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 41   [00:01:18.000] Project '/project/tsconfig.json' (Configured)
@@ -312,22 +252,6 @@ Before running timeout callbacks
 //// [/project/b.ts]
 export const b = 10;export const x = 10;
 
-
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/project/b.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
 
 Info 48   [00:01:27.000] Running: /project/tsconfig.json
 Info 49   [00:01:28.000] Starting updateGraphWorker: Project: /project/tsconfig.json
@@ -357,19 +281,3 @@ Info 57   [00:01:45.000] Open files:
 Info 57   [00:01:46.000] 	FileName: /project/a.ts ProjectRootPath: undefined
 Info 57   [00:01:47.000] 		Projects: /project/tsconfig.json
 After running timeout callbacks
-
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/project/b.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}

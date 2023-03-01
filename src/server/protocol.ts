@@ -77,8 +77,6 @@ export const enum CommandTypes {
     NavtoFull = "navto-full",
     NavTree = "navtree",
     NavTreeFull = "navtree-full",
-    /** @deprecated */
-    Occurrences = "occurrences",
     DocumentHighlights = "documentHighlights",
     /** @internal */
     DocumentHighlightsFull = "documentHighlights-full",
@@ -1103,33 +1101,6 @@ export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
 }
 
-/**
- * @deprecated
- * Get occurrences request; value of command field is
- * "occurrences". Return response giving spans that are relevant
- * in the file at a given line and column.
- */
-export interface OccurrencesRequest extends FileLocationRequest {
-    command: CommandTypes.Occurrences;
-}
-
-/** @deprecated */
-export interface OccurrencesResponseItem extends FileSpanWithContext {
-    /**
-     * True if the occurrence is a write location, false otherwise.
-     */
-    isWriteAccess: boolean;
-
-    /**
-     * True if the occurrence is in a string, undefined otherwise;
-     */
-    isInString?: true;
-}
-
-/** @deprecated */
-export interface OccurrencesResponse extends Response {
-    body?: OccurrencesResponseItem[];
-}
 
 /**
  * Get document highlights request; value of command field is

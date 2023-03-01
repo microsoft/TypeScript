@@ -1,15 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "configure",
-      "arguments": {
-        "watchOptions": {
-          "watchDirectory": "UseFsEvents"
-        }
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -34,27 +23,28 @@ let y = 1
 let x = 1
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:18.000] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "watchOptions": {
+          "watchDirectory": "UseFsEvents"
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Host watch options changed to {"watchDirectory":0}, it will be take effect for next watches.
 Info 3    [00:00:20.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 4    [00:00:21.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 5    [00:00:22.000] request:
     {
       "command": "open",
@@ -65,14 +55,6 @@ Info 5    [00:00:22.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 6    [00:00:23.000] Search path: /a/b
 Info 7    [00:00:24.000] For info: /a/b/commonFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 8    [00:00:25.000] Creating configuration project /a/b/tsconfig.json
@@ -116,25 +98,22 @@ Info 22   [00:00:41.000] -----------------------------------------------
 Info 22   [00:00:42.000] Open files: 
 Info 22   [00:00:43.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: /a/b
 Info 22   [00:00:44.000] 		Projects: /a/b/tsconfig.json
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 22   [00:00:45.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b: *new*
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}

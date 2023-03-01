@@ -1,13 +1,4 @@
 Info 0    [00:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:20.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/project/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/project/file1.ts]
 import a from "file2"
@@ -32,12 +23,15 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"typeRoots":[]}}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:20.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/project/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:21.000] Search path: /a/b/project
 Info 3    [00:00:22.000] For info: /a/b/project/file1.ts :: Config file name: /a/b/project/tsconfig.json
 Info 4    [00:00:23.000] Creating configuration project /a/b/project/tsconfig.json
@@ -82,28 +76,28 @@ Info 18   [00:00:39.000] -----------------------------------------------
 Info 18   [00:00:40.000] Open files: 
 Info 18   [00:00:41.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
 Info 18   [00:00:42.000] 		Projects: /a/b/project/tsconfig.json
-After request
-
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
-
 Info 18   [00:00:43.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/project/node_modules: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/project/tsconfig.json: *new*
+  {}
+/a/b/project/file3.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b/project: *new*
+  {}
+
 Info 19   [00:00:47.000] FileWatcher:: Triggered with /a/b/project/file3.ts 1:: WatchInfo: /a/b/project/file3.ts 500 undefined WatchType: Closed Script info
 Info 20   [00:00:48.000] Scheduled: /a/b/project/tsconfig.json
 Info 21   [00:00:49.000] Scheduled: *ensureProjectForOpenFiles*
@@ -112,22 +106,6 @@ Before checking timeout queue length (2) and running
 //// [/a/b/project/file3.ts]
 export class c { }export class d {}
 
-
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
 
 Info 23   [00:00:51.000] Running: /a/b/project/tsconfig.json
 Info 24   [00:00:52.000] Starting updateGraphWorker: Project: /a/b/project/tsconfig.json
@@ -158,93 +136,13 @@ Info 32   [00:01:10.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undef
 Info 32   [00:01:11.000] 		Projects: /a/b/project/tsconfig.json
 After checking timeout queue length (2) and running
 
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
-
 Before running timeout callbacks
 //// [/a/b/node_modules/file2.d.ts]
 export class a { }
 
 
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
-
 After running timeout callbacks
-
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
 
 Before running timeout callbacks
 
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}
-
 After running timeout callbacks
-
-PolledWatches::
-/a/b/project/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json:
-  {}
-/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/project:
-  {}

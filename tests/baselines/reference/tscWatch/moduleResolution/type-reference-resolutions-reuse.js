@@ -71,8 +71,12 @@ File '/user/username/projects/package.json' does not exist according to earlier 
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving type reference directive 'pkg', containing file '/user/username/projects/myproject/index.ts', root directory '/user/username/projects/myproject/node_modules/@types'. ========
-Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
+======== Resolving type reference directive 'pkg', containing file '/user/username/projects/myproject/index.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/user/username/projects/myproject/node_modules/@types, /user/username/projects/node_modules/@types, /user/username/node_modules/@types, /user/node_modules/@types, /node_modules/@types'.
+Directory '/user/username/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/user/username/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/user/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
 Entering conditional exports.
@@ -84,8 +88,12 @@ Resolved under condition 'import'.
 Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
 ======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1', primary: false. ========
-======== Resolving type reference directive 'pkg1', containing file '/user/username/projects/myproject/index.ts', root directory '/user/username/projects/myproject/node_modules/@types'. ========
-Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
+======== Resolving type reference directive 'pkg1', containing file '/user/username/projects/myproject/index.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/user/username/projects/myproject/node_modules/@types, /user/username/projects/node_modules/@types, /user/username/node_modules/@types, /user/node_modules/@types, /node_modules/@types'.
+Directory '/user/username/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/user/username/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/user/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg1/package.json'.
 Entering conditional exports.
@@ -103,8 +111,8 @@ Directory '/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Type reference directive 'pkg1' was not resolved. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-======== Resolving type reference directive 'pkg2', containing file '/user/username/projects/myproject/__inferred type names__.ts', root directory '/user/username/projects/myproject/node_modules/@types'. ========
-Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
+======== Resolving type reference directive 'pkg2', containing file '/user/username/projects/myproject/__inferred type names__.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/user/username/projects/myproject/node_modules/@types, /user/username/projects/node_modules/@types, /user/username/node_modules/@types, /user/node_modules/@types, /node_modules/@types'.
 File '/user/username/projects/myproject/node_modules/@types/pkg2/package.json' does not exist.
 File '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts', result '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts'.
@@ -159,41 +167,41 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/package.json:
+/user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/package.json:
+/user/username/projects/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/pkg2/package.json:
+/user/username/projects/myproject/node_modules/@types/pkg2/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/package.json:
+/user/username/projects/myproject/node_modules/@types/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/package.json:
+/user/username/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/a.ts:
+/user/username/projects/myproject/a.ts: *new*
   {}
-/user/username/projects/myproject/index.ts:
+/user/username/projects/myproject/index.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg/import.d.ts:
+/user/username/projects/myproject/node_modules/pkg/import.d.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts:
+/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg/package.json:
+/user/username/projects/myproject/node_modules/pkg/package.json: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
+/user/username/projects/myproject/node_modules/pkg1/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -253,8 +261,12 @@ File '/user/username/projects/package.json' does not exist according to earlier 
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving type reference directive 'pkg', containing file '/user/username/projects/myproject/a.ts', root directory '/user/username/projects/myproject/node_modules/@types'. ========
-Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
+======== Resolving type reference directive 'pkg', containing file '/user/username/projects/myproject/a.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/user/username/projects/myproject/node_modules/@types, /user/username/projects/node_modules/@types, /user/username/node_modules/@types, /user/node_modules/@types, /node_modules/@types'.
+Directory '/user/username/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/user/username/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/user/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -315,44 +327,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/pkg2/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/package.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/index.ts:
-  {}
-/user/username/projects/myproject/node_modules/pkg/import.d.ts:
-  {}
-/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/node_modules/pkg/package.json:
-  {}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/@types:
-  {}
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

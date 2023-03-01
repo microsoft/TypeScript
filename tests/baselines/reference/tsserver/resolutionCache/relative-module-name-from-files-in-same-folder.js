@@ -29,12 +29,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:30.000] Search path: /user/username/projects/myproject/src
 Info 2    [00:00:31.000] For info: /user/username/projects/myproject/src/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 3    [00:00:32.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -122,23 +116,23 @@ import { module1 } from "./module1";import { module2 } from "../module2";import 
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/module2.ts:
+/user/username/projects/myproject/module2.ts: *new*
   {}
-/user/username/projects/myproject/src/file2.ts:
+/user/username/projects/myproject/src/file2.ts: *new*
   {}
-/user/username/projects/myproject/src/module1.ts:
+/user/username/projects/myproject/src/module1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 Info 39   [00:01:20.000] Running: /user/username/projects/myproject/tsconfig.json
@@ -175,23 +169,3 @@ Info 52   [00:01:42.000] Open files:
 Info 52   [00:01:43.000] 	FileName: /user/username/projects/myproject/src/file1.ts ProjectRootPath: undefined
 Info 52   [00:01:44.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After running timeout callbacks
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/module2.ts:
-  {}
-/user/username/projects/myproject/src/file2.ts:
-  {}
-/user/username/projects/myproject/src/module1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}

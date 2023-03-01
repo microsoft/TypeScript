@@ -1,13 +1,4 @@
 Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:32.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/src/main.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -35,12 +26,15 @@ export function foo(): string;
 {"include":["src"],"watchOptions":{"excludeDirectories":["node_modules"]}}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:32.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:33.000] Search path: /user/username/projects/myproject/src
 Info 3    [00:00:34.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:35.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -96,23 +90,20 @@ Info 23   [00:00:56.000] -----------------------------------------------
 Info 23   [00:00:57.000] Open files: 
 Info 23   [00:00:58.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 Info 23   [00:00:59.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After request
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 23   [00:01:00.000] response:
     {
       "responseRequired": false
     }
+After request
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src: *new*
+  {}
+/user/username/projects/myproject/node_modules: *new*
+  {}
