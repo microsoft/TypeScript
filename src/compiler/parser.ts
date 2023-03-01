@@ -8672,7 +8672,7 @@ namespace Parser {
                     }
                     nextTokenJSDoc();
                 }
-                comments = comments.trimEnd()
+                comments = comments.trimEnd();
                 if (parts.length && comments.length) {
                     parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? start, commentsPos));
                 }
@@ -8683,7 +8683,7 @@ namespace Parser {
 
             function removeLeadingNewlines(comments: string) {
                 // TODO: Also a regex would work, and perhaps faster
-                let i = 0
+                let i = 0;
                 while (i < comments.length && (comments[i] === "\n" || comments[i] === "\r")) {
                     i++;
                 }
@@ -9133,20 +9133,20 @@ namespace Parser {
 
             function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
                 const commentStart = getNodePos();
-                const textOnly = parseAuthorNameAndEmail();
+                const nameAndEmail = parseAuthorNameAndEmail();
                 let commentEnd = scanner.getStartPos();
                 const comments = parseTrailingTagComments(start, commentEnd, indent, indentText);
                 if (!comments) {
                     commentEnd = scanner.getStartPos();
                 }
                 const allParts = typeof comments !== "string"
-                    ? createNodeArray(concatenate([finishNode(textOnly, commentStart, commentEnd)], comments) as JSDocComment[], commentStart) // cast away readonly
-                    : textOnly.text + comments;
+                    ? createNodeArray(concatenate([finishNode(nameAndEmail, commentStart, commentEnd)], comments) as JSDocComment[], commentStart) // cast away readonly
+                    : nameAndEmail.text + comments;
                 return finishNode(factory.createJSDocAuthorTag(tagName, allParts), start);
             }
 
             function parseAuthorNameAndEmail(): JSDocText {
-                const comments: string[] = [];
+                let nameAndEmail = "";
                 let inEmail = false;
                 let token = scanner.getToken();
                 while (token !== SyntaxKind.EndOfFileToken && token !== SyntaxKind.NewLineTrivia) {
@@ -9157,15 +9157,15 @@ namespace Parser {
                         break;
                     }
                     else if (token === SyntaxKind.GreaterThanToken && inEmail) {
-                        comments.push(scanner.getTokenText());
+                        nameAndEmail += scanner.getTokenText();
                         scanner.setTextPos(scanner.getTokenPos() + 1);
                         break;
                     }
-                    comments.push(scanner.getTokenText());
+                    nameAndEmail += scanner.getTokenText();
                     token = nextTokenJSDoc();
                 }
 
-                return factory.createJSDocText(comments.join(""));
+                return factory.createJSDocText(nameAndEmail);
             }
 
             function parseImplementsTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocImplementsTag {
