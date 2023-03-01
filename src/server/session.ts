@@ -913,6 +913,7 @@ const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.SignatureHelpFull,
     protocol.CommandTypes.Navto,
     protocol.CommandTypes.NavtoFull,
+    protocol.CommandTypes.Occurrences,
     protocol.CommandTypes.DocumentHighlights,
     protocol.CommandTypes.DocumentHighlightsFull,
 ];
@@ -1765,6 +1766,24 @@ export class Session<TMessage = string> implements EventSender {
         return simplifiedResult ?
             implementations.map(({ fileName, textSpan, contextSpan }) => this.toFileSpanWithContext(fileName, textSpan, contextSpan, project)) :
             implementations.map(Session.mapToOriginalLocation);
+    }
+
+    private getOccurrences(args: protocol.FileLocationRequestArgs): readonly protocol.OccurrencesResponseItem[] {
+        const { file, project } = this.getFileAndProject(args);
+        const position = this.getPositionInFile(args, file);
+        const occurrences = project.getLanguageService().getOccurrencesAtPosition(file, position);
+        return occurrences ?
+            occurrences.map<protocol.OccurrencesResponseItem>(occurrence => {
+                const { fileName, isWriteAccess, textSpan, isInString, contextSpan } = occurrence;
+                const scriptInfo = project.getScriptInfo(fileName)!;
+                return {
+                    ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo),
+                    file: fileName,
+                    isWriteAccess,
+                    ...(isInString ? { isInString } : undefined)
+                };
+            }) :
+            emptyArray;
     }
 
     private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs) {
@@ -3366,6 +3385,9 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.NavTreeFull]: (request: protocol.FileRequest) => {
             return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ false));
+        },
+        [protocol.CommandTypes.Occurrences]: (request: protocol.FileLocationRequest) => {
+            return this.requiredResponse(this.getOccurrences(request.arguments));
         },
         [protocol.CommandTypes.DocumentHighlights]: (request: protocol.DocumentHighlightsRequest) => {
             return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ true));

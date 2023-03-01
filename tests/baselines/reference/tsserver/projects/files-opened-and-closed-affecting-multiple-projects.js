@@ -285,14 +285,11 @@ Before request
 
 Info 50   [00:01:43.000] request:
     {
-      "command": "documentHighlights",
+      "command": "occurrences",
       "arguments": {
         "file": "/a/b/projects/files/file1.ts",
         "line": 1,
-        "offset": 11,
-        "filesToSearch": [
-          "/a/b/projects/files/file1.ts"
-        ]
+        "offset": 11
       },
       "seq": 5,
       "type": "request"

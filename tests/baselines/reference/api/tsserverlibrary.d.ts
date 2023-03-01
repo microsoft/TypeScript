@@ -117,6 +117,8 @@ declare namespace ts {
                 Navto = "navto",
                 NavTree = "navtree",
                 NavTreeFull = "navtree-full",
+                /** @deprecated */
+                Occurrences = "occurrences",
                 DocumentHighlights = "documentHighlights",
                 Open = "open",
                 Quickinfo = "quickinfo",
@@ -876,6 +878,30 @@ declare namespace ts {
             }
             interface JsxClosingTagResponse extends Response {
                 readonly body: TextInsertion;
+            }
+            /**
+             * @deprecated
+             * Get occurrences request; value of command field is
+             * "occurrences". Return response giving spans that are relevant
+             * in the file at a given line and column.
+             */
+            interface OccurrencesRequest extends FileLocationRequest {
+                command: CommandTypes.Occurrences;
+            }
+            /** @deprecated */
+            interface OccurrencesResponseItem extends FileSpanWithContext {
+                /**
+                 * True if the occurrence is a write location, false otherwise.
+                 */
+                isWriteAccess: boolean;
+                /**
+                 * True if the occurrence is in a string, undefined otherwise;
+                 */
+                isInString?: true;
+            }
+            /** @deprecated */
+            interface OccurrencesResponse extends Response {
+                body?: OccurrencesResponseItem[];
             }
             /**
              * Get document highlights request; value of command field is
@@ -3848,6 +3874,7 @@ declare namespace ts {
             private getTypeDefinition;
             private mapImplementationLocations;
             private getImplementation;
+            private getOccurrences;
             private getSyntacticDiagnosticsSync;
             private getSemanticDiagnosticsSync;
             private getSuggestionDiagnosticsSync;
@@ -9961,6 +9988,8 @@ declare namespace ts {
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         getFileReferences(fileName: string): ReferenceEntry[];
+        /** @deprecated */
+        getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined;
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;

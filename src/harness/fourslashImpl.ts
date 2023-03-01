@@ -3557,16 +3557,7 @@ export class TestState {
     }
 
     private getOccurrencesAtCurrentPosition() {
-        return ts.flatMap(
-            this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, [this.activeFile.fileName]),
-            entry => entry.highlightSpans.map<ts.ReferenceEntry>(highlightSpan => ({
-                fileName: entry.fileName,
-                textSpan: highlightSpan.textSpan,
-                isWriteAccess: highlightSpan.kind === ts.HighlightSpanKind.writtenReference,
-                ...highlightSpan.isInString && { isInString: true },
-                ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
-            }))
-        );
+        return this.languageService.getOccurrencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
     }
 
     public verifyOccurrencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean) {
