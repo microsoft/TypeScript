@@ -1,4 +1,5 @@
-TI:: Creating typing installer
+Info 0    [00:00:13.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
 //// [/a/b/app.js]
 
 
@@ -9,15 +10,60 @@ TI:: Creating typing installer
 {"name":"test","dependencies":{"jquery":"^3.1.0"}}
 
 
-TI:: [00:00:13.000] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:14.000] Processing cache location '/a/data'
-TI:: [00:00:15.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:16.000] Finished processing cache location '/a/data'
-TI:: [00:00:17.000] Npm config file: /a/data/package.json
-TI:: [00:00:18.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:23.000] Updating types-registry npm package...
-TI:: [00:00:24.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:31.000] TI:: Updated types-registry npm package
+Info 1    [00:00:14.000] Search path: /a/b
+Info 2    [00:00:15.000] For info: /a/b/app.js :: Config file name: /a/b/tsconfig.json
+Info 3    [00:00:16.000] Creating configuration project /a/b/tsconfig.json
+Info 4    [00:00:17.000] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info 5    [00:00:18.000] Config: /a/b/tsconfig.json : {
+ "rootNames": [
+  "/a/b/app.js"
+ ],
+ "options": {
+  "allowJs": true,
+  "configFilePath": "/a/b/tsconfig.json"
+ }
+}
+Info 6    [00:00:19.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info 7    [00:00:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info 8    [00:00:21.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info 9    [00:00:22.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
+Info 10   [00:00:23.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 11   [00:00:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 12   [00:00:25.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 13   [00:00:26.000] Project '/a/b/tsconfig.json' (Configured)
+Info 14   [00:00:27.000] 	Files (1)
+	/a/b/app.js
+
+
+	app.js
+	  Matched by default include pattern '**/*'
+
+Info 15   [00:00:28.000] -----------------------------------------------
+TI:: Creating typing installer
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+TI:: [00:00:29.000] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:30.000] Processing cache location '/a/data'
+TI:: [00:00:31.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:32.000] Finished processing cache location '/a/data'
+TI:: [00:00:33.000] Npm config file: /a/data/package.json
+TI:: [00:00:34.000] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [00:00:39.000] Updating types-registry npm package...
+TI:: [00:00:40.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:00:47.000] TI:: Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -40,38 +86,6 @@ TI:: typing installer creation complete
 }
 
 
-Info 0    [00:00:32.000] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
-
-Info 1    [00:00:33.000] Search path: /a/b
-Info 2    [00:00:34.000] For info: /a/b/app.js :: Config file name: /a/b/tsconfig.json
-Info 3    [00:00:35.000] Creating configuration project /a/b/tsconfig.json
-Info 4    [00:00:36.000] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Info 5    [00:00:37.000] Config: /a/b/tsconfig.json : {
- "rootNames": [
-  "/a/b/app.js"
- ],
- "options": {
-  "allowJs": true,
-  "configFilePath": "/a/b/tsconfig.json"
- }
-}
-Info 6    [00:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 7    [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:40.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 9    [00:00:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info 10   [00:00:42.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 11   [00:00:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 12   [00:00:44.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 13   [00:00:45.000] Project '/a/b/tsconfig.json' (Configured)
-Info 14   [00:00:46.000] 	Files (1)
-	/a/b/app.js
-
-
-	app.js
-	  Matched by default include pattern '**/*'
-
-Info 15   [00:00:47.000] -----------------------------------------------
 TI:: [00:00:48.000] Got install request {"projectName":"/a/b/tsconfig.json","fileNames":["/a/b/app.js"],"compilerOptions":{"allowJs":true,"configFilePath":"/a/b/tsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a/b","cachePath":"/a/data","kind":"discover"}
 TI:: [00:00:49.000] Request specifies cache path '/a/data', loading cached information...
 TI:: [00:00:50.000] Processing cache location '/a/data'
@@ -106,9 +120,9 @@ TI:: [00:01:16.000] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: tru
 TI:: Before installWorker
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
-/a/b/node_modules/@types: *new*
+/a/b/node_modules/@types:
   {"pollingInterval":500}
 /a/b/bower_components: *new*
   {"pollingInterval":500}
@@ -116,13 +130,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json: *new*
+/a/b/tsconfig.json:
   {}
 /a/b/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/a/b: *new*
+/a/b:
   {}
 
 TI:: After installWorker

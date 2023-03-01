@@ -1,4 +1,14 @@
-TI:: Creating typing installer
+Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:16.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/app.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
 //// [/a/b/app.ts]
 let x = 10
 
@@ -22,44 +32,13 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 
-TI:: [00:00:15.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:16.000] Processing cache location '/a/data/'
-TI:: [00:00:17.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:18.000] Finished processing cache location '/a/data/'
-TI:: [00:00:19.000] Npm config file: /a/data/package.json
-TI:: [00:00:20.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:25.000] Updating types-registry npm package...
-TI:: [00:00:26.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:33.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/data/package.json]
-{ "private": true }
-
-//// [/a/data/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:00:34.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:35.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/app.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
-
-Info 2    [00:00:36.000] Search path: /a/b
-Info 3    [00:00:37.000] For info: /a/b/app.ts :: Config file name: /a/b/tsconfig.json
-Info 4    [00:00:38.000] Creating configuration project /a/b/tsconfig.json
-Info 5    [00:00:39.000] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Info 6    [00:00:40.000] event:
+Info 2    [00:00:17.000] Search path: /a/b
+Info 3    [00:00:18.000] For info: /a/b/app.ts :: Config file name: /a/b/tsconfig.json
+Info 4    [00:00:19.000] Creating configuration project /a/b/tsconfig.json
+Info 5    [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info 6    [00:00:21.000] event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/a/b/tsconfig.json","reason":"Creating possible configured project for /a/b/app.ts to open"}}
-Info 7    [00:00:41.000] Config: /a/b/tsconfig.json : {
+Info 7    [00:00:22.000] Config: /a/b/tsconfig.json : {
  "rootNames": [
   "/a/b/app.ts"
  ],
@@ -73,8 +52,8 @@ Info 7    [00:00:41.000] Config: /a/b/tsconfig.json : {
   }
  ]
 }
-Info 8    [00:00:42.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 9    [00:00:43.000] Config: /a/b/no-such-tsconfig.json : {
+Info 8    [00:00:23.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info 9    [00:00:24.000] Config: /a/b/no-such-tsconfig.json : {
  "rootNames": [
   "/a/b/app.ts"
  ],
@@ -82,13 +61,13 @@ Info 9    [00:00:43.000] Config: /a/b/no-such-tsconfig.json : {
   "configFilePath": "/a/b/no-such-tsconfig.json"
  }
 }
-Info 10   [00:00:44.000] FileWatcher:: Added:: WatchInfo: /a/b/no-such-tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Info 11   [00:00:45.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:00:46.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 13   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 14   [00:00:48.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 15   [00:00:49.000] Project '/a/b/tsconfig.json' (Configured)
-Info 16   [00:00:50.000] 	Files (2)
+Info 10   [00:00:25.000] FileWatcher:: Added:: WatchInfo: /a/b/no-such-tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info 11   [00:00:26.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:00:27.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 13   [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 14   [00:00:29.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 15   [00:00:30.000] Project '/a/b/tsconfig.json' (Configured)
+Info 16   [00:00:31.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/a/b/app.ts
 
@@ -98,20 +77,20 @@ Info 16   [00:00:50.000] 	Files (2)
 	app.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 17   [00:00:51.000] -----------------------------------------------
-Info 18   [00:00:52.000] event:
+Info 17   [00:00:32.000] -----------------------------------------------
+Info 18   [00:00:33.000] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/a/b/tsconfig.json"}}
-Info 19   [00:00:53.000] event:
+Info 19   [00:00:34.000] event:
     {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"e10a1dc99ee63f16cb9b69bcee75540cdf41a1137371d3afbd4e7de507be5207","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":10,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":true,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
-Info 20   [00:00:54.000] event:
+Info 20   [00:00:35.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/a/b/app.ts","configFile":"/a/b/tsconfig.json","diagnostics":[{"start":{"line":3,"offset":36},"end":{"line":3,"offset":70},"text":"File '/a/b/no-such-tsconfig.json' not found.","code":6053,"category":"error","fileName":"/a/b/tsconfig.json"}]}}
-Info 21   [00:00:55.000] Project '/a/b/tsconfig.json' (Configured)
-Info 21   [00:00:56.000] 	Files (2)
+Info 21   [00:00:36.000] Project '/a/b/tsconfig.json' (Configured)
+Info 21   [00:00:37.000] 	Files (2)
 
-Info 21   [00:00:57.000] -----------------------------------------------
-Info 21   [00:00:58.000] Open files: 
-Info 21   [00:00:59.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info 21   [00:01:00.000] 		Projects: /a/b/tsconfig.json
+Info 21   [00:00:38.000] -----------------------------------------------
+Info 21   [00:00:39.000] Open files: 
+Info 21   [00:00:40.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
+Info 21   [00:00:41.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
@@ -126,7 +105,7 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 21   [00:01:01.000] response:
+Info 21   [00:00:42.000] response:
     {
       "responseRequired": false
     }

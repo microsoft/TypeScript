@@ -1,4 +1,14 @@
-TI:: Creating typing installer
+Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
 //// [/user/username/projects/myproject/a.ts]
 if (a < (b + c) { }
 
@@ -19,41 +29,10 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-TI:: [00:00:21.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:22.000] Processing cache location '/a/data/'
-TI:: [00:00:23.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:24.000] Finished processing cache location '/a/data/'
-TI:: [00:00:25.000] Npm config file: /a/data/package.json
-TI:: [00:00:26.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:31.000] Updating types-registry npm package...
-TI:: [00:00:32.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:39.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/data/package.json]
-{ "private": true }
-
-//// [/a/data/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:00:40.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:41.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
-
-Info 2    [00:00:42.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 3    [00:00:43.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 4    [00:00:44.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 5    [00:00:45.000] 	Files (2)
+Info 2    [00:00:23.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 3    [00:00:24.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 4    [00:00:25.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 5    [00:00:26.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/a.ts
 
@@ -63,21 +42,21 @@ Info 5    [00:00:45.000] 	Files (2)
 	user/username/projects/myproject/a.ts
 	  Root file specified for compilation
 
-Info 6    [00:00:46.000] -----------------------------------------------
-Info 7    [00:00:47.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 7    [00:00:48.000] 	Files (2)
+Info 6    [00:00:27.000] -----------------------------------------------
+Info 7    [00:00:28.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 7    [00:00:29.000] 	Files (2)
 
-Info 7    [00:00:49.000] -----------------------------------------------
-Info 7    [00:00:50.000] Open files: 
-Info 7    [00:00:51.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-Info 7    [00:00:52.000] 		Projects: /dev/null/inferredProject1*
+Info 7    [00:00:30.000] -----------------------------------------------
+Info 7    [00:00:31.000] Open files: 
+Info 7    [00:00:32.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info 7    [00:00:33.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-Info 7    [00:00:53.000] response:
+Info 7    [00:00:34.000] response:
     {
       "responseRequired": false
     }
-Info 8    [00:00:54.000] request:
+Info 8    [00:00:35.000] request:
     {
       "type": "request",
       "seq": 2,
@@ -90,7 +69,7 @@ Before request
 
 After request
 
-Info 9    [00:00:55.000] response:
+Info 9    [00:00:36.000] response:
     {
       "response": [
         {
@@ -127,7 +106,7 @@ Info 9    [00:00:55.000] response:
       ],
       "responseRequired": true
     }
-Info 10   [00:00:56.000] request:
+Info 10   [00:00:37.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -143,12 +122,12 @@ Before request
 
 After request
 
-Info 11   [00:00:57.000] response:
+Info 11   [00:00:38.000] response:
     {
       "responseRequired": false
     }
 Before checking timeout queue length (1) and running
 
-Info 12   [00:00:58.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/a.ts","diagnostics":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":18},"text":"')' expected.","code":1005,"category":"error","relatedInformation":[{"span":{"start":{"line":1,"offset":4},"end":{"line":1,"offset":5},"file":"/user/username/projects/myproject/a.ts"},"message":"The parser expected to find a ')' to match the '(' token here.","category":"error","code":1007}]}]}}
-Info 13   [00:00:59.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+Info 12   [00:00:39.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/a.ts","diagnostics":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":18},"text":"')' expected.","code":1005,"category":"error","relatedInformation":[{"span":{"start":{"line":1,"offset":4},"end":{"line":1,"offset":5},"file":"/user/username/projects/myproject/a.ts"},"message":"The parser expected to find a ')' to match the '(' token here.","category":"error","code":1007}]}]}}
+Info 13   [00:00:40.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 After checking timeout queue length (1) and running

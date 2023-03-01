@@ -1,4 +1,14 @@
-TI:: Creating typing installer
+Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:16.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/file1.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
 //// [/a/b/file1.js]
 function foo() {}
 
@@ -19,42 +29,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-TI:: [00:00:15.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:16.000] Processing cache location '/a/data/'
-TI:: [00:00:17.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:18.000] Finished processing cache location '/a/data/'
-TI:: [00:00:19.000] Npm config file: /a/data/package.json
-TI:: [00:00:20.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:25.000] Updating types-registry npm package...
-TI:: [00:00:26.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:33.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/data/package.json]
-{ "private": true }
-
-//// [/a/data/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:00:34.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:35.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/file1.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
-
-Info 2    [00:00:36.000] Search path: /a/b
-Info 3    [00:00:37.000] For info: /a/b/file1.js :: Config file name: /a/b/jsconfig.json
-Info 4    [00:00:38.000] Creating configuration project /a/b/jsconfig.json
-Info 5    [00:00:39.000] FileWatcher:: Added:: WatchInfo: /a/b/jsconfig.json 2000 undefined Project: /a/b/jsconfig.json WatchType: Config file
-Info 6    [00:00:40.000] Config: /a/b/jsconfig.json : {
+Info 2    [00:00:17.000] Search path: /a/b
+Info 3    [00:00:18.000] For info: /a/b/file1.js :: Config file name: /a/b/jsconfig.json
+Info 4    [00:00:19.000] Creating configuration project /a/b/jsconfig.json
+Info 5    [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/b/jsconfig.json 2000 undefined Project: /a/b/jsconfig.json WatchType: Config file
+Info 6    [00:00:21.000] Config: /a/b/jsconfig.json : {
  "rootNames": [
   "/a/b/file1.js"
  ],
@@ -67,15 +46,15 @@ Info 6    [00:00:40.000] Config: /a/b/jsconfig.json : {
   "configFilePath": "/a/b/jsconfig.json"
  }
 }
-Info 7    [00:00:41.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
-Info 8    [00:00:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
-Info 9    [00:00:43.000] Starting updateGraphWorker: Project: /a/b/jsconfig.json
-Info 10   [00:00:44.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 11   [00:00:45.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/jsconfig.json WatchType: Type roots
-Info 12   [00:00:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/jsconfig.json WatchType: Type roots
-Info 13   [00:00:47.000] Finishing updateGraphWorker: Project: /a/b/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 14   [00:00:48.000] Project '/a/b/jsconfig.json' (Configured)
-Info 15   [00:00:49.000] 	Files (2)
+Info 7    [00:00:22.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
+Info 8    [00:00:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
+Info 9    [00:00:24.000] Starting updateGraphWorker: Project: /a/b/jsconfig.json
+Info 10   [00:00:25.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 11   [00:00:26.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/jsconfig.json WatchType: Type roots
+Info 12   [00:00:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/jsconfig.json WatchType: Type roots
+Info 13   [00:00:28.000] Finishing updateGraphWorker: Project: /a/b/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 14   [00:00:29.000] Project '/a/b/jsconfig.json' (Configured)
+Info 15   [00:00:30.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/a/b/file1.js
 
@@ -85,7 +64,42 @@ Info 15   [00:00:49.000] 	Files (2)
 	file1.js
 	  Matched by default include pattern '**/*'
 
-Info 16   [00:00:50.000] -----------------------------------------------
+Info 16   [00:00:31.000] -----------------------------------------------
+TI:: Creating typing installer
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/jsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+TI:: [00:00:32.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:33.000] Processing cache location '/a/data/'
+TI:: [00:00:34.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:35.000] Finished processing cache location '/a/data/'
+TI:: [00:00:36.000] Npm config file: /a/data/package.json
+TI:: [00:00:37.000] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [00:00:42.000] Updating types-registry npm package...
+TI:: [00:00:43.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:00:50.000] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/types-registry/index.json]
+{
+ "entries": {}
+}
+
+
 TI:: [00:00:51.000] Got install request {"projectName":"/a/b/jsconfig.json","fileNames":["/a/lib/lib.d.ts","/a/b/file1.js"],"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/a/b/jsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a/b","cachePath":"/a/data/","kind":"discover"}
 TI:: [00:00:52.000] Request specifies cache path '/a/data/', loading cached information...
 TI:: [00:00:53.000] Processing cache location '/a/data/'
@@ -114,7 +128,7 @@ Info 17   [00:01:13.000] 		Projects: /a/b/jsconfig.json
 After request
 
 PolledWatches::
-/a/b/node_modules/@types: *new*
+/a/b/node_modules/@types:
   {"pollingInterval":500}
 /a/b/bower_components: *new*
   {"pollingInterval":500}
@@ -122,13 +136,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/jsconfig.json: *new*
+/a/b/jsconfig.json:
   {}
-/a/lib/lib.d.ts: *new*
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
-/a/b: *new*
+/a/b:
   {}
 
 Info 17   [00:01:14.000] response:

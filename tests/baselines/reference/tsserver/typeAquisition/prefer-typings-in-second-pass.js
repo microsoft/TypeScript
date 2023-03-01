@@ -1,4 +1,5 @@
-TI:: Creating typing installer
+Info 0    [00:00:27.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
 //// [/a/b/app.js]
 var x = require('bar')
 
@@ -12,33 +13,11 @@ export let y: number
 {"compilerOptions":{"allowJs":true},"exclude":["node_modules"]}
 
 
-TI:: [00:00:27.000] Global cache location '/a/typings', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:28.000] Processing cache location '/a/typings'
-TI:: [00:00:29.000] Trying to find '/a/typings/package.json'...
-TI:: [00:00:30.000] Finished processing cache location '/a/typings'
-TI:: [00:00:31.000] Npm config file: /a/typings/package.json
-TI:: [00:00:32.000] Npm config file: '/a/typings/package.json' is missing, creating new one...
-TI:: [00:00:35.000] Updating types-registry npm package...
-TI:: [00:00:36.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:41.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/typings/package.json]
-{ "private": true }
-
-//// [/a/typings/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:00:42.000] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
-
-Info 1    [00:00:43.000] Search path: /a/b
-Info 2    [00:00:44.000] For info: /a/b/app.js :: Config file name: /a/b/jsconfig.json
-Info 3    [00:00:45.000] Creating configuration project /a/b/jsconfig.json
-Info 4    [00:00:46.000] FileWatcher:: Added:: WatchInfo: /a/b/jsconfig.json 2000 undefined Project: /a/b/jsconfig.json WatchType: Config file
-Info 5    [00:00:47.000] Config: /a/b/jsconfig.json : {
+Info 1    [00:00:28.000] Search path: /a/b
+Info 2    [00:00:29.000] For info: /a/b/app.js :: Config file name: /a/b/jsconfig.json
+Info 3    [00:00:30.000] Creating configuration project /a/b/jsconfig.json
+Info 4    [00:00:31.000] FileWatcher:: Added:: WatchInfo: /a/b/jsconfig.json 2000 undefined Project: /a/b/jsconfig.json WatchType: Config file
+Info 5    [00:00:32.000] Config: /a/b/jsconfig.json : {
  "rootNames": [
   "/a/b/app.js"
  ],
@@ -51,17 +30,17 @@ Info 5    [00:00:47.000] Config: /a/b/jsconfig.json : {
   "configFilePath": "/a/b/jsconfig.json"
  }
 }
-Info 6    [00:00:48.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
-Info 7    [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
-Info 8    [00:00:50.000] Starting updateGraphWorker: Project: /a/b/jsconfig.json
-Info 9    [00:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/b/jsconfig.json WatchType: Failed Lookup Locations
-Info 10   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/b/jsconfig.json WatchType: Failed Lookup Locations
-Info 11   [00:00:53.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/jsconfig.json WatchType: Missing file
-Info 12   [00:00:54.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/jsconfig.json WatchType: Type roots
-Info 13   [00:00:55.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/jsconfig.json WatchType: Type roots
-Info 14   [00:00:56.000] Finishing updateGraphWorker: Project: /a/b/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 15   [00:00:57.000] Project '/a/b/jsconfig.json' (Configured)
-Info 16   [00:00:58.000] 	Files (2)
+Info 6    [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
+Info 7    [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
+Info 8    [00:00:35.000] Starting updateGraphWorker: Project: /a/b/jsconfig.json
+Info 9    [00:00:36.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/b/jsconfig.json WatchType: Failed Lookup Locations
+Info 10   [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/b/jsconfig.json WatchType: Failed Lookup Locations
+Info 11   [00:00:38.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/jsconfig.json WatchType: Missing file
+Info 12   [00:00:39.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/jsconfig.json WatchType: Type roots
+Info 13   [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/jsconfig.json WatchType: Type roots
+Info 14   [00:00:41.000] Finishing updateGraphWorker: Project: /a/b/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 15   [00:00:42.000] Project '/a/b/jsconfig.json' (Configured)
+Info 16   [00:00:43.000] 	Files (2)
 	/a/typings/node_modules/@types/bar/index.d.ts
 	/a/b/app.js
 
@@ -71,7 +50,44 @@ Info 16   [00:00:58.000] 	Files (2)
 	app.js
 	  Matched by default include pattern '**/*'
 
-Info 17   [00:00:59.000] -----------------------------------------------
+Info 17   [00:00:44.000] -----------------------------------------------
+TI:: Creating typing installer
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/jsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+/a/b/node_modules: *new*
+  {}
+
+TI:: [00:00:45.000] Global cache location '/a/typings', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:46.000] Processing cache location '/a/typings'
+TI:: [00:00:47.000] Trying to find '/a/typings/package.json'...
+TI:: [00:00:48.000] Finished processing cache location '/a/typings'
+TI:: [00:00:49.000] Npm config file: /a/typings/package.json
+TI:: [00:00:50.000] Npm config file: '/a/typings/package.json' is missing, creating new one...
+TI:: [00:00:53.000] Updating types-registry npm package...
+TI:: [00:00:54.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:00:59.000] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/typings/package.json]
+{ "private": true }
+
+//// [/a/typings/node_modules/types-registry/index.json]
+{
+ "entries": {}
+}
+
+
 TI:: [00:01:00.000] Got install request {"projectName":"/a/b/jsconfig.json","fileNames":["/a/b/app.js"],"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/a/b/jsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a/b","cachePath":"/a/typings","kind":"discover"}
 TI:: [00:01:01.000] Request specifies cache path '/a/typings', loading cached information...
 TI:: [00:01:02.000] Processing cache location '/a/typings'

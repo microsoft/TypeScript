@@ -1,4 +1,14 @@
-TI:: Creating typing installer
+Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:28.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/src/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
 //// [/src/a.ts]
 export const foo = 0;
 
@@ -25,42 +35,11 @@ declare module 'ambient' {}
 export declare function observable(): unknown;
 
 
-TI:: [00:00:27.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:28.000] Processing cache location '/a/data/'
-TI:: [00:00:29.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:30.000] Finished processing cache location '/a/data/'
-TI:: [00:00:31.000] Npm config file: /a/data/package.json
-TI:: [00:00:32.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:39.000] Updating types-registry npm package...
-TI:: [00:00:40.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:47.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/data/package.json]
-{ "private": true }
-
-//// [/a/data/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:00:48.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:49.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/src/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
-
-Info 2    [00:00:50.000] Search path: /src
-Info 3    [00:00:51.000] For info: /src/a.ts :: Config file name: /tsconfig.json
-Info 4    [00:00:52.000] Creating configuration project /tsconfig.json
-Info 5    [00:00:53.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 6    [00:00:54.000] Config: /tsconfig.json : {
+Info 2    [00:00:29.000] Search path: /src
+Info 3    [00:00:30.000] For info: /src/a.ts :: Config file name: /tsconfig.json
+Info 4    [00:00:31.000] Creating configuration project /tsconfig.json
+Info 5    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info 6    [00:00:33.000] Config: /tsconfig.json : {
  "rootNames": [
   "/src/a.ts",
   "/src/ambient.d.ts",
@@ -72,17 +51,17 @@ Info 6    [00:00:54.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 7    [00:00:55.000] DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:56.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:57.000] FileWatcher:: Added:: WatchInfo: /src/ambient.d.ts 500 undefined WatchType: Closed Script info
-Info 10   [00:00:58.000] FileWatcher:: Added:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
-Info 11   [00:00:59.000] FileWatcher:: Added:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:01:00.000] FileWatcher:: Added:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:01:01.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 14   [00:01:02.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 15   [00:01:03.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 16   [00:01:04.000] Project '/tsconfig.json' (Configured)
-Info 17   [00:01:05.000] 	Files (5)
+Info 7    [00:00:34.000] DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info 8    [00:00:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info 9    [00:00:36.000] FileWatcher:: Added:: WatchInfo: /src/ambient.d.ts 500 undefined WatchType: Closed Script info
+Info 10   [00:00:37.000] FileWatcher:: Added:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
+Info 11   [00:00:38.000] FileWatcher:: Added:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:00:39.000] FileWatcher:: Added:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
+Info 13   [00:00:40.000] Starting updateGraphWorker: Project: /tsconfig.json
+Info 14   [00:00:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info 15   [00:00:42.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 16   [00:00:43.000] Project '/tsconfig.json' (Configured)
+Info 17   [00:00:44.000] 	Files (5)
 	/src/a.ts
 	/src/ambient.d.ts
 	/src/b-link.ts
@@ -101,33 +80,33 @@ Info 17   [00:01:05.000] 	Files (5)
 	src/c.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 18   [00:01:06.000] -----------------------------------------------
-Info 19   [00:01:07.000] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info 20   [00:01:08.000] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
-Info 21   [00:01:09.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 22   [00:01:10.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 23   [00:01:11.000] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info 24   [00:01:12.000] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 25   [00:01:13.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 26   [00:01:14.000] 	Files (1)
+Info 18   [00:00:45.000] -----------------------------------------------
+Info 19   [00:00:46.000] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
+Info 20   [00:00:47.000] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info 21   [00:00:48.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 22   [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 23   [00:00:50.000] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info 24   [00:00:51.000] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 25   [00:00:52.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 26   [00:00:53.000] 	Files (1)
 	/node_modules/mobx/index.d.ts
 
 
 	node_modules/mobx/index.d.ts
 	  Root file specified for compilation
 
-Info 27   [00:01:15.000] -----------------------------------------------
-Info 28   [00:01:16.000] Project '/tsconfig.json' (Configured)
-Info 28   [00:01:17.000] 	Files (5)
+Info 27   [00:00:54.000] -----------------------------------------------
+Info 28   [00:00:55.000] Project '/tsconfig.json' (Configured)
+Info 28   [00:00:56.000] 	Files (5)
 
-Info 28   [00:01:18.000] -----------------------------------------------
-Info 28   [00:01:19.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 28   [00:01:20.000] 	Files (1)
+Info 28   [00:00:57.000] -----------------------------------------------
+Info 28   [00:00:58.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 28   [00:00:59.000] 	Files (1)
 
-Info 28   [00:01:21.000] -----------------------------------------------
-Info 28   [00:01:22.000] Open files: 
-Info 28   [00:01:23.000] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info 28   [00:01:24.000] 		Projects: /tsconfig.json
+Info 28   [00:01:00.000] -----------------------------------------------
+Info 28   [00:01:01.000] Open files: 
+Info 28   [00:01:02.000] 	FileName: /src/a.ts ProjectRootPath: undefined
+Info 28   [00:01:03.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
@@ -154,11 +133,11 @@ FsWatchesRecursive::
 /node_modules: *new*
   {}
 
-Info 28   [00:01:25.000] response:
+Info 28   [00:01:04.000] response:
     {
       "responseRequired": false
     }
-Info 29   [00:01:26.000] request:
+Info 29   [00:01:05.000] request:
     {
       "command": "open",
       "arguments": {
@@ -169,22 +148,22 @@ Info 29   [00:01:26.000] request:
     }
 Before request
 
-Info 30   [00:01:27.000] FileWatcher:: Close:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
-Info 31   [00:01:28.000] Search path: /src
-Info 32   [00:01:29.000] For info: /src/b.ts :: Config file name: /tsconfig.json
-Info 33   [00:01:30.000] Project '/tsconfig.json' (Configured)
-Info 33   [00:01:31.000] 	Files (5)
+Info 30   [00:01:06.000] FileWatcher:: Close:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
+Info 31   [00:01:07.000] Search path: /src
+Info 32   [00:01:08.000] For info: /src/b.ts :: Config file name: /tsconfig.json
+Info 33   [00:01:09.000] Project '/tsconfig.json' (Configured)
+Info 33   [00:01:10.000] 	Files (5)
 
-Info 33   [00:01:32.000] -----------------------------------------------
-Info 33   [00:01:33.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 33   [00:01:34.000] 	Files (1)
+Info 33   [00:01:11.000] -----------------------------------------------
+Info 33   [00:01:12.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 33   [00:01:13.000] 	Files (1)
 
-Info 33   [00:01:35.000] -----------------------------------------------
-Info 33   [00:01:36.000] Open files: 
-Info 33   [00:01:37.000] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info 33   [00:01:38.000] 		Projects: /tsconfig.json
-Info 33   [00:01:39.000] 	FileName: /src/b.ts ProjectRootPath: undefined
-Info 33   [00:01:40.000] 		Projects: /tsconfig.json
+Info 33   [00:01:14.000] -----------------------------------------------
+Info 33   [00:01:15.000] Open files: 
+Info 33   [00:01:16.000] 	FileName: /src/a.ts ProjectRootPath: undefined
+Info 33   [00:01:17.000] 		Projects: /tsconfig.json
+Info 33   [00:01:18.000] 	FileName: /src/b.ts ProjectRootPath: undefined
+Info 33   [00:01:19.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
@@ -213,11 +192,11 @@ FsWatchesRecursive::
 /node_modules:
   {}
 
-Info 33   [00:01:41.000] response:
+Info 33   [00:01:20.000] response:
     {
       "responseRequired": false
     }
-Info 34   [00:01:42.000] request:
+Info 34   [00:01:21.000] request:
     {
       "command": "open",
       "arguments": {
@@ -228,24 +207,24 @@ Info 34   [00:01:42.000] request:
     }
 Before request
 
-Info 35   [00:01:43.000] FileWatcher:: Close:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
-Info 36   [00:01:44.000] Search path: /src
-Info 37   [00:01:45.000] For info: /src/c.ts :: Config file name: /tsconfig.json
-Info 38   [00:01:46.000] Project '/tsconfig.json' (Configured)
-Info 38   [00:01:47.000] 	Files (5)
+Info 35   [00:01:22.000] FileWatcher:: Close:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
+Info 36   [00:01:23.000] Search path: /src
+Info 37   [00:01:24.000] For info: /src/c.ts :: Config file name: /tsconfig.json
+Info 38   [00:01:25.000] Project '/tsconfig.json' (Configured)
+Info 38   [00:01:26.000] 	Files (5)
 
-Info 38   [00:01:48.000] -----------------------------------------------
-Info 38   [00:01:49.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 38   [00:01:50.000] 	Files (1)
+Info 38   [00:01:27.000] -----------------------------------------------
+Info 38   [00:01:28.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 38   [00:01:29.000] 	Files (1)
 
-Info 38   [00:01:51.000] -----------------------------------------------
-Info 38   [00:01:52.000] Open files: 
-Info 38   [00:01:53.000] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info 38   [00:01:54.000] 		Projects: /tsconfig.json
-Info 38   [00:01:55.000] 	FileName: /src/b.ts ProjectRootPath: undefined
-Info 38   [00:01:56.000] 		Projects: /tsconfig.json
-Info 38   [00:01:57.000] 	FileName: /src/c.ts ProjectRootPath: undefined
-Info 38   [00:01:58.000] 		Projects: /tsconfig.json
+Info 38   [00:01:30.000] -----------------------------------------------
+Info 38   [00:01:31.000] Open files: 
+Info 38   [00:01:32.000] 	FileName: /src/a.ts ProjectRootPath: undefined
+Info 38   [00:01:33.000] 		Projects: /tsconfig.json
+Info 38   [00:01:34.000] 	FileName: /src/b.ts ProjectRootPath: undefined
+Info 38   [00:01:35.000] 		Projects: /tsconfig.json
+Info 38   [00:01:36.000] 	FileName: /src/c.ts ProjectRootPath: undefined
+Info 38   [00:01:37.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
@@ -272,11 +251,11 @@ FsWatchesRecursive::
 /node_modules:
   {}
 
-Info 38   [00:01:59.000] response:
+Info 38   [00:01:38.000] response:
     {
       "responseRequired": false
     }
-Info 39   [00:02:00.000] request:
+Info 39   [00:01:39.000] request:
     {
       "command": "configure",
       "arguments": {
@@ -292,15 +271,15 @@ Info 39   [00:02:00.000] request:
     }
 Before request
 
-Info 40   [00:02:01.000] response:
+Info 40   [00:01:40.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":4,"success":true,"performanceData":{"updateGraphDurationMs":*,"createAutoImportProviderProgramDurationMs":*}}
 After request
 
-Info 41   [00:02:02.000] response:
+Info 41   [00:01:41.000] response:
     {
       "responseRequired": false
     }
-Info 42   [00:02:03.000] request:
+Info 42   [00:01:42.000] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -313,20 +292,20 @@ Info 42   [00:02:03.000] request:
     }
 Before request
 
-Info 43   [00:02:04.000] getCompletionData: Get current token: *
-Info 44   [00:02:05.000] getCompletionData: Is inside comment: *
-Info 45   [00:02:06.000] getCompletionData: Get previous token: *
-Info 46   [00:02:07.000] getExportInfoMap: cache miss or empty; calculating new results
-Info 47   [00:02:08.000] forEachExternalModuleToImportFrom autoImportProvider: *
-Info 48   [00:02:09.000] getExportInfoMap: done in * ms
-Info 49   [00:02:10.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info 50   [00:02:11.000] collectAutoImports: response is incomplete
-Info 51   [00:02:12.000] collectAutoImports: *
-Info 52   [00:02:13.000] getCompletionData: Semantic work: *
-Info 53   [00:02:14.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info 43   [00:01:43.000] getCompletionData: Get current token: *
+Info 44   [00:01:44.000] getCompletionData: Is inside comment: *
+Info 45   [00:01:45.000] getCompletionData: Get previous token: *
+Info 46   [00:01:46.000] getExportInfoMap: cache miss or empty; calculating new results
+Info 47   [00:01:47.000] forEachExternalModuleToImportFrom autoImportProvider: *
+Info 48   [00:01:48.000] getExportInfoMap: done in * ms
+Info 49   [00:01:49.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
+Info 50   [00:01:50.000] collectAutoImports: response is incomplete
+Info 51   [00:01:51.000] collectAutoImports: *
+Info 52   [00:01:52.000] getCompletionData: Semantic work: *
+Info 53   [00:01:53.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
 
-Info 54   [00:02:15.000] response:
+Info 54   [00:01:54.000] response:
     {
       "response": {
         "flags": 1,
@@ -757,10 +736,10 @@ Info 54   [00:02:15.000] response:
       },
       "responseRequired": true
     }
-Info 55   [00:02:16.000] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) {
+Info 55   [00:01:55.000] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) {
  "isBlockedByPackageJsonDependencies": false
 }
-Info 56   [00:02:17.000] request:
+Info 56   [00:01:56.000] request:
     {
       "command": "configure",
       "arguments": {
@@ -773,19 +752,19 @@ Info 56   [00:02:17.000] request:
     }
 Before request
 
-Info 57   [00:02:18.000] response:
+Info 57   [00:01:57.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":6,"success":true,"performanceData":{"updateGraphDurationMs":*,"createAutoImportProviderProgramDurationMs":*}}
 After request
 
-Info 58   [00:02:19.000] response:
+Info 58   [00:01:58.000] response:
     {
       "responseRequired": false
     }
-Info 59   [00:02:20.000] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) {
+Info 59   [00:01:59.000] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) {
  "isBlockedByPackageJsonDependencies": false
 }
-Info 60   [00:02:21.000] moduleSpecifierCache for {"importModuleSpecifierPreference":"project-relative"} (/src/b.ts -> /src/a.ts) undefined
-Info 61   [00:02:22.000] request:
+Info 60   [00:02:00.000] moduleSpecifierCache for {"importModuleSpecifierPreference":"project-relative"} (/src/b.ts -> /src/a.ts) undefined
+Info 61   [00:02:01.000] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -798,18 +777,18 @@ Info 61   [00:02:22.000] request:
     }
 Before request
 
-Info 62   [00:02:23.000] getCompletionData: Get current token: *
-Info 63   [00:02:24.000] getCompletionData: Is inside comment: *
-Info 64   [00:02:25.000] getCompletionData: Get previous token: *
-Info 65   [00:02:26.000] getExportInfoMap: cache hit
-Info 66   [00:02:27.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info 67   [00:02:28.000] collectAutoImports: response is incomplete
-Info 68   [00:02:29.000] collectAutoImports: *
-Info 69   [00:02:30.000] getCompletionData: Semantic work: *
-Info 70   [00:02:31.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info 62   [00:02:02.000] getCompletionData: Get current token: *
+Info 63   [00:02:03.000] getCompletionData: Is inside comment: *
+Info 64   [00:02:04.000] getCompletionData: Get previous token: *
+Info 65   [00:02:05.000] getExportInfoMap: cache hit
+Info 66   [00:02:06.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
+Info 67   [00:02:07.000] collectAutoImports: response is incomplete
+Info 68   [00:02:08.000] collectAutoImports: *
+Info 69   [00:02:09.000] getCompletionData: Semantic work: *
+Info 70   [00:02:10.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
 
-Info 71   [00:02:32.000] response:
+Info 71   [00:02:11.000] response:
     {
       "response": {
         "flags": 1,
@@ -1240,11 +1219,11 @@ Info 71   [00:02:32.000] response:
       },
       "responseRequired": true
     }
-Info 72   [00:02:33.000] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) undefined
-Info 73   [00:02:34.000] moduleSpecifierCache for {"importModuleSpecifierPreference":"project-relative"} (/src/b.ts -> /src/a.ts) {
+Info 72   [00:02:12.000] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) undefined
+Info 73   [00:02:13.000] moduleSpecifierCache for {"importModuleSpecifierPreference":"project-relative"} (/src/b.ts -> /src/a.ts) {
  "isBlockedByPackageJsonDependencies": false
 }
-Info 74   [00:02:35.000] request:
+Info 74   [00:02:14.000] request:
     {
       "command": "configure",
       "arguments": {
@@ -1257,15 +1236,15 @@ Info 74   [00:02:35.000] request:
     }
 Before request
 
-Info 75   [00:02:36.000] response:
+Info 75   [00:02:15.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":8,"success":true,"performanceData":{"updateGraphDurationMs":*,"createAutoImportProviderProgramDurationMs":*}}
 After request
 
-Info 76   [00:02:37.000] response:
+Info 76   [00:02:16.000] response:
     {
       "responseRequired": false
     }
-Info 77   [00:02:38.000] request:
+Info 77   [00:02:17.000] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -1278,18 +1257,18 @@ Info 77   [00:02:38.000] request:
     }
 Before request
 
-Info 78   [00:02:39.000] getCompletionData: Get current token: *
-Info 79   [00:02:40.000] getCompletionData: Is inside comment: *
-Info 80   [00:02:41.000] getCompletionData: Get previous token: *
-Info 81   [00:02:42.000] getExportInfoMap: cache hit
-Info 82   [00:02:43.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info 83   [00:02:44.000] collectAutoImports: response is incomplete
-Info 84   [00:02:45.000] collectAutoImports: *
-Info 85   [00:02:46.000] getCompletionData: Semantic work: *
-Info 86   [00:02:47.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info 78   [00:02:18.000] getCompletionData: Get current token: *
+Info 79   [00:02:19.000] getCompletionData: Is inside comment: *
+Info 80   [00:02:20.000] getCompletionData: Get previous token: *
+Info 81   [00:02:21.000] getExportInfoMap: cache hit
+Info 82   [00:02:22.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
+Info 83   [00:02:23.000] collectAutoImports: response is incomplete
+Info 84   [00:02:24.000] collectAutoImports: *
+Info 85   [00:02:25.000] getCompletionData: Semantic work: *
+Info 86   [00:02:26.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 After request
 
-Info 87   [00:02:48.000] response:
+Info 87   [00:02:27.000] response:
     {
       "response": {
         "flags": 1,
@@ -1720,4 +1699,4 @@ Info 87   [00:02:48.000] response:
       },
       "responseRequired": true
     }
-Info 88   [00:02:49.000] moduleSpecifierCache for {"importModuleSpecifierPreference":"project-relative"} (/src/b.ts -> /src/a.ts) undefined
+Info 88   [00:02:28.000] moduleSpecifierCache for {"importModuleSpecifierPreference":"project-relative"} (/src/b.ts -> /src/a.ts) undefined

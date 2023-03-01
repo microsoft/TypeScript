@@ -1,4 +1,14 @@
-TI:: Creating typing installer
+Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:12.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/file.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
 //// [/file.js]
 
 class Foo {
@@ -24,15 +34,38 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-TI:: [00:00:11.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:12.000] Processing cache location '/a/data/'
-TI:: [00:00:13.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:14.000] Finished processing cache location '/a/data/'
-TI:: [00:00:15.000] Npm config file: /a/data/package.json
-TI:: [00:00:16.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:21.000] Updating types-registry npm package...
-TI:: [00:00:22.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:29.000] TI:: Updated types-registry npm package
+Info 2    [00:00:13.000] Search path: /
+Info 3    [00:00:14.000] For info: /file.js :: No config files found.
+Info 4    [00:00:15.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 5    [00:00:16.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 6    [00:00:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 7    [00:00:18.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 8    [00:00:19.000] 	Files (2)
+	/a/lib/lib.d.ts
+	/file.js
+
+
+	a/lib/lib.d.ts
+	  Default library for target 'es5'
+	file.js
+	  Root file specified for compilation
+
+Info 9    [00:00:20.000] -----------------------------------------------
+TI:: Creating typing installer
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+
+TI:: [00:00:21.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:22.000] Processing cache location '/a/data/'
+TI:: [00:00:23.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:24.000] Finished processing cache location '/a/data/'
+TI:: [00:00:25.000] Npm config file: /a/data/package.json
+TI:: [00:00:26.000] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [00:00:31.000] Updating types-registry npm package...
+TI:: [00:00:32.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:00:39.000] TI:: Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -43,35 +76,6 @@ TI:: typing installer creation complete
 }
 
 
-Info 0    [00:00:30.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:31.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/file.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
-
-Info 2    [00:00:32.000] Search path: /
-Info 3    [00:00:33.000] For info: /file.js :: No config files found.
-Info 4    [00:00:34.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 5    [00:00:35.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 6    [00:00:36.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 7    [00:00:37.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 8    [00:00:38.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/file.js
-
-
-	a/lib/lib.d.ts
-	  Default library for target 'es5'
-	file.js
-	  Root file specified for compilation
-
-Info 9    [00:00:39.000] -----------------------------------------------
 TI:: [00:00:40.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/file.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
 TI:: [00:00:41.000] Request specifies cache path '/a/data/', loading cached information...
 TI:: [00:00:42.000] Processing cache location '/a/data/'
@@ -106,7 +110,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/a/lib/lib.d.ts:
   {}
 
 Info 10   [00:01:03.000] response:

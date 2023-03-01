@@ -1,29 +1,5 @@
-TI:: Creating typing installer
-//// [/a.js]
-require("b")
-
-
-TI:: [00:00:05.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:06.000] Processing cache location '/a/data/'
-TI:: [00:00:07.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:08.000] Finished processing cache location '/a/data/'
-TI:: [00:00:09.000] Npm config file: /a/data/package.json
-TI:: [00:00:10.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:17.000] Updating types-registry npm package...
-TI:: [00:00:18.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:25.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/data/package.json]
-{ "private": true }
-
-//// [/a/data/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:00:26.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:27.000] request:
+Info 0    [00:00:05.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:06.000] request:
     {
       "command": "open",
       "arguments": {
@@ -34,23 +10,53 @@ Info 1    [00:00:27.000] request:
       "type": "request"
     }
 Before request
+//// [/a.js]
+require("b")
 
-Info 2    [00:00:28.000] Search path: /
-Info 3    [00:00:29.000] For info: /a.js :: No config files found.
-Info 4    [00:00:30.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 5    [00:00:31.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 6    [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 7    [00:00:33.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 8    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 9    [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 10   [00:00:36.000] 	Files (1)
+
+Info 2    [00:00:07.000] Search path: /
+Info 3    [00:00:08.000] For info: /a.js :: No config files found.
+Info 4    [00:00:09.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 5    [00:00:10.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 6    [00:00:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 7    [00:00:12.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 8    [00:00:13.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 9    [00:00:14.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 10   [00:00:15.000] 	Files (1)
 	/a.js
 
 
 	a.js
 	  Root file specified for compilation
 
-Info 11   [00:00:37.000] -----------------------------------------------
+Info 11   [00:00:16.000] -----------------------------------------------
+TI:: Creating typing installer
+
+PolledWatches::
+/node_modules: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+TI:: [00:00:17.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:18.000] Processing cache location '/a/data/'
+TI:: [00:00:19.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:20.000] Finished processing cache location '/a/data/'
+TI:: [00:00:21.000] Npm config file: /a/data/package.json
+TI:: [00:00:22.000] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [00:00:29.000] Updating types-registry npm package...
+TI:: [00:00:30.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:00:37.000] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/types-registry/index.json]
+{
+ "entries": {}
+}
+
+
 TI:: [00:00:38.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["b"],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
 TI:: [00:00:39.000] Request specifies cache path '/a/data/', loading cached information...
 TI:: [00:00:40.000] Processing cache location '/a/data/'
@@ -81,9 +87,9 @@ Info 12   [00:01:02.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/node_modules: *new*
+/node_modules:
   {"pollingInterval":500}
-/a/lib/lib.d.ts: *new*
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /bower_components: *new*
   {"pollingInterval":500}

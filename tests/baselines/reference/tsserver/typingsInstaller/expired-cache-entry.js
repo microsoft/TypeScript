@@ -1,4 +1,5 @@
-TI:: Creating typing installer
+Info 0    [00:00:25.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
 //// [/a/b/app.js]
 
 
@@ -15,17 +16,37 @@ declare const $: { x: number }
 {"dependencies":{"@types/jquery":{"version":"1.0.0"}}}
 
 
-TI:: [00:00:25.000] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:26.000] Processing cache location '/a/data'
-TI:: [00:00:27.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:28.000] Loaded content of '/a/data/package.json': {"dependencies":{"types-registry":"^0.1.317"},"devDependencies":{"@types/jquery":"^1.0.0"}}
-TI:: [00:00:29.000] Loaded content of '/a/data/package-lock.json'
-TI:: [00:00:30.000] Adding entry into typings cache: 'jquery' => '/a/data/node_modules/@types/jquery/index.d.ts'
-TI:: [00:00:31.000] Finished processing cache location '/a/data'
-TI:: [00:00:32.000] Npm config file: /a/data/package.json
-TI:: [00:00:33.000] Updating types-registry npm package...
-TI:: [00:00:34.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:39.000] TI:: Updated types-registry npm package
+Info 1    [00:00:26.000] Search path: /a/b
+Info 2    [00:00:27.000] For info: /a/b/app.js :: No config files found.
+Info 3    [00:00:28.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 4    [00:00:29.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 5    [00:00:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 6    [00:00:31.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 7    [00:00:32.000] 	Files (1)
+	/a/b/app.js
+
+
+	a/b/app.js
+	  Root file specified for compilation
+
+Info 8    [00:00:33.000] -----------------------------------------------
+TI:: Creating typing installer
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+TI:: [00:00:34.000] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:35.000] Processing cache location '/a/data'
+TI:: [00:00:36.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:37.000] Loaded content of '/a/data/package.json': {"dependencies":{"types-registry":"^0.1.317"},"devDependencies":{"@types/jquery":"^1.0.0"}}
+TI:: [00:00:38.000] Loaded content of '/a/data/package-lock.json'
+TI:: [00:00:39.000] Adding entry into typings cache: 'jquery' => '/a/data/node_modules/@types/jquery/index.d.ts'
+TI:: [00:00:40.000] Finished processing cache location '/a/data'
+TI:: [00:00:41.000] Npm config file: /a/data/package.json
+TI:: [00:00:42.000] Updating types-registry npm package...
+TI:: [00:00:43.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:00:48.000] TI:: Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/node_modules/types-registry/index.json]
 {
@@ -45,23 +66,6 @@ TI:: typing installer creation complete
 }
 
 
-Info 0    [00:00:40.000] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
-
-Info 1    [00:00:41.000] Search path: /a/b
-Info 2    [00:00:42.000] For info: /a/b/app.js :: No config files found.
-Info 3    [00:00:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 4    [00:00:44.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 5    [00:00:45.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 6    [00:00:46.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 7    [00:00:47.000] 	Files (1)
-	/a/b/app.js
-
-
-	a/b/app.js
-	  Root file specified for compilation
-
-Info 8    [00:00:48.000] -----------------------------------------------
 TI:: [00:00:49.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data","kind":"discover"}
 TI:: [00:00:50.000] Request specifies cache path '/a/data', loading cached information...
 TI:: [00:00:51.000] Processing cache location '/a/data'
@@ -99,7 +103,7 @@ TI:: [00:01:20.000] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: tru
 TI:: Before installWorker
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /bower_components: *new*
   {"pollingInterval":500}

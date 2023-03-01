@@ -1,4 +1,14 @@
-TI:: Creating typing installer
+Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:32.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
 //// [/user/username/projects/myproject/a.ts]
 ///<reference path="b.ts"/>
 ///<reference path="/user/username/projects/myproject/node_modules/something/index.d.ts"/>
@@ -32,41 +42,10 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-TI:: [00:00:31.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:32.000] Processing cache location '/a/data/'
-TI:: [00:00:33.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:34.000] Finished processing cache location '/a/data/'
-TI:: [00:00:35.000] Npm config file: /a/data/package.json
-TI:: [00:00:36.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:41.000] Updating types-registry npm package...
-TI:: [00:00:42.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:49.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/data/package.json]
-{ "private": true }
-
-//// [/a/data/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:00:50.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:51.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
-
-Info 2    [00:00:52.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 3    [00:00:53.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 4    [00:00:54.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 5    [00:00:55.000] 	Files (2)
+Info 2    [00:00:33.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 3    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 4    [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 5    [00:00:36.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/a.ts
 
@@ -76,17 +55,17 @@ Info 5    [00:00:55.000] 	Files (2)
 	user/username/projects/myproject/a.ts
 	  Root file specified for compilation
 
-Info 6    [00:00:56.000] -----------------------------------------------
-Info 7    [00:00:57.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 7    [00:00:58.000] 	Files (2)
+Info 6    [00:00:37.000] -----------------------------------------------
+Info 7    [00:00:38.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 7    [00:00:39.000] 	Files (2)
 
-Info 7    [00:00:59.000] -----------------------------------------------
-Info 7    [00:01:00.000] Open files: 
-Info 7    [00:01:01.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-Info 7    [00:01:02.000] 		Projects: /dev/null/inferredProject1*
+Info 7    [00:00:40.000] -----------------------------------------------
+Info 7    [00:00:41.000] Open files: 
+Info 7    [00:00:42.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info 7    [00:00:43.000] 		Projects: /dev/null/inferredProject1*
 After request
 
-Info 7    [00:01:03.000] response:
+Info 7    [00:00:44.000] response:
     {
       "responseRequired": false
     }

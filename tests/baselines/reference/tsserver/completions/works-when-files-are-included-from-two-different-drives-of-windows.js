@@ -1,4 +1,14 @@
-TI:: Creating typing installer
+Info 0    [00:00:58.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:59.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "e:/myproject/src/app.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
 //// [e:/myproject/src/app.js]
 import React from 'react';
 import {
@@ -65,57 +75,26 @@ export function foo() {}
 {"name":"@types/react","version":"16.9.14"}
 
 
-TI:: [00:00:58.000] Global cache location 'c:/typescript', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:59.000] Processing cache location 'c:/typescript'
-TI:: [00:01:00.000] Trying to find 'c:/typescript/package.json'...
-TI:: [00:01:01.000] Finished processing cache location 'c:/typescript'
-TI:: [00:01:02.000] Npm config file: c:/typescript/package.json
-TI:: [00:01:03.000] Npm config file: 'c:/typescript/package.json' is missing, creating new one...
-TI:: [00:01:06.000] Updating types-registry npm package...
-TI:: [00:01:07.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:01:12.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [c:/typescript/package.json]
-{ "private": true }
-
-//// [c:/typescript/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:01:13.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:14.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "e:/myproject/src/app.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
-
-Info 2    [00:01:15.000] Search path: e:/myproject/src
-Info 3    [00:01:16.000] For info: e:/myproject/src/app.js :: No config files found.
-Info 4    [00:01:17.000] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 5    [00:01:18.000] FileWatcher:: Added:: WatchInfo: e:/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 6    [00:01:19.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 7    [00:01:20.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 8    [00:01:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 9    [00:01:22.000] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 10   [00:01:23.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 11   [00:01:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 12   [00:01:25.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info 13   [00:01:26.000] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info 14   [00:01:27.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info 15   [00:01:28.000] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info 16   [00:01:29.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types/prop-types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info 17   [00:01:30.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 18   [00:01:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 19   [00:01:32.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 20   [00:01:33.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 21   [00:01:34.000] 	Files (6)
+Info 2    [00:01:00.000] Search path: e:/myproject/src
+Info 3    [00:01:01.000] For info: e:/myproject/src/app.js :: No config files found.
+Info 4    [00:01:02.000] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 5    [00:01:03.000] FileWatcher:: Added:: WatchInfo: e:/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 6    [00:01:04.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 7    [00:01:05.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 8    [00:01:06.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 9    [00:01:07.000] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 10   [00:01:08.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 11   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 12   [00:01:10.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info 13   [00:01:11.000] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info 14   [00:01:12.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info 15   [00:01:13.000] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info 16   [00:01:14.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types/prop-types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info 17   [00:01:15.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 18   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 19   [00:01:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 20   [00:01:18.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 21   [00:01:19.000] 	Files (6)
 	c:/a/lib/lib.d.ts
 	e:/myproject/node_modules/@types/prop-types/index.d.ts
 	e:/myproject/node_modules/@types/react/index.d.ts
@@ -140,7 +119,56 @@ Info 21   [00:01:34.000] 	Files (6)
 	app.js
 	  Root file specified for compilation
 
-Info 22   [00:01:35.000] -----------------------------------------------
+Info 22   [00:01:20.000] -----------------------------------------------
+TI:: Creating typing installer
+
+PolledWatches::
+e:/myproject/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+e:/myproject/src/jsconfig.json: *new*
+  {"pollingInterval":2000}
+e:/myproject/src/node_modules: *new*
+  {"pollingInterval":500}
+e:/myproject/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+c:/a/lib/lib.d.ts: *new*
+  {}
+e:/myproject/node_modules/@types/react/package.json: *new*
+  {}
+c:/typescript/node_modules/@types/react/package.json: *new*
+  {}
+e:/myproject/node_modules/react-router-dom/package.json: *new*
+  {}
+c:/typescript/node_modules/@types/react-router-dom/package.json: *new*
+  {}
+e:/myproject/node_modules/@types/prop-types/package.json: *new*
+  {}
+
+FsWatchesRecursive::
+e:/myproject/node_modules: *new*
+  {}
+
+TI:: [00:01:21.000] Global cache location 'c:/typescript', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:01:22.000] Processing cache location 'c:/typescript'
+TI:: [00:01:23.000] Trying to find 'c:/typescript/package.json'...
+TI:: [00:01:24.000] Finished processing cache location 'c:/typescript'
+TI:: [00:01:25.000] Npm config file: c:/typescript/package.json
+TI:: [00:01:26.000] Npm config file: 'c:/typescript/package.json' is missing, creating new one...
+TI:: [00:01:29.000] Updating types-registry npm package...
+TI:: [00:01:30.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:01:35.000] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [c:/typescript/package.json]
+{ "private": true }
+
+//// [c:/typescript/node_modules/types-registry/index.json]
+{
+ "entries": {}
+}
+
+
 TI:: [00:01:36.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["c:/a/lib/lib.d.ts","e:/myproject/src/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"e:/myproject/src","cachePath":"c:/typescript","kind":"discover"}
 TI:: [00:01:37.000] Request specifies cache path 'c:/typescript', loading cached information...
 TI:: [00:01:38.000] Processing cache location 'c:/typescript'
@@ -170,35 +198,35 @@ Info 24   [00:01:59.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-e:/myproject/src/tsconfig.json: *new*
+e:/myproject/src/tsconfig.json:
   {"pollingInterval":2000}
-e:/myproject/src/jsconfig.json: *new*
+e:/myproject/src/jsconfig.json:
   {"pollingInterval":2000}
-e:/myproject/src/node_modules: *new*
+e:/myproject/src/node_modules:
   {"pollingInterval":500}
-e:/myproject/src/node_modules/@types: *new*
+e:/myproject/src/node_modules/@types:
   {"pollingInterval":500}
 e:/myproject/src/bower_components: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/a/lib/lib.d.ts: *new*
+c:/a/lib/lib.d.ts:
   {}
-e:/myproject/node_modules/@types/react/package.json: *new*
+e:/myproject/node_modules/@types/react/package.json:
   {}
-c:/typescript/node_modules/@types/react/package.json: *new*
+c:/typescript/node_modules/@types/react/package.json:
   {}
-e:/myproject/node_modules/react-router-dom/package.json: *new*
+e:/myproject/node_modules/react-router-dom/package.json:
   {}
-c:/typescript/node_modules/@types/react-router-dom/package.json: *new*
+c:/typescript/node_modules/@types/react-router-dom/package.json:
   {}
-e:/myproject/node_modules/@types/prop-types/package.json: *new*
+e:/myproject/node_modules/@types/prop-types/package.json:
   {}
 e:/myproject/package.json: *new*
   {}
 
 FsWatchesRecursive::
-e:/myproject/node_modules: *new*
+e:/myproject/node_modules:
   {}
 
 Info 24   [00:02:00.000] response:

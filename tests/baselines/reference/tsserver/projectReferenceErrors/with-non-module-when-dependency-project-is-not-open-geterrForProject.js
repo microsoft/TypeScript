@@ -1,4 +1,14 @@
-TI:: Creating typing installer
+Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 function fn1() { }
 function fn2() { }
@@ -33,44 +43,13 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-TI:: [00:00:29.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:30.000] Processing cache location '/a/data/'
-TI:: [00:00:31.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:32.000] Finished processing cache location '/a/data/'
-TI:: [00:00:33.000] Npm config file: /a/data/package.json
-TI:: [00:00:34.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:39.000] Updating types-registry npm package...
-TI:: [00:00:40.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:47.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/data/package.json]
-{ "private": true }
-
-//// [/a/data/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:00:48.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:49.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/usage/usage.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
-
-Info 2    [00:00:50.000] Search path: /user/username/projects/myproject/usage
-Info 3    [00:00:51.000] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
-Info 4    [00:00:52.000] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
-Info 5    [00:00:53.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Config file
-Info 6    [00:00:54.000] event:
+Info 2    [00:00:31.000] Search path: /user/username/projects/myproject/usage
+Info 3    [00:00:32.000] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
+Info 4    [00:00:33.000] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
+Info 5    [00:00:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Config file
+Info 6    [00:00:35.000] event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/usage/tsconfig.json","reason":"Creating possible configured project for /user/username/projects/myproject/usage/usage.ts to open"}}
-Info 7    [00:00:55.000] Config: /user/username/projects/myproject/usage/tsconfig.json : {
+Info 7    [00:00:36.000] Config: /user/username/projects/myproject/usage/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/usage/usage.ts"
  ],
@@ -86,10 +65,10 @@ Info 7    [00:00:55.000] Config: /user/username/projects/myproject/usage/tsconfi
   }
  ]
 }
-Info 8    [00:00:56.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
-Info 10   [00:00:58.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
-Info 11   [00:00:59.000] Config: /user/username/projects/myproject/dependency/tsconfig.json : {
+Info 8    [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
+Info 9    [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
+Info 10   [00:00:39.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
+Info 11   [00:00:40.000] Config: /user/username/projects/myproject/dependency/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/dependency/fns.ts"
  ],
@@ -99,18 +78,18 @@ Info 11   [00:00:59.000] Config: /user/username/projects/myproject/dependency/ts
   "configFilePath": "/user/username/projects/myproject/dependency/tsconfig.json"
  }
 }
-Info 12   [00:01:00.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Config file
-Info 13   [00:01:01.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info 14   [00:01:02.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info 15   [00:01:03.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/fns.ts 500 undefined WatchType: Closed Script info
-Info 16   [00:01:04.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 17   [00:01:05.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 18   [00:01:06.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 19   [00:01:07.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 20   [00:01:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 21   [00:01:09.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 22   [00:01:10.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 23   [00:01:11.000] 	Files (3)
+Info 12   [00:00:41.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Config file
+Info 13   [00:00:42.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
+Info 14   [00:00:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
+Info 15   [00:00:44.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/fns.ts 500 undefined WatchType: Closed Script info
+Info 16   [00:00:45.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 17   [00:00:46.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 18   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 19   [00:00:48.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 20   [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info 21   [00:00:50.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 22   [00:00:51.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 23   [00:00:52.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/dependency/fns.ts
 	/user/username/projects/myproject/usage/usage.ts
@@ -123,22 +102,22 @@ Info 23   [00:01:11.000] 	Files (3)
 	usage.ts
 	  Matched by default include pattern '**/*'
 
-Info 24   [00:01:12.000] -----------------------------------------------
-Info 25   [00:01:13.000] event:
+Info 24   [00:00:53.000] -----------------------------------------------
+Info 25   [00:00:54.000] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/usage/tsconfig.json"}}
-Info 26   [00:01:14.000] event:
+Info 26   [00:00:55.000] event:
     {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"2b96539513e8810fb8ec0c078e4cb28919c0c28cdb8f7646118c5a6f4ff4cb10","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":2,"tsSize":179,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"composite":true,"outFile":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
-Info 27   [00:01:15.000] event:
+Info 27   [00:00:56.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/usage/usage.ts","configFile":"/user/username/projects/myproject/usage/tsconfig.json","diagnostics":[]}}
-Info 28   [00:01:16.000] Search path: /user/username/projects/myproject/usage
-Info 29   [00:01:17.000] For info: /user/username/projects/myproject/usage/tsconfig.json :: No config files found.
-Info 30   [00:01:18.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 30   [00:01:19.000] 	Files (3)
+Info 28   [00:00:57.000] Search path: /user/username/projects/myproject/usage
+Info 29   [00:00:58.000] For info: /user/username/projects/myproject/usage/tsconfig.json :: No config files found.
+Info 30   [00:00:59.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 30   [00:01:00.000] 	Files (3)
 
-Info 30   [00:01:20.000] -----------------------------------------------
-Info 30   [00:01:21.000] Open files: 
-Info 30   [00:01:22.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 30   [00:01:23.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 30   [00:01:01.000] -----------------------------------------------
+Info 30   [00:01:02.000] Open files: 
+Info 30   [00:01:03.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 30   [00:01:04.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 After request
 
 PolledWatches::
@@ -163,11 +142,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency: *new*
   {}
 
-Info 30   [00:01:24.000] response:
+Info 30   [00:01:05.000] response:
     {
       "responseRequired": false
     }
-Info 31   [00:01:25.000] request:
+Info 31   [00:01:06.000] request:
     {
       "command": "geterrForProject",
       "arguments": {
@@ -181,49 +160,49 @@ Before request
 
 After request
 
-Info 32   [00:01:26.000] response:
+Info 32   [00:01:07.000] response:
     {
       "responseRequired": false
     }
 Before checking timeout queue length (1) and running
 
-Info 33   [00:01:27.000] event:
+Info 33   [00:01:08.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 34   [00:01:28.000] event:
+Info 34   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[{"start":{"line":3,"offset":1},"end":{"line":3,"offset":6},"text":"Cannot find name 'fnErr'.","code":2304,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 35   [00:01:29.000] event:
+Info 35   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before checking timeout queue length (1) and running
 
-Info 36   [00:01:30.000] event:
+Info 36   [00:01:11.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 37   [00:01:31.000] event:
+Info 37   [00:01:12.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 38   [00:01:32.000] event:
+Info 38   [00:01:13.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
-Info 39   [00:01:33.000] event:
+Info 39   [00:01:14.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
-Info 40   [00:01:34.000] request:
+Info 40   [00:01:15.000] request:
     {
       "command": "geterrForProject",
       "arguments": {
@@ -237,44 +216,44 @@ Before request
 
 After request
 
-Info 41   [00:01:35.000] response:
+Info 41   [00:01:16.000] response:
     {
       "responseRequired": false
     }
 Before checking timeout queue length (1) and running
 
-Info 42   [00:01:36.000] event:
+Info 42   [00:01:17.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 43   [00:01:37.000] event:
+Info 43   [00:01:18.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 44   [00:01:38.000] event:
+Info 44   [00:01:19.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before checking timeout queue length (1) and running
 
-Info 45   [00:01:39.000] event:
+Info 45   [00:01:20.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 46   [00:01:40.000] event:
+Info 46   [00:01:21.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[{"start":{"line":3,"offset":1},"end":{"line":3,"offset":6},"text":"Cannot find name 'fnErr'.","code":2304,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 47   [00:01:41.000] event:
+Info 47   [00:01:22.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
-Info 48   [00:01:42.000] event:
+Info 48   [00:01:23.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Before running immediate callbacks and checking length (1)

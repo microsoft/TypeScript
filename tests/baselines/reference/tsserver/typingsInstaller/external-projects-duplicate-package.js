@@ -1,4 +1,5 @@
-TI:: Creating typing installer
+Info 0    [00:00:17.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
 //// [/a/b/app.js]
 
 
@@ -6,15 +7,51 @@ TI:: Creating typing installer
 declare var node;
 
 
-TI:: [00:00:17.000] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:18.000] Processing cache location '/a/data'
-TI:: [00:00:19.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:20.000] Finished processing cache location '/a/data'
-TI:: [00:00:21.000] Npm config file: /a/data/package.json
-TI:: [00:00:22.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:27.000] Updating types-registry npm package...
-TI:: [00:00:28.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:35.000] TI:: Updated types-registry npm package
+Info 1    [00:00:18.000] FileWatcher:: Added:: WatchInfo: /a/b/app.js 500 undefined WatchType: Closed Script info
+Info 2    [00:00:19.000] Starting updateGraphWorker: Project: /a/app/test.csproj
+Info 3    [00:00:20.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 4    [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 5    [00:00:22.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test.csproj WatchType: Missing file
+Info 6    [00:00:23.000] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules/@types 1 undefined Project: /a/app/test.csproj WatchType: Type roots
+Info 7    [00:00:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules/@types 1 undefined Project: /a/app/test.csproj WatchType: Type roots
+Info 8    [00:00:25.000] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 9    [00:00:26.000] Project '/a/app/test.csproj' (External)
+Info 10   [00:00:27.000] 	Files (2)
+	/a/b/app.js
+	/node_modules/@types/node/index.d.ts
+
+
+	../b/app.js
+	  Root file specified for compilation
+	../../node_modules/@types/node/index.d.ts
+	  Entry point for implicit type library 'node'
+
+Info 11   [00:00:28.000] -----------------------------------------------
+TI:: Creating typing installer
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/app/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/app.js: *new*
+  {}
+
+FsWatchesRecursive::
+/node_modules: *new*
+  {}
+
+TI:: [00:00:29.000] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:30.000] Processing cache location '/a/data'
+TI:: [00:00:31.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:32.000] Finished processing cache location '/a/data'
+TI:: [00:00:33.000] Npm config file: /a/data/package.json
+TI:: [00:00:34.000] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [00:00:39.000] Updating types-registry npm package...
+TI:: [00:00:40.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:00:47.000] TI:: Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -37,29 +74,6 @@ TI:: typing installer creation complete
 }
 
 
-Info 0    [00:00:36.000] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
-
-Info 1    [00:00:37.000] FileWatcher:: Added:: WatchInfo: /a/b/app.js 500 undefined WatchType: Closed Script info
-Info 2    [00:00:38.000] Starting updateGraphWorker: Project: /a/app/test.csproj
-Info 3    [00:00:39.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 4    [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 5    [00:00:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test.csproj WatchType: Missing file
-Info 6    [00:00:42.000] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules/@types 1 undefined Project: /a/app/test.csproj WatchType: Type roots
-Info 7    [00:00:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules/@types 1 undefined Project: /a/app/test.csproj WatchType: Type roots
-Info 8    [00:00:44.000] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 9    [00:00:45.000] Project '/a/app/test.csproj' (External)
-Info 10   [00:00:46.000] 	Files (2)
-	/a/b/app.js
-	/node_modules/@types/node/index.d.ts
-
-
-	../b/app.js
-	  Root file specified for compilation
-	../../node_modules/@types/node/index.d.ts
-	  Entry point for implicit type library 'node'
-
-Info 11   [00:00:47.000] -----------------------------------------------
 TI:: [00:00:48.000] Got install request {"projectName":"/a/app/test.csproj","fileNames":["/a/b/app.js"],"compilerOptions":{"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
 TI:: [00:00:49.000] Request specifies cache path '/a/data', loading cached information...
 TI:: [00:00:50.000] Processing cache location '/a/data'

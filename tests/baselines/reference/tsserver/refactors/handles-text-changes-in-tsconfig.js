@@ -1,32 +1,5 @@
-TI:: Creating typing installer
-//// [/a.ts]
-export const a = 0;
-
-//// [/tsconfig.json]
-{ "files": ["./a.ts"] }
-
-
-TI:: [00:00:07.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:08.000] Processing cache location '/a/data/'
-TI:: [00:00:09.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:10.000] Finished processing cache location '/a/data/'
-TI:: [00:00:11.000] Npm config file: /a/data/package.json
-TI:: [00:00:12.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:19.000] Updating types-registry npm package...
-TI:: [00:00:20.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:27.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/data/package.json]
-{ "private": true }
-
-//// [/a/data/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:00:28.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:29.000] request:
+Info 0    [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:08.000] request:
     {
       "command": "open",
       "arguments": {
@@ -36,12 +9,18 @@ Info 1    [00:00:29.000] request:
       "type": "request"
     }
 Before request
+//// [/a.ts]
+export const a = 0;
 
-Info 2    [00:00:30.000] Search path: /
-Info 3    [00:00:31.000] For info: /a.ts :: Config file name: /tsconfig.json
-Info 4    [00:00:32.000] Creating configuration project /tsconfig.json
-Info 5    [00:00:33.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 6    [00:00:34.000] Config: /tsconfig.json : {
+//// [/tsconfig.json]
+{ "files": ["./a.ts"] }
+
+
+Info 2    [00:00:09.000] Search path: /
+Info 3    [00:00:10.000] For info: /a.ts :: Config file name: /tsconfig.json
+Info 4    [00:00:11.000] Creating configuration project /tsconfig.json
+Info 5    [00:00:12.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info 6    [00:00:13.000] Config: /tsconfig.json : {
  "rootNames": [
   "/a.ts"
  ],
@@ -49,25 +28,25 @@ Info 6    [00:00:34.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 7    [00:00:35.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 8    [00:00:36.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 9    [00:00:37.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 10   [00:00:38.000] Project '/tsconfig.json' (Configured)
-Info 11   [00:00:39.000] 	Files (1)
+Info 7    [00:00:14.000] Starting updateGraphWorker: Project: /tsconfig.json
+Info 8    [00:00:15.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info 9    [00:00:16.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 10   [00:00:17.000] Project '/tsconfig.json' (Configured)
+Info 11   [00:00:18.000] 	Files (1)
 	/a.ts
 
 
 	a.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 12   [00:00:40.000] -----------------------------------------------
-Info 13   [00:00:41.000] Project '/tsconfig.json' (Configured)
-Info 13   [00:00:42.000] 	Files (1)
+Info 12   [00:00:19.000] -----------------------------------------------
+Info 13   [00:00:20.000] Project '/tsconfig.json' (Configured)
+Info 13   [00:00:21.000] 	Files (1)
 
-Info 13   [00:00:43.000] -----------------------------------------------
-Info 13   [00:00:44.000] Open files: 
-Info 13   [00:00:45.000] 	FileName: /a.ts ProjectRootPath: undefined
-Info 13   [00:00:46.000] 		Projects: /tsconfig.json
+Info 13   [00:00:22.000] -----------------------------------------------
+Info 13   [00:00:23.000] Open files: 
+Info 13   [00:00:24.000] 	FileName: /a.ts ProjectRootPath: undefined
+Info 13   [00:00:25.000] 		Projects: /tsconfig.json
 After request
 
 PolledWatches::
@@ -78,11 +57,11 @@ FsWatches::
 /tsconfig.json: *new*
   {}
 
-Info 13   [00:00:47.000] response:
+Info 13   [00:00:26.000] response:
     {
       "responseRequired": false
     }
-Info 14   [00:00:48.000] request:
+Info 14   [00:00:27.000] request:
     {
       "command": "getEditsForRefactor",
       "arguments": {
@@ -101,7 +80,7 @@ Before request
 
 After request
 
-Info 15   [00:00:49.000] response:
+Info 15   [00:00:28.000] response:
     {
       "response": {
         "edits": [

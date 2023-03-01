@@ -1,4 +1,15 @@
-TI:: Creating typing installer
+Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:34.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/client/app.js",
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -22,15 +33,62 @@ function getHostName() { return "hello"; } export { getHostName };
 import { getHostName } from '../../src/server/utilities';export default getHostName;
 
 
-TI:: [00:00:33.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:34.000] Processing cache location '/a/data/'
-TI:: [00:00:35.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:36.000] Finished processing cache location '/a/data/'
-TI:: [00:00:37.000] Npm config file: /a/data/package.json
-TI:: [00:00:38.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:43.000] Updating types-registry npm package...
-TI:: [00:00:44.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:51.000] TI:: Updated types-registry npm package
+Info 2    [00:00:35.000] Search path: /user/username/projects/myproject/src/client
+Info 3    [00:00:36.000] For info: /user/username/projects/myproject/src/client/app.js :: No config files found.
+Info 4    [00:00:37.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/client/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 5    [00:00:38.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/client/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 6    [00:00:39.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 7    [00:00:40.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 8    [00:00:41.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 9    [00:00:42.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 10   [00:00:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 11   [00:00:44.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:00:45.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 13   [00:00:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 14   [00:00:47.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 15   [00:00:48.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 16   [00:00:49.000] 	Files (2)
+	/a/lib/lib.d.ts
+	/user/username/projects/myproject/src/client/app.js
+
+
+	../../../../a/lib/lib.d.ts
+	  Default library for target 'es5'
+	src/client/app.js
+	  Root file specified for compilation
+
+Info 17   [00:00:50.000] -----------------------------------------------
+TI:: Creating typing installer
+
+PolledWatches::
+/user/username/projects/myproject/src/client/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/client/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+
+TI:: [00:00:51.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:00:52.000] Processing cache location '/a/data/'
+TI:: [00:00:53.000] Trying to find '/a/data/package.json'...
+TI:: [00:00:54.000] Finished processing cache location '/a/data/'
+TI:: [00:00:55.000] Npm config file: /a/data/package.json
+TI:: [00:00:56.000] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [00:01:01.000] Updating types-registry npm package...
+TI:: [00:01:02.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:01:09.000] TI:: Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -41,44 +99,6 @@ TI:: typing installer creation complete
 }
 
 
-Info 0    [00:00:52.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:53.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/src/client/app.js",
-        "projectRootPath": "/user/username/projects/myproject"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
-
-Info 2    [00:00:54.000] Search path: /user/username/projects/myproject/src/client
-Info 3    [00:00:55.000] For info: /user/username/projects/myproject/src/client/app.js :: No config files found.
-Info 4    [00:00:56.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/client/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 5    [00:00:57.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/client/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 6    [00:00:58.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 7    [00:00:59.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 8    [00:01:00.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 9    [00:01:01.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 10   [00:01:02.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 11   [00:01:03.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:01:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 13   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 14   [00:01:06.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 15   [00:01:07.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 16   [00:01:08.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/client/app.js
-
-
-	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
-	src/client/app.js
-	  Root file specified for compilation
-
-Info 17   [00:01:09.000] -----------------------------------------------
 TI:: [00:01:10.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/user/username/projects/myproject/src/client/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/user/username/projects/myproject","cachePath":"/a/data/","kind":"discover"}
 TI:: [00:01:11.000] Request specifies cache path '/a/data/', loading cached information...
 TI:: [00:01:12.000] Processing cache location '/a/data/'
@@ -110,19 +130,19 @@ Info 18   [00:01:35.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/user/username/projects/myproject/src/client/tsconfig.json: *new*
+/user/username/projects/myproject/src/client/tsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/client/jsconfig.json: *new*
+/user/username/projects/myproject/src/client/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json: *new*
+/user/username/projects/myproject/src/tsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json: *new*
+/user/username/projects/myproject/src/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json: *new*
+/user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json: *new*
+/user/username/projects/myproject/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/bower_components: *new*
   {"pollingInterval":500}
@@ -130,7 +150,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::

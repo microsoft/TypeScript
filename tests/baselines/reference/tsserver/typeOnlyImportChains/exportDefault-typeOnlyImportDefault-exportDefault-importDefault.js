@@ -1,4 +1,14 @@
-TI:: Creating typing installer
+Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:16.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/c.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
 //// [/a.ts]
 export default class A {}
 
@@ -22,46 +32,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-TI:: [00:00:15.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:16.000] Processing cache location '/a/data/'
-TI:: [00:00:17.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:18.000] Finished processing cache location '/a/data/'
-TI:: [00:00:19.000] Npm config file: /a/data/package.json
-TI:: [00:00:20.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:25.000] Updating types-registry npm package...
-TI:: [00:00:26.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:33.000] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/data/package.json]
-{ "private": true }
-
-//// [/a/data/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-Info 0    [00:00:34.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:35.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/c.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
-Before request
-
-Info 2    [00:00:36.000] Search path: /
-Info 3    [00:00:37.000] For info: /c.ts :: No config files found.
-Info 4    [00:00:38.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 5    [00:00:39.000] FileWatcher:: Added:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
-Info 6    [00:00:40.000] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info 7    [00:00:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 8    [00:00:42.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 9    [00:00:43.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 10   [00:00:44.000] 	Files (4)
+Info 2    [00:00:17.000] Search path: /
+Info 3    [00:00:18.000] For info: /c.ts :: No config files found.
+Info 4    [00:00:19.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 5    [00:00:20.000] FileWatcher:: Added:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
+Info 6    [00:00:21.000] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
+Info 7    [00:00:22.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 8    [00:00:23.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 9    [00:00:24.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 10   [00:00:25.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/a.ts
 	/b.ts
@@ -77,14 +56,14 @@ Info 10   [00:00:44.000] 	Files (4)
 	c.ts
 	  Root file specified for compilation
 
-Info 11   [00:00:45.000] -----------------------------------------------
-Info 12   [00:00:46.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 12   [00:00:47.000] 	Files (4)
+Info 11   [00:00:26.000] -----------------------------------------------
+Info 12   [00:00:27.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 12   [00:00:28.000] 	Files (4)
 
-Info 12   [00:00:48.000] -----------------------------------------------
-Info 12   [00:00:49.000] Open files: 
-Info 12   [00:00:50.000] 	FileName: /c.ts ProjectRootPath: undefined
-Info 12   [00:00:51.000] 		Projects: /dev/null/inferredProject1*
+Info 12   [00:00:29.000] -----------------------------------------------
+Info 12   [00:00:30.000] Open files: 
+Info 12   [00:00:31.000] 	FileName: /c.ts ProjectRootPath: undefined
+Info 12   [00:00:32.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 FsWatches::
@@ -95,11 +74,11 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 12   [00:00:52.000] response:
+Info 12   [00:00:33.000] response:
     {
       "responseRequired": false
     }
-Info 13   [00:00:53.000] request:
+Info 13   [00:00:34.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -112,7 +91,7 @@ Before request
 
 After request
 
-Info 14   [00:00:54.000] response:
+Info 14   [00:00:35.000] response:
     {
       "response": [
         {
