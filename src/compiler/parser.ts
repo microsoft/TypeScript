@@ -8672,6 +8672,7 @@ namespace Parser {
                     }
                     nextTokenJSDoc();
                 }
+                comments = comments.trimEnd()
                 if (parts.length && comments.length) {
                     parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? start, commentsPos));
                 }
@@ -8935,7 +8936,7 @@ namespace Parser {
                     tok = nextTokenJSDoc();
                 }
 
-                comments = removeLeadingNewlines(comments);
+                comments = removeLeadingNewlines(comments).trimEnd();
                 if (parts.length) {
                     if (comments.length) {
                         parts.push(finishNode(factory.createJSDocText(comments), linkEnd ?? commentsPos));
