@@ -69,7 +69,7 @@
         "eslint-plugin-simple-import-sort": "^10.0.0",
         "fast-xml-parser": "^4.0.11",
         "fs-extra": "^9.1.0",
-        "glob": "latest",
+        "glob": "^8.1.0",
         "hereby": "^1.6.4",
         "jsonc-parser": "^3.2.0",
         "minimist": "latest",

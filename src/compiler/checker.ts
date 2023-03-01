@@ -110,6 +110,7 @@ import {
     createGetCanonicalFileName,
     createGetSymbolWalker,
     createModeAwareCacheKey,
+    createMultiMap,
     createPrinterWithDefaults,
     createPrinterWithRemoveComments,
     createPrinterWithRemoveCommentsNeverAsciiEscape,
@@ -117,7 +118,6 @@ import {
     createPropertyNameNodeForIdentifierOrLiteral,
     createSymbolTable,
     createTextWriter,
-    createUnderscoreEscapedMultiMap,
     Debug,
     Declaration,
     DeclarationName,
@@ -7187,7 +7187,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const mayHaveNameCollisions = !(context.flags & NodeBuilderFlags.UseFullyQualifiedType);
                 /** Map from type reference identifier text to [type, index in `result` where the type node is] */
-                const seenNames = mayHaveNameCollisions ? createUnderscoreEscapedMultiMap<[Type, number]>() : undefined;
+                const seenNames = mayHaveNameCollisions ? createMultiMap<__String, [Type, number]>() : undefined;
                 const result: TypeNode[] = [];
                 let i = 0;
                 for (const type of types) {
@@ -21117,7 +21117,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 //
                 else if (result && isNonGenericObjectType(target) && !isArrayOrTupleType(target) &&
                     source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType &&
-                    !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
+                    !some((source as IntersectionType).types, t => t === target || !!(getObjectFlags(t) & ObjectFlags.NonInferrableType))) {
                     result &= propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, /*optionalsOnly*/ true, intersectionState);
                 }
             }
