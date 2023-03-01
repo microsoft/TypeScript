@@ -55,11 +55,9 @@ type TUndefined = Awaited<undefined>;
 
 type TNull = Awaited<null>;
 >TNull : null
->null : null
 
 type TNullOrUndefined = Awaited<null | undefined>;
 >TNullOrUndefined : null
->null : null
 
 interface BadPromise { then(cb: (value: BadPromise) => void): void; }
 >then : (cb: (value: BadPromise) => void) => void
