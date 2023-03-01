@@ -2183,7 +2183,7 @@ export class Session<TMessage = string> implements EventSender {
         // only to the previous line.  If all this is true, then
         // add edits necessary to properly indent the current line.
         if ((args.key === "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
-            const { lineText, absolutePosition } = scriptInfo.getAbsolutePositionAndLineText(args.line);
+            const { lineText, absolutePosition } = scriptInfo.textStorage.getAbsolutePositionAndLineText(args.line);
             if (lineText && lineText.search("\\S") < 0) {
                 const preferredIndent = languageService.getIndentationAtPosition(file, position, formatOptions);
                 let hasIndent = 0;
@@ -2418,6 +2418,8 @@ export class Session<TMessage = string> implements EventSender {
     private change(args: protocol.ChangeRequestArgs) {
         const scriptInfo = this.projectService.getScriptInfo(args.file)!;
         Debug.assert(!!scriptInfo);
+        // Because we are going to apply edits, its better to switch to svc now instead of computing line map
+        scriptInfo.textStorage.switchToScriptVersionCache();
         const start = scriptInfo.lineOffsetToPosition(args.line, args.offset);
         const end = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
         if (start >= 0) {

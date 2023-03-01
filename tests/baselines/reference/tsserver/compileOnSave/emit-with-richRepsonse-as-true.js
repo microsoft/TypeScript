@@ -58,9 +58,9 @@ Info 13   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 14   [00:00:37.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:38.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 16   [00:00:39.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/file1.ts
-	/user/username/projects/myproject/file2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file1.ts SVC-1-0 "const x = 1;"
+	/user/username/projects/myproject/file2.ts Text-1 "const y = 2;"
 
 
 	../../../../a/lib/lib.d.ts
@@ -201,10 +201,10 @@ Info 38   [00:01:26.000] Starting updateGraphWorker: Project: /user/username/pro
 Info 39   [00:01:27.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 40   [00:01:28.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 41   [00:01:29.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/file1.ts
-	/user/username/projects/myproject/file2.ts
-	/user/username/projects/myproject/test/file1.d.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file1.ts SVC-1-0 "const x = 1;"
+	/user/username/projects/myproject/file2.ts Text-1 "const y = 2;"
+	/user/username/projects/myproject/test/file1.d.ts Text-1 "declare const x = 1;\n"
 
 
 	../../../../a/lib/lib.d.ts

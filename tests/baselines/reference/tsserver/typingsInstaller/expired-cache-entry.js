@@ -23,7 +23,7 @@ Info 4    [00:00:29.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 5    [00:00:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 6    [00:00:31.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 7    [00:00:32.000] 	Files (1)
-	/a/b/app.js
+	/a/b/app.js SVC-1-0 ""
 
 
 	a/b/app.js
@@ -135,8 +135,8 @@ Info 12   [00:01:29.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 13   [00:01:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:01:31.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 15   [00:01:32.000] 	Files (2)
-	/a/b/app.js
-	/a/data/node_modules/@types/jquery/index.d.ts
+	/a/b/app.js SVC-1-0 ""
+	/a/data/node_modules/@types/jquery/index.d.ts Text-1 "declare const $: { x: number }"
 
 
 	a/b/app.js

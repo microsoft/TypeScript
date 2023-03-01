@@ -44,7 +44,7 @@ Info 6    [00:00:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 7    [00:00:24.000] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 8    [00:00:25.000] Project '/a/app/test.csproj' (External)
 Info 9    [00:00:26.000] 	Files (1)
-	/a/b/file3.d.ts
+	/a/b/file3.d.ts Text-1 ""
 
 
 	../b/file3.d.ts
@@ -209,11 +209,11 @@ Info 13   [00:01:42.000] Starting updateGraphWorker: Project: /a/app/test.csproj
 Info 14   [00:01:43.000] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:01:44.000] Project '/a/app/test.csproj' (External)
 Info 16   [00:01:45.000] 	Files (5)
-	/a/b/file3.d.ts
-	/a/data/node_modules/@types/commander/index.d.ts
-	/a/data/node_modules/@types/express/index.d.ts
-	/a/data/node_modules/@types/jquery/index.d.ts
-	/a/data/node_modules/@types/moment/index.d.ts
+	/a/b/file3.d.ts Text-1 ""
+	/a/data/node_modules/@types/commander/index.d.ts Text-1 "declare const commander: { x: number }"
+	/a/data/node_modules/@types/express/index.d.ts Text-1 "declare const express: { x: number }"
+	/a/data/node_modules/@types/jquery/index.d.ts Text-1 "declare const jquery: { x: number }"
+	/a/data/node_modules/@types/moment/index.d.ts Text-1 "declare const moment: { x: number }"
 
 
 	../b/file3.d.ts

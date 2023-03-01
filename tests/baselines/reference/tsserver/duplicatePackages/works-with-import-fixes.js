@@ -64,10 +64,10 @@ Info 21   [00:00:50.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 22   [00:00:51.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:52.000] Project '/tsconfig.json' (Configured)
 Info 24   [00:00:53.000] 	Files (4)
-	/a/node_modules/foo/index.d.ts
-	/a/user.ts
-	/b/node_modules/foo/index.d.ts
-	/b/user.ts
+	/a/node_modules/foo/index.d.ts Text-1 "export const foo: number;"
+	/a/user.ts SVC-1-0 "import(\"foo\");\nfoo"
+	/b/node_modules/foo/index.d.ts Text-1 "export const foo: number;"
+	/b/user.ts Text-1 "import(\"foo\");\nfoo"
 
 
 	a/node_modules/foo/index.d.ts

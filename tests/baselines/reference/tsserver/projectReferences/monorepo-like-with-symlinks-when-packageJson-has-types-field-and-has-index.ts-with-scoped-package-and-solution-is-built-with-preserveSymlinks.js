@@ -288,10 +288,10 @@ Info 32   [00:01:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 33   [00:01:46.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 34   [00:01:47.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
 Info 35   [00:01:48.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/packages/B/src/index.ts
-	/user/username/projects/myproject/packages/B/src/bar.ts
-	/user/username/projects/myproject/packages/A/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/packages/B/src/index.ts Text-1 "export function foo() { }"
+	/user/username/projects/myproject/packages/B/src/bar.ts Text-1 "export function bar() { }"
+	/user/username/projects/myproject/packages/A/src/index.ts SVC-1-0 "import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -458,21 +458,28 @@ Before checking timeout queue length (1) and running
 
 Info 53   [00:02:12.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
 Info 54   [00:02:13.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 55   [00:02:14.000] Different program with same set of files
-Info 56   [00:02:15.000] event:
+Info 55   [00:02:14.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
+Info 56   [00:02:15.000] 	Files (4)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/packages/B/src/index.ts Text-1 "export function foo() { }"
+	/user/username/projects/myproject/packages/B/src/bar.ts Text-1 "export function bar() { }"
+	/user/username/projects/myproject/packages/A/src/index.ts SVC-1-1 "import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n\n"
+
+Info 57   [00:02:16.000] -----------------------------------------------
+Info 58   [00:02:17.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 57   [00:02:16.000] event:
+Info 59   [00:02:18.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 58   [00:02:17.000] event:
+Info 60   [00:02:19.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
-Info 59   [00:02:18.000] event:
+Info 61   [00:02:20.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)

@@ -64,9 +64,9 @@ Info 20   [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 21   [00:00:50.000] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 22   [00:00:51.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
 Info 23   [00:00:52.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/rootfolder/otherfolder/a/b/project/file1.ts
-	/user/username/rootfolder/otherfolder/a/b/project/file3.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/rootfolder/otherfolder/a/b/project/file1.ts SVC-1-0 "import a from \"file2\""
+	/user/username/rootfolder/otherfolder/a/b/project/file3.ts Text-1 "export class c { }"
 
 
 	../../../../../../../a/lib/lib.d.ts
@@ -130,40 +130,46 @@ export class c { }export class d {}
 Info 33   [00:01:11.000] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 34   [00:01:12.000] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 35   [00:01:13.000] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 36   [00:01:14.000] Different program with same set of files
-Info 37   [00:01:15.000] Running: *ensureProjectForOpenFiles*
-Info 38   [00:01:16.000] Before ensureProjectForOpenFiles:
-Info 39   [00:01:17.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
-Info 39   [00:01:18.000] 	Files (3)
+Info 36   [00:01:14.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
+Info 37   [00:01:15.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/rootfolder/otherfolder/a/b/project/file1.ts SVC-1-0 "import a from \"file2\""
+	/user/username/rootfolder/otherfolder/a/b/project/file3.ts Text-2 "export class c { }export class d {}"
 
-Info 39   [00:01:19.000] -----------------------------------------------
-Info 39   [00:01:20.000] Open files: 
-Info 39   [00:01:21.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
-Info 39   [00:01:22.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info 39   [00:01:23.000] After ensureProjectForOpenFiles:
-Info 40   [00:01:24.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
-Info 40   [00:01:25.000] 	Files (3)
+Info 38   [00:01:16.000] -----------------------------------------------
+Info 39   [00:01:17.000] Running: *ensureProjectForOpenFiles*
+Info 40   [00:01:18.000] Before ensureProjectForOpenFiles:
+Info 41   [00:01:19.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
+Info 41   [00:01:20.000] 	Files (3)
 
-Info 40   [00:01:26.000] -----------------------------------------------
-Info 40   [00:01:27.000] Open files: 
-Info 40   [00:01:28.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
-Info 40   [00:01:29.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info 40   [00:01:30.000] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
-Info 41   [00:01:31.000] event:
+Info 41   [00:01:21.000] -----------------------------------------------
+Info 41   [00:01:22.000] Open files: 
+Info 41   [00:01:23.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
+Info 41   [00:01:24.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+Info 41   [00:01:25.000] After ensureProjectForOpenFiles:
+Info 42   [00:01:26.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
+Info 42   [00:01:27.000] 	Files (3)
+
+Info 42   [00:01:28.000] -----------------------------------------------
+Info 42   [00:01:29.000] Open files: 
+Info 42   [00:01:30.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
+Info 42   [00:01:31.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+Info 42   [00:01:32.000] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info 43   [00:01:33.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/rootfolder/otherfolder/a/b/project/file1.ts"]}}
 After checking timeout queue length (2) and running
 
 Checking timeout queue length: 1
 
-Info 42   [00:01:35.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 43   [00:01:36.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
-Info 44   [00:01:37.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 45   [00:01:38.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 46   [00:01:39.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info 47   [00:01:40.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 48   [00:01:43.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 49   [00:01:44.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info 50   [00:01:45.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 44   [00:01:37.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 45   [00:01:38.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
+Info 46   [00:01:39.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 47   [00:01:40.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 48   [00:01:41.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info 49   [00:01:42.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 50   [00:01:45.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 51   [00:01:46.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info 52   [00:01:47.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Before running timeout callbacks
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts]
 export class a { }
@@ -195,21 +201,21 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/node_modules: *new*
   {}
 
-Info 51   [00:01:46.000] Scheduled: *ensureProjectForOpenFiles*
-Info 52   [00:01:47.000] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info 53   [00:01:48.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 54   [00:01:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 55   [00:01:50.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/a/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 56   [00:01:51.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/a/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 57   [00:01:52.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 58   [00:01:53.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 59   [00:01:54.000] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 60   [00:01:55.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
-Info 61   [00:01:56.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts
-	/user/username/rootfolder/otherfolder/a/b/project/file1.ts
-	/user/username/rootfolder/otherfolder/a/b/project/file3.ts
+Info 53   [00:01:48.000] Scheduled: *ensureProjectForOpenFiles*
+Info 54   [00:01:49.000] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+Info 55   [00:01:50.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 56   [00:01:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 57   [00:01:52.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/a/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 58   [00:01:53.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/a/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 59   [00:01:54.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 60   [00:01:55.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 61   [00:01:56.000] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info 62   [00:01:57.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
+Info 63   [00:01:58.000] 	Files (4)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts Text-1 "export class a { }"
+	/user/username/rootfolder/otherfolder/a/b/project/file1.ts SVC-1-0 "import a from \"file2\""
+	/user/username/rootfolder/otherfolder/a/b/project/file3.ts Text-2 "export class c { }export class d {}"
 
 
 	../../../../../../../a/lib/lib.d.ts
@@ -221,8 +227,8 @@ Info 61   [00:01:56.000] 	Files (4)
 	file3.ts
 	  Matched by default include pattern '**/*'
 
-Info 62   [00:01:57.000] -----------------------------------------------
-Info 63   [00:01:58.000] event:
+Info 64   [00:01:59.000] -----------------------------------------------
+Info 65   [00:02:00.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/rootfolder/otherfolder/a/b/project/file1.ts","diagnostics":[]}}
 After running timeout callbacks
 
@@ -252,25 +258,25 @@ FsWatchesRecursive::
 
 Before running timeout callbacks
 
-Info 64   [00:01:59.000] Running: *ensureProjectForOpenFiles*
-Info 65   [00:02:00.000] Before ensureProjectForOpenFiles:
-Info 66   [00:02:01.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
-Info 66   [00:02:02.000] 	Files (4)
+Info 66   [00:02:01.000] Running: *ensureProjectForOpenFiles*
+Info 67   [00:02:02.000] Before ensureProjectForOpenFiles:
+Info 68   [00:02:03.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
+Info 68   [00:02:04.000] 	Files (4)
 
-Info 66   [00:02:03.000] -----------------------------------------------
-Info 66   [00:02:04.000] Open files: 
-Info 66   [00:02:05.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
-Info 66   [00:02:06.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info 66   [00:02:07.000] After ensureProjectForOpenFiles:
-Info 67   [00:02:08.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
-Info 67   [00:02:09.000] 	Files (4)
+Info 68   [00:02:05.000] -----------------------------------------------
+Info 68   [00:02:06.000] Open files: 
+Info 68   [00:02:07.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
+Info 68   [00:02:08.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+Info 68   [00:02:09.000] After ensureProjectForOpenFiles:
+Info 69   [00:02:10.000] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
+Info 69   [00:02:11.000] 	Files (4)
 
-Info 67   [00:02:10.000] -----------------------------------------------
-Info 67   [00:02:11.000] Open files: 
-Info 67   [00:02:12.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
-Info 67   [00:02:13.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info 67   [00:02:14.000] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
-Info 68   [00:02:15.000] event:
+Info 69   [00:02:12.000] -----------------------------------------------
+Info 69   [00:02:13.000] Open files: 
+Info 69   [00:02:14.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
+Info 69   [00:02:15.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+Info 69   [00:02:16.000] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info 70   [00:02:17.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/rootfolder/otherfolder/a/b/project/file1.ts"]}}
 After running timeout callbacks
 

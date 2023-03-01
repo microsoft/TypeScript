@@ -62,9 +62,9 @@ Info 16   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 17   [00:00:42.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:00:43.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 19   [00:00:44.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/blabla.json
-	/user/username/projects/myproject/src/test.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/blabla.json Text-1 "{}"
+	/user/username/projects/myproject/src/test.ts SVC-1-0 "import * as blabla from \"./blabla.json\";\ndeclare var console: any;\nconsole.log(blabla);"
 
 
 	../../../../a/lib/lib.d.ts

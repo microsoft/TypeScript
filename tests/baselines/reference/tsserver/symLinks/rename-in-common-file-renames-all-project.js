@@ -65,9 +65,9 @@ Info 13   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 14   [00:00:49.000] Finishing updateGraphWorker: Project: /users/username/projects/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:50.000] Project '/users/username/projects/a/tsconfig.json' (Configured)
 Info 16   [00:00:51.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/users/username/projects/a/c/fc.ts
-	/users/username/projects/a/a.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/a/c/fc.ts Text-1 "export const C = 8"
+	/users/username/projects/a/a.ts SVC-1-0 "import {C} from \"./c/fc\"; console.log(C)"
 
 
 	../../../../a/lib/lib.d.ts
@@ -143,9 +143,9 @@ Info 30   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 31   [00:01:12.000] Finishing updateGraphWorker: Project: /users/username/projects/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 32   [00:01:13.000] Project '/users/username/projects/b/tsconfig.json' (Configured)
 Info 33   [00:01:14.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/users/username/projects/b/c/fc.ts
-	/users/username/projects/b/b.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/b/c/fc.ts Text-1 "export const C = 8"
+	/users/username/projects/b/b.ts SVC-1-0 "import {C} from \"./c/fc\"; console.log(C)"
 
 
 	../../../../a/lib/lib.d.ts

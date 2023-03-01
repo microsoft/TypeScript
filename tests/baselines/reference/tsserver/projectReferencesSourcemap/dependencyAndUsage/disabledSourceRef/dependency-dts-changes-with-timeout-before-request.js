@@ -271,9 +271,9 @@ Info 21   [00:01:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:01:25.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:01:26.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 24   [00:01:27.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/decls/fns.d.ts
-	/user/username/projects/myproject/main/main.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/decls/fns.d.ts Text-1 "export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n//# sourceMappingURL=FnS.d.ts.map"
+	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -345,8 +345,8 @@ Info 37   [00:01:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 38   [00:01:47.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 39   [00:01:48.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 40   [00:01:49.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/dependency/FnS.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/FnS.ts SVC-1-0 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -435,8 +435,8 @@ Info 57   [00:02:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 58   [00:02:18.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 59   [00:02:19.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
 Info 60   [00:02:20.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/random/random.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/random/random.ts SVC-1-0 "let a = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -707,56 +707,63 @@ export declare function fn6(): void;
 Info 76   [00:02:55.000] Running: /user/username/projects/myproject/main/tsconfig.json
 Info 77   [00:02:56.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
 Info 78   [00:02:57.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 79   [00:02:58.000] Different program with same set of files
-Info 80   [00:02:59.000] Running: /user/username/projects/myproject/dependency/tsconfig.json
-Info 81   [00:03:00.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
-Info 82   [00:03:01.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 83   [00:03:02.000] Running: *ensureProjectForOpenFiles*
-Info 84   [00:03:03.000] Before ensureProjectForOpenFiles:
-Info 85   [00:03:04.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 85   [00:03:05.000] 	Files (3)
+Info 79   [00:02:58.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 80   [00:02:59.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/decls/fns.d.ts Text-2 "export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\nexport declare function fn6(): void;\n//# sourceMappingURL=FnS.d.ts.map"
+	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
 
-Info 85   [00:03:06.000] -----------------------------------------------
-Info 85   [00:03:07.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 85   [00:03:08.000] 	Files (2)
+Info 81   [00:03:00.000] -----------------------------------------------
+Info 82   [00:03:01.000] Running: /user/username/projects/myproject/dependency/tsconfig.json
+Info 83   [00:03:02.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
+Info 84   [00:03:03.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info 85   [00:03:04.000] Same program as before
+Info 86   [00:03:05.000] Running: *ensureProjectForOpenFiles*
+Info 87   [00:03:06.000] Before ensureProjectForOpenFiles:
+Info 88   [00:03:07.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 88   [00:03:08.000] 	Files (3)
 
-Info 85   [00:03:09.000] -----------------------------------------------
-Info 85   [00:03:10.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 85   [00:03:11.000] 	Files (2)
+Info 88   [00:03:09.000] -----------------------------------------------
+Info 88   [00:03:10.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info 88   [00:03:11.000] 	Files (2)
 
-Info 85   [00:03:12.000] -----------------------------------------------
-Info 85   [00:03:13.000] Open files: 
-Info 85   [00:03:14.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
-Info 85   [00:03:15.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
-Info 85   [00:03:16.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
-Info 85   [00:03:17.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
-Info 85   [00:03:18.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
-Info 85   [00:03:19.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
-Info 85   [00:03:20.000] After ensureProjectForOpenFiles:
-Info 86   [00:03:21.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-Info 86   [00:03:22.000] 	Files (3)
+Info 88   [00:03:12.000] -----------------------------------------------
+Info 88   [00:03:13.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 88   [00:03:14.000] 	Files (2)
 
-Info 86   [00:03:23.000] -----------------------------------------------
-Info 86   [00:03:24.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 86   [00:03:25.000] 	Files (2)
+Info 88   [00:03:15.000] -----------------------------------------------
+Info 88   [00:03:16.000] Open files: 
+Info 88   [00:03:17.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
+Info 88   [00:03:18.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 88   [00:03:19.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
+Info 88   [00:03:20.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
+Info 88   [00:03:21.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
+Info 88   [00:03:22.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 88   [00:03:23.000] After ensureProjectForOpenFiles:
+Info 89   [00:03:24.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 89   [00:03:25.000] 	Files (3)
 
-Info 86   [00:03:26.000] -----------------------------------------------
-Info 86   [00:03:27.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
-Info 86   [00:03:28.000] 	Files (2)
+Info 89   [00:03:26.000] -----------------------------------------------
+Info 89   [00:03:27.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info 89   [00:03:28.000] 	Files (2)
 
-Info 86   [00:03:29.000] -----------------------------------------------
-Info 86   [00:03:30.000] Open files: 
-Info 86   [00:03:31.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
-Info 86   [00:03:32.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
-Info 86   [00:03:33.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
-Info 86   [00:03:34.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
-Info 86   [00:03:35.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
-Info 86   [00:03:36.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 89   [00:03:29.000] -----------------------------------------------
+Info 89   [00:03:30.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
+Info 89   [00:03:31.000] 	Files (2)
+
+Info 89   [00:03:32.000] -----------------------------------------------
+Info 89   [00:03:33.000] Open files: 
+Info 89   [00:03:34.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
+Info 89   [00:03:35.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 89   [00:03:36.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
+Info 89   [00:03:37.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
+Info 89   [00:03:38.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
+Info 89   [00:03:39.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 After running timeout callbacks
 
 Before request
 
-Info 86   [00:03:37.000] request:
+Info 89   [00:03:40.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -767,7 +774,7 @@ Info 86   [00:03:37.000] request:
       "seq": 6,
       "type": "request"
     }
-Info 87   [00:03:38.000] response:
+Info 90   [00:03:41.000] response:
     {
       "response": {
         "definitions": [
@@ -808,7 +815,7 @@ After request
 
 Before request
 
-Info 88   [00:03:39.000] request:
+Info 91   [00:03:42.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -819,7 +826,7 @@ Info 88   [00:03:39.000] request:
       "seq": 7,
       "type": "request"
     }
-Info 89   [00:03:40.000] response:
+Info 92   [00:03:43.000] response:
     {
       "response": {
         "definitions": [
@@ -860,7 +867,7 @@ After request
 
 Before request
 
-Info 90   [00:03:41.000] request:
+Info 93   [00:03:44.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -871,7 +878,7 @@ Info 90   [00:03:41.000] request:
       "seq": 8,
       "type": "request"
     }
-Info 91   [00:03:42.000] response:
+Info 94   [00:03:45.000] response:
     {
       "response": {
         "definitions": [
@@ -912,7 +919,7 @@ After request
 
 Before request
 
-Info 92   [00:03:43.000] request:
+Info 95   [00:03:46.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -923,7 +930,7 @@ Info 92   [00:03:43.000] request:
       "seq": 9,
       "type": "request"
     }
-Info 93   [00:03:44.000] response:
+Info 96   [00:03:47.000] response:
     {
       "response": {
         "definitions": [
@@ -964,7 +971,7 @@ After request
 
 Before request
 
-Info 94   [00:03:45.000] request:
+Info 97   [00:03:48.000] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
@@ -975,7 +982,7 @@ Info 94   [00:03:45.000] request:
       "seq": 10,
       "type": "request"
     }
-Info 95   [00:03:46.000] response:
+Info 98   [00:03:49.000] response:
     {
       "response": {
         "definitions": [
@@ -1016,7 +1023,7 @@ After request
 
 Before request
 
-Info 96   [00:03:47.000] request:
+Info 99   [00:03:50.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1027,9 +1034,9 @@ Info 96   [00:03:47.000] request:
       "seq": 11,
       "type": "request"
     }
-Info 97   [00:03:48.000] Search path: /user/username/projects/myproject/dependency
-Info 98   [00:03:49.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-Info 99   [00:03:50.000] response:
+Info 100  [00:03:51.000] Search path: /user/username/projects/myproject/dependency
+Info 101  [00:03:52.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 102  [00:03:53.000] response:
     {
       "response": {
         "info": {
@@ -1114,7 +1121,7 @@ After request
 
 Before request
 
-Info 100  [00:03:51.000] request:
+Info 103  [00:03:54.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1125,9 +1132,9 @@ Info 100  [00:03:51.000] request:
       "seq": 12,
       "type": "request"
     }
-Info 101  [00:03:52.000] Search path: /user/username/projects/myproject/dependency
-Info 102  [00:03:53.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-Info 103  [00:03:54.000] response:
+Info 104  [00:03:55.000] Search path: /user/username/projects/myproject/dependency
+Info 105  [00:03:56.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 106  [00:03:57.000] response:
     {
       "response": {
         "info": {
@@ -1212,7 +1219,7 @@ After request
 
 Before request
 
-Info 104  [00:03:55.000] request:
+Info 107  [00:03:58.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1223,9 +1230,9 @@ Info 104  [00:03:55.000] request:
       "seq": 13,
       "type": "request"
     }
-Info 105  [00:03:56.000] Search path: /user/username/projects/myproject/dependency
-Info 106  [00:03:57.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-Info 107  [00:03:58.000] response:
+Info 108  [00:03:59.000] Search path: /user/username/projects/myproject/dependency
+Info 109  [00:04:00.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 110  [00:04:01.000] response:
     {
       "response": {
         "info": {
@@ -1310,7 +1317,7 @@ After request
 
 Before request
 
-Info 108  [00:03:59.000] request:
+Info 111  [00:04:02.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1321,9 +1328,9 @@ Info 108  [00:03:59.000] request:
       "seq": 14,
       "type": "request"
     }
-Info 109  [00:04:00.000] Search path: /user/username/projects/myproject/dependency
-Info 110  [00:04:01.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-Info 111  [00:04:02.000] response:
+Info 112  [00:04:03.000] Search path: /user/username/projects/myproject/dependency
+Info 113  [00:04:04.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 114  [00:04:05.000] response:
     {
       "response": {
         "info": {
@@ -1408,7 +1415,7 @@ After request
 
 Before request
 
-Info 112  [00:04:03.000] request:
+Info 115  [00:04:06.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -1419,9 +1426,9 @@ Info 112  [00:04:03.000] request:
       "seq": 15,
       "type": "request"
     }
-Info 113  [00:04:04.000] Search path: /user/username/projects/myproject/dependency
-Info 114  [00:04:05.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-Info 115  [00:04:06.000] response:
+Info 116  [00:04:07.000] Search path: /user/username/projects/myproject/dependency
+Info 117  [00:04:08.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info 118  [00:04:09.000] response:
     {
       "response": {
         "info": {

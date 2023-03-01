@@ -88,9 +88,9 @@ Info 21   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:51.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:52.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
 Info 24   [00:00:53.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/dependency/fns.ts
-	/user/username/projects/myproject/usage/usage.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/fns.ts Text-1 "export function fn1() { }\nexport function fn2() { }\n"
+	/user/username/projects/myproject/usage/usage.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n} from '../decls/fns'\nfn1();\nfn2();\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -215,24 +215,30 @@ Info 33   [00:01:20.000] request:
     }
 Info 34   [00:01:21.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
 Info 35   [00:01:22.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 36   [00:01:23.000] Different program with same set of files
-Info 37   [00:01:24.000] Before ensureProjectForOpenFiles:
-Info 38   [00:01:25.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 38   [00:01:26.000] 	Files (3)
+Info 36   [00:01:23.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 37   [00:01:24.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/fns.ts Text-1 "export function fn1() { }\nexport function fn2() { }\n"
+	/user/username/projects/myproject/usage/usage.ts SVC-1-1 "import {\n    fn1,\n    fn2,\n} from '../decls/fns'\nfn1();\nfn2();\nexport function fn3() { }"
 
-Info 38   [00:01:27.000] -----------------------------------------------
-Info 38   [00:01:28.000] Open files: 
-Info 38   [00:01:29.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 38   [00:01:30.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 38   [00:01:31.000] After ensureProjectForOpenFiles:
-Info 39   [00:01:32.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 39   [00:01:33.000] 	Files (3)
+Info 38   [00:01:25.000] -----------------------------------------------
+Info 39   [00:01:26.000] Before ensureProjectForOpenFiles:
+Info 40   [00:01:27.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 40   [00:01:28.000] 	Files (3)
 
-Info 39   [00:01:34.000] -----------------------------------------------
-Info 39   [00:01:35.000] Open files: 
-Info 39   [00:01:36.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 39   [00:01:37.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 39   [00:01:38.000] response:
+Info 40   [00:01:29.000] -----------------------------------------------
+Info 40   [00:01:30.000] Open files: 
+Info 40   [00:01:31.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 40   [00:01:32.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 40   [00:01:33.000] After ensureProjectForOpenFiles:
+Info 41   [00:01:34.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info 41   [00:01:35.000] 	Files (3)
+
+Info 41   [00:01:36.000] -----------------------------------------------
+Info 41   [00:01:37.000] Open files: 
+Info 41   [00:01:38.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info 41   [00:01:39.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 41   [00:01:40.000] response:
     {
       "response": [
         {
@@ -249,7 +255,7 @@ After request
 
 Before request
 
-Info 40   [00:01:39.000] request:
+Info 42   [00:01:41.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -258,10 +264,10 @@ Info 40   [00:01:39.000] request:
       "seq": 5,
       "type": "request"
     }
-Info 41   [00:01:42.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
-Info 42   [00:01:43.000] Project: /user/username/projects/myproject/usage/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/usage/usage.js
-Info 43   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
-Info 44   [00:01:45.000] response:
+Info 43   [00:01:44.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
+Info 44   [00:01:45.000] Project: /user/username/projects/myproject/usage/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/usage/usage.js
+Info 45   [00:01:46.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
+Info 46   [00:01:47.000] response:
     {
       "response": true,
       "responseRequired": true
@@ -281,7 +287,7 @@ exports.fn3 = fn3;
 
 Before request
 
-Info 45   [00:01:46.000] request:
+Info 47   [00:01:48.000] request:
     {
       "command": "emit-output",
       "arguments": {
@@ -290,7 +296,7 @@ Info 45   [00:01:46.000] request:
       "seq": 6,
       "type": "request"
     }
-Info 46   [00:01:47.000] response:
+Info 48   [00:01:49.000] response:
     {
       "response": {
         "outputFiles": [

@@ -57,9 +57,9 @@ Info 13   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:39.000] Finishing updateGraphWorker: Project: /a/b/projects/config/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:40.000] Project '/a/b/projects/config/tsconfig.json' (Configured)
 Info 16   [00:00:41.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/projects/files/file1.ts
-	/a/b/projects/config/file.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/files/file1.ts Text-1 "export let a = 10;"
+	/a/b/projects/config/file.ts SVC-1-0 "import {a} from \"../files/file1\"; export let b = a;"
 
 
 	../../../lib/lib.d.ts
@@ -208,8 +208,8 @@ Info 34   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 35   [00:01:20.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:21.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 37   [00:01:22.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/files/file2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/files/file2.ts SVC-1-0 "export let aa = 10;"
 
 
 	../../../lib/lib.d.ts
@@ -313,8 +313,8 @@ Info 54   [00:01:55.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 55   [00:01:56.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 56   [00:01:57.000] Project '/dev/null/inferredProject2*' (Inferred)
 Info 57   [00:01:58.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/files/file1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/projects/files/file1.ts Text-1 "export let a = 10;"
 
 
 	../../../lib/lib.d.ts

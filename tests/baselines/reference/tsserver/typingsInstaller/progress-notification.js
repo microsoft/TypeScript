@@ -19,7 +19,7 @@ Info 6    [00:00:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 7    [00:00:20.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 8    [00:00:21.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 9    [00:00:22.000] 	Files (1)
-	/a/app.js
+	/a/app.js SVC-1-0 ""
 
 
 	app.js
@@ -133,8 +133,8 @@ Info 15   [00:01:24.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 16   [00:01:25.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:01:26.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 18   [00:01:27.000] 	Files (2)
-	/a/app.js
-	/a/cache/node_modules/@types/commander/index.d.ts
+	/a/app.js SVC-1-0 ""
+	/a/cache/node_modules/@types/commander/index.d.ts Text-1 "export let x: number"
 
 
 	app.js

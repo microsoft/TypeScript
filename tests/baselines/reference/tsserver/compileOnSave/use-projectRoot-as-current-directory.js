@@ -44,8 +44,8 @@ Info 6    [00:00:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ro
 Info 7    [00:00:24.000] Finishing updateGraphWorker: Project: /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 8    [00:00:25.000] Project '/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj' (External)
 Info 9    [00:00:26.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/root/TypeScriptProject3/TypeScriptProject3/Foo.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/root/TypeScriptProject3/TypeScriptProject3/Foo.ts Text-1 "consonle.log('file1');"
 
 
 	../../../a/lib/lib.d.ts

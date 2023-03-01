@@ -44,7 +44,7 @@ Info 12   [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:22.000] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:23.000] Project '/a/jsconfig.json' (Configured)
 Info 15   [00:00:24.000] 	Files (1)
-	/a/jsFile.js
+	/a/jsFile.js SVC-1-0 "let x = 1;\n                x === \"string\";"
 
 
 	jsFile.js
@@ -142,14 +142,15 @@ TI:: [00:01:20.000] Sending response:
 TI:: [00:01:21.000] No new typings were requested as a result of typings discovery
 Info 37   [00:01:22.000] Starting updateGraphWorker: Project: /a/jsconfig.json
 Info 38   [00:01:23.000] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 39   [00:01:24.000] Project '/a/jsconfig.json' (Configured)
-Info 39   [00:01:25.000] 	Files (1)
+Info 39   [00:01:24.000] Same program as before
+Info 40   [00:01:25.000] Project '/a/jsconfig.json' (Configured)
+Info 40   [00:01:26.000] 	Files (1)
 
-Info 39   [00:01:26.000] -----------------------------------------------
-Info 39   [00:01:27.000] Open files: 
-Info 39   [00:01:28.000] 	FileName: /a/jsFile.js ProjectRootPath: undefined
-Info 39   [00:01:29.000] 		Projects: /a/jsconfig.json
-Info 39   [00:01:30.000] response:
+Info 40   [00:01:27.000] -----------------------------------------------
+Info 40   [00:01:28.000] Open files: 
+Info 40   [00:01:29.000] 	FileName: /a/jsFile.js ProjectRootPath: undefined
+Info 40   [00:01:30.000] 		Projects: /a/jsconfig.json
+Info 40   [00:01:31.000] response:
     {
       "responseRequired": false
     }
@@ -177,7 +178,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 40   [00:01:31.000] request:
+Info 41   [00:01:32.000] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -186,7 +187,7 @@ Info 40   [00:01:31.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 41   [00:01:32.000] response:
+Info 42   [00:01:33.000] response:
     {
       "response": [
         {

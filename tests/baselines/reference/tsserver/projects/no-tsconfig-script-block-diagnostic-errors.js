@@ -86,9 +86,9 @@ Info 19   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 20   [00:00:39.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 21   [00:00:40.000] Project '/a/b/tsconfig.json' (Configured)
 Info 22   [00:00:41.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/f1.ts
-	/a/b/f2.html
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/f1.ts SVC-1-0 " "
+	/a/b/f2.html Text-1 ""
 
 
 	../lib/lib.d.ts
@@ -232,8 +232,8 @@ Info 46   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 47   [00:00:39.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 48   [00:00:40.000] Project '/a/b/tsconfig.json' (Configured)
 Info 49   [00:00:41.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/f1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/f1.ts SVC-1-0 " "
 
 
 	../lib/lib.d.ts
@@ -374,8 +374,8 @@ Info 73   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 74   [00:00:39.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 75   [00:00:40.000] Project '/a/b/tsconfig.json' (Configured)
 Info 76   [00:00:41.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/f1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/f1.ts SVC-1-0 " "
 
 
 	../lib/lib.d.ts
@@ -516,9 +516,9 @@ Info 98   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 99   [00:00:37.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 100  [00:00:38.000] Project '/a/b/tsconfig.json' (Configured)
 Info 101  [00:00:39.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/f1.ts
-	/a/b/f2.html
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/f1.ts SVC-1-0 " "
+	/a/b/f2.html Text-1 ""
 
 
 	../lib/lib.d.ts
@@ -658,8 +658,8 @@ Info 125  [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 126  [00:00:39.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 127  [00:00:40.000] Project '/a/b/tsconfig.json' (Configured)
 Info 128  [00:00:41.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/f1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/f1.ts SVC-1-0 " "
 
 
 	../lib/lib.d.ts

@@ -113,7 +113,7 @@ Info 21   [00:00:32.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 22   [00:00:33.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:34.000] Project '/tsconfig.json' (Configured)
 Info 24   [00:00:35.000] 	Files (1)
-	/a.deferred
+	/a.deferred Text-1 ""
 
 
 	a.deferred

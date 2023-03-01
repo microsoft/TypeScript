@@ -47,7 +47,7 @@ Info 12   [00:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:32.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:33.000] Project '/a/tsconfig.json' (Configured)
 Info 15   [00:00:34.000] 	Files (1)
-	/a/src/a.ts
+	/a/src/a.ts SVC-1-0 ""
 
 
 	src/a.ts
@@ -123,7 +123,7 @@ Info 31   [00:00:56.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/
 Info 32   [00:00:57.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 33   [00:00:58.000] Project '/b/tsconfig.json' (Configured)
 Info 34   [00:00:59.000] 	Files (1)
-	/b/src/b.ts
+	/b/src/b.ts SVC-1-0 ""
 
 
 	src/b.ts

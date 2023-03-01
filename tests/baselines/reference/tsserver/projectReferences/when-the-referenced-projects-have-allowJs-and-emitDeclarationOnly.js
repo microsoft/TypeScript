@@ -117,10 +117,10 @@ Info 34   [00:01:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 35   [00:01:18.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/consumer/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:19.000] Project '/user/username/projects/myproject/packages/consumer/tsconfig.json' (Configured)
 Info 37   [00:01:20.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/packages/emit-composite/src/testModule.js
-	/user/username/projects/myproject/packages/emit-composite/src/index.js
-	/user/username/projects/myproject/packages/consumer/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/packages/emit-composite/src/testModule.js Text-1 "/**\n * @param {string} arg\n */\n const testCompositeFunction = (arg) => {\n}\nmodule.exports = {\n    testCompositeFunction\n}"
+	/user/username/projects/myproject/packages/emit-composite/src/index.js Text-1 "const testModule = require('./testModule');\nmodule.exports = {\n    ...testModule\n}"
+	/user/username/projects/myproject/packages/consumer/src/index.ts SVC-1-0 "import { testCompositeFunction } from 'emit-composite';\ntestCompositeFunction('why hello there');\ntestCompositeFunction('why hello there', 42);"
 
 
 	../../../../../../a/lib/lib.d.ts

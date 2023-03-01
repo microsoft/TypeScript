@@ -62,11 +62,11 @@ Info 14   [00:00:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 15   [00:00:42.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:43.000] Project '/tsconfig.json' (Configured)
 Info 17   [00:00:44.000] 	Files (5)
-	/src/a.ts
-	/src/ambient.d.ts
-	/src/b-link.ts
-	/src/b.ts
-	/src/c.ts
+	/src/a.ts SVC-1-0 "export const foo = 0;"
+	/src/ambient.d.ts Text-1 "declare module 'ambient' {}"
+	/src/b-link.ts Text-1 "foo"
+	/src/b.ts Text-1 "foo"
+	/src/c.ts Text-1 "import "
 
 
 	src/a.ts
@@ -89,7 +89,7 @@ Info 23   [00:00:50.000] Starting updateGraphWorker: Project: /dev/null/autoImpo
 Info 24   [00:00:51.000] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 25   [00:00:52.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info 26   [00:00:53.000] 	Files (1)
-	/node_modules/mobx/index.d.ts
+	/node_modules/mobx/index.d.ts Text-1 "export declare function observable(): unknown;"
 
 
 	node_modules/mobx/index.d.ts
@@ -762,40 +762,52 @@ Info 61   [00:02:04.000] Config: /tsconfig.json : {
 }
 Info 62   [00:02:05.000] Starting updateGraphWorker: Project: /tsconfig.json
 Info 63   [00:02:06.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 64   [00:02:07.000] Different program with same set of files
-Info 65   [00:02:08.000] Running: *ensureProjectForOpenFiles*
-Info 66   [00:02:09.000] Before ensureProjectForOpenFiles:
-Info 67   [00:02:10.000] Project '/tsconfig.json' (Configured)
-Info 67   [00:02:11.000] 	Files (5)
+Info 64   [00:02:07.000] Project '/tsconfig.json' (Configured)
+Info 65   [00:02:08.000] 	Files (5)
+	/src/a.ts SVC-1-0 "export const foo = 0;"
+	/src/ambient.d.ts Text-1 "declare module 'ambient' {}"
+	/src/b-link.ts Text-1 "foo"
+	/src/b.ts Text-1 "foo"
+	/src/c.ts Text-1 "import "
 
-Info 67   [00:02:12.000] -----------------------------------------------
-Info 67   [00:02:13.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 67   [00:02:14.000] 	Files (1)
+Info 66   [00:02:09.000] -----------------------------------------------
+Info 67   [00:02:10.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 68   [00:02:11.000] 	Files (1)
 
-Info 67   [00:02:15.000] -----------------------------------------------
-Info 67   [00:02:16.000] Open files: 
-Info 67   [00:02:17.000] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info 67   [00:02:18.000] 		Projects: /tsconfig.json
-Info 67   [00:02:19.000] 	FileName: /src/b.ts ProjectRootPath: undefined
-Info 67   [00:02:20.000] 		Projects: /tsconfig.json
-Info 67   [00:02:21.000] 	FileName: /src/c.ts ProjectRootPath: undefined
-Info 67   [00:02:22.000] 		Projects: /tsconfig.json
-Info 67   [00:02:23.000] After ensureProjectForOpenFiles:
-Info 68   [00:02:24.000] Project '/tsconfig.json' (Configured)
-Info 68   [00:02:25.000] 	Files (5)
+Info 69   [00:02:12.000] -----------------------------------------------
+Info 70   [00:02:13.000] Running: *ensureProjectForOpenFiles*
+Info 71   [00:02:14.000] Before ensureProjectForOpenFiles:
+Info 72   [00:02:15.000] Project '/tsconfig.json' (Configured)
+Info 72   [00:02:16.000] 	Files (5)
 
-Info 68   [00:02:26.000] -----------------------------------------------
-Info 68   [00:02:27.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 68   [00:02:28.000] 	Files (1)
+Info 72   [00:02:17.000] -----------------------------------------------
+Info 72   [00:02:18.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 72   [00:02:19.000] 	Files (1)
 
-Info 68   [00:02:29.000] -----------------------------------------------
-Info 68   [00:02:30.000] Open files: 
-Info 68   [00:02:31.000] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info 68   [00:02:32.000] 		Projects: /tsconfig.json
-Info 68   [00:02:33.000] 	FileName: /src/b.ts ProjectRootPath: undefined
-Info 68   [00:02:34.000] 		Projects: /tsconfig.json
-Info 68   [00:02:35.000] 	FileName: /src/c.ts ProjectRootPath: undefined
-Info 68   [00:02:36.000] 		Projects: /tsconfig.json
+Info 72   [00:02:20.000] -----------------------------------------------
+Info 72   [00:02:21.000] Open files: 
+Info 72   [00:02:22.000] 	FileName: /src/a.ts ProjectRootPath: undefined
+Info 72   [00:02:23.000] 		Projects: /tsconfig.json
+Info 72   [00:02:24.000] 	FileName: /src/b.ts ProjectRootPath: undefined
+Info 72   [00:02:25.000] 		Projects: /tsconfig.json
+Info 72   [00:02:26.000] 	FileName: /src/c.ts ProjectRootPath: undefined
+Info 72   [00:02:27.000] 		Projects: /tsconfig.json
+Info 72   [00:02:28.000] After ensureProjectForOpenFiles:
+Info 73   [00:02:29.000] Project '/tsconfig.json' (Configured)
+Info 73   [00:02:30.000] 	Files (5)
+
+Info 73   [00:02:31.000] -----------------------------------------------
+Info 73   [00:02:32.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 73   [00:02:33.000] 	Files (1)
+
+Info 73   [00:02:34.000] -----------------------------------------------
+Info 73   [00:02:35.000] Open files: 
+Info 73   [00:02:36.000] 	FileName: /src/a.ts ProjectRootPath: undefined
+Info 73   [00:02:37.000] 		Projects: /tsconfig.json
+Info 73   [00:02:38.000] 	FileName: /src/b.ts ProjectRootPath: undefined
+Info 73   [00:02:39.000] 		Projects: /tsconfig.json
+Info 73   [00:02:40.000] 	FileName: /src/c.ts ProjectRootPath: undefined
+Info 73   [00:02:41.000] 		Projects: /tsconfig.json
 After running timeout callbacks
 
-Info 68   [00:02:37.000] moduleSpecifierCache count: 0
+Info 73   [00:02:42.000] moduleSpecifierCache count: 0

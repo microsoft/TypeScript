@@ -37,7 +37,7 @@ Info 9    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 10   [00:00:25.000] Finishing updateGraphWorker: Project: /jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 11   [00:00:26.000] Project '/jsconfig.json' (Configured)
 Info 12   [00:00:27.000] 	Files (1)
-	/app.js
+	/app.js SVC-1-0 ""
 
 
 	app.js
@@ -147,14 +147,15 @@ TI:: [00:01:27.000] Sending response:
 TI:: [00:01:28.000] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]'.
 Info 34   [00:01:29.000] Starting updateGraphWorker: Project: /jsconfig.json
 Info 35   [00:01:30.000] Finishing updateGraphWorker: Project: /jsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 36   [00:01:31.000] Project '/jsconfig.json' (Configured)
-Info 36   [00:01:32.000] 	Files (1)
+Info 36   [00:01:31.000] Same program as before
+Info 37   [00:01:32.000] Project '/jsconfig.json' (Configured)
+Info 37   [00:01:33.000] 	Files (1)
 
-Info 36   [00:01:33.000] -----------------------------------------------
-Info 36   [00:01:34.000] Open files: 
-Info 36   [00:01:35.000] 	FileName: /app.js ProjectRootPath: undefined
-Info 36   [00:01:36.000] 		Projects: /jsconfig.json
-TI:: [00:01:37.000] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: true
+Info 37   [00:01:34.000] -----------------------------------------------
+Info 37   [00:01:35.000] Open files: 
+Info 37   [00:01:36.000] 	FileName: /app.js ProjectRootPath: undefined
+Info 37   [00:01:37.000] 		Projects: /jsconfig.json
+TI:: [00:01:38.000] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: true
 TI:: Before installWorker
 
 PolledWatches::
@@ -175,40 +176,40 @@ FsWatchesRecursive::
 /bower_components: *new*
   {}
 
-Info 36   [00:01:42.000] DirectoryWatcher:: Triggered with tmp/node_modules/@types :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 37   [00:01:43.000] Scheduled: /jsconfig.json, Cancelled earlier one
-Info 38   [00:01:44.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 39   [00:01:45.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 40   [00:01:47.000] DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 41   [00:01:48.000] Scheduled: /jsconfig.json, Cancelled earlier one
-Info 42   [00:01:49.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 43   [00:01:50.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 44   [00:01:52.000] DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery/index.d.ts :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info 45   [00:01:53.000] Scheduled: /jsconfig.json, Cancelled earlier one
-Info 46   [00:01:54.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 47   [00:01:55.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery/index.d.ts :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info 37   [00:01:43.000] DirectoryWatcher:: Triggered with tmp/node_modules/@types :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info 38   [00:01:44.000] Scheduled: /jsconfig.json, Cancelled earlier one
+Info 39   [00:01:45.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info 40   [00:01:46.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info 41   [00:01:48.000] DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info 42   [00:01:49.000] Scheduled: /jsconfig.json, Cancelled earlier one
+Info 43   [00:01:50.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info 44   [00:01:51.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info 45   [00:01:53.000] DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery/index.d.ts :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
+Info 46   [00:01:54.000] Scheduled: /jsconfig.json, Cancelled earlier one
+Info 47   [00:01:55.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info 48   [00:01:56.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery/index.d.ts :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
 TI:: After installWorker
 //// [/tmp/node_modules/@types/jquery/index.d.ts]
 
 
 
-TI:: [00:01:56.000] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
-TI:: [00:01:57.000] Installed typing files ["/tmp/node_modules/@types/jquery/index.d.ts"]
-TI:: [00:01:58.000] Sending response:
+TI:: [00:01:57.000] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
+TI:: [00:01:58.000] Installed typing files ["/tmp/node_modules/@types/jquery/index.d.ts"]
+TI:: [00:01:59.000] Sending response:
     {"projectName":"/jsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typings":["/tmp/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
-Info 48   [00:01:59.000] Scheduled: /jsconfig.json, Cancelled earlier one
-Info 49   [00:02:00.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-TI:: [00:02:01.000] Sending response:
+Info 49   [00:02:00.000] Scheduled: /jsconfig.json, Cancelled earlier one
+Info 50   [00:02:01.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+TI:: [00:02:02.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/jsconfig.json","packagesToInstall":["@types/jquery@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
 Before checking timeout queue length (2) and running
 
-Info 50   [00:02:02.000] Running: /jsconfig.json
-Info 51   [00:02:03.000] Starting updateGraphWorker: Project: /jsconfig.json
-Info 52   [00:02:04.000] Finishing updateGraphWorker: Project: /jsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 53   [00:02:05.000] Project '/jsconfig.json' (Configured)
-Info 54   [00:02:06.000] 	Files (2)
-	/app.js
-	/tmp/node_modules/@types/jquery/index.d.ts
+Info 51   [00:02:03.000] Running: /jsconfig.json
+Info 52   [00:02:04.000] Starting updateGraphWorker: Project: /jsconfig.json
+Info 53   [00:02:05.000] Finishing updateGraphWorker: Project: /jsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 54   [00:02:06.000] Project '/jsconfig.json' (Configured)
+Info 55   [00:02:07.000] 	Files (2)
+	/app.js SVC-1-0 ""
+	/tmp/node_modules/@types/jquery/index.d.ts Text-1 ""
 
 
 	app.js
@@ -216,35 +217,35 @@ Info 54   [00:02:06.000] 	Files (2)
 	tmp/node_modules/@types/jquery/index.d.ts
 	  Matched by default include pattern '**/*'
 
-Info 55   [00:02:07.000] -----------------------------------------------
-TI:: [00:02:08.000] Got install request {"projectName":"/jsconfig.json","fileNames":["/app.js","/tmp/node_modules/@types/jquery/index.d.ts"],"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/tmp","kind":"discover"}
-TI:: [00:02:09.000] Request specifies cache path '/tmp', loading cached information...
-TI:: [00:02:10.000] Processing cache location '/tmp'
-TI:: [00:02:11.000] Cache location was already processed...
-TI:: [00:02:12.000] Explicitly included types: []
-TI:: [00:02:13.000] Searching for typing names in /bower_components; all files: ["/bower_components/jquery/bower.json"]
-TI:: [00:02:14.000]     Found package names: ["jquery"]
-TI:: [00:02:15.000] Inferred typings from unresolved imports: []
-TI:: [00:02:16.000] Result: {"cachedTypingPaths":["/tmp/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [00:02:17.000] Finished typings discovery: {"cachedTypingPaths":["/tmp/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [00:02:18.000] Sending response:
+Info 56   [00:02:08.000] -----------------------------------------------
+TI:: [00:02:09.000] Got install request {"projectName":"/jsconfig.json","fileNames":["/app.js","/tmp/node_modules/@types/jquery/index.d.ts"],"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/tmp","kind":"discover"}
+TI:: [00:02:10.000] Request specifies cache path '/tmp', loading cached information...
+TI:: [00:02:11.000] Processing cache location '/tmp'
+TI:: [00:02:12.000] Cache location was already processed...
+TI:: [00:02:13.000] Explicitly included types: []
+TI:: [00:02:14.000] Searching for typing names in /bower_components; all files: ["/bower_components/jquery/bower.json"]
+TI:: [00:02:15.000]     Found package names: ["jquery"]
+TI:: [00:02:16.000] Inferred typings from unresolved imports: []
+TI:: [00:02:17.000] Result: {"cachedTypingPaths":["/tmp/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [00:02:18.000] Finished typings discovery: {"cachedTypingPaths":["/tmp/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [00:02:19.000] Sending response:
     {"projectName":"/jsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typings":["/tmp/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
-TI:: [00:02:19.000] No new typings were requested as a result of typings discovery
-Info 56   [00:02:20.000] Running: *ensureProjectForOpenFiles*
-Info 57   [00:02:21.000] Before ensureProjectForOpenFiles:
-Info 58   [00:02:22.000] Project '/jsconfig.json' (Configured)
-Info 58   [00:02:23.000] 	Files (2)
+TI:: [00:02:20.000] No new typings were requested as a result of typings discovery
+Info 57   [00:02:21.000] Running: *ensureProjectForOpenFiles*
+Info 58   [00:02:22.000] Before ensureProjectForOpenFiles:
+Info 59   [00:02:23.000] Project '/jsconfig.json' (Configured)
+Info 59   [00:02:24.000] 	Files (2)
 
-Info 58   [00:02:24.000] -----------------------------------------------
-Info 58   [00:02:25.000] Open files: 
-Info 58   [00:02:26.000] 	FileName: /app.js ProjectRootPath: undefined
-Info 58   [00:02:27.000] 		Projects: /jsconfig.json
-Info 58   [00:02:28.000] After ensureProjectForOpenFiles:
-Info 59   [00:02:29.000] Project '/jsconfig.json' (Configured)
-Info 59   [00:02:30.000] 	Files (2)
+Info 59   [00:02:25.000] -----------------------------------------------
+Info 59   [00:02:26.000] Open files: 
+Info 59   [00:02:27.000] 	FileName: /app.js ProjectRootPath: undefined
+Info 59   [00:02:28.000] 		Projects: /jsconfig.json
+Info 59   [00:02:29.000] After ensureProjectForOpenFiles:
+Info 60   [00:02:30.000] Project '/jsconfig.json' (Configured)
+Info 60   [00:02:31.000] 	Files (2)
 
-Info 59   [00:02:31.000] -----------------------------------------------
-Info 59   [00:02:32.000] Open files: 
-Info 59   [00:02:33.000] 	FileName: /app.js ProjectRootPath: undefined
-Info 59   [00:02:34.000] 		Projects: /jsconfig.json
+Info 60   [00:02:32.000] -----------------------------------------------
+Info 60   [00:02:33.000] Open files: 
+Info 60   [00:02:34.000] 	FileName: /app.js ProjectRootPath: undefined
+Info 60   [00:02:35.000] 		Projects: /jsconfig.json
 After checking timeout queue length (2) and running

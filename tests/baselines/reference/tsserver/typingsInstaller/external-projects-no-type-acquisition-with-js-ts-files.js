@@ -16,8 +16,8 @@ Info 6    [00:00:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 7    [00:00:18.000] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 8    [00:00:19.000] Project '/a/app/test.csproj' (External)
 Info 9    [00:00:20.000] 	Files (2)
-	/a/b/jquery.js
-	/a/b/file2.ts
+	/a/b/jquery.js Text-1 ""
+	/a/b/file2.ts Text-1 ""
 
 
 	../b/jquery.js

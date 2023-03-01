@@ -25,7 +25,7 @@ Info 5    [00:00:08.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 6    [00:00:09.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 7    [00:00:10.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 8    [00:00:11.000] 	Files (1)
-	^/untitled/ts-nul-authority/Untitled-1
+	^/untitled/ts-nul-authority/Untitled-1 SVC-1-0 "function fn(Foo: number) {\r\n     type Foo = typeof Foo;\r\n    return 0 as any as {x: Foo};\r\n}"
 
 
 	^/untitled/ts-nul-authority/Untitled-1

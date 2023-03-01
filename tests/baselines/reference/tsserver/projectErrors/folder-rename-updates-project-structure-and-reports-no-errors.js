@@ -45,8 +45,8 @@ Info 14   [00:00:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 15   [00:00:36.000] Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:37.000] Project '/a/b/projects/myproject/tsconfig.json' (Configured)
 Info 17   [00:00:38.000] 	Files (2)
-	/a/b/projects/myproject/bar/app.ts
-	/a/b/projects/myproject/foo/foo.ts
+	/a/b/projects/myproject/bar/app.ts SVC-1-0 "class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }"
+	/a/b/projects/myproject/foo/foo.ts Text-1 "declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }"
 
 
 	bar/app.ts
@@ -181,8 +181,8 @@ Info 52   [00:01:22.000] Starting updateGraphWorker: Project: /a/b/projects/mypr
 Info 53   [00:01:23.000] Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 54   [00:01:24.000] Project '/a/b/projects/myproject/tsconfig.json' (Configured)
 Info 55   [00:01:25.000] 	Files (2)
-	/a/b/projects/myproject/bar/app.ts
-	/a/b/projects/myproject/foo2/foo.ts
+	/a/b/projects/myproject/bar/app.ts SVC-1-0 "class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }"
+	/a/b/projects/myproject/foo2/foo.ts Text-1 "declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }"
 
 
 	bar/app.ts

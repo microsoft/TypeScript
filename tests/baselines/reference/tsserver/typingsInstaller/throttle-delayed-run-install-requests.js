@@ -41,7 +41,7 @@ Info 6    [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 7    [00:00:22.000] Finishing updateGraphWorker: Project: /a/app/test1.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 8    [00:00:23.000] Project '/a/app/test1.csproj' (External)
 Info 9    [00:00:24.000] 	Files (1)
-	/a/b/file3.d.ts
+	/a/b/file3.d.ts Text-1 ""
 
 
 	../b/file3.d.ts
@@ -180,7 +180,7 @@ Info 14   [00:01:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 15   [00:01:15.000] Finishing updateGraphWorker: Project: /a/app/test2.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:01:16.000] Project '/a/app/test2.csproj' (External)
 Info 17   [00:01:17.000] 	Files (1)
-	/a/b/file3.d.ts
+	/a/b/file3.d.ts Text-1 ""
 
 
 	../b/file3.d.ts
@@ -273,11 +273,11 @@ Info 22   [00:02:16.000] Starting updateGraphWorker: Project: /a/app/test1.cspro
 Info 23   [00:02:17.000] Finishing updateGraphWorker: Project: /a/app/test1.csproj Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 24   [00:02:18.000] Project '/a/app/test1.csproj' (External)
 Info 25   [00:02:19.000] 	Files (5)
-	/a/b/file3.d.ts
-	/a/data/node_modules/@types/commander/index.d.ts
-	/a/data/node_modules/@types/cordova/index.d.ts
-	/a/data/node_modules/@types/jquery/index.d.ts
-	/a/data/node_modules/@types/lodash/index.d.ts
+	/a/b/file3.d.ts Text-1 ""
+	/a/data/node_modules/@types/commander/index.d.ts Text-1 "declare const commander: { x: number }"
+	/a/data/node_modules/@types/cordova/index.d.ts Text-1 "declare const cordova: { x: number }"
+	/a/data/node_modules/@types/jquery/index.d.ts Text-1 "declare const jquery: { x: number }"
+	/a/data/node_modules/@types/lodash/index.d.ts Text-1 "declare const lodash: { x: number }"
 
 
 	../b/file3.d.ts
@@ -309,9 +309,9 @@ Info 28   [00:02:33.000] Starting updateGraphWorker: Project: /a/app/test2.cspro
 Info 29   [00:02:34.000] Finishing updateGraphWorker: Project: /a/app/test2.csproj Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 30   [00:02:35.000] Project '/a/app/test2.csproj' (External)
 Info 31   [00:02:36.000] 	Files (3)
-	/a/b/file3.d.ts
-	/a/data/node_modules/@types/grunt/index.d.ts
-	/a/data/node_modules/@types/gulp/index.d.ts
+	/a/b/file3.d.ts Text-1 ""
+	/a/data/node_modules/@types/grunt/index.d.ts Text-1 "declare const grunt: { x: number }"
+	/a/data/node_modules/@types/gulp/index.d.ts Text-1 "declare const gulp: { x: number }"
 
 
 	../b/file3.d.ts

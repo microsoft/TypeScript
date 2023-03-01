@@ -24,8 +24,8 @@ Info 10   [00:00:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 11   [00:00:26.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 12   [00:00:27.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 13   [00:00:28.000] 	Files (2)
-	/a/b/node_modules/fooo/index.d.ts
-	/a/b/app.js
+	/a/b/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
+	/a/b/app.js SVC-1-0 "\n                    import * as a from \"foo/a/a\";\n                    import * as b from \"foo/a/b\";\n                    import * as c from \"foo/a/c\";\n            import * as x from \"fooo\";"
 
 
 	node_modules/fooo/index.d.ts
@@ -150,12 +150,12 @@ Info 18   [00:01:36.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 19   [00:01:37.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 20   [00:01:38.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 21   [00:01:39.000] 	Files (6)
-	/tmp/node_modules/foo/a/a.d.ts
-	/tmp/node_modules/foo/a/b.d.ts
-	/tmp/node_modules/foo/a/c.d.ts
-	/a/b/node_modules/fooo/index.d.ts
-	/a/b/app.js
-	/tmp/node_modules/foo/index.d.ts
+	/tmp/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
+	/tmp/node_modules/foo/a/b.d.ts Text-1 "export function b (): void;"
+	/tmp/node_modules/foo/a/c.d.ts Text-1 "export function c (): void;"
+	/a/b/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
+	/a/b/app.js SVC-1-0 "\n                    import * as a from \"foo/a/a\";\n                    import * as b from \"foo/a/b\";\n                    import * as c from \"foo/a/c\";\n            import * as x from \"fooo\";"
+	/tmp/node_modules/foo/index.d.ts Text-1 "export function aa(): void;"
 
 
 	../../tmp/node_modules/foo/a/a.d.ts
@@ -193,11 +193,11 @@ Info 25   [00:01:55.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 26   [00:01:56.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 27   [00:01:57.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 28   [00:01:58.000] 	Files (5)
-	/tmp/node_modules/foo/a/a.d.ts
-	/tmp/node_modules/foo/a/b.d.ts
-	/tmp/node_modules/foo/a/c.d.ts
-	/a/b/node_modules/fooo/index.d.ts
-	/a/b/app.js
+	/tmp/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
+	/tmp/node_modules/foo/a/b.d.ts Text-1 "export function b (): void;"
+	/tmp/node_modules/foo/a/c.d.ts Text-1 "export function c (): void;"
+	/a/b/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
+	/a/b/app.js SVC-1-0 "\n                    import * as a from \"foo/a/a\";\n                    import * as b from \"foo/a/b\";\n                    import * as c from \"foo/a/c\";\n            import * as x from \"fooo\";"
 
 
 	../../tmp/node_modules/foo/a/a.d.ts
@@ -230,39 +230,47 @@ Before running timeout callbacks
 Info 30   [00:02:12.000] Running: /dev/null/inferredProject1*
 Info 31   [00:02:13.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 32   [00:02:14.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 33   [00:02:15.000] Different program with same set of files
-TI:: [00:02:16.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["bar"],"projectRootPath":"/a/b","cachePath":"/tmp","kind":"discover"}
-TI:: [00:02:17.000] Request specifies cache path '/tmp', loading cached information...
-TI:: [00:02:18.000] Processing cache location '/tmp'
-TI:: [00:02:19.000] Cache location was already processed...
-TI:: [00:02:20.000] Explicitly included types: []
-TI:: [00:02:21.000] Searching for typing names in /a/b/node_modules; all files: []
-TI:: [00:02:22.000]     Found package names: []
-TI:: [00:02:23.000] Inferred typings from unresolved imports: ["bar"]
-TI:: [00:02:24.000] Result: {"cachedTypingPaths":[],"newTypingNames":["bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
-TI:: [00:02:25.000] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
-TI:: [00:02:26.000] Installing typings ["bar"]
-TI:: [00:02:27.000] 'bar':: Entry for package 'bar' does not exist in local types registry - skipping...
-TI:: [00:02:28.000] All typings are known to be missing or invalid - no need to install more typings
-TI:: [00:02:29.000] Sending response:
+Info 33   [00:02:15.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 34   [00:02:16.000] 	Files (5)
+	/tmp/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
+	/tmp/node_modules/foo/a/b.d.ts Text-1 "export function b (): void;"
+	/tmp/node_modules/foo/a/c.d.ts Text-1 "export function c (): void;"
+	/a/b/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
+	/a/b/app.js SVC-1-1 "import * as bar from \"bar\";\n                    import * as a from \"foo/a/a\";\n                    import * as b from \"foo/a/b\";\n                    import * as c from \"foo/a/c\";\n            import * as x from \"fooo\";"
+
+Info 35   [00:02:17.000] -----------------------------------------------
+TI:: [00:02:18.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["bar"],"projectRootPath":"/a/b","cachePath":"/tmp","kind":"discover"}
+TI:: [00:02:19.000] Request specifies cache path '/tmp', loading cached information...
+TI:: [00:02:20.000] Processing cache location '/tmp'
+TI:: [00:02:21.000] Cache location was already processed...
+TI:: [00:02:22.000] Explicitly included types: []
+TI:: [00:02:23.000] Searching for typing names in /a/b/node_modules; all files: []
+TI:: [00:02:24.000]     Found package names: []
+TI:: [00:02:25.000] Inferred typings from unresolved imports: ["bar"]
+TI:: [00:02:26.000] Result: {"cachedTypingPaths":[],"newTypingNames":["bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [00:02:27.000] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [00:02:28.000] Installing typings ["bar"]
+TI:: [00:02:29.000] 'bar':: Entry for package 'bar' does not exist in local types registry - skipping...
+TI:: [00:02:30.000] All typings are known to be missing or invalid - no need to install more typings
+TI:: [00:02:31.000] Sending response:
     {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":["bar"],"kind":"action::set"}
-Info 34   [00:02:30.000] Running: *ensureProjectForOpenFiles*
-Info 35   [00:02:31.000] Before ensureProjectForOpenFiles:
-Info 36   [00:02:32.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 36   [00:02:33.000] 	Files (5)
+Info 36   [00:02:32.000] Running: *ensureProjectForOpenFiles*
+Info 37   [00:02:33.000] Before ensureProjectForOpenFiles:
+Info 38   [00:02:34.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 38   [00:02:35.000] 	Files (5)
 
-Info 36   [00:02:34.000] -----------------------------------------------
-Info 36   [00:02:35.000] Open files: 
-Info 36   [00:02:36.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
-Info 36   [00:02:37.000] 		Projects: /dev/null/inferredProject1*
-Info 36   [00:02:38.000] After ensureProjectForOpenFiles:
-Info 37   [00:02:39.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 37   [00:02:40.000] 	Files (5)
+Info 38   [00:02:36.000] -----------------------------------------------
+Info 38   [00:02:37.000] Open files: 
+Info 38   [00:02:38.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
+Info 38   [00:02:39.000] 		Projects: /dev/null/inferredProject1*
+Info 38   [00:02:40.000] After ensureProjectForOpenFiles:
+Info 39   [00:02:41.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 39   [00:02:42.000] 	Files (5)
 
-Info 37   [00:02:41.000] -----------------------------------------------
-Info 37   [00:02:42.000] Open files: 
-Info 37   [00:02:43.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
-Info 37   [00:02:44.000] 		Projects: /dev/null/inferredProject1*
+Info 39   [00:02:43.000] -----------------------------------------------
+Info 39   [00:02:44.000] Open files: 
+Info 39   [00:02:45.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
+Info 39   [00:02:46.000] 		Projects: /dev/null/inferredProject1*
 After running timeout callbacks
 
 Checking timeout queue length: 0

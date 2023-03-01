@@ -49,8 +49,8 @@ Info 9    [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 10   [00:00:29.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 11   [00:00:30.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 12   [00:00:31.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/file.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file.ts SVC-1-0 "const x = 10;\nfunction foo() {\n    // @ts-ignore\n    let y: string = x;\n    return y;\n}\nfunction bar() {\n    // @ts-ignore\n    let z : string = x;\n    return z;\n}\nfoo();\nbar();"
 
 
 	../../../../a/lib/lib.d.ts
@@ -183,28 +183,33 @@ Before checking timeout queue length (1) and running
 
 Info 25   [00:00:50.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 26   [00:00:51.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 27   [00:00:52.000] Different program with same set of files
-Info 28   [00:00:53.000] event:
+Info 27   [00:00:52.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 28   [00:00:53.000] 	Files (2)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file.ts SVC-1-1 "const x = 10;\nfunction foo() {\n                 \n    let y: string = x;\n    return y;\n}\nfunction bar() {\n    // @ts-ignore\n    let z : string = x;\n    return z;\n}\nfoo();\nbar();"
+
+Info 29   [00:00:54.000] -----------------------------------------------
+Info 30   [00:00:55.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 29   [00:00:54.000] event:
+Info 31   [00:00:56.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[{"start":{"line":4,"offset":9},"end":{"line":4,"offset":10},"text":"Type 'number' is not assignable to type 'string'.","code":2322,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 30   [00:00:55.000] event:
+Info 32   [00:00:57.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
-Info 31   [00:00:56.000] event:
+Info 33   [00:00:58.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)
 
 Before request
 
-Info 32   [00:00:57.000] request:
+Info 34   [00:00:59.000] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -230,7 +235,7 @@ Info 32   [00:00:57.000] request:
       "seq": 5,
       "type": "request"
     }
-Info 33   [00:00:58.000] response:
+Info 35   [00:01:00.000] response:
     {
       "response": true,
       "responseRequired": true
@@ -239,7 +244,7 @@ After request
 
 Before request
 
-Info 34   [00:00:59.000] request:
+Info 36   [00:01:01.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -251,7 +256,7 @@ Info 34   [00:00:59.000] request:
       "seq": 6,
       "type": "request"
     }
-Info 35   [00:01:00.000] response:
+Info 37   [00:01:02.000] response:
     {
       "responseRequired": false
     }
@@ -259,23 +264,28 @@ After request
 
 Before checking timeout queue length (1) and running
 
-Info 36   [00:01:01.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 37   [00:01:02.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 38   [00:01:03.000] Different program with same set of files
-Info 39   [00:01:04.000] event:
+Info 38   [00:01:03.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 39   [00:01:04.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 40   [00:01:05.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 41   [00:01:06.000] 	Files (2)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file.ts SVC-1-2 "const x = 10;\nfunction foo() {\n    // @ts-ignore\n    let y: string = x;\n    return y;\n}\nfunction bar() {\n    // @ts-ignore\n    let z : string = x;\n    return z;\n}\nfoo();\nbar();"
+
+Info 42   [00:01:07.000] -----------------------------------------------
+Info 43   [00:01:08.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 40   [00:01:05.000] event:
+Info 44   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 41   [00:01:06.000] event:
+Info 45   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
-Info 42   [00:01:07.000] event:
+Info 46   [00:01:11.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
 Before running immediate callbacks and checking length (1)

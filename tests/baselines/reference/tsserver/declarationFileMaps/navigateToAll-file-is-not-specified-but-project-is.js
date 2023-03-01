@@ -77,7 +77,7 @@ Info 12   [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:50.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:51.000] Project '/a/tsconfig.json' (Configured)
 Info 15   [00:00:52.000] 	Files (1)
-	/a/a.ts
+	/a/a.ts SVC-1-0 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
 
 
 	a.ts
@@ -204,7 +204,7 @@ Info 34   [00:01:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/
 Info 35   [00:01:22.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:23.000] Project '/b/tsconfig.json' (Configured)
 Info 37   [00:01:24.000] 	Files (1)
-	/b/b.ts
+	/b/b.ts SVC-1-0 "export function fnB() {}"
 
 
 	b.ts
@@ -384,9 +384,9 @@ Info 72   [00:02:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 73   [00:02:10.000] Finishing updateGraphWorker: Project: /user/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 74   [00:02:11.000] Project '/user/tsconfig.json' (Configured)
 Info 75   [00:02:12.000] 	Files (3)
-	/a/a.ts
-	/b/b.ts
-	/user/user.ts
+	/a/a.ts Text-2 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
+	/b/b.ts SVC-1-0 "export function fnB() {}"
+	/user/user.ts SVC-1-0 "import * as a from \"../a/a\";\nimport * as b from \"../b/b\";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
 
 
 	../a/a.ts

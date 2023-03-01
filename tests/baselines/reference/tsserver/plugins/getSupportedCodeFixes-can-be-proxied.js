@@ -67,10 +67,10 @@ Info 15   [00:00:32.000] Starting updateGraphWorker: Project: /tsconfig.json
 Info 16   [00:00:33.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:00:34.000] Project '/tsconfig.json' (Configured)
 Info 18   [00:00:35.000] 	Files (4)
-	/a.ts
-	/b.ts
-	/c.ts
-	/a/lib/lib.d.ts
+	/a.ts SVC-1-0 "class c { prop = \"hello\"; foo() { const x = 0; } }"
+	/b.ts Text-1 "class c { prop = \"hello\"; foo() { const x = 0; } }"
+	/c.ts Text-1 "class c { prop = \"hello\"; foo() { const x = 0; } }"
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 
 
 	a.ts

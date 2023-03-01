@@ -112,10 +112,10 @@ Info 47   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /sr
 Info 48   [00:01:17.000] Finishing updateGraphWorker: Project: /src/projects/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 49   [00:01:18.000] Project '/src/projects/app/tsconfig.json' (Configured)
 Info 50   [00:01:19.000] 	Files (4)
-	/src/projects/node_modules/moduleX/index.d.ts
-	/src/projects/app/appA.ts
-	/src/projects/common/moduleB.ts
-	/src/projects/app/appB.ts
+	/src/projects/node_modules/moduleX/index.d.ts Text-1 "export const x = 10;"
+	/src/projects/app/appA.ts Text-1 "import { x } from \"moduleX\";\nexport const y = x;\n"
+	/src/projects/common/moduleB.ts Text-1 "import { x } from \"moduleX\";\nexport const b = x;\n"
+	/src/projects/app/appB.ts SVC-1-0 "import { x } from \"../common/moduleB\";\nexport const y = x;\n"
 
 
 	../node_modules/moduleX/index.d.ts

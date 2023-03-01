@@ -38,8 +38,8 @@ Info 10   [00:00:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info 11   [00:00:26.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 12   [00:00:27.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 13   [00:00:28.000] 	Files (2)
-	c:/a/lib/lib.d.ts
-	c:/myprojects/project/x.js
+	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/myprojects/project/x.js SVC-1-0 "const x = 10"
 
 
 	../../a/lib/lib.d.ts
@@ -168,8 +168,8 @@ Info 26   [00:00:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //v
 Info 27   [00:00:28.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 28   [00:00:29.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 29   [00:00:30.000] 	Files (2)
-	//vda1cs4850/a/lib/lib.d.ts
-	//vda1cs4850/myprojects/project/x.js
+	//vda1cs4850/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	//vda1cs4850/myprojects/project/x.js SVC-1-0 ""
 
 
 	../../a/lib/lib.d.ts
@@ -298,8 +298,8 @@ Info 42   [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //v
 Info 43   [00:00:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 44   [00:00:31.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 45   [00:00:32.000] 	Files (2)
-	//vda1cs4850/a/lib/lib.d.ts
-	//vda1cs4850/c$/myprojects/project/x.js
+	//vda1cs4850/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	//vda1cs4850/c$/myprojects/project/x.js SVC-1-0 ""
 
 
 	../../../a/lib/lib.d.ts
@@ -428,8 +428,8 @@ Info 58   [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info 59   [00:00:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 60   [00:00:31.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 61   [00:00:32.000] 	Files (2)
-	c:/a/lib/lib.d.ts
-	c:/users/username/myprojects/project/x.js
+	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/users/username/myprojects/project/x.js SVC-1-0 "const x = 10"
 
 
 	../../../../a/lib/lib.d.ts
@@ -558,8 +558,8 @@ Info 74   [00:00:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //v
 Info 75   [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 76   [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 77   [00:00:36.000] 	Files (2)
-	//vda1cs4850/a/lib/lib.d.ts
-	//vda1cs4850/c$/users/username/myprojects/project/x.js
+	//vda1cs4850/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	//vda1cs4850/c$/users/username/myprojects/project/x.js SVC-1-0 ""
 
 
 	../../../../../a/lib/lib.d.ts

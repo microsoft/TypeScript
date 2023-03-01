@@ -40,8 +40,8 @@ Info 11   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Us
 Info 12   [00:00:31.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:32.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 14   [00:00:33.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/User/userName/Projects/I/foo.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/User/userName/Projects/I/foo.ts SVC-1-0 "import { foo } from \"bar\""
 
 
 	../../../../a/lib/lib.d.ts

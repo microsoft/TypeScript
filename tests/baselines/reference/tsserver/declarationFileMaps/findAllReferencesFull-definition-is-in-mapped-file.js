@@ -53,7 +53,7 @@ Info 12   [00:00:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:34.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:35.000] Project '/a/tsconfig.json' (Configured)
 Info 15   [00:00:36.000] 	Files (1)
-	/a/a.ts
+	/a/a.ts SVC-1-0 "function f() {}"
 
 
 	a.ts
@@ -180,8 +180,8 @@ Info 32   [00:01:03.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/
 Info 33   [00:01:04.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 34   [00:01:05.000] Project '/b/tsconfig.json' (Configured)
 Info 35   [00:01:06.000] 	Files (2)
-	/a/a.ts
-	/b/b.ts
+	/a/a.ts SVC-1-0 "function f() {}"
+	/b/b.ts SVC-1-0 "f();"
 
 
 	../a/a.ts

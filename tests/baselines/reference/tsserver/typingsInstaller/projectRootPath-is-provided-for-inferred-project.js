@@ -30,7 +30,7 @@ Info 8    [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 9    [00:00:50.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 10   [00:00:51.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 11   [00:00:52.000] 	Files (1)
-	/user/username/projects/san2/x.js
+	/user/username/projects/san2/x.js SVC-1-0 "const aaaaaaav = 1;"
 
 
 	x.js

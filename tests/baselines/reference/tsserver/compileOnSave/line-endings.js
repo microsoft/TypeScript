@@ -23,7 +23,7 @@ Info 7    [00:00:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 8    [00:00:15.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 9    [00:00:16.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 10   [00:00:17.000] 	Files (1)
-	/a/app.ts
+	/a/app.ts SVC-1-0 "var x = 1;\nvar y = 2;"
 
 
 	app.ts
@@ -97,7 +97,7 @@ Info 22   [00:00:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 23   [00:00:15.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 24   [00:00:16.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 25   [00:00:17.000] 	Files (1)
-	/a/app.ts
+	/a/app.ts SVC-1-0 "var x = 1;\r\nvar y = 2;"
 
 
 	app.ts

@@ -118,11 +118,11 @@ Info 26   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 27   [00:01:06.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 28   [00:01:07.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 29   [00:01:08.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/a/index.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/refs/a.d.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -202,10 +202,10 @@ Info 43   [00:01:29.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info 44   [00:01:30.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 45   [00:01:31.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 46   [00:01:32.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/refs/a.d.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -325,11 +325,11 @@ Info 64   [00:02:04.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 65   [00:02:05.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 66   [00:02:06.000] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info 67   [00:02:07.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/a/index.ts
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/refs/a.d.ts
-	/user/username/projects/myproject/c/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a/index.ts Text-1 "export class A {}"
+	/user/username/projects/myproject/b/index.ts Text-1 "import {A} from '@ref/a';\nexport const b = new A();"
+	/user/username/projects/myproject/refs/a.d.ts Text-1 "export class X {}\nexport class A {}"
+	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 
 	../../../../../a/lib/lib.d.ts

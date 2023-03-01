@@ -65,10 +65,10 @@ Info 16   [00:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 17   [00:00:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/playground/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:00:53.000] Project '/user/username/projects/myproject/playground/tsconfig.json' (Configured)
 Info 19   [00:00:54.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/playground/tests.ts
-	/user/username/projects/myproject/playground/tsconfig-json/src/src.ts
-	/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/playground/tests.ts SVC-1-0 "export function foo() {}"
+	/user/username/projects/myproject/playground/tsconfig-json/src/src.ts Text-1 "export function foobar() { }"
+	/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts Text-1 "export function bar() { }"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -195,8 +195,8 @@ Info 40   [00:01:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 41   [00:01:26.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 42   [00:01:27.000] Project '/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json' (Configured)
 Info 43   [00:01:28.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/playground/tsconfig-json/src/src.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/playground/tsconfig-json/src/src.ts Text-1 "export function foobar() { }"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -317,8 +317,8 @@ Info 75   [00:02:12.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 76   [00:02:13.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 77   [00:02:14.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 78   [00:02:15.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts Text-1 "export function bar() { }"
 
 
 	../../../../../../../a/lib/lib.d.ts

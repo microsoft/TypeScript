@@ -57,9 +57,9 @@ Info 15   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info 16   [00:00:37.000] Finishing updateGraphWorker: Project: c:/myfolder/allproject/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:00:38.000] Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
 Info 18   [00:00:39.000] 	Files (3)
-	c:/a/lib/lib.d.ts
-	c:/myfolder/allproject/project/file1.ts
-	c:/myfolder/allproject/project/file2.ts
+	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/myfolder/allproject/project/file1.ts SVC-1-0 "let x = 10;"
+	c:/myfolder/allproject/project/file2.ts Text-1 "let y = 10;"
 
 
 	../../../a/lib/lib.d.ts

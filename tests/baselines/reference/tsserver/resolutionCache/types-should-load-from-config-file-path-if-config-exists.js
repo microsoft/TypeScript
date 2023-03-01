@@ -36,8 +36,8 @@ Info 13   [00:00:34.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 14   [00:00:35.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:36.000] Project '/a/b/tsconfig.json' (Configured)
 Info 16   [00:00:37.000] 	Files (2)
-	/a/b/app.ts
-	/a/b/node_modules/@types/node/index.d.ts
+	/a/b/app.ts SVC-1-0 "let x = 1"
+	/a/b/node_modules/@types/node/index.d.ts Text-1 "declare var process: any"
 
 
 	app.ts

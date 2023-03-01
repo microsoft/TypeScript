@@ -62,9 +62,9 @@ Info 17   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 18   [00:00:39.000] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 19   [00:00:40.000] Project '/a/username/project/tsconfig.json' (Configured)
 Info 20   [00:00:41.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/username/project/src/file1.ts
-	/a/username/project/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/username/project/src/file1.ts Text-1 ""
+	/a/username/project/src/index.ts SVC-1-0 "import {} from \"./\""
 
 
 	../../lib/lib.d.ts
@@ -156,10 +156,10 @@ Info 35   [00:01:04.000] Starting updateGraphWorker: Project: /a/username/projec
 Info 36   [00:01:05.000] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 37   [00:01:06.000] Project '/a/username/project/tsconfig.json' (Configured)
 Info 38   [00:01:07.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/a/username/project/src/file1.ts
-	/a/username/project/src/index.ts
-	/a/username/project/src/file2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/username/project/src/file1.ts Text-1 ""
+	/a/username/project/src/index.ts SVC-1-0 "import {} from \"./\""
+	/a/username/project/src/file2.ts Text-1 ""
 
 
 	../../lib/lib.d.ts

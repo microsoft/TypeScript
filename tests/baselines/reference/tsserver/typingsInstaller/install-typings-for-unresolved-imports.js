@@ -18,7 +18,7 @@ Info 8    [00:00:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 9    [00:00:18.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 10   [00:00:19.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 11   [00:00:20.000] 	Files (1)
-	/a/b/app.js
+	/a/b/app.js SVC-1-0 "\n                import * as fs from \"fs\";\n                import * as commander from \"commander\";\n                import * as component from \"@ember/component\";"
 
 
 	app.js
@@ -144,10 +144,10 @@ Info 16   [00:01:29.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 17   [00:01:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:01:31.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 19   [00:01:32.000] 	Files (4)
-	/a/cache/node_modules/@types/node/index.d.ts
-	/a/cache/node_modules/@types/commander/index.d.ts
-	/a/cache/node_modules/@types/ember__component/index.d.ts
-	/a/b/app.js
+	/a/cache/node_modules/@types/node/index.d.ts Text-1 "export let x: number"
+	/a/cache/node_modules/@types/commander/index.d.ts Text-1 "export let y: string"
+	/a/cache/node_modules/@types/ember__component/index.d.ts Text-1 "export let x: number"
+	/a/b/app.js SVC-1-0 "\n                import * as fs from \"fs\";\n                import * as commander from \"commander\";\n                import * as component from \"@ember/component\";"
 
 
 	../cache/node_modules/@types/node/index.d.ts

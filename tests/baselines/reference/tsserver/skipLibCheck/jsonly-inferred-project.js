@@ -34,8 +34,8 @@ Info 8    [00:00:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 9    [00:00:20.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 10   [00:00:21.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 11   [00:00:22.000] 	Files (2)
-	/a/b/file2.d.ts
-	/a/b/file1.js
+	/a/b/file2.d.ts Text-1 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
+	/a/b/file1.js SVC-1-0 "\n                /// <reference path=\"file2.d.ts\" />\n                var x = 1;"
 
 
 	file2.d.ts
@@ -200,7 +200,7 @@ Info 26   [00:01:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 27   [00:01:28.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 28   [00:01:29.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 29   [00:01:30.000] 	Files (1)
-	/a/b/file2.d.ts
+	/a/b/file2.d.ts Text-1 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
 
 
 	file2.d.ts
@@ -334,8 +334,8 @@ Info 42   [00:01:59.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 43   [00:02:00.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 44   [00:02:01.000] Project '/dev/null/inferredProject2*' (Inferred)
 Info 45   [00:02:02.000] 	Files (2)
-	/a/b/file2.d.ts
-	/a/b/file1.js
+	/a/b/file2.d.ts Text-1 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
+	/a/b/file1.js SVC-1-0 "\n                /// <reference path=\"file2.d.ts\" />\n                var x = 1;"
 
 
 	file2.d.ts

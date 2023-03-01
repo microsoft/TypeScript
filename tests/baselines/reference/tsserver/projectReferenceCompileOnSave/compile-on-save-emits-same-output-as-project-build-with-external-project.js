@@ -314,9 +314,9 @@ Info 16   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 17   [00:01:10.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/SiblingClass/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:01:11.000] Project '/user/username/projects/myproject/SiblingClass/tsconfig.json' (Configured)
 Info 19   [00:01:12.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/buttonClass/Source.ts
-	/user/username/projects/myproject/SiblingClass/Source.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/buttonClass/Source.ts Text-1 "module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"
+	/user/username/projects/myproject/SiblingClass/Source.ts SVC-1-0 "module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"
 
 
 	../../../../../a/lib/lib.d.ts

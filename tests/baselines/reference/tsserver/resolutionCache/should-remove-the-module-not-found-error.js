@@ -26,7 +26,7 @@ Info 11   [00:00:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 12   [00:00:21.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:22.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 14   [00:00:23.000] 	Files (1)
-	/a/b/file1.ts
+	/a/b/file1.ts SVC-1-0 "import * as T from './moduleFile'; T.bar();"
 
 
 	file1.ts
@@ -145,8 +145,8 @@ Info 33   [00:00:50.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/
 Info 34   [00:00:51.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 35   [00:00:52.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 36   [00:00:53.000] 	Files (2)
-	/a/b/moduleFile.ts
-	/a/b/file1.ts
+	/a/b/moduleFile.ts Text-1 "export function bar() { };"
+	/a/b/file1.ts SVC-1-1 "import * as T from './moduleFile'; T.bar();\n"
 
 
 	moduleFile.ts

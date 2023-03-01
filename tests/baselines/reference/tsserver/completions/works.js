@@ -40,8 +40,8 @@ Info 11   [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 12   [00:00:21.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:22.000] Project '/tsconfig.json' (Configured)
 Info 14   [00:00:23.000] 	Files (2)
-	/a.ts
-	/b.ts
+	/a.ts SVC-1-0 "export const foo = 0;"
+	/b.ts Text-1 "foo"
 
 
 	a.ts

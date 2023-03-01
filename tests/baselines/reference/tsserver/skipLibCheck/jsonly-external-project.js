@@ -38,8 +38,8 @@ Info 5    [00:00:16.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 6    [00:00:17.000] Finishing updateGraphWorker: Project: project1 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 7    [00:00:18.000] Project 'project1' (External)
 Info 8    [00:00:19.000] 	Files (2)
-	/a/b/file1.js
-	/a/b/file2.d.ts
+	/a/b/file1.js Text-1 "let x =1;"
+	/a/b/file2.d.ts Text-1 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
 
 
 	a/b/file1.js

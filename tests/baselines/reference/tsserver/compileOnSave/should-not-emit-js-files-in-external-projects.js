@@ -54,9 +54,9 @@ Info 7    [00:00:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 8    [00:00:25.000] Finishing updateGraphWorker: Project: /a/b/externalproject Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 9    [00:00:26.000] Project '/a/b/externalproject' (External)
 Info 10   [00:00:27.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/file1.ts
-	/a/b/file2.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/file1.ts Text-1 "consonle.log('file1');"
+	/a/b/file2.js Text-1 "console.log'file2');"
 
 
 	../lib/lib.d.ts

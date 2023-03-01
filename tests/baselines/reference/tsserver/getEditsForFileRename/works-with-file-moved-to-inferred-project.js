@@ -42,7 +42,7 @@ Info 13   [00:00:22.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 14   [00:00:23.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:24.000] Project '/tsconfig.json' (Configured)
 Info 16   [00:00:25.000] 	Files (1)
-	/a.ts
+	/a.ts SVC-1-0 "import {} from \"./b\";"
 
 
 	a.ts
@@ -94,7 +94,7 @@ Info 23   [00:00:38.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 24   [00:00:39.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 25   [00:00:40.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 26   [00:00:41.000] 	Files (1)
-	/c.ts
+	/c.ts SVC-1-0 "export {};"
 
 
 	c.ts

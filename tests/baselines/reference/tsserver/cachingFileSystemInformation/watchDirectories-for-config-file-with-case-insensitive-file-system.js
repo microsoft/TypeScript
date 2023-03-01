@@ -74,9 +74,9 @@ Info 14   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Us
 Info 15   [00:00:48.000] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:49.000] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info 17   [00:00:50.000] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts
-	/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts
-	/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts
+	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts Text-1 "export class configureStore { }"
+	/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts SVC-1-0 "export class SomeClass { };"
 
 
 	../../../../../a/lib/lib.es2016.full.d.ts
@@ -127,10 +127,10 @@ Info 25   [00:01:06.000] Starting updateGraphWorker: Project: /Users/someuser/wo
 Info 26   [00:01:07.000] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 27   [00:01:08.000] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info 28   [00:01:09.000] 	Files (4)
-	/a/lib/lib.es2016.full.d.ts
-	/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts
-	/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts
-	/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts
+	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts Text-1 "export class configureStore { }"
+	/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts SVC-1-0 "export class SomeClass { };"
+	/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts Text-1 "export class Cookie { }"
 
 
 	../../../../../a/lib/lib.es2016.full.d.ts

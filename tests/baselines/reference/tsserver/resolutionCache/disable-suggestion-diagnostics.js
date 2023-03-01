@@ -23,7 +23,7 @@ Info 7    [00:00:12.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 8    [00:00:13.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 9    [00:00:14.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 10   [00:00:15.000] 	Files (1)
-	/a.js
+	/a.js SVC-1-0 "require(\"b\")"
 
 
 	a.js

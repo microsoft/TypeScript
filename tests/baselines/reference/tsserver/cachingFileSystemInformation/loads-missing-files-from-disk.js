@@ -16,7 +16,7 @@ Info 9    [00:00:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /c/
 Info 10   [00:00:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 11   [00:00:18.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 12   [00:00:19.000] 	Files (1)
-	/c/foo.ts
+	/c/foo.ts SVC-1-0 "import {y} from \"bar\""
 
 
 	foo.ts
@@ -68,8 +68,8 @@ Info 30   [00:00:45.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /c/
 Info 31   [00:00:46.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 32   [00:00:47.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 33   [00:00:48.000] 	Files (2)
-	/c/bar.d.ts
-	/c/foo.ts
+	/c/bar.d.ts Text-1 "export var y = 1"
+	/c/foo.ts SVC-1-0 "import {y} from \"bar\""
 
 
 	bar.d.ts

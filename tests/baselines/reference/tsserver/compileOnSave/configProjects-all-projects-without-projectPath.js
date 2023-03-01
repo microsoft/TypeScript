@@ -48,8 +48,8 @@ Info 13   [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:33.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:34.000] Project '/a/b/tsconfig.json' (Configured)
 Info 16   [00:00:35.000] 	Files (2)
-	/a/b/file1.ts
-	/a/b/file2.ts
+	/a/b/file1.ts SVC-1-0 "export var t = 10;"
+	/a/b/file2.ts Text-1 "import {t} from \"./file1\"; var t2 = 11;"
 
 
 	file1.ts
@@ -167,8 +167,8 @@ Info 35   [00:01:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 36   [00:01:09.000] Finishing updateGraphWorker: Project: /a/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 37   [00:01:10.000] Project '/a/c/tsconfig.json' (Configured)
 Info 38   [00:01:11.000] 	Files (2)
-	/a/b/file1.ts
-	/a/c/file2.ts
+	/a/b/file1.ts SVC-1-0 "export var t = 10;"
+	/a/c/file2.ts SVC-1-0 "import {t} from \"../b/file1\"; var t3 = 11;"
 
 
 	../b/file1.ts

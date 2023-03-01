@@ -248,8 +248,8 @@ Info 14   [00:01:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 15   [00:01:18.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:01:19.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 17   [00:01:20.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/dependency/FnS.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/FnS.ts SVC-1-0 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -322,8 +322,8 @@ Info 34   [00:01:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 35   [00:01:44.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:45.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
 Info 37   [00:01:46.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/random/random.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/random/random.ts SVC-1-0 "let a = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -492,7 +492,8 @@ Info 48   [00:02:11.000] request:
     }
 Info 49   [00:02:12.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
 Info 50   [00:02:13.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 51   [00:02:14.000] response:
+Info 51   [00:02:14.000] Same program as before
+Info 52   [00:02:15.000] response:
     {
       "response": {
         "info": {
@@ -544,7 +545,7 @@ After request
 
 Before request
 
-Info 52   [00:02:15.000] request:
+Info 53   [00:02:16.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -555,7 +556,7 @@ Info 52   [00:02:15.000] request:
       "seq": 5,
       "type": "request"
     }
-Info 53   [00:02:16.000] response:
+Info 54   [00:02:17.000] response:
     {
       "response": {
         "info": {
@@ -607,7 +608,7 @@ After request
 
 Before request
 
-Info 54   [00:02:17.000] request:
+Info 55   [00:02:18.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -618,7 +619,7 @@ Info 54   [00:02:17.000] request:
       "seq": 6,
       "type": "request"
     }
-Info 55   [00:02:18.000] response:
+Info 56   [00:02:19.000] response:
     {
       "response": {
         "info": {
@@ -670,7 +671,7 @@ After request
 
 Before request
 
-Info 56   [00:02:19.000] request:
+Info 57   [00:02:20.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -681,7 +682,7 @@ Info 56   [00:02:19.000] request:
       "seq": 7,
       "type": "request"
     }
-Info 57   [00:02:20.000] response:
+Info 58   [00:02:21.000] response:
     {
       "response": {
         "info": {
@@ -733,7 +734,7 @@ After request
 
 Before request
 
-Info 58   [00:02:21.000] request:
+Info 59   [00:02:22.000] request:
     {
       "command": "rename",
       "arguments": {
@@ -744,7 +745,7 @@ Info 58   [00:02:21.000] request:
       "seq": 8,
       "type": "request"
     }
-Info 59   [00:02:22.000] response:
+Info 60   [00:02:23.000] response:
     {
       "response": {
         "info": {

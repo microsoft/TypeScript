@@ -45,8 +45,8 @@ Info 16   [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 17   [00:00:38.000] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:00:39.000] Project '/a/jsconfig.json' (Configured)
 Info 19   [00:00:40.000] 	Files (2)
-	/a/config.js
-	/a/app.js
+	/a/config.js Text-1 "export let x = 1"
+	/a/app.js SVC-1-0 "const c = require('./config');"
 
 
 	config.js

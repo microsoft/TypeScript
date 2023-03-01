@@ -41,8 +41,8 @@ Info 6    [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 7    [00:00:22.000] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 8    [00:00:23.000] Project '/a/app/test.csproj' (External)
 Info 9    [00:00:24.000] 	Files (2)
-	/a/b/file2.jsx
-	/a/b/file3.d.ts
+	/a/b/file2.jsx Text-1 ""
+	/a/b/file3.d.ts Text-1 ""
 
 
 	../b/file2.jsx
@@ -180,10 +180,10 @@ Info 13   [00:01:29.000] Starting updateGraphWorker: Project: /a/app/test.csproj
 Info 14   [00:01:30.000] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:01:31.000] Project '/a/app/test.csproj' (External)
 Info 16   [00:01:32.000] 	Files (4)
-	/a/b/file2.jsx
-	/a/b/file3.d.ts
-	/a/data/node_modules/@types/lodash/index.d.ts
-	/a/data/node_modules/@types/react/index.d.ts
+	/a/b/file2.jsx Text-1 ""
+	/a/b/file3.d.ts Text-1 ""
+	/a/data/node_modules/@types/lodash/index.d.ts Text-1 "declare const lodash: { x: number }"
+	/a/data/node_modules/@types/react/index.d.ts Text-1 "declare const react: { x: number }"
 
 
 	../b/file2.jsx

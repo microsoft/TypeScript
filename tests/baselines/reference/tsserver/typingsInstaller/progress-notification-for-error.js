@@ -16,7 +16,7 @@ Info 6    [00:00:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 7    [00:00:16.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 8    [00:00:17.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 9    [00:00:18.000] 	Files (1)
-	/a/app.js
+	/a/app.js SVC-1-0 ""
 
 
 	app.js

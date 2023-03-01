@@ -83,10 +83,10 @@ Info 13   [00:00:42.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/proj
 Info 14   [00:00:43.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/project.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:44.000] Project '/user/username/projects/myproject/project.csproj' (External)
 Info 16   [00:00:45.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/node_modules/bar/foo.d.ts
-	/user/username/projects/myproject/node_modules/bar/index.d.ts
-	/user/username/projects/myproject/src/main.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/node_modules/bar/foo.d.ts Text-1 "export function foo(): string;"
+	/user/username/projects/myproject/node_modules/bar/index.d.ts Text-1 "export { foo } from \"./foo\";"
+	/user/username/projects/myproject/src/main.ts Text-1 "import { foo } from \"bar\"; foo();"
 
 
 	../../../../a/lib/lib.d.ts

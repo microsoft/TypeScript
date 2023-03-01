@@ -99,8 +99,8 @@ Info 21   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:53.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:54.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
 Info 24   [00:00:55.000] 	Files (2)
-	/user/username/projects/myproject/b/lib/index.d.ts
-	/user/username/projects/myproject/a/index.ts
+	/user/username/projects/myproject/b/lib/index.d.ts Text-1 "export declare class B {\n    M(): void;\n}\n//# sourceMappingURL=index.d.ts.map"
+	/user/username/projects/myproject/a/index.ts SVC-1-0 "import { B } from \"../b/lib\";\n\nconst b: B = new B();"
 
 
 	../b/lib/index.d.ts
@@ -172,8 +172,8 @@ Info 41   [00:01:18.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 42   [00:01:19.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 43   [00:01:20.000] Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
 Info 44   [00:01:21.000] 	Files (2)
-	/user/username/projects/myproject/b/index.ts
-	/user/username/projects/myproject/b/helper.ts
+	/user/username/projects/myproject/b/index.ts Text-1 "export class B {\n    M() {}\n}"
+	/user/username/projects/myproject/b/helper.ts SVC-1-0 "import { B } from \".\";\n\nconst b: B = new B();"
 
 
 	index.ts

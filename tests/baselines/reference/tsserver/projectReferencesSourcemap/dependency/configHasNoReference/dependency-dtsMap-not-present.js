@@ -245,8 +245,8 @@ Info 14   [00:01:18.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 15   [00:01:19.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:01:20.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 17   [00:01:21.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/dependency/FnS.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/dependency/FnS.ts SVC-1-0 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -319,8 +319,8 @@ Info 34   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 35   [00:01:45.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:46.000] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
 Info 37   [00:01:47.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/random/random.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/random/random.ts SVC-1-0 "let a = 10;"
 
 
 	../../../../../a/lib/lib.d.ts

@@ -31,8 +31,8 @@ Info 8    [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 9    [00:00:22.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 10   [00:00:23.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 11   [00:00:24.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/app.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/app.js SVC-1-0 "// @ts-check\n\nconst net = require(\"net\");\nconst stream = require(\"stream\");"
 
 
 	../lib/lib.d.ts
@@ -154,9 +154,9 @@ Info 18   [00:01:24.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/
 Info 19   [00:01:25.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 20   [00:01:26.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 21   [00:01:27.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/tmp/node_modules/node/index.d.ts
-	/a/b/app.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/tmp/node_modules/node/index.d.ts Text-1 "\ndeclare module \"net\" {\n    export type n = number;\n}\ndeclare module \"stream\" {\n    export type s = string;\n}"
+	/a/b/app.js SVC-1-0 "// @ts-check\n\nconst net = require(\"net\");\nconst stream = require(\"stream\");"
 
 
 	../lib/lib.d.ts
@@ -193,9 +193,9 @@ Info 28   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 29   [00:01:45.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 30   [00:01:46.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 31   [00:01:47.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/tmp/node_modules/node/index.d.ts
-	/a/b/app.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/tmp/node_modules/node/index.d.ts Text-1 "\ndeclare module \"net\" {\n    export type n = number;\n}\ndeclare module \"stream\" {\n    export type s = string;\n}"
+	/a/b/app.js SVC-1-1 "// @ts-check\n\nconst net = require(\"net\");\nconst stream = require(\"s tream\");"
 
 
 	../lib/lib.d.ts
@@ -242,19 +242,25 @@ Checking timeout queue length: 0
 
 Info 36   [00:02:16.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 37   [00:02:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 38   [00:02:18.000] Different program with same set of files
-TI:: [00:02:19.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["bar","s tream"],"projectRootPath":"/a/b","cachePath":"/tmp","kind":"discover"}
-TI:: [00:02:20.000] Request specifies cache path '/tmp', loading cached information...
-TI:: [00:02:21.000] Processing cache location '/tmp'
-TI:: [00:02:22.000] Cache location was already processed...
-TI:: [00:02:23.000] Explicitly included types: []
-TI:: [00:02:24.000] Inferred typings from unresolved imports: ["bar","s tream"]
-TI:: [00:02:25.000] Result: {"cachedTypingPaths":[],"newTypingNames":["bar","s tream"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
-TI:: [00:02:26.000] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["bar","s tream"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
-TI:: [00:02:27.000] Installing typings ["bar","s tream"]
-TI:: [00:02:28.000] 'bar':: Entry for package 'bar' does not exist in local types registry - skipping...
-TI:: [00:02:29.000] 's tream':: 's tream' is in missingTypingsSet - skipping...
-TI:: [00:02:30.000] All typings are known to be missing or invalid - no need to install more typings
-TI:: [00:02:31.000] Sending response:
+Info 38   [00:02:18.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 39   [00:02:19.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/tmp/node_modules/node/index.d.ts Text-1 "\ndeclare module \"net\" {\n    export type n = number;\n}\ndeclare module \"stream\" {\n    export type s = string;\n}"
+	/a/b/app.js SVC-1-2 "// @ts-check\n\nconst bar = require(\"bar\");const net = require(\"net\");\nconst stream = require(\"s tream\");"
+
+Info 40   [00:02:20.000] -----------------------------------------------
+TI:: [00:02:21.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["bar","s tream"],"projectRootPath":"/a/b","cachePath":"/tmp","kind":"discover"}
+TI:: [00:02:22.000] Request specifies cache path '/tmp', loading cached information...
+TI:: [00:02:23.000] Processing cache location '/tmp'
+TI:: [00:02:24.000] Cache location was already processed...
+TI:: [00:02:25.000] Explicitly included types: []
+TI:: [00:02:26.000] Inferred typings from unresolved imports: ["bar","s tream"]
+TI:: [00:02:27.000] Result: {"cachedTypingPaths":[],"newTypingNames":["bar","s tream"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [00:02:28.000] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["bar","s tream"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [00:02:29.000] Installing typings ["bar","s tream"]
+TI:: [00:02:30.000] 'bar':: Entry for package 'bar' does not exist in local types registry - skipping...
+TI:: [00:02:31.000] 's tream':: 's tream' is in missingTypingsSet - skipping...
+TI:: [00:02:32.000] All typings are known to be missing or invalid - no need to install more typings
+TI:: [00:02:33.000] Sending response:
     {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":["bar","s tream"],"kind":"action::set"}
 Checking timeout queue length: 0

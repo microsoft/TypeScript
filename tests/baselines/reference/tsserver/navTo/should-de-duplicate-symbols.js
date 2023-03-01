@@ -56,7 +56,7 @@ Info 12   [00:00:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:28.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:29.000] Project '/a/tsconfig.json' (Configured)
 Info 15   [00:00:30.000] 	Files (1)
-	/a/index.ts
+	/a/index.ts SVC-1-0 "export const abcdef = 1;"
 
 
 	index.ts
@@ -131,8 +131,8 @@ Info 31   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/
 Info 32   [00:00:53.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 33   [00:00:54.000] Project '/b/tsconfig.json' (Configured)
 Info 34   [00:00:55.000] 	Files (2)
-	/a/index.ts
-	/b/index.ts
+	/a/index.ts SVC-1-0 "export const abcdef = 1;"
+	/b/index.ts SVC-1-0 "import a = require(\"../a\");\nexport const ghijkl = a.abcdef;"
 
 
 	../a/index.ts

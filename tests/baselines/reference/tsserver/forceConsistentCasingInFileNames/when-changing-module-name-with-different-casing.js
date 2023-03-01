@@ -59,9 +59,9 @@ Info 14   [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 15   [00:00:39.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:40.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 17   [00:00:41.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/Logger.ts
-	/user/username/projects/myproject/another.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/Logger.ts Text-1 "export class logger { }"
+	/user/username/projects/myproject/another.ts SVC-1-0 "import { logger } from \"./Logger\"; new logger();"
 
 
 	../../../../a/lib/lib.d.ts
@@ -207,21 +207,27 @@ Before checking timeout queue length (1) and running
 
 Info 33   [00:01:03.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 34   [00:01:04.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 35   [00:01:05.000] Different program with same set of files
-Info 36   [00:01:06.000] event:
+Info 35   [00:01:05.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 36   [00:01:06.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/Logger.ts Text-1 "export class logger { }"
+	/user/username/projects/myproject/another.ts SVC-1-1 "import { logger } from \"./logger\"; new logger();"
+
+Info 37   [00:01:07.000] -----------------------------------------------
+Info 38   [00:01:08.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/another.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
 Before running immediate callbacks and checking length (1)
 
-Info 37   [00:01:07.000] event:
+Info 39   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/another.ts","diagnostics":[{"start":{"line":1,"offset":24},"end":{"line":1,"offset":34},"text":"File name '/user/username/projects/myproject/logger.ts' differs from already included file name '/user/username/projects/myproject/Logger.ts' only in casing.\n  The file is in the program because:\n    Matched by default include pattern '**/*'\n    Imported via \"./logger\" from file '/user/username/projects/myproject/another.ts'","code":1149,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
 Before running immediate callbacks and checking length (1)
 
-Info 38   [00:01:08.000] event:
+Info 40   [00:01:10.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/another.ts","diagnostics":[]}}
-Info 39   [00:01:09.000] event:
+Info 41   [00:01:11.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)

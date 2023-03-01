@@ -59,9 +59,9 @@ Info 14   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 15   [00:00:42.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:43.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 17   [00:00:44.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/bar.ts
-	/user/username/projects/myproject/src/foo.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/bar.ts Text-1 "export function bar() { }"
+	/user/username/projects/myproject/src/foo.ts SVC-1-0 "export function foo() { }"
 
 
 	../../../../a/lib/lib.d.ts
@@ -139,8 +139,8 @@ Info 38   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 39   [00:01:12.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 40   [00:01:13.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 41   [00:01:14.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/sub/fooBar.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/sub/fooBar.ts SVC-1-0 "export function fooBar() { }"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -239,10 +239,10 @@ Info 55   [00:01:41.000] Starting updateGraphWorker: Project: /user/username/pro
 Info 56   [00:01:42.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 57   [00:01:43.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 58   [00:01:44.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/bar.ts
-	/user/username/projects/myproject/src/foo.ts
-	/user/username/projects/myproject/src/sub/fooBar.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/bar.ts Text-1 "export function bar() { }"
+	/user/username/projects/myproject/src/foo.ts SVC-1-0 "export function foo() { }"
+	/user/username/projects/myproject/src/sub/fooBar.ts SVC-1-0 "export function fooBar() { }"
 
 
 	../../../../a/lib/lib.d.ts

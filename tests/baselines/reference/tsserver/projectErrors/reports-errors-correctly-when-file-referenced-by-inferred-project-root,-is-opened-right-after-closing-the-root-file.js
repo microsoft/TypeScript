@@ -48,8 +48,8 @@ Info 13   [00:00:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 14   [00:00:47.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:48.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 16   [00:00:49.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/client/app.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/client/app.js SVC-1-0 ""
 
 
 	../../../../a/lib/lib.d.ts
@@ -186,10 +186,10 @@ Info 29   [00:01:47.000] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info 30   [00:01:48.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 31   [00:01:49.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 32   [00:01:50.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/client/app.js
-	/user/username/projects/myproject/src/server/utilities.js
-	/user/username/projects/myproject/test/backend/index.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/client/app.js SVC-1-0 ""
+	/user/username/projects/myproject/src/server/utilities.js Text-1 "function getHostName() { return \"hello\"; } export { getHostName };"
+	/user/username/projects/myproject/test/backend/index.js SVC-1-0 "import { getHostName } from '../../src/server/utilities';export default getHostName;"
 
 
 	../../../../a/lib/lib.d.ts
@@ -424,8 +424,8 @@ Info 57   [00:02:42.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info 58   [00:02:43.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 59   [00:02:44.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 60   [00:02:45.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/client/app.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/client/app.js SVC-1-0 ""
 
 
 	../../../../a/lib/lib.d.ts
@@ -454,9 +454,9 @@ Info 64   [00:03:02.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 65   [00:03:03.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 66   [00:03:04.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 67   [00:03:05.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/client/app.js
-	/user/username/projects/myproject/src/server/utilities.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/client/app.js SVC-1-0 ""
+	/user/username/projects/myproject/src/server/utilities.js Text-1 "function getHostName() { return \"hello\"; } export { getHostName };"
 
 
 	../../../../a/lib/lib.d.ts

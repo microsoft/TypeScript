@@ -85,9 +85,9 @@ Info 21   [00:00:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 22   [00:00:55.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 23   [00:00:56.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info 24   [00:00:57.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.ts
-	/user/username/projects/myproject/projects/project2/class2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -162,8 +162,8 @@ Info 40   [00:01:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 41   [00:01:20.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 42   [00:01:21.000] Project '/user/username/projects/myproject/projects/project1/tsconfig.json' (Configured)
 Info 43   [00:01:22.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -238,10 +238,10 @@ Info 56   [00:01:48.000] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info 57   [00:01:49.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 58   [00:01:50.000] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info 59   [00:01:51.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.ts
-	/user/username/projects/myproject/projects/project1/class3.ts
-	/user/username/projects/myproject/projects/project2/class2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
+	/user/username/projects/myproject/projects/project1/class3.ts Text-1 "class class3 {}"
+	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -259,9 +259,9 @@ Info 62   [00:01:54.000] Starting updateGraphWorker: Project: /user/username/pro
 Info 63   [00:01:55.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project1/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 64   [00:01:56.000] Project '/user/username/projects/myproject/projects/project1/tsconfig.json' (Configured)
 Info 65   [00:01:57.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/projects/project1/class1.ts
-	/user/username/projects/myproject/projects/project1/class3.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/projects/project1/class1.ts Text-1 "class class1 {}"
+	/user/username/projects/myproject/projects/project1/class3.ts Text-1 "class class3 {}"
 
 
 	../../../../../../a/lib/lib.d.ts

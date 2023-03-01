@@ -41,8 +41,8 @@ Info 13   [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:41.000] Finishing updateGraphWorker: Project: /a/b/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:42.000] Project '/a/b/jsconfig.json' (Configured)
 Info 16   [00:00:43.000] 	Files (2)
-	/a/typings/node_modules/@types/bar/index.d.ts
-	/a/b/app.js
+	/a/typings/node_modules/@types/bar/index.d.ts Text-1 "export let y: number"
+	/a/b/app.js SVC-1-0 "var x = require('bar')"
 
 
 	../typings/node_modules/@types/bar/index.d.ts

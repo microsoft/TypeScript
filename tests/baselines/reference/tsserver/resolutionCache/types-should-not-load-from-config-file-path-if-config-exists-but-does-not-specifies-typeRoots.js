@@ -33,7 +33,7 @@ Info 9    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 10   [00:00:31.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 11   [00:00:32.000] Project '/a/b/tsconfig.json' (Configured)
 Info 12   [00:00:33.000] 	Files (1)
-	/a/b/app.ts
+	/a/b/app.ts SVC-1-0 "let x = 1"
 
 
 	app.ts

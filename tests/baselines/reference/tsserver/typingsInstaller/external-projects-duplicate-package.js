@@ -19,8 +19,8 @@ Info 9    [00:00:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 10   [00:00:27.000] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 11   [00:00:28.000] Project '/a/app/test.csproj' (External)
 Info 12   [00:00:29.000] 	Files (2)
-	/a/b/app.js
-	/node_modules/@types/node/index.d.ts
+	/a/b/app.js Text-1 ""
+	/node_modules/@types/node/index.d.ts Text-1 "declare var node;"
 
 
 	../b/app.js

@@ -27,7 +27,7 @@ Info 12   [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 13   [00:00:22.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:23.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 15   [00:00:24.000] 	Files (1)
-	/a/b/app.js
+	/a/b/app.js SVC-1-0 "\n                import * as a from \"foo/a/a\";\n                import * as b from \"foo/a/b\";\n                import * as c from \"foo/a/c\";\n                import * as d from \"@bar/router/\";\n                import * as e from \"@bar/common/shared\";\n                import * as e from \"@bar/common/apps\";\n                import * as f from \"./lib\"\n                "
 
 
 	app.js
@@ -112,7 +112,8 @@ Info 17   [00:01:10.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info 17   [00:01:11.000] 		Projects: /dev/null/inferredProject1*
 Info 17   [00:01:12.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 18   [00:01:13.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-TI:: [00:01:14.000] #1 with arguments'["@types/foo@tsFakeMajor.Minor"]':: true
+Info 19   [00:01:14.000] Same program as before
+TI:: [00:01:15.000] #1 with arguments'["@types/foo@tsFakeMajor.Minor"]':: true
 TI:: Before installWorker
 
 PolledWatches::
@@ -133,9 +134,9 @@ FsWatches::
 
 TI:: After installWorker
 
-TI:: [00:01:15.000] Installed typings ["@types/foo@tsFakeMajor.Minor"]
-TI:: [00:01:16.000] Installed typing files []
-TI:: [00:01:17.000] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":["@bar/common","@bar/router","foo"],"kind":"action::set"}
+TI:: [00:01:16.000] Installed typings ["@types/foo@tsFakeMajor.Minor"]
+TI:: [00:01:17.000] Installed typing files []
 TI:: [00:01:18.000] Sending response:
+    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":["@bar/common","@bar/router","foo"],"kind":"action::set"}
+TI:: [00:01:19.000] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/foo@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}

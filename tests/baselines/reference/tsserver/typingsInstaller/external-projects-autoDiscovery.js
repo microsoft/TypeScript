@@ -12,7 +12,7 @@ Info 5    [00:00:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 6    [00:00:15.000] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 7    [00:00:16.000] Project '/a/app/test.csproj' (External)
 Info 8    [00:00:17.000] 	Files (1)
-	/a/b/app.ts
+	/a/b/app.ts Text-1 ""
 
 
 	../b/app.ts

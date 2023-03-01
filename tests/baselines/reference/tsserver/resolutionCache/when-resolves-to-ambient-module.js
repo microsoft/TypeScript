@@ -86,11 +86,11 @@ Info 24   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 25   [00:00:58.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 26   [00:00:59.000] Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)
 Info 27   [00:01:00.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/somefolder/module1.ts
-	/user/username/projects/myproject/src/somefolder/srcfile.ts
-	/user/username/projects/myproject/src/typings/electron.d.ts
-	/user/username/projects/myproject/src/typings/node.d.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/somefolder/module1.ts Text-1 "\nexport const x = 10;"
+	/user/username/projects/myproject/src/somefolder/srcfile.ts SVC-1-0 "\nimport { x } from \"somefolder/module1\";\nimport { x } from \"somefolder/module2\";\nconst y = x;"
+	/user/username/projects/myproject/src/typings/electron.d.ts Text-1 "\ndeclare module 'original-fs' {\n    import * as fs from 'fs';\n    export = fs;\n}"
+	/user/username/projects/myproject/src/typings/node.d.ts Text-1 "\ndeclare module \"fs\" {\n    export interface something {\n    }\n}"
 
 
 	../../../../../a/lib/lib.d.ts

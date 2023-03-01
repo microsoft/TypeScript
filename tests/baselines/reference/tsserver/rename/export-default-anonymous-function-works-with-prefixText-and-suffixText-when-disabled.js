@@ -24,8 +24,8 @@ Info 6    [00:00:13.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 7    [00:00:14.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 8    [00:00:15.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 9    [00:00:16.000] 	Files (2)
-	/a.ts
-	/b.ts
+	/a.ts Text-1 "export default function() {}"
+	/b.ts SVC-1-0 "import aTest from \"./a\"; function test() { return aTest(); }"
 
 
 	a.ts

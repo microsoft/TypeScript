@@ -48,8 +48,8 @@ Info 13   [00:00:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:27.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:28.000] Project '/a/b/tsconfig.json' (Configured)
 Info 16   [00:00:29.000] 	Files (2)
-	/a/b/file2.ts
-	/a/b/file1.ts
+	/a/b/file2.ts Text-1 "\n                    /// <reference path=\"./file1.ts\" />\n                    export var t2 = 10;"
+	/a/b/file1.ts SVC-1-0 "\n                    /// <reference path=\"./file2.ts\" />\n                    export var t1 = 10;"
 
 
 	file2.ts

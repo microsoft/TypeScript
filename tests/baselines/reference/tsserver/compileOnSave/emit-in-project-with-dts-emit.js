@@ -68,10 +68,10 @@ Info 14   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 15   [00:00:40.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:41.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 17   [00:00:42.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/file1.ts
-	/user/username/projects/myproject/file2.ts
-	/user/username/projects/myproject/file3.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file1.ts SVC-1-0 "const x = 1;\nfunction foo() {\n    return \"hello\";\n}"
+	/user/username/projects/myproject/file2.ts Text-1 "const y = 2;\nfunction bar() {\n    return \"world\";\n}"
+	/user/username/projects/myproject/file3.ts Text-1 "const xy = 3;"
 
 
 	../../../../a/lib/lib.d.ts
@@ -364,28 +364,35 @@ Info 55   [00:02:02.000] request:
     }
 Info 56   [00:02:03.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 57   [00:02:04.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 58   [00:02:05.000] Different program with same set of files
-Info 59   [00:02:06.000] Before ensureProjectForOpenFiles:
-Info 60   [00:02:07.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 60   [00:02:08.000] 	Files (4)
+Info 58   [00:02:05.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 59   [00:02:06.000] 	Files (4)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file1.ts SVC-1-1 "const x = 1;\nfunction foo() {\n    return \"world\";\n}"
+	/user/username/projects/myproject/file2.ts Text-1 "const y = 2;\nfunction bar() {\n    return \"world\";\n}"
+	/user/username/projects/myproject/file3.ts Text-1 "const xy = 3;"
 
-Info 60   [00:02:09.000] -----------------------------------------------
-Info 60   [00:02:10.000] Open files: 
-Info 60   [00:02:11.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 60   [00:02:12.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 60   [00:02:13.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 60   [00:02:14.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 60   [00:02:15.000] After ensureProjectForOpenFiles:
-Info 61   [00:02:16.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 61   [00:02:17.000] 	Files (4)
+Info 60   [00:02:07.000] -----------------------------------------------
+Info 61   [00:02:08.000] Before ensureProjectForOpenFiles:
+Info 62   [00:02:09.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 62   [00:02:10.000] 	Files (4)
 
-Info 61   [00:02:18.000] -----------------------------------------------
-Info 61   [00:02:19.000] Open files: 
-Info 61   [00:02:20.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 61   [00:02:21.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 61   [00:02:22.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 61   [00:02:23.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 61   [00:02:24.000] response:
+Info 62   [00:02:11.000] -----------------------------------------------
+Info 62   [00:02:12.000] Open files: 
+Info 62   [00:02:13.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 62   [00:02:14.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 62   [00:02:15.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 62   [00:02:16.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 62   [00:02:17.000] After ensureProjectForOpenFiles:
+Info 63   [00:02:18.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 63   [00:02:19.000] 	Files (4)
+
+Info 63   [00:02:20.000] -----------------------------------------------
+Info 63   [00:02:21.000] Open files: 
+Info 63   [00:02:22.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 63   [00:02:23.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 63   [00:02:24.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 63   [00:02:25.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 63   [00:02:26.000] response:
     {
       "response": [
         {
@@ -402,7 +409,7 @@ After request
 
 Before request
 
-Info 62   [00:02:25.000] request:
+Info 64   [00:02:27.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -411,7 +418,7 @@ Info 62   [00:02:25.000] request:
       "seq": 9,
       "type": "request"
     }
-Info 63   [00:02:32.000] response:
+Info 65   [00:02:34.000] response:
     {
       "response": true,
       "responseRequired": true
@@ -428,7 +435,7 @@ function foo() {
 
 Before request
 
-Info 64   [00:02:33.000] request:
+Info 66   [00:02:35.000] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -454,7 +461,7 @@ Info 64   [00:02:33.000] request:
       "seq": 10,
       "type": "request"
     }
-Info 65   [00:02:34.000] response:
+Info 67   [00:02:36.000] response:
     {
       "response": true,
       "responseRequired": true
@@ -463,7 +470,7 @@ After request
 
 Before request
 
-Info 66   [00:02:35.000] request:
+Info 68   [00:02:37.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -472,30 +479,37 @@ Info 66   [00:02:35.000] request:
       "seq": 11,
       "type": "request"
     }
-Info 67   [00:02:36.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 68   [00:02:37.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 69   [00:02:38.000] Different program with same set of files
-Info 70   [00:02:39.000] Before ensureProjectForOpenFiles:
+Info 69   [00:02:38.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 70   [00:02:39.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 71   [00:02:40.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 71   [00:02:41.000] 	Files (4)
+Info 72   [00:02:41.000] 	Files (4)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/file1.ts SVC-1-1 "const x = 1;\nfunction foo() {\n    return \"world\";\n}"
+	/user/username/projects/myproject/file2.ts SVC-2-1 "const y = 2;\nfunction bar() {\n    return \"hello\";\n}"
+	/user/username/projects/myproject/file3.ts Text-1 "const xy = 3;"
 
-Info 71   [00:02:42.000] -----------------------------------------------
-Info 71   [00:02:43.000] Open files: 
-Info 71   [00:02:44.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 71   [00:02:45.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 71   [00:02:46.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 71   [00:02:47.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 71   [00:02:48.000] After ensureProjectForOpenFiles:
-Info 72   [00:02:49.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 72   [00:02:50.000] 	Files (4)
+Info 73   [00:02:42.000] -----------------------------------------------
+Info 74   [00:02:43.000] Before ensureProjectForOpenFiles:
+Info 75   [00:02:44.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 75   [00:02:45.000] 	Files (4)
 
-Info 72   [00:02:51.000] -----------------------------------------------
-Info 72   [00:02:52.000] Open files: 
-Info 72   [00:02:53.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
-Info 72   [00:02:54.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 72   [00:02:55.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
-Info 72   [00:02:56.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 72   [00:02:57.000] response:
+Info 75   [00:02:46.000] -----------------------------------------------
+Info 75   [00:02:47.000] Open files: 
+Info 75   [00:02:48.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 75   [00:02:49.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 75   [00:02:50.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 75   [00:02:51.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 75   [00:02:52.000] After ensureProjectForOpenFiles:
+Info 76   [00:02:53.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 76   [00:02:54.000] 	Files (4)
+
+Info 76   [00:02:55.000] -----------------------------------------------
+Info 76   [00:02:56.000] Open files: 
+Info 76   [00:02:57.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info 76   [00:02:58.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 76   [00:02:59.000] 	FileName: /user/username/projects/myproject/file2.ts ProjectRootPath: undefined
+Info 76   [00:03:00.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 76   [00:03:01.000] response:
     {
       "response": [
         {
@@ -512,7 +526,7 @@ After request
 
 Before request
 
-Info 73   [00:02:58.000] request:
+Info 77   [00:03:02.000] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -521,7 +535,7 @@ Info 73   [00:02:58.000] request:
       "seq": 12,
       "type": "request"
     }
-Info 74   [00:03:05.000] response:
+Info 78   [00:03:09.000] response:
     {
       "response": true,
       "responseRequired": true
