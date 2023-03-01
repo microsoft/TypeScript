@@ -1,13 +1,4 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:22.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/projects/myproject/bar/app.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/projects/myproject/bar/app.ts]
 class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }
@@ -19,6 +10,15 @@ declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }
 {"compilerOptions":{"module":"none","targer":"es5"},"exclude":["node_modules"]}
 
 
+Info 1    [00:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/myproject/bar/app.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:23.000] Search path: /a/b/projects/myproject/bar
 Info 3    [00:00:24.000] For info: /a/b/projects/myproject/bar/app.ts :: Config file name: /a/b/projects/myproject/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /a/b/projects/myproject/tsconfig.json
@@ -68,6 +68,10 @@ Info 22   [00:00:45.000] -----------------------------------------------
 Info 22   [00:00:46.000] Open files: 
 Info 22   [00:00:47.000] 	FileName: /a/b/projects/myproject/bar/app.ts ProjectRootPath: undefined
 Info 22   [00:00:48.000] 		Projects: /a/b/projects/myproject/tsconfig.json
+Info 22   [00:00:49.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -86,10 +90,8 @@ FsWatchesRecursive::
 /a/b/projects/myproject: *new*
   {}
 
-Info 22   [00:00:49.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 23   [00:00:50.000] request:
     {
       "command": "geterr",
@@ -102,14 +104,12 @@ Info 23   [00:00:50.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 24   [00:00:51.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 25   [00:00:52.000] event:
@@ -235,6 +235,8 @@ Info 62   [00:01:44.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
 After running timeout callbacks
 
+Before request
+
 Info 63   [00:01:45.000] request:
     {
       "command": "geterr",
@@ -247,14 +249,12 @@ Info 63   [00:01:45.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 64   [00:01:46.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 65   [00:01:47.000] event:

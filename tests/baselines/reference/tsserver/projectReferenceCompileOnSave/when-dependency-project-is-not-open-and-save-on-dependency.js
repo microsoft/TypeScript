@@ -1,13 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/usage/usage.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
@@ -43,6 +34,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Search path: /user/username/projects/myproject/usage
 Info 3    [00:00:32.000] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
@@ -108,6 +108,10 @@ Info 26   [00:00:57.000] -----------------------------------------------
 Info 26   [00:00:58.000] Open files: 
 Info 26   [00:00:59.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 26   [00:01:00.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 26   [00:01:01.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -134,10 +138,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency: *new*
   {}
 
-Info 26   [00:01:01.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 27   [00:01:02.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -147,8 +149,6 @@ Info 27   [00:01:02.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 28   [00:01:03.000] Before ensureProjectForOpenFiles:
 Info 29   [00:01:04.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
 Info 29   [00:01:05.000] 	Files (3)
@@ -165,8 +165,6 @@ Info 30   [00:01:13.000] -----------------------------------------------
 Info 30   [00:01:14.000] Open files: 
 Info 30   [00:01:15.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 30   [00:01:16.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-After request
-
 Info 30   [00:01:17.000] response:
     {
       "response": [
@@ -180,6 +178,10 @@ Info 30   [00:01:17.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 31   [00:01:18.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -189,15 +191,15 @@ Info 31   [00:01:18.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 32   [00:01:19.000] response:
     {
       "response": false,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 33   [00:01:20.000] request:
     {
       "command": "emit-output",
@@ -207,10 +209,6 @@ Info 33   [00:01:20.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 34   [00:01:21.000] response:
     {
       "response": {
@@ -220,3 +218,4 @@ Info 34   [00:01:21.000] response:
       },
       "responseRequired": true
     }
+After request

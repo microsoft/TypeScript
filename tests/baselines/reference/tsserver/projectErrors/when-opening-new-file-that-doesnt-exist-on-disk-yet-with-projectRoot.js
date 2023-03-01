@@ -1,16 +1,4 @@
 Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:26.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "untitled:Untitled-1",
-        "fileContent": "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />",
-        "scriptKindName": "TS",
-        "projectRootPath": "/user/someuser/projects/someFolder"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,6 +20,18 @@ class c { }
 class c { }
 
 
+Info 1    [00:00:26.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "untitled:Untitled-1",
+        "fileContent": "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />",
+        "scriptKindName": "TS",
+        "projectRootPath": "/user/someuser/projects/someFolder"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:27.000] Search path: 
 Info 3    [00:00:28.000] For info: untitled:Untitled-1 :: No config files found.
 Info 4    [00:00:29.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -60,6 +60,10 @@ Info 14   [00:00:41.000] -----------------------------------------------
 Info 14   [00:00:42.000] Open files: 
 Info 14   [00:00:43.000] 	FileName: untitled:Untitled-1 ProjectRootPath: /user/someuser/projects/someFolder
 Info 14   [00:00:44.000] 		Projects: /dev/null/inferredProject1*
+Info 14   [00:00:45.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -74,16 +78,14 @@ FsWatches::
 /user/someuser/projects/somefolder/src/somefile.d.ts: *new*
   {}
 
-Info 14   [00:00:45.000] response:
-    {
-      "responseRequired": false
-    }
 
 ScriptInfos:
 path: /user/someuser/projects/somefolder/untitled:untitled-1 fileName: untitled:Untitled-1
 path: /a/lib/lib.d.ts fileName: /a/lib/lib.d.ts
 
 Checking timeout queue length: 0
+
+Before request
 
 Info 15   [00:00:46.000] request:
     {
@@ -97,14 +99,12 @@ Info 15   [00:00:46.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 16   [00:00:47.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 17   [00:00:48.000] event:

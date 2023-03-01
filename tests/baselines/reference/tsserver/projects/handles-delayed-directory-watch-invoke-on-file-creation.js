@@ -1,14 +1,4 @@
 Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:26.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/users/username/projects/project/b.ts",
-        "projectRootPath": "/users/username/projects/project"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/users/username/projects/project/sub/a.ts]
 export const a = 10;
@@ -33,6 +23,16 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:26.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/project/b.ts",
+        "projectRootPath": "/users/username/projects/project"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:27.000] Search path: /users/username/projects/project
 Info 3    [00:00:28.000] For info: /users/username/projects/project/b.ts :: Config file name: /users/username/projects/project/tsconfig.json
 Info 4    [00:00:29.000] Creating configuration project /users/username/projects/project/tsconfig.json
@@ -84,6 +84,10 @@ Info 22   [00:00:49.000] -----------------------------------------------
 Info 22   [00:00:50.000] Open files: 
 Info 22   [00:00:51.000] 	FileName: /users/username/projects/project/b.ts ProjectRootPath: /users/username/projects/project
 Info 22   [00:00:52.000] 		Projects: /users/username/projects/project/tsconfig.json
+Info 22   [00:00:53.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -102,10 +106,8 @@ FsWatchesRecursive::
 /users/username/projects/project: *new*
   {}
 
-Info 22   [00:00:53.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 23   [00:00:54.000] request:
     {
       "command": "open",
@@ -116,8 +118,6 @@ Info 23   [00:00:54.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 24   [00:00:55.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/sub/a.ts 500 undefined WatchType: Closed Script info
 Info 25   [00:00:56.000] Search path: /users/username/projects/project/sub
 Info 26   [00:00:57.000] For info: /users/username/projects/project/sub/a.ts :: Config file name: /users/username/projects/project/tsconfig.json
@@ -130,6 +130,10 @@ Info 27   [00:01:02.000] 	FileName: /users/username/projects/project/b.ts Projec
 Info 27   [00:01:03.000] 		Projects: /users/username/projects/project/tsconfig.json
 Info 27   [00:01:04.000] 	FileName: /users/username/projects/project/sub/a.ts ProjectRootPath: /users/username/projects/project
 Info 27   [00:01:05.000] 		Projects: /users/username/projects/project/tsconfig.json
+Info 27   [00:01:06.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -150,10 +154,6 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info 27   [00:01:06.000] response:
-    {
-      "responseRequired": false
-    }
 Before checking timeout queue length (0) and running
 
 After checking timeout queue length (0) and running
@@ -174,6 +174,8 @@ export const a = 10;
 
 //// [/users/username/projects/project/sub/a.ts] deleted
 
+Before request
+
 Info 38   [00:01:21.000] request:
     {
       "command": "close",
@@ -183,8 +185,6 @@ Info 38   [00:01:21.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 39   [00:01:22.000] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info 40   [00:01:23.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 41   [00:01:24.000] Project '/users/username/projects/project/tsconfig.json' (Configured)
@@ -194,13 +194,15 @@ Info 41   [00:01:26.000] -----------------------------------------------
 Info 41   [00:01:27.000] Open files: 
 Info 41   [00:01:28.000] 	FileName: /users/username/projects/project/b.ts ProjectRootPath: /users/username/projects/project
 Info 41   [00:01:29.000] 		Projects: /users/username/projects/project/tsconfig.json
-After request
-
 Info 41   [00:01:30.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Checking timeout queue length: 2
+
+Before request
 
 Info 42   [00:01:31.000] request:
     {
@@ -212,8 +214,6 @@ Info 42   [00:01:31.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 43   [00:01:32.000] Search path: /users/username/projects/project
 Info 44   [00:01:33.000] For info: /users/username/projects/project/a.ts :: Config file name: /users/username/projects/project/tsconfig.json
 Info 45   [00:01:34.000] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -242,12 +242,12 @@ Info 50   [00:01:43.000] 	FileName: /users/username/projects/project/b.ts Projec
 Info 50   [00:01:44.000] 		Projects: /users/username/projects/project/tsconfig.json
 Info 50   [00:01:45.000] 	FileName: /users/username/projects/project/a.ts ProjectRootPath: /users/username/projects/project
 Info 50   [00:01:46.000] 		Projects: /users/username/projects/project/tsconfig.json
-After request
-
 Info 50   [00:01:47.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (2) and running
 
 Info 51   [00:01:48.000] Running: /users/username/projects/project/tsconfig.json
@@ -277,6 +277,8 @@ Info 56   [00:02:09.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/project/b.ts","/users/username/projects/project/a.ts"]}}
 After checking timeout queue length (2) and running
 
+Before request
+
 Info 57   [00:02:10.000] request:
     {
       "command": "close",
@@ -286,8 +288,6 @@ Info 57   [00:02:10.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
 Info 58   [00:02:11.000] Scheduled: /users/username/projects/project/tsconfig.json
 Info 59   [00:02:12.000] Scheduled: *ensureProjectForOpenFiles*
 Info 60   [00:02:13.000] Project '/users/username/projects/project/tsconfig.json' (Configured)
@@ -297,13 +297,15 @@ Info 60   [00:02:15.000] -----------------------------------------------
 Info 60   [00:02:16.000] Open files: 
 Info 60   [00:02:17.000] 	FileName: /users/username/projects/project/b.ts ProjectRootPath: /users/username/projects/project
 Info 60   [00:02:18.000] 		Projects: /users/username/projects/project/tsconfig.json
-After request
-
 Info 60   [00:02:19.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Checking timeout queue length: 2
+
+Before request
 
 Info 61   [00:02:20.000] request:
     {
@@ -315,8 +317,6 @@ Info 61   [00:02:20.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
 Info 62   [00:02:21.000] Search path: /users/username/projects/project/sub
 Info 63   [00:02:22.000] For info: /users/username/projects/project/sub/a.ts :: Config file name: /users/username/projects/project/tsconfig.json
 Info 64   [00:02:23.000] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -370,6 +370,10 @@ Info 83   [00:02:49.000] 	FileName: /users/username/projects/project/b.ts Projec
 Info 83   [00:02:50.000] 		Projects: /users/username/projects/project/tsconfig.json
 Info 83   [00:02:51.000] 	FileName: /users/username/projects/project/sub/a.ts ProjectRootPath: /users/username/projects/project
 Info 83   [00:02:52.000] 		Projects: /dev/null/inferredProject1*
+Info 83   [00:02:53.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -396,10 +400,6 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info 83   [00:02:53.000] response:
-    {
-      "responseRequired": false
-    }
 Before checking timeout queue length (2) and running
 
 Info 84   [00:02:54.000] Running: /users/username/projects/project/tsconfig.json
@@ -455,6 +455,8 @@ export const a = 10;
 
 //// [/users/username/projects/project/a.ts] deleted
 
+Before request
+
 Info 102  [00:03:39.000] request:
     {
       "command": "geterr",
@@ -468,14 +470,12 @@ Info 102  [00:03:39.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 103  [00:03:40.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Checking timeout queue length: 3
 
 Before running timeout callback15

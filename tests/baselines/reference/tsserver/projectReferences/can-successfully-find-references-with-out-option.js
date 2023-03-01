@@ -1,13 +1,4 @@
 Info 0    [00:01:10.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:11.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/container/compositeExec/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -362,6 +353,15 @@ declare namespace container {
 ======================================================================
 
 
+Info 1    [00:01:11.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:12.000] Search path: /user/username/projects/container/compositeExec
 Info 3    [00:01:13.000] For info: /user/username/projects/container/compositeExec/index.ts :: Config file name: /user/username/projects/container/compositeExec/tsconfig.json
 Info 4    [00:01:14.000] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
@@ -437,6 +437,10 @@ Info 26   [00:01:41.000] -----------------------------------------------
 Info 26   [00:01:42.000] Open files: 
 Info 26   [00:01:43.000] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
 Info 26   [00:01:44.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
+Info 26   [00:01:45.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -457,10 +461,8 @@ FsWatches::
 /user/username/projects/container/tsconfig.json: *new*
   {}
 
-Info 26   [00:01:45.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 27   [00:01:46.000] request:
     {
       "command": "rename",
@@ -472,8 +474,6 @@ Info 27   [00:01:46.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 28   [00:01:47.000] Search path: /user/username/projects/container/lib
 Info 29   [00:01:48.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
 Info 30   [00:01:49.000] Creating configuration project /user/username/projects/container/lib/tsconfig.json
@@ -560,34 +560,6 @@ Info 58   [00:02:17.000] 	Files (3)
 Info 59   [00:02:18.000] -----------------------------------------------
 Info 60   [00:02:19.000] Search path: /user/username/projects/container/lib
 Info 61   [00:02:20.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-/user/username/projects/container/exec/tsconfig.json: *new*
-  {}
-/user/username/projects/container/exec/index.ts: *new*
-  {}
-
 Info 62   [00:02:21.000] response:
     {
       "response": {
@@ -666,3 +638,30 @@ Info 62   [00:02:21.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/container/compositeexec/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/lib/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/container/exec/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/container/compositeexec/tsconfig.json:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/lib/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/container/tsconfig.json:
+  {}
+/user/username/projects/container/exec/tsconfig.json: *new*
+  {}
+/user/username/projects/container/exec/index.ts: *new*
+  {}

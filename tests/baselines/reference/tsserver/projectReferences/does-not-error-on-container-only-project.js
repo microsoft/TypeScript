@@ -139,15 +139,6 @@ Info 45   [00:01:55.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 46   [00:01:56.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info 47   [00:01:57.000] Finishing updateGraphWorker: Project: /user/username/projects/container/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 48   [00:01:58.000] Different program with same set of files
-Info 49   [00:01:59.000] request:
-    {
-      "command": "syntacticDiagnosticsSync",
-      "arguments": {
-        "file": "/a/lib/lib.d.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -530,13 +521,24 @@ FsWatches::
 /user/username/projects/container/tsconfig.json: *new*
   {}
 
-After request
-
+Info 49   [00:01:59.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/lib/lib.d.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 50   [00:02:00.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 51   [00:02:01.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -546,15 +548,15 @@ Info 51   [00:02:01.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 52   [00:02:02.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 53   [00:02:03.000] request:
     {
       "command": "syntacticDiagnosticsSync",
@@ -565,15 +567,15 @@ Info 53   [00:02:03.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 54   [00:02:04.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 55   [00:02:05.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -584,15 +586,15 @@ Info 55   [00:02:05.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 56   [00:02:06.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 57   [00:02:07.000] request:
     {
       "command": "syntacticDiagnosticsSync",
@@ -602,15 +604,15 @@ Info 57   [00:02:07.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 58   [00:02:08.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 59   [00:02:09.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -620,15 +622,15 @@ Info 59   [00:02:09.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 60   [00:02:10.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 61   [00:02:11.000] request:
     {
       "command": "syntacticDiagnosticsSync",
@@ -639,15 +641,15 @@ Info 61   [00:02:11.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 62   [00:02:12.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 63   [00:02:13.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -658,15 +660,15 @@ Info 63   [00:02:13.000] request:
       "seq": 8,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 64   [00:02:14.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 65   [00:02:15.000] request:
     {
       "command": "syntacticDiagnosticsSync",
@@ -676,15 +678,15 @@ Info 65   [00:02:15.000] request:
       "seq": 9,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 66   [00:02:16.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 67   [00:02:17.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -694,15 +696,15 @@ Info 67   [00:02:17.000] request:
       "seq": 10,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 68   [00:02:18.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 69   [00:02:19.000] request:
     {
       "command": "syntacticDiagnosticsSync",
@@ -713,15 +715,15 @@ Info 69   [00:02:19.000] request:
       "seq": 11,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 70   [00:02:20.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 71   [00:02:21.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -732,15 +734,15 @@ Info 71   [00:02:21.000] request:
       "seq": 12,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 72   [00:02:22.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 73   [00:02:23.000] request:
     {
       "command": "syntacticDiagnosticsSync",
@@ -750,15 +752,15 @@ Info 73   [00:02:23.000] request:
       "seq": 13,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 74   [00:02:24.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 75   [00:02:25.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -768,15 +770,15 @@ Info 75   [00:02:25.000] request:
       "seq": 14,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 76   [00:02:26.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 77   [00:02:27.000] request:
     {
       "command": "syntacticDiagnosticsSync",
@@ -787,15 +789,15 @@ Info 77   [00:02:27.000] request:
       "seq": 15,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 78   [00:02:28.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 79   [00:02:29.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -806,15 +808,15 @@ Info 79   [00:02:29.000] request:
       "seq": 16,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 80   [00:02:30.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 81   [00:02:31.000] request:
     {
       "command": "compilerOptionsDiagnostics-full",
@@ -824,12 +826,9 @@ Info 81   [00:02:31.000] request:
       "seq": 17,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 82   [00:02:32.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

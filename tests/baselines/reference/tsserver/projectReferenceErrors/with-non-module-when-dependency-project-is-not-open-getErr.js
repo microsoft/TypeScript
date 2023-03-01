@@ -1,13 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/usage/usage.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 function fn1() { }
@@ -43,6 +34,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Search path: /user/username/projects/myproject/usage
 Info 3    [00:00:32.000] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
@@ -118,6 +118,10 @@ Info 30   [00:01:01.000] -----------------------------------------------
 Info 30   [00:01:02.000] Open files: 
 Info 30   [00:01:03.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 30   [00:01:04.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 30   [00:01:05.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -142,10 +146,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency: *new*
   {}
 
-Info 30   [00:01:05.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 31   [00:01:06.000] request:
     {
       "command": "geterr",
@@ -158,14 +160,12 @@ Info 31   [00:01:06.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 32   [00:01:07.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 33   [00:01:08.000] event:

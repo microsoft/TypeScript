@@ -1,13 +1,4 @@
 Info 0    [00:00:37.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:38.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/a.ts]
 export function fnA() {}
@@ -52,6 +43,15 @@ export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }
 let a = 10;
 
 
+Info 1    [00:00:38.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:39.000] Search path: /a
 Info 3    [00:00:40.000] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:41.000] Creating configuration project /a/tsconfig.json
@@ -93,6 +93,10 @@ Info 19   [00:00:58.000] -----------------------------------------------
 Info 19   [00:00:59.000] Open files: 
 Info 19   [00:01:00.000] 	FileName: /a/a.ts ProjectRootPath: undefined
 Info 19   [00:01:01.000] 		Projects: /a/tsconfig.json
+Info 19   [00:01:02.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -109,10 +113,6 @@ FsWatchesRecursive::
 /a: *new*
   {}
 
-Info 19   [00:01:02.000] response:
-    {
-      "responseRequired": false
-    }
 ts.getFileEmitOutput: /a/a.ts: {
  "outputFiles": [
   {
@@ -129,6 +129,8 @@ ts.getFileEmitOutput: /a/a.ts: {
  "emitSkipped": false,
  "diagnostics": []
 }
+Before request
+
 Info 20   [00:01:03.000] request:
     {
       "command": "close",
@@ -138,14 +140,16 @@ Info 20   [00:01:03.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 21   [00:01:04.000] FileWatcher:: Added:: WatchInfo: /a/a.ts 500 undefined WatchType: Closed Script info
 Info 22   [00:01:05.000] Project '/a/tsconfig.json' (Configured)
 Info 22   [00:01:06.000] 	Files (1)
 
 Info 22   [00:01:07.000] -----------------------------------------------
 Info 22   [00:01:08.000] Open files: 
+Info 22   [00:01:09.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -164,10 +168,8 @@ FsWatchesRecursive::
 /a:
   {}
 
-Info 22   [00:01:09.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 23   [00:01:10.000] request:
     {
       "command": "open",
@@ -177,8 +179,6 @@ Info 23   [00:01:10.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 24   [00:01:11.000] Search path: /b
 Info 25   [00:01:12.000] For info: /b/b.ts :: Config file name: /b/tsconfig.json
 Info 26   [00:01:13.000] Creating configuration project /b/tsconfig.json
@@ -237,6 +237,10 @@ Info 52   [00:01:41.000] -----------------------------------------------
 Info 52   [00:01:42.000] Open files: 
 Info 52   [00:01:43.000] 	FileName: /b/b.ts ProjectRootPath: undefined
 Info 52   [00:01:44.000] 		Projects: /b/tsconfig.json
+Info 52   [00:01:45.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -267,10 +271,6 @@ FsWatchesRecursive *deleted*::
 /a:
   {}
 
-Info 52   [00:01:45.000] response:
-    {
-      "responseRequired": false
-    }
 ts.getFileEmitOutput: /b/b.ts: {
  "outputFiles": [
   {
@@ -287,6 +287,8 @@ ts.getFileEmitOutput: /b/b.ts: {
  "emitSkipped": false,
  "diagnostics": []
 }
+Before request
+
 Info 53   [00:01:46.000] request:
     {
       "command": "close",
@@ -296,14 +298,16 @@ Info 53   [00:01:46.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 54   [00:01:47.000] FileWatcher:: Added:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info 55   [00:01:48.000] Project '/b/tsconfig.json' (Configured)
 Info 55   [00:01:49.000] 	Files (1)
 
 Info 55   [00:01:50.000] -----------------------------------------------
 Info 55   [00:01:51.000] Open files: 
+Info 55   [00:01:52.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -322,10 +326,8 @@ FsWatchesRecursive::
 /b:
   {}
 
-Info 55   [00:01:52.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 56   [00:01:53.000] request:
     {
       "command": "open",
@@ -335,8 +337,6 @@ Info 56   [00:01:53.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
 Info 57   [00:01:54.000] Search path: /user
 Info 58   [00:01:55.000] For info: /user/user.ts :: Config file name: /user/tsconfig.json
 Info 59   [00:01:56.000] Creating configuration project /user/tsconfig.json
@@ -408,6 +408,10 @@ Info 77   [00:02:19.000] -----------------------------------------------
 Info 77   [00:02:20.000] Open files: 
 Info 77   [00:02:21.000] 	FileName: /user/user.ts ProjectRootPath: undefined
 Info 77   [00:02:22.000] 		Projects: /user/tsconfig.json
+Info 77   [00:02:23.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -438,10 +442,8 @@ FsWatchesRecursive::
 /a: *new*
   {}
 
-Info 77   [00:02:23.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 78   [00:02:24.000] request:
     {
       "command": "navto",
@@ -451,10 +453,6 @@ Info 78   [00:02:24.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 79   [00:02:25.000] response:
     {
       "response": [
@@ -509,3 +507,4 @@ Info 79   [00:02:25.000] response:
       ],
       "responseRequired": true
     }
+After request

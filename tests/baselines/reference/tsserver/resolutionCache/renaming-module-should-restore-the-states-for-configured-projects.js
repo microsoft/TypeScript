@@ -1,13 +1,4 @@
 Info 0    [00:00:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:14.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/moduleFile.ts]
 export function bar() { };
@@ -19,6 +10,15 @@ import * as T from './moduleFile'; T.bar();
 {}
 
 
+Info 1    [00:00:14.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:15.000] Search path: /a/b
 Info 3    [00:00:16.000] For info: /a/b/file1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:17.000] Creating configuration project /a/b/tsconfig.json
@@ -60,6 +60,10 @@ Info 18   [00:00:33.000] -----------------------------------------------
 Info 18   [00:00:34.000] Open files: 
 Info 18   [00:00:35.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 18   [00:00:36.000] 		Projects: /a/b/tsconfig.json
+Info 18   [00:00:37.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -78,10 +82,8 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
-Info 18   [00:00:37.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 19   [00:00:38.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -91,15 +93,13 @@ Info 19   [00:00:38.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 20   [00:00:39.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
 Info 21   [00:00:41.000] FileWatcher:: Triggered with /a/b/moduleFile.ts 2:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info 22   [00:00:42.000] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info 23   [00:00:43.000] Scheduled: /a/b/tsconfig.json
@@ -196,6 +196,8 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Before request
+
 Info 48   [00:01:22.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -205,10 +207,6 @@ Info 48   [00:01:22.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 49   [00:01:23.000] response:
     {
       "response": [
@@ -228,6 +226,8 @@ Info 49   [00:01:23.000] response:
       ],
       "responseRequired": true
     }
+After request
+
 Info 50   [00:01:25.000] FileWatcher:: Triggered with /a/b/moduleFile1.ts 2:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info 51   [00:01:26.000] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info 52   [00:01:27.000] Scheduled: /a/b/tsconfig.json
@@ -280,6 +280,8 @@ Info 70   [00:01:47.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 71   [00:01:48.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running timeout callbacks
 
+Before request
+
 Info 72   [00:01:49.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -289,8 +291,6 @@ Info 72   [00:01:49.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 73   [00:01:50.000] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info 74   [00:01:51.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 75   [00:01:52.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/moduleFile 1 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -311,6 +311,11 @@ Info 81   [00:01:58.000] 	Files (2)
 	  Matched by default include pattern '**/*'
 
 Info 82   [00:01:59.000] -----------------------------------------------
+Info 83   [00:02:00.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
 After request
 
 PolledWatches::
@@ -336,9 +341,3 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /a/b:
   {}
-
-Info 83   [00:02:00.000] response:
-    {
-      "response": [],
-      "responseRequired": true
-    }

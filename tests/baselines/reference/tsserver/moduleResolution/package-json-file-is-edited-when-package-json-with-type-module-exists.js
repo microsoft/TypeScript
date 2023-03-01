@@ -1,13 +1,4 @@
 Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:28.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/src/fileA.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/src/tsconfig.json]
 {"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out","traceResolution":true}}
@@ -39,6 +30,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:28.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/fileA.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:29.000] Search path: /user/username/projects/myproject/src
 Info 3    [00:00:30.000] For info: /user/username/projects/myproject/src/fileA.ts :: Config file name: /user/username/projects/myproject/src/tsconfig.json
 Info 4    [00:00:31.000] Creating configuration project /user/username/projects/myproject/src/tsconfig.json
@@ -113,6 +113,10 @@ Info 39   [00:01:08.000] -----------------------------------------------
 Info 39   [00:01:09.000] Open files: 
 Info 39   [00:01:10.000] 	FileName: /user/username/projects/myproject/src/fileA.ts ProjectRootPath: undefined
 Info 39   [00:01:11.000] 		Projects: /user/username/projects/myproject/src/tsconfig.json
+Info 39   [00:01:12.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -137,10 +141,6 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
-Info 39   [00:01:12.000] response:
-    {
-      "responseRequired": false
-    }
 Info 40   [00:01:13.000] Modify package json file to remove type module
 Info 41   [00:01:17.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 42   [00:01:18.000] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
@@ -202,6 +202,8 @@ Info 74   [00:02:02.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
 After running timeout callbacks
 
+Before request
+
 Info 75   [00:02:03.000] request:
     {
       "command": "geterr",
@@ -214,14 +216,12 @@ Info 75   [00:02:03.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 76   [00:02:04.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 77   [00:02:05.000] event:
@@ -303,6 +303,8 @@ Info 115  [00:02:58.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
 After running timeout callbacks
 
+Before request
+
 Info 116  [00:02:59.000] request:
     {
       "command": "geterr",
@@ -315,14 +317,12 @@ Info 116  [00:02:59.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 117  [00:03:00.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 118  [00:03:01.000] event:
@@ -429,6 +429,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Before request
+
 Info 160  [00:03:56.000] request:
     {
       "command": "geterr",
@@ -441,14 +443,12 @@ Info 160  [00:03:56.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 161  [00:03:57.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 162  [00:03:58.000] event:
@@ -555,6 +555,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Before request
+
 Info 200  [00:04:50.000] request:
     {
       "command": "geterr",
@@ -567,14 +569,12 @@ Info 200  [00:04:50.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 201  [00:04:51.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 202  [00:04:52.000] event:
@@ -679,6 +679,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Before request
+
 Info 242  [00:05:45.000] request:
     {
       "command": "geterr",
@@ -691,14 +693,12 @@ Info 242  [00:05:45.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 243  [00:05:46.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 244  [00:05:47.000] event:

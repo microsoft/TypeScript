@@ -1,13 +1,4 @@
 Info 0    [00:01:03.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:04.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/main/main.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
 export function fn1() { }
@@ -222,6 +213,15 @@ export {};
 }
 
 
+Info 1    [00:01:04.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:05.000] Search path: /user/username/projects/myproject/main
 Info 3    [00:01:06.000] For info: /user/username/projects/myproject/main/main.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
 Info 4    [00:01:07.000] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
@@ -293,6 +293,10 @@ Info 28   [00:01:33.000] -----------------------------------------------
 Info 28   [00:01:34.000] Open files: 
 Info 28   [00:01:35.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
 Info 28   [00:01:36.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 28   [00:01:37.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -319,10 +323,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/decls: *new*
   {}
 
-Info 28   [00:01:37.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 29   [00:01:38.000] request:
     {
       "command": "open",
@@ -332,8 +334,6 @@ Info 29   [00:01:38.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 30   [00:01:39.000] Search path: /user/username/projects/myproject/random
 Info 31   [00:01:40.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
 Info 32   [00:01:41.000] Creating configuration project /user/username/projects/myproject/random/tsconfig.json
@@ -379,6 +379,10 @@ Info 46   [00:02:02.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 46   [00:02:03.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 46   [00:02:04.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 46   [00:02:05.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 46   [00:02:06.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -411,10 +415,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random: *new*
   {}
 
-Info 46   [00:02:06.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 47   [00:02:07.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -426,46 +428,8 @@ Info 47   [00:02:07.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 48   [00:02:08.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info 49   [00:02:09.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
-After request
-
-PolledWatches::
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/random/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/decls/fns.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/random/tsconfig.json:
-  {}
-/user/username/projects/myproject/decls/fns.d.ts.map: *new*
-  {}
-/user/username/projects/myproject/dependency/fns.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-/user/username/projects/myproject/decls:
-  {}
-/user/username/projects/myproject/random:
-  {}
-
 Info 50   [00:02:10.000] response:
     {
       "response": {
@@ -503,6 +467,42 @@ Info 50   [00:02:10.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts.map: *new*
+  {}
+/user/username/projects/myproject/dependency/fns.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 51   [00:02:14.000] FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 1:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info 52   [00:02:15.000] Scheduled: /user/username/projects/myproject/main/tsconfig.json
 Info 53   [00:02:16.000] Scheduled: *ensureProjectForOpenFiles*
@@ -553,6 +553,8 @@ Info 62   [00:02:45.000] 	FileName: /user/username/projects/myproject/random/ran
 Info 62   [00:02:46.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 After running timeout callbacks
 
+Before request
+
 Info 62   [00:02:47.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -564,10 +566,6 @@ Info 62   [00:02:47.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 63   [00:02:48.000] response:
     {
       "response": {
@@ -605,6 +603,10 @@ Info 63   [00:02:48.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 64   [00:02:49.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -616,10 +618,6 @@ Info 64   [00:02:49.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 65   [00:02:50.000] response:
     {
       "response": {
@@ -657,6 +655,10 @@ Info 65   [00:02:50.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 66   [00:02:51.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -668,10 +670,6 @@ Info 66   [00:02:51.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 67   [00:02:52.000] response:
     {
       "response": {
@@ -709,6 +707,10 @@ Info 67   [00:02:52.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 68   [00:02:53.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -720,10 +722,6 @@ Info 68   [00:02:53.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 69   [00:02:54.000] response:
     {
       "response": {
@@ -761,6 +759,10 @@ Info 69   [00:02:54.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 70   [00:02:55.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -772,10 +774,6 @@ Info 70   [00:02:55.000] request:
       "seq": 8,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 71   [00:02:56.000] response:
     {
       "response": {
@@ -813,3 +811,4 @@ Info 71   [00:02:56.000] response:
       },
       "responseRequired": true
     }
+After request

@@ -1,16 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/projects/temp/a.ts",
-        "fileContent": "import f = require(\"pad\"); f;",
-        "scriptKindName": "TS",
-        "projectRootPath": "/a/b/projects/temp"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/projects/temp/a.ts]
 import f = require("pad"); f;
@@ -29,6 +17,18 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/temp/a.ts",
+        "fileContent": "import f = require(\"pad\"); f;",
+        "scriptKindName": "TS",
+        "projectRootPath": "/a/b/projects/temp"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /a/b/projects/temp
 Info 3    [00:00:20.000] For info: /a/b/projects/temp/a.ts :: No config files found.
 Info 4    [00:00:21.000] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -59,6 +59,10 @@ Info 16   [00:00:35.000] -----------------------------------------------
 Info 16   [00:00:36.000] Open files: 
 Info 16   [00:00:37.000] 	FileName: /a/b/projects/temp/a.ts ProjectRootPath: /a/b/projects/temp
 Info 16   [00:00:38.000] 		Projects: /dev/null/inferredProject1*
+Info 16   [00:00:39.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -75,10 +79,8 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 16   [00:00:39.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 17   [00:00:40.000] request:
     {
       "command": "geterr",
@@ -91,14 +93,12 @@ Info 17   [00:00:40.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 18   [00:00:41.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 19   [00:00:42.000] event:

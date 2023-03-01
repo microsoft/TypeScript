@@ -1,13 +1,4 @@
 Info 0    [00:00:44.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:45.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/solution/api/src/server.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -48,6 +39,15 @@ instance.fly();
 export const foo = class { fly() {} };
 
 
+Info 1    [00:00:45.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/solution/api/src/server.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:46.000] Search path: /user/username/projects/solution/api/src
 Info 3    [00:00:47.000] For info: /user/username/projects/solution/api/src/server.ts :: Config file name: /user/username/projects/solution/api/tsconfig.json
 Info 4    [00:00:48.000] Creating configuration project /user/username/projects/solution/api/tsconfig.json
@@ -127,6 +127,10 @@ Info 32   [00:01:21.000] -----------------------------------------------
 Info 32   [00:01:22.000] Open files: 
 Info 32   [00:01:23.000] 	FileName: /user/username/projects/solution/api/src/server.ts ProjectRootPath: undefined
 Info 32   [00:01:24.000] 		Projects: /user/username/projects/solution/api/tsconfig.json
+Info 32   [00:01:25.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -155,10 +159,8 @@ FsWatchesRecursive::
 /user/username/projects/solution/shared: *new*
   {}
 
-Info 32   [00:01:25.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 33   [00:01:26.000] request:
     {
       "command": "references",
@@ -170,8 +172,6 @@ Info 33   [00:01:26.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 34   [00:01:27.000] Finding references to /user/username/projects/solution/api/src/server.ts position 89 in project /user/username/projects/solution/api/tsconfig.json
 Info 35   [00:01:28.000] Search path: /user/username/projects/solution/shared/src
 Info 36   [00:01:29.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
@@ -269,44 +269,6 @@ Info 75   [00:02:08.000] Search path: /user/username/projects/solution/shared/sr
 Info 76   [00:02:09.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
 Info 77   [00:02:10.000] Search path: /user/username/projects/solution/shared/src
 Info 78   [00:02:11.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/solution/api/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/shared/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/solution/app/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/api/tsconfig.json:
-  {}
-/user/username/projects/solution/shared/tsconfig.json:
-  {}
-/user/username/projects/solution/shared/src/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/solution/tsconfig.json:
-  {}
-/user/username/projects/solution/app/tsconfig.json: *new*
-  {}
-/user/username/projects/solution/app/src/app.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/solution/api/src:
-  {}
-/user/username/projects/solution/shared/src:
-  {}
-/user/username/projects/solution/shared:
-  {}
-/user/username/projects/solution/app/src: *new*
-  {}
-
 Info 79   [00:02:12.000] response:
     {
       "response": {
@@ -365,3 +327,40 @@ Info 79   [00:02:12.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/solution/api/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/shared/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/solution/app/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/api/tsconfig.json:
+  {}
+/user/username/projects/solution/shared/tsconfig.json:
+  {}
+/user/username/projects/solution/shared/src/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+/user/username/projects/solution/app/tsconfig.json: *new*
+  {}
+/user/username/projects/solution/app/src/app.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/solution/api/src:
+  {}
+/user/username/projects/solution/shared/src:
+  {}
+/user/username/projects/solution/shared:
+  {}
+/user/username/projects/solution/app/src: *new*
+  {}

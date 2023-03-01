@@ -1,13 +1,4 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:22.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/username/project/src/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/username/project/src/index.ts]
 import {} from "./"
@@ -32,6 +23,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/username/project/src/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:23.000] Search path: /a/username/project/src
 Info 3    [00:00:24.000] For info: /a/username/project/src/index.ts :: Config file name: /a/username/project/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /a/username/project/tsconfig.json
@@ -83,6 +83,10 @@ Info 22   [00:00:45.000] -----------------------------------------------
 Info 22   [00:00:46.000] Open files: 
 Info 22   [00:00:47.000] 	FileName: /a/username/project/src/index.ts ProjectRootPath: undefined
 Info 22   [00:00:48.000] 		Projects: /a/username/project/tsconfig.json
+Info 22   [00:00:49.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -101,10 +105,8 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 22   [00:00:49.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 23   [00:00:50.000] request:
     {
       "command": "completionInfo",
@@ -116,10 +118,6 @@ Info 23   [00:00:50.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 24   [00:00:51.000] response:
     {
       "response": {
@@ -137,6 +135,8 @@ Info 24   [00:00:51.000] response:
       },
       "responseRequired": true
     }
+After request
+
 Info 25   [00:00:54.000] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
 Info 26   [00:00:55.000] Scheduled: /a/username/project/tsconfig.json
 Info 27   [00:00:56.000] Scheduled: *ensureProjectForOpenFiles*
@@ -193,6 +193,8 @@ FsWatches::
 /a/username/project/src/file2.ts: *new*
   {}
 
+Before request
+
 Info 40   [00:01:09.000] request:
     {
       "command": "completionInfo",
@@ -204,10 +206,6 @@ Info 40   [00:01:09.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 41   [00:01:10.000] response:
     {
       "response": {
@@ -231,3 +229,4 @@ Info 41   [00:01:10.000] response:
       },
       "responseRequired": true
     }
+After request

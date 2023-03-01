@@ -1,13 +1,4 @@
 Info 0    [00:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:24.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/moduleFile1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -43,6 +34,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:24.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/moduleFile1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:25.000] Search path: /a/b
 Info 3    [00:00:26.000] For info: /a/b/moduleFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /a/b/tsconfig.json
@@ -103,6 +103,10 @@ Info 21   [00:00:46.000] -----------------------------------------------
 Info 21   [00:00:47.000] Open files: 
 Info 21   [00:00:48.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefined
 Info 21   [00:00:49.000] 		Projects: /a/b/tsconfig.json
+Info 21   [00:00:50.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -127,10 +131,8 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
-Info 21   [00:00:50.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 22   [00:00:51.000] request:
     {
       "command": "open",
@@ -140,8 +142,6 @@ Info 22   [00:00:51.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 23   [00:00:52.000] FileWatcher:: Close:: WatchInfo: /a/b/file1Consumer1.ts 500 undefined WatchType: Closed Script info
 Info 24   [00:00:53.000] Search path: /a/b
 Info 25   [00:00:54.000] For info: /a/b/file1Consumer1.ts :: Config file name: /a/b/tsconfig.json
@@ -154,6 +154,10 @@ Info 26   [00:00:59.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefin
 Info 26   [00:01:00.000] 		Projects: /a/b/tsconfig.json
 Info 26   [00:01:01.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
 Info 26   [00:01:02.000] 		Projects: /a/b/tsconfig.json
+Info 26   [00:01:03.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -180,10 +184,8 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 26   [00:01:03.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 27   [00:01:04.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -194,10 +196,6 @@ Info 27   [00:01:04.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 28   [00:01:05.000] response:
     {
       "response": [
@@ -213,6 +211,10 @@ Info 28   [00:01:05.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 29   [00:01:06.000] request:
     {
       "command": "change",
@@ -227,14 +229,14 @@ Info 29   [00:01:06.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 30   [00:01:07.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 31   [00:01:08.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -245,13 +247,9 @@ Info 31   [00:01:08.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
 Info 32   [00:01:09.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 33   [00:01:10.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 34   [00:01:11.000] Different program with same set of files
-After request
-
 Info 35   [00:01:12.000] response:
     {
       "response": [
@@ -267,6 +265,10 @@ Info 35   [00:01:12.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 36   [00:01:13.000] request:
     {
       "command": "change",
@@ -281,14 +283,14 @@ Info 36   [00:01:13.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 37   [00:01:14.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 38   [00:01:15.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -299,13 +301,9 @@ Info 38   [00:01:15.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
 Info 39   [00:01:16.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 40   [00:01:17.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 41   [00:01:18.000] Different program with same set of files
-After request
-
 Info 42   [00:01:19.000] response:
     {
       "response": [
@@ -319,3 +317,4 @@ Info 42   [00:01:19.000] response:
       ],
       "responseRequired": true
     }
+After request

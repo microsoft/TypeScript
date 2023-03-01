@@ -1,14 +1,4 @@
 Info 0    [00:00:24.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:25.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/Logger.ts",
-        "projectRootPath": "/user/username/projects/myproject"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/Logger.ts]
 export class logger { }
@@ -33,6 +23,16 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:25.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/Logger.ts",
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:26.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:27.000] For info: /user/username/projects/myproject/Logger.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:28.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -86,6 +86,10 @@ Info 22   [00:00:48.000] -----------------------------------------------
 Info 22   [00:00:49.000] Open files: 
 Info 22   [00:00:50.000] 	FileName: /user/username/projects/myproject/Logger.ts ProjectRootPath: /user/username/projects/myproject
 Info 22   [00:00:51.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 22   [00:00:52.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -104,10 +108,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-Info 22   [00:00:52.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 23   [00:00:53.000] request:
     {
       "command": "geterr",
@@ -120,14 +122,12 @@ Info 23   [00:00:53.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 24   [00:00:54.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 25   [00:00:55.000] event:
@@ -152,6 +152,9 @@ Info 29   [00:01:00.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 30   [00:01:01.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/Logger.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 31   [00:01:04.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/logger.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 32   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/logger.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Before request
+//// [/user/username/projects/myproject/logger.ts] file was renamed from file /user/username/projects/myproject/Logger.ts
+
 Info 33   [00:01:06.000] request:
     {
       "command": "close",
@@ -161,15 +164,16 @@ Info 33   [00:01:06.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-//// [/user/username/projects/myproject/logger.ts] file was renamed from file /user/username/projects/myproject/Logger.ts
-
 Info 34   [00:01:07.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/Logger.ts 500 undefined WatchType: Closed Script info
 Info 35   [00:01:08.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 35   [00:01:09.000] 	Files (3)
 
 Info 35   [00:01:10.000] -----------------------------------------------
 Info 35   [00:01:11.000] Open files: 
+Info 35   [00:01:12.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -190,10 +194,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 35   [00:01:12.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 36   [00:01:13.000] request:
     {
       "command": "open",
@@ -204,8 +206,6 @@ Info 36   [00:01:13.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 37   [00:01:14.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/Logger.ts 500 undefined WatchType: Closed Script info
 Info 38   [00:01:15.000] Search path: /user/username/projects/myproject
 Info 39   [00:01:16.000] For info: /user/username/projects/myproject/Logger.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
@@ -219,6 +219,10 @@ Info 43   [00:01:22.000] -----------------------------------------------
 Info 43   [00:01:23.000] Open files: 
 Info 43   [00:01:24.000] 	FileName: /user/username/projects/myproject/Logger.ts ProjectRootPath: /user/username/projects/myproject
 Info 43   [00:01:25.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 43   [00:01:26.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -241,10 +245,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 43   [00:01:26.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 44   [00:01:27.000] request:
     {
       "command": "open",
@@ -255,8 +257,6 @@ Info 44   [00:01:27.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
 Info 45   [00:01:28.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/another.ts 500 undefined WatchType: Closed Script info
 Info 46   [00:01:29.000] Search path: /user/username/projects/myproject
 Info 47   [00:01:30.000] For info: /user/username/projects/myproject/another.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
@@ -269,6 +269,10 @@ Info 48   [00:01:35.000] 	FileName: /user/username/projects/myproject/Logger.ts 
 Info 48   [00:01:36.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 48   [00:01:37.000] 	FileName: /user/username/projects/myproject/another.ts ProjectRootPath: /user/username/projects/myproject
 Info 48   [00:01:38.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 48   [00:01:39.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -289,10 +293,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 48   [00:01:39.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 49   [00:01:40.000] request:
     {
       "command": "updateOpen",
@@ -319,15 +321,15 @@ Info 49   [00:01:40.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 50   [00:01:41.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 51   [00:01:42.000] request:
     {
       "command": "geterr",
@@ -341,14 +343,12 @@ Info 51   [00:01:42.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 52   [00:01:43.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 53   [00:01:44.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json

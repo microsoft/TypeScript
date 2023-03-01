@@ -1,13 +1,4 @@
 Info 0    [00:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:20.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/file.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/file.ts]
 const x = 10;
@@ -38,6 +29,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:20.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/file.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:21.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:22.000] For info: /user/username/projects/myproject/file.ts :: No config files found.
 Info 4    [00:00:23.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -66,6 +66,10 @@ Info 14   [00:00:35.000] -----------------------------------------------
 Info 14   [00:00:36.000] Open files: 
 Info 14   [00:00:37.000] 	FileName: /user/username/projects/myproject/file.ts ProjectRootPath: undefined
 Info 14   [00:00:38.000] 		Projects: /dev/null/inferredProject1*
+Info 14   [00:00:39.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -80,10 +84,8 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 14   [00:00:39.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 15   [00:00:40.000] request:
     {
       "command": "geterr",
@@ -96,14 +98,12 @@ Info 15   [00:00:40.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 16   [00:00:41.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 17   [00:00:42.000] event:
@@ -123,6 +123,8 @@ Info 19   [00:00:44.000] event:
 Info 20   [00:00:45.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
+
+Before request
 
 Info 21   [00:00:46.000] request:
     {
@@ -150,15 +152,15 @@ Info 21   [00:00:46.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 22   [00:00:47.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 23   [00:00:48.000] request:
     {
       "command": "geterr",
@@ -171,14 +173,12 @@ Info 23   [00:00:48.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 24   [00:00:49.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 25   [00:00:50.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -201,6 +201,8 @@ Info 30   [00:00:55.000] event:
 Info 31   [00:00:56.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)
+
+Before request
 
 Info 32   [00:00:57.000] request:
     {
@@ -228,15 +230,15 @@ Info 32   [00:00:57.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 33   [00:00:58.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 34   [00:00:59.000] request:
     {
       "command": "geterr",
@@ -249,14 +251,12 @@ Info 34   [00:00:59.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 35   [00:01:00.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 36   [00:01:01.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*

@@ -1,13 +1,4 @@
 Info 0    [00:00:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:14.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/commonFile1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/commonFile1.ts]
 /// <reference path="commonFile2.ts"/>
@@ -27,6 +18,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:14.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:15.000] Search path: /a/b
 Info 3    [00:00:16.000] For info: /a/b/commonFile1.ts :: No config files found.
 Info 4    [00:00:17.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -54,6 +54,10 @@ Info 13   [00:00:28.000] -----------------------------------------------
 Info 13   [00:00:29.000] Open files: 
 Info 13   [00:00:30.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
 Info 13   [00:00:31.000] 		Projects: /dev/null/inferredProject1*
+Info 13   [00:00:32.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -66,10 +70,8 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 13   [00:00:32.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 14   [00:00:33.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -79,10 +81,6 @@ Info 14   [00:00:33.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 15   [00:00:34.000] response:
     {
       "response": [
@@ -115,6 +113,8 @@ Info 15   [00:00:34.000] response:
       ],
       "responseRequired": true
     }
+After request
+
 Info 16   [00:00:37.000] FileWatcher:: Triggered with /a/b/commonfile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info 17   [00:00:38.000] FileWatcher:: Close:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info 18   [00:00:39.000] Scheduled: /dev/null/inferredProject1*
@@ -185,6 +185,8 @@ FsWatches::
 /a/b/commonfile2.ts: *new*
   {}
 
+Before request
+
 Info 31   [00:01:04.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -194,12 +196,9 @@ Info 31   [00:01:04.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 32   [00:01:05.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

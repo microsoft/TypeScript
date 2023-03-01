@@ -1,14 +1,4 @@
 Info 0    [00:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:24.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/src/main.ts",
-        "projectRootPath": "/user/username/projects/myproject"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/src/main.ts]
 import * as _a from '@angular/core';
@@ -30,6 +20,16 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
+Info 1    [00:00:24.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts",
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:25.000] Search path: /user/username/projects/myproject/src
 Info 3    [00:00:26.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -80,6 +80,10 @@ Info 25   [00:00:50.000] -----------------------------------------------
 Info 25   [00:00:51.000] Open files: 
 Info 25   [00:00:52.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 Info 25   [00:00:53.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 25   [00:00:54.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -100,10 +104,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
-Info 25   [00:00:54.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 26   [00:00:55.000] request:
     {
       "command": "geterr",
@@ -116,14 +118,12 @@ Info 26   [00:00:55.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 27   [00:00:56.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 28   [00:00:57.000] event:
@@ -233,6 +233,8 @@ Info 75   [00:02:06.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/main.ts"]}}
 After checking timeout queue length (2) and running
 
+Before request
+
 Info 76   [00:02:07.000] request:
     {
       "command": "geterr",
@@ -245,14 +247,12 @@ Info 76   [00:02:07.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 77   [00:02:08.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 78   [00:02:09.000] event:
@@ -318,6 +318,8 @@ export const y = 10;
 
 After checking timeout queue length (0) and running
 
+Before request
+
 Info 117  [00:03:02.000] request:
     {
       "command": "geterr",
@@ -330,14 +332,12 @@ Info 117  [00:03:02.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 118  [00:03:03.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 119  [00:03:04.000] event:
@@ -365,6 +365,8 @@ export const y = 10;
 
 After checking timeout queue length (0) and running
 
+Before request
+
 Info 123  [00:03:14.000] request:
     {
       "command": "geterr",
@@ -377,14 +379,12 @@ Info 123  [00:03:14.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 124  [00:03:15.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 125  [00:03:16.000] event:
@@ -515,6 +515,8 @@ Info 201  [00:04:55.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/main.ts"]}}
 After checking timeout queue length (2) and running
 
+Before request
+
 Info 202  [00:04:56.000] request:
     {
       "command": "geterr",
@@ -527,14 +529,12 @@ Info 202  [00:04:56.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 203  [00:04:57.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 204  [00:04:58.000] event:

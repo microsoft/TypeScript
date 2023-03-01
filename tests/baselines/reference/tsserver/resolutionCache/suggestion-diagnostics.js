@@ -1,4 +1,9 @@
 Info 0    [00:00:05.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a.js]
+function f(p) {}
+
+
 Info 1    [00:00:06.000] request:
     {
       "command": "open",
@@ -9,11 +14,6 @@ Info 1    [00:00:06.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a.js]
-function f(p) {}
-
-
 Info 2    [00:00:07.000] Search path: /
 Info 3    [00:00:08.000] For info: /a.js :: No config files found.
 Info 4    [00:00:09.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -78,6 +78,10 @@ Info 10   [00:00:55.000] -----------------------------------------------
 Info 10   [00:00:56.000] Open files: 
 Info 10   [00:00:57.000] 	FileName: /a.js ProjectRootPath: undefined
 Info 10   [00:00:58.000] 		Projects: /dev/null/inferredProject1*
+Info 10   [00:00:59.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -88,11 +92,9 @@ PolledWatches::
 /node_modules: *new*
   {"pollingInterval":500}
 
-Info 10   [00:00:59.000] response:
-    {
-      "responseRequired": false
-    }
 Checking timeout queue length: 0
+
+Before request
 
 Info 11   [00:01:00.000] request:
     {
@@ -106,14 +108,12 @@ Info 11   [00:01:00.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 12   [00:01:01.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 13   [00:01:02.000] event:

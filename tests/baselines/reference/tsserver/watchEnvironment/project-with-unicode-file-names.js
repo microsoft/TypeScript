@@ -1,14 +1,4 @@
 Info 0    [00:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:20.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/User/userName/Projects/İ/foo.ts",
-        "projectRootPath": "/User/userName/Projects/İ"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/User/userName/Projects/İ/foo.ts]
 import { foo } from "bar"
@@ -27,6 +17,16 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:20.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/User/userName/Projects/İ/foo.ts",
+        "projectRootPath": "/User/userName/Projects/İ"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:21.000] Search path: /User/userName/Projects/İ
 Info 3    [00:00:22.000] For info: /User/userName/Projects/İ/foo.ts :: No config files found.
 Info 4    [00:00:23.000] FileWatcher:: Added:: WatchInfo: /User/userName/Projects/İ/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -57,6 +57,10 @@ Info 16   [00:00:37.000] -----------------------------------------------
 Info 16   [00:00:38.000] Open files: 
 Info 16   [00:00:39.000] 	FileName: /User/userName/Projects/İ/foo.ts ProjectRootPath: /User/userName/Projects/İ
 Info 16   [00:00:40.000] 		Projects: /dev/null/inferredProject1*
+Info 16   [00:00:41.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -72,8 +76,3 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-
-Info 16   [00:00:41.000] response:
-    {
-      "responseRequired": false
-    }

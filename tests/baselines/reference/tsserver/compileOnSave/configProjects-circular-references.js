@@ -1,13 +1,4 @@
 Info 0    [00:00:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:14.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/file1.ts]
 
@@ -25,6 +16,15 @@ Before request
                     }
 
 
+Info 1    [00:00:14.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:15.000] Search path: /a/b
 Info 3    [00:00:16.000] For info: /a/b/file1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:17.000] Creating configuration project /a/b/tsconfig.json
@@ -67,6 +67,10 @@ Info 18   [00:00:33.000] -----------------------------------------------
 Info 18   [00:00:34.000] Open files: 
 Info 18   [00:00:35.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 18   [00:00:36.000] 		Projects: /a/b/tsconfig.json
+Info 18   [00:00:37.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -85,10 +89,8 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
-Info 18   [00:00:37.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 19   [00:00:38.000] request:
     {
       "command": "open",
@@ -98,8 +100,6 @@ Info 19   [00:00:38.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 20   [00:00:39.000] FileWatcher:: Close:: WatchInfo: /a/b/file2.ts 500 undefined WatchType: Closed Script info
 Info 21   [00:00:40.000] Search path: /a/b
 Info 22   [00:00:41.000] For info: /a/b/file2.ts :: Config file name: /a/b/tsconfig.json
@@ -112,6 +112,10 @@ Info 23   [00:00:46.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 23   [00:00:47.000] 		Projects: /a/b/tsconfig.json
 Info 23   [00:00:48.000] 	FileName: /a/b/file2.ts ProjectRootPath: undefined
 Info 23   [00:00:49.000] 		Projects: /a/b/tsconfig.json
+Info 23   [00:00:50.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -132,10 +136,8 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 23   [00:00:50.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 24   [00:00:51.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -145,8 +147,6 @@ Info 24   [00:00:51.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 25   [00:00:52.000] Before ensureProjectForOpenFiles:
 Info 26   [00:00:53.000] Project '/a/b/tsconfig.json' (Configured)
 Info 26   [00:00:54.000] 	Files (2)
@@ -167,8 +167,6 @@ Info 27   [00:01:06.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 27   [00:01:07.000] 		Projects: /a/b/tsconfig.json
 Info 27   [00:01:08.000] 	FileName: /a/b/file2.ts ProjectRootPath: undefined
 Info 27   [00:01:09.000] 		Projects: /a/b/tsconfig.json
-After request
-
 Info 27   [00:01:10.000] response:
     {
       "response": [
@@ -183,3 +181,4 @@ Info 27   [00:01:10.000] response:
       ],
       "responseRequired": true
     }
+After request

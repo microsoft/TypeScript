@@ -1,13 +1,4 @@
 Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:28.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/src/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/src/a.ts]
 export const foo = 0;
@@ -35,6 +26,15 @@ declare module 'ambient' {}
 export declare function observable(): unknown;
 
 
+Info 1    [00:00:28.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/src/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:29.000] Search path: /src
 Info 3    [00:00:30.000] For info: /src/a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:31.000] Creating configuration project /tsconfig.json
@@ -107,6 +107,10 @@ Info 28   [00:01:00.000] -----------------------------------------------
 Info 28   [00:01:01.000] Open files: 
 Info 28   [00:01:02.000] 	FileName: /src/a.ts ProjectRootPath: undefined
 Info 28   [00:01:03.000] 		Projects: /tsconfig.json
+Info 28   [00:01:04.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -133,10 +137,8 @@ FsWatchesRecursive::
 /node_modules: *new*
   {}
 
-Info 28   [00:01:04.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 29   [00:01:05.000] request:
     {
       "command": "open",
@@ -146,8 +148,6 @@ Info 29   [00:01:05.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 30   [00:01:06.000] FileWatcher:: Close:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
 Info 31   [00:01:07.000] Search path: /src
 Info 32   [00:01:08.000] For info: /src/b.ts :: Config file name: /tsconfig.json
@@ -164,6 +164,10 @@ Info 33   [00:01:16.000] 	FileName: /src/a.ts ProjectRootPath: undefined
 Info 33   [00:01:17.000] 		Projects: /tsconfig.json
 Info 33   [00:01:18.000] 	FileName: /src/b.ts ProjectRootPath: undefined
 Info 33   [00:01:19.000] 		Projects: /tsconfig.json
+Info 33   [00:01:20.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -192,10 +196,8 @@ FsWatchesRecursive::
 /node_modules:
   {}
 
-Info 33   [00:01:20.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 34   [00:01:21.000] request:
     {
       "command": "open",
@@ -205,8 +207,6 @@ Info 34   [00:01:21.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 35   [00:01:22.000] FileWatcher:: Close:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
 Info 36   [00:01:23.000] Search path: /src
 Info 37   [00:01:24.000] For info: /src/c.ts :: Config file name: /tsconfig.json
@@ -225,6 +225,10 @@ Info 38   [00:01:34.000] 	FileName: /src/b.ts ProjectRootPath: undefined
 Info 38   [00:01:35.000] 		Projects: /tsconfig.json
 Info 38   [00:01:36.000] 	FileName: /src/c.ts ProjectRootPath: undefined
 Info 38   [00:01:37.000] 		Projects: /tsconfig.json
+Info 38   [00:01:38.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -251,10 +255,8 @@ FsWatchesRecursive::
 /node_modules:
   {}
 
-Info 38   [00:01:38.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 39   [00:01:39.000] request:
     {
       "command": "configure",
@@ -269,16 +271,16 @@ Info 39   [00:01:39.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 40   [00:01:40.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":4,"success":true,"performanceData":{"updateGraphDurationMs":*,"createAutoImportProviderProgramDurationMs":*}}
-After request
-
 Info 41   [00:01:41.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 42   [00:01:42.000] request:
     {
       "command": "completionInfo",
@@ -290,8 +292,6 @@ Info 42   [00:01:42.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
 Info 43   [00:01:43.000] getCompletionData: Get current token: *
 Info 44   [00:01:44.000] getCompletionData: Is inside comment: *
 Info 45   [00:01:45.000] getCompletionData: Get previous token: *
@@ -303,8 +303,6 @@ Info 50   [00:01:50.000] collectAutoImports: response is incomplete
 Info 51   [00:01:51.000] collectAutoImports: *
 Info 52   [00:01:52.000] getCompletionData: Semantic work: *
 Info 53   [00:01:53.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-After request
-
 Info 54   [00:01:54.000] response:
     {
       "response": {
@@ -736,6 +734,10 @@ Info 54   [00:01:54.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 55   [00:01:55.000] request:
     {
       "command": "completionInfo",
@@ -747,8 +749,6 @@ Info 55   [00:01:55.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
 Info 56   [00:01:56.000] getCompletionData: Get current token: *
 Info 57   [00:01:57.000] getCompletionData: Is inside comment: *
 Info 58   [00:01:58.000] getCompletionData: Get previous token: *
@@ -760,8 +760,6 @@ Info 63   [00:02:03.000] collectAutoImports: response is complete
 Info 64   [00:02:04.000] collectAutoImports: *
 Info 65   [00:02:05.000] getCompletionData: Semantic work: *
 Info 66   [00:02:06.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-After request
-
 Info 67   [00:02:07.000] response:
     {
       "response": {
@@ -846,6 +844,8 @@ Info 67   [00:02:07.000] response:
       },
       "responseRequired": true
     }
+After request
+
 Info 68   [00:02:08.000] mobxCache: {
  "modulePaths": [
   {

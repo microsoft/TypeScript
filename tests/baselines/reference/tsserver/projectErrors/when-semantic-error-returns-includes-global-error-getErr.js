@@ -1,13 +1,4 @@
 Info 0    [00:00:22.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:23.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/ui.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -30,6 +21,15 @@ const x = async (_action: string) => {
 {}
 
 
+Info 1    [00:00:23.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/ui.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:24.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:25.000] For info: /user/username/projects/myproject/ui.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:26.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -76,6 +76,10 @@ Info 21   [00:00:45.000] -----------------------------------------------
 Info 21   [00:00:46.000] Open files: 
 Info 21   [00:00:47.000] 	FileName: /user/username/projects/myproject/ui.ts ProjectRootPath: undefined
 Info 21   [00:00:48.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 21   [00:00:49.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -92,10 +96,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-Info 21   [00:00:49.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 22   [00:00:50.000] request:
     {
       "command": "geterr",
@@ -108,14 +110,12 @@ Info 22   [00:00:50.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 23   [00:00:51.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 24   [00:00:52.000] event:

@@ -1,13 +1,4 @@
 Info 0    [00:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:20.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/moduleFile1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -35,6 +26,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:20.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/moduleFile1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:21.000] Search path: /a/b
 Info 3    [00:00:22.000] For info: /a/b/moduleFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:23.000] Creating configuration project /a/b/tsconfig.json
@@ -85,6 +85,10 @@ Info 19   [00:00:40.000] -----------------------------------------------
 Info 19   [00:00:41.000] Open files: 
 Info 19   [00:00:42.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefined
 Info 19   [00:00:43.000] 		Projects: /a/b/tsconfig.json
+Info 19   [00:00:44.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -105,10 +109,8 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
-Info 19   [00:00:44.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 20   [00:00:45.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -119,12 +121,9 @@ Info 20   [00:00:45.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 21   [00:00:46.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

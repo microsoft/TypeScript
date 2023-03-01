@@ -1,26 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "openExternalProject",
-      "arguments": {
-        "rootFiles": [
-          {
-            "fileName": "/a/b/file1.ts"
-          },
-          {
-            "fileName": "/a/b/file2.js"
-          }
-        ],
-        "options": {
-          "allowJs": true,
-          "outFile": "dist.js",
-          "compileOnSave": true
-        },
-        "projectFileName": "/a/b/externalproject"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/file1.ts]
 consonle.log('file1');
@@ -45,6 +23,28 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:18.000] request:
+    {
+      "command": "openExternalProject",
+      "arguments": {
+        "rootFiles": [
+          {
+            "fileName": "/a/b/file1.ts"
+          },
+          {
+            "fileName": "/a/b/file2.js"
+          }
+        ],
+        "options": {
+          "allowJs": true,
+          "outFile": "dist.js",
+          "compileOnSave": true
+        },
+        "projectFileName": "/a/b/externalproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] FileWatcher:: Added:: WatchInfo: /a/b/file1.ts 500 undefined WatchType: Closed Script info
 Info 3    [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/b/file2.js 500 undefined WatchType: Closed Script info
 Info 4    [00:00:21.000] Starting updateGraphWorker: Project: /a/b/externalproject
@@ -67,6 +67,11 @@ Info 10   [00:00:27.000] 	Files (3)
 	  Root file specified for compilation
 
 Info 11   [00:00:28.000] -----------------------------------------------
+Info 12   [00:00:29.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 
 PolledWatches::
@@ -81,11 +86,8 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 12   [00:00:29.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
+Before request
+
 Info 13   [00:00:30.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -95,16 +97,13 @@ Info 13   [00:00:30.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-//// [/a/b/dist.js]
-consonle.log('file1');
-
-
-
 Info 14   [00:00:33.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+//// [/a/b/dist.js]
+consonle.log('file1');
+
+

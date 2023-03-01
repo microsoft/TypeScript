@@ -1,13 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/a/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/a/tsconfig.json]
 {
@@ -46,6 +37,15 @@ export declare class B {
 //# sourceMappingURL=index.d.ts.map
 
 
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Search path: /user/username/projects/myproject/a
 Info 3    [00:00:32.000] For info: /user/username/projects/myproject/a/index.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /user/username/projects/myproject/a/tsconfig.json
@@ -115,6 +115,10 @@ Info 28   [00:00:59.000] -----------------------------------------------
 Info 28   [00:01:00.000] Open files: 
 Info 28   [00:01:01.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
 Info 28   [00:01:02.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
+Info 28   [00:01:03.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -139,10 +143,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b: *new*
   {}
 
-Info 28   [00:01:03.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 29   [00:01:04.000] request:
     {
       "command": "references",
@@ -154,36 +156,8 @@ Info 29   [00:01:04.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 30   [00:01:05.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
 Info 31   [00:01:06.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/lib/index.d.ts.map 2000 undefined WatchType: Missing source map file
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/myproject/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/lib/index.d.ts.map: *new*
-  {"pollingInterval":2000}
-
-FsWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/lib/index.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/a:
-  {}
-/user/username/projects/myproject/b:
-  {}
-
 Info 32   [00:01:07.000] response:
     {
       "response": {
@@ -263,3 +237,28 @@ Info 32   [00:01:07.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/myproject/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/b/lib/index.d.ts.map: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/lib/index.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/b:
+  {}

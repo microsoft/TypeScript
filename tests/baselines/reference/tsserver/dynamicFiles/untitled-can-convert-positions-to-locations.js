@@ -1,4 +1,12 @@
 Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/proj/a.ts]
+
+
+//// [/proj/tsconfig.json]
+{}
+
+
 Info 1    [00:00:10.000] request:
     {
       "command": "open",
@@ -8,14 +16,6 @@ Info 1    [00:00:10.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/proj/a.ts]
-
-
-//// [/proj/tsconfig.json]
-{}
-
-
 Info 2    [00:00:11.000] Search path: /proj
 Info 3    [00:00:12.000] For info: /proj/a.ts :: Config file name: /proj/tsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /proj/tsconfig.json
@@ -51,6 +51,10 @@ Info 17   [00:00:28.000] -----------------------------------------------
 Info 17   [00:00:29.000] Open files: 
 Info 17   [00:00:30.000] 	FileName: /proj/a.ts ProjectRootPath: undefined
 Info 17   [00:00:31.000] 		Projects: /proj/tsconfig.json
+Info 17   [00:00:32.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -67,10 +71,8 @@ FsWatchesRecursive::
 /proj: *new*
   {}
 
-Info 17   [00:00:32.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 18   [00:00:33.000] request:
     {
       "command": "open",
@@ -83,8 +85,6 @@ Info 18   [00:00:33.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 19   [00:00:34.000] Search path: 
 Info 20   [00:00:35.000] For info: untitled:^Untitled-1 :: No config files found.
 Info 21   [00:00:36.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -115,6 +115,10 @@ Info 30   [00:00:52.000] 	FileName: /proj/a.ts ProjectRootPath: undefined
 Info 30   [00:00:53.000] 		Projects: /proj/tsconfig.json
 Info 30   [00:00:54.000] 	FileName: untitled:^Untitled-1 ProjectRootPath: /proj
 Info 30   [00:00:55.000] 		Projects: /dev/null/inferredProject1*
+Info 30   [00:00:56.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -133,10 +137,8 @@ FsWatchesRecursive::
 /proj:
   {}
 
-Info 30   [00:00:56.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 31   [00:00:57.000] request:
     {
       "command": "getCodeFixes",
@@ -153,10 +155,6 @@ Info 31   [00:00:57.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 32   [00:00:58.000] response:
     {
       "response": [
@@ -185,3 +183,4 @@ Info 32   [00:00:58.000] response:
       ],
       "responseRequired": true
     }
+After request

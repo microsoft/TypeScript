@@ -1,13 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/src/projects/app/appB.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/src/projects/node_modules/moduleX/index.d.ts]
 export const x = 10;
@@ -37,6 +28,15 @@ export const y = x;
 
 
 
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/src/projects/app/appB.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Search path: /src/projects/app
 Info 3    [00:00:32.000] For info: /src/projects/app/appB.ts :: Config file name: /src/projects/app/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /src/projects/app/tsconfig.json
@@ -138,6 +138,10 @@ Info 54   [00:01:25.000] -----------------------------------------------
 Info 54   [00:01:26.000] Open files: 
 Info 54   [00:01:27.000] 	FileName: /src/projects/app/appB.ts ProjectRootPath: undefined
 Info 54   [00:01:28.000] 		Projects: /src/projects/app/tsconfig.json
+Info 54   [00:01:29.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -165,8 +169,3 @@ FsWatchesRecursive::
   {}
 /src/projects/node_modules: *new*
   {}
-
-Info 54   [00:01:29.000] response:
-    {
-      "responseRequired": false
-    }

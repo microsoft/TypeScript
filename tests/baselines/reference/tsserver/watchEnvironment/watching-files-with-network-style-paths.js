@@ -1,14 +1,5 @@
 Info 0    [00:00:15.000] For files of style c:/myprojects/project/x.js
 Info 1    [00:00:16.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
-Info 2    [00:00:17.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "c:/myprojects/project/x.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [c:/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -27,6 +18,15 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
+Info 2    [00:00:17.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "c:/myprojects/project/x.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 3    [00:00:18.000] Search path: c:/myprojects/project
 Info 4    [00:00:19.000] For info: c:/myprojects/project/x.js :: No config files found.
 Info 5    [00:00:20.000] FileWatcher:: Added:: WatchInfo: c:/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -106,6 +106,10 @@ Info 15   [00:01:08.000] -----------------------------------------------
 Info 15   [00:01:09.000] Open files: 
 Info 15   [00:01:10.000] 	FileName: c:/myprojects/project/x.js ProjectRootPath: undefined
 Info 15   [00:01:11.000] 		Projects: /dev/null/inferredProject1*
+Info 15   [00:01:12.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -124,21 +128,8 @@ FsWatches::
 c:/a/lib/lib.d.ts:
   {}
 
-Info 15   [00:01:12.000] response:
-    {
-      "responseRequired": false
-    }
 Info 16   [00:00:17.000] For files of style //vda1cs4850/myprojects/project/x.js
 Info 17   [00:00:18.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
-Info 18   [00:00:19.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "//vda1cs4850/myprojects/project/x.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -157,6 +148,15 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
+Info 18   [00:00:19.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "//vda1cs4850/myprojects/project/x.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 19   [00:00:20.000] Search path: //vda1cs4850/myprojects/project
 Info 20   [00:00:21.000] For info: //vda1cs4850/myprojects/project/x.js :: No config files found.
 Info 21   [00:00:22.000] FileWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -236,6 +236,10 @@ Info 31   [00:01:10.000] -----------------------------------------------
 Info 31   [00:01:11.000] Open files: 
 Info 31   [00:01:12.000] 	FileName: //vda1cs4850/myprojects/project/x.js ProjectRootPath: undefined
 Info 31   [00:01:13.000] 		Projects: /dev/null/inferredProject1*
+Info 31   [00:01:14.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -254,21 +258,8 @@ FsWatches::
 //vda1cs4850/a/lib/lib.d.ts:
   {}
 
-Info 31   [00:01:14.000] response:
-    {
-      "responseRequired": false
-    }
 Info 32   [00:00:19.000] For files of style //vda1cs4850/c$/myprojects/project/x.js
 Info 33   [00:00:20.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
-Info 34   [00:00:21.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "//vda1cs4850/c$/myprojects/project/x.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -287,6 +278,15 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
+Info 34   [00:00:21.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "//vda1cs4850/c$/myprojects/project/x.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 35   [00:00:22.000] Search path: //vda1cs4850/c$/myprojects/project
 Info 36   [00:00:23.000] For info: //vda1cs4850/c$/myprojects/project/x.js :: No config files found.
 Info 37   [00:00:24.000] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -366,6 +366,10 @@ Info 47   [00:01:12.000] -----------------------------------------------
 Info 47   [00:01:13.000] Open files: 
 Info 47   [00:01:14.000] 	FileName: //vda1cs4850/c$/myprojects/project/x.js ProjectRootPath: undefined
 Info 47   [00:01:15.000] 		Projects: /dev/null/inferredProject1*
+Info 47   [00:01:16.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -384,21 +388,8 @@ FsWatches::
 //vda1cs4850/a/lib/lib.d.ts:
   {}
 
-Info 47   [00:01:16.000] response:
-    {
-      "responseRequired": false
-    }
 Info 48   [00:00:19.000] For files of style c:/users/username/myprojects/project/x.js
 Info 49   [00:00:20.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
-Info 50   [00:00:21.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "c:/users/username/myprojects/project/x.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [c:/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -417,6 +408,15 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
+Info 50   [00:00:21.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "c:/users/username/myprojects/project/x.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 51   [00:00:22.000] Search path: c:/users/username/myprojects/project
 Info 52   [00:00:23.000] For info: c:/users/username/myprojects/project/x.js :: No config files found.
 Info 53   [00:00:24.000] FileWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -496,6 +496,10 @@ Info 63   [00:01:12.000] -----------------------------------------------
 Info 63   [00:01:13.000] Open files: 
 Info 63   [00:01:14.000] 	FileName: c:/users/username/myprojects/project/x.js ProjectRootPath: undefined
 Info 63   [00:01:15.000] 		Projects: /dev/null/inferredProject1*
+Info 63   [00:01:16.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -514,21 +518,8 @@ FsWatches::
 c:/a/lib/lib.d.ts:
   {}
 
-Info 63   [00:01:16.000] response:
-    {
-      "responseRequired": false
-    }
 Info 64   [00:00:23.000] For files of style //vda1cs4850/c$/users/username/myprojects/project/x.js
 Info 65   [00:00:24.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
-Info 66   [00:00:25.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "//vda1cs4850/c$/users/username/myprojects/project/x.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -547,6 +538,15 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
+Info 66   [00:00:25.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "//vda1cs4850/c$/users/username/myprojects/project/x.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 67   [00:00:26.000] Search path: //vda1cs4850/c$/users/username/myprojects/project
 Info 68   [00:00:27.000] For info: //vda1cs4850/c$/users/username/myprojects/project/x.js :: No config files found.
 Info 69   [00:00:28.000] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -626,6 +626,10 @@ Info 79   [00:01:16.000] -----------------------------------------------
 Info 79   [00:01:17.000] Open files: 
 Info 79   [00:01:18.000] 	FileName: //vda1cs4850/c$/users/username/myprojects/project/x.js ProjectRootPath: undefined
 Info 79   [00:01:19.000] 		Projects: /dev/null/inferredProject1*
+Info 79   [00:01:20.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -643,8 +647,3 @@ PolledWatches::
 FsWatches::
 //vda1cs4850/a/lib/lib.d.ts:
   {}
-
-Info 79   [00:01:20.000] response:
-    {
-      "responseRequired": false
-    }

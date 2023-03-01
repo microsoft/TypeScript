@@ -1,13 +1,4 @@
 Info 0    [00:01:03.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:04.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/main/main.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
 export function fn1() { }
@@ -222,6 +213,15 @@ export {};
 }
 
 
+Info 1    [00:01:04.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:05.000] Search path: /user/username/projects/myproject/main
 Info 3    [00:01:06.000] For info: /user/username/projects/myproject/main/main.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
 Info 4    [00:01:07.000] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
@@ -293,6 +293,10 @@ Info 28   [00:01:33.000] -----------------------------------------------
 Info 28   [00:01:34.000] Open files: 
 Info 28   [00:01:35.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
 Info 28   [00:01:36.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 28   [00:01:37.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -319,10 +323,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/decls: *new*
   {}
 
-Info 28   [00:01:37.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 29   [00:01:38.000] request:
     {
       "command": "open",
@@ -332,8 +334,6 @@ Info 29   [00:01:38.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 30   [00:01:39.000] Search path: /user/username/projects/myproject/dependency
 Info 31   [00:01:40.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info 32   [00:01:41.000] Creating configuration project /user/username/projects/myproject/dependency/tsconfig.json
@@ -370,6 +370,10 @@ Info 44   [00:02:00.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 44   [00:02:01.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 44   [00:02:02.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
 Info 44   [00:02:03.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
+Info 44   [00:02:04.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -398,10 +402,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/decls:
   {}
 
-Info 44   [00:02:04.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 45   [00:02:05.000] request:
     {
       "command": "open",
@@ -411,8 +413,6 @@ Info 45   [00:02:05.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 46   [00:02:06.000] Search path: /user/username/projects/myproject/random
 Info 47   [00:02:07.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
 Info 48   [00:02:08.000] Creating configuration project /user/username/projects/myproject/random/tsconfig.json
@@ -464,6 +464,10 @@ Info 62   [00:02:34.000] 	FileName: /user/username/projects/myproject/dependency
 Info 62   [00:02:35.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
 Info 62   [00:02:36.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 62   [00:02:37.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 62   [00:02:38.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -498,10 +502,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random: *new*
   {}
 
-Info 62   [00:02:38.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 63   [00:02:39.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -513,45 +515,7 @@ Info 63   [00:02:39.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 64   [00:02:40.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
-After request
-
-PolledWatches::
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/dependency/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/random/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/decls/fns.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/random/tsconfig.json:
-  {}
-/user/username/projects/myproject/decls/fns.d.ts.map: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-/user/username/projects/myproject/decls:
-  {}
-/user/username/projects/myproject/random:
-  {}
-
 Info 65   [00:02:41.000] response:
     {
       "response": {
@@ -589,6 +553,44 @@ Info 65   [00:02:41.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts.map: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
+Before request
+
 Info 66   [00:02:42.000] request:
     {
       "command": "rename",
@@ -600,12 +602,8 @@ Info 66   [00:02:42.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
 Info 67   [00:02:43.000] Search path: /user/username/projects/myproject/dependency
 Info 68   [00:02:44.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-After request
-
 Info 69   [00:02:45.000] response:
     {
       "response": {
@@ -687,12 +685,19 @@ Info 69   [00:02:45.000] response:
       },
       "responseRequired": true
     }
+After request
+
 Info 70   [00:02:49.000] FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 1:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info 71   [00:02:50.000] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
 Info 72   [00:02:51.000] Scheduled: *ensureProjectForOpenFiles*
 Info 73   [00:02:52.000] Scheduled: /user/username/projects/myproject/main/tsconfig.json
 Info 74   [00:02:53.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 75   [00:02:54.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 1:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
+Before request
+//// [/user/username/projects/myproject/decls/FnS.d.ts.map]
+{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}
+
+
 Info 76   [00:02:55.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -704,15 +709,8 @@ Info 76   [00:02:55.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-//// [/user/username/projects/myproject/decls/FnS.d.ts.map]
-{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}
-
-
 Info 77   [00:02:56.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
 Info 78   [00:02:57.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-After request
-
 Info 79   [00:02:58.000] response:
     {
       "response": {
@@ -750,6 +748,10 @@ Info 79   [00:02:58.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 80   [00:02:59.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -761,10 +763,6 @@ Info 80   [00:02:59.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 81   [00:03:00.000] response:
     {
       "response": {
@@ -802,6 +800,10 @@ Info 81   [00:03:00.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 82   [00:03:01.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -813,10 +815,6 @@ Info 82   [00:03:01.000] request:
       "seq": 8,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 83   [00:03:02.000] response:
     {
       "response": {
@@ -854,6 +852,10 @@ Info 83   [00:03:02.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 84   [00:03:03.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -865,10 +867,6 @@ Info 84   [00:03:03.000] request:
       "seq": 9,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 85   [00:03:04.000] response:
     {
       "response": {
@@ -906,6 +904,10 @@ Info 85   [00:03:04.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 86   [00:03:05.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -917,10 +919,6 @@ Info 86   [00:03:05.000] request:
       "seq": 10,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 87   [00:03:06.000] response:
     {
       "response": {
@@ -958,6 +956,10 @@ Info 87   [00:03:06.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 88   [00:03:07.000] request:
     {
       "command": "rename",
@@ -969,14 +971,10 @@ Info 88   [00:03:07.000] request:
       "seq": 11,
       "type": "request"
     }
-Before request
-
 Info 89   [00:03:08.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
 Info 90   [00:03:09.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info 91   [00:03:10.000] Search path: /user/username/projects/myproject/dependency
 Info 92   [00:03:11.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-After request
-
 Info 93   [00:03:12.000] response:
     {
       "response": {
@@ -1058,6 +1056,10 @@ Info 93   [00:03:12.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 94   [00:03:13.000] request:
     {
       "command": "rename",
@@ -1069,12 +1071,8 @@ Info 94   [00:03:13.000] request:
       "seq": 12,
       "type": "request"
     }
-Before request
-
 Info 95   [00:03:14.000] Search path: /user/username/projects/myproject/dependency
 Info 96   [00:03:15.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-After request
-
 Info 97   [00:03:16.000] response:
     {
       "response": {
@@ -1156,6 +1154,10 @@ Info 97   [00:03:16.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 98   [00:03:17.000] request:
     {
       "command": "rename",
@@ -1167,12 +1169,8 @@ Info 98   [00:03:17.000] request:
       "seq": 13,
       "type": "request"
     }
-Before request
-
 Info 99   [00:03:18.000] Search path: /user/username/projects/myproject/dependency
 Info 100  [00:03:19.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-After request
-
 Info 101  [00:03:20.000] response:
     {
       "response": {
@@ -1254,6 +1252,10 @@ Info 101  [00:03:20.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 102  [00:03:21.000] request:
     {
       "command": "rename",
@@ -1265,12 +1267,8 @@ Info 102  [00:03:21.000] request:
       "seq": 14,
       "type": "request"
     }
-Before request
-
 Info 103  [00:03:22.000] Search path: /user/username/projects/myproject/dependency
 Info 104  [00:03:23.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-After request
-
 Info 105  [00:03:24.000] response:
     {
       "response": {
@@ -1352,6 +1350,10 @@ Info 105  [00:03:24.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 106  [00:03:25.000] request:
     {
       "command": "rename",
@@ -1363,12 +1365,8 @@ Info 106  [00:03:25.000] request:
       "seq": 15,
       "type": "request"
     }
-Before request
-
 Info 107  [00:03:26.000] Search path: /user/username/projects/myproject/dependency
 Info 108  [00:03:27.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-After request
-
 Info 109  [00:03:28.000] response:
     {
       "response": {
@@ -1450,3 +1448,4 @@ Info 109  [00:03:28.000] response:
       },
       "responseRequired": true
     }
+After request

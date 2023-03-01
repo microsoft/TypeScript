@@ -1,13 +1,4 @@
 Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:10.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/main.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/main.ts]
 import { value, valueA, valueB, valueC, renamedD, valueE, valueF } from "./mod";
@@ -23,6 +14,15 @@ export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };
 {}
 
 
+Info 1    [00:00:10.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/main.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:11.000] Search path: /
 Info 3    [00:00:12.000] For info: /main.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /tsconfig.json
@@ -62,6 +62,10 @@ Info 16   [00:00:27.000] -----------------------------------------------
 Info 16   [00:00:28.000] Open files: 
 Info 16   [00:00:29.000] 	FileName: /main.ts ProjectRootPath: undefined
 Info 16   [00:00:30.000] 		Projects: /tsconfig.json
+Info 16   [00:00:31.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -78,10 +82,8 @@ FsWatchesRecursive::
 /: *new*
   {}
 
-Info 16   [00:00:31.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 17   [00:00:32.000] request:
     {
       "command": "open",
@@ -91,8 +93,6 @@ Info 17   [00:00:32.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 18   [00:00:33.000] FileWatcher:: Close:: WatchInfo: /mod.ts 500 undefined WatchType: Closed Script info
 Info 19   [00:00:34.000] Search path: /
 Info 20   [00:00:35.000] For info: /mod.ts :: Config file name: /tsconfig.json
@@ -105,6 +105,10 @@ Info 21   [00:00:40.000] 	FileName: /main.ts ProjectRootPath: undefined
 Info 21   [00:00:41.000] 		Projects: /tsconfig.json
 Info 21   [00:00:42.000] 	FileName: /mod.ts ProjectRootPath: undefined
 Info 21   [00:00:43.000] 		Projects: /tsconfig.json
+Info 21   [00:00:44.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -123,10 +127,8 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 21   [00:00:44.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 22   [00:00:45.000] request:
     {
       "command": "references",
@@ -138,11 +140,7 @@ Info 22   [00:00:45.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 23   [00:00:46.000] Finding references to /mod.ts position 166 in project /tsconfig.json
-After request
-
 Info 24   [00:00:47.000] response:
     {
       "response": {
@@ -220,3 +218,4 @@ Info 24   [00:00:47.000] response:
       },
       "responseRequired": true
     }
+After request

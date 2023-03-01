@@ -1,13 +1,4 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:22.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/a.ts]
 export const x = 10;
@@ -29,6 +20,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:23.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:24.000] For info: /user/username/projects/myproject/a.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -78,6 +78,10 @@ Info 21   [00:00:44.000] -----------------------------------------------
 Info 21   [00:00:45.000] Open files: 
 Info 21   [00:00:46.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 21   [00:00:47.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 21   [00:00:48.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -96,10 +100,6 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-Info 21   [00:00:48.000] response:
-    {
-      "responseRequired": false
-    }
 ExternalFiles:: ["someFile.txt"]
 Info 22   [00:00:52.000] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info 23   [00:00:53.000] Scheduled: /user/username/projects/myproject/tsconfig.json

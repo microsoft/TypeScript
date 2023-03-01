@@ -1,13 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/usage/usage.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
@@ -43,6 +34,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Search path: /user/username/projects/myproject/usage
 Info 3    [00:00:32.000] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
@@ -108,6 +108,10 @@ Info 26   [00:00:57.000] -----------------------------------------------
 Info 26   [00:00:58.000] Open files: 
 Info 26   [00:00:59.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 26   [00:01:00.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 26   [00:01:01.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -134,10 +138,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency: *new*
   {}
 
-Info 26   [00:01:01.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 27   [00:01:02.000] request:
     {
       "command": "open",
@@ -147,8 +149,6 @@ Info 27   [00:01:02.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 28   [00:01:03.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/fns.ts 500 undefined WatchType: Closed Script info
 Info 29   [00:01:04.000] Search path: /user/username/projects/myproject/dependency
 Info 30   [00:01:05.000] For info: /user/username/projects/myproject/dependency/fns.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
@@ -186,6 +186,10 @@ Info 43   [00:01:25.000] 	FileName: /user/username/projects/myproject/usage/usag
 Info 43   [00:01:26.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 Info 43   [00:01:27.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
 Info 43   [00:01:28.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+Info 43   [00:01:29.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -216,10 +220,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 43   [00:01:29.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 44   [00:01:30.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -229,8 +231,6 @@ Info 44   [00:01:30.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 45   [00:01:31.000] Before ensureProjectForOpenFiles:
 Info 46   [00:01:32.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
 Info 46   [00:01:33.000] 	Files (3)
@@ -259,8 +259,6 @@ Info 47   [00:01:51.000] 	FileName: /user/username/projects/myproject/usage/usag
 Info 47   [00:01:52.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 Info 47   [00:01:53.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
 Info 47   [00:01:54.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
-After request
-
 Info 47   [00:01:55.000] response:
     {
       "response": [
@@ -281,6 +279,10 @@ Info 47   [00:01:55.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 48   [00:01:56.000] request:
     {
       "command": "change",
@@ -295,14 +297,14 @@ Info 48   [00:01:56.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 49   [00:01:57.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 50   [00:01:58.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -312,8 +314,6 @@ Info 50   [00:01:58.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
 Info 51   [00:01:59.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
 Info 52   [00:02:00.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 53   [00:02:01.000] Different program with same set of files
@@ -348,8 +348,6 @@ Info 59   [00:02:25.000] 	FileName: /user/username/projects/myproject/usage/usag
 Info 59   [00:02:26.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 Info 59   [00:02:27.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
 Info 59   [00:02:28.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
-After request
-
 Info 59   [00:02:29.000] response:
     {
       "response": [
@@ -370,6 +368,10 @@ Info 59   [00:02:29.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 60   [00:02:30.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -379,8 +381,6 @@ Info 60   [00:02:30.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
 Info 61   [00:02:33.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/dependency/fns.js :: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info 62   [00:02:34.000] Project: /user/username/projects/myproject/dependency/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/dependency/fns.js
 Info 63   [00:02:35.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/dependency/fns.js :: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
@@ -393,6 +393,11 @@ Info 69   [00:02:44.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 70   [00:02:47.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Failed Lookup Locations
 Info 71   [00:02:48.000] Scheduled: /user/username/projects/myproject/usage/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info 72   [00:02:49.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Failed Lookup Locations
+Info 73   [00:02:50.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 //// [/user/username/projects/myproject/dependency/fns.js]
 "use strict";
@@ -441,11 +446,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/decls: *new*
   {}
 
-Info 73   [00:02:50.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
+Before request
+
 Info 74   [00:02:51.000] request:
     {
       "command": "emit-output",
@@ -455,10 +457,6 @@ Info 74   [00:02:51.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 75   [00:02:52.000] response:
     {
       "response": {
@@ -479,3 +477,4 @@ Info 75   [00:02:52.000] response:
       },
       "responseRequired": true
     }
+After request

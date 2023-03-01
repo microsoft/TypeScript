@@ -1,15 +1,4 @@
 Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:28.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/src/foo.ts",
-        "fileContent": "export function foo() { }",
-        "projectRootPath": "/user/username/projects/myproject"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/src/foo.ts]
 export function foo() { }
@@ -34,6 +23,17 @@ interface Array<T> { length: number; [n: number]: T; }
 {"include":["./src"],"exclude":["./src/sub"]}
 
 
+Info 1    [00:00:28.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/foo.ts",
+        "fileContent": "export function foo() { }",
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:29.000] Search path: /user/username/projects/myproject/src
 Info 3    [00:00:30.000] For info: /user/username/projects/myproject/src/foo.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:31.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -85,6 +85,10 @@ Info 22   [00:00:51.000] -----------------------------------------------
 Info 22   [00:00:52.000] Open files: 
 Info 22   [00:00:53.000] 	FileName: /user/username/projects/myproject/src/foo.ts ProjectRootPath: /user/username/projects/myproject
 Info 22   [00:00:54.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 22   [00:00:55.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -103,13 +107,14 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
-Info 22   [00:00:55.000] response:
-    {
-      "responseRequired": false
-    }
 Info 23   [00:00:58.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 24   [00:00:59.000] Project: /user/username/projects/myproject/tsconfig.json Detected excluded file: /user/username/projects/myproject/src/sub/fooBar.ts
 Info 25   [00:01:00.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Before request
+//// [/user/username/projects/myproject/src/sub/fooBar.ts]
+export function fooBar() { }
+
+
 Info 26   [00:01:01.000] request:
     {
       "command": "open",
@@ -121,11 +126,6 @@ Info 26   [00:01:01.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-//// [/user/username/projects/myproject/src/sub/fooBar.ts]
-export function fooBar() { }
-
-
 Info 27   [00:01:02.000] Search path: /user/username/projects/myproject/src/sub
 Info 28   [00:01:03.000] For info: /user/username/projects/myproject/src/sub/fooBar.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 29   [00:01:04.000] event:
@@ -168,6 +168,10 @@ Info 46   [00:01:28.000] 	FileName: /user/username/projects/myproject/src/foo.ts
 Info 46   [00:01:29.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 46   [00:01:30.000] 	FileName: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject
 Info 46   [00:01:31.000] 		Projects: /dev/null/inferredProject1*
+Info 46   [00:01:32.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -200,10 +204,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 46   [00:01:32.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 47   [00:01:33.000] request:
     {
       "command": "geterr",
@@ -217,14 +219,12 @@ Info 47   [00:01:33.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 48   [00:01:34.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Checking timeout queue length: 1
 
 Before running timeout callback1

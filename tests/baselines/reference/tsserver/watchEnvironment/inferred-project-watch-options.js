@@ -1,18 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "compilerOptionsForInferredProjects",
-      "arguments": {
-        "options": {
-          "excludeDirectories": [
-            "node_modules"
-          ]
-        },
-        "projectRootPath": "/user/username/projects/myproject"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -37,13 +23,29 @@ export { foo } from "./foo";
 export function foo(): string;
 
 
-After request
-
+Info 1    [00:00:30.000] request:
+    {
+      "command": "compilerOptionsForInferredProjects",
+      "arguments": {
+        "options": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        },
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 3    [00:00:32.000] request:
     {
       "command": "open",
@@ -54,8 +56,6 @@ Info 3    [00:00:32.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 4    [00:00:33.000] Search path: /user/username/projects/myproject/src
 Info 5    [00:00:34.000] For info: /user/username/projects/myproject/src/main.ts :: No config files found.
 Info 6    [00:00:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -96,6 +96,10 @@ Info 22   [00:00:53.000] -----------------------------------------------
 Info 22   [00:00:54.000] Open files: 
 Info 22   [00:00:55.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 Info 22   [00:00:56.000] 		Projects: /dev/null/inferredProject1*
+Info 22   [00:00:57.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -117,8 +121,3 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/src: *new*
   {}
-
-Info 22   [00:00:57.000] response:
-    {
-      "responseRequired": false
-    }

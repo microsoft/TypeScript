@@ -1,13 +1,4 @@
 Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:12.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/file1.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/file1.js]
 
@@ -24,6 +15,15 @@ Before request
                 };
 
 
+Info 1    [00:00:12.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/file1.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:13.000] Search path: /a/b
 Info 3    [00:00:14.000] For info: /a/b/file1.js :: No config files found.
 Info 4    [00:00:15.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -100,6 +100,10 @@ Info 13   [00:01:02.000] -----------------------------------------------
 Info 13   [00:01:03.000] Open files: 
 Info 13   [00:01:04.000] 	FileName: /a/b/file1.js ProjectRootPath: undefined
 Info 13   [00:01:05.000] 		Projects: /dev/null/inferredProject1*
+Info 13   [00:01:06.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -116,10 +120,8 @@ FsWatches::
 /a/b/file2.d.ts:
   {}
 
-Info 13   [00:01:06.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 14   [00:01:07.000] request:
     {
       "command": "open",
@@ -129,8 +131,6 @@ Info 14   [00:01:07.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 15   [00:01:08.000] FileWatcher:: Close:: WatchInfo: /a/b/file2.d.ts 500 undefined WatchType: Closed Script info
 Info 16   [00:01:09.000] Search path: /a/b
 Info 17   [00:01:10.000] For info: /a/b/file2.d.ts :: No config files found.
@@ -143,6 +143,10 @@ Info 18   [00:01:15.000] 	FileName: /a/b/file1.js ProjectRootPath: undefined
 Info 18   [00:01:16.000] 		Projects: /dev/null/inferredProject1*
 Info 18   [00:01:17.000] 	FileName: /a/b/file2.d.ts ProjectRootPath: undefined
 Info 18   [00:01:18.000] 		Projects: /dev/null/inferredProject1*
+Info 18   [00:01:19.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -159,10 +163,8 @@ FsWatches *deleted*::
 /a/b/file2.d.ts:
   {}
 
-Info 18   [00:01:19.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 19   [00:01:20.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -172,15 +174,15 @@ Info 19   [00:01:20.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 20   [00:01:21.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 21   [00:01:22.000] request:
     {
       "command": "close",
@@ -190,8 +192,6 @@ Info 21   [00:01:22.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 22   [00:01:23.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 23   [00:01:24.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 24   [00:01:25.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -226,6 +226,10 @@ Info 32   [00:01:45.000] -----------------------------------------------
 Info 32   [00:01:46.000] Open files: 
 Info 32   [00:01:47.000] 	FileName: /a/b/file2.d.ts ProjectRootPath: undefined
 Info 32   [00:01:48.000] 		Projects: /dev/null/inferredProject1*
+Info 32   [00:01:49.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -246,10 +250,8 @@ FsWatches::
 /a/b/file1.js: *new*
   {}
 
-Info 32   [00:01:49.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 33   [00:01:50.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -259,10 +261,6 @@ Info 33   [00:01:50.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 34   [00:01:51.000] response:
     {
       "response": [
@@ -313,6 +311,10 @@ Info 34   [00:01:51.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 35   [00:01:52.000] request:
     {
       "command": "open",
@@ -322,8 +324,6 @@ Info 35   [00:01:52.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
 Info 36   [00:01:53.000] FileWatcher:: Close:: WatchInfo: /a/b/file1.js 500 undefined WatchType: Closed Script info
 Info 37   [00:01:54.000] Search path: /a/b
 Info 38   [00:01:55.000] For info: /a/b/file1.js :: No config files found.
@@ -383,6 +383,10 @@ Info 54   [00:02:31.000] 	FileName: /a/b/file2.d.ts ProjectRootPath: undefined
 Info 54   [00:02:32.000] 		Projects: /dev/null/inferredProject2*
 Info 54   [00:02:33.000] 	FileName: /a/b/file1.js ProjectRootPath: undefined
 Info 54   [00:02:34.000] 		Projects: /dev/null/inferredProject2*
+Info 54   [00:02:35.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -399,10 +403,8 @@ FsWatches *deleted*::
 /a/b/file1.js:
   {}
 
-Info 54   [00:02:35.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 55   [00:02:36.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -412,12 +414,9 @@ Info 55   [00:02:36.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 56   [00:02:37.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

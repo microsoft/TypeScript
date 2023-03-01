@@ -1,13 +1,4 @@
 Info 0    [00:01:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:12.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/packages/A/src/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -224,6 +215,15 @@ export {};
 }
 
 
+Info 1    [00:01:12.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/packages/A/src/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:13.000] Search path: /user/username/projects/myproject/packages/A/src
 Info 3    [00:01:14.000] For info: /user/username/projects/myproject/packages/A/src/index.ts :: Config file name: /user/username/projects/myproject/packages/A/tsconfig.json
 Info 4    [00:01:15.000] Creating configuration project /user/username/projects/myproject/packages/A/tsconfig.json
@@ -319,6 +319,10 @@ Info 42   [00:01:55.000] -----------------------------------------------
 Info 42   [00:01:56.000] Open files: 
 Info 42   [00:01:57.000] 	FileName: /user/username/projects/myproject/packages/A/src/index.ts ProjectRootPath: undefined
 Info 42   [00:01:58.000] 		Projects: /user/username/projects/myproject/packages/A/tsconfig.json
+Info 42   [00:01:59.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -355,10 +359,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
-Info 42   [00:01:59.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 43   [00:02:00.000] request:
     {
       "command": "geterr",
@@ -371,14 +373,12 @@ Info 43   [00:02:00.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 44   [00:02:01.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 45   [00:02:02.000] event:
@@ -398,6 +398,8 @@ Info 47   [00:02:04.000] event:
 Info 48   [00:02:05.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
+
+Before request
 
 Info 49   [00:02:06.000] request:
     {
@@ -425,15 +427,15 @@ Info 49   [00:02:06.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 50   [00:02:07.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 51   [00:02:08.000] request:
     {
       "command": "geterr",
@@ -446,14 +448,12 @@ Info 51   [00:02:08.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 52   [00:02:09.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 53   [00:02:10.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json

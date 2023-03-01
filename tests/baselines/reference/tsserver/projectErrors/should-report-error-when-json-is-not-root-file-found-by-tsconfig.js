@@ -1,13 +1,4 @@
 Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:26.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/src/test.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/src/test.ts]
 import * as blabla from "./blabla.json";
@@ -34,6 +25,15 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"resolveJsonModule":true,"composite":true},"include":["./src/*.ts"]}
 
 
+Info 1    [00:00:26.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/test.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:27.000] Search path: /user/username/projects/myproject/src
 Info 3    [00:00:28.000] For info: /user/username/projects/myproject/src/test.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:29.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -90,6 +90,10 @@ Info 26   [00:00:53.000] -----------------------------------------------
 Info 26   [00:00:54.000] Open files: 
 Info 26   [00:00:55.000] 	FileName: /user/username/projects/myproject/src/test.ts ProjectRootPath: undefined
 Info 26   [00:00:56.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 26   [00:00:57.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -110,10 +114,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
-Info 26   [00:00:57.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 27   [00:00:58.000] request:
     {
       "command": "geterr",
@@ -126,14 +128,12 @@ Info 27   [00:00:58.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 28   [00:00:59.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 29   [00:01:00.000] event:

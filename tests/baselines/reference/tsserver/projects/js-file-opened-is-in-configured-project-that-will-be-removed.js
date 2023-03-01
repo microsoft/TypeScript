@@ -1,13 +1,4 @@
 Info 0    [00:00:37.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:38.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/mocks/cssMock.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"allowJs":true}}
@@ -38,6 +29,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:38.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/mocks/cssMock.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:39.000] Search path: /user/username/projects/myproject/mocks
 Info 3    [00:00:40.000] For info: /user/username/projects/myproject/mocks/cssMock.js :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:41.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -95,6 +95,10 @@ Info 23   [00:01:02.000] -----------------------------------------------
 Info 23   [00:01:03.000] Open files: 
 Info 23   [00:01:04.000] 	FileName: /user/username/projects/myproject/mocks/cssMock.js ProjectRootPath: undefined
 Info 23   [00:01:05.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 23   [00:01:06.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -115,10 +119,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-Info 23   [00:01:06.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 24   [00:01:07.000] request:
     {
       "command": "close",
@@ -128,14 +130,16 @@ Info 24   [00:01:07.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 25   [00:01:08.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/mocks/cssMock.js 500 undefined WatchType: Closed Script info
 Info 26   [00:01:09.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 26   [00:01:10.000] 	Files (4)
 
 Info 26   [00:01:11.000] -----------------------------------------------
 Info 26   [00:01:12.000] Open files: 
+Info 26   [00:01:13.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -158,10 +162,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 26   [00:01:13.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 27   [00:01:14.000] request:
     {
       "command": "open",
@@ -171,8 +173,6 @@ Info 27   [00:01:14.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 28   [00:01:15.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js 500 undefined WatchType: Closed Script info
 Info 29   [00:01:16.000] Search path: /user/username/projects/myproject/apps/editor/scripts
 Info 30   [00:01:17.000] For info: /user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js :: Config file name: /user/username/projects/myproject/apps/editor/tsconfig.json
@@ -386,6 +386,10 @@ Info 83   [00:03:06.000] -----------------------------------------------
 Info 83   [00:03:07.000] Open files: 
 Info 83   [00:03:08.000] 	FileName: /user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js ProjectRootPath: undefined
 Info 83   [00:03:09.000] 		Projects: /dev/null/inferredProject1*
+Info 83   [00:03:10.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -427,8 +431,3 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/apps/editor/src:
   {}
-
-Info 83   [00:03:10.000] response:
-    {
-      "responseRequired": false
-    }

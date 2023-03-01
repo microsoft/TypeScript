@@ -1,13 +1,4 @@
 Info 0    [00:01:01.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:02.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/dependency/FnS.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
 export function fn1() { }
@@ -214,6 +205,15 @@ export {};
 }
 
 
+Info 1    [00:01:02.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/FnS.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:03.000] Search path: /user/username/projects/myproject/dependency
 Info 3    [00:01:04.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info 4    [00:01:05.000] Creating configuration project /user/username/projects/myproject/dependency/tsconfig.json
@@ -259,6 +259,10 @@ Info 21   [00:01:24.000] -----------------------------------------------
 Info 21   [00:01:25.000] Open files: 
 Info 21   [00:01:26.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
 Info 21   [00:01:27.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
+Info 21   [00:01:28.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -277,10 +281,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency: *new*
   {}
 
-Info 21   [00:01:28.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 22   [00:01:29.000] request:
     {
       "command": "open",
@@ -290,8 +292,6 @@ Info 22   [00:01:29.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 23   [00:01:30.000] Search path: /user/username/projects/myproject/random
 Info 24   [00:01:31.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
 Info 25   [00:01:32.000] Creating configuration project /user/username/projects/myproject/random/tsconfig.json
@@ -337,6 +337,10 @@ Info 39   [00:01:53.000] 	FileName: /user/username/projects/myproject/dependency
 Info 39   [00:01:54.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
 Info 39   [00:01:55.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 39   [00:01:56.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 39   [00:01:57.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -361,10 +365,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random: *new*
   {}
 
-Info 39   [00:01:57.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 40   [00:01:58.000] request:
     {
       "command": "rename",
@@ -376,35 +378,7 @@ Info 40   [00:01:58.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 41   [00:01:59.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 2000 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Missing generated file
-After request
-
-PolledWatches::
-/user/username/projects/myproject/dependency/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/random/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/decls/fns.d.ts: *new*
-  {"pollingInterval":2000}
-
-FsWatches::
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/random/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/dependency:
-  {}
-/user/username/projects/myproject/random:
-  {}
-
 Info 42   [00:02:00.000] response:
     {
       "response": {
@@ -453,6 +427,34 @@ Info 42   [00:02:00.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
+Before request
+
 Info 43   [00:02:01.000] request:
     {
       "command": "rename",
@@ -464,10 +466,6 @@ Info 43   [00:02:01.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 44   [00:02:02.000] response:
     {
       "response": {
@@ -516,6 +514,10 @@ Info 44   [00:02:02.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 45   [00:02:03.000] request:
     {
       "command": "rename",
@@ -527,10 +529,6 @@ Info 45   [00:02:03.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 46   [00:02:04.000] response:
     {
       "response": {
@@ -579,6 +577,10 @@ Info 46   [00:02:04.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 47   [00:02:05.000] request:
     {
       "command": "rename",
@@ -590,10 +592,6 @@ Info 47   [00:02:05.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 48   [00:02:06.000] response:
     {
       "response": {
@@ -642,6 +640,10 @@ Info 48   [00:02:06.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 49   [00:02:07.000] request:
     {
       "command": "rename",
@@ -653,10 +655,6 @@ Info 49   [00:02:07.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 50   [00:02:08.000] response:
     {
       "response": {
@@ -705,6 +703,10 @@ Info 50   [00:02:08.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 51   [00:02:09.000] request:
     {
       "command": "close",
@@ -714,8 +716,6 @@ Info 51   [00:02:09.000] request:
       "seq": 8,
       "type": "request"
     }
-Before request
-
 Info 52   [00:02:10.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
 Info 53   [00:02:11.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 53   [00:02:12.000] 	Files (2)
@@ -728,6 +728,10 @@ Info 53   [00:02:16.000] -----------------------------------------------
 Info 53   [00:02:17.000] Open files: 
 Info 53   [00:02:18.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
 Info 53   [00:02:19.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
+Info 53   [00:02:20.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -756,10 +760,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 53   [00:02:20.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 54   [00:02:21.000] request:
     {
       "command": "open",
@@ -769,8 +771,6 @@ Info 54   [00:02:21.000] request:
       "seq": 9,
       "type": "request"
     }
-Before request
-
 Info 55   [00:02:22.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
 Info 56   [00:02:23.000] Search path: /user/username/projects/myproject/random
 Info 57   [00:02:24.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
@@ -787,6 +787,10 @@ Info 58   [00:02:32.000] 	FileName: /user/username/projects/myproject/dependency
 Info 58   [00:02:33.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
 Info 58   [00:02:34.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 58   [00:02:35.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 58   [00:02:36.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -817,10 +821,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 58   [00:02:36.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 59   [00:02:37.000] request:
     {
       "command": "close",
@@ -830,8 +832,6 @@ Info 59   [00:02:37.000] request:
       "seq": 10,
       "type": "request"
     }
-Before request
-
 Info 60   [00:02:38.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
 Info 61   [00:02:39.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 61   [00:02:40.000] 	Files (2)
@@ -844,6 +844,10 @@ Info 61   [00:02:44.000] -----------------------------------------------
 Info 61   [00:02:45.000] Open files: 
 Info 61   [00:02:46.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 61   [00:02:47.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 61   [00:02:48.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -872,10 +876,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 61   [00:02:48.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 62   [00:02:49.000] request:
     {
       "command": "close",
@@ -885,8 +887,6 @@ Info 62   [00:02:49.000] request:
       "seq": 11,
       "type": "request"
     }
-Before request
-
 Info 63   [00:02:50.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
 Info 64   [00:02:51.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info 64   [00:02:52.000] 	Files (2)
@@ -897,6 +897,10 @@ Info 64   [00:02:55.000] 	Files (2)
 
 Info 64   [00:02:56.000] -----------------------------------------------
 Info 64   [00:02:57.000] Open files: 
+Info 64   [00:02:58.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -927,10 +931,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 64   [00:02:58.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 65   [00:02:59.000] request:
     {
       "command": "open",
@@ -940,8 +942,6 @@ Info 65   [00:02:59.000] request:
       "seq": 12,
       "type": "request"
     }
-Before request
-
 Info 66   [00:03:00.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
 Info 67   [00:03:01.000] Search path: /user/username/projects/myproject/random
 Info 68   [00:03:02.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
@@ -974,6 +974,10 @@ Info 82   [00:03:18.000] -----------------------------------------------
 Info 82   [00:03:19.000] Open files: 
 Info 82   [00:03:20.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 82   [00:03:21.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 82   [00:03:22.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -1009,8 +1013,3 @@ FsWatchesRecursive::
 FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/dependency:
   {}
-
-Info 82   [00:03:22.000] response:
-    {
-      "responseRequired": false
-    }

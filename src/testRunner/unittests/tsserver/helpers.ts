@@ -553,7 +553,16 @@ export class TestSession extends ts.server.Session {
     }
 
     public override executeCommand(request: ts.server.protocol.Request) {
-        return this.baseline("response", super.executeCommand(this.baseline("request", request)));
+        if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
+            this.testhost.baselineHost("Before request");
+            this.logger.info(`request:${ts.server.indent(JSON.stringify(request, undefined, 2))}`);
+        }
+        const response = super.executeCommand(request);
+        if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
+            this.logger.info(`response:${ts.server.indent(JSON.stringify(response, undefined, 2))}`);
+            this.testhost.baselineHost("After request");
+        }
+        return response;
     }
 
     public executeCommandSeq<T extends ts.server.protocol.Request>(inputRequest: TestSessionRequest<T>) {
@@ -572,14 +581,6 @@ export class TestSession extends ts.server.Session {
     public clearMessages() {
         ts.clear(this.events);
         this.testhost.clearOutput();
-    }
-
-    private baseline<T extends ts.server.protocol.Request | ts.server.HandlerResponse>(type: "request" | "response", requestOrResult: T): T {
-        if (!this.logger.hasLevel(ts.server.LogLevel.verbose)) return requestOrResult;
-        if (type === "request") this.logger.info(`request:${ts.server.indent(JSON.stringify(requestOrResult, undefined, 2))}`);
-        this.testhost.baselineHost(type === "request" ? "Before request" : "After request");
-        if (type === "response") this.logger.info(`response:${ts.server.indent(JSON.stringify(requestOrResult, undefined, 2))}`);
-        return requestOrResult;
     }
 }
 

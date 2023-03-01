@@ -1,4 +1,9 @@
 Info 0    [00:00:05.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a.js]
+require("b")
+
+
 Info 1    [00:00:06.000] request:
     {
       "command": "open",
@@ -9,11 +14,6 @@ Info 1    [00:00:06.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a.js]
-require("b")
-
-
 Info 2    [00:00:07.000] Search path: /
 Info 3    [00:00:08.000] For info: /a.js :: No config files found.
 Info 4    [00:00:09.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -84,6 +84,10 @@ Info 12   [00:00:59.000] -----------------------------------------------
 Info 12   [00:01:00.000] Open files: 
 Info 12   [00:01:01.000] 	FileName: /a.js ProjectRootPath: undefined
 Info 12   [00:01:02.000] 		Projects: /dev/null/inferredProject1*
+Info 12   [00:01:03.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -94,10 +98,8 @@ PolledWatches::
 /bower_components: *new*
   {"pollingInterval":500}
 
-Info 12   [00:01:03.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 13   [00:01:04.000] request:
     {
       "command": "configure",
@@ -109,17 +111,17 @@ Info 13   [00:01:04.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 14   [00:01:05.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":2,"success":true,"performanceData":{"updateGraphDurationMs":*}}
-After request
-
 Info 15   [00:01:06.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Checking timeout queue length: 0
+
+Before request
 
 Info 16   [00:01:07.000] request:
     {
@@ -133,14 +135,12 @@ Info 16   [00:01:07.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 17   [00:01:08.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 18   [00:01:09.000] event:

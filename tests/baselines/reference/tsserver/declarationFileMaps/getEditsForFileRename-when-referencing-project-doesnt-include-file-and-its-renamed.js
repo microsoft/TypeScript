@@ -1,13 +1,4 @@
 Info 0    [00:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:20.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/src/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/src/a.ts]
 
@@ -22,6 +13,15 @@ Before request
 {"compilerOptions":{"composite":true,"outDir":"./build"},"include":["./src"],"references":[{"path":"../a"}]}
 
 
+Info 1    [00:00:20.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/src/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:21.000] Search path: /a/src
 Info 3    [00:00:22.000] For info: /a/src/a.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:23.000] Creating configuration project /a/tsconfig.json
@@ -63,6 +63,10 @@ Info 19   [00:00:40.000] -----------------------------------------------
 Info 19   [00:00:41.000] Open files: 
 Info 19   [00:00:42.000] 	FileName: /a/src/a.ts ProjectRootPath: undefined
 Info 19   [00:00:43.000] 		Projects: /a/tsconfig.json
+Info 19   [00:00:44.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -79,10 +83,8 @@ FsWatchesRecursive::
 /a: *new*
   {}
 
-Info 19   [00:00:44.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 20   [00:00:45.000] request:
     {
       "command": "open",
@@ -92,8 +94,6 @@ Info 20   [00:00:45.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 21   [00:00:46.000] Search path: /b/src
 Info 22   [00:00:47.000] For info: /b/src/b.ts :: Config file name: /b/tsconfig.json
 Info 23   [00:00:48.000] Creating configuration project /b/tsconfig.json
@@ -145,6 +145,10 @@ Info 38   [00:01:10.000] 	FileName: /a/src/a.ts ProjectRootPath: undefined
 Info 38   [00:01:11.000] 		Projects: /a/tsconfig.json
 Info 38   [00:01:12.000] 	FileName: /b/src/b.ts ProjectRootPath: undefined
 Info 38   [00:01:13.000] 		Projects: /b/tsconfig.json
+Info 38   [00:01:14.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -167,10 +171,8 @@ FsWatchesRecursive::
 /b/src: *new*
   {}
 
-Info 38   [00:01:14.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 39   [00:01:15.000] request:
     {
       "command": "getEditsForFileRename",
@@ -181,12 +183,9 @@ Info 39   [00:01:15.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 40   [00:01:16.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

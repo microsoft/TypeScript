@@ -1,4 +1,6 @@
 Info 0    [00:00:03.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+
 Info 1    [00:00:04.000] request:
     {
       "command": "updateOpen",
@@ -16,8 +18,6 @@ Info 1    [00:00:04.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-
 Info 2    [00:00:05.000] Search path: ^/untitled/ts-nul-authority
 Info 3    [00:00:06.000] For info: ^/untitled/ts-nul-authority/Untitled-1 :: No config files found.
 Info 4    [00:00:07.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -39,17 +39,19 @@ Info 10   [00:00:15.000] -----------------------------------------------
 Info 10   [00:00:16.000] Open files: 
 Info 10   [00:00:17.000] 	FileName: ^/untitled/ts-nul-authority/Untitled-1 ProjectRootPath: undefined
 Info 10   [00:00:18.000] 		Projects: /dev/null/inferredProject1*
+Info 10   [00:00:19.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
-Info 10   [00:00:19.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
+Before request
+
 Info 11   [00:00:20.000] request:
     {
       "command": "encodedSemanticClassifications-full",
@@ -62,10 +64,6 @@ Info 11   [00:00:20.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 12   [00:00:21.000] response:
     {
       "response": {
@@ -93,6 +91,10 @@ Info 12   [00:00:21.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 13   [00:00:22.000] request:
     {
       "command": "geterr",
@@ -105,14 +107,12 @@ Info 13   [00:00:22.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 14   [00:00:23.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 15   [00:00:24.000] event:

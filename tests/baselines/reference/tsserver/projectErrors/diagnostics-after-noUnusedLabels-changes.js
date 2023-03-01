@@ -1,4 +1,12 @@
 Info 0    [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a.ts]
+label: while (1) {}
+
+//// [/tsconfig.json]
+{ "compilerOptions": { "allowUnusedLabels": true } }
+
+
 Info 1    [00:00:08.000] request:
     {
       "command": "open",
@@ -8,14 +16,6 @@ Info 1    [00:00:08.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a.ts]
-label: while (1) {}
-
-//// [/tsconfig.json]
-{ "compilerOptions": { "allowUnusedLabels": true } }
-
-
 Info 2    [00:00:09.000] Search path: /
 Info 3    [00:00:10.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:11.000] Creating configuration project /tsconfig.json
@@ -50,6 +50,10 @@ Info 15   [00:00:24.000] -----------------------------------------------
 Info 15   [00:00:25.000] Open files: 
 Info 15   [00:00:26.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 15   [00:00:27.000] 		Projects: /tsconfig.json
+Info 15   [00:00:28.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -64,10 +68,6 @@ FsWatchesRecursive::
 /: *new*
   {}
 
-Info 15   [00:00:28.000] response:
-    {
-      "responseRequired": false
-    }
 Info 16   [00:00:31.000] FileWatcher:: Triggered with /tsconfig.json 1:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info 17   [00:00:32.000] Scheduled: /tsconfig.json
 Info 18   [00:00:33.000] Scheduled: *ensureProjectForOpenFiles*
@@ -110,6 +110,8 @@ Info 29   [00:00:54.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 29   [00:00:55.000] 		Projects: /tsconfig.json
 After running timeout callbacks
 
+Before request
+
 Info 29   [00:00:56.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -119,10 +121,6 @@ Info 29   [00:00:56.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 30   [00:00:57.000] response:
     {
       "response": [
@@ -143,3 +141,4 @@ Info 30   [00:00:57.000] response:
       ],
       "responseRequired": true
     }
+After request

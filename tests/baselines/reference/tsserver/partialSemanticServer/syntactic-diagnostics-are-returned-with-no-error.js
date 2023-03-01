@@ -1,13 +1,4 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:22.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/a.ts]
 if (a < (b + c) { }
@@ -29,6 +20,15 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
+Info 1    [00:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:23.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 3    [00:00:24.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 4    [00:00:25.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -50,12 +50,14 @@ Info 7    [00:00:30.000] -----------------------------------------------
 Info 7    [00:00:31.000] Open files: 
 Info 7    [00:00:32.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 7    [00:00:33.000] 		Projects: /dev/null/inferredProject1*
-After request
-
 Info 7    [00:00:34.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 8    [00:00:35.000] request:
     {
       "type": "request",
@@ -65,10 +67,6 @@ Info 8    [00:00:35.000] request:
         "file": "/user/username/projects/myproject/a.ts"
       }
     }
-Before request
-
-After request
-
 Info 9    [00:00:36.000] response:
     {
       "response": [
@@ -106,6 +104,10 @@ Info 9    [00:00:36.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 10   [00:00:37.000] request:
     {
       "command": "geterr",
@@ -118,14 +120,12 @@ Info 10   [00:00:37.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 11   [00:00:38.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 12   [00:00:39.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/a.ts","diagnostics":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":18},"text":"')' expected.","code":1005,"category":"error","relatedInformation":[{"span":{"start":{"line":1,"offset":4},"end":{"line":1,"offset":5},"file":"/user/username/projects/myproject/a.ts"},"message":"The parser expected to find a ')' to match the '(' token here.","category":"error","code":1007}]}]}}

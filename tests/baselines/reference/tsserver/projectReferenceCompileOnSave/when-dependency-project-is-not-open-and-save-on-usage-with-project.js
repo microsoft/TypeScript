@@ -1,13 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/usage/usage.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
@@ -43,6 +34,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Search path: /user/username/projects/myproject/usage
 Info 3    [00:00:32.000] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
@@ -108,6 +108,10 @@ Info 26   [00:00:57.000] -----------------------------------------------
 Info 26   [00:00:58.000] Open files: 
 Info 26   [00:00:59.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 26   [00:01:00.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info 26   [00:01:01.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -134,10 +138,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency: *new*
   {}
 
-Info 26   [00:01:01.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 27   [00:01:02.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -148,10 +150,6 @@ Info 27   [00:01:02.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 28   [00:01:03.000] response:
     {
       "response": [
@@ -165,6 +163,10 @@ Info 28   [00:01:03.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 29   [00:01:04.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -175,11 +177,14 @@ Info 29   [00:01:04.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 30   [00:01:07.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
 Info 31   [00:01:08.000] Project: /user/username/projects/myproject/usage/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/usage/usage.js
 Info 32   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
+Info 33   [00:01:10.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 //// [/user/username/projects/myproject/usage/usage.js]
 "use strict";
@@ -190,11 +195,8 @@ var fns_1 = require("../decls/fns");
 
 
 
-Info 33   [00:01:10.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
+Before request
+
 Info 34   [00:01:11.000] request:
     {
       "command": "emit-output",
@@ -205,10 +207,6 @@ Info 34   [00:01:11.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 35   [00:01:12.000] response:
     {
       "response": {
@@ -224,3 +222,4 @@ Info 35   [00:01:12.000] response:
       },
       "responseRequired": true
     }
+After request

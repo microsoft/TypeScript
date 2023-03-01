@@ -1,13 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/f1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/f1.ts]
 export function Foo() { return 10; }
@@ -32,6 +23,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/f1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /a/b
 Info 3    [00:00:20.000] For info: /a/b/f1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /a/b/tsconfig.json
@@ -76,6 +76,10 @@ Info 18   [00:00:37.000] -----------------------------------------------
 Info 18   [00:00:38.000] Open files: 
 Info 18   [00:00:39.000] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info 18   [00:00:40.000] 		Projects: /a/b/tsconfig.json
+Info 18   [00:00:41.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -94,10 +98,8 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
-Info 18   [00:00:41.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 19   [00:00:42.000] request:
     {
       "command": "open",
@@ -107,8 +109,6 @@ Info 19   [00:00:42.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 20   [00:00:43.000] FileWatcher:: Close:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
 Info 21   [00:00:44.000] Search path: /a/b
 Info 22   [00:00:45.000] For info: /a/b/f2.ts :: Config file name: /a/b/tsconfig.json
@@ -121,6 +121,10 @@ Info 23   [00:00:50.000] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info 23   [00:00:51.000] 		Projects: /a/b/tsconfig.json
 Info 23   [00:00:52.000] 	FileName: /a/b/f2.ts ProjectRootPath: undefined
 Info 23   [00:00:53.000] 		Projects: /a/b/tsconfig.json
+Info 23   [00:00:54.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -141,10 +145,8 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 23   [00:00:54.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 24   [00:00:55.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -155,11 +157,14 @@ Info 24   [00:00:55.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 25   [00:00:58.000] DirectoryWatcher:: Triggered with /a/b/f1.js :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info 26   [00:00:59.000] Project: /a/b/tsconfig.json Detected file add/remove of non supported extension: /a/b/f1.js
 Info 27   [00:01:00.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/f1.js :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info 28   [00:01:01.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 //// [/a/b/f1.js]
 "use strict";
@@ -169,9 +174,3 @@ function Foo() { return 10; }
 exports.Foo = Foo;
 
 
-
-Info 28   [00:01:01.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }

@@ -1,13 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/rootfolder/otherfolder/a/b/project/file1.ts]
 import a from "file2"
@@ -32,6 +23,15 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"typeRoots":[]}}
 
 
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Search path: /user/username/rootfolder/otherfolder/a/b/project
 Info 3    [00:00:32.000] For info: /user/username/rootfolder/otherfolder/a/b/project/file1.ts :: Config file name: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
@@ -90,6 +90,10 @@ Info 28   [00:00:59.000] -----------------------------------------------
 Info 28   [00:01:00.000] Open files: 
 Info 28   [00:01:01.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
 Info 28   [00:01:02.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+Info 28   [00:01:03.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -114,10 +118,6 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/project: *new*
   {}
 
-Info 28   [00:01:03.000] response:
-    {
-      "responseRequired": false
-    }
 Info 29   [00:01:07.000] FileWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/project/file3.ts 1:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/file3.ts 500 undefined WatchType: Closed Script info
 Info 30   [00:01:08.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 31   [00:01:09.000] Scheduled: *ensureProjectForOpenFiles*

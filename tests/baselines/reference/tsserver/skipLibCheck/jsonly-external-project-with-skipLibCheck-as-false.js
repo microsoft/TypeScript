@@ -1,4 +1,18 @@
 Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a/b/file1.js]
+let x =1;
+
+//// [/a/b/file2.d.ts]
+
+                interface T {
+                    name: string;
+                };
+                interface T {
+                    name: number;
+                };
+
+
 Info 1    [00:00:12.000] request:
     {
       "command": "openExternalProject",
@@ -19,20 +33,6 @@ Info 1    [00:00:12.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a/b/file1.js]
-let x =1;
-
-//// [/a/b/file2.d.ts]
-
-                interface T {
-                    name: string;
-                };
-                interface T {
-                    name: number;
-                };
-
-
 Info 2    [00:00:13.000] FileWatcher:: Added:: WatchInfo: /a/b/file1.js 500 undefined WatchType: Closed Script info
 Info 3    [00:00:14.000] FileWatcher:: Added:: WatchInfo: /a/b/file2.d.ts 500 undefined WatchType: Closed Script info
 Info 4    [00:00:15.000] Starting updateGraphWorker: Project: project1
@@ -102,6 +102,11 @@ TI:: [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_mo
 TI:: [00:00:58.000] Sending response:
     {"projectName":"project1","typeAcquisition":{"include":[],"exclude":[],"enable":true},"compilerOptions":{"skipLibCheck":false,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
 TI:: [00:00:59.000] No new typings were requested as a result of typings discovery
+Info 10   [00:01:00.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 
 PolledWatches::
@@ -122,11 +127,8 @@ FsWatchesRecursive::
 /a: *new*
   {}
 
-Info 10   [00:01:00.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
+Before request
+
 Info 11   [00:01:01.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -136,12 +138,9 @@ Info 11   [00:01:01.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 12   [00:01:02.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

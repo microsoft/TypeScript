@@ -1,13 +1,4 @@
 Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:34.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/projects/project2/class2.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
 {"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
@@ -38,6 +29,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:34.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/projects/project2/class2.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:35.000] Search path: /user/username/projects/myproject/projects/project2
 Info 3    [00:00:36.000] For info: /user/username/projects/myproject/projects/project2/class2.ts :: Config file name: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 4    [00:00:37.000] Creating configuration project /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -107,6 +107,10 @@ Info 28   [00:01:03.000] -----------------------------------------------
 Info 28   [00:01:04.000] Open files: 
 Info 28   [00:01:05.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
 Info 28   [00:01:06.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info 28   [00:01:07.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -133,10 +137,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1: *new*
   {}
 
-Info 28   [00:01:07.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 29   [00:01:08.000] request:
     {
       "command": "open",
@@ -146,8 +148,6 @@ Info 29   [00:01:08.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 30   [00:01:09.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class1.ts 500 undefined WatchType: Closed Script info
 Info 31   [00:01:10.000] Search path: /user/username/projects/myproject/projects/project1
 Info 32   [00:01:11.000] For info: /user/username/projects/myproject/projects/project1/class1.ts :: Config file name: /user/username/projects/myproject/projects/project1/tsconfig.json
@@ -187,6 +187,10 @@ Info 47   [00:01:33.000] 	FileName: /user/username/projects/myproject/projects/p
 Info 47   [00:01:34.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 47   [00:01:35.000] 	FileName: /user/username/projects/myproject/projects/project1/class1.ts ProjectRootPath: undefined
 Info 47   [00:01:36.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json,/user/username/projects/myproject/projects/project1/tsconfig.json
+Info 47   [00:01:37.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -217,10 +221,6 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
   {}
 
-Info 47   [00:01:37.000] response:
-    {
-      "responseRequired": false
-    }
 Info 48   [00:01:40.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 49   [00:01:41.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 50   [00:01:42.000] Scheduled: *ensureProjectForOpenFiles*

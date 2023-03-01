@@ -1,13 +1,4 @@
 Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:16.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/tsconfig.json]
 {
@@ -34,6 +25,15 @@ import a = require("../a");
 export const ghijkl = a.abcdef;
 
 
+Info 1    [00:00:16.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:17.000] Search path: /a
 Info 3    [00:00:18.000] For info: /a/index.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:19.000] Creating configuration project /a/tsconfig.json
@@ -72,6 +72,10 @@ Info 19   [00:00:36.000] -----------------------------------------------
 Info 19   [00:00:37.000] Open files: 
 Info 19   [00:00:38.000] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info 19   [00:00:39.000] 		Projects: /a/tsconfig.json
+Info 19   [00:00:40.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -88,10 +92,8 @@ FsWatchesRecursive::
 /a: *new*
   {}
 
-Info 19   [00:00:40.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 20   [00:00:41.000] request:
     {
       "command": "open",
@@ -101,8 +103,6 @@ Info 20   [00:00:41.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 21   [00:00:42.000] Search path: /b
 Info 22   [00:00:43.000] For info: /b/index.ts :: Config file name: /b/tsconfig.json
 Info 23   [00:00:44.000] Creating configuration project /b/tsconfig.json
@@ -156,6 +156,10 @@ Info 38   [00:01:06.000] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info 38   [00:01:07.000] 		Projects: /a/tsconfig.json,/b/tsconfig.json
 Info 38   [00:01:08.000] 	FileName: /b/index.ts ProjectRootPath: undefined
 Info 38   [00:01:09.000] 		Projects: /b/tsconfig.json
+Info 38   [00:01:10.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -178,10 +182,8 @@ FsWatchesRecursive::
 /b: *new*
   {}
 
-Info 38   [00:01:10.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 39   [00:01:11.000] request:
     {
       "command": "navto",
@@ -192,10 +194,6 @@ Info 39   [00:01:11.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 40   [00:01:12.000] response:
     {
       "response": [
@@ -218,3 +216,4 @@ Info 40   [00:01:12.000] response:
       ],
       "responseRequired": true
     }
+After request

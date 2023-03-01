@@ -1,17 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "configure",
-      "arguments": {
-        "watchOptions": {
-          "excludeDirectories": [
-            "node_modules"
-          ]
-        }
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -36,15 +23,30 @@ export { foo } from "./foo";
 export function foo(): string;
 
 
+Info 1    [00:00:30.000] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "watchOptions": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
 Info 3    [00:00:32.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-After request
-
 Info 4    [00:00:33.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 5    [00:00:34.000] request:
     {
       "command": "openExternalProject",
@@ -70,8 +72,6 @@ Info 5    [00:00:34.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 6    [00:00:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 {"excludeDirectories":["node_modules"]} WatchType: Closed Script info
 Info 7    [00:00:36.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["node_modules"]} WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 8    [00:00:37.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/project.csproj
@@ -102,6 +102,11 @@ Info 16   [00:00:45.000] 	Files (4)
 	  Root file specified for compilation
 
 Info 17   [00:00:46.000] -----------------------------------------------
+Info 18   [00:00:47.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 
 FsWatches::
@@ -114,11 +119,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
-Info 18   [00:00:47.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
+Before request
+
 Info 19   [00:00:48.000] request:
     {
       "command": "open",
@@ -128,8 +130,6 @@ Info 19   [00:00:48.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 20   [00:00:49.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 {"excludeDirectories":["node_modules"]} WatchType: Closed Script info
 Info 21   [00:00:50.000] Project '/user/username/projects/myproject/project.csproj' (External)
 Info 21   [00:00:51.000] 	Files (4)
@@ -138,6 +138,10 @@ Info 21   [00:00:52.000] -----------------------------------------------
 Info 21   [00:00:53.000] Open files: 
 Info 21   [00:00:54.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 Info 21   [00:00:55.000] 		Projects: /user/username/projects/myproject/project.csproj
+Info 21   [00:00:56.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 FsWatches::
@@ -151,8 +155,3 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
-
-Info 21   [00:00:56.000] response:
-    {
-      "responseRequired": false
-    }

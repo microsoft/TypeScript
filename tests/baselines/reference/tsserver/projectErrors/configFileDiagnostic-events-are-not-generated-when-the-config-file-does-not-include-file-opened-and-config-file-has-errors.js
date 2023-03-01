@@ -1,13 +1,4 @@
 Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:16.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/test.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/app.ts]
 let x = 10
@@ -35,6 +26,15 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 
+Info 1    [00:00:16.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/test.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:17.000] Search path: /a/b
 Info 3    [00:00:18.000] For info: /a/b/test.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:19.000] Creating configuration project /a/b/tsconfig.json
@@ -100,6 +100,10 @@ Info 27   [00:00:47.000] -----------------------------------------------
 Info 27   [00:00:48.000] Open files: 
 Info 27   [00:00:49.000] 	FileName: /a/b/test.ts ProjectRootPath: undefined
 Info 27   [00:00:50.000] 		Projects: /dev/null/inferredProject1*
+Info 27   [00:00:51.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -114,10 +118,8 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-Info 27   [00:00:51.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 28   [00:00:52.000] request:
     {
       "command": "open",
@@ -127,8 +129,6 @@ Info 28   [00:00:52.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 29   [00:00:53.000] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info 30   [00:00:54.000] Search path: /a/b
 Info 31   [00:00:55.000] For info: /a/b/app.ts :: Config file name: /a/b/tsconfig.json
@@ -145,6 +145,10 @@ Info 32   [00:01:03.000] 	FileName: /a/b/test.ts ProjectRootPath: undefined
 Info 32   [00:01:04.000] 		Projects: /dev/null/inferredProject1*
 Info 32   [00:01:05.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 32   [00:01:06.000] 		Projects: /a/b/tsconfig.json
+Info 32   [00:01:07.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -161,10 +165,8 @@ FsWatches *deleted*::
 /a/b/app.ts:
   {}
 
-Info 32   [00:01:07.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 33   [00:01:08.000] request:
     {
       "command": "open",
@@ -174,8 +176,6 @@ Info 33   [00:01:08.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 34   [00:01:09.000] Search path: /a/b
 Info 35   [00:01:10.000] For info: /a/b/test2.ts :: Config file name: /a/b/tsconfig.json
 Info 36   [00:01:11.000] event:
@@ -215,9 +215,8 @@ Info 44   [00:01:31.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 44   [00:01:32.000] 		Projects: /a/b/tsconfig.json
 Info 44   [00:01:33.000] 	FileName: /a/b/test2.ts ProjectRootPath: undefined
 Info 44   [00:01:34.000] 		Projects: /dev/null/inferredProject2*
-After request
-
 Info 44   [00:01:35.000] response:
     {
       "responseRequired": false
     }
+After request

@@ -1,17 +1,4 @@
 Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:32.000] request:
-    {
-      "command": "configure",
-      "arguments": {
-        "watchOptions": {
-          "excludeDirectories": [
-            "node_modules"
-          ]
-        }
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -39,15 +26,30 @@ export function foo(): string;
 {"include":["src"],"watchOptions":{"excludeDirectories":["node_modules"]}}
 
 
+Info 1    [00:00:32.000] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "watchOptions": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:33.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
 Info 3    [00:00:34.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-After request
-
 Info 4    [00:00:35.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 5    [00:00:36.000] request:
     {
       "command": "open",
@@ -57,8 +59,6 @@ Info 5    [00:00:36.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 6    [00:00:37.000] Search path: /user/username/projects/myproject/src
 Info 7    [00:00:38.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 8    [00:00:39.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -113,6 +113,10 @@ Info 26   [00:00:59.000] -----------------------------------------------
 Info 26   [00:01:00.000] Open files: 
 Info 26   [00:01:01.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 Info 26   [00:01:02.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 26   [00:01:03.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 FsWatches::
@@ -124,8 +128,3 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
-
-Info 26   [00:01:03.000] response:
-    {
-      "responseRequired": false
-    }

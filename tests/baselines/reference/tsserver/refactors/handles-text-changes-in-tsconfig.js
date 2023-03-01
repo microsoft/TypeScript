@@ -1,4 +1,12 @@
 Info 0    [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a.ts]
+export const a = 0;
+
+//// [/tsconfig.json]
+{ "files": ["./a.ts"] }
+
+
 Info 1    [00:00:08.000] request:
     {
       "command": "open",
@@ -8,14 +16,6 @@ Info 1    [00:00:08.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a.ts]
-export const a = 0;
-
-//// [/tsconfig.json]
-{ "files": ["./a.ts"] }
-
-
 Info 2    [00:00:09.000] Search path: /
 Info 3    [00:00:10.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:11.000] Creating configuration project /tsconfig.json
@@ -47,6 +47,10 @@ Info 13   [00:00:22.000] -----------------------------------------------
 Info 13   [00:00:23.000] Open files: 
 Info 13   [00:00:24.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 13   [00:00:25.000] 		Projects: /tsconfig.json
+Info 13   [00:00:26.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -57,10 +61,8 @@ FsWatches::
 /tsconfig.json: *new*
   {}
 
-Info 13   [00:00:26.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 14   [00:00:27.000] request:
     {
       "command": "getEditsForRefactor",
@@ -76,10 +78,6 @@ Info 14   [00:00:27.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 15   [00:00:28.000] response:
     {
       "response": {
@@ -136,3 +134,4 @@ Info 15   [00:00:28.000] response:
       },
       "responseRequired": true
     }
+After request

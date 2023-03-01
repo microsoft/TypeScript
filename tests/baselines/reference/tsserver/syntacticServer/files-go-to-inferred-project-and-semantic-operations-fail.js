@@ -1,13 +1,4 @@
 Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:32.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/a.ts]
 import { y, cc } from "./b";
@@ -42,6 +33,15 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
+Info 1    [00:00:32.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:33.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 3    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: false Elapsed:: *ms
 Info 4    [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -55,12 +55,14 @@ Info 7    [00:00:40.000] -----------------------------------------------
 Info 7    [00:00:41.000] Open files: 
 Info 7    [00:00:42.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 7    [00:00:43.000] 		Projects: /dev/null/inferredProject1*
-After request
-
 Info 7    [00:00:44.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 8    [00:00:45.000] request:
     {
       "command": "completionInfo",
@@ -72,9 +74,9 @@ Info 8    [00:00:45.000] request:
       "seq": 2,
       "type": "request"
     }
+Info 9    [00:00:46.000] Request: completionInfo not allowed in LanguageServiceMode.Syntactic
 Before request
 
-Info 9    [00:00:46.000] Request: completionInfo not allowed in LanguageServiceMode.Syntactic
 Info 10   [00:00:47.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -86,9 +88,9 @@ Info 10   [00:00:47.000] request:
       "seq": 3,
       "type": "request"
     }
+Info 11   [00:00:48.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Before request
 
-Info 11   [00:00:48.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Info 12   [00:00:49.000] request:
     {
       "command": "open",
@@ -98,8 +100,6 @@ Info 12   [00:00:49.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 13   [00:00:50.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 14   [00:00:51.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false Elapsed:: *ms
 Info 15   [00:00:52.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -115,12 +115,14 @@ Info 18   [00:00:59.000] 	FileName: /user/username/projects/myproject/a.ts Proje
 Info 18   [00:01:00.000] 		Projects: /dev/null/inferredProject1*
 Info 18   [00:01:01.000] 	FileName: /user/username/projects/myproject/b.ts ProjectRootPath: undefined
 Info 18   [00:01:02.000] 		Projects: /dev/null/inferredProject1*
-After request
-
 Info 18   [00:01:03.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 19   [00:01:04.000] request:
     {
       "command": "completionInfo",
@@ -132,9 +134,9 @@ Info 19   [00:01:04.000] request:
       "seq": 5,
       "type": "request"
     }
+Info 20   [00:01:05.000] Request: completionInfo not allowed in LanguageServiceMode.Syntactic
 Before request
 
-Info 20   [00:01:05.000] Request: completionInfo not allowed in LanguageServiceMode.Syntactic
 Info 21   [00:01:06.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -146,9 +148,9 @@ Info 21   [00:01:06.000] request:
       "seq": 6,
       "type": "request"
     }
+Info 22   [00:01:07.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Before request
 
-Info 22   [00:01:07.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Info 23   [00:01:08.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -160,9 +162,9 @@ Info 23   [00:01:08.000] request:
       "seq": 7,
       "type": "request"
     }
+Info 24   [00:01:09.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Before request
 
-Info 24   [00:01:09.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Info 25   [00:01:10.000] request:
     {
       "command": "open",
@@ -172,8 +174,6 @@ Info 25   [00:01:10.000] request:
       "seq": 8,
       "type": "request"
     }
-Before request
-
 Info 26   [00:01:11.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 27   [00:01:12.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: false Elapsed:: *ms
 Info 28   [00:01:13.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -191,12 +191,14 @@ Info 31   [00:01:22.000] 	FileName: /user/username/projects/myproject/b.ts Proje
 Info 31   [00:01:23.000] 		Projects: /dev/null/inferredProject1*
 Info 31   [00:01:24.000] 	FileName: /user/username/projects/myproject/c.ts ProjectRootPath: undefined
 Info 31   [00:01:25.000] 		Projects: /dev/null/inferredProject1*
-After request
-
 Info 31   [00:01:26.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 32   [00:01:27.000] request:
     {
       "command": "open",
@@ -206,8 +208,6 @@ Info 32   [00:01:27.000] request:
       "seq": 9,
       "type": "request"
     }
-Before request
-
 Info 33   [00:01:28.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 34   [00:01:29.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 4 structureChanged: false Elapsed:: *ms
 Info 35   [00:01:30.000] Project '/dev/null/inferredProject1*' (Inferred)
@@ -227,12 +227,14 @@ Info 38   [00:01:41.000] 	FileName: /user/username/projects/myproject/c.ts Proje
 Info 38   [00:01:42.000] 		Projects: /dev/null/inferredProject1*
 Info 38   [00:01:43.000] 	FileName: /user/username/projects/myproject/node_modules/something/index.d.ts ProjectRootPath: undefined
 Info 38   [00:01:44.000] 		Projects: /dev/null/inferredProject1*
-After request
-
 Info 38   [00:01:45.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 39   [00:01:46.000] request:
     {
       "command": "close",
@@ -242,8 +244,6 @@ Info 39   [00:01:46.000] request:
       "seq": 10,
       "type": "request"
     }
-Before request
-
 Info 40   [00:01:47.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 40   [00:01:48.000] 	Files (0) NoProgram
 
@@ -255,12 +255,14 @@ Info 40   [00:01:53.000] 	FileName: /user/username/projects/myproject/b.ts Proje
 Info 40   [00:01:54.000] 		Projects: /dev/null/inferredProject1*
 Info 40   [00:01:55.000] 	FileName: /user/username/projects/myproject/node_modules/something/index.d.ts ProjectRootPath: undefined
 Info 40   [00:01:56.000] 		Projects: /dev/null/inferredProject1*
-After request
-
 Info 40   [00:01:57.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 41   [00:01:58.000] request:
     {
       "command": "close",
@@ -270,8 +272,6 @@ Info 41   [00:01:58.000] request:
       "seq": 11,
       "type": "request"
     }
-Before request
-
 Info 42   [00:01:59.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 42   [00:02:00.000] 	Files (0) NoProgram
 
@@ -281,9 +281,8 @@ Info 42   [00:02:03.000] 	FileName: /user/username/projects/myproject/a.ts Proje
 Info 42   [00:02:04.000] 		Projects: /dev/null/inferredProject1*
 Info 42   [00:02:05.000] 	FileName: /user/username/projects/myproject/node_modules/something/index.d.ts ProjectRootPath: undefined
 Info 42   [00:02:06.000] 		Projects: /dev/null/inferredProject1*
-After request
-
 Info 42   [00:02:07.000] response:
     {
       "responseRequired": false
     }
+After request

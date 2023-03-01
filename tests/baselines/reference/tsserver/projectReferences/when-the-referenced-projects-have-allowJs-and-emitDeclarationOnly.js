@@ -1,13 +1,4 @@
 Info 0    [00:00:43.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:44.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/packages/consumer/src/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -54,6 +45,15 @@ testCompositeFunction('why hello there', 42);
 
 //// [/user/username/projects/myproject/node_modules/emit-composite] symlink(/user/username/projects/myproject/packages/emit-composite)
 
+Info 1    [00:00:44.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/packages/consumer/src/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:45.000] Search path: /user/username/projects/myproject/packages/consumer/src
 Info 3    [00:00:46.000] For info: /user/username/projects/myproject/packages/consumer/src/index.ts :: Config file name: /user/username/projects/myproject/packages/consumer/tsconfig.json
 Info 4    [00:00:47.000] Creating configuration project /user/username/projects/myproject/packages/consumer/tsconfig.json
@@ -146,6 +146,10 @@ Info 42   [00:01:27.000] -----------------------------------------------
 Info 42   [00:01:28.000] Open files: 
 Info 42   [00:01:29.000] 	FileName: /user/username/projects/myproject/packages/consumer/src/index.ts ProjectRootPath: undefined
 Info 42   [00:01:30.000] 		Projects: /user/username/projects/myproject/packages/consumer/tsconfig.json
+Info 42   [00:01:31.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -184,10 +188,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
-Info 42   [00:01:31.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 43   [00:01:32.000] request:
     {
       "command": "geterr",
@@ -200,14 +202,12 @@ Info 43   [00:01:32.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 44   [00:01:33.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 45   [00:01:34.000] event:

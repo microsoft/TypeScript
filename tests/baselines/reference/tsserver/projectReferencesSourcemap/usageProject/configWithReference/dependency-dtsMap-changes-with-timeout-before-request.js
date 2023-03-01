@@ -1,13 +1,4 @@
 Info 0    [00:01:00.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:01.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/main/main.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
 export function fn1() { }
@@ -222,6 +213,15 @@ export {};
 }
 
 
+Info 1    [00:01:01.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:02.000] Search path: /user/username/projects/myproject/main
 Info 3    [00:01:03.000] For info: /user/username/projects/myproject/main/main.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
 Info 4    [00:01:04.000] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
@@ -292,6 +292,10 @@ Info 28   [00:01:30.000] -----------------------------------------------
 Info 28   [00:01:31.000] Open files: 
 Info 28   [00:01:32.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
 Info 28   [00:01:33.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 28   [00:01:34.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -318,10 +322,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/decls: *new*
   {}
 
-Info 28   [00:01:34.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 29   [00:01:35.000] request:
     {
       "command": "open",
@@ -331,8 +333,6 @@ Info 29   [00:01:35.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 30   [00:01:36.000] Search path: /user/username/projects/myproject/random
 Info 31   [00:01:37.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
 Info 32   [00:01:38.000] Creating configuration project /user/username/projects/myproject/random/tsconfig.json
@@ -378,6 +378,10 @@ Info 46   [00:01:59.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 46   [00:02:00.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 46   [00:02:01.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 46   [00:02:02.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+Info 46   [00:02:03.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -410,10 +414,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random: *new*
   {}
 
-Info 46   [00:02:03.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 47   [00:02:04.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -425,10 +427,6 @@ Info 47   [00:02:04.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 48   [00:02:05.000] response:
     {
       "response": {
@@ -466,12 +464,16 @@ Info 48   [00:02:05.000] response:
       },
       "responseRequired": true
     }
+After request
+
 Before running timeout callbacks
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map]
 {"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}
 
 
 After running timeout callbacks
+
+Before request
 
 Info 49   [00:02:09.000] request:
     {
@@ -484,10 +486,6 @@ Info 49   [00:02:09.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 50   [00:02:10.000] response:
     {
       "response": {
@@ -525,6 +523,10 @@ Info 50   [00:02:10.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 51   [00:02:11.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -536,10 +538,6 @@ Info 51   [00:02:11.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 52   [00:02:12.000] response:
     {
       "response": {
@@ -577,6 +575,10 @@ Info 52   [00:02:12.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 53   [00:02:13.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -588,10 +590,6 @@ Info 53   [00:02:13.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 54   [00:02:14.000] response:
     {
       "response": {
@@ -629,6 +627,10 @@ Info 54   [00:02:14.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 55   [00:02:15.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -640,10 +642,6 @@ Info 55   [00:02:15.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 56   [00:02:16.000] response:
     {
       "response": {
@@ -681,6 +679,10 @@ Info 56   [00:02:16.000] response:
       },
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 57   [00:02:17.000] request:
     {
       "command": "definitionAndBoundSpan",
@@ -692,10 +694,6 @@ Info 57   [00:02:17.000] request:
       "seq": 8,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 58   [00:02:18.000] response:
     {
       "response": {
@@ -733,3 +731,4 @@ Info 58   [00:02:18.000] response:
       },
       "responseRequired": true
     }
+After request

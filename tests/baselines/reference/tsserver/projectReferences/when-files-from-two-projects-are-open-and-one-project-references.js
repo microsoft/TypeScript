@@ -1,13 +1,4 @@
 Info 0    [00:01:53.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:54.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/main/src/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -95,6 +86,15 @@ export const noCoreRef2Const = 10;
 {"compilerOptions":{"composite":true}}
 
 
+Info 1    [00:01:54.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/src/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:55.000] Search path: /user/username/projects/myproject/main/src
 Info 3    [00:01:56.000] For info: /user/username/projects/myproject/main/src/file1.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
 Info 4    [00:01:57.000] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
@@ -350,6 +350,10 @@ Info 65   [00:03:00.000] -----------------------------------------------
 Info 65   [00:03:01.000] Open files: 
 Info 65   [00:03:02.000] 	FileName: /user/username/projects/myproject/main/src/file1.ts ProjectRootPath: undefined
 Info 65   [00:03:03.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 65   [00:03:04.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -412,10 +416,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/noCoreRef2: *new*
   {}
 
-Info 65   [00:03:04.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 66   [00:03:05.000] request:
     {
       "command": "open",
@@ -425,8 +427,6 @@ Info 66   [00:03:05.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 67   [00:03:06.000] Search path: /user/username/projects/myproject/core/src
 Info 68   [00:03:07.000] For info: /user/username/projects/myproject/core/src/file1.ts :: Config file name: /user/username/projects/myproject/core/tsconfig.json
 Info 69   [00:03:08.000] Creating configuration project /user/username/projects/myproject/core/tsconfig.json
@@ -463,6 +463,10 @@ Info 81   [00:03:27.000] 	FileName: /user/username/projects/myproject/main/src/f
 Info 81   [00:03:28.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 81   [00:03:29.000] 	FileName: /user/username/projects/myproject/core/src/file1.ts ProjectRootPath: undefined
 Info 81   [00:03:30.000] 		Projects: /user/username/projects/myproject/core/tsconfig.json
+Info 81   [00:03:31.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -527,10 +531,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/noCoreRef2:
   {}
 
-Info 81   [00:03:31.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 82   [00:03:32.000] request:
     {
       "command": "references",
@@ -542,8 +544,6 @@ Info 82   [00:03:32.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 83   [00:03:33.000] Finding references to /user/username/projects/myproject/core/src/file1.ts position 13 in project /user/username/projects/myproject/core/tsconfig.json
 Info 84   [00:03:34.000] Creating configuration project /user/username/projects/myproject/indirect/tsconfig.json
 Info 85   [00:03:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/src/file1.ts 500 undefined WatchType: Closed Script info
@@ -666,6 +666,39 @@ Info 148  [00:04:38.000] 	Files (2)
 
 Info 149  [00:04:39.000] -----------------------------------------------
 Info 150  [00:04:40.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/src/file1.d.ts 2000 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Missing generated file
+Info 151  [00:04:41.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/myproject/core/src/file1.ts",
+            "start": {
+              "line": 1,
+              "offset": 14
+            },
+            "end": {
+              "line": 1,
+              "offset": 23
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 29
+            },
+            "lineText": "export const coreConst = 10;",
+            "isWriteAccess": true,
+            "isDefinition": true
+          }
+        ],
+        "symbolName": "coreConst",
+        "symbolStartOffset": 14,
+        "symbolDisplayString": "const coreConst: 10"
+      },
+      "responseRequired": true
+    }
 After request
 
 PolledWatches::
@@ -755,37 +788,3 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/noCoreRef2:
   {}
-
-Info 151  [00:04:41.000] response:
-    {
-      "response": {
-        "refs": [
-          {
-            "file": "/user/username/projects/myproject/core/src/file1.ts",
-            "start": {
-              "line": 1,
-              "offset": 14
-            },
-            "end": {
-              "line": 1,
-              "offset": 23
-            },
-            "contextStart": {
-              "line": 1,
-              "offset": 1
-            },
-            "contextEnd": {
-              "line": 1,
-              "offset": 29
-            },
-            "lineText": "export const coreConst = 10;",
-            "isWriteAccess": true,
-            "isDefinition": true
-          }
-        ],
-        "symbolName": "coreConst",
-        "symbolStartOffset": 14,
-        "symbolDisplayString": "const coreConst: 10"
-      },
-      "responseRequired": true
-    }

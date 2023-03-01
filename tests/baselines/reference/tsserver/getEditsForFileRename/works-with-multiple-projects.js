@@ -1,13 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/user.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/user.ts]
 import { x } from "./old";
@@ -25,6 +16,15 @@ import { x } from "../a/old";
 {}
 
 
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/user.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /a
 Info 3    [00:00:20.000] For info: /a/user.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /a/tsconfig.json
@@ -64,6 +64,10 @@ Info 16   [00:00:35.000] -----------------------------------------------
 Info 16   [00:00:36.000] Open files: 
 Info 16   [00:00:37.000] 	FileName: /a/user.ts ProjectRootPath: undefined
 Info 16   [00:00:38.000] 		Projects: /a/tsconfig.json
+Info 16   [00:00:39.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -78,10 +82,8 @@ FsWatches::
 /a/old.ts: *new*
   {}
 
-Info 16   [00:00:39.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 17   [00:00:40.000] request:
     {
       "command": "open",
@@ -91,8 +93,6 @@ Info 17   [00:00:40.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 18   [00:00:41.000] Search path: /b
 Info 19   [00:00:42.000] For info: /b/user.ts :: Config file name: /b/tsconfig.json
 Info 20   [00:00:43.000] Creating configuration project /b/tsconfig.json
@@ -137,6 +137,10 @@ Info 33   [00:01:03.000] 	FileName: /a/user.ts ProjectRootPath: undefined
 Info 33   [00:01:04.000] 		Projects: /a/tsconfig.json
 Info 33   [00:01:05.000] 	FileName: /b/user.ts ProjectRootPath: undefined
 Info 33   [00:01:06.000] 		Projects: /b/tsconfig.json
+Info 33   [00:01:07.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -159,10 +163,8 @@ FsWatchesRecursive::
 /b: *new*
   {}
 
-Info 33   [00:01:07.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 34   [00:01:08.000] request:
     {
       "command": "getEditsForFileRename",
@@ -173,10 +175,6 @@ Info 34   [00:01:08.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 35   [00:01:09.000] response:
     {
       "response": [
@@ -231,3 +229,4 @@ Info 35   [00:01:09.000] response:
       ],
       "responseRequired": true
     }
+After request

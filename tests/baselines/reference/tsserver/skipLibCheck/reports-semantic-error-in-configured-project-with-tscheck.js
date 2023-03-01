@@ -1,13 +1,4 @@
 Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:10.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/jsFile.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/jsconfig.json]
 {}
@@ -19,6 +10,15 @@ Before request
                 x === "string";
 
 
+Info 1    [00:00:10.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/jsFile.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:11.000] Search path: /a
 Info 3    [00:00:12.000] For info: /a/jsFile.js :: Config file name: /a/jsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /a/jsconfig.json
@@ -150,6 +150,10 @@ Info 39   [00:01:26.000] -----------------------------------------------
 Info 39   [00:01:27.000] Open files: 
 Info 39   [00:01:28.000] 	FileName: /a/jsFile.js ProjectRootPath: undefined
 Info 39   [00:01:29.000] 		Projects: /a/jsconfig.json
+Info 39   [00:01:30.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -172,10 +176,8 @@ FsWatchesRecursive::
 /a:
   {}
 
-Info 39   [00:01:30.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 40   [00:01:31.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -185,10 +187,6 @@ Info 40   [00:01:31.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 41   [00:01:32.000] response:
     {
       "response": [
@@ -208,3 +206,4 @@ Info 41   [00:01:32.000] response:
       ],
       "responseRequired": true
     }
+After request

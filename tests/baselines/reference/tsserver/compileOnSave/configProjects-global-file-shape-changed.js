@@ -1,13 +1,4 @@
 Info 0    [00:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:24.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/globalFile3.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -43,6 +34,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:24.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/globalFile3.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:25.000] Search path: /a/b
 Info 3    [00:00:26.000] For info: /a/b/globalFile3.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /a/b/tsconfig.json
@@ -103,6 +103,10 @@ Info 21   [00:00:46.000] -----------------------------------------------
 Info 21   [00:00:47.000] Open files: 
 Info 21   [00:00:48.000] 	FileName: /a/b/globalFile3.ts ProjectRootPath: undefined
 Info 21   [00:00:49.000] 		Projects: /a/b/tsconfig.json
+Info 21   [00:00:50.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -127,10 +131,8 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
-Info 21   [00:00:50.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 22   [00:00:51.000] request:
     {
       "command": "change",
@@ -145,14 +147,14 @@ Info 22   [00:00:51.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 23   [00:00:52.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 24   [00:00:53.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -162,8 +164,6 @@ Info 24   [00:00:53.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 25   [00:00:54.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 26   [00:00:55.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 27   [00:00:56.000] Different program with same set of files
@@ -183,8 +183,6 @@ Info 30   [00:01:07.000] -----------------------------------------------
 Info 30   [00:01:08.000] Open files: 
 Info 30   [00:01:09.000] 	FileName: /a/b/globalFile3.ts ProjectRootPath: undefined
 Info 30   [00:01:10.000] 		Projects: /a/b/tsconfig.json
-After request
-
 Info 30   [00:01:11.000] response:
     {
       "response": [
@@ -202,3 +200,4 @@ Info 30   [00:01:11.000] response:
       ],
       "responseRequired": true
     }
+After request

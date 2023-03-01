@@ -1,14 +1,4 @@
 Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:34.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/src/client/app.js",
-        "projectRootPath": "/user/username/projects/myproject"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -33,6 +23,16 @@ function getHostName() { return "hello"; } export { getHostName };
 import { getHostName } from '../../src/server/utilities';export default getHostName;
 
 
+Info 1    [00:00:34.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/client/app.js",
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:35.000] Search path: /user/username/projects/myproject/src/client
 Info 3    [00:00:36.000] For info: /user/username/projects/myproject/src/client/app.js :: No config files found.
 Info 4    [00:00:37.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/client/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -127,6 +127,10 @@ Info 18   [00:01:32.000] -----------------------------------------------
 Info 18   [00:01:33.000] Open files: 
 Info 18   [00:01:34.000] 	FileName: /user/username/projects/myproject/src/client/app.js ProjectRootPath: /user/username/projects/myproject
 Info 18   [00:01:35.000] 		Projects: /dev/null/inferredProject1*
+Info 18   [00:01:36.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -157,10 +161,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
-Info 18   [00:01:36.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 19   [00:01:37.000] request:
     {
       "command": "open",
@@ -171,8 +173,6 @@ Info 19   [00:01:37.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 20   [00:01:38.000] Search path: /user/username/projects/myproject/test/backend
 Info 21   [00:01:39.000] For info: /user/username/projects/myproject/test/backend/index.js :: No config files found.
 Info 22   [00:01:40.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test/backend/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -225,6 +225,10 @@ Info 34   [00:02:09.000] 	FileName: /user/username/projects/myproject/src/client
 Info 34   [00:02:10.000] 		Projects: /dev/null/inferredProject1*
 Info 34   [00:02:11.000] 	FileName: /user/username/projects/myproject/test/backend/index.js ProjectRootPath: /user/username/projects/myproject
 Info 34   [00:02:12.000] 		Projects: /dev/null/inferredProject1*
+Info 34   [00:02:13.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -267,10 +271,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/test: *new*
   {}
 
-Info 34   [00:02:13.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 35   [00:02:14.000] request:
     {
       "command": "geterr",
@@ -284,14 +286,12 @@ Info 35   [00:02:14.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 36   [00:02:15.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 37   [00:02:16.000] event:
@@ -330,6 +330,8 @@ Info 43   [00:02:22.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Before running immediate callbacks and checking length (1)
 
+Before request
+
 Info 44   [00:02:23.000] request:
     {
       "command": "close",
@@ -339,8 +341,6 @@ Info 44   [00:02:23.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 45   [00:02:24.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/test/backend/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 46   [00:02:25.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/test/backend/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 47   [00:02:26.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/test/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -353,6 +353,10 @@ Info 50   [00:02:31.000] -----------------------------------------------
 Info 50   [00:02:32.000] Open files: 
 Info 50   [00:02:33.000] 	FileName: /user/username/projects/myproject/src/client/app.js ProjectRootPath: /user/username/projects/myproject
 Info 50   [00:02:34.000] 		Projects: /dev/null/inferredProject1*
+Info 50   [00:02:35.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -399,10 +403,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/test:
   {}
 
-Info 50   [00:02:35.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 51   [00:02:36.000] request:
     {
       "command": "open",
@@ -413,8 +415,6 @@ Info 51   [00:02:36.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
 Info 52   [00:02:37.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/server/utilities.js 500 undefined WatchType: Closed Script info
 Info 53   [00:02:38.000] Search path: /user/username/projects/myproject/src/server
 Info 54   [00:02:39.000] For info: /user/username/projects/myproject/src/server/utilities.js :: No config files found.
@@ -488,6 +488,10 @@ Info 70   [00:03:22.000] 	FileName: /user/username/projects/myproject/src/client
 Info 70   [00:03:23.000] 		Projects: /dev/null/inferredProject1*
 Info 70   [00:03:24.000] 	FileName: /user/username/projects/myproject/src/server/utilities.js ProjectRootPath: /user/username/projects/myproject
 Info 70   [00:03:25.000] 		Projects: /dev/null/inferredProject1*
+Info 70   [00:03:26.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -532,10 +536,8 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/test:
   {}
 
-Info 70   [00:03:26.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 71   [00:03:27.000] request:
     {
       "command": "geterr",
@@ -549,14 +551,12 @@ Info 71   [00:03:27.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 72   [00:03:28.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 73   [00:03:29.000] event:

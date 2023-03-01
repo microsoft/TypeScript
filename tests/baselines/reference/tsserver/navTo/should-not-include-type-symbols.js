@@ -1,13 +1,4 @@
 Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:16.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/file1.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/file1.js]
 function foo() {}
@@ -29,6 +20,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:16.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/file1.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:17.000] Search path: /a/b
 Info 3    [00:00:18.000] For info: /a/b/file1.js :: Config file name: /a/b/jsconfig.json
 Info 4    [00:00:19.000] Creating configuration project /a/b/jsconfig.json
@@ -125,6 +125,10 @@ Info 17   [00:01:10.000] -----------------------------------------------
 Info 17   [00:01:11.000] Open files: 
 Info 17   [00:01:12.000] 	FileName: /a/b/file1.js ProjectRootPath: undefined
 Info 17   [00:01:13.000] 		Projects: /a/b/jsconfig.json
+Info 17   [00:01:14.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -145,10 +149,8 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 17   [00:01:14.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 18   [00:01:15.000] request:
     {
       "command": "navto",
@@ -160,15 +162,15 @@ Info 18   [00:01:15.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 19   [00:01:16.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 20   [00:01:17.000] request:
     {
       "command": "navto",
@@ -180,10 +182,6 @@ Info 20   [00:01:17.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 21   [00:01:18.000] response:
     {
       "response": [
@@ -206,3 +204,4 @@ Info 21   [00:01:18.000] response:
       ],
       "responseRequired": true
     }
+After request

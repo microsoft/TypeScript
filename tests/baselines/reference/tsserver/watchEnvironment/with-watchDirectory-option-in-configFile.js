@@ -1,14 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/commonFile1.ts",
-        "projectRootPath": "/a/b"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -33,6 +23,16 @@ let y = 1
 let x = 1
 
 
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts",
+        "projectRootPath": "/a/b"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /a/b
 Info 3    [00:00:20.000] For info: /a/b/commonFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /a/b/tsconfig.json
@@ -81,6 +81,10 @@ Info 20   [00:00:39.000] -----------------------------------------------
 Info 20   [00:00:40.000] Open files: 
 Info 20   [00:00:41.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: /a/b
 Info 20   [00:00:42.000] 		Projects: /a/b/tsconfig.json
+Info 20   [00:00:43.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -96,8 +100,3 @@ FsWatches::
   {}
 /a/lib/lib.d.ts: *new*
   {}
-
-Info 20   [00:00:43.000] response:
-    {
-      "responseRequired": false
-    }

@@ -1,13 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a.ts]
 class c { prop = "hello"; foo() { const x = 0; } }
@@ -35,6 +26,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /
 Info 3    [00:00:20.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /tsconfig.json
@@ -90,6 +90,10 @@ Info 20   [00:00:39.000] -----------------------------------------------
 Info 20   [00:00:40.000] Open files: 
 Info 20   [00:00:41.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 20   [00:00:42.000] 		Projects: /tsconfig.json
+Info 20   [00:00:43.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 FsWatches::
@@ -106,10 +110,8 @@ FsWatchesRecursive::
 /: *new*
   {}
 
-Info 20   [00:00:43.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 21   [00:00:44.000] request:
     {
       "command": "open",
@@ -119,8 +121,6 @@ Info 21   [00:00:44.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 22   [00:00:45.000] FileWatcher:: Close:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
 Info 23   [00:00:46.000] Search path: /
 Info 24   [00:00:47.000] For info: /b.ts :: Config file name: /tsconfig.json
@@ -133,6 +133,10 @@ Info 25   [00:00:52.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 25   [00:00:53.000] 		Projects: /tsconfig.json
 Info 25   [00:00:54.000] 	FileName: /b.ts ProjectRootPath: undefined
 Info 25   [00:00:55.000] 		Projects: /tsconfig.json
+Info 25   [00:00:56.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 FsWatches::
@@ -151,10 +155,8 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 25   [00:00:56.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 26   [00:00:57.000] request:
     {
       "command": "open",
@@ -164,8 +166,6 @@ Info 26   [00:00:57.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 27   [00:00:58.000] FileWatcher:: Close:: WatchInfo: /c.ts 500 undefined WatchType: Closed Script info
 Info 28   [00:00:59.000] Search path: /
 Info 29   [00:01:00.000] For info: /c.ts :: Config file name: /tsconfig.json
@@ -180,6 +180,10 @@ Info 30   [00:01:07.000] 	FileName: /b.ts ProjectRootPath: undefined
 Info 30   [00:01:08.000] 		Projects: /tsconfig.json
 Info 30   [00:01:09.000] 	FileName: /c.ts ProjectRootPath: undefined
 Info 30   [00:01:10.000] 		Projects: /tsconfig.json
+Info 30   [00:01:11.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 FsWatches::
@@ -196,20 +200,14 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 30   [00:01:11.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 31   [00:01:12.000] request:
     {
       "command": "getSupportedCodeFixes",
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 32   [00:01:13.000] response:
     {
       "response": [
@@ -1432,6 +1430,10 @@ Info 32   [00:01:13.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 33   [00:01:14.000] request:
     {
       "command": "getSupportedCodeFixes",
@@ -1441,10 +1443,6 @@ Info 33   [00:01:14.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 34   [00:01:15.000] response:
     {
       "response": [
@@ -1452,6 +1450,10 @@ Info 34   [00:01:15.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 35   [00:01:16.000] request:
     {
       "command": "getSupportedCodeFixes",
@@ -1461,10 +1463,6 @@ Info 35   [00:01:16.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 36   [00:01:17.000] response:
     {
       "response": [
@@ -1472,6 +1470,10 @@ Info 36   [00:01:17.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 37   [00:01:18.000] request:
     {
       "command": "getSupportedCodeFixes",
@@ -1481,10 +1483,6 @@ Info 37   [00:01:18.000] request:
       "seq": 7,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 38   [00:01:19.000] response:
     {
       "response": [
@@ -1492,6 +1490,10 @@ Info 38   [00:01:19.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 39   [00:01:20.000] request:
     {
       "command": "getSupportedCodeFixes",
@@ -1501,10 +1503,6 @@ Info 39   [00:01:20.000] request:
       "seq": 8,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 40   [00:01:21.000] response:
     {
       "response": [
@@ -1512,3 +1510,4 @@ Info 40   [00:01:21.000] response:
       ],
       "responseRequired": true
     }
+After request

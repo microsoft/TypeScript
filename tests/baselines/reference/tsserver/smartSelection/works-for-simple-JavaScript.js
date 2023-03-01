@@ -1,13 +1,4 @@
 Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:12.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/file.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/file.js]
 
@@ -34,6 +25,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:12.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/file.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:13.000] Search path: /
 Info 3    [00:00:14.000] For info: /file.js :: No config files found.
 Info 4    [00:00:15.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -101,6 +101,10 @@ Info 10   [00:00:59.000] -----------------------------------------------
 Info 10   [00:01:00.000] Open files: 
 Info 10   [00:01:01.000] 	FileName: /file.js ProjectRootPath: undefined
 Info 10   [00:01:02.000] 		Projects: /dev/null/inferredProject1*
+Info 10   [00:01:03.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -113,10 +117,8 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
-Info 10   [00:01:03.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 11   [00:01:04.000] request:
     {
       "command": "selectionRange",
@@ -132,10 +134,6 @@ Info 11   [00:01:04.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 12   [00:01:05.000] response:
     {
       "response": [
@@ -250,3 +248,4 @@ Info 12   [00:01:05.000] response:
       ],
       "responseRequired": true
     }
+After request

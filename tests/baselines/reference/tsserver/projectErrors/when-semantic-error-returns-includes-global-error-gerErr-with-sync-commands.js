@@ -1,13 +1,4 @@
 Info 0    [00:00:22.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:23.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/ui.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -30,6 +21,15 @@ const x = async (_action: string) => {
 {}
 
 
+Info 1    [00:00:23.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/ui.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:24.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:25.000] For info: /user/username/projects/myproject/ui.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:26.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -68,6 +68,10 @@ Info 17   [00:00:41.000] -----------------------------------------------
 Info 17   [00:00:42.000] Open files: 
 Info 17   [00:00:43.000] 	FileName: /user/username/projects/myproject/ui.ts ProjectRootPath: undefined
 Info 17   [00:00:44.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 17   [00:00:45.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -84,10 +88,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-Info 17   [00:00:45.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 18   [00:00:46.000] request:
     {
       "command": "syntacticDiagnosticsSync",
@@ -98,15 +100,15 @@ Info 18   [00:00:46.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 19   [00:00:47.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 20   [00:00:48.000] request:
     {
       "command": "semanticDiagnosticsSync",
@@ -117,10 +119,6 @@ Info 20   [00:00:48.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 21   [00:00:49.000] response:
     {
       "response": [
@@ -140,6 +138,10 @@ Info 21   [00:00:49.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 22   [00:00:50.000] request:
     {
       "command": "suggestionDiagnosticsSync",
@@ -150,12 +152,9 @@ Info 22   [00:00:50.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 23   [00:00:51.000] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

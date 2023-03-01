@@ -1,13 +1,4 @@
 Info 0    [00:00:47.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:48.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/app/src/program/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/tsconfig.json]
 {"files":[],"references":[{"path":"shared/src/library"},{"path":"app/src/program"}]}
@@ -45,6 +36,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:48.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/app/src/program/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:49.000] Search path: /user/username/projects/myproject/app/src/program
 Info 3    [00:00:50.000] For info: /user/username/projects/myproject/app/src/program/index.ts :: Config file name: /user/username/projects/myproject/app/src/program/tsconfig.json
 Info 4    [00:00:51.000] Creating configuration project /user/username/projects/myproject/app/src/program/tsconfig.json
@@ -138,6 +138,10 @@ Info 44   [00:01:36.000] -----------------------------------------------
 Info 44   [00:01:37.000] Open files: 
 Info 44   [00:01:38.000] 	FileName: /user/username/projects/myproject/app/src/program/index.ts ProjectRootPath: undefined
 Info 44   [00:01:39.000] 		Projects: /user/username/projects/myproject/app/src/program/tsconfig.json
+Info 44   [00:01:40.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -180,10 +184,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
-Info 44   [00:01:40.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 45   [00:01:41.000] request:
     {
       "command": "getCodeFixes",
@@ -200,12 +202,8 @@ Info 45   [00:01:41.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 46   [00:01:42.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 47   [00:01:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-After request
-
 Info 48   [00:01:44.000] response:
     {
       "response": [
@@ -234,3 +232,4 @@ Info 48   [00:01:44.000] response:
       ],
       "responseRequired": true
     }
+After request

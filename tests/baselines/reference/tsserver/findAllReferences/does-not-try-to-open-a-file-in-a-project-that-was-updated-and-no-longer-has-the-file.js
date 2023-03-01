@@ -1,18 +1,4 @@
 Info 0    [00:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:24.000] request:
-    {
-      "command": "updateOpen",
-      "arguments": {
-        "openFiles": [
-          {
-            "file": "/packages/babel-loader/src/index.ts",
-            "fileContent": "\nimport type { Foo } from \"../../core/src/index.js\";\n"
-          }
-        ]
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/packages/babel-loader/tsconfig.json]
 
@@ -72,6 +58,20 @@ const bar: Bar = {
 
 
 
+Info 1    [00:00:24.000] request:
+    {
+      "command": "updateOpen",
+      "arguments": {
+        "openFiles": [
+          {
+            "file": "/packages/babel-loader/src/index.ts",
+            "fileContent": "\nimport type { Foo } from \"../../core/src/index.js\";\n"
+          }
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:25.000] Search path: /packages/babel-loader/src
 Info 3    [00:00:26.000] For info: /packages/babel-loader/src/index.ts :: Config file name: /packages/babel-loader/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /packages/babel-loader/tsconfig.json
@@ -149,6 +149,11 @@ Info 25   [00:00:50.000] -----------------------------------------------
 Info 25   [00:00:51.000] Open files: 
 Info 25   [00:00:52.000] 	FileName: /packages/babel-loader/src/index.ts ProjectRootPath: undefined
 Info 25   [00:00:53.000] 		Projects: /packages/babel-loader/tsconfig.json
+Info 25   [00:00:54.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 
 PolledWatches::
@@ -173,11 +178,8 @@ FsWatchesRecursive::
 /packages/core/src: *new*
   {}
 
-Info 25   [00:00:54.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
+Before request
+
 Info 26   [00:00:55.000] request:
     {
       "command": "updateOpen",
@@ -192,8 +194,6 @@ Info 26   [00:00:55.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 27   [00:00:56.000] FileWatcher:: Close:: WatchInfo: /packages/core/src/index.ts 500 undefined WatchType: Closed Script info
 Info 28   [00:00:57.000] Search path: /packages/core/src
 Info 29   [00:00:58.000] For info: /packages/core/src/index.ts :: Config file name: /packages/core/tsconfig.json
@@ -231,6 +231,11 @@ Info 41   [00:01:17.000] 	FileName: /packages/babel-loader/src/index.ts ProjectR
 Info 41   [00:01:18.000] 		Projects: /packages/babel-loader/tsconfig.json
 Info 41   [00:01:19.000] 	FileName: /packages/core/src/index.ts ProjectRootPath: undefined
 Info 41   [00:01:20.000] 		Projects: /packages/babel-loader/tsconfig.json,/packages/core/tsconfig.json
+Info 41   [00:01:21.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 
 PolledWatches::
@@ -259,11 +264,8 @@ FsWatchesRecursive::
 /packages/core/src:
   {}
 
-Info 41   [00:01:21.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
+Before request
+
 Info 42   [00:01:22.000] request:
     {
       "command": "updateOpen",
@@ -290,15 +292,15 @@ Info 42   [00:01:22.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 43   [00:01:23.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 44   [00:01:24.000] request:
     {
       "command": "references",
@@ -310,8 +312,6 @@ Info 44   [00:01:24.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 45   [00:01:25.000] Finding references to /packages/core/src/index.ts position 92 in project /packages/core/tsconfig.json
 Info 46   [00:01:26.000] Starting updateGraphWorker: Project: /packages/babel-loader/tsconfig.json
 Info 47   [00:01:27.000] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -325,32 +325,6 @@ Info 49   [00:01:29.000] 	Files (1)
 
 Info 50   [00:01:30.000] -----------------------------------------------
 Info 51   [00:01:31.000] FileWatcher:: Added:: WatchInfo: /packages/core/dist/loading-indicator.d.ts 2000 undefined Project: /packages/core/tsconfig.json WatchType: Missing generated file
-After request
-
-PolledWatches::
-/a/lib/lib.es2018.full.d.ts:
-  {"pollingInterval":500}
-/packages/babel-loader/node_modules/@types:
-  {"pollingInterval":500}
-/packages/core/node_modules/@types:
-  {"pollingInterval":500}
-/packages/core/dist/loading-indicator.d.ts: *new*
-  {"pollingInterval":2000}
-
-FsWatches::
-/packages/babel-loader/tsconfig.json:
-  {}
-/packages/core/tsconfig.json:
-  {}
-/packages/core/src/loading-indicator.ts:
-  {}
-
-FsWatchesRecursive::
-/packages/babel-loader/src:
-  {}
-/packages/core/src:
-  {}
-
 Info 52   [00:01:32.000] response:
     {
       "response": {
@@ -428,3 +402,28 @@ Info 52   [00:01:32.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/a/lib/lib.es2018.full.d.ts:
+  {"pollingInterval":500}
+/packages/babel-loader/node_modules/@types:
+  {"pollingInterval":500}
+/packages/core/node_modules/@types:
+  {"pollingInterval":500}
+/packages/core/dist/loading-indicator.d.ts: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/packages/babel-loader/tsconfig.json:
+  {}
+/packages/core/tsconfig.json:
+  {}
+/packages/core/src/loading-indicator.ts:
+  {}
+
+FsWatchesRecursive::
+/packages/babel-loader/src:
+  {}
+/packages/core/src:
+  {}

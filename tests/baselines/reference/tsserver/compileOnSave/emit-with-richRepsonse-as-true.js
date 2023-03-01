@@ -1,13 +1,4 @@
 Info 0    [00:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:24.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/file1.ts]
 const x = 1;
@@ -32,6 +23,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info 1    [00:00:24.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:25.000] Search path: /user/username/projects/myproject
 Info 3    [00:00:26.000] For info: /user/username/projects/myproject/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:27.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -78,6 +78,10 @@ Info 18   [00:00:43.000] -----------------------------------------------
 Info 18   [00:00:44.000] Open files: 
 Info 18   [00:00:45.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
 Info 18   [00:00:46.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 18   [00:00:47.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -96,10 +100,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-Info 18   [00:00:47.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 19   [00:00:48.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -109,8 +111,6 @@ Info 19   [00:00:48.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 20   [00:00:49.000] Before ensureProjectForOpenFiles:
 Info 21   [00:00:50.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 21   [00:00:51.000] 	Files (3)
@@ -127,8 +127,6 @@ Info 22   [00:00:59.000] -----------------------------------------------
 Info 22   [00:01:00.000] Open files: 
 Info 22   [00:01:01.000] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
 Info 22   [00:01:02.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After request
-
 Info 22   [00:01:03.000] response:
     {
       "response": [
@@ -143,6 +141,10 @@ Info 22   [00:01:03.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 23   [00:01:04.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -153,8 +155,6 @@ Info 23   [00:01:04.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 24   [00:01:08.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/test :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 25   [00:01:09.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 26   [00:01:10.000] Scheduled: *ensureProjectForOpenFiles*
@@ -166,6 +166,14 @@ Info 31   [00:01:19.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 32   [00:01:20.000] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Info 33   [00:01:21.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 34   [00:01:22.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/test/file1.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 35   [00:01:23.000] response:
+    {
+      "response": {
+        "emitSkipped": false,
+        "diagnostics": []
+      },
+      "responseRequired": true
+    }
 After request
 //// [/user/username/projects/myproject/test/file1.js]
 var x = 1;
@@ -176,14 +184,8 @@ declare const x = 1;
 
 
 
-Info 35   [00:01:23.000] response:
-    {
-      "response": {
-        "emitSkipped": false,
-        "diagnostics": []
-      },
-      "responseRequired": true
-    }
+Before request
+
 Info 36   [00:01:24.000] request:
     {
       "command": "compileOnSaveEmitFile",
@@ -194,8 +196,6 @@ Info 36   [00:01:24.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
 Info 37   [00:01:25.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test/file1.d.ts 500 undefined WatchType: Closed Script info
 Info 38   [00:01:26.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 39   [00:01:27.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -217,6 +217,20 @@ Info 41   [00:01:29.000] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info 42   [00:01:30.000] -----------------------------------------------
+Info 43   [00:01:31.000] response:
+    {
+      "response": {
+        "emitSkipped": true,
+        "diagnostics": [
+          {
+            "text": "Cannot write file '/user/username/projects/myproject/test/file1.d.ts' because it would overwrite input file.",
+            "code": 5055,
+            "category": "error"
+          }
+        ]
+      },
+      "responseRequired": true
+    }
 After request
 
 PolledWatches::
@@ -236,18 +250,3 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
-
-Info 43   [00:01:31.000] response:
-    {
-      "response": {
-        "emitSkipped": true,
-        "diagnostics": [
-          {
-            "text": "Cannot write file '/user/username/projects/myproject/test/file1.d.ts' because it would overwrite input file.",
-            "code": 5055,
-            "category": "error"
-          }
-        ]
-      },
-      "responseRequired": true
-    }

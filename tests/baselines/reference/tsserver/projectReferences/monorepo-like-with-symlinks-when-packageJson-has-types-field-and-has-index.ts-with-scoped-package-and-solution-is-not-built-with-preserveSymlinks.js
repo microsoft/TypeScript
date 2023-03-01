@@ -1,13 +1,4 @@
 Info 0    [00:00:45.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:46.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/packages/A/src/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -46,6 +37,15 @@ export function bar() { }
 
 //// [/user/username/projects/myproject/node_modules/@issue/b] symlink(/user/username/projects/myproject/packages/B)
 
+Info 1    [00:00:46.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/packages/A/src/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:47.000] Search path: /user/username/projects/myproject/packages/A/src
 Info 3    [00:00:48.000] For info: /user/username/projects/myproject/packages/A/src/index.ts :: Config file name: /user/username/projects/myproject/packages/A/tsconfig.json
 Info 4    [00:00:49.000] Creating configuration project /user/username/projects/myproject/packages/A/tsconfig.json
@@ -141,6 +141,10 @@ Info 42   [00:01:29.000] -----------------------------------------------
 Info 42   [00:01:30.000] Open files: 
 Info 42   [00:01:31.000] 	FileName: /user/username/projects/myproject/packages/A/src/index.ts ProjectRootPath: undefined
 Info 42   [00:01:32.000] 		Projects: /user/username/projects/myproject/packages/A/tsconfig.json
+Info 42   [00:01:33.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -177,10 +181,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
-Info 42   [00:01:33.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 43   [00:01:34.000] request:
     {
       "command": "geterr",
@@ -193,14 +195,12 @@ Info 43   [00:01:34.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 44   [00:01:35.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 45   [00:01:36.000] event:
@@ -220,6 +220,8 @@ Info 47   [00:01:38.000] event:
 Info 48   [00:01:39.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
+
+Before request
 
 Info 49   [00:01:40.000] request:
     {
@@ -247,15 +249,15 @@ Info 49   [00:01:40.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 50   [00:01:41.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 51   [00:01:42.000] request:
     {
       "command": "geterr",
@@ -268,14 +270,12 @@ Info 51   [00:01:42.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 52   [00:01:43.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 53   [00:01:44.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json

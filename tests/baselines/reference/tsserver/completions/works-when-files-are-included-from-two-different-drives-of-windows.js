@@ -1,13 +1,4 @@
 Info 0    [00:00:58.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:59.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "e:/myproject/src/app.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [e:/myproject/src/app.js]
 import React from 'react';
@@ -75,6 +66,15 @@ export function foo() {}
 {"name":"@types/react","version":"16.9.14"}
 
 
+Info 1    [00:00:59.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "e:/myproject/src/app.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:00.000] Search path: e:/myproject/src
 Info 3    [00:01:01.000] For info: e:/myproject/src/app.js :: No config files found.
 Info 4    [00:01:02.000] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -195,6 +195,10 @@ Info 24   [00:01:56.000] -----------------------------------------------
 Info 24   [00:01:57.000] Open files: 
 Info 24   [00:01:58.000] 	FileName: e:/myproject/src/app.js ProjectRootPath: undefined
 Info 24   [00:01:59.000] 		Projects: /dev/null/inferredProject1*
+Info 24   [00:02:00.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -229,10 +233,8 @@ FsWatchesRecursive::
 e:/myproject/node_modules:
   {}
 
-Info 24   [00:02:00.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 25   [00:02:01.000] request:
     {
       "command": "completionInfo",
@@ -246,8 +248,6 @@ Info 25   [00:02:01.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 26   [00:02:02.000] getCompletionData: Get current token: *
 Info 27   [00:02:03.000] getCompletionData: Is inside comment: *
 Info 28   [00:02:04.000] getCompletionData: Get previous token: *
@@ -259,8 +259,6 @@ Info 33   [00:02:09.000] collectAutoImports: response is complete
 Info 34   [00:02:10.000] collectAutoImports: *
 Info 35   [00:02:11.000] getCompletionData: Semantic work: *
 Info 36   [00:02:12.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-After request
-
 Info 37   [00:02:13.000] response:
     {
       "response": {
@@ -561,3 +559,4 @@ Info 37   [00:02:13.000] response:
       },
       "responseRequired": true
     }
+After request

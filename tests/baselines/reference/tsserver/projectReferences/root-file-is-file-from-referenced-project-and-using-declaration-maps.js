@@ -1,13 +1,4 @@
 Info 0    [00:01:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/project/src/common/input/keyboard.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/project/src/common/tsconfig.json]
 {"compilerOptions":{"composite":true,"declarationMap":true,"outDir":"../../out","baseUrl":"..","disableSourceOfProjectReferenceRedirect":true},"include":["./**/*"]}
@@ -274,6 +265,15 @@ export {};
 }
 
 
+Info 1    [00:01:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/project/src/common/input/keyboard.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:19.000] Search path: /user/username/projects/project/src/common/input
 Info 3    [00:01:20.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Info 4    [00:01:21.000] Creating configuration project /user/username/projects/project/src/common/tsconfig.json
@@ -337,6 +337,10 @@ Info 28   [00:01:50.000] -----------------------------------------------
 Info 28   [00:01:51.000] Open files: 
 Info 28   [00:01:52.000] 	FileName: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined
 Info 28   [00:01:53.000] 		Projects: /user/username/projects/project/src/common/tsconfig.json
+Info 28   [00:01:54.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -361,10 +365,8 @@ FsWatchesRecursive::
 /user/username/projects/project/src/common: *new*
   {}
 
-Info 28   [00:01:54.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 29   [00:01:55.000] request:
     {
       "command": "open",
@@ -374,8 +376,6 @@ Info 29   [00:01:55.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 30   [00:01:56.000] Search path: /user/username/projects/project/src
 Info 31   [00:01:57.000] For info: /user/username/projects/project/src/terminal.ts :: Config file name: /user/username/projects/project/src/tsconfig.json
 Info 32   [00:01:58.000] Loading configured project /user/username/projects/project/src/tsconfig.json
@@ -452,6 +452,10 @@ Info 48   [00:02:21.000] 	FileName: /user/username/projects/project/src/common/i
 Info 48   [00:02:22.000] 		Projects: /user/username/projects/project/src/common/tsconfig.json,/user/username/projects/project/src/tsconfig.json
 Info 48   [00:02:23.000] 	FileName: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined
 Info 48   [00:02:24.000] 		Projects: /user/username/projects/project/src/tsconfig.json
+Info 48   [00:02:25.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -480,10 +484,8 @@ FsWatchesRecursive::
 /user/username/projects/project/src: *new*
   {}
 
-Info 48   [00:02:25.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 49   [00:02:26.000] request:
     {
       "command": "references",
@@ -495,8 +497,6 @@ Info 49   [00:02:26.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
 Info 50   [00:02:27.000] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
 Info 51   [00:02:28.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts.map 500 undefined WatchType: Closed Script info
 Info 52   [00:02:29.000] Finding references to /user/username/projects/project/out/input/keyboard.d.ts position 24 in project /user/username/projects/project/src/tsconfig.json
@@ -504,36 +504,6 @@ Info 53   [00:02:30.000] Search path: /user/username/projects/project/src/common
 Info 54   [00:02:31.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Info 55   [00:02:32.000] Search path: /user/username/projects/project/src/common/input
 Info 56   [00:02:33.000] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/project/src/common/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/src/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/project/src/common/tsconfig.json:
-  {}
-/user/username/projects/project/src/common/input/keyboard.test.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/project/src/tsconfig.json:
-  {}
-/user/username/projects/project/out/input/keyboard.d.ts:
-  {}
-/user/username/projects/project/out/input/keyboard.d.ts.map: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/project/src/common:
-  {}
-/user/username/projects/project/src:
-  {}
-
 Info 57   [00:02:34.000] response:
     {
       "response": {
@@ -639,3 +609,32 @@ Info 57   [00:02:34.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/project/src/common/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/project/src/common/tsconfig.json:
+  {}
+/user/username/projects/project/src/common/input/keyboard.test.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/project/src/tsconfig.json:
+  {}
+/user/username/projects/project/out/input/keyboard.d.ts:
+  {}
+/user/username/projects/project/out/input/keyboard.d.ts.map: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/project/src/common:
+  {}
+/user/username/projects/project/src:
+  {}

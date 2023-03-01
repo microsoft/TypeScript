@@ -1,14 +1,4 @@
 Info 0    [00:00:51.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:52.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts",
-        "projectRootPath": "/users/username/projects/myproject"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -41,6 +31,16 @@ export class C { method () { return 10; } }
 export class C { method(): number; }
 
 
+Info 1    [00:00:52.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts",
+        "projectRootPath": "/users/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:53.000] Search path: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime
 Info 3    [00:00:54.000] For info: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts :: Config file name: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info 4    [00:00:55.000] Creating configuration project /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
@@ -102,6 +102,10 @@ Info 33   [00:01:26.000] -----------------------------------------------
 Info 33   [00:01:27.000] Open files: 
 Info 33   [00:01:28.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
 Info 33   [00:01:29.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info 33   [00:01:30.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -130,10 +134,8 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules: *new*
   {}
 
-Info 33   [00:01:30.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 34   [00:01:31.000] request:
     {
       "command": "geterr",
@@ -146,14 +148,12 @@ Info 34   [00:01:31.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 35   [00:01:32.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 36   [00:01:33.000] event:
@@ -289,6 +289,8 @@ Info 62   [00:02:14.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 After running timeout callbacks
 
+Before request
+
 Info 63   [00:02:15.000] request:
     {
       "command": "geterr",
@@ -301,14 +303,12 @@ Info 63   [00:02:15.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 64   [00:02:16.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 65   [00:02:17.000] event:
@@ -340,6 +340,8 @@ Before running timeout callbacks
 
 After running timeout callbacks
 
+Before request
+
 Info 69   [00:02:27.000] request:
     {
       "command": "geterr",
@@ -352,14 +354,12 @@ Info 69   [00:02:27.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 70   [00:02:28.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
 
 Info 71   [00:02:29.000] event:

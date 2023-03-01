@@ -1,15 +1,4 @@
 Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:28.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/src/foo.ts",
-        "fileContent": "export function foo() { }",
-        "projectRootPath": "/user/username/projects/myproject"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/src/foo.ts]
 export function foo() { }
@@ -34,6 +23,17 @@ interface Array<T> { length: number; [n: number]: T; }
 {"include":["./src"]}
 
 
+Info 1    [00:00:28.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/foo.ts",
+        "fileContent": "export function foo() { }",
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:29.000] Search path: /user/username/projects/myproject/src
 Info 3    [00:00:30.000] For info: /user/username/projects/myproject/src/foo.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:31.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -85,6 +85,10 @@ Info 22   [00:00:51.000] -----------------------------------------------
 Info 22   [00:00:52.000] Open files: 
 Info 22   [00:00:53.000] 	FileName: /user/username/projects/myproject/src/foo.ts ProjectRootPath: /user/username/projects/myproject
 Info 22   [00:00:54.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 22   [00:00:55.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -103,10 +107,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
-Info 22   [00:00:55.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 23   [00:00:56.000] request:
     {
       "command": "open",
@@ -118,8 +120,6 @@ Info 23   [00:00:56.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 24   [00:00:57.000] Search path: /user/username/projects/myproject/src/sub
 Info 25   [00:00:58.000] For info: /user/username/projects/myproject/src/sub/fooBar.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 26   [00:00:59.000] event:
@@ -162,6 +162,10 @@ Info 43   [00:01:23.000] 	FileName: /user/username/projects/myproject/src/foo.ts
 Info 43   [00:01:24.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 43   [00:01:25.000] 	FileName: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject
 Info 43   [00:01:26.000] 		Projects: /dev/null/inferredProject1*
+Info 43   [00:01:27.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -194,14 +198,15 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 43   [00:01:27.000] response:
-    {
-      "responseRequired": false
-    }
 Info 44   [00:01:30.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 45   [00:01:31.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 46   [00:01:32.000] Scheduled: *ensureProjectForOpenFiles*
 Info 47   [00:01:33.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Before request
+//// [/user/username/projects/myproject/src/sub/fooBar.ts]
+export function fooBar() { }
+
+
 Info 48   [00:01:34.000] request:
     {
       "command": "geterr",
@@ -215,17 +220,12 @@ Info 48   [00:01:34.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-//// [/user/username/projects/myproject/src/sub/fooBar.ts]
-export function fooBar() { }
-
-
-After request
-
 Info 49   [00:01:35.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Checking timeout queue length: 3
 
 Before running timeout callback3

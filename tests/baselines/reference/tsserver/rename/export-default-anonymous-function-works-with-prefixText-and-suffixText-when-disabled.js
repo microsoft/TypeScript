@@ -1,4 +1,12 @@
 Info 0    [00:00:07.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a.ts]
+export default function() {}
+
+//// [/b.ts]
+import aTest from "./a"; function test() { return aTest(); }
+
+
 Info 1    [00:00:08.000] request:
     {
       "command": "open",
@@ -8,14 +16,6 @@ Info 1    [00:00:08.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a.ts]
-export default function() {}
-
-//// [/b.ts]
-import aTest from "./a"; function test() { return aTest(); }
-
-
 Info 2    [00:00:09.000] Search path: /
 Info 3    [00:00:10.000] For info: /b.ts :: No config files found.
 Info 4    [00:00:11.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -41,6 +41,10 @@ Info 11   [00:00:20.000] -----------------------------------------------
 Info 11   [00:00:21.000] Open files: 
 Info 11   [00:00:22.000] 	FileName: /b.ts ProjectRootPath: undefined
 Info 11   [00:00:23.000] 		Projects: /dev/null/inferredProject1*
+Info 11   [00:00:24.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -51,10 +55,8 @@ FsWatches::
 /a.ts: *new*
   {}
 
-Info 11   [00:00:24.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 12   [00:00:25.000] request:
     {
       "command": "configure",
@@ -66,16 +68,16 @@ Info 12   [00:00:25.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 13   [00:00:26.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":2,"success":true,"performanceData":{"updateGraphDurationMs":*}}
-After request
-
 Info 14   [00:00:27.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 15   [00:00:28.000] request:
     {
       "command": "rename",
@@ -87,10 +89,6 @@ Info 15   [00:00:28.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 16   [00:00:29.000] response:
     {
       "response": {
@@ -149,3 +147,4 @@ Info 16   [00:00:29.000] response:
       },
       "responseRequired": true
     }
+After request

@@ -1,13 +1,4 @@
 Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:10.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a.ts]
 import {} from "./b";
@@ -19,6 +10,15 @@ export {};
 {"files":["./a.ts","./b.ts"]}
 
 
+Info 1    [00:00:10.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:11.000] Search path: /
 Info 3    [00:00:12.000] For info: /a.ts :: Config file name: /tsconfig.json
 Info 4    [00:00:13.000] Creating configuration project /tsconfig.json
@@ -56,6 +56,10 @@ Info 18   [00:00:29.000] -----------------------------------------------
 Info 18   [00:00:30.000] Open files: 
 Info 18   [00:00:31.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 18   [00:00:32.000] 		Projects: /tsconfig.json
+Info 18   [00:00:33.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -72,10 +76,8 @@ FsWatches::
 /: *new*
   {}
 
-Info 18   [00:00:33.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 19   [00:00:34.000] request:
     {
       "command": "open",
@@ -85,8 +87,6 @@ Info 19   [00:00:34.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
 Info 20   [00:00:35.000] Search path: /
 Info 21   [00:00:36.000] For info: /c.ts :: Config file name: /tsconfig.json
 Info 22   [00:00:37.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -114,12 +114,14 @@ Info 28   [00:00:50.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 28   [00:00:51.000] 		Projects: /tsconfig.json
 Info 28   [00:00:52.000] 	FileName: /c.ts ProjectRootPath: undefined
 Info 28   [00:00:53.000] 		Projects: /dev/null/inferredProject1*
-After request
-
 Info 28   [00:00:54.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 29   [00:00:55.000] request:
     {
       "command": "getEditsForFileRename",
@@ -130,10 +132,6 @@ Info 29   [00:00:55.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-After request
-
 Info 30   [00:00:56.000] response:
     {
       "response": [
@@ -172,3 +170,4 @@ Info 30   [00:00:56.000] response:
       ],
       "responseRequired": true
     }
+After request
