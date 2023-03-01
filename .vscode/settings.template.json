@@ -8,10 +8,10 @@
     // "typescript.tsdk": "built/local"
 
     // To ignore commits listed in .git-blame-ignore-revs in GitLens:
-    // "gitlens.advanced.blame.customArguments": [
-    //     "--ignore-revs-file",
-    //     ".git-blame-ignore-revs"
-    // ]
+    "gitlens.advanced.blame.customArguments": [
+        "--ignore-revs-file",
+        ".git-blame-ignore-revs"
+    ],
 
     // Match eslint-plugin-simple-import-sort in organize/auto-imports.
     "typescript.unstable": {
