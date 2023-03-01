@@ -1,0 +1,94 @@
+=== tests/cases/compiler/contextuallyTypedElementsOfGenericZippingTuples.ts ===
+declare function test<T extends unknown[], T2 extends unknown[]>(
+>test : <T extends unknown[], T2 extends unknown[]>(a: [...{ [K in keyof T]: { produce: (seed: string) => T[K]; }; }], b: [...{ [K in keyof T2]: { consume: (arg: T[K & keyof T]) => T2[K]; }; }]) => void
+
+  a: [
+>a : [...{ [K in keyof T]: { produce: (seed: string) => T[K]; }; }]
+
+    ...{
+      [K in keyof T]: {
+        produce: (seed: string) => T[K];
+>produce : (seed: string) => T[K]
+>seed : string
+
+      };
+    }
+  ],
+  b: [
+>b : [...{ [K in keyof T2]: { consume: (arg: T[K & keyof T]) => T2[K]; }; }]
+
+    ...{
+      [K in keyof T2]: {
+        consume: (arg: T[K & keyof T]) => T2[K];
+>consume : (arg: T[K & keyof T]) => T2[K]
+>arg : T[K & keyof T]
+
+      };
+    }
+  ]
+): void;
+
+test(
+>test(  [    {      produce: () => "",    },    {      produce: () => 42,    },  ],  [    {      consume: (arg) => {        const received: string = arg;        return received;      },    },    {      consume: (arg) => {        const received: number = arg;        return received;      },    },  ]) : void
+>test : <T extends unknown[], T2 extends unknown[]>(a: [...{ [K in keyof T]: { produce: (seed: string) => T[K]; }; }], b: [...{ [K in keyof T2]: { consume: (arg: T[K & keyof T]) => T2[K]; }; }]) => void
+
+  [
+>[    {      produce: () => "",    },    {      produce: () => 42,    },  ] : [{ produce: () => string; }, { produce: () => number; }]
+    {
+>{      produce: () => "",    } : { produce: () => string; }
+
+      produce: () => "",
+>produce : () => string
+>() => "" : () => string
+>"" : ""
+
+    },
+    {
+>{      produce: () => 42,    } : { produce: () => number; }
+
+      produce: () => 42,
+>produce : () => number
+>() => 42 : () => number
+>42 : 42
+
+    },
+  ],
+  [
+>[    {      consume: (arg) => {        const received: string = arg;        return received;      },    },    {      consume: (arg) => {        const received: number = arg;        return received;      },    },  ] : [{ consume: (arg: string) => string; }, { consume: (arg: number) => number; }]
+    {
+>{      consume: (arg) => {        const received: string = arg;        return received;      },    } : { consume: (arg: string) => string; }
+
+      consume: (arg) => {
+>consume : (arg: string) => string
+>(arg) => {        const received: string = arg;        return received;      } : (arg: string) => string
+>arg : string
+
+        const received: string = arg;
+>received : string
+>arg : string
+
+        return received;
+>received : string
+
+      },
+    },
+    {
+>{      consume: (arg) => {        const received: number = arg;        return received;      },    } : { consume: (arg: number) => number; }
+
+      consume: (arg) => {
+>consume : (arg: number) => number
+>(arg) => {        const received: number = arg;        return received;      } : (arg: number) => number
+>arg : number
+
+        const received: number = arg;
+>received : number
+>arg : number
+
+        return received;
+>received : number
+
+      },
+    },
+  ]
+);
+
