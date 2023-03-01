@@ -71,8 +71,8 @@ import {
     ModuleResolutionHost,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
+    moduleResolutionSupportsPackageJsonExportsAndImports,
     noop,
-    noopPush,
     normalizePath,
     normalizeSlashes,
     PackageId,
@@ -82,7 +82,6 @@ import {
     Pattern,
     patternText,
     perfLogger,
-    Push,
     readJson,
     removeExtension,
     removeFileExtension,
@@ -285,8 +284,8 @@ export interface ModuleResolutionState {
     host: ModuleResolutionHost;
     compilerOptions: CompilerOptions;
     traceEnabled: boolean;
-    failedLookupLocations: Push<string>;
-    affectingLocations: Push<string>;
+    failedLookupLocations: string[] | undefined;
+    affectingLocations: string[] | undefined;
     resultFromCache?: ResolvedModuleWithFailedLookupLocations;
     packageJsonInfoCache: PackageJsonInfoCache | undefined;
     features: NodeResolutionFeatures;
@@ -710,10 +709,13 @@ export function getConditions(options: CompilerOptions, esmMode?: boolean) {
     // conditions are only used by the node16/nodenext/bundler resolvers - there's no priority order in the list,
     // it's essentially a set (priority is determined by object insertion order in the object we look at).
     const conditions = esmMode || getEmitModuleResolutionKind(options) === ModuleResolutionKind.Bundler
-        ? ["node", "import"]
-        : ["node", "require"];
+        ? ["import"]
+        : ["require"];
     if (!options.noDtsResolution) {
         conditions.push("types");
+    }
+    if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler) {
+        conditions.push("node");
     }
     return concatenate(conditions, options.customConditions);
 }
@@ -1706,7 +1708,7 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         candidateIsFromPackageJsonField: false,
     };
 
-    if (traceEnabled && getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) <= ModuleResolutionKind.NodeNext) {
+    if (traceEnabled && moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(compilerOptions))) {
         trace(host, Diagnostics.Resolving_in_0_mode_with_conditions_1, features & NodeResolutionFeatures.EsmMode ? "ESM" : "CJS", conditions.map(c => `'${c}'`).join(", "));
     }
 
@@ -2049,7 +2051,7 @@ function tryFileLookup(fileName: string, onlyRecordFailures: boolean, state: Mod
             }
         }
     }
-    state.failedLookupLocations.push(fileName);
+    state.failedLookupLocations?.push(fileName);
     return undefined;
 }
 
@@ -2175,8 +2177,8 @@ export function getTemporaryModuleResolutionState(packageJsonInfoCache: PackageJ
         host,
         compilerOptions: options,
         traceEnabled: isTraceEnabled(options, host),
-        failedLookupLocations: noopPush,
-        affectingLocations: noopPush,
+        failedLookupLocations: undefined,
+        affectingLocations: undefined,
         packageJsonInfoCache,
         features: NodeResolutionFeatures.None,
         conditions: emptyArray,
@@ -2231,7 +2233,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
     const { host, traceEnabled } = state;
     const packageJsonPath = combinePaths(packageDirectory, "package.json");
     if (onlyRecordFailures) {
-        state.failedLookupLocations.push(packageJsonPath);
+        state.failedLookupLocations?.push(packageJsonPath);
         return undefined;
     }
 
@@ -2239,14 +2241,14 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
     if (existing !== undefined) {
         if (typeof existing !== "boolean") {
             if (traceEnabled) trace(host, Diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath);
-            state.affectingLocations.push(packageJsonPath);
+            state.affectingLocations?.push(packageJsonPath);
             return existing.packageDirectory === packageDirectory ?
                 existing :
                 { packageDirectory, contents: existing.contents };
         }
         else {
             if (existing && traceEnabled) trace(host, Diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath);
-            state.failedLookupLocations.push(packageJsonPath);
+            state.failedLookupLocations?.push(packageJsonPath);
             return undefined;
         }
     }
@@ -2258,7 +2260,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
         }
         const result: PackageJsonInfo = { packageDirectory, contents: { packageJsonContent, versionPaths: undefined, resolvedEntrypoints: undefined } };
         state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
-        state.affectingLocations.push(packageJsonPath);
+        state.affectingLocations?.push(packageJsonPath);
         return result;
     }
     else {
@@ -2267,7 +2269,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
         }
         state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, directoryExists);
         // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
-        state.failedLookupLocations.push(packageJsonPath);
+        state.failedLookupLocations?.push(packageJsonPath);
     }
 }
 
@@ -2592,19 +2594,26 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
         }
         else if (typeof target === "object" && target !== null) { // eslint-disable-line no-null/no-null
             if (!Array.isArray(target)) {
+                traceIfEnabled(state, Diagnostics.Entering_conditional_exports);
                 for (const condition of getOwnKeys(target as MapLike<unknown>)) {
                     if (condition === "default" || state.conditions.indexOf(condition) >= 0 || isApplicableVersionedTypesKey(state.conditions, condition)) {
                         traceIfEnabled(state, Diagnostics.Matched_0_condition_1, isImports ? "imports" : "exports", condition);
                         const subTarget = (target as MapLike<unknown>)[condition];
                         const result = loadModuleFromTargetImportOrExport(subTarget, subpath, pattern, key);
                         if (result) {
+                            traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
+                            traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
                             return result;
+                        }
+                        else {
+                            traceIfEnabled(state, Diagnostics.Failed_to_resolve_under_condition_0, condition);
                         }
                     }
                     else {
                         traceIfEnabled(state, Diagnostics.Saw_non_matching_condition_0, condition);
                     }
                 }
+                traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
                 return undefined;
             }
             else {
@@ -3093,6 +3102,7 @@ function resolveFromTypeRoot(moduleName: string, state: ModuleResolutionState) {
 
 // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,
 // so this function doesn't check them to avoid propagating errors.
+/** @internal */
 export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string) {
     return !!compilerOptions.allowImportingTsExtensions || fromFileName && isDeclarationFileName(fromFileName);
 }

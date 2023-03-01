@@ -111,8 +111,8 @@ module M2 {
     }
 
     var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];
->x : (EComp2.A | EComp2.B | EComp2.C | EComp2.D | EComp2.E | EComp2.F)[]
->[EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F] : (EComp2.A | EComp2.B | EComp2.C | EComp2.D | EComp2.E | EComp2.F)[]
+>x : EComp2[]
+>[EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F] : EComp2[]
 >EComp2.A : EComp2.A
 >EComp2 : typeof EComp2
 >A : EComp2.A

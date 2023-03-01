@@ -422,7 +422,16 @@ export function forEachExternalModuleToImportFrom(
     const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
     if (autoImportProvider) {
         const start = timestamp();
-        forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), excludePatterns, (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
+        const checker = program.getTypeChecker();
+        forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), excludePatterns, (module, file) => {
+            if (file && !program.getSourceFile(file.fileName) || !file && !checker.resolveName(module.name, /*location*/ undefined, SymbolFlags.Module, /*excludeGlobals*/ false)) {
+                // The AutoImportProvider filters files already in the main program out of its *root* files,
+                // but non-root files can still be present in both programs, and already in the export info map
+                // at this point. This doesn't create any incorrect behavior, but is a waste of time and memory,
+                // so we filter them out here.
+                cb(module, file, autoImportProvider, /*isFromPackageJson*/ true);
+            }
+        });
         host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
     }
 }

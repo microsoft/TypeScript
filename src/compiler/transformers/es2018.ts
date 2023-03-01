@@ -19,6 +19,7 @@ import {
     concatenate,
     ConciseBody,
     ConstructorDeclaration,
+    containsObjectRestOrSpread,
     createForOfBindingStatement,
     createSuperAccessVariableStatement,
     Debug,
@@ -577,7 +578,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
      * expression of an `ExpressionStatement`).
      */
     function visitBinaryExpression(node: BinaryExpression, expressionResultIsUnused: boolean): Expression {
-        if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+        if (isDestructuringAssignment(node) && containsObjectRestOrSpread(node.left)) {
             return flattenDestructuringAssignment(
                 node,
                 visitor,
@@ -703,7 +704,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
      */
     function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
         const ancestorFacts = enterSubtree(HierarchyFacts.IterationStatementExcludes, HierarchyFacts.IterationStatementIncludes);
-        if (node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+        if (node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread ||
+            isAssignmentPattern(node.initializer) && containsObjectRestOrSpread(node.initializer)) {
             node = transformForOfStatementWithObjectRest(node);
         }
         const result = node.awaitModifier ?
