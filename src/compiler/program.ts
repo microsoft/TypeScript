@@ -4325,9 +4325,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function getIgnoreDeprecationsVersion(): Version {
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
-            const parsed = Version.tryParse(ignoreDeprecations);
-            if (parsed) {
-                return parsed;
+            // While we could do Version.tryParse here to support any version,
+            // for now, only allow "5.0". We aren't planning on deprecating anything
+            // until 6.0.
+            if (ignoreDeprecations === "5.0") {
+                return new Version(ignoreDeprecations);
             }
             reportInvalidIgnoreDeprecations();
         }
