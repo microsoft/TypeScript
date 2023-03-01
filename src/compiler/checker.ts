@@ -28961,9 +28961,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isTupleType(t) && isNumericLiteralName(name) && +name >= 0) {
                     if (t.target.hasRestElement) {
                         const restElement = getTypeArguments(t)[t.target.fixedLength];
-                        const type = getTypeOfPropertyOfContextualType(restElement, name);
-                        if (type) {
-                            return type;
+                        if (restElement !== type) {
+                            const propType = getTypeOfPropertyOfContextualType(restElement, name);
+                            if (propType) {
+                                return propType;
+                            }
                         }
                     }
                     const restType = getElementTypeOfSliceOfTupleType(t, t.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
