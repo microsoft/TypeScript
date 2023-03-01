@@ -8592,19 +8592,24 @@ namespace Parser {
                 }
                 function addComment() {
                     // TODO: addComment likely needs to be aware of indent/margin, at least when adding things after a newline
+                    if (cpos === cend) return
                     comments += scanner.getText().slice(cpos, cend)
-                    cpos = cend // TODO: Most callers (I think) immediately set cpos and cend themselves
+                    cpos = cend // TODO: Most callers (I think) immediately set cpos and cend themselves; TODO: if cpos > cend, I'm not sure what that means
                 }
 
-                nextTokenJSDoc();
                 // TODO: These might be the same as some existing variable (specifically, maybe cend = commentsPos)
                 let comments = "";
                 let cpos = scanner.getTextPos() // -OR- 0 ? getStartPos ?
                 let cend = cpos
-                while (parseOptionalJsdoc(SyntaxKind.WhitespaceTrivia));
+
+                nextTokenJSDoc();
+                while (parseOptionalJsdoc(SyntaxKind.WhitespaceTrivia)) {
+                    cpos = cend = scanner.getTokenPos();
+                }
                 if (parseOptionalJsdoc(SyntaxKind.NewLineTrivia)) {
                     state = JSDocState.BeginningOfLine;
                     indent = 0;
+                    cpos = cend = scanner.getTokenPos();
                 }
                 loop: while (true) {
                     switch (token()) {
@@ -8876,8 +8881,9 @@ namespace Parser {
                     indent += scanner.getTextPos() - scanner.getTokenPos() // text.length;
                 }
                 function addComment() {
+                    if (cpos === end) return
                     comments += scanner.getText().slice(cpos, cend)
-                    cpos = cend
+                    cpos = cend // TODO: if cpos > cend, I'm not sure what the means, but maybe don't reset it
                 }
                 if (initialMargin !== undefined) {
                     // jump straight to saving comments if there is some initial indentation
@@ -8922,6 +8928,10 @@ namespace Parser {
                                     addComment()
                                     cpos = cend = scanner.getTokenPos() + (margin - indent)
                                     // comments += whitespace.slice(margin - indent);
+                                }
+                                else {
+                                    addComment()
+                                    cpos = cend = scanner.getTextPos()
                                 }
                                 // TODO: Why is this only in the else branch, but in both branches for top-level comments? Seems wrong.
                                 indent += whitespaceLength;
@@ -9187,7 +9197,7 @@ namespace Parser {
             }
 
             function parseAuthorNameAndEmail(): JSDocText {
-                let comments = "";
+                let comments = ""; // TODO: Should be named authorNameAndEmail, sheesh
                 let inEmail = false;
                 let token = scanner.getToken();
                 while (token !== SyntaxKind.EndOfFileToken && token !== SyntaxKind.NewLineTrivia) {
@@ -9206,7 +9216,7 @@ namespace Parser {
                     token = nextTokenJSDoc();
                 }
 
-                return factory.createJSDocText(comments);
+                return factory.createJSDocText(comments); // TODO: Should return undefined if (!comments)
             }
 
             function parseImplementsTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocImplementsTag {
