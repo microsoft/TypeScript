@@ -12632,7 +12632,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const associatedNames = getUniqAssociatedNamesFromTupleType(restType);
             const restParams = map(elementTypes, (t, i) => {
                 // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
-                const name = associatedNames[i] ? associatedNames[i] : getParameterNameAtPosition(sig, restIndex + i, restType);
+                const name = associatedNames && associatedNames[i] ? associatedNames[i] :
+                    getParameterNameAtPosition(sig, restIndex + i, restType);
                 const flags = restType.target.elementFlags[i];
                 const checkFlags = flags & ElementFlags.Variable ? CheckFlags.RestParameter :
                     flags & ElementFlags.Optional ? CheckFlags.OptionalParameter : 0;
@@ -12643,22 +12644,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return concatenate(sig.parameters.slice(0, restIndex), restParams);
         }
 
-        function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference): __String[] {
+        function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference) {
             const associatedNamesMap = new Map<__String, number>();
-            const associatedNames: __String[] = [];
-            forEach(type.target.labeledElementDeclarations, (labeledElement, i) => {
+            return map(type.target.labeledElementDeclarations, labeledElement => {
                 const name = getTupleElementLabel(labeledElement);
                 const prevCounter = associatedNamesMap.get(name);
                 if (prevCounter === undefined) {
-                    associatedNames[i] = name;
                     associatedNamesMap.set(name, 1);
+                    return name;
                 }
                 else {
-                    associatedNames[i] = `${name}_${prevCounter}` as __String;
                     associatedNamesMap.set(name, prevCounter + 1);
+                    return `${name}_${prevCounter}` as __String;
                 }
             });
-            return associatedNames;
         }
     }
 
