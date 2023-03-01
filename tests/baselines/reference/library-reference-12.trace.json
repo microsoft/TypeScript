@@ -1,6 +1,7 @@
 [
-    "======== Resolving type reference directive 'jquery', containing file '/a/b/consumer.ts', root directory not set. ========",
-    "Root directory cannot be determined, skipping primary search paths.",
+    "======== Resolving type reference directive 'jquery', containing file '/a/b/consumer.ts', root directory '/node_modules/@types'. ========",
+    "Resolving with primary search path '/node_modules/@types'.",
+    "Directory '/node_modules/@types' does not exist, skipping all lookups in it.",
     "Looking up in 'node_modules' folder, initial location '/a/b'.",
     "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
     "Found 'package.json' at '/a/node_modules/jquery/package.json'.",
