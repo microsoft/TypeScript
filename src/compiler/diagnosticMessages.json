@@ -4265,7 +4265,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
+    "Option '{0}' can only be used when 'module' is set to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },
@@ -4281,15 +4281,7 @@
         "category": "Error",
         "code": 5098
     },
-    "Import assignment is not allowed when 'moduleResolution' is set to 'bundler'. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
-        "category": "Error",
-        "code": 5099
-    },
-    "Export assignment cannot be used when 'moduleResolution' is set to 'bundler'. Consider using 'export default' or another module format instead.": {
-        "category": "Error",
-        "code": 5100
-    },
-    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify 'ignoreDeprecations: \"{2}\"' to silence this error.": {
+    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '\"ignoreDeprecations\": \"{2}\"' to silence this error.": {
         "category": "Error",
         "code": 5101
     },
@@ -6702,7 +6694,15 @@
         "category": "Suggestion",
         "code": 80008
     },
-
+    "JSDoc typedef may be converted to TypeScript type.": {
+        "category": "Suggestion",
+        "code": 80009
+    },
+    "JSDoc typedefs may be converted to TypeScript types.": {
+        "category": "Suggestion",
+        "code": 80010
+    },
+    
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -7559,6 +7559,14 @@
     "Use `Number.isNaN` in all conditions.": {
         "category": "Message",
         "code": 95175
+    },
+    "Convert typedef to TypeScript type.": {
+        "category": "Message",
+        "code": 95176
+    },
+    "Convert all typedef to TypeScript types.": {
+        "category": "Message",
+        "code": 95177
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

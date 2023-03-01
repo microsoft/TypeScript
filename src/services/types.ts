@@ -159,7 +159,7 @@ declare module "../compiler/types" {
     export interface SourceFile {
         /** @internal */ version: string;
         /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
-        /** @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
+        /** @internal */ nameTable: Map<__String, number> | undefined;
 
         /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
 
@@ -567,10 +567,8 @@ export interface LanguageService {
     getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
     /** @internal */
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
     getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: false, stopAtAlias: boolean): readonly DefinitionInfo[] | undefined;
     /** @internal */
-    // eslint-disable-next-line @typescript-eslint/unified-signatures
     getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean, stopAtAlias: false): readonly DefinitionInfo[] | undefined;
     getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
     getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;

@@ -58,7 +58,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -79,7 +79,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg/impo
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
 ======== Resolving module 'pkg1' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in CJS mode with conditions 'node', 'require', 'types'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -119,7 +119,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module './a' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in CJS mode with conditions 'node', 'require', 'types'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/a', target file types: TypeScript, JavaScript, Declaration.
 File '/user/username/projects/myproject/a.ts' exists - use it as a name resolution result.
 ======== Module name './a' was successfully resolved to '/user/username/projects/myproject/a.ts'. ========
@@ -237,7 +237,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/a.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.

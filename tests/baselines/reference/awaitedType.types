@@ -54,6 +54,17 @@ type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>
 >null : null
 >null : null
 
+type TUndefined = Awaited<undefined>;
+>TUndefined : undefined
+
+type TNull = Awaited<null>;
+>TNull : null
+>null : null
+
+type TNullOrUndefined = Awaited<null | undefined>;
+>TNullOrUndefined : null
+>null : null
+
 interface BadPromise { then(cb: (value: BadPromise) => void): void; }
 >then : (cb: (value: BadPromise) => void) => void
 >cb : (value: BadPromise) => void

@@ -600,8 +600,7 @@ function compareModuleSpecifiersWorker(m1: Expression | undefined, m2: Expressio
     const name2 = m2 === undefined ? undefined : getExternalModuleName(m2);
     return compareBooleans(name1 === undefined, name2 === undefined) ||
         compareBooleans(isExternalModuleNameRelative(name1!), isExternalModuleNameRelative(name2!)) ||
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-        comparer(name1!, name2!); // I don't know why eslint is wrong but this one is necessary
+        comparer(name1!, name2!);
 }
 
 function getModuleSpecifierExpression(declaration: AnyImportOrRequireStatement): Expression | undefined {

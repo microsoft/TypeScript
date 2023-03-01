@@ -1,6 +1,7 @@
 [
     "======== Resolving module 'foo' from '/index.mts'. ========",
     "Explicitly specified module resolution kind: 'Bundler'.",
+    "Resolving in CJS mode with conditions 'import', 'types'.",
     "File '/package.json' does not exist.",
     "Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
     "Found 'package.json' at '/node_modules/foo/package.json'.",
@@ -37,6 +38,7 @@
     "======== Module name 'foo' was successfully resolved to '/node_modules/foo/index.mjs' with Package ID 'foo/index.mjs@1.0.0'. ========",
     "======== Resolving module 'bar' from '/index.mts'. ========",
     "Explicitly specified module resolution kind: 'Bundler'.",
+    "Resolving in CJS mode with conditions 'import', 'types'.",
     "File '/package.json' does not exist according to earlier cached lookups.",
     "Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
     "Found 'package.json' at '/node_modules/bar/package.json'.",
