@@ -116,6 +116,11 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
                 }
             }
 
+            const jsdocTypedefNode = codefix.getJSDocTypedefNode(node);
+            if (jsdocTypedefNode) {
+                diags.push(createDiagnosticForNode(jsdocTypedefNode, Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type));
+            }
+
             if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
                 diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
             }
