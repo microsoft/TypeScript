@@ -45,15 +45,11 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/file.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/file.ts:
+/a/b/file.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -99,16 +95,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/b/file.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/a/b/file.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

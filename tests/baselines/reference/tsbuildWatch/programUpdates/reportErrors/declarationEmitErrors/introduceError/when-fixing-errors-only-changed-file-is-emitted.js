@@ -52,18 +52,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewitherror.ts (computed .d.ts during emit)
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts during emit)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/solution/app/tsconfig.json:
+/user/username/projects/solution/app/tsconfig.json: *new*
   {}
-/user/username/projects/solution/app/filewitherror.ts:
+/user/username/projects/solution/app/filewitherror.ts: *new*
   {}
-/user/username/projects/solution/app/filewithouterror.ts:
+/user/username/projects/solution/app/filewithouterror.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/solution/app:
+/user/username/projects/solution/app: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -207,20 +205,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewitherror.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/solution/app/tsconfig.json:
-  {}
-/user/username/projects/solution/app/filewitherror.ts:
-  {}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/solution/app:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -241,20 +225,6 @@ Output::
 [[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/solution/app/tsconfig.json:
-  {}
-/user/username/projects/solution/app/filewitherror.ts:
-  {}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/solution/app:
-  {}
 
 exitCode:: ExitStatus.undefined
 

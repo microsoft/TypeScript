@@ -59,20 +59,18 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/a.ts:
+/user/username/projects/myproject/a.ts: *new*
   {}
-/user/username/projects/myproject/b.ts:
+/user/username/projects/myproject/b.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -107,22 +105,6 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -222,22 +204,6 @@ Output::
 Program: Same as old program
 
 BuilderProgram: Same as old builder program
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -365,22 +331,6 @@ Program: Same as old program
 
 BuilderProgram: Same as old builder program
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 
@@ -394,22 +344,6 @@ Program: Same as old program
 
 BuilderProgram: Same as old builder program
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 
@@ -422,22 +356,6 @@ Output::
 Program: Same as old program
 
 BuilderProgram: Same as old builder program
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

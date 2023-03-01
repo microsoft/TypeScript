@@ -32,12 +32,6 @@ let y = 1
 let z = 1
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:26.000] Search path: /a/b/c
 Info 2    [00:00:27.000] For info: /a/b/c/f1.ts :: Config file name: /a/b/tsconfig.json
 Info 3    [00:00:28.000] Creating configuration project /a/b/tsconfig.json

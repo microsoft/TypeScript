@@ -1,4 +1,12 @@
 Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a/b/file1.ts]
+let t1 = "div";
+let t2 = "div";
+let t3 = { "div": 123 };
+let t4 = t3["div"];
+
+
 Info 1    [00:00:10.000] request:
     {
       "command": "open",
@@ -8,20 +16,6 @@ Info 1    [00:00:10.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a/b/file1.ts]
-let t1 = "div";
-let t2 = "div";
-let t3 = { "div": 123 };
-let t4 = t3["div"];
-
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:11.000] Search path: /a/b
 Info 3    [00:00:12.000] For info: /a/b/file1.ts :: No config files found.
 Info 4    [00:00:13.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -45,22 +39,20 @@ Info 12   [00:00:23.000] -----------------------------------------------
 Info 12   [00:00:24.000] Open files: 
 Info 12   [00:00:25.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 12   [00:00:26.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 12   [00:00:27.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+Before request
+
 Info 13   [00:00:28.000] request:
     {
       "command": "documentHighlights",
@@ -75,30 +67,6 @@ Info 13   [00:00:28.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 14   [00:00:29.000] response:
     {
       "response": [
@@ -162,6 +130,10 @@ Info 14   [00:00:29.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 15   [00:00:30.000] request:
     {
       "command": "documentHighlights",
@@ -176,30 +148,6 @@ Info 15   [00:00:30.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 16   [00:00:31.000] response:
     {
       "response": [
@@ -241,6 +189,10 @@ Info 16   [00:00:31.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 17   [00:00:32.000] request:
     {
       "command": "documentHighlights",
@@ -255,30 +207,6 @@ Info 17   [00:00:32.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 18   [00:00:33.000] response:
     {
       "response": [
@@ -320,3 +248,4 @@ Info 18   [00:00:33.000] response:
       ],
       "responseRequired": true
     }
+After request

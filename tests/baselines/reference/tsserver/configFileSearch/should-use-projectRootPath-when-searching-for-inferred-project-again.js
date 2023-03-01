@@ -23,12 +23,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:24.000] Search path: /a/b/projects/project/src
 Info 2    [00:00:25.000] For info: /a/b/projects/project/src/file1.ts :: Config file name: /a/b/projects/project/src/tsconfig.json
 Info 3    [00:00:26.000] Creating configuration project /a/b/projects/project/src/tsconfig.json
@@ -97,13 +91,9 @@ Info 33   [00:01:03.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/project
 Before running timeout callbacks
 //// [/a/b/projects/project/src/tsconfig.json] deleted
 
-PolledWatches::
-
 FsWatches::
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 Info 34   [00:01:04.500] Running: *ensureProjectForOpenFiles*
 Info 35   [00:01:05.500] Before ensureProjectForOpenFiles:
@@ -143,21 +133,19 @@ Info 50   [00:01:28.500] 		Projects: /dev/null/inferredProject1*
 After running timeout callbacks
 
 PolledWatches::
-/a/b/projects/project/src/tsconfig.json:
+/a/b/projects/project/src/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/src/jsconfig.json:
+/a/b/projects/project/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/tsconfig.json:
+/a/b/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/jsconfig.json:
+/a/b/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/src/node_modules/@types:
+/a/b/projects/project/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/project/node_modules/@types:
+/a/b/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-
-FsWatchesRecursive::

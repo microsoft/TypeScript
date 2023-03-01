@@ -1,13 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/rootfolder/otherfolder/a/b/project/file1.ts]
 import a from "file2"
@@ -32,12 +23,15 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"typeRoots":[]}}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Search path: /user/username/rootfolder/otherfolder/a/b/project
 Info 3    [00:00:32.000] For info: /user/username/rootfolder/otherfolder/a/b/project/file1.ts :: Config file name: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
@@ -88,34 +82,34 @@ Info 24   [00:00:55.000] -----------------------------------------------
 Info 24   [00:00:56.000] Open files: 
 Info 24   [00:00:57.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
 Info 24   [00:00:58.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/b/project/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
-  {}
-/user/username/rootfolder/otherfolder/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b/project:
-  {}
-
 Info 24   [00:00:59.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/rootfolder/otherfolder/a/b/project/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/node_modules: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json: *new*
+  {}
+/user/username/rootfolder/otherfolder/a/b/project/file3.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/rootfolder/otherfolder/a/b/project: *new*
+  {}
+
 Info 25   [00:01:03.000] FileWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/project/file3.ts 1:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/file3.ts 500 undefined WatchType: Closed Script info
 Info 26   [00:01:04.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 27   [00:01:05.000] Scheduled: *ensureProjectForOpenFiles*
@@ -124,28 +118,6 @@ Before checking timeout queue length (2) and running
 //// [/user/username/rootfolder/otherfolder/a/b/project/file3.ts]
 export class c { }export class d {}
 
-
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/b/project/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
-  {}
-/user/username/rootfolder/otherfolder/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b/project:
-  {}
 
 Info 29   [00:01:07.000] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 30   [00:01:08.000] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
@@ -170,28 +142,6 @@ Info 36   [00:01:24.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/pr
 Info 36   [00:01:25.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 After checking timeout queue length (2) and running
 
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/b/project/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
-  {}
-/user/username/rootfolder/otherfolder/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b/project:
-  {}
-
 Info 36   [00:01:29.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Info 37   [00:01:30.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
 Info 38   [00:01:31.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -214,6 +164,10 @@ PolledWatches::
 /user/username/rootfolder/otherfolder/node_modules:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/user/username/rootfolder/otherfolder/a/b/node_modules:
+  {"pollingInterval":500}
+
 FsWatches::
 /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
   {}
@@ -225,7 +179,7 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/project:
   {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
+/user/username/rootfolder/otherfolder/a/b/node_modules: *new*
   {}
 
 Info 45   [00:01:40.000] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
@@ -233,51 +187,7 @@ Info 46   [00:01:41.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/pr
 Info 47   [00:01:42.000] Scheduled: *ensureProjectForOpenFiles*
 After running timeout callbacks
 
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/b/project/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
-  {}
-/user/username/rootfolder/otherfolder/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b/project:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {}
-
 Before running timeout callbacks
-
-PolledWatches::
-/user/username/rootfolder/otherfolder/a/b/project/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
-  {}
-/user/username/rootfolder/otherfolder/a/b/project/file3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b/project:
-  {}
-/user/username/rootfolder/otherfolder/a/b/node_modules:
-  {}
 
 Info 48   [00:01:43.000] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 49   [00:01:44.000] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
@@ -327,6 +237,12 @@ After running timeout callbacks
 
 PolledWatches::
 /user/username/rootfolder/otherfolder/a/b/project/node_modules:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/rootfolder/otherfolder/a/node_modules:
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/node_modules:
   {"pollingInterval":500}
 
 FsWatches::

@@ -10,12 +10,6 @@ let x = 1
 declare var process: any
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:22.000] Search path: /a/b
 Info 2    [00:00:23.000] For info: /a/b/app.ts :: Config file name: /a/b/tsconfig.json
 Info 3    [00:00:24.000] Creating configuration project /a/b/tsconfig.json

@@ -26,12 +26,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:36.000] Search path: /user/username/projects/myproject/src
 Info 2    [00:00:37.000] For info: /user/username/projects/myproject/src/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 3    [00:00:38.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -121,43 +115,23 @@ Before checking timeout queue length (0) and running
 //// [/user/username/projects/myproject/src/file1.ts] file changed its modified time
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/src/node_modules:
+/user/username/projects/myproject/src/node_modules: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
 
 After checking timeout queue length (0) and running
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/src/node_modules:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/src:
-  {}

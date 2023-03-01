@@ -7,12 +7,6 @@ import {x} from "f1"
 foo()
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:12.000] Search path: /c/d
 Info 2    [00:00:13.000] For info: /c/d/f0.ts :: No config files found.
 Info 3    [00:00:14.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*

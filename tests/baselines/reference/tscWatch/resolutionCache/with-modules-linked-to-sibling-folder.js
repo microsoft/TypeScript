@@ -60,31 +60,31 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/main/@scoped:
+/user/username/projects/myproject/main/@scoped: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/main/node_modules/@types:
+/user/username/projects/myproject/main/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/main/tsconfig.json:
+/user/username/projects/myproject/main/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/main/index.ts:
+/user/username/projects/myproject/main/index.ts: *new*
   {}
-/user/username/projects/myproject/linked-package/dist/index.d.ts:
+/user/username/projects/myproject/linked-package/dist/index.d.ts: *new*
   {}
-/user/username/projects/myproject/linked-package/dist/other.d.ts:
+/user/username/projects/myproject/linked-package/dist/other.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/linked-package/package.json:
+/user/username/projects/myproject/linked-package/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/linked-package:
+/user/username/projects/myproject/linked-package: *new*
   {}
-/user/username/projects/myproject/main/node_modules:
+/user/username/projects/myproject/main/node_modules: *new*
   {}
 
 exitCode:: ExitStatus.undefined

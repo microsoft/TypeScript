@@ -62,21 +62,21 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/f2.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/f1.ts:
+/user/username/projects/myproject/f1.ts: *new*
   {}
-/user/username/projects/myproject/f2.ts:
+/user/username/projects/myproject/f2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -225,7 +225,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/new-file.ts:
+/user/username/projects/myproject/new-file.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -358,26 +358,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/f1.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/f1.ts:
-  {}
-/user/username/projects/myproject/f2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/new-file.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

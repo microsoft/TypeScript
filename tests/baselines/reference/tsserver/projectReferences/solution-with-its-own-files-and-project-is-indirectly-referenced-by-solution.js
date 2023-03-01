@@ -151,18 +151,6 @@ Info 40   [00:01:56.000] 	FileName: /user/username/projects/myproject/src/main.t
 Info 40   [00:01:57.000] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
 Info 40   [00:01:58.000] getDefaultProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
 Info 40   [00:01:59.000] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
-Info 40   [00:02:00.000] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/user/username/projects/myproject/src/main.ts"
-        ]
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/tsconfig-src.json]
 {"compilerOptions":{"composite":true,"outDir":"./target/","baseUrl":"./src/"},"include":["./src/**/*"]}
@@ -238,238 +226,68 @@ bar;
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/own/main.ts:
+/user/username/projects/myproject/own/main.ts: *new*
   {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
+/user/username/projects/myproject/tsconfig-indirect1.json: *new*
   {}
-/user/username/projects/myproject/tsconfig-src.json:
+/user/username/projects/myproject/tsconfig-src.json: *new*
   {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
+/user/username/projects/myproject/tsconfig-indirect2.json: *new*
   {}
-/user/username/projects/myproject/indirect1/main.ts:
+/user/username/projects/myproject/indirect1/main.ts: *new*
   {}
-/user/username/projects/myproject/src/helpers/functions.ts:
+/user/username/projects/myproject/src/helpers/functions.ts: *new*
   {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/own/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
 
+Info 40   [00:02:00.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/main.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 41   [00:02:01.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/own/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 
 Info 42   [00:02:02.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/own/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/own/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 
 Info 43   [00:02:03.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/own/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/own/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 
 Info 44   [00:02:04.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 45   [00:02:05.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/own/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 
 Info 46   [00:02:06.000] Search path: /dummy
 Info 47   [00:02:07.000] For info: /dummy/dummy.ts :: No config files found.
@@ -967,28 +785,37 @@ Info 183  [00:06:09.000] 	FileName: /user/username/projects/myproject/src/main.t
 Info 183  [00:06:10.000] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
 Info 183  [00:06:11.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info 183  [00:06:12.000] 		Projects: /dev/null/inferredProject1*
-Info 183  [00:06:13.000] request:
-    {
-      "command": "references",
-      "arguments": {
-        "file": "/user/username/projects/myproject/src/main.ts",
-        "line": 2,
-        "offset": 10
-      },
-      "seq": 2,
-      "type": "request"
-    }
 Before request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500} *new*
+/dummy/node_modules/@types: *new*
   {"pollingInterval":500}
-/dummy/node_modules/@types:
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
+/user/username/projects/myproject/tsconfig.json:
+  {} *new*
+/user/username/projects/myproject/own/main.ts:
+  {} *new*
+/user/username/projects/myproject/tsconfig-indirect1.json:
+  {} *new*
+/user/username/projects/myproject/tsconfig-src.json:
+  {} *new*
+/user/username/projects/myproject/tsconfig-indirect2.json:
+  {} *new*
+/user/username/projects/myproject/indirect1/main.ts:
+  {} *new*
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {} *new*
+
+FsWatches *deleted*::
 /user/username/projects/myproject/tsconfig.json:
   {}
 /user/username/projects/myproject/own/main.ts:
@@ -1006,8 +833,23 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
+  {} *new*
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/src:
   {}
 
+Info 183  [00:06:13.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts",
+        "line": 2,
+        "offset": 10
+      },
+      "seq": 2,
+      "type": "request"
+    }
 Info 184  [00:06:14.000] Finding references to /user/username/projects/myproject/src/main.ts position 50 in project /user/username/projects/myproject/tsconfig-src.json
 Info 185  [00:06:15.000] Finding references to /user/username/projects/myproject/src/main.ts position 50 in project /user/username/projects/myproject/tsconfig.json
 Info 186  [00:06:16.000] Search path: /user/username/projects/myproject/src
@@ -1109,42 +951,6 @@ Info 245  [00:07:15.000] Search path: /user/username/projects/myproject/src
 Info 246  [00:07:16.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 247  [00:07:17.000] Search path: /user/username/projects/myproject/src
 Info 248  [00:07:18.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/dummy/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/own/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/user/username/projects/myproject/indirect2/main.ts:
-  {}
-/user/username/projects/myproject/target/src/helpers/functions.d.ts:
-  {}
-/user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Info 249  [00:07:19.000] response:
     {
       "response": {
@@ -1294,6 +1100,42 @@ Info 249  [00:07:19.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/dummy/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/own/main.ts:
+  {}
+/user/username/projects/myproject/tsconfig-indirect1.json:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/tsconfig-indirect2.json:
+  {}
+/user/username/projects/myproject/indirect1/main.ts:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/indirect2/main.ts: *new*
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts: *new*
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts.map: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 250  [00:07:20.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Info 251  [00:07:21.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 251  [00:07:22.000] 	Files (5)
@@ -1508,23 +1350,16 @@ Info 316  [00:09:02.000] -----------------------------------------------
 Info 316  [00:09:03.000] Open files: 
 Info 316  [00:09:04.000] 	FileName: /user/username/projects/myproject/indirect3/main.ts ProjectRootPath: undefined
 Info 316  [00:09:05.000] 		Projects: /user/username/projects/myproject/indirect3/tsconfig.json
-Info 316  [00:09:06.000] request:
-    {
-      "command": "references",
-      "arguments": {
-        "file": "/user/username/projects/myproject/indirect3/main.ts",
-        "line": 1,
-        "offset": 10
-      },
-      "seq": 3,
-      "type": "request"
-    }
 Before request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/indirect3/node_modules/@types:
+/user/username/projects/myproject/indirect3/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/dummy/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1536,17 +1371,48 @@ FsWatches::
   {}
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
   {}
-/user/username/projects/myproject/indirect3/tsconfig.json:
+/user/username/projects/myproject/indirect3/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/target/src/main.d.ts:
+/user/username/projects/myproject/target/src/main.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/own/main.ts:
+  {}
+/user/username/projects/myproject/tsconfig-indirect1.json:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/tsconfig-indirect2.json:
+  {}
+/user/username/projects/myproject/indirect1/main.ts:
+  {}
+/user/username/projects/myproject/indirect2/main.ts:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/indirect3:
+/user/username/projects/myproject/indirect3: *new*
   {}
-/user/username/projects/myproject/target:
+/user/username/projects/myproject/target: *new*
   {}
 
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/src:
+  {}
+
+Info 316  [00:09:06.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/myproject/indirect3/main.ts",
+        "line": 1,
+        "offset": 10
+      },
+      "seq": 3,
+      "type": "request"
+    }
 Info 317  [00:09:07.000] Finding references to /user/username/projects/myproject/indirect3/main.ts position 9 in project /user/username/projects/myproject/indirect3/tsconfig.json
 Info 318  [00:09:08.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/target/src/main.d.ts.map 500 undefined WatchType: Closed Script info
 Info 319  [00:09:09.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
@@ -1784,54 +1650,6 @@ Info 419  [00:10:49.000] Search path: /user/username/projects/myproject/src
 Info 420  [00:10:50.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 421  [00:10:51.000] Search path: /user/username/projects/myproject/src
 Info 422  [00:10:52.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/indirect3/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/user/username/projects/myproject/target/src/helpers/functions.d.ts:
-  {}
-/user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
-  {}
-/user/username/projects/myproject/indirect3/tsconfig.json:
-  {}
-/user/username/projects/myproject/target/src/main.d.ts:
-  {}
-/user/username/projects/myproject/target/src/main.d.ts.map:
-  {}
-/user/username/projects/myproject/src/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/own/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
-/user/username/projects/myproject/indirect2/main.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/indirect3:
-  {}
-/user/username/projects/myproject/target:
-  {}
-/user/username/projects/myproject/src:
-  {}
-
 Info 423  [00:10:53.000] response:
     {
       "response": {
@@ -2017,3 +1835,50 @@ Info 423  [00:10:53.000] response:
       },
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/indirect3/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
+  {}
+/user/username/projects/myproject/indirect3/tsconfig.json:
+  {}
+/user/username/projects/myproject/target/src/main.d.ts:
+  {}
+/user/username/projects/myproject/target/src/main.d.ts.map: *new*
+  {}
+/user/username/projects/myproject/src/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/own/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig-indirect1.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig-src.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig-indirect2.json: *new*
+  {}
+/user/username/projects/myproject/indirect1/main.ts: *new*
+  {}
+/user/username/projects/myproject/indirect2/main.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/indirect3:
+  {}
+/user/username/projects/myproject/target:
+  {}
+/user/username/projects/myproject/src: *new*
+  {}

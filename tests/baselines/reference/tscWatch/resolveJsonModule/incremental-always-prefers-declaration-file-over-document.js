@@ -62,21 +62,21 @@ Shape signatures in builder refreshed for::
 /src/project/main.ts (used version)
 
 PolledWatches::
-/src/project/node_modules/@types:
+/src/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/src/project/tsconfig.json:
+/src/project/tsconfig.json: *new*
   {}
-/src/project/data.d.json.ts:
+/src/project/data.d.json.ts: *new*
   {}
-/src/project/main.ts:
+/src/project/main.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/src/project:
+/src/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -190,6 +190,10 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
+/src/project/node_modules/@types:
+  {"pollingInterval":500} *new*
+
+PolledWatches *deleted*::
 /src/project/node_modules/@types:
   {"pollingInterval":500}
 
