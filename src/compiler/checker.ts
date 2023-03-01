@@ -28997,6 +28997,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const symbol = getSymbolOfDeclaration(element);
                 return getTypeOfPropertyOfContextualType(type, symbol.escapedName, getSymbolLinks(symbol).nameType);
             }
+            if (hasDynamicName(element)) {
+                const name = getNameOfDeclaration(element);
+                if (name && isComputedPropertyName(name)) {
+                    const exprType = checkExpression(name.expression);
+                    const propType = isTypeUsableAsPropertyName(exprType) && getTypeOfPropertyOfContextualType(type, getPropertyNameFromType(exprType));
+                    if (propType) {
+                        return propType;
+                    }
+                }
+            }
             if (element.name) {
                 const nameType = getLiteralTypeFromPropertyName(element.name);
                 // We avoid calling getApplicableIndexInfo here because it performs potentially expensive intersection reduction.
