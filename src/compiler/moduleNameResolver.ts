@@ -72,7 +72,6 @@ import {
     moduleResolutionOptionDeclarations,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     noop,
-    noopPush,
     normalizePath,
     normalizeSlashes,
     PackageId,
@@ -82,7 +81,6 @@ import {
     Pattern,
     patternText,
     perfLogger,
-    Push,
     readJson,
     removeExtension,
     removeFileExtension,
@@ -285,8 +283,8 @@ export interface ModuleResolutionState {
     host: ModuleResolutionHost;
     compilerOptions: CompilerOptions;
     traceEnabled: boolean;
-    failedLookupLocations: Push<string>;
-    affectingLocations: Push<string>;
+    failedLookupLocations: string[] | undefined;
+    affectingLocations: string[] | undefined;
     resultFromCache?: ResolvedModuleWithFailedLookupLocations;
     packageJsonInfoCache: PackageJsonInfoCache | undefined;
     features: NodeResolutionFeatures;
@@ -2045,7 +2043,7 @@ function tryFileLookup(fileName: string, onlyRecordFailures: boolean, state: Mod
             }
         }
     }
-    state.failedLookupLocations.push(fileName);
+    state.failedLookupLocations?.push(fileName);
     return undefined;
 }
 
@@ -2171,8 +2169,8 @@ export function getTemporaryModuleResolutionState(packageJsonInfoCache: PackageJ
         host,
         compilerOptions: options,
         traceEnabled: isTraceEnabled(options, host),
-        failedLookupLocations: noopPush,
-        affectingLocations: noopPush,
+        failedLookupLocations: undefined,
+        affectingLocations: undefined,
         packageJsonInfoCache,
         features: NodeResolutionFeatures.None,
         conditions: emptyArray,
@@ -2227,7 +2225,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
     const { host, traceEnabled } = state;
     const packageJsonPath = combinePaths(packageDirectory, "package.json");
     if (onlyRecordFailures) {
-        state.failedLookupLocations.push(packageJsonPath);
+        state.failedLookupLocations?.push(packageJsonPath);
         return undefined;
     }
 
@@ -2235,14 +2233,14 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
     if (existing !== undefined) {
         if (typeof existing !== "boolean") {
             if (traceEnabled) trace(host, Diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath);
-            state.affectingLocations.push(packageJsonPath);
+            state.affectingLocations?.push(packageJsonPath);
             return existing.packageDirectory === packageDirectory ?
                 existing :
                 { packageDirectory, contents: existing.contents };
         }
         else {
             if (existing && traceEnabled) trace(host, Diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath);
-            state.failedLookupLocations.push(packageJsonPath);
+            state.failedLookupLocations?.push(packageJsonPath);
             return undefined;
         }
     }
@@ -2254,7 +2252,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
         }
         const result: PackageJsonInfo = { packageDirectory, contents: { packageJsonContent, versionPaths: undefined, resolvedEntrypoints: undefined } };
         state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
-        state.affectingLocations.push(packageJsonPath);
+        state.affectingLocations?.push(packageJsonPath);
         return result;
     }
     else {
@@ -2263,7 +2261,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
         }
         state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, directoryExists);
         // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
-        state.failedLookupLocations.push(packageJsonPath);
+        state.failedLookupLocations?.push(packageJsonPath);
     }
 }
 

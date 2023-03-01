@@ -7,7 +7,6 @@ import {
     EqualityComparer,
     isWhiteSpaceLike,
     MapLike,
-    Push,
     Queue,
     SortedArray,
     SortedReadonlyArray,
@@ -1001,14 +1000,13 @@ export function append<T>(to: T[] | undefined, value: T): T[];
 /** @internal */
 export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
 /** @internal */
-export function append<T>(to: Push<T>, value: T | undefined): void;
+export function append<T>(to: T[], value: T | undefined): void;
 /** @internal */
-export function append<T>(to: Push<T> | T[] | undefined, value: T | undefined): T[] | undefined {
-        // If to is Push<T>, return value is void, so safe to cast to T[].
+export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
     if (value === undefined) return to as T[];
     if (to === undefined) return [value];
     to.push(value);
-    return to as T[];
+    return to;
 }
 
 /**
@@ -1882,12 +1880,6 @@ export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: 
  * @internal
  */
 export function noop(_?: unknown): void { }
-
-/** @internal */
-export const noopPush: Push<any> = {
-    push: noop,
-    length: 0
-};
 
 /**
  * Do nothing and return false

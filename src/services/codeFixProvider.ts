@@ -20,7 +20,6 @@ import {
     flatMap,
     isString,
     map,
-    Push,
     TextChange,
     textChanges,
 } from "./_namespaces/ts";
@@ -106,7 +105,7 @@ export function createFileTextChanges(fileName: string, textChanges: TextChange[
 export function codeFixAll(
     context: CodeFixAllContext,
     errorCodes: number[],
-    use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void,
+    use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: CodeActionCommand[]) => void,
 ): CombinedCodeActions {
     const commands: CodeActionCommand[] = [];
     const changes = textChanges.ChangeTracker.with(context, t => eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));

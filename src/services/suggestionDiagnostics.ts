@@ -52,7 +52,6 @@ import {
     Program,
     programContainsEsModules,
     PropertyAccessExpression,
-    Push,
     ReturnStatement,
     skipAlias,
     some,
@@ -166,7 +165,7 @@ function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Id
     }
 }
 
-function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
+function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
     // need to check function before checking map so that deeper levels of nested callbacks are checked
     if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
         diags.push(createDiagnosticForNode(
