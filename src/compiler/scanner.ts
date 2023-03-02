@@ -2477,12 +2477,6 @@ export function createScanner(languageVersion: ScriptTarget,
                 let char = ch;
                 while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) || text.charCodeAt(pos) === CharacterCodes.minus)
                     pos += charSize(char);
-                // tokenValue = text.substring(tokenPos, pos);
-                // TODO: Just use the real escaping code I think
-                // if (char === CharacterCodes.backslash) {
-                //     // and then grab this all at once instead of slicing!
-                //     tokenValue += scanIdentifierParts();
-                // }
             }
             else {
                 break;

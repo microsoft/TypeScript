@@ -8606,6 +8606,11 @@ namespace Parser {
                 loop: while (true) {
                     let bigMode = false;
                     switch (token()) {
+                        case SyntaxKind.Identifier:
+                            state = JSDocState.SavingComments;
+                            bigMode = true
+                            pushComment(scanner.getTokenValue());
+                            break;
                         case SyntaxKind.AtToken:
                             if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
                                 removeTrailingWhitespace(comments);
@@ -8951,6 +8956,7 @@ namespace Parser {
                             break;
                     }
                     previousWhitespace = token() === SyntaxKind.WhitespaceTrivia;
+                    // TODO: bigMode here
                     tok = nextTokenJSDoc();
                 }
 
