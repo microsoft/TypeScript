@@ -560,7 +560,7 @@ export class TestSession extends ts.server.Session {
         }
         const response = super.executeCommand(request);
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-            this.logger.info(`response:${ts.server.indent(JSON.stringify(response, undefined, 2))}`);
+            this.logger.info(`response:${ts.server.indent(JSON.stringify(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response, undefined, 2))}`);
             this.testhost.baselineHost("After request");
         }
         return response;
