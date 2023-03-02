@@ -1,4 +1,4 @@
-tests/cases/compiler/factory.ts(3,1): error TS1269: Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.
+tests/cases/compiler/factory.ts(3,1): error TS1269: Cannot use 'export import' on a type or type-only namespace when 'isolatedModules' is enabled.
 
 
 ==== tests/cases/compiler/jsx.ts (0 errors) ====
@@ -12,7 +12,7 @@ tests/cases/compiler/factory.ts(3,1): error TS1269: Cannot use 'export import' o
     
     export import JSX = JSXInternal;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1269: Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.
+!!! error TS1269: Cannot use 'export import' on a type or type-only namespace when 'isolatedModules' is enabled.
     
     export function createElement<ElementType extends HTMLElement>(
       tagName: string,

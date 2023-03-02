@@ -38,11 +38,11 @@ File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist.
 File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'lib-boilerplate' from '/Users/name/projects/lib-boilerplate/test/basic.spec.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist according to earlier cached lookups.
 File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath '.' with target './src/index.ts'.
-File '/Users/name/projects/lib-boilerplate/src/index.ts' exist - use it as a name resolution result.
+File '/Users/name/projects/lib-boilerplate/src/index.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/lib-boilerplate/src/index.ts', result '/Users/name/projects/lib-boilerplate/src/index.ts'.
 ======== Module name 'lib-boilerplate' was successfully resolved to '/Users/name/projects/lib-boilerplate/src/index.ts' with Package ID 'lib-boilerplate/src/index.ts@0.0.2'. ========
 File '/a/lib/package.json' does not exist.
@@ -80,29 +80,29 @@ Shape signatures in builder refreshed for::
 /users/name/projects/lib-boilerplate/test/basic.spec.ts (used version)
 
 PolledWatches::
-/users/name/projects/lib-boilerplate/src/package.json:
+/users/name/projects/lib-boilerplate/src/package.json: *new*
   {"pollingInterval":2000}
-/users/name/projects/lib-boilerplate/test/package.json:
+/users/name/projects/lib-boilerplate/test/package.json: *new*
   {"pollingInterval":2000}
-/users/name/projects/lib-boilerplate/node_modules/@types:
+/users/name/projects/lib-boilerplate/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/name/projects/lib-boilerplate/tsconfig.json:
+/users/name/projects/lib-boilerplate/tsconfig.json: *new*
   {}
-/users/name/projects/lib-boilerplate/src/index.ts:
+/users/name/projects/lib-boilerplate/src/index.ts: *new*
   {}
-/users/name/projects/lib-boilerplate/test/basic.spec.ts:
+/users/name/projects/lib-boilerplate/test/basic.spec.ts: *new*
   {}
-/a/lib/lib.es2021.full.d.ts:
+/a/lib/lib.es2021.full.d.ts: *new*
   {}
-/users/name/projects/lib-boilerplate/package.json:
+/users/name/projects/lib-boilerplate/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/name/projects/lib-boilerplate/test:
+/users/name/projects/lib-boilerplate/test: *new*
   {}
-/users/name/projects/lib-boilerplate:
+/users/name/projects/lib-boilerplate: *new*
   {}
 
 exitCode:: ExitStatus.undefined

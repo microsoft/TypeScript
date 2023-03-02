@@ -5,27 +5,13 @@ import {
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    checkNumberOfProjects,
-    checkProjectActualFiles,
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
-    TestSession,
+    openFilesForSession,
 } from "./helpers";
 
 describe("unittests:: tsserver:: syntax operations", () => {
-    function navBarFull(session: TestSession, file: File) {
-        return JSON.stringify(session.executeCommandSeq<ts.server.protocol.FileRequest>({
-            command: ts.server.protocol.CommandTypes.NavBarFull,
-            arguments: { file: file.path }
-        }).response);
-    }
-
-    function openFile(session: TestSession, file: File) {
-        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
-            command: ts.server.protocol.CommandTypes.Open,
-            arguments: { file: file.path, fileContent: file.content }
-        });
-    }
-
     it("works when file is removed and added with different content", () => {
         const app: File = {
             path: `/user/username/projects/myproject/app.ts`,
@@ -52,34 +38,26 @@ describe("Test Suite 1", () => {
         };
         const files = [app, libFile, tsconfig];
         const host = createServerHost(files);
-        const session = createSession(host);
-        const service = session.getProjectService();
-        openFile(session, app);
-
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        const project = service.configuredProjects.get(tsconfig.path)!;
-        const expectedFilesWithoutUnitTest1 = files.map(f => f.path);
-        checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([{ file: app.path, content: app.content }], session);
 
         host.writeFile(unitTest1.path, unitTest1.content);
         host.runQueuedTimeoutCallbacks();
-        const expectedFilesWithUnitTest1 = expectedFilesWithoutUnitTest1.concat(unitTest1.path);
-        checkProjectActualFiles(project, expectedFilesWithUnitTest1);
 
-        openFile(session, unitTest1);
-        checkProjectActualFiles(project, expectedFilesWithUnitTest1);
+        openFilesForSession([{ file: unitTest1.path, content: unitTest1.content }], session);
 
-        const navBarResultUnitTest1 = navBarFull(session, unitTest1);
+        session.executeCommandSeq<ts.server.protocol.FileRequest>({
+            command: ts.server.protocol.CommandTypes.NavBarFull,
+            arguments: { file: unitTest1.path }
+        });
         host.deleteFile(unitTest1.path);
         host.checkTimeoutQueueLengthAndRun(0);
-        checkProjectActualFiles(project, expectedFilesWithUnitTest1);
 
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({
             command: ts.server.protocol.CommandTypes.Close,
             arguments: { file: unitTest1.path }
         });
         host.checkTimeoutQueueLengthAndRun(2);
-        checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
 
         const unitTest1WithChangedContent: File = {
             path: unitTest1.path,
@@ -96,14 +74,13 @@ export function Test2() {
         };
         host.writeFile(unitTest1.path, unitTest1WithChangedContent.content);
         host.runQueuedTimeoutCallbacks();
-        checkProjectActualFiles(project, expectedFilesWithUnitTest1);
 
-        openFile(session, unitTest1WithChangedContent);
-        checkProjectActualFiles(project, expectedFilesWithUnitTest1);
-        const sourceFile = project.getLanguageService().getNonBoundSourceFile(unitTest1WithChangedContent.path);
-        assert.strictEqual(sourceFile.text, unitTest1WithChangedContent.content);
+        openFilesForSession([{ file: unitTest1WithChangedContent, content: unitTest1WithChangedContent.content }], session);
 
-        const navBarResultUnitTest1WithChangedContent = navBarFull(session, unitTest1WithChangedContent);
-        assert.notStrictEqual(navBarResultUnitTest1WithChangedContent, navBarResultUnitTest1, "With changes in contents of unitTest file, we should see changed naviagation bar item result");
+        session.executeCommandSeq<ts.server.protocol.FileRequest>({
+            command: ts.server.protocol.CommandTypes.NavBarFull,
+            arguments: { file: unitTest1WithChangedContent.path }
+        });
+        baselineTsserverLogs("syntaxOperations", "file is removed and added with different content", session);
     });
 });

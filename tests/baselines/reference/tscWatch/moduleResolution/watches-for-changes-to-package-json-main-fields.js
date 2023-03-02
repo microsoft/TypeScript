@@ -59,7 +59,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
@@ -68,7 +68,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
 [[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -96,37 +96,37 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/node_modules:
+/user/username/projects/myproject/packages/pkg1/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
+/user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types:
+/user/username/projects/myproject/packages/pkg1/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
+/user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/pkg1/index.ts:
+/user/username/projects/myproject/packages/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/package.json:
+/user/username/projects/myproject/packages/pkg2/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2:
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/packages/pkg1:
+/user/username/projects/myproject/packages/pkg1: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -168,7 +168,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/node_modules/pkg2/build/other.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/other.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/other.d.ts' with Package ID 'pkg2/build/other.d.ts@1.0.0'. ========
 [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS2305: [0mModule '"pkg2"' has no exported member 'TheNum'.
@@ -217,13 +217,23 @@ FsWatches::
   {}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {}
-/user/username/projects/myproject/packages/pkg2/build/other.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/other.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 /user/username/projects/myproject/packages/pkg1:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/packages/pkg2:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -259,7 +269,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
@@ -268,7 +278,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
 [[90m12:01:06 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -314,9 +324,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {}
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/packages/pkg2/build/other.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -324,7 +338,7 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/pkg1:
   {}
-/user/username/projects/myproject/packages/pkg2:
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined

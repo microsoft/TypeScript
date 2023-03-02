@@ -1,14 +1,4 @@
 Info 0    [00:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:20.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/User/userName/Projects/i/foo.ts",
-        "projectRootPath": "/User/userName/Projects/i"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/User/userName/Projects/i/foo.ts]
 import { foo } from "bar"
@@ -27,12 +17,16 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:20.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/User/userName/Projects/i/foo.ts",
+        "projectRootPath": "/User/userName/Projects/i"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:21.000] Search path: /User/userName/Projects/i
 Info 3    [00:00:22.000] For info: /User/userName/Projects/i/foo.ts :: No config files found.
 Info 4    [00:00:23.000] FileWatcher:: Added:: WatchInfo: /User/userName/Projects/i/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -46,8 +40,8 @@ Info 11   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Us
 Info 12   [00:00:31.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:32.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 14   [00:00:33.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/User/userName/Projects/i/foo.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/User/userName/Projects/i/foo.ts SVC-1-0 "import { foo } from \"bar\""
 
 
 	../../../../a/lib/lib.d.ts
@@ -63,25 +57,22 @@ Info 16   [00:00:37.000] -----------------------------------------------
 Info 16   [00:00:38.000] Open files: 
 Info 16   [00:00:39.000] 	FileName: /User/userName/Projects/i/foo.ts ProjectRootPath: /User/userName/Projects/i
 Info 16   [00:00:40.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/user/username/projects/i/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/i/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/i/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/i/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 16   [00:00:41.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/i/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/i/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/i/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/i/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}

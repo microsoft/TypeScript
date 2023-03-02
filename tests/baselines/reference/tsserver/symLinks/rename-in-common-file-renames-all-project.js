@@ -1,14 +1,4 @@
 Info 0    [00:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:36.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/users/username/projects/a/a.ts",
-        "projectRootPath": "/users/username/projects/a"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/users/username/projects/c/fc.ts]
 export const C = 8
@@ -41,12 +31,16 @@ import {C} from "./c/fc"; console.log(C)
 
 //// [/users/username/projects/b/c] symlink(/users/username/projects/c)
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:36.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/a/a.ts",
+        "projectRootPath": "/users/username/projects/a"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:37.000] Search path: /users/username/projects/a
 Info 3    [00:00:38.000] For info: /users/username/projects/a/a.ts :: Config file name: /users/username/projects/a/tsconfig.json
 Info 4    [00:00:39.000] Creating configuration project /users/username/projects/a/tsconfig.json
@@ -71,9 +65,9 @@ Info 13   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 14   [00:00:49.000] Finishing updateGraphWorker: Project: /users/username/projects/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:50.000] Project '/users/username/projects/a/tsconfig.json' (Configured)
 Info 16   [00:00:51.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/users/username/projects/a/c/fc.ts
-	/users/username/projects/a/a.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/a/c/fc.ts Text-1 "export const C = 8"
+	/users/username/projects/a/a.ts SVC-1-0 "import {C} from \"./c/fc\"; console.log(C)"
 
 
 	../../../../a/lib/lib.d.ts
@@ -92,28 +86,30 @@ Info 18   [00:00:55.000] -----------------------------------------------
 Info 18   [00:00:56.000] Open files: 
 Info 18   [00:00:57.000] 	FileName: /users/username/projects/a/a.ts ProjectRootPath: /users/username/projects/a
 Info 18   [00:00:58.000] 		Projects: /users/username/projects/a/tsconfig.json
-After request
-
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/users/username/projects/a/c/fc.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
-
 Info 18   [00:00:59.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/users/username/projects/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/a/tsconfig.json: *new*
+  {}
+/users/username/projects/a/c/fc.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/a: *new*
+  {}
+
+Before request
+
 Info 19   [00:01:00.000] request:
     {
       "command": "open",
@@ -124,24 +120,6 @@ Info 19   [00:01:00.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/users/username/projects/a/c/fc.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
-
 Info 20   [00:01:01.000] Search path: /users/username/projects/b
 Info 21   [00:01:02.000] For info: /users/username/projects/b/b.ts :: Config file name: /users/username/projects/b/tsconfig.json
 Info 22   [00:01:03.000] Creating configuration project /users/username/projects/b/tsconfig.json
@@ -165,9 +143,9 @@ Info 30   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 31   [00:01:12.000] Finishing updateGraphWorker: Project: /users/username/projects/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 32   [00:01:13.000] Project '/users/username/projects/b/tsconfig.json' (Configured)
 Info 33   [00:01:14.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/users/username/projects/b/c/fc.ts
-	/users/username/projects/b/b.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/users/username/projects/b/c/fc.ts Text-1 "export const C = 8"
+	/users/username/projects/b/b.ts SVC-1-0 "import {C} from \"./c/fc\"; console.log(C)"
 
 
 	../../../../a/lib/lib.d.ts
@@ -192,12 +170,16 @@ Info 35   [00:01:23.000] 	FileName: /users/username/projects/a/a.ts ProjectRootP
 Info 35   [00:01:24.000] 		Projects: /users/username/projects/a/tsconfig.json
 Info 35   [00:01:25.000] 	FileName: /users/username/projects/b/b.ts ProjectRootPath: /users/username/projects/b
 Info 35   [00:01:26.000] 		Projects: /users/username/projects/b/tsconfig.json
+Info 35   [00:01:27.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/b/node_modules/@types:
+/users/username/projects/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -207,21 +189,19 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/users/username/projects/b/tsconfig.json:
+/users/username/projects/b/tsconfig.json: *new*
   {}
-/users/username/projects/b/c/fc.ts:
+/users/username/projects/b/c/fc.ts: *new*
   {}
 
 FsWatchesRecursive::
 /users/username/projects/a:
   {}
-/users/username/projects/b:
+/users/username/projects/b: *new*
   {}
 
-Info 35   [00:01:27.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 36   [00:01:28.000] request:
     {
       "command": "open",
@@ -232,32 +212,6 @@ Info 36   [00:01:28.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/users/username/projects/a/c/fc.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/b/tsconfig.json:
-  {}
-/users/username/projects/b/c/fc.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
-/users/username/projects/b:
-  {}
-
 Info 37   [00:01:29.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/a/c/fc.ts 500 undefined WatchType: Closed Script info
 Info 38   [00:01:30.000] Search path: /users/username/projects/a/c
 Info 39   [00:01:31.000] For info: /users/username/projects/a/c/fc.ts :: Config file name: /users/username/projects/a/tsconfig.json
@@ -276,6 +230,10 @@ Info 40   [00:01:41.000] 	FileName: /users/username/projects/b/b.ts ProjectRootP
 Info 40   [00:01:42.000] 		Projects: /users/username/projects/b/tsconfig.json
 Info 40   [00:01:43.000] 	FileName: /users/username/projects/a/c/fc.ts ProjectRootPath: /users/username/projects/a
 Info 40   [00:01:44.000] 		Projects: /users/username/projects/a/tsconfig.json
+Info 40   [00:01:45.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -294,16 +252,18 @@ FsWatches::
 /users/username/projects/b/c/fc.ts:
   {}
 
+FsWatches *deleted*::
+/users/username/projects/a/c/fc.ts:
+  {}
+
 FsWatchesRecursive::
 /users/username/projects/a:
   {}
 /users/username/projects/b:
   {}
 
-Info 40   [00:01:45.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 41   [00:01:46.000] request:
     {
       "command": "open",
@@ -314,30 +274,6 @@ Info 41   [00:01:46.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/b/tsconfig.json:
-  {}
-/users/username/projects/b/c/fc.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
-/users/username/projects/b:
-  {}
-
 Info 42   [00:01:47.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/b/c/fc.ts 500 undefined WatchType: Closed Script info
 Info 43   [00:01:48.000] Search path: /users/username/projects/b/c
 Info 44   [00:01:49.000] For info: /users/username/projects/b/c/fc.ts :: Config file name: /users/username/projects/b/tsconfig.json
@@ -358,6 +294,10 @@ Info 45   [00:02:01.000] 	FileName: /users/username/projects/a/c/fc.ts ProjectRo
 Info 45   [00:02:02.000] 		Projects: /users/username/projects/a/tsconfig.json
 Info 45   [00:02:03.000] 	FileName: /users/username/projects/b/c/fc.ts ProjectRootPath: /users/username/projects/b
 Info 45   [00:02:04.000] 		Projects: /users/username/projects/b/tsconfig.json
+Info 45   [00:02:05.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -374,16 +314,18 @@ FsWatches::
 /users/username/projects/b/tsconfig.json:
   {}
 
+FsWatches *deleted*::
+/users/username/projects/b/c/fc.ts:
+  {}
+
 FsWatchesRecursive::
 /users/username/projects/a:
   {}
 /users/username/projects/b:
   {}
 
-Info 45   [00:02:05.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 46   [00:02:06.000] request:
     {
       "command": "rename",
@@ -395,50 +337,6 @@ Info 46   [00:02:06.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
-/users/username/projects/b:
-  {}
-
-After request
-
-PolledWatches::
-/users/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/a:
-  {}
-/users/username/projects/b:
-  {}
-
 Info 47   [00:02:07.000] response:
     {
       "response": {
@@ -576,3 +474,4 @@ Info 47   [00:02:07.000] response:
       },
       "responseRequired": true
     }
+After request

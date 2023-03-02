@@ -1,13 +1,4 @@
 Info 0    [00:00:58.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:59.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "e:/myproject/src/app.js"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [e:/myproject/src/app.js]
 import React from 'react';
@@ -75,12 +66,15 @@ export function foo() {}
 {"name":"@types/react","version":"16.9.14"}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:59.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "e:/myproject/src/app.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:00.000] Search path: e:/myproject/src
 Info 3    [00:01:01.000] For info: e:/myproject/src/app.js :: No config files found.
 Info 4    [00:01:02.000] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -101,12 +95,12 @@ Info 18   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/
 Info 19   [00:01:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 20   [00:01:18.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 21   [00:01:19.000] 	Files (6)
-	c:/a/lib/lib.d.ts
-	e:/myproject/node_modules/@types/prop-types/index.d.ts
-	e:/myproject/node_modules/@types/react/index.d.ts
-	c:/typescript/node_modules/@types/react/index.d.ts
-	c:/typescript/node_modules/@types/react-router-dom/index.d.ts
-	e:/myproject/src/app.js
+	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	e:/myproject/node_modules/@types/prop-types/index.d.ts Text-1 "export type ReactComponentLike =\n    | string\n    | ((props: any, context?: any) => any)\n    | (new (props: any, context?: any) => any);\n"
+	e:/myproject/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\n"
+	c:/typescript/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\n"
+	c:/typescript/node_modules/@types/react-router-dom/index.d.ts Text-1 "import * as React from 'react';\nexport interface BrowserRouterProps {\n    basename?: string;\n    getUserConfirmation?: ((message: string, callback: (ok: boolean) => void) => void);\n    forceRefresh?: boolean;\n    keyLength?: number;\n}"
+	e:/myproject/src/app.js SVC-1-0 "import React from 'react';\nimport {\n  BrowserRouter as Router,\n} from \"react-router-dom\";\n"
 
 
 	c:/a/lib/lib.d.ts
@@ -126,14 +120,85 @@ Info 21   [00:01:19.000] 	Files (6)
 	  Root file specified for compilation
 
 Info 22   [00:01:20.000] -----------------------------------------------
-Info 23   [00:01:21.000] FileWatcher:: Added:: WatchInfo: e:/myproject/package.json 250 undefined WatchType: package.json file
-Info 24   [00:01:22.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 24   [00:01:23.000] 	Files (6)
+TI:: Creating typing installer
 
-Info 24   [00:01:24.000] -----------------------------------------------
-Info 24   [00:01:25.000] Open files: 
-Info 24   [00:01:26.000] 	FileName: e:/myproject/src/app.js ProjectRootPath: undefined
-Info 24   [00:01:27.000] 		Projects: /dev/null/inferredProject1*
+PolledWatches::
+e:/myproject/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+e:/myproject/src/jsconfig.json: *new*
+  {"pollingInterval":2000}
+e:/myproject/src/node_modules: *new*
+  {"pollingInterval":500}
+e:/myproject/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+c:/a/lib/lib.d.ts: *new*
+  {}
+e:/myproject/node_modules/@types/react/package.json: *new*
+  {}
+c:/typescript/node_modules/@types/react/package.json: *new*
+  {}
+e:/myproject/node_modules/react-router-dom/package.json: *new*
+  {}
+c:/typescript/node_modules/@types/react-router-dom/package.json: *new*
+  {}
+e:/myproject/node_modules/@types/prop-types/package.json: *new*
+  {}
+
+FsWatchesRecursive::
+e:/myproject/node_modules: *new*
+  {}
+
+TI:: [00:01:21.000] Global cache location 'c:/typescript', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [00:01:22.000] Processing cache location 'c:/typescript'
+TI:: [00:01:23.000] Trying to find 'c:/typescript/package.json'...
+TI:: [00:01:24.000] Finished processing cache location 'c:/typescript'
+TI:: [00:01:25.000] Npm config file: c:/typescript/package.json
+TI:: [00:01:26.000] Npm config file: 'c:/typescript/package.json' is missing, creating new one...
+TI:: [00:01:29.000] Updating types-registry npm package...
+TI:: [00:01:30.000] npm install --ignore-scripts types-registry@latest
+TI:: [00:01:35.000] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [c:/typescript/package.json]
+{ "private": true }
+
+//// [c:/typescript/node_modules/types-registry/index.json]
+{
+ "entries": {}
+}
+
+
+TI:: [00:01:36.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["c:/a/lib/lib.d.ts","e:/myproject/src/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"e:/myproject/src","cachePath":"c:/typescript","kind":"discover"}
+TI:: [00:01:37.000] Request specifies cache path 'c:/typescript', loading cached information...
+TI:: [00:01:38.000] Processing cache location 'c:/typescript'
+TI:: [00:01:39.000] Cache location was already processed...
+TI:: [00:01:40.000] Failed to load safelist from types map file '/typesMap.json'
+TI:: [00:01:41.000] Explicitly included types: []
+TI:: [00:01:42.000] Inferred typings from unresolved imports: []
+TI:: [00:01:43.000] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["e:/myproject/src/bower_components","e:/myproject/src/node_modules"]}
+TI:: [00:01:44.000] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["e:/myproject/src/bower_components","e:/myproject/src/node_modules"]}
+TI:: [00:01:45.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/bower_components
+TI:: [00:01:46.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:01:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:01:48.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules
+TI:: [00:01:49.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:01:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [00:01:51.000] Sending response:
+    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+TI:: [00:01:52.000] No new typings were requested as a result of typings discovery
+Info 23   [00:01:53.000] FileWatcher:: Added:: WatchInfo: e:/myproject/package.json 250 undefined WatchType: package.json file
+Info 24   [00:01:54.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 24   [00:01:55.000] 	Files (6)
+
+Info 24   [00:01:56.000] -----------------------------------------------
+Info 24   [00:01:57.000] Open files: 
+Info 24   [00:01:58.000] 	FileName: e:/myproject/src/app.js ProjectRootPath: undefined
+Info 24   [00:01:59.000] 		Projects: /dev/null/inferredProject1*
+Info 24   [00:02:00.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -145,7 +210,7 @@ e:/myproject/src/node_modules:
   {"pollingInterval":500}
 e:/myproject/src/node_modules/@types:
   {"pollingInterval":500}
-e:/myproject/src/bower_components:
+e:/myproject/src/bower_components: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -161,18 +226,16 @@ c:/typescript/node_modules/@types/react-router-dom/package.json:
   {}
 e:/myproject/node_modules/@types/prop-types/package.json:
   {}
-e:/myproject/package.json:
+e:/myproject/package.json: *new*
   {}
 
 FsWatchesRecursive::
 e:/myproject/node_modules:
   {}
 
-Info 24   [00:01:28.000] response:
-    {
-      "responseRequired": false
-    }
-Info 25   [00:01:29.000] request:
+Before request
+
+Info 25   [00:02:01.000] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -185,86 +248,18 @@ Info 25   [00:01:29.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-e:/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-e:/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-e:/myproject/src/node_modules:
-  {"pollingInterval":500}
-e:/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-e:/myproject/src/bower_components:
-  {"pollingInterval":500}
-
-FsWatches::
-c:/a/lib/lib.d.ts:
-  {}
-e:/myproject/node_modules/@types/react/package.json:
-  {}
-c:/typescript/node_modules/@types/react/package.json:
-  {}
-e:/myproject/node_modules/react-router-dom/package.json:
-  {}
-c:/typescript/node_modules/@types/react-router-dom/package.json:
-  {}
-e:/myproject/node_modules/@types/prop-types/package.json:
-  {}
-e:/myproject/package.json:
-  {}
-
-FsWatchesRecursive::
-e:/myproject/node_modules:
-  {}
-
-Info 26   [00:01:30.000] getCompletionData: Get current token: *
-Info 27   [00:01:31.000] getCompletionData: Is inside comment: *
-Info 28   [00:01:32.000] getCompletionData: Get previous token: *
-Info 29   [00:01:33.000] getCompletionsAtPosition: isCompletionListBlocker: *
-Info 30   [00:01:34.000] getExportInfoMap: cache miss or empty; calculating new results
-Info 31   [00:01:35.000] getExportInfoMap: done in * ms
-Info 32   [00:01:36.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 0 from cache
-Info 33   [00:01:37.000] collectAutoImports: response is complete
-Info 34   [00:01:38.000] collectAutoImports: *
-Info 35   [00:01:39.000] getCompletionData: Semantic work: *
-Info 36   [00:01:40.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-After request
-
-PolledWatches::
-e:/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-e:/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-e:/myproject/src/node_modules:
-  {"pollingInterval":500}
-e:/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-e:/myproject/src/bower_components:
-  {"pollingInterval":500}
-
-FsWatches::
-c:/a/lib/lib.d.ts:
-  {}
-e:/myproject/node_modules/@types/react/package.json:
-  {}
-c:/typescript/node_modules/@types/react/package.json:
-  {}
-e:/myproject/node_modules/react-router-dom/package.json:
-  {}
-c:/typescript/node_modules/@types/react-router-dom/package.json:
-  {}
-e:/myproject/node_modules/@types/prop-types/package.json:
-  {}
-e:/myproject/package.json:
-  {}
-
-FsWatchesRecursive::
-e:/myproject/node_modules:
-  {}
-
-Info 37   [00:01:41.000] response:
+Info 26   [00:02:02.000] getCompletionData: Get current token: *
+Info 27   [00:02:03.000] getCompletionData: Is inside comment: *
+Info 28   [00:02:04.000] getCompletionData: Get previous token: *
+Info 29   [00:02:05.000] getCompletionsAtPosition: isCompletionListBlocker: *
+Info 30   [00:02:06.000] getExportInfoMap: cache miss or empty; calculating new results
+Info 31   [00:02:07.000] getExportInfoMap: done in * ms
+Info 32   [00:02:08.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 0 from cache
+Info 33   [00:02:09.000] collectAutoImports: response is complete
+Info 34   [00:02:10.000] collectAutoImports: *
+Info 35   [00:02:11.000] getCompletionData: Semantic work: *
+Info 36   [00:02:12.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info 37   [00:02:13.000] response:
     {
       "response": {
         "flags": 1,
@@ -564,3 +559,4 @@ Info 37   [00:01:41.000] response:
       },
       "responseRequired": true
     }
+After request

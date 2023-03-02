@@ -48,14 +48,12 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
 FsWatches::
-/a/tsconfig.json:
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a/node_modules/@types:
+/a/node_modules/@types: *new*
   {}
 
 exitCode:: ExitStatus.undefined

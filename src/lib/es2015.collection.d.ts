@@ -64,7 +64,7 @@ interface WeakMap<K extends object, V> {
 }
 
 interface WeakMapConstructor {
-    new <K extends object = object, V = any>(entries?: readonly [K, V][] | null): WeakMap<K, V>;
+    new <K extends object = object, V = any>(entries?: readonly (readonly [K, V])[] | null): WeakMap<K, V>;
     readonly prototype: WeakMap<object, any>;
 }
 declare var WeakMap: WeakMapConstructor;

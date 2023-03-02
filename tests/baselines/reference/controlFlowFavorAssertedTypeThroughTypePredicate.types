@@ -23,7 +23,7 @@ if (isObject1(obj1)) {
 }
 // check type after conditional block
 obj1;
->obj1 : Record<string, unknown>
+>obj1 : {}
 
 declare const obj2: {} | undefined;
 >obj2 : {} | undefined
@@ -43,7 +43,7 @@ if (isObject1(obj2)) {
 }
 // check type after conditional block
 obj2;
->obj2 : Record<string, unknown> | undefined
+>obj2 : {} | undefined
 
 declare function isObject2(value: unknown): value is {};
 >isObject2 : (value: unknown) => value is {}
@@ -67,7 +67,7 @@ if (isObject2(obj3)) {
 }
 // check type after conditional block
 obj3;
->obj3 : {}
+>obj3 : Record<string, unknown>
 
 declare const obj4: Record<string, unknown> | undefined;
 >obj4 : Record<string, unknown> | undefined
@@ -87,5 +87,5 @@ if (isObject2(obj4)) {
 }
 // check type after conditional block
 obj4;
->obj4 : {} | undefined
+>obj4 : Record<string, unknown> | undefined
 

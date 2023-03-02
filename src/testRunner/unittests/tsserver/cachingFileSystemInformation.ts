@@ -2,6 +2,7 @@ import * as ts from "../../_namespaces/ts";
 import {
     createServerHost,
     File,
+    Folder,
     libFile,
     SymLink,
     TestServerHost,
@@ -42,7 +43,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         return logCacheAndClear;
 
         function setCallsTrackingWithSingleArgFn(prop: CalledMapsWithSingleArg) {
-            const calledMap = ts.createMultiMap<true>();
+            const calledMap = ts.createMultiMap<string, true>();
             const cb = (host as any)[prop].bind(host);
             (host as any)[prop] = (f: string) => {
                 calledMap.add(f, /*value*/ true);
@@ -52,7 +53,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         }
 
         function setCallsTrackingWithFiveArgFn<U, V, W, X>(prop: CalledMapsWithFiveArgs) {
-            const calledMap = ts.createMultiMap<[U, V, W, X]>();
+            const calledMap = ts.createMultiMap<string, [U, V, W, X]>();
             const cb = (host as any)[prop].bind(host);
             (host as any)[prop] = (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => {
                 calledMap.add(f, [arg1!, arg2!, arg3!, arg4!]); // TODO: GH#18217
@@ -366,7 +367,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
     describe("Verify npm install in directory with tsconfig file works when", () => {
         function verifyNpmInstall(timeoutDuringPartialInstallation: boolean) {
             const root = "/user/username/rootfolder/otherfolder";
-            const getRootedFileOrFolder = (fileOrFolder: File) => {
+            const getRootedFileOrFolder = <T extends File | Folder>(fileOrFolder: T) => {
                 fileOrFolder.path = root + fileOrFolder.path;
                 return fileOrFolder;
             };
@@ -411,7 +412,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             let npmInstallComplete = false;
 
             // Simulate npm install
-            const filesAndFoldersToAdd: File[] = [
+            const filesAndFoldersToAdd: (File | Folder)[] = [
                 { path: "/a/b/node_modules" },
                 { path: "/a/b/node_modules/.staging/@types" },
                 { path: "/a/b/node_modules/.staging/lodash-b0733faa" },

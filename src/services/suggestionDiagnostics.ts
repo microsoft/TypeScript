@@ -52,7 +52,6 @@ import {
     Program,
     programContainsEsModules,
     PropertyAccessExpression,
-    Push,
     ReturnStatement,
     skipAlias,
     some,
@@ -117,6 +116,11 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
                 }
             }
 
+            const jsdocTypedefNode = codefix.getJSDocTypedefNode(node);
+            if (jsdocTypedefNode) {
+                diags.push(createDiagnosticForNode(jsdocTypedefNode, Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type));
+            }
+
             if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
                 diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
             }
@@ -166,7 +170,7 @@ function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Id
     }
 }
 
-function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
+function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
     // need to check function before checking map so that deeper levels of nested callbacks are checked
     if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
         diags.push(createDiagnosticForNode(

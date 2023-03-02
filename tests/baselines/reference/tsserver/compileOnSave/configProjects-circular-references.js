@@ -1,13 +1,4 @@
 Info 0    [00:00:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:14.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/file1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/file1.ts]
 
@@ -25,12 +16,15 @@ Before request
                     }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:14.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:15.000] Search path: /a/b
 Info 3    [00:00:16.000] For info: /a/b/file1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:17.000] Creating configuration project /a/b/tsconfig.json
@@ -54,8 +48,8 @@ Info 13   [00:00:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 14   [00:00:27.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:28.000] Project '/a/b/tsconfig.json' (Configured)
 Info 16   [00:00:29.000] 	Files (2)
-	/a/b/file2.ts
-	/a/b/file1.ts
+	/a/b/file2.ts Text-1 "\n                    /// <reference path=\"./file1.ts\" />\n                    export var t2 = 10;"
+	/a/b/file1.ts SVC-1-0 "\n                    /// <reference path=\"./file2.ts\" />\n                    export var t1 = 10;"
 
 
 	file2.ts
@@ -73,28 +67,30 @@ Info 18   [00:00:33.000] -----------------------------------------------
 Info 18   [00:00:34.000] Open files: 
 Info 18   [00:00:35.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 18   [00:00:36.000] 		Projects: /a/b/tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 18   [00:00:37.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/file2.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Before request
+
 Info 19   [00:00:38.000] request:
     {
       "command": "open",
@@ -104,24 +100,6 @@ Info 19   [00:00:38.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 20   [00:00:39.000] FileWatcher:: Close:: WatchInfo: /a/b/file2.ts 500 undefined WatchType: Closed Script info
 Info 21   [00:00:40.000] Search path: /a/b
 Info 22   [00:00:41.000] For info: /a/b/file2.ts :: Config file name: /a/b/tsconfig.json
@@ -134,6 +112,10 @@ Info 23   [00:00:46.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 23   [00:00:47.000] 		Projects: /a/b/tsconfig.json
 Info 23   [00:00:48.000] 	FileName: /a/b/file2.ts ProjectRootPath: undefined
 Info 23   [00:00:49.000] 		Projects: /a/b/tsconfig.json
+Info 23   [00:00:50.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -146,14 +128,16 @@ FsWatches::
 /a/b/tsconfig.json:
   {}
 
+FsWatches *deleted*::
+/a/b/file2.ts:
+  {}
+
 FsWatchesRecursive::
 /a/b:
   {}
 
-Info 23   [00:00:50.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 24   [00:00:51.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -163,22 +147,6 @@ Info 24   [00:00:51.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 25   [00:00:52.000] Before ensureProjectForOpenFiles:
 Info 26   [00:00:53.000] Project '/a/b/tsconfig.json' (Configured)
 Info 26   [00:00:54.000] 	Files (2)
@@ -199,22 +167,6 @@ Info 27   [00:01:06.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 27   [00:01:07.000] 		Projects: /a/b/tsconfig.json
 Info 27   [00:01:08.000] 	FileName: /a/b/file2.ts ProjectRootPath: undefined
 Info 27   [00:01:09.000] 		Projects: /a/b/tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 27   [00:01:10.000] response:
     {
       "response": [
@@ -229,3 +181,4 @@ Info 27   [00:01:10.000] response:
       ],
       "responseRequired": true
     }
+After request

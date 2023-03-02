@@ -19,11 +19,8 @@ import {
     TypeAcquisition,
 } from "./_namespaces/ts";
 
-/**
- * Declaration module describing the TypeScript Server protocol
- */
+// Declaration module describing the TypeScript Server protocol
 
-// NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
     Brace = "brace",
@@ -80,8 +77,6 @@ export const enum CommandTypes {
     NavtoFull = "navto-full",
     NavTree = "navtree",
     NavTreeFull = "navtree-full",
-    /** @deprecated */
-    Occurrences = "occurrences",
     DocumentHighlights = "documentHighlights",
     /** @internal */
     DocumentHighlightsFull = "documentHighlights-full",
@@ -175,8 +170,6 @@ export const enum CommandTypes {
     ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
     ProvideInlayHints = "provideInlayHints"
-
-    // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
 }
 
 /**
@@ -1108,33 +1101,6 @@ export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
 }
 
-/**
- * @deprecated
- * Get occurrences request; value of command field is
- * "occurrences". Return response giving spans that are relevant
- * in the file at a given line and column.
- */
-export interface OccurrencesRequest extends FileLocationRequest {
-    command: CommandTypes.Occurrences;
-}
-
-/** @deprecated */
-export interface OccurrencesResponseItem extends FileSpanWithContext {
-    /**
-     * True if the occurrence is a write location, false otherwise.
-     */
-    isWriteAccess: boolean;
-
-    /**
-     * True if the occurrence is in a string, undefined otherwise;
-     */
-    isInString?: true;
-}
-
-/** @deprecated */
-export interface OccurrencesResponse extends Response {
-    body?: OccurrencesResponseItem[];
-}
 
 /**
  * Get document highlights request; value of command field is
@@ -1419,10 +1385,6 @@ export interface ExternalProject {
      * Compiler options for the project
      */
     options: ExternalProjectCompilerOptions;
-    /**
-     * @deprecated typingOptions. Use typeAcquisition instead
-     */
-    typingOptions?: TypeAcquisition;
     /**
      * Explicitly specified type acquisition for the project
      */
@@ -3516,7 +3478,60 @@ export interface UserPreferences {
     readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
     readonly includeInlayEnumMemberValueHints?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
+
+    /**
+     * Indicates whether imports should be organized in a case-insensitive manner.
+     */
     readonly organizeImportsIgnoreCase?: "auto" | boolean;
+    /**
+     * Indicates whether imports should be organized via an "ordinal" (binary) comparison using the numeric value
+     * of their code points, or via "unicode" collation (via the
+     * [Unicode Collation Algorithm](https://unicode.org/reports/tr10/#Scope)) using rules associated with the locale
+     * specified in {@link organizeImportsCollationLocale}.
+     *
+     * Default: `"ordinal"`.
+     */
+    readonly organizeImportsCollation?: "ordinal" | "unicode";
+    /**
+     * Indicates the locale to use for "unicode" collation. If not specified, the locale `"en"` is used as an invariant
+     * for the sake of consistent sorting. Use `"auto"` to use the detected UI locale.
+     *
+     * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
+     *
+     * Default: `"en"`
+     */
+    readonly organizeImportsCollationLocale?: string;
+    /**
+     * Indicates whether numeric collation should be used for digit sequences in strings. When `true`, will collate
+     * strings such that `a1z < a2z < a100z`. When `false`, will collate strings such that `a1z < a100z < a2z`.
+     *
+     * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
+     *
+     * Default: `false`
+     */
+    readonly organizeImportsNumericCollation?: boolean;
+    /**
+     * Indicates whether accents and other diacritic marks are considered unequal for the purpose of collation. When
+     * `true`, characters with accents and other diacritics will be collated in the order defined by the locale specified
+     * in {@link organizeImportsCollationLocale}.
+     *
+     * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
+     *
+     * Default: `true`
+     */
+    readonly organizeImportsAccentCollation?: boolean;
+    /**
+     * Indicates whether upper case or lower case should sort first. When `false`, the default order for the locale
+     * specified in {@link organizeImportsCollationLocale} is used.
+     *
+     * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`. This preference is also
+     * ignored if we are using case-insensitive sorting, which occurs when {@link organizeImportsIgnoreCase} is `true`,
+     * or if {@link organizeImportsIgnoreCase} is `"auto"` and the auto-detected case sensitivity is determined to be
+     * case-insensitive.
+     *
+     * Default: `false`
+     */
+    readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
 
     /**
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.

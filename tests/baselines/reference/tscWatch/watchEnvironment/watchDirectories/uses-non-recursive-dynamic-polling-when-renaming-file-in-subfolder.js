@@ -43,17 +43,13 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/username/project/src/file1.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/username/project/tsconfig.json:
+/a/username/project/tsconfig.json: *new*
   {}
-/a/username/project/src/file1.ts:
+/a/username/project/src/file1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -90,17 +86,17 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/username/project/src/file2.ts (used version)
 
-PolledWatches::
-
 FsWatches::
 /a/username/project/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/username/project/src/file2.ts:
+/a/username/project/src/file2.ts: *new*
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/username/project/src/file1.ts:
+  {}
 
 exitCode:: ExitStatus.undefined
 

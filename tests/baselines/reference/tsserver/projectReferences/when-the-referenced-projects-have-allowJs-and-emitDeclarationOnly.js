@@ -1,13 +1,4 @@
 Info 0    [00:00:43.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:44.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/packages/consumer/src/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -54,12 +45,15 @@ testCompositeFunction('why hello there', 42);
 
 //// [/user/username/projects/myproject/node_modules/emit-composite] symlink(/user/username/projects/myproject/packages/emit-composite)
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:44.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/packages/consumer/src/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:45.000] Search path: /user/username/projects/myproject/packages/consumer/src
 Info 3    [00:00:46.000] For info: /user/username/projects/myproject/packages/consumer/src/index.ts :: Config file name: /user/username/projects/myproject/packages/consumer/tsconfig.json
 Info 4    [00:00:47.000] Creating configuration project /user/username/projects/myproject/packages/consumer/tsconfig.json
@@ -123,10 +117,10 @@ Info 34   [00:01:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 35   [00:01:18.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/consumer/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:19.000] Project '/user/username/projects/myproject/packages/consumer/tsconfig.json' (Configured)
 Info 37   [00:01:20.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/packages/emit-composite/src/testModule.js
-	/user/username/projects/myproject/packages/emit-composite/src/index.js
-	/user/username/projects/myproject/packages/consumer/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/packages/emit-composite/src/testModule.js Text-1 "/**\n * @param {string} arg\n */\n const testCompositeFunction = (arg) => {\n}\nmodule.exports = {\n    testCompositeFunction\n}"
+	/user/username/projects/myproject/packages/emit-composite/src/index.js Text-1 "const testModule = require('./testModule');\nmodule.exports = {\n    ...testModule\n}"
+	/user/username/projects/myproject/packages/consumer/src/index.ts SVC-1-0 "import { testCompositeFunction } from 'emit-composite';\ntestCompositeFunction('why hello there');\ntestCompositeFunction('why hello there', 42);"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -152,48 +146,50 @@ Info 42   [00:01:27.000] -----------------------------------------------
 Info 42   [00:01:28.000] Open files: 
 Info 42   [00:01:29.000] 	FileName: /user/username/projects/myproject/packages/consumer/src/index.ts ProjectRootPath: undefined
 Info 42   [00:01:30.000] 		Projects: /user/username/projects/myproject/packages/consumer/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/packages/consumer/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/consumer/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/consumer/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/index.js:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/emit-composite/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/consumer/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 42   [00:01:31.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/packages/consumer/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/consumer/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/packages/consumer/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/packages/emit-composite/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/packages/emit-composite/src/index.js: *new*
+  {}
+/user/username/projects/myproject/packages/emit-composite/src/testModule.js: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/packages/emit-composite/package.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/packages/consumer/src: *new*
+  {}
+/user/username/projects/myproject/packages/emit-composite/src: *new*
+  {}
+/user/username/projects/myproject/packages/emit-composite: *new*
+  {}
+/user/username/projects/myproject/node_modules: *new*
+  {}
+
+Before request
+
 Info 43   [00:01:32.000] request:
     {
       "command": "geterr",
@@ -206,318 +202,28 @@ Info 43   [00:01:32.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/packages/consumer/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/consumer/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/consumer/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/index.js:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/emit-composite/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/consumer/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/packages/consumer/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/consumer/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/consumer/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/index.js:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/emit-composite/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/consumer/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 44   [00:01:33.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
-
-PolledWatches::
-/user/username/projects/myproject/packages/consumer/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/consumer/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/consumer/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/index.js:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/emit-composite/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/consumer/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 Info 45   [00:01:34.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/consumer/src/index.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
-PolledWatches::
-/user/username/projects/myproject/packages/consumer/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/consumer/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/consumer/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/index.js:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/emit-composite/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/consumer/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/packages/consumer/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/consumer/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/consumer/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/index.js:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/emit-composite/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/consumer/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 Info 46   [00:01:35.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/consumer/src/index.ts","diagnostics":[{"start":{"line":3,"offset":42},"end":{"line":3,"offset":44},"text":"Expected 1 arguments, but got 2.","code":2554,"category":"error"}]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/packages/consumer/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/consumer/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/consumer/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/index.js:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/emit-composite/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/consumer/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/packages/consumer/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/consumer/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/consumer/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/index.js:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/emit-composite/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/consumer/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 Info 47   [00:01:36.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/consumer/src/index.ts","diagnostics":[]}}
 Info 48   [00:01:37.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/packages/consumer/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/consumer/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/consumer/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/index.js:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/emit-composite/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/consumer/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite/src:
-  {}
-/user/username/projects/myproject/packages/emit-composite:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
