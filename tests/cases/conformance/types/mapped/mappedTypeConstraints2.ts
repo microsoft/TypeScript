@@ -49,3 +49,13 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
     }
     return true;
 }
+
+// repro from #50030
+
+type ObjectWithUnderscoredKeys<K extends string> = {
+    [k in K as `_${k}`]: true;
+};
+
+function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
+  const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`];
+}
