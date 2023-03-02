@@ -40,9 +40,12 @@ export function tokenIsIdentifierOrKeywordOrGreaterThan(token: SyntaxKind): bool
 }
 
 export interface Scanner {
+    /** @deprecated use getFullStart */
     getStartPos(): number;
     getToken(): SyntaxKind;
+    /** @deprecated use getEnd/getTokenEnd */
     getTextPos(): number;
+    /** @deprecated use getStart/getTokenStart */
     getTokenPos(): number;
     getTokenText(): string;
     getTokenValue(): string;
@@ -75,6 +78,7 @@ export interface Scanner {
     reScanInvalidIdentifier(): SyntaxKind;
     scanJsxToken(): JsxTokenSyntaxKind;
     scanJsDocToken(): JSDocSyntaxKind;
+    scanBigJsDocToken(): JSDocSyntaxKind; // TODO: Should only be the Big Token kinds
     scan(): SyntaxKind;
 
     getText(): string;
@@ -1020,6 +1024,7 @@ export function createScanner(languageVersion: ScriptTarget,
         reScanInvalidIdentifier,
         scanJsxToken,
         scanJsDocToken,
+        scanBigJsDocToken,
         scan,
         getText,
         clearCommentDirectives,
@@ -2453,6 +2458,45 @@ export function createScanner(languageVersion: ScriptTarget,
     function reScanJsxAttributeValue(): SyntaxKind {
         pos = tokenPos = startPos;
         return scanJsxAttributeValue();
+    }
+
+    /** Note: starts with no unicode escape support since that's 2x the code */
+    function scanBigJsDocToken(): JSDocSyntaxKind {
+        startPos = tokenPos = pos;
+        tokenFlags = TokenFlags.None;
+        if (pos >= end) {
+            return token = SyntaxKind.EndOfFileToken;
+        }
+
+        let ch = codePointAt(text, pos);
+        while (pos < end) {
+            if (isWhiteSpaceSingleLine(ch)) {
+                pos++;
+            }
+            else if (isIdentifierStart(ch, languageVersion)) {
+                let char = ch;
+                while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) || text.charCodeAt(pos) === CharacterCodes.minus)
+                    pos += charSize(char);
+                // tokenValue = text.substring(tokenPos, pos);
+                // TODO: Just use the real escaping code I think
+                // if (char === CharacterCodes.backslash) {
+                //     // and then grab this all at once instead of slicing!
+                //     tokenValue += scanIdentifierParts();
+                // }
+            }
+            else {
+                break;
+            }
+            ch = codePointAt(text, pos);
+        }
+        if (pos === tokenPos) {
+            return scanJsDocToken();
+        }
+        else {
+            // TODO: Make sure this is right (and in the right place)
+            tokenValue = text.substring(tokenPos, pos);
+        }
+        return token = SyntaxKind.Identifier;
     }
 
     function scanJsDocToken(): JSDocSyntaxKind {

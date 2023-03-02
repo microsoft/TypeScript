@@ -2165,6 +2165,10 @@ namespace Parser {
         return currentToken = scanner.scanJsDocToken();
     }
 
+    function nextTokenJSDocBig(): JSDocSyntaxKind {
+        return currentToken = scanner.scanBigJsDocToken();
+    }
+
     function reScanGreaterToken(): SyntaxKind {
         return currentToken = scanner.reScanGreaterToken();
     }
@@ -8573,7 +8577,7 @@ namespace Parser {
             let tagsEnd: number;
             let linkEnd: number;
             let commentsPos: number | undefined;
-            let comments: string[] = [];
+            let comments: string[] = []; // TODO: Push this down!!
             const parts: JSDocComment[] = [];
 
             // + 3 for leading /**, - 5 in total for /** */
@@ -8600,6 +8604,7 @@ namespace Parser {
                     indent = 0;
                 }
                 loop: while (true) {
+                    let bigMode = false;
                     switch (token()) {
                         case SyntaxKind.AtToken:
                             if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
@@ -8627,6 +8632,7 @@ namespace Parser {
                                 // If we've already seen an asterisk, then we can no longer parse a tag on this line
                                 state = JSDocState.SavingComments;
                                 pushComment(asterisk);
+                                bigMode = true;
                             }
                             else {
                                 // Ignore the first asterisk on a line
@@ -8639,6 +8645,7 @@ namespace Parser {
                             const whitespace = scanner.getTokenText();
                             if (state === JSDocState.SavingComments) {
                                 comments.push(whitespace);
+                                bigMode = true
                             }
                             else if (margin !== undefined && indent + whitespace.length > margin) {
                                 comments.push(whitespace.slice(margin - indent));
@@ -8649,6 +8656,7 @@ namespace Parser {
                             break loop;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
+                            bigMode = true
                             const commentEnd = scanner.getStartPos();
                             const linkStart = scanner.getTextPos() - 1;
                             const link = parseJSDocLink(linkStart);
@@ -8668,10 +8676,16 @@ namespace Parser {
                             // wasn't a tag, we can no longer parse a tag on this line until we hit the next
                             // line break.
                             state = JSDocState.SavingComments;
+                            bigMode = true
                             pushComment(scanner.getTokenText());
                             break;
                     }
-                    nextTokenJSDoc();
+                    if (bigMode) { // TODO: or, state === SavingComments
+                        nextTokenJSDocBig();
+                    }
+                    else {
+                        nextTokenJSDoc();
+                    }
                 }
                 removeTrailingWhitespace(comments);
                 if (parts.length && comments.length) {
@@ -8683,13 +8697,13 @@ namespace Parser {
             });
 
             function removeLeadingNewlines(comments: string[]) {
-                while (comments.length && (comments[0] === "\n" || comments[0] === "\r")) {
+                while (comments.length && (comments[0] === "\n" || comments[0] === "\r")) { // TODO: Bad code is still bad
                     comments.shift();
                 }
             }
 
             function removeTrailingWhitespace(comments: string[]) {
-                while (comments.length && comments[comments.length - 1].trim() === "") {
+                while (comments.length && comments[comments.length - 1].trim() === "") { // TODO: Bad code is still bad; should operate on an entire string
                     comments.pop();
                 }
             }

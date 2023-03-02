@@ -393,6 +393,7 @@ oh.no
  * Some\n\n * text\r\n * with newlines.
  */`);
             parsesCorrectly("Chained tags, no leading whitespace", `/**@a @b @c@d*/`);
+            parsesCorrectly("Single trailing whitespace", `/** trailing whitespace */`);
             parsesCorrectly("Initial star is not a tag", `/***@a*/`);
             parsesCorrectly("Initial star space is not a tag", `/*** @a*/`);
             parsesCorrectly("Initial email address is not a tag", `/**bill@example.com*/`);
