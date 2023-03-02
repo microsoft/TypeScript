@@ -8571,13 +8571,14 @@ namespace Parser {
             let tags: JSDocTag[];
             let tagsPos: number;
             let tagsEnd: number;
-            let linkEnd: number;
-            let commentsPos: number | undefined;
-            let comments: string[] = [];
-            const parts: JSDocComment[] = [];
 
             // + 3 for leading /**, - 5 in total for /** */
             return scanner.scanRange(start + 3, length - 5, () => {
+                let linkEnd: number | undefined;
+                let commentsPos: number | undefined;
+                let comments: string[] = [];
+                const parts: JSDocComment[] = [];
+
                 // Initially we can parse out a tag.  We also have seen a starting asterisk.
                 // This is so that /** * @type */ doesn't parse.
                 let state = JSDocState.SawAsterisk;
