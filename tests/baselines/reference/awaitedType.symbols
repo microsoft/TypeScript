@@ -476,3 +476,123 @@ async function brokenExample<AcceptableKeyType extends string = string>(structur
 >structure : Symbol(structure, Decl(awaitedType.ts, 182, 7))
 >key : Symbol(key, Decl(awaitedType.ts, 181, 135))
 }
+
+// repro from #46543
+
+type SelectAndInclude = {
+>SelectAndInclude : Symbol(SelectAndInclude, Decl(awaitedType.ts, 184, 1))
+
+  select: any;
+>select : Symbol(select, Decl(awaitedType.ts, 188, 25))
+
+  include: any;
+>include : Symbol(include, Decl(awaitedType.ts, 189, 14))
+
+};
+type HasSelect = {
+>HasSelect : Symbol(HasSelect, Decl(awaitedType.ts, 191, 2))
+
+  select: any;
+>select : Symbol(select, Decl(awaitedType.ts, 192, 18))
+
+};
+type HasInclude = {
+>HasInclude : Symbol(HasInclude, Decl(awaitedType.ts, 194, 2))
+
+  include: any;
+>include : Symbol(include, Decl(awaitedType.ts, 195, 19))
+
+};
+
+type CheckSelect<T, S, U> = T extends SelectAndInclude
+>CheckSelect : Symbol(CheckSelect, Decl(awaitedType.ts, 197, 2))
+>T : Symbol(T, Decl(awaitedType.ts, 199, 17))
+>S : Symbol(S, Decl(awaitedType.ts, 199, 19))
+>U : Symbol(U, Decl(awaitedType.ts, 199, 22))
+>T : Symbol(T, Decl(awaitedType.ts, 199, 17))
+>SelectAndInclude : Symbol(SelectAndInclude, Decl(awaitedType.ts, 184, 1))
+
+  ? "Please either choose `select` or `include`"
+  : T extends HasSelect
+>T : Symbol(T, Decl(awaitedType.ts, 199, 17))
+>HasSelect : Symbol(HasSelect, Decl(awaitedType.ts, 191, 2))
+
+  ? U
+>U : Symbol(U, Decl(awaitedType.ts, 199, 22))
+
+  : T extends HasInclude
+>T : Symbol(T, Decl(awaitedType.ts, 199, 17))
+>HasInclude : Symbol(HasInclude, Decl(awaitedType.ts, 194, 2))
+
+  ? U
+>U : Symbol(U, Decl(awaitedType.ts, 199, 22))
+
+  : S;
+>S : Symbol(S, Decl(awaitedType.ts, 199, 19))
+
+declare function findMany<T extends { select?: string; include?: string }>(
+>findMany : Symbol(findMany, Decl(awaitedType.ts, 205, 6))
+>T : Symbol(T, Decl(awaitedType.ts, 207, 26))
+>select : Symbol(select, Decl(awaitedType.ts, 207, 37))
+>include : Symbol(include, Decl(awaitedType.ts, 207, 54))
+
+  args: T
+>args : Symbol(args, Decl(awaitedType.ts, 207, 75))
+>T : Symbol(T, Decl(awaitedType.ts, 207, 26))
+
+): CheckSelect<T, Promise<1>, Promise<2>>;
+>CheckSelect : Symbol(CheckSelect, Decl(awaitedType.ts, 197, 2))
+>T : Symbol(T, Decl(awaitedType.ts, 207, 26))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+async function findManyWrapper<
+>findManyWrapper : Symbol(findManyWrapper, Decl(awaitedType.ts, 209, 42))
+
+  T extends { select?: string; include?: string }
+>T : Symbol(T, Decl(awaitedType.ts, 211, 31))
+>select : Symbol(select, Decl(awaitedType.ts, 212, 13))
+>include : Symbol(include, Decl(awaitedType.ts, 212, 30))
+
+>(args: T) {
+>args : Symbol(args, Decl(awaitedType.ts, 213, 2))
+>T : Symbol(T, Decl(awaitedType.ts, 211, 31))
+
+  const result = await findMany(args);
+>result : Symbol(result, Decl(awaitedType.ts, 214, 7))
+>findMany : Symbol(findMany, Decl(awaitedType.ts, 205, 6))
+>args : Symbol(args, Decl(awaitedType.ts, 213, 2))
+
+  return result;
+>result : Symbol(result, Decl(awaitedType.ts, 214, 7))
+}
+
+async function mainFindMany() {
+>mainFindMany : Symbol(mainFindMany, Decl(awaitedType.ts, 216, 1))
+
+  const shouldBeErrorText = await findManyWrapper({
+>shouldBeErrorText : Symbol(shouldBeErrorText, Decl(awaitedType.ts, 219, 7))
+>findManyWrapper : Symbol(findManyWrapper, Decl(awaitedType.ts, 209, 42))
+
+    select: "foo",
+>select : Symbol(select, Decl(awaitedType.ts, 219, 51))
+
+    include: "bar",
+>include : Symbol(include, Decl(awaitedType.ts, 220, 18))
+
+  });
+  const itsOne = await findManyWrapper({});
+>itsOne : Symbol(itsOne, Decl(awaitedType.ts, 223, 7))
+>findManyWrapper : Symbol(findManyWrapper, Decl(awaitedType.ts, 209, 42))
+
+  const itsTwo1 = await findManyWrapper({ select: "foo" });
+>itsTwo1 : Symbol(itsTwo1, Decl(awaitedType.ts, 224, 7))
+>findManyWrapper : Symbol(findManyWrapper, Decl(awaitedType.ts, 209, 42))
+>select : Symbol(select, Decl(awaitedType.ts, 224, 41))
+
+  const itsTwo2 = await findManyWrapper({ include: "bar" });
+>itsTwo2 : Symbol(itsTwo2, Decl(awaitedType.ts, 225, 7))
+>findManyWrapper : Symbol(findManyWrapper, Decl(awaitedType.ts, 209, 42))
+>include : Symbol(include, Decl(awaitedType.ts, 225, 41))
+}
+
