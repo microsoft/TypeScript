@@ -7227,8 +7227,12 @@ declare namespace ts {
         useDefineForClassFields?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
+    interface TypeScriptSubsetForWatchFactory {
+        sys: System;
+        FileWatcherEventKind: typeof FileWatcherEventKind;
+    }
     type UserWatchFactoryModule = (mod: {
-        typescript: typeof ts;
+        typescript: TypeScriptSubsetForWatchFactory;
         options: WatchOptions;
         config: any;
     }) => UserWatchFactory;

@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     BaseNodeFactory,
     CreateSourceFileOptions,
@@ -6,6 +5,7 @@ import {
     EmitHelperFactory,
     FileWatcher,
     FileWatcherCallback,
+    FileWatcherEventKind,
     GetCanonicalFileName,
     MapLike,
     ModeAwareCache,
@@ -19,6 +19,7 @@ import {
     Pattern,
     ProgramBuildInfo,
     SymlinkCache,
+    System,
     ThisContainer,
 } from "./_namespaces/ts";
 
@@ -7206,7 +7207,16 @@ export interface CompilerOptions {
     [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
 }
 
-export type UserWatchFactoryModule = (mod: { typescript: typeof ts, options: WatchOptions, config: any }) => UserWatchFactory;
+export interface TypeScriptSubsetForWatchFactory {
+    sys: System;
+    FileWatcherEventKind: typeof FileWatcherEventKind;
+}
+
+export type UserWatchFactoryModule = (mod: {
+    typescript: TypeScriptSubsetForWatchFactory;
+    options: WatchOptions;
+    config: any;
+}) => UserWatchFactory;
 export interface UserWatchFactory {
     watchFile?(fileName: string, callback: FileWatcherCallback, pollingInterval: number, options: WatchOptions | undefined): FileWatcher;
     watchDirectory?(fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined): FileWatcher;

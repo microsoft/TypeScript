@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     AssertionLevel,
     closeFileWatcher,
@@ -1016,7 +1015,7 @@ export function createSystemWatchFunctions({
             sysLog
         );
         if (typeof resolvedModule === "function") {
-            return setUserWatchFactory(options, resolvedModule({ typescript: ts, options, config: pluginConfigEntry }));
+            return setUserWatchFactory(options, resolvedModule({ typescript: { sys, FileWatcherEventKind }, options, config: pluginConfigEntry }));
         }
         else if (!resolvedModule) {
             forEach(errorLogs, sysLog);
