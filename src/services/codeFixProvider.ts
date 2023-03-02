@@ -59,9 +59,10 @@ export function registerCodeFix(reg: CodeFixRegistration) {
     }
 }
 
+let errorCodeToFixesArray: readonly string[] | undefined;
 /** @internal */
 export function getSupportedErrorCodes(): readonly string[] {
-    return arrayFrom(errorCodeToFixes.keys());
+    return errorCodeToFixesArray ??= arrayFrom(errorCodeToFixes.keys());
 }
 
 function removeFixIdIfFixAllUnavailable(registration: CodeFixRegistration, diagnostics: Diagnostic[]) {
