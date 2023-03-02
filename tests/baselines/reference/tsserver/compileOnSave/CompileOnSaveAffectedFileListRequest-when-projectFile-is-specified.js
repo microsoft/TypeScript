@@ -1,13 +1,4 @@
 Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:34.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/app1/app.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -38,12 +29,15 @@ let y = 10;
 {"files":["app.ts","../core/core.ts"],"compilerOptions":{"outFile":"build/output.js"},"compileOnSave":true}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:34.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/app1/app.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:35.000] Search path: /user/username/projects/myproject/app1
 Info 3    [00:00:36.000] For info: /user/username/projects/myproject/app1/app.ts :: Config file name: /user/username/projects/myproject/app1/tsconfig.json
 Info 4    [00:00:37.000] Creating configuration project /user/username/projects/myproject/app1/tsconfig.json
@@ -68,9 +62,9 @@ Info 13   [00:00:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 14   [00:00:47.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:48.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
 Info 16   [00:00:49.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/app1/app.ts
-	/user/username/projects/myproject/core/core.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/app1/app.ts SVC-1-0 "let x = 10;"
+	/user/username/projects/myproject/core/core.ts Text-1 "let z = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -88,28 +82,28 @@ Info 18   [00:00:53.000] -----------------------------------------------
 Info 18   [00:00:54.000] Open files: 
 Info 18   [00:00:55.000] 	FileName: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined
 Info 18   [00:00:56.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/app1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
-/user/username/projects/myproject/core/core.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 18   [00:00:57.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/app1/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/app1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/core/core.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Before request
+
 Info 19   [00:00:58.000] request:
     {
       "command": "open",
@@ -119,24 +113,6 @@ Info 19   [00:00:58.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/app1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
-/user/username/projects/myproject/core/core.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 20   [00:00:59.000] Search path: /user/username/projects/myproject/app2
 Info 21   [00:01:00.000] For info: /user/username/projects/myproject/app2/app.ts :: Config file name: /user/username/projects/myproject/app2/tsconfig.json
 Info 22   [00:01:01.000] Creating configuration project /user/username/projects/myproject/app2/tsconfig.json
@@ -159,9 +135,9 @@ Info 29   [00:01:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 30   [00:01:09.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 31   [00:01:10.000] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
 Info 32   [00:01:11.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/app2/app.ts
-	/user/username/projects/myproject/core/core.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/app2/app.ts SVC-1-0 "let y = 10;"
+	/user/username/projects/myproject/core/core.ts Text-1 "let z = 10;"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -185,6 +161,10 @@ Info 34   [00:01:20.000] 	FileName: /user/username/projects/myproject/app1/app.t
 Info 34   [00:01:21.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json
 Info 34   [00:01:22.000] 	FileName: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined
 Info 34   [00:01:23.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
+Info 34   [00:01:24.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -192,7 +172,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/app2/node_modules/@types:
+/user/username/projects/myproject/app2/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -202,15 +182,11 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/app2/tsconfig.json:
+/user/username/projects/myproject/app2/tsconfig.json: *new*
   {}
 
-FsWatchesRecursive::
+Before request
 
-Info 34   [00:01:24.000] response:
-    {
-      "responseRequired": false
-    }
 Info 35   [00:01:25.000] request:
     {
       "command": "open",
@@ -220,28 +196,6 @@ Info 35   [00:01:25.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/app1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app2/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
-/user/username/projects/myproject/core/core.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/app2/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 36   [00:01:26.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/core/core.ts 500 undefined WatchType: Closed Script info
 Info 37   [00:01:27.000] Search path: /user/username/projects/myproject/core
 Info 38   [00:01:28.000] For info: /user/username/projects/myproject/core/core.ts :: No config files found.
@@ -260,6 +214,10 @@ Info 39   [00:01:38.000] 	FileName: /user/username/projects/myproject/app2/app.t
 Info 39   [00:01:39.000] 		Projects: /user/username/projects/myproject/app2/tsconfig.json
 Info 39   [00:01:40.000] 	FileName: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined
 Info 39   [00:01:41.000] 		Projects: /user/username/projects/myproject/app1/tsconfig.json,/user/username/projects/myproject/app2/tsconfig.json
+Info 39   [00:01:42.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -278,12 +236,12 @@ FsWatches::
 /user/username/projects/myproject/app2/tsconfig.json:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/myproject/core/core.ts:
+  {}
 
-Info 39   [00:01:42.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 40   [00:01:43.000] request:
     {
       "command": "change",
@@ -298,50 +256,14 @@ Info 40   [00:01:43.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/app1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app2/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/app2/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/app1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app2/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/app2/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 41   [00:01:44.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 42   [00:01:45.000] request:
     {
       "command": "change",
@@ -356,52 +278,16 @@ Info 42   [00:01:45.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/app1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app2/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/app2/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/app1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app2/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/app2/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 43   [00:01:46.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Project1 is dirty: true
 Project2 is dirty: true
+Before request
+
 Info 44   [00:01:47.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -412,50 +298,16 @@ Info 44   [00:01:47.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/app1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app2/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/app2/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 45   [00:01:48.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json
 Info 46   [00:01:49.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 47   [00:01:50.000] Different program with same set of files
-After request
+Info 47   [00:01:50.000] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
+Info 48   [00:01:51.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/app1/app.ts SVC-1-1 "let k = 1let x = 10;"
+	/user/username/projects/myproject/core/core.ts Text-1 "let z = 10;"
 
-PolledWatches::
-/user/username/projects/myproject/app1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/app2/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/app2/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 48   [00:01:51.000] response:
+Info 49   [00:01:52.000] -----------------------------------------------
+Info 50   [00:01:53.000] response:
     {
       "response": [
         {
@@ -468,5 +320,7 @@ Info 48   [00:01:51.000] response:
       ],
       "responseRequired": true
     }
+After request
+
 Project1 is dirty: false
 Project2 is dirty: true

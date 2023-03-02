@@ -1,4 +1,11 @@
 Info 0    [00:00:05.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a.ts]
+function f() {
+  1;
+}
+
+
 Info 1    [00:00:06.000] request:
     {
       "command": "open",
@@ -8,19 +15,6 @@ Info 1    [00:00:06.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a.ts]
-function f() {
-  1;
-}
-
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 2    [00:00:07.000] Search path: /
 Info 3    [00:00:08.000] For info: /a.ts :: No config files found.
 Info 4    [00:00:09.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -28,7 +22,7 @@ Info 5    [00:00:10.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info 6    [00:00:11.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 7    [00:00:12.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 8    [00:00:13.000] 	Files (1)
-	/a.ts
+	/a.ts SVC-1-0 "function f() {\n  1;\n}"
 
 
 	a.ts
@@ -42,20 +36,18 @@ Info 10   [00:00:17.000] -----------------------------------------------
 Info 10   [00:00:18.000] Open files: 
 Info 10   [00:00:19.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 10   [00:00:20.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 10   [00:00:21.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+Before request
+
 Info 11   [00:00:22.000] request:
     {
       "command": "configure",
@@ -67,33 +59,17 @@ Info 11   [00:00:22.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 12   [00:00:23.000] Format host information updated
 Info 13   [00:00:24.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":2,"success":true,"performanceData":{"updateGraphDurationMs":*}}
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 14   [00:00:25.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 15   [00:00:26.000] request:
     {
       "command": "getEditsForRefactor",
@@ -109,26 +85,6 @@ Info 15   [00:00:26.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 16   [00:00:27.000] response:
     {
       "response": {
@@ -169,3 +125,4 @@ Info 16   [00:00:27.000] response:
       },
       "responseRequired": true
     }
+After request

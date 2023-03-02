@@ -157,12 +157,6 @@ Program files::
 /user/username/projects/myproject/plugin-two/index.d.ts
 /user/username/projects/myproject/plugin-one/index.ts
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.Success
 
 //// [/user/username/projects/myproject/plugin-one/action.js]

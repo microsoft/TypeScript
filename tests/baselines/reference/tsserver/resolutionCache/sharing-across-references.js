@@ -1,13 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/src/projects/app/appB.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/src/projects/node_modules/moduleX/index.d.ts]
 export const x = 10;
@@ -37,12 +28,15 @@ export const y = x;
 
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/src/projects/app/appB.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Search path: /src/projects/app
 Info 3    [00:00:32.000] For info: /src/projects/app/appB.ts :: Config file name: /src/projects/app/tsconfig.json
 Info 4    [00:00:33.000] Creating configuration project /src/projects/app/tsconfig.json
@@ -118,10 +112,10 @@ Info 47   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /sr
 Info 48   [00:01:17.000] Finishing updateGraphWorker: Project: /src/projects/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 49   [00:01:18.000] Project '/src/projects/app/tsconfig.json' (Configured)
 Info 50   [00:01:19.000] 	Files (4)
-	/src/projects/node_modules/moduleX/index.d.ts
-	/src/projects/app/appA.ts
-	/src/projects/common/moduleB.ts
-	/src/projects/app/appB.ts
+	/src/projects/node_modules/moduleX/index.d.ts Text-1 "export const x = 10;"
+	/src/projects/app/appA.ts Text-1 "import { x } from \"moduleX\";\nexport const y = x;\n"
+	/src/projects/common/moduleB.ts Text-1 "import { x } from \"moduleX\";\nexport const b = x;\n"
+	/src/projects/app/appB.ts SVC-1-0 "import { x } from \"../common/moduleB\";\nexport const y = x;\n"
 
 
 	../node_modules/moduleX/index.d.ts
@@ -144,35 +138,34 @@ Info 54   [00:01:25.000] -----------------------------------------------
 Info 54   [00:01:26.000] Open files: 
 Info 54   [00:01:27.000] 	FileName: /src/projects/app/appB.ts ProjectRootPath: undefined
 Info 54   [00:01:28.000] 		Projects: /src/projects/app/tsconfig.json
-After request
-
-PolledWatches::
-/src/projects/app/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/src/projects/app/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/src/projects/app/tsconfig.json:
-  {}
-/src/projects/app/appa.ts:
-  {}
-/src/projects/common/tsconfig.json:
-  {}
-/src/projects/common/moduleb.ts:
-  {}
-
-FsWatchesRecursive::
-/src/projects/app:
-  {}
-/src/projects/common:
-  {}
-/src/projects/node_modules:
-  {}
-
 Info 54   [00:01:29.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/src/projects/app/node_modules: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/src/projects/app/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/src/projects/app/tsconfig.json: *new*
+  {}
+/src/projects/app/appa.ts: *new*
+  {}
+/src/projects/common/tsconfig.json: *new*
+  {}
+/src/projects/common/moduleb.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/src/projects/app: *new*
+  {}
+/src/projects/common: *new*
+  {}
+/src/projects/node_modules: *new*
+  {}

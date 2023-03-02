@@ -913,7 +913,6 @@ const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.SignatureHelpFull,
     protocol.CommandTypes.Navto,
     protocol.CommandTypes.NavtoFull,
-    protocol.CommandTypes.Occurrences,
     protocol.CommandTypes.DocumentHighlights,
     protocol.CommandTypes.DocumentHighlightsFull,
 ];
@@ -1768,24 +1767,6 @@ export class Session<TMessage = string> implements EventSender {
             implementations.map(Session.mapToOriginalLocation);
     }
 
-    private getOccurrences(args: protocol.FileLocationRequestArgs): readonly protocol.OccurrencesResponseItem[] {
-        const { file, project } = this.getFileAndProject(args);
-        const position = this.getPositionInFile(args, file);
-        const occurrences = project.getLanguageService().getOccurrencesAtPosition(file, position);
-        return occurrences ?
-            occurrences.map<protocol.OccurrencesResponseItem>(occurrence => {
-                const { fileName, isWriteAccess, textSpan, isInString, contextSpan } = occurrence;
-                const scriptInfo = project.getScriptInfo(fileName)!;
-                return {
-                    ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo),
-                    file: fileName,
-                    isWriteAccess,
-                    ...(isInString ? { isInString } : undefined)
-                };
-            }) :
-            emptyArray;
-    }
-
     private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs) {
         const { configFile } = this.getConfigFileAndProject(args);
         if (configFile) {
@@ -2202,7 +2183,7 @@ export class Session<TMessage = string> implements EventSender {
         // only to the previous line.  If all this is true, then
         // add edits necessary to properly indent the current line.
         if ((args.key === "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
-            const { lineText, absolutePosition } = scriptInfo.getAbsolutePositionAndLineText(args.line);
+            const { lineText, absolutePosition } = scriptInfo.textStorage.getAbsolutePositionAndLineText(args.line);
             if (lineText && lineText.search("\\S") < 0) {
                 const preferredIndent = languageService.getIndentationAtPosition(file, position, formatOptions);
                 let hasIndent = 0;
@@ -2437,6 +2418,8 @@ export class Session<TMessage = string> implements EventSender {
     private change(args: protocol.ChangeRequestArgs) {
         const scriptInfo = this.projectService.getScriptInfo(args.file)!;
         Debug.assert(!!scriptInfo);
+        // Because we are going to apply edits, its better to switch to svc now instead of computing line map
+        scriptInfo.textStorage.switchToScriptVersionCache();
         const start = scriptInfo.lineOffsetToPosition(args.line, args.offset);
         const end = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
         if (start >= 0) {
@@ -3385,9 +3368,6 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.NavTreeFull]: (request: protocol.FileRequest) => {
             return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ false));
-        },
-        [protocol.CommandTypes.Occurrences]: (request: protocol.FileLocationRequest) => {
-            return this.requiredResponse(this.getOccurrences(request.arguments));
         },
         [protocol.CommandTypes.DocumentHighlights]: (request: protocol.DocumentHighlightsRequest) => {
             return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ true));

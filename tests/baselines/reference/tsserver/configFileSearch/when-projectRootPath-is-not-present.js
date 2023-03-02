@@ -17,12 +17,6 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:24.000] Search path: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace
 Info 2    [00:00:25.000] For info: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js :: No config files found.
 Info 3    [00:00:26.000] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -42,8 +36,8 @@ Info 16   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ro
 Info 17   [00:00:40.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:00:41.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 19   [00:00:42.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js SVC-1-0 "const x = 10"
 
 
 	../../../../../../a/lib/lib.d.ts

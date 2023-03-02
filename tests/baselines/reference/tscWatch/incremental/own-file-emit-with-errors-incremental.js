@@ -52,12 +52,6 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/file1.ts (used version)
 /users/username/projects/project/file2.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/users/username/projects/project/file1.js]
@@ -177,12 +171,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/file1.ts (computed .d.ts)
 /users/username/projects/project/file2.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 

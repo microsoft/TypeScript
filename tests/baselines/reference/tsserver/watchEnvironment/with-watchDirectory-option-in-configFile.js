@@ -1,14 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/commonFile1.ts",
-        "projectRootPath": "/a/b"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -33,12 +23,16 @@ let y = 1
 let x = 1
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts",
+        "projectRootPath": "/a/b"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /a/b
 Info 3    [00:00:20.000] For info: /a/b/commonFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /a/b/tsconfig.json
@@ -67,9 +61,9 @@ Info 15   [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 16   [00:00:33.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:00:34.000] Project '/a/b/tsconfig.json' (Configured)
 Info 18   [00:00:35.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/commonFile1.ts
-	/a/b/commonFile2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/commonFile1.ts SVC-1-0 "let x = 1"
+	/a/b/commonFile2.ts Text-1 "let y = 1"
 
 
 	../lib/lib.d.ts
@@ -87,25 +81,22 @@ Info 20   [00:00:39.000] -----------------------------------------------
 Info 20   [00:00:40.000] Open files: 
 Info 20   [00:00:41.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: /a/b
 Info 20   [00:00:42.000] 		Projects: /a/b/tsconfig.json
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 20   [00:00:43.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b: *new*
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}

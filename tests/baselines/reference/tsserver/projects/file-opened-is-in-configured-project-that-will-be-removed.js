@@ -1,13 +1,4 @@
 Info 0    [00:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:36.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/playground/tests.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/playground/tsconfig.json]
 {}
@@ -38,12 +29,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:36.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/playground/tests.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:37.000] Search path: /user/username/projects/myproject/playground
 Info 3    [00:00:38.000] For info: /user/username/projects/myproject/playground/tests.ts :: Config file name: /user/username/projects/myproject/playground/tsconfig.json
 Info 4    [00:00:39.000] Creating configuration project /user/username/projects/myproject/playground/tsconfig.json
@@ -71,10 +65,10 @@ Info 16   [00:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 17   [00:00:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/playground/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:00:53.000] Project '/user/username/projects/myproject/playground/tsconfig.json' (Configured)
 Info 19   [00:00:54.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/playground/tests.ts
-	/user/username/projects/myproject/playground/tsconfig-json/src/src.ts
-	/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/playground/tests.ts SVC-1-0 "export function foo() {}"
+	/user/username/projects/myproject/playground/tsconfig-json/src/src.ts Text-1 "export function foobar() { }"
+	/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts Text-1 "export function bar() { }"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -94,32 +88,34 @@ Info 21   [00:00:58.000] -----------------------------------------------
 Info 21   [00:00:59.000] Open files: 
 Info 21   [00:01:00.000] 	FileName: /user/username/projects/myproject/playground/tests.ts ProjectRootPath: undefined
 Info 21   [00:01:01.000] 		Projects: /user/username/projects/myproject/playground/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/playground/tsconfig.json:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/playground:
-  {}
-
 Info 21   [00:01:02.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/playground/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/playground/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts: *new*
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/playground: *new*
+  {}
+
+Before request
+
 Info 22   [00:01:03.000] request:
     {
       "command": "close",
@@ -129,34 +125,16 @@ Info 22   [00:01:03.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/playground/tsconfig.json:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/playground:
-  {}
-
 Info 23   [00:01:04.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/playground/tests.ts 500 undefined WatchType: Closed Script info
 Info 24   [00:01:05.000] Project '/user/username/projects/myproject/playground/tsconfig.json' (Configured)
 Info 24   [00:01:06.000] 	Files (4)
 
 Info 24   [00:01:07.000] -----------------------------------------------
 Info 24   [00:01:08.000] Open files: 
+Info 24   [00:01:09.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -174,17 +152,15 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/playground/tests.ts:
+/user/username/projects/myproject/playground/tests.ts: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/playground:
   {}
 
-Info 24   [00:01:09.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 25   [00:01:10.000] request:
     {
       "command": "open",
@@ -194,30 +170,6 @@ Info 25   [00:01:10.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/playground/tsconfig.json:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/playground/tests.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/playground:
-  {}
-
 Info 26   [00:01:11.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts 500 undefined WatchType: Closed Script info
 Info 27   [00:01:12.000] Search path: /user/username/projects/myproject/playground/tsconfig-json/tests
 Info 28   [00:01:13.000] For info: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts :: Config file name: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json
@@ -243,8 +195,8 @@ Info 40   [00:01:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 41   [00:01:26.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 42   [00:01:27.000] Project '/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json' (Configured)
 Info 43   [00:01:28.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/playground/tsconfig-json/src/src.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/playground/tsconfig-json/src/src.ts Text-1 "export function foobar() { }"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -287,6 +239,10 @@ Info 57   [00:01:44.000] -----------------------------------------------
 Info 57   [00:01:45.000] Open files: 
 Info 57   [00:01:46.000] 	FileName: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts ProjectRootPath: undefined
 Info 57   [00:01:47.000] 		Projects: 
+Info 57   [00:01:48.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -294,7 +250,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
+/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -302,17 +258,27 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
+/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json: *new*
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/playground/tsconfig.json:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
+  {}
+/user/username/projects/myproject/playground/tests.ts:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/playground/tsconfig-json/src:
+/user/username/projects/myproject/playground/tsconfig-json/src: *new*
   {}
 
-Info 57   [00:01:48.000] response:
-    {
-      "responseRequired": false
-    }
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/playground:
+  {}
+
+Before request
+
 Info 58   [00:01:49.000] request:
     {
       "command": "getOutliningSpans",
@@ -322,28 +288,6 @@ Info 58   [00:01:49.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/playground/tsconfig-json/src:
-  {}
-
 Info 59   [00:01:50.000] Before ensureProjectForOpenFiles:
 Info 60   [00:01:51.000] Project '/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json' (Configured)
 Info 60   [00:01:52.000] 	Files (2)
@@ -371,8 +315,8 @@ Info 75   [00:02:12.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 76   [00:02:13.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 77   [00:02:14.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 78   [00:02:15.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts Text-1 "export function bar() { }"
 
 
 	../../../../../../../a/lib/lib.d.ts
@@ -393,44 +337,6 @@ Info 81   [00:02:23.000] -----------------------------------------------
 Info 81   [00:02:24.000] Open files: 
 Info 81   [00:02:25.000] 	FileName: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts ProjectRootPath: undefined
 Info 81   [00:02:26.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/tests/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/playground/tsconfig-json/tests/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/playground/tsconfig-json/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/playground/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/playground/tsconfig-json/tests/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
-  {}
-/user/username/projects/myproject/playground/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/playground/tsconfig-json/src:
-  {}
-
 Info 81   [00:02:27.000] response:
     {
       "response": [
@@ -462,3 +368,40 @@ Info 81   [00:02:27.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/playground/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/tests/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/playground/tsconfig-json/tests/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/playground/tsconfig-json/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/playground/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/playground/tsconfig-json/tests/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
+  {}
+/user/username/projects/myproject/playground/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/playground/tsconfig-json/src:
+  {}

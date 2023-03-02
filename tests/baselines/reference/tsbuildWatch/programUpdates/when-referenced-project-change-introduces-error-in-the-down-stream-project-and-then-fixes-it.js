@@ -79,22 +79,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/sample1/library/tsconfig.json:
+/user/username/projects/sample1/library/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/library/library.ts:
+/user/username/projects/sample1/library/library.ts: *new*
   {}
-/user/username/projects/sample1/app/tsconfig.json:
+/user/username/projects/sample1/app/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/app/app.ts:
+/user/username/projects/sample1/app/app.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/library:
+/user/username/projects/sample1/library: *new*
   {}
-/user/username/projects/sample1/app:
+/user/username/projects/sample1/app: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -242,24 +240,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/library/tsconfig.json:
-  {}
-/user/username/projects/sample1/library/library.ts:
-  {}
-/user/username/projects/sample1/app/tsconfig.json:
-  {}
-/user/username/projects/sample1/app/app.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/library:
-  {}
-/user/username/projects/sample1/app:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/Library/library.js]
@@ -387,24 +367,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/library/tsconfig.json:
-  {}
-/user/username/projects/sample1/library/library.ts:
-  {}
-/user/username/projects/sample1/app/tsconfig.json:
-  {}
-/user/username/projects/sample1/app/app.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/library:
-  {}
-/user/username/projects/sample1/app:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -11359,7 +11359,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
         }
         else {
-            return strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
+            return strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type, /*isProperty*/ true) : type;
         }
     }
 
@@ -21309,6 +21309,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Relate components directly before falling back to constraint relationships
                     // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
                     if (result = isRelatedTo((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType, RecursionFlags.Both, reportErrors)) {
+                        // This does _not_ generalize - specific instantiations of `S[K]` and `T[J]` may be related, even if the indexed accesses generally are not.
+                        // For example, `S = {x: string, a: string}`, `T = {x: string, b: string}`, `K = J = "x"`. `S` and `T` are unrelated, but the result of executing
+                        // `S["x"]` and `T["x"]` _are_. Given that, we have to flag the object type comparison here as "unreliable", since while the generic result can reliably
+                        // be used in the affirmative case, it failing is not an indicator that the structural result will not succeed.
+                        instantiateType((source as IndexedAccessType).objectType, reportUnreliableMapper);
                         result &= isRelatedTo((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType, RecursionFlags.Both, reportErrors);
                     }
                     if (result) {
@@ -25119,7 +25124,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isInAmbientOrTypeNode(node: Node): boolean {
-        return !!(node.flags & NodeFlags.Ambient || findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n)));
+        return !!(node.flags & NodeFlags.Ambient || findAncestor(node, n => isInterfaceDeclaration(n) || isTypeAliasDeclaration(n) || isTypeLiteralNode(n)));
     }
 
     // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
@@ -32218,19 +32223,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSpreadArgumentType(args: readonly Expression[], index: number, argCount: number, restType: Type, context: InferenceContext | undefined, checkMode: CheckMode) {
+        const inConstContext = isConstTypeVariable(restType);
+
         if (index >= argCount - 1) {
             const arg = args[argCount - 1];
             if (isSpreadArgument(arg)) {
                 // We are inferring from a spread expression in the last argument position, i.e. both the parameter
                 // and the argument are ...x forms.
-                return getMutableArrayOrTupleType(arg.kind === SyntaxKind.SyntheticExpression ? (arg as SyntheticExpression).type :
-                    checkExpressionWithContextualType((arg as SpreadElement).expression, restType, context, checkMode));
+                const spreadType = arg.kind === SyntaxKind.SyntheticExpression ? (arg as SyntheticExpression).type :
+                    checkExpressionWithContextualType((arg as SpreadElement).expression, restType, context, checkMode);
+
+                if (isArrayLikeType(spreadType)) {
+                    return getMutableArrayOrTupleType(spreadType);
+                }
+
+                return createArrayType(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, arg.kind === SyntaxKind.SpreadElement ? (arg as SpreadElement).expression : arg), inConstContext);
             }
         }
         const types = [];
         const flags = [];
         const names = [];
-        const inConstContext = isConstTypeVariable(restType);
         for (let i = index; i < argCount; i++) {
             const arg = args[i];
             if (isSpreadArgument(arg)) {
@@ -40653,6 +40665,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // For a binding pattern, validate the initializer and exit
         if (isBindingPattern(node.name)) {
+            if (isInAmbientOrTypeNode(node)) {
+                return;
+            }
             const needCheckInitializer = hasOnlyExpressionInitializer(node) && node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement;
             const needCheckWidenedType = !some(node.name.elements, not(isOmittedExpression));
             if (needCheckInitializer || needCheckWidenedType) {

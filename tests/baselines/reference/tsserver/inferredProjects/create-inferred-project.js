@@ -23,12 +23,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:22.000] Search path: /user/username/projects/myproject
 Info 2    [00:00:23.000] For info: /user/username/projects/myproject/app.ts :: No config files found.
 Info 3    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -43,9 +37,9 @@ Info 11   [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 12   [00:00:33.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:34.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 14   [00:00:35.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/module.d.ts
-	/user/username/projects/myproject/app.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/module.d.ts Text-1 "export let x: number"
+	/user/username/projects/myproject/app.ts SVC-1-0 "\n                import {f} from \"./module\"\n                console.log(f)\n                "
 
 
 	../../../../a/lib/lib.d.ts

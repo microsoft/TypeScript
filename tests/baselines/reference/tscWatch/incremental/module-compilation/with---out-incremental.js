@@ -38,12 +38,6 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/out.js]

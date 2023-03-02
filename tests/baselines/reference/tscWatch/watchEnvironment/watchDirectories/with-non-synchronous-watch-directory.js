@@ -50,28 +50,26 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/src/file1.ts:
+/user/username/projects/myproject/src/file1.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
+/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/src: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/node_modules/file2:
+/user/username/projects/myproject/node_modules/file2: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -86,6 +84,14 @@ Change:: Directory watch updates because of file1.js creation
 Input::
 
 Output::
+
+exitCode:: ExitStatus.undefined
+
+
+Change:: Remove directory node_modules
+
+Input::
+//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] deleted
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -104,20 +110,12 @@ FsWatches::
   {}
 /user/username/projects/myproject/node_modules:
   {}
-/user/username/projects/myproject/node_modules/file2:
-  {}
 /user/username/projects/myproject:
   {}
 
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.undefined
-
-
-Change:: Remove directory node_modules
-
-Input::
-//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] deleted
+FsWatches *deleted*::
+/user/username/projects/myproject/node_modules/file2:
+  {}
 
 Output::
 >> Screen clear
@@ -163,7 +161,9 @@ FsWatches::
 /user/username/projects/myproject:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/myproject/node_modules/file2/index.d.ts:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -197,26 +197,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 
@@ -226,26 +206,6 @@ Input::
 
 Output::
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 
@@ -254,26 +214,6 @@ Change:: npm install folder creation of file2
 Input::
 
 Output::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -286,26 +226,6 @@ export const x = 10;
 
 
 Output::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -333,10 +253,8 @@ FsWatches::
   {}
 /user/username/projects/myproject:
   {}
-/user/username/projects/myproject/node_modules/file2:
+/user/username/projects/myproject/node_modules/file2: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -346,28 +264,6 @@ Change:: Invalidates module resolution cache
 Input::
 
 Output::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/node_modules/file2:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -419,10 +315,8 @@ FsWatches::
   {}
 /user/username/projects/myproject/node_modules/file2:
   {}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
+/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

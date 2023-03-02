@@ -171,7 +171,7 @@ export function countEachFileTypes(infos: ScriptInfo[], includeSizes = false): F
         deferred: 0, deferredSize: 0,
     };
     for (const info of infos) {
-        const fileSize = includeSizes ? info.getTelemetryFileSize() : 0;
+        const fileSize = includeSizes ? info.textStorage.getTelemetryFileSize() : 0;
         switch (info.scriptKind) {
             case ScriptKind.JS:
                 result.js += 1;
@@ -1461,8 +1461,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         const elapsed = timestamp() - start;
         this.sendPerformanceEvent("UpdateGraph", elapsed);
         this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram}${this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}` : ""} Elapsed: ${elapsed}ms`);
-        if (this.hasAddedorRemovedFiles) {
-            this.print(/*writeProjectFileNames*/ true);
+        if (this.projectService.logger.isTestLogger) {
+            if (this.program !== oldProgram) {
+                this.print(/*writeProjectFileNames*/ true, this.hasAddedorRemovedFiles, /*writeFileVersionAndText*/ true);
+            }
+            else {
+                this.writeLog(`Same program as before`);
+            }
+        }
+        else if (this.hasAddedorRemovedFiles) {
+            this.print(/*writeProjectFileNames*/ true, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
         }
         else if (this.program !== oldProgram) {
             this.writeLog(`Different program with same set of files`);
@@ -1589,27 +1597,38 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     filesToString(writeProjectFileNames: boolean) {
+        return this.filesToStringWorker(writeProjectFileNames, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
+    }
+
+    /** @internal */
+    private filesToStringWorker(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
         if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
         if (!this.program) return "\tFiles (0) NoProgram\n";
         const sourceFiles = this.program.getSourceFiles();
         let strBuilder = `\tFiles (${sourceFiles.length})\n`;
         if (writeProjectFileNames) {
             for (const file of sourceFiles) {
-                strBuilder += `\t${file.fileName}\n`;
+                strBuilder += `\t${file.fileName}${writeFileVersionAndText?` ${file.version} ${JSON.stringify(file.text)}` : ""}\n`;
             }
-            strBuilder += "\n\n";
-            explainFiles(this.program, s => strBuilder += `\t${s}\n`);
+            if (writeFileExplaination) {
+                strBuilder += "\n\n";
+                explainFiles(this.program, s => strBuilder += `\t${s}\n`);
+            }
         }
         return strBuilder;
     }
 
     /** @internal */
-    print(writeProjectFileNames: boolean) {
+    print(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
         this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]})`);
-        this.writeLog(this.filesToString(writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose)));
+        this.writeLog(this.filesToStringWorker(
+            writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose),
+            writeFileExplaination && this.projectService.logger.hasLevel(LogLevel.verbose),
+            writeFileVersionAndText && this.projectService.logger.hasLevel(LogLevel.verbose),
+        ));
         this.writeLog("-----------------------------------------------");
         if (this.autoImportProviderHost) {
-            this.autoImportProviderHost.print(/*writeProjectFileNames*/ false);
+            this.autoImportProviderHost.print(/*writeProjectFileNames*/ false, /*writeFileExplaination*/ false, /*writeFileVersionAndText*/ false);
         }
     }
 
@@ -2827,7 +2846,7 @@ export class ConfiguredProject extends Project {
     }
 
     getEffectiveTypeRoots() {
-        return getEffectiveTypeRoots(this.getCompilationSettings(), this.directoryStructureHost) || [];
+        return getEffectiveTypeRoots(this.getCompilationSettings(), this) || [];
     }
 
     /** @internal */

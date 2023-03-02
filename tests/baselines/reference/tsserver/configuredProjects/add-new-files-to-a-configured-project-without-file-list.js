@@ -20,12 +20,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 1    [00:00:16.000] Search path: /a/b
 Info 2    [00:00:17.000] For info: /a/b/commonFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 3    [00:00:18.000] Creating configuration project /a/b/tsconfig.json
@@ -47,8 +41,8 @@ Info 11   [00:00:26.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 12   [00:00:27.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:28.000] Project '/a/b/tsconfig.json' (Configured)
 Info 14   [00:00:29.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/commonFile1.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/commonFile1.ts SVC-1-0 "let x = 1"
 
 
 	../lib/lib.d.ts
@@ -74,17 +68,17 @@ let y = 1
 
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 Info 20   [00:00:43.000] Running: /a/b/tsconfig.json
@@ -93,9 +87,9 @@ Info 22   [00:00:45.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 23   [00:00:46.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 24   [00:00:47.000] Project '/a/b/tsconfig.json' (Configured)
 Info 25   [00:00:48.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/commonFile1.ts
-	/a/b/commonFile2.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/commonFile1.ts SVC-1-0 "let x = 1"
+	/a/b/commonFile2.ts Text-1 "let y = 1"
 
 
 	../lib/lib.d.ts
@@ -134,7 +128,7 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
 
 FsWatchesRecursive::

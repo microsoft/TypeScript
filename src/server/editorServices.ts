@@ -169,7 +169,6 @@ import {
     ProjectKind,
     ProjectOptions,
     ScriptInfo,
-    ScriptInfoVersion,
     ServerHost,
     Session,
     SetTypings,
@@ -870,7 +869,7 @@ export class ProjectService {
      * it does not reset when creating script info again
      * (and could have potentially collided with version where contents mismatch)
      */
-    private readonly filenameToScriptInfoVersion = new Map<string, ScriptInfoVersion>();
+    private readonly filenameToScriptInfoVersion = new Map<string, number>();
     // Set of all '.js' files ever opened.
     private readonly allJsFilesForOpenFileTelemetry = new Map<string, true>();
 
@@ -1623,7 +1622,7 @@ export class ProjectService {
 
     private removeProject(project: Project) {
         this.logger.info("`remove Project::");
-        project.print(/*writeProjectFileNames*/ true);
+        project.print(/*writeProjectFileNames*/ true, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
 
         project.close();
         if (Debug.shouldAssert(AssertionLevel.Normal)) {
@@ -1812,7 +1811,7 @@ export class ProjectService {
 
     private deleteScriptInfo(info: ScriptInfo) {
         this.filenameToScriptInfo.delete(info.path);
-        this.filenameToScriptInfoVersion.set(info.path, info.getVersion());
+        this.filenameToScriptInfoVersion.set(info.path, info.textStorage.version);
         const realpath = info.getRealpathIfDifferent();
         if (realpath) {
             this.realpathToScriptInfos!.remove(realpath, info); // TODO: GH#18217
@@ -3001,7 +3000,7 @@ export class ProjectService {
             // Opening closed script info
             // either it was created just now, or was part of projects but was closed
             this.stopWatchingScriptInfo(info);
-            info.open(fileContent!);
+            info.open(fileContent);
             if (hasMixedContent) {
                 info.registerFileUpdate();
             }
@@ -3075,7 +3074,7 @@ export class ProjectService {
         const documentPositionMapper = getDocumentPositionMapper(
             { getCanonicalFileName: this.toCanonicalFileName, log: s => this.logger.info(s), getSourceFileLike: f => this.getSourceFileLike(f, projectName, declarationInfo) },
             declarationInfo.fileName,
-            declarationInfo.getLineInfo(),
+            declarationInfo.textStorage.getLineInfo(),
             readMapFile
         );
         readMapFile = undefined; // Remove ref to project
@@ -4493,5 +4492,5 @@ export function isConfigFile(config: ScriptInfoOrConfig): config is TsConfigSour
 }
 
 function printProjectWithoutFileNames(project: Project) {
-    project.print(/*writeProjectFileNames*/ false);
+    project.print(/*writeProjectFileNames*/ false, /*writeFileExplaination*/ false, /*writeFileVersionAndText*/ false);
 }

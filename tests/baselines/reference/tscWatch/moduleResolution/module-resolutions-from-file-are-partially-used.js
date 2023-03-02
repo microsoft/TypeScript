@@ -158,35 +158,35 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/package.json:
+/user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/package.json:
+/user/username/projects/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/a.ts:
+/user/username/projects/myproject/a.ts: *new*
   {}
-/user/username/projects/myproject/index.ts:
+/user/username/projects/myproject/index.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg/import.d.ts:
+/user/username/projects/myproject/node_modules/pkg/import.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg/package.json:
+/user/username/projects/myproject/node_modules/pkg/package.json: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
+/user/username/projects/myproject/node_modules/pkg1/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -293,38 +293,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/index.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/index.ts:
-  {}
-/user/username/projects/myproject/node_modules/pkg/import.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/node_modules/pkg/package.json:
-  {}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -71,12 +71,6 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/a.ts (used version)
 /users/username/projects/project/index.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/c.d.ts]
@@ -263,12 +257,6 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.ts (used version)
 /users/username/projects/project/c.ts (used version)
 /users/username/projects/project/b.ts (used version)
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.Success
 

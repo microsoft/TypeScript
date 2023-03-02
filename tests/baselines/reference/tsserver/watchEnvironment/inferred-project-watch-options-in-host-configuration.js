@@ -1,17 +1,4 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:30.000] request:
-    {
-      "command": "configure",
-      "arguments": {
-        "watchOptions": {
-          "excludeDirectories": [
-            "node_modules"
-          ]
-        }
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -36,27 +23,30 @@ export { foo } from "./foo";
 export function foo(): string;
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:30.000] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "watchOptions": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:31.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
 Info 3    [00:00:32.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 4    [00:00:33.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 5    [00:00:34.000] request:
     {
       "command": "compilerOptionsForInferredProjects",
@@ -71,27 +61,15 @@ Info 5    [00:00:34.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 6    [00:00:35.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 7    [00:00:36.000] request:
     {
       "command": "open",
@@ -102,14 +80,6 @@ Info 7    [00:00:36.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 Info 8    [00:00:37.000] Search path: /user/username/projects/myproject/src
 Info 9    [00:00:38.000] For info: /user/username/projects/myproject/src/main.ts :: No config files found.
 Info 10   [00:00:39.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
@@ -126,10 +96,10 @@ Info 20   [00:00:49.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/proj
 Info 21   [00:00:50.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 22   [00:00:51.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 23   [00:00:52.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/node_modules/bar/foo.d.ts
-	/user/username/projects/myproject/node_modules/bar/index.d.ts
-	/user/username/projects/myproject/src/main.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/node_modules/bar/foo.d.ts Text-1 "export function foo(): string;"
+	/user/username/projects/myproject/node_modules/bar/index.d.ts Text-1 "export { foo } from \"./foo\";"
+	/user/username/projects/myproject/src/main.ts SVC-1-0 "import { foo } from \"bar\"; foo();"
 
 
 	../../../../a/lib/lib.d.ts
@@ -149,27 +119,26 @@ Info 25   [00:00:56.000] -----------------------------------------------
 Info 25   [00:00:57.000] Open files: 
 Info 25   [00:00:58.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 Info 25   [00:00:59.000] 		Projects: /dev/null/inferredProject1*
-After request
-
-PolledWatches::
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Info 25   [00:01:00.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src: *new*
+  {}

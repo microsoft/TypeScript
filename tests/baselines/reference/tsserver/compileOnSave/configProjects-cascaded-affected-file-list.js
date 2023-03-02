@@ -1,13 +1,4 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:22.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/b/moduleFile1.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -40,12 +31,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/moduleFile1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:23.000] Search path: /a/b
 Info 3    [00:00:24.000] For info: /a/b/moduleFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [00:00:25.000] Creating configuration project /a/b/tsconfig.json
@@ -73,11 +67,11 @@ Info 15   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 16   [00:00:37.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:00:38.000] Project '/a/b/tsconfig.json' (Configured)
 Info 18   [00:00:39.000] 	Files (5)
-	/a/lib/lib.d.ts
-	/a/b/moduleFile1.ts
-	/a/b/file1Consumer1.ts
-	/a/b/file1Consumer1Consumer1.ts
-	/a/b/globalFile3.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/moduleFile1.ts SVC-1-0 "export function Foo() { };"
+	/a/b/file1Consumer1.ts Text-1 "import {Foo} from \"./moduleFile1\"; export var y = 10;"
+	/a/b/file1Consumer1Consumer1.ts Text-1 "import {y} from \"./file1Consumer1\";"
+	/a/b/globalFile3.ts Text-1 "interface GlobalFoo { age: number }"
 
 
 	../lib/lib.d.ts
@@ -101,32 +95,34 @@ Info 20   [00:00:43.000] -----------------------------------------------
 Info 20   [00:00:44.000] Open files: 
 Info 20   [00:00:45.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefined
 Info 20   [00:00:46.000] 		Projects: /a/b/tsconfig.json
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 20   [00:00:47.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/file1consumer1.ts: *new*
+  {}
+/a/b/file1consumer1consumer1.ts: *new*
+  {}
+/a/b/globalfile3.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Before request
+
 Info 21   [00:00:48.000] request:
     {
       "command": "open",
@@ -136,28 +132,6 @@ Info 21   [00:00:48.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 22   [00:00:49.000] FileWatcher:: Close:: WatchInfo: /a/b/file1Consumer1.ts 500 undefined WatchType: Closed Script info
 Info 23   [00:00:50.000] Search path: /a/b
 Info 24   [00:00:51.000] For info: /a/b/file1Consumer1.ts :: Config file name: /a/b/tsconfig.json
@@ -170,6 +144,10 @@ Info 25   [00:00:56.000] 	FileName: /a/b/moduleFile1.ts ProjectRootPath: undefin
 Info 25   [00:00:57.000] 		Projects: /a/b/tsconfig.json
 Info 25   [00:00:58.000] 	FileName: /a/b/file1Consumer1.ts ProjectRootPath: undefined
 Info 25   [00:00:59.000] 		Projects: /a/b/tsconfig.json
+Info 25   [00:01:00.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -186,14 +164,16 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+FsWatches *deleted*::
+/a/b/file1consumer1.ts:
+  {}
+
 FsWatchesRecursive::
 /a/b:
   {}
 
-Info 25   [00:01:00.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 26   [00:01:01.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -204,46 +184,6 @@ Info 26   [00:01:01.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 27   [00:01:02.000] response:
     {
       "response": [
@@ -259,6 +199,10 @@ Info 27   [00:01:02.000] response:
       ],
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 28   [00:01:03.000] request:
     {
       "command": "change",
@@ -273,50 +217,14 @@ Info 28   [00:01:03.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 29   [00:01:04.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 30   [00:01:05.000] request:
     {
       "command": "change",
@@ -331,50 +239,14 @@ Info 30   [00:01:05.000] request:
       "seq": 5,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
-After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 31   [00:01:06.000] response:
     {
       "responseRequired": false
     }
+After request
+
+Before request
+
 Info 32   [00:01:07.000] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -385,50 +257,18 @@ Info 32   [00:01:07.000] request:
       "seq": 6,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Info 33   [00:01:08.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 34   [00:01:09.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 35   [00:01:10.000] Different program with same set of files
-After request
+Info 35   [00:01:10.000] Project '/a/b/tsconfig.json' (Configured)
+Info 36   [00:01:11.000] 	Files (5)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/moduleFile1.ts SVC-1-1 "export var T: number;export function Foo() { };"
+	/a/b/file1Consumer1.ts SVC-2-1 "import {Foo} from \"./moduleFile1\"; export var y = 10;export var T: number;"
+	/a/b/file1Consumer1Consumer1.ts Text-1 "import {y} from \"./file1Consumer1\";"
+	/a/b/globalFile3.ts Text-1 "interface GlobalFoo { age: number }"
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
-Info 36   [00:01:11.000] response:
+Info 37   [00:01:12.000] -----------------------------------------------
+Info 38   [00:01:13.000] response:
     {
       "response": [
         {
@@ -443,3 +283,4 @@ Info 36   [00:01:11.000] response:
       ],
       "responseRequired": true
     }
+After request

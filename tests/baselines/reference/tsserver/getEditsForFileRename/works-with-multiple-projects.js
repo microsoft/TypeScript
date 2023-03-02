@@ -1,13 +1,4 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:18.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/a/user.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/user.ts]
 import { x } from "./old";
@@ -25,12 +16,15 @@ import { x } from "../a/old";
 {}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/user.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:19.000] Search path: /a
 Info 3    [00:00:20.000] For info: /a/user.ts :: Config file name: /a/tsconfig.json
 Info 4    [00:00:21.000] Creating configuration project /a/tsconfig.json
@@ -52,8 +46,8 @@ Info 11   [00:00:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 12   [00:00:29.000] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 13   [00:00:30.000] Project '/a/tsconfig.json' (Configured)
 Info 14   [00:00:31.000] 	Files (2)
-	/a/old.ts
-	/a/user.ts
+	/a/old.ts Text-1 "export const x = 0;"
+	/a/user.ts SVC-1-0 "import { x } from \"./old\";"
 
 
 	old.ts
@@ -70,26 +64,26 @@ Info 16   [00:00:35.000] -----------------------------------------------
 Info 16   [00:00:36.000] Open files: 
 Info 16   [00:00:37.000] 	FileName: /a/user.ts ProjectRootPath: undefined
 Info 16   [00:00:38.000] 		Projects: /a/tsconfig.json
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/old.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 16   [00:00:39.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json: *new*
+  {}
+/a/old.ts: *new*
+  {}
+
+Before request
+
 Info 17   [00:00:40.000] request:
     {
       "command": "open",
@@ -99,22 +93,6 @@ Info 17   [00:00:40.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/old.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 18   [00:00:41.000] Search path: /b
 Info 19   [00:00:42.000] For info: /b/user.ts :: Config file name: /b/tsconfig.json
 Info 20   [00:00:43.000] Creating configuration project /b/tsconfig.json
@@ -136,8 +114,8 @@ Info 28   [00:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/
 Info 29   [00:00:52.000] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 30   [00:00:53.000] Project '/b/tsconfig.json' (Configured)
 Info 31   [00:00:54.000] 	Files (2)
-	/a/old.ts
-	/b/user.ts
+	/a/old.ts Text-1 "export const x = 0;"
+	/b/user.ts SVC-1-0 "import { x } from \"../a/old\";"
 
 
 	../a/old.ts
@@ -159,6 +137,10 @@ Info 33   [00:01:03.000] 	FileName: /a/user.ts ProjectRootPath: undefined
 Info 33   [00:01:04.000] 		Projects: /a/tsconfig.json
 Info 33   [00:01:05.000] 	FileName: /b/user.ts ProjectRootPath: undefined
 Info 33   [00:01:06.000] 		Projects: /b/tsconfig.json
+Info 33   [00:01:07.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -166,7 +148,7 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules/@types:
   {"pollingInterval":500}
-/b/node_modules/@types:
+/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -174,17 +156,15 @@ FsWatches::
   {}
 /a/old.ts:
   {}
-/b/tsconfig.json:
+/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/b:
+/b: *new*
   {}
 
-Info 33   [00:01:07.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 34   [00:01:08.000] request:
     {
       "command": "getEditsForFileRename",
@@ -195,50 +175,6 @@ Info 34   [00:01:08.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/old.ts:
-  {}
-/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/b:
-  {}
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/old.ts:
-  {}
-/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/b:
-  {}
-
 Info 35   [00:01:09.000] response:
     {
       "response": [
@@ -293,3 +229,4 @@ Info 35   [00:01:09.000] response:
       ],
       "responseRequired": true
     }
+After request

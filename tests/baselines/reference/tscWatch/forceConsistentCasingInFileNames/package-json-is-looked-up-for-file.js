@@ -80,29 +80,29 @@ Shape signatures in builder refreshed for::
 /users/name/projects/lib-boilerplate/test/basic.spec.ts (used version)
 
 PolledWatches::
-/users/name/projects/lib-boilerplate/src/package.json:
+/users/name/projects/lib-boilerplate/src/package.json: *new*
   {"pollingInterval":2000}
-/users/name/projects/lib-boilerplate/test/package.json:
+/users/name/projects/lib-boilerplate/test/package.json: *new*
   {"pollingInterval":2000}
-/users/name/projects/lib-boilerplate/node_modules/@types:
+/users/name/projects/lib-boilerplate/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/name/projects/lib-boilerplate/tsconfig.json:
+/users/name/projects/lib-boilerplate/tsconfig.json: *new*
   {}
-/users/name/projects/lib-boilerplate/src/index.ts:
+/users/name/projects/lib-boilerplate/src/index.ts: *new*
   {}
-/users/name/projects/lib-boilerplate/test/basic.spec.ts:
+/users/name/projects/lib-boilerplate/test/basic.spec.ts: *new*
   {}
-/a/lib/lib.es2021.full.d.ts:
+/a/lib/lib.es2021.full.d.ts: *new*
   {}
-/users/name/projects/lib-boilerplate/package.json:
+/users/name/projects/lib-boilerplate/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/name/projects/lib-boilerplate/test:
+/users/name/projects/lib-boilerplate/test: *new*
   {}
-/users/name/projects/lib-boilerplate:
+/users/name/projects/lib-boilerplate: *new*
   {}
 
 exitCode:: ExitStatus.undefined

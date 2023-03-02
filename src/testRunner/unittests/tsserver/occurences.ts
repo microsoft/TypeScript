@@ -20,19 +20,19 @@ describe("unittests:: tsserver:: occurrence highlight on string", () => {
         const host = createServerHost([file1]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file1], session);
-        session.executeCommandSeq<ts.server.protocol.FileLocationRequest>({
-            command: ts.server.protocol.CommandTypes.Occurrences,
-            arguments: { file: file1.path, line: 1, offset: 11 }
+        session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
+            command: ts.server.protocol.CommandTypes.DocumentHighlights,
+            arguments: { file: file1.path, line: 1, offset: 11, filesToSearch: [file1.path] }
         });
 
-        session.executeCommandSeq<ts.server.protocol.FileLocationRequest>({
-            command: ts.server.protocol.CommandTypes.Occurrences,
-            arguments: { file: file1.path, line: 3, offset: 13 }
+        session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
+            command: ts.server.protocol.CommandTypes.DocumentHighlights,
+            arguments: { file: file1.path, line: 3, offset: 13, filesToSearch: [file1.path] }
         });
 
-        session.executeCommandSeq<ts.server.protocol.FileLocationRequest>({
-            command: ts.server.protocol.CommandTypes.Occurrences,
-            arguments: { file: file1.path, line: 4, offset: 14 }
+        session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
+            command: ts.server.protocol.CommandTypes.DocumentHighlights,
+            arguments: { file: file1.path, line: 4, offset: 14, filesToSearch: [file1.path] }
         });
         baselineTsserverLogs("occurences", "should be marked if only on string values", session);
     });

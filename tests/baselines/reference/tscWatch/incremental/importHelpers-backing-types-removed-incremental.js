@@ -49,12 +49,6 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/node_modules/tslib/index.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/index.js]
@@ -159,12 +153,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 

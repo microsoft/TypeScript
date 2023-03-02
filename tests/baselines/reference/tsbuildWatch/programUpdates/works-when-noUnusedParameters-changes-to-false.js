@@ -48,16 +48,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/index.ts:
+/user/username/projects/myproject/index.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -90,18 +88,6 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/index.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/index.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

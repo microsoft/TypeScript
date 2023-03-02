@@ -45,11 +45,14 @@ export const customTypesMap = {
 
 export interface PostExecAction {
     readonly success: boolean;
+    requestId: number;
+    readonly packageNames: readonly string[];
     readonly callback: ts.server.typingsInstaller.RequestCompletedAction;
 }
 
 export interface Logger extends ts.server.Logger {
-    logs: string[];
+    logs?: string[];
+    log(s: string): void;
     host?: TestServerHost;
 }
 
@@ -64,7 +67,8 @@ export function nullLogger(): Logger {
         startGroup: ts.noop,
         endGroup: ts.noop,
         getLogFileName: ts.returnUndefined,
-        logs: [],
+        log: ts.noop,
+        isTestLogger: true,
     };
 }
 
@@ -87,10 +91,11 @@ function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Lo
     logger.host = host;
     const originalInfo = logger.info;
     logger.info = s => msg(s, ts.server.Msg.Info, s => originalInfo.call(logger, s));
+    logger.log = s => originalInfo.call(logger, s);
     return logger;
 
     function msg(s: string, type = ts.server.Msg.Err, write: (s: string) => void) {
-        s = `[${nowString()}] ${s}`;
+        s = `[${nowString(logger.host!)}] ${s}`;
         if (!inGroup || firstInGroup) s = padStringRight(type + " " + seq.toString(), "          ") + s;
         if (ts.Debug.isDebugging) console.log(s);
         write(s);
@@ -100,12 +105,12 @@ function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Lo
     function padStringRight(str: string, padding: string) {
         return (str + padding).slice(0, padding.length);
     }
+}
 
-    function nowString() {
-        // E.g. "12:34:56.789"
-        const d = logger.host!.now();
-        return `${ts.padLeft(d.getUTCHours().toString(), 2, "0")}:${ts.padLeft(d.getUTCMinutes().toString(), 2, "0")}:${ts.padLeft(d.getUTCSeconds().toString(), 2, "0")}.${ts.padLeft(d.getUTCMilliseconds().toString(), 3, "0")}`;
-    }
+function nowString(host: TestServerHost) {
+    // E.g. "12:34:56.789"
+    const d = host.now();
+    return `${ts.padLeft(d.getUTCHours().toString(), 2, "0")}:${ts.padLeft(d.getUTCMinutes().toString(), 2, "0")}:${ts.padLeft(d.getUTCSeconds().toString(), 2, "0")}.${ts.padLeft(d.getUTCMilliseconds().toString(), 3, "0")}`;
 }
 
 export function createLoggerWritingToConsole(host: TestServerHost): Logger {
@@ -119,85 +124,154 @@ export function createLoggerWritingToConsole(host: TestServerHost): Logger {
     }, host);
 }
 
+function sanitizeLog(s: string) {
+    return s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
+        .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
+        .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
+        .replace(`"version":"${ts.version}"`, `"version":"FakeVersion"`)
+        .replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`)
+        .replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`)
+        .replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`)
+        .replace(/getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: isCompletionListBlocker: *`)
+        .replace(/getCompletionData: Semantic work: \d+(?:\.\d+)?/g, `getCompletionData: Semantic work: *`)
+        .replace(/getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`)
+        .replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`)
+        .replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`)
+        .replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`)
+        .replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`)
+        .replace(/\"exportMapKey\"\:\s*\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`));
+}
+
 export function createLoggerWithInMemoryLogs(host: TestServerHost): Logger {
     const logger = createHasErrorMessageLogger();
+    const logs: string[] = [];
     return handleLoggerGroup({
         ...logger,
+        logs,
         hasLevel: ts.returnTrue,
         loggingEnabled: ts.returnTrue,
-        info: s => logger.logs.push(
-            s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
-                .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
-                .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
-                .replace(`"version":"${ts.version}"`, `"version":"FakeVersion"`)
-                .replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`)
-                .replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`)
-                .replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`)
-                .replace(/getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: isCompletionListBlocker: *`)
-                .replace(/getCompletionData: Semantic work: \d+(?:\.\d+)?/g, `getCompletionData: Semantic work: *`)
-                .replace(/getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`)
-                .replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`)
-                .replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`)
-                .replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`)
-                .replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`)
-                .replace(/\"exportMapKey\"\:\s*\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`))
-        )
+        info: s => logs.push(sanitizeLog(s)),
     }, host);
 }
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: Logger; }) {
-    ts.Debug.assert(sessionOrService.logger.logs.length); // Ensure caller used in memory logger
+    ts.Debug.assert(sessionOrService.logger.logs?.length); // Ensure caller used in memory logger
     Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
 }
 
-export function appendAllScriptInfos(service: ts.server.ProjectService, logs: string[]) {
-    logs.push("");
-    logs.push(`ScriptInfos:`);
-    service.filenameToScriptInfo.forEach(info => logs.push(`path: ${info.path} fileName: ${info.fileName}`));
-    logs.push("");
+export function appendAllScriptInfos(session: TestSession) {
+    session.logger.log("");
+    session.logger.log(`ScriptInfos:`);
+    session.getProjectService().filenameToScriptInfo.forEach(info => session.logger.log(`path: ${info.path} fileName: ${info.fileName}`));
+    session.logger.log("");
 }
 
-export function appendProjectFileText(project: ts.server.Project, logs: string[]) {
-    logs.push("");
-    logs.push(`Project: ${project.getProjectName()}`);
-    project.getCurrentProgram()?.getSourceFiles().forEach(f => {
-        logs.push(JSON.stringify({ fileName: f.fileName, version: f.version }));
-        logs.push(f.text);
-        logs.push("");
-    });
-    logs.push("");
+const versionRegExp = new RegExp(ts.version, "g");
+const tsMajorMinorVersion = new RegExp(`@ts${ts.versionMajorMinor}`, "g");
+function loggerToTypingsInstallerLog(logger: Logger): ts.server.typingsInstaller.Log | undefined {
+    return logger?.loggingEnabled() ? {
+        isEnabled: ts.returnTrue,
+        writeLine: s => logger.log(`TI:: [${nowString(logger.host!)}] ${sanitizeLog(s).replace(versionRegExp, "FakeVersion")
+                .replace(tsMajorMinorVersion, `@tsFakeMajor.Minor`)
+            }`),
+    } : undefined;
 }
 
-export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller implements ts.server.ITypingsInstaller {
+interface TypesRegistryFile {
+    entries: ts.MapLike<ts.MapLike<string>>;
+}
+
+function loadTypesRegistryFile(typesRegistryFilePath: string, host: TestServerHost, log: ts.server.typingsInstaller.Log): Map<string, ts.MapLike<string>> {
+    if (!host.fileExists(typesRegistryFilePath)) {
+        if (log.isEnabled()) {
+            log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
+        }
+        return new Map<string, ts.MapLike<string>>();
+    }
+    try {
+        const content = JSON.parse(host.readFile(typesRegistryFilePath)!) as TypesRegistryFile;
+        return new Map(Object.entries(content.entries));
+    }
+    catch (e) {
+        if (log.isEnabled()) {
+            log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`);
+        }
+        return new Map<string, ts.MapLike<string>>();
+    }
+}
+
+const typesRegistryPackageName = "types-registry";
+function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
+    return ts.combinePaths(ts.normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
+}
+
+export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.TypingsInstaller {
+    readonly typesRegistry: Map<string, ts.MapLike<string>>;
     protected projectService!: ts.server.ProjectService;
     constructor(
         readonly globalTypingsCacheLocation: string,
         throttleLimit: number,
-        installTypingHost: ts.server.ServerHost,
-        readonly typesRegistry = new Map<string, ts.MapLike<string>>(),
-        log?: ts.server.typingsInstaller.Log) {
-        super(installTypingHost, globalTypingsCacheLocation, "/safeList.json" as ts.Path, customTypesMap.path, throttleLimit, log);
+        installTypingHost: TestServerHost,
+        logger: Logger,
+        typesRegistry?: string | readonly string[],
+    ) {
+        const log = loggerToTypingsInstallerLog(logger);
+        if (log?.isEnabled()) {
+            patchHostTimeouts(
+                changeToHostTrackingWrittenFiles(installTypingHost),
+                logger
+            );
+            (installTypingHost as TestSessionAndServiceHost).baselineHost("TI:: Creating typing installer");
+        }
+        super(
+            installTypingHost,
+            globalTypingsCacheLocation,
+            "/safeList.json" as ts.Path,
+            customTypesMap.path,
+            throttleLimit,
+            log,
+        );
+
+        this.ensurePackageDirectoryExists(globalTypingsCacheLocation);
+
+        if (this.log.isEnabled()) {
+            this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
+            this.log.writeLine(`npm install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`);
+        }
+        installTypingHost.ensureFileOrFolder({
+            path: getTypesRegistryFileLocation(globalTypingsCacheLocation),
+            content: JSON.stringify(
+                createTypesRegistryFileContent(typesRegistry ?
+                    ts.isString(typesRegistry) ?
+                        [typesRegistry] :
+                        typesRegistry :
+                    ts.emptyArray
+                ),
+                undefined,
+                " ",
+            )
+        });
+        if (this.log.isEnabled()) {
+            this.log.writeLine(`TI:: Updated ${typesRegistryPackageName} npm package`);
+        }
+        this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), installTypingHost, this.log);
+        if (this.log.isEnabled()) {
+            (installTypingHost as TestSessionAndServiceHost).baselineHost("TI:: typing installer creation complete");
+        }
     }
 
     protected postExecActions: PostExecAction[] = [];
-
-    isKnownTypesPackageName = ts.notImplemented;
-    installPackage = ts.notImplemented;
-    inspectValue = ts.notImplemented;
 
     executePendingCommands() {
         const actionsToRun = this.postExecActions;
         this.postExecActions = [];
         for (const action of actionsToRun) {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`#${action.requestId} with arguments'${JSON.stringify(action.packageNames)}':: ${action.success}`);
+            }
             action.callback(action.success);
         }
     }
-
-    checkPendingCommands(expectedCount: number) {
-        assert.equal(this.postExecActions.length, expectedCount, `Expected ${expectedCount} post install actions`);
-    }
-
-    onProjectClosed = ts.noop;
 
     attach(projectService: ts.server.ProjectService) {
         this.projectService = projectService;
@@ -207,11 +281,17 @@ export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
         return this.installTypingHost;
     }
 
-    installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
-        this.addPostExecAction("success", cb);
+    installWorker(requestId: number, packageNames: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+        if (this.log.isEnabled()) {
+            this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
+        }
+        this.addPostExecAction("success", requestId, packageNames, cb);
     }
 
     sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings) {
+        if (this.log.isEnabled()) {
+            this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
+        }
         this.projectService.updateTypingsForProject(response);
     }
 
@@ -220,13 +300,51 @@ export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
         this.install(request);
     }
 
-    addPostExecAction(stdout: string | string[], cb: ts.server.typingsInstaller.RequestCompletedAction) {
+    addPostExecAction(stdout: string | string[], requestId: number, packageNames: string[], cb: ts.server.typingsInstaller.RequestCompletedAction) {
         const out = ts.isString(stdout) ? stdout : createNpmPackageJsonString(stdout);
         const action: PostExecAction = {
             success: !!out,
+            requestId,
+            packageNames,
             callback: cb
         };
         this.postExecActions.push(action);
+    }
+}
+
+export class TestTypingsInstaller<T extends TestTypingsInstallerWorker = TestTypingsInstallerWorker> implements ts.server.ITypingsInstaller {
+    protected projectService!: ts.server.ProjectService;
+    public installer!: T;
+    constructor(
+        readonly globalTypingsCacheLocation: string,
+        private throttleLimit: number,
+        private installTypingHost: TestServerHost,
+        private logger: Logger,
+        private workerConstructor?: new (...args: ConstructorParameters<typeof TestTypingsInstallerWorker>) => T,
+        private typesRegistry?: string | readonly string[],
+    ) {
+    }
+
+    isKnownTypesPackageName = ts.notImplemented;
+    installPackage = ts.notImplemented;
+
+    attach(projectService: ts.server.ProjectService) {
+        this.projectService = projectService;
+    }
+
+    onProjectClosed = ts.noop;
+
+    enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
+        if (!this.installer) {
+            if (this.workerConstructor) {
+                this.installer ??= new this.workerConstructor(this.globalTypingsCacheLocation, this.throttleLimit, this.installTypingHost, this.logger, this.typesRegistry);
+            }
+            else {
+                this.installer = new TestTypingsInstallerWorker(this.globalTypingsCacheLocation, this.throttleLimit, this.installTypingHost, this.logger, this.typesRegistry) as T;
+            }
+            this.installer.attach(this.projectService);
+        }
+        this.installer.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
     }
 }
 
@@ -238,7 +356,7 @@ function createNpmPackageJsonString(installedTypings: string[]): string {
     return JSON.stringify({ dependencies });
 }
 
-export function createTypesRegistry(...list: string[]): Map<string, ts.MapLike<string>> {
+function createTypesRegistryFileContent(list: readonly string[]): TypesRegistryFile {
     const versionMap = {
         "latest": "1.3.0",
         "ts2.0": "1.0.0",
@@ -250,11 +368,15 @@ export function createTypesRegistry(...list: string[]): Map<string, ts.MapLike<s
         "ts2.6": "1.3.0",
         "ts2.7": "1.3.0"
     };
-    const map = new Map<string, ts.MapLike<string>>();
+    const entries: ts.MapLike<ts.MapLike<string>> = {};
     for (const l of list) {
-        map.set(l, versionMap);
+        entries[l] = versionMap;
     }
-    return map;
+    return { entries };
+}
+
+export function createTypesRegistry(...list: string[]) {
+    return new Map(Object.entries(createTypesRegistryFileContent(list).entries));
 }
 
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
@@ -341,13 +463,15 @@ export class TestServerEventManager {
 }
 
 export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
+    patched: boolean;
     baselineHost(title: string): void;
 };
 function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
-    session: TestSession | TestProjectService
+    logger: Logger,
 ) {
     const host = inputHost as TestSessionAndServiceHost;
+    if (host.patched) return host;
     const originalCheckTimeoutQueueLength = host.checkTimeoutQueueLength;
     const originalRunQueuedTimeoutCallbacks = host.runQueuedTimeoutCallbacks;
     const originalRunQueuedImmediateCallbacks = host.runQueuedImmediateCallbacks;
@@ -358,6 +482,7 @@ function patchHostTimeouts(
     host.runQueuedTimeoutCallbacks = runQueuedTimeoutCallbacks;
     host.runQueuedImmediateCallbacks = runQueuedImmediateCallbacks;
     host.baselineHost = baselineHost;
+    host.patched = true;
     return host;
 
     function checkTimeoutQueueLengthAndRun(expected: number) {
@@ -385,10 +510,12 @@ function patchHostTimeouts(
     }
 
     function baselineHost(title: string) {
-        if (!session.logger.hasLevel(ts.server.LogLevel.verbose)) return;
-        session.logger.logs.push(title);
-        host.diff(session.logger.logs, hostDiff);
-        host.serializeWatches(session.logger.logs);
+        if (!logger.hasLevel(ts.server.LogLevel.verbose)) return;
+        logger.log(title);
+        const logs = logger.logs || [];
+        host.diff(logs, hostDiff);
+        host.serializeWatches(logs);
+        if (!logger.logs) logs.forEach(log => logger.log(log));
         hostDiff = host.snap();
         host.writtenFiles.clear();
     }
@@ -410,7 +537,7 @@ export class TestSession extends ts.server.Session {
         this.logger = opts.logger;
         this.testhost = patchHostTimeouts(
             changeToHostTrackingWrittenFiles(this.host as TestServerHost),
-            this
+            this.logger
         );
     }
 
@@ -427,7 +554,16 @@ export class TestSession extends ts.server.Session {
     }
 
     public override executeCommand(request: ts.server.protocol.Request) {
-        return this.baseline("response", super.executeCommand(this.baseline("request", request)));
+        if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
+            this.testhost.baselineHost("Before request");
+            this.logger.info(`request:${ts.server.indent(JSON.stringify(request, undefined, 2))}`);
+        }
+        const response = super.executeCommand(request);
+        if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
+            this.logger.info(`response:${ts.server.indent(JSON.stringify(response, undefined, 2))}`);
+            this.testhost.baselineHost("After request");
+        }
+        return response;
     }
 
     public executeCommandSeq<T extends ts.server.protocol.Request>(inputRequest: TestSessionRequest<T>) {
@@ -447,19 +583,12 @@ export class TestSession extends ts.server.Session {
         ts.clear(this.events);
         this.testhost.clearOutput();
     }
-
-    private baseline<T extends ts.server.protocol.Request | ts.server.HandlerResponse>(type: "request" | "response", requestOrResult: T): T {
-        if (!this.logger.hasLevel(ts.server.LogLevel.verbose)) return requestOrResult;
-        if (type === "request") this.logger.info(`request:${ts.server.indent(JSON.stringify(requestOrResult, undefined, 2))}`);
-        this.testhost.baselineHost(type === "request" ? "Before request" : "After request");
-        if (type === "response") this.logger.info(`response:${ts.server.indent(JSON.stringify(requestOrResult, undefined, 2))}`);
-        return requestOrResult;
-    }
 }
 
-export function createSession(host: ts.server.ServerHost, opts: Partial<TestSessionOptions> = {}) {
+export function createSession(host: TestServerHost, opts: Partial<TestSessionOptions> = {}) {
+    const logger = opts.logger || createHasErrorMessageLogger();
     if (opts.typingsInstaller === undefined) {
-        opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
+        opts.typingsInstaller = new TestTypingsInstaller(host.getHostSpecificPath("/a/data/"), /*throttleLimit*/ 5, host, logger);
     }
 
     if (opts.eventHandler !== undefined) {
@@ -474,14 +603,14 @@ export function createSession(host: ts.server.ServerHost, opts: Partial<TestSess
         typingsInstaller: undefined!, // TODO: GH#18217
         byteLength: Buffer.byteLength,
         hrtime: process.hrtime,
-        logger: opts.logger || createHasErrorMessageLogger(),
+        logger,
         canUseEvents: false
     };
 
     return new TestSession({ ...sessionOptions, ...opts });
 }
 
-export function createSessionWithEventTracking<T extends ts.server.ProjectServiceEvent>(host: ts.server.ServerHost, eventNames: T["eventName"] | T["eventName"][], opts: Partial<TestSessionOptions> = {}) {
+export function createSessionWithEventTracking<T extends ts.server.ProjectServiceEvent>(host: TestServerHost, eventNames: T["eventName"] | T["eventName"][], opts: Partial<TestSessionOptions> = {}) {
     const events: T[] = [];
     const session = createSession(host, {
         eventHandler: e => {
@@ -537,7 +666,7 @@ export class TestProjectService extends ts.server.ProjectService {
         });
         this.testhost = patchHostTimeouts(
             changeToHostTrackingWrittenFiles(this.host as TestServerHost),
-            this
+            this.logger
         );
         this.testhost.baselineHost("Creating project service");
     }
@@ -736,27 +865,28 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 }
 
-export function openFilesForSession(files: readonly (string | File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: TestSession): void {
+export function openFilesForSession(files: readonly (string | File | { readonly file: File | string, readonly projectRootPath?: string, content?: string })[], session: TestSession): void {
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
             arguments: ts.isString(file) ?
                 { file } :
-                "projectRootPath" in file ? // eslint-disable-line local/no-in-operator
+                "file" in file ? // eslint-disable-line local/no-in-operator
                     {
                         file: typeof file.file === "string" ? file.file : file.file.path,
-                        projectRootPath: file.projectRootPath
+                        projectRootPath: file.projectRootPath,
+                        fileContent: file.content,
                     } :
                     { file: file.path }
         });
     }
 }
 
-export function closeFilesForSession(files: readonly File[], session: TestSession): void {
+export function closeFilesForSession(files: readonly (File | string)[], session: TestSession): void {
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({
             command: ts.server.protocol.CommandTypes.Close,
-            arguments: { file: file.path }
+            arguments: { file: ts.isString(file) ? file : file.path }
         });
     }
 }
@@ -785,7 +915,7 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
     skip?: readonly (SkipErrors | undefined)[];
 }
 function checkAllErrors({ session, host, existingTimeouts, files, skip }: CheckAllErrors) {
-    ts.Debug.assert(session.logger.logs.length);
+    ts.Debug.assert(session.logger.logs?.length);
     for (let i = 0; i < files.length; i++) {
         if (existingTimeouts !== undefined) {
             host.checkTimeoutQueueLength(existingTimeouts + 1);

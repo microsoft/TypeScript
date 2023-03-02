@@ -1,13 +1,4 @@
 Info 0    [00:00:34.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:35.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/solution/compiler/program.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -55,12 +46,15 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:35.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/solution/compiler/program.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:36.000] Search path: /user/username/projects/solution/compiler
 Info 3    [00:00:37.000] For info: /user/username/projects/solution/compiler/program.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
 Info 4    [00:00:38.000] Creating configuration project /user/username/projects/solution/compiler/tsconfig.json
@@ -87,9 +81,9 @@ Info 13   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 14   [00:00:48.000] Finishing updateGraphWorker: Project: /user/username/projects/solution/compiler/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:49.000] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
 Info 16   [00:00:50.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/solution/compiler/types.ts
-	/user/username/projects/solution/compiler/program.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/solution/compiler/types.ts Text-1 "\n                namespace ts {\n                    export interface Program {\n                        getSourceFiles(): string[];\n                    }\n                }"
+	/user/username/projects/solution/compiler/program.ts SVC-1-0 "\n                namespace ts {\n                    export const program: Program = {\n                        getSourceFiles: () => [getSourceFile()]\n                    };\n                    function getSourceFile() { return \"something\"; }\n                }"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -107,28 +101,28 @@ Info 18   [00:00:54.000] -----------------------------------------------
 Info 18   [00:00:55.000] Open files: 
 Info 18   [00:00:56.000] 	FileName: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined
 Info 18   [00:00:57.000] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/solution/compiler/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/compiler/tsconfig.json:
-  {}
-/user/username/projects/solution/compiler/types.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 18   [00:00:58.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/solution/compiler/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/compiler/tsconfig.json: *new*
+  {}
+/user/username/projects/solution/compiler/types.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Before request
+
 Info 19   [00:00:59.000] request:
     {
       "command": "references",
@@ -140,43 +134,7 @@ Info 19   [00:00:59.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/solution/compiler/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/compiler/tsconfig.json:
-  {}
-/user/username/projects/solution/compiler/types.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 20   [00:01:00.000] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/solution/compiler/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/solution/compiler/tsconfig.json:
-  {}
-/user/username/projects/solution/compiler/types.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 Info 21   [00:01:01.000] response:
     {
       "response": {
@@ -232,3 +190,4 @@ Info 21   [00:01:01.000] response:
       },
       "responseRequired": true
     }
+After request
