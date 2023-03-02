@@ -313,8 +313,6 @@ declare namespace FourSlashInterface {
         /** Verifies that goToDefinition at the current position would take you to `endMarker`. */
         goToDefinitionIs(endMarkers: ArrayOrSingle<string>): void;
         goToDefinitionName(name: string, containerName: string): void;
-        /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
-        goToDefinitionForMarkers(...markerNames: string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         baselineCommands(...commands: BaselineCommand[]): void;

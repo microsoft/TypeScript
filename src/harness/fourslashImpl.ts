@@ -753,17 +753,6 @@ export class TestState {
         return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition)!;
     }
 
-    public verifyGoToDefinitionForMarkers(markerNames: string[]) {
-        for (const markerName of markerNames) {
-            this.verifyGoToXSingle(`${markerName}Reference`, `${markerName}Definition`, () => this.getGoToDefinition());
-        }
-    }
-
-    private verifyGoToXSingle(startMarkerName: string, endMarkerNames: ArrayOrSingle<string | { marker: string, unverified?: boolean }> | { file: string, unverified?: boolean }, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
-        this.goToMarker(startMarkerName);
-        this.verifyGoToXWorker(startMarkerName, toArray(endMarkerNames), getDefs, startMarkerName);
-    }
-
     private verifyGoToXWorker(startMarker: string | undefined, endMarkers: readonly (string | { marker?: string, file?: string, unverified?: boolean })[], getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined, startMarkerName?: string) {
         const defs = getDefs();
         let definitions: readonly ts.DefinitionInfo[];
