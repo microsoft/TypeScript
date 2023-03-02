@@ -2830,14 +2830,6 @@ export class TestState {
         this.goToPosition(pos);
     }
 
-    public verifyGoToDefinitionName(expectedName: string, expectedContainerName: string) {
-        const definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-        const actualDefinitionName = definitions && definitions.length ? definitions[0].name : "";
-        const actualDefinitionContainerName = definitions && definitions.length ? definitions[0].containerName : "";
-        assert.equal(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Name"));
-        assert.equal(actualDefinitionContainerName, expectedContainerName, this.messageAtLastKnownMarker("Definition Info Container Name"));
-    }
-
     public getMarkers(): Marker[] {
         //  Return a copy of the list
         return this.testData.markers.slice(0);

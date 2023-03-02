@@ -310,10 +310,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyGoToDefinitionIs(endMarkers);
     }
 
-    public goToDefinitionName(name: string, containerName: string) {
-        this.state.verifyGoToDefinitionName(name, containerName);
-    }
-
     public verifyGetEmitOutputForCurrentFile(expected: string): void {
         this.state.verifyGetEmitOutputForCurrentFile(expected);
     }
