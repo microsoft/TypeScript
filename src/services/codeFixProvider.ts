@@ -49,7 +49,7 @@ function createCodeFixActionWorker(fixName: string, description: string, changes
 /** @internal */
 export function registerCodeFix(reg: CodeFixRegistration) {
     for (const error of reg.errorCodes) {
-        Debug.assert(errorCodeToFixesArray === undefined || errorCodeToFixes.has(String(error)));
+        errorCodeToFixesArray = undefined;
         errorCodeToFixes.add(String(error), reg);
     }
     if (reg.fixIds) {
