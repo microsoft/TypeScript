@@ -105,8 +105,7 @@ export function organizeImports(
     // Exports are always used
     if (mode !== OrganizeImportsMode.RemoveUnused) {
         // All of the old ExportDeclarations in the file, in syntactic order.
-        const topLevelExportDecls = groupByNewlineContiguous(sourceFile, sourceFile.statements.filter(isExportDeclaration));
-        topLevelExportDecls.forEach(exportGroupDecl =>
+        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl =>
             organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer)));
     }
 
@@ -147,7 +146,7 @@ export function organizeImports(
             ? stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiersWorker(group1[0].moduleSpecifier, group2[0].moduleSpecifier, comparer))
             : oldImportGroups;
         const newImportDecls = flatMap(sortedImportGroups, importGroup =>
-            getExternalModuleName(importGroup[0].moduleSpecifier)
+            getExternalModuleName(importGroup[0].moduleSpecifier) || importGroup[0].moduleSpecifier === undefined
                 ? coalesce(importGroup)
                 : importGroup);
 
@@ -825,4 +824,35 @@ export function getOrganizeImportsComparer(preferences: UserPreferences, ignoreC
 function getOrganizeImportsComparerWithDetection(preferences: UserPreferences, detectIgnoreCase?: () => boolean): Comparer<string> {
     const ignoreCase = typeof preferences.organizeImportsIgnoreCase === "boolean" ? preferences.organizeImportsIgnoreCase : detectIgnoreCase?.() ?? false;
     return getOrganizeImportsComparer(preferences, ignoreCase);
+}
+
+function getTopLevelExportGroups(sourceFile: SourceFile) {
+    const topLevelExportGroups: ExportDeclaration[][] = [];
+    const statements = sourceFile.statements;
+    const len = length(statements);
+
+    let i = 0;
+    let groupIndex = 0;
+    while (i < len) {
+        if (isExportDeclaration(statements[i])) {
+            if (topLevelExportGroups[groupIndex] === undefined) {
+                topLevelExportGroups[groupIndex] = [];
+            }
+            const exportDecl = statements[i] as ExportDeclaration;
+            if (exportDecl.moduleSpecifier) {
+                topLevelExportGroups[groupIndex].push(exportDecl);
+                i++;
+            }
+            else {
+                while (i < len && isExportDeclaration(statements[i])) {
+                    topLevelExportGroups[groupIndex].push(statements[i++] as ExportDeclaration);
+                }
+                groupIndex++;
+            }
+        }
+        else {
+            i++;
+        }
+    }
+    return flatMap(topLevelExportGroups, exportGroupDecls => groupByNewlineContiguous(sourceFile, exportGroupDecls));
 }
