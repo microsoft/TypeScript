@@ -2344,7 +2344,7 @@ namespace Parser {
                 return;
 
             case "is":
-                parseErrorAt(pos, scanner.getTokenEnd(), Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+                parseErrorAt(pos, scanner.getTokenStart(), Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
                 return;
 
             case "module":
@@ -9163,7 +9163,7 @@ namespace Parser {
                     }
                     else if (token === SyntaxKind.GreaterThanToken && inEmail) {
                         comments.push(scanner.getTokenText());
-                        scanner.setTokenEnd(scanner.getTokenStart() + 1);
+                        scanner.setTokenEnd(scanner.getTokenEnd());
                         break;
                     }
                     comments.push(scanner.getTokenText());
@@ -9284,7 +9284,7 @@ namespace Parser {
             }
 
             function parseJSDocTypeNameWithNamespace(nested?: boolean) {
-                const pos = scanner.getTokenStart();
+                const start = scanner.getTokenStart();
                 if (!tokenIsIdentifierOrKeyword(token())) {
                     return undefined;
                 }
@@ -9297,7 +9297,7 @@ namespace Parser {
                         body,
                         nested ? NodeFlags.NestedNamespace : undefined
                     ) as JSDocNamespaceDeclaration;
-                    return finishNode(jsDocNamespaceNode, pos);
+                    return finishNode(jsDocNamespaceNode, start);
                 }
 
                 if (nested) {
@@ -9520,11 +9520,11 @@ namespace Parser {
                 }
 
                 identifierCount++;
-                const pos = scanner.getTokenStart();
+                const start = scanner.getTokenStart();
                 const end = scanner.getTokenEnd();
                 const originalKeywordKind = token();
                 const text = internIdentifier(scanner.getTokenValue());
-                const result = finishNode(factoryCreateIdentifier(text, originalKeywordKind), pos, end);
+                const result = finishNode(factoryCreateIdentifier(text, originalKeywordKind), start, end);
                 nextTokenJSDoc();
                 return result;
             }
