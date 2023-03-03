@@ -99,6 +99,7 @@ import "./unittests/tsbuildWatch/projectsBuilding";
 import "./unittests/tsbuildWatch/publicApi";
 import "./unittests/tsbuildWatch/reexport";
 import "./unittests/tsbuildWatch/watchEnvironment";
+import "./unittests/tsc/arbitraryExtensions";
 import "./unittests/tsc/cancellationToken";
 import "./unittests/tsc/composite";
 import "./unittests/tsc/declarationEmit";

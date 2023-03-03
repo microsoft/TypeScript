@@ -8465,6 +8465,14 @@ export function getResolveJsonModule(compilerOptions: CompilerOptions) {
 }
 
 /** @internal */
+export function getAllowArbitraryExtensions(compilerOptions: CompilerOptions) {
+    if (compilerOptions.allowArbitraryExtensions !== undefined) {
+        return compilerOptions.allowArbitraryExtensions;
+    }
+    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler;
+}
+
+/** @internal */
 export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
     return !!(compilerOptions.declaration || compilerOptions.composite);
 }
@@ -9298,9 +9306,17 @@ export function extensionIsTS(ext: string): boolean {
     return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts || ext === Extension.Dcts || (startsWith(ext, ".d.") && endsWith(ext, ".ts"));
 }
 
+export function hasArbitraryExtension(ext: string) {
+    return !some(supportedTSExtensionsFlat, tsExt => endsWith(ext, tsExt)) &&
+        !some(supportedJSExtensionsFlat, jsExt => endsWith(ext, jsExt)) &&
+        !endsWith(ext, Extension.Json);
+}
+
 /** @internal */
-export function resolutionExtensionIsTSOrJson(ext: string) {
-    return extensionIsTS(ext) || ext === Extension.Json;
+export function resolutionExtensionIsTSOrJsonOrArbitrary(ext: string, options: CompilerOptions) {
+    return extensionIsTS(ext) ||
+        ext === Extension.Json ||
+        getAllowArbitraryExtensions(options) && !some(supportedJSExtensionsFlat, jsExt => endsWith(ext, jsExt));
 }
 
 /**

@@ -57,7 +57,7 @@ import {
     Program,
     removeSuffix,
     removeTrailingDirectorySeparator,
-    resolutionExtensionIsTSOrJson,
+    resolutionExtensionIsTSOrJsonOrArbitrary,
     ResolutionLoader,
     ResolutionMode,
     ResolvedModuleWithFailedLookupLocations,
@@ -684,7 +684,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 options,
             ),
             getResolutionWithResolvedFileName: getResolvedModule,
-            shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
+            shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJsonOrArbitrary(resolution.resolvedModule.extension, options),
             logChanges: logChangesWhenResolvingModule,
         });
     }

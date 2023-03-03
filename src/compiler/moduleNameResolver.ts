@@ -35,6 +35,7 @@ import {
     forEach,
     forEachAncestorDirectory,
     formatMessage,
+    getAllowArbitraryExtensions,
     getBaseFileName,
     GetCanonicalFileName,
     getCommonSourceDirectory,
@@ -98,6 +99,8 @@ import {
     startsWith,
     stringContains,
     supportedDeclarationExtensions,
+    supportedJSExtensionsFlat,
+    supportedTSExtensionsFlat,
     supportedTSImplementationExtensions,
     toPath,
     tryExtractTSExtension,
@@ -179,7 +182,9 @@ const enum Extensions {
     TypeScript  = 1 << 0, // '.ts', '.tsx', '.mts', '.cts'
     JavaScript  = 1 << 1, // '.js', '.jsx', '.mjs', '.cjs'
     Declaration = 1 << 2, // '.d.ts', etc.
-    Json        = 1 << 3, // '.json'
+    Json = 1 << 3, // '.json'
+
+    Arbitrary = 1 << 4,
 
     ImplementationFiles = TypeScript | JavaScript,
 }
@@ -190,6 +195,7 @@ function formatExtensions(extensions: Extensions) {
     if (extensions & Extensions.JavaScript) result.push("JavaScript");
     if (extensions & Extensions.Declaration) result.push("Declaration");
     if (extensions & Extensions.Json) result.push("JSON");
+    if (extensions & Extensions.Arbitrary) result.push("Arbitrary");
     return result.join(", ");
 }
 
@@ -1636,6 +1642,9 @@ function nodeNextModuleNameResolverWorker(features: NodeResolutionFeatures, modu
     if (getResolveJsonModule(compilerOptions)) {
         extensions |= Extensions.Json;
     }
+    if (getAllowArbitraryExtensions(compilerOptions)) {
+        extensions |= Extensions.Arbitrary;
+    }
     return nodeModuleNameResolverWorker(features | esmMode, moduleName, containingDirectory, compilerOptions, host, cache, extensions, /*isConfigLookup*/ false, redirectedReference);
 }
 
@@ -1658,6 +1667,9 @@ export function bundlerModuleNameResolver(moduleName: string, containingFile: st
     if (getResolveJsonModule(compilerOptions)) {
         extensions |= Extensions.Json;
     }
+    if (getAllowArbitraryExtensions(compilerOptions)) {
+        extensions |= Extensions.Arbitrary;
+    }
     return nodeModuleNameResolverWorker(getNodeResolutionFeatures(compilerOptions), moduleName, containingDirectory, compilerOptions, host, cache, extensions, /*isConfigLookup*/ false, redirectedReference);
 }
 
@@ -1671,11 +1683,17 @@ export function nodeModuleNameResolver(moduleName: string, containingFile: strin
     else if (compilerOptions.noDtsResolution) {
         extensions = Extensions.ImplementationFiles;
         if (getResolveJsonModule(compilerOptions)) extensions |= Extensions.Json;
+        if (getAllowArbitraryExtensions(compilerOptions)) {
+            extensions |= Extensions.Arbitrary;
+        }
     }
     else {
         extensions = getResolveJsonModule(compilerOptions)
             ? Extensions.TypeScript | Extensions.JavaScript | Extensions.Declaration | Extensions.Json
             : Extensions.TypeScript | Extensions.JavaScript | Extensions.Declaration;
+        if (getAllowArbitraryExtensions(compilerOptions)) {
+            extensions |= Extensions.Arbitrary;
+        }
     }
     return nodeModuleNameResolverWorker(NodeResolutionFeatures.None, moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, extensions, !!isConfigLookup, redirectedReference);
 }
@@ -1712,6 +1730,8 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         trace(host, Diagnostics.Resolving_in_0_mode_with_conditions_1, features & NodeResolutionFeatures.EsmMode ? "ESM" : "CJS", conditions.map(c => `'${c}'`).join(", "));
     }
 
+    const originalExtensions = extensions;
+    extensions = extensions & ~Extensions.Arbitrary;
     let result;
     if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node10) {
         const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
@@ -1723,6 +1743,11 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
     }
     else {
         result = tryResolve(extensions, state);
+    }
+
+    if (originalExtensions !== extensions) {
+        // try arbitary extension
+        result ??= tryResolve(Extensions.Arbitrary, state);
     }
 
     // For non-relative names that resolved to JS but no types in modes that look up an "import" condition in package.json "exports",
@@ -2016,6 +2041,7 @@ function tryAddingExtensions(candidate: string, extensions: Extensions, original
                 || undefined;
         default:
             return extensions & Extensions.Declaration && !isDeclarationFileName(candidate + originalExtension) && tryExtension(`.d${originalExtension}.ts`)
+                || !!originalExtension && extensions & Extensions.Arbitrary && !some(supportedTSExtensionsFlat, ext => endsWith(originalExtension, ext)) && !some(supportedJSExtensionsFlat, ext => endsWith(originalExtension, ext)) && tryExtension(originalExtension)
                 || undefined;
 
     }
@@ -2355,6 +2381,7 @@ function extensionIsOk(extensions: Extensions, extension: string): boolean {
         || extensions & Extensions.TypeScript && (extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Mts || extension === Extension.Cts)
         || extensions & Extensions.Declaration && (extension === Extension.Dts || extension === Extension.Dmts || extension === Extension.Dcts)
         || extensions & Extensions.Json && extension === Extension.Json
+        || extensions & Extensions.Arbitrary && !!extension
         || false;
 }
 
