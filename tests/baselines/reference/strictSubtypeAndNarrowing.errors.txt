@@ -178,3 +178,52 @@ tests/cases/compiler/strictSubtypeAndNarrowing.ts(129,26): error TS2322: Type '{
         value;
     }
     
+    // Repro from comment in #52984
+    
+    type DistributedKeyOf<T> = T extends unknown ? keyof T : never;
+    
+    type NarrowByKeyValue<ObjT, KeyT extends PropertyKey, ValueT> = ObjT extends unknown
+        ? KeyT extends keyof ObjT
+            ? ValueT extends ObjT[KeyT]
+                ? ObjT & Readonly<Record<KeyT, ValueT>>
+                : never
+            : never
+        : never;
+    
+    type NarrowByDeepValue<ObjT, DeepPathT, ValueT> = DeepPathT extends readonly [
+        infer Head extends DistributedKeyOf<ObjT>,
+    ]
+        ? NarrowByKeyValue<ObjT, Head, ValueT>
+        : DeepPathT extends readonly [infer Head extends DistributedKeyOf<ObjT>, ...infer Rest]
+        ? NarrowByKeyValue<ObjT, Head, NarrowByDeepValue<NonNullable<ObjT[Head]>, Rest, ValueT>>
+        : never;
+    
+    
+    declare function doesValueAtDeepPathSatisfy<
+        ObjT extends object,
+        const DeepPathT extends ReadonlyArray<number | string>,
+        ValueT,
+    >(
+        obj: ObjT,
+        deepPath: DeepPathT,
+        predicate: (arg: unknown) => arg is ValueT,
+    ): obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>;
+    
+    
+    type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
+    
+    declare function isA(arg: unknown): arg is 'A';
+    declare function isB(arg: unknown): arg is 'B';
+    
+    declare function assert(condition: boolean): asserts condition;
+    
+    function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
+        assert(doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA));
+        return foo;
+    }
+    
+    function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
+        assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB));
+        return foo;
+    }
+    

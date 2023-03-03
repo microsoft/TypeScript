@@ -402,3 +402,115 @@ function ff3(value: string | string[] | { [index: number]: boolean, length: numb
 >value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
 }
 
+// Repro from comment in #52984
+
+type DistributedKeyOf<T> = T extends unknown ? keyof T : never;
+>DistributedKeyOf : DistributedKeyOf<T>
+
+type NarrowByKeyValue<ObjT, KeyT extends PropertyKey, ValueT> = ObjT extends unknown
+>NarrowByKeyValue : NarrowByKeyValue<ObjT, KeyT, ValueT>
+
+    ? KeyT extends keyof ObjT
+        ? ValueT extends ObjT[KeyT]
+            ? ObjT & Readonly<Record<KeyT, ValueT>>
+            : never
+        : never
+    : never;
+
+type NarrowByDeepValue<ObjT, DeepPathT, ValueT> = DeepPathT extends readonly [
+>NarrowByDeepValue : NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+
+    infer Head extends DistributedKeyOf<ObjT>,
+]
+    ? NarrowByKeyValue<ObjT, Head, ValueT>
+    : DeepPathT extends readonly [infer Head extends DistributedKeyOf<ObjT>, ...infer Rest]
+    ? NarrowByKeyValue<ObjT, Head, NarrowByDeepValue<NonNullable<ObjT[Head]>, Rest, ValueT>>
+    : never;
+
+
+declare function doesValueAtDeepPathSatisfy<
+>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+
+    ObjT extends object,
+    const DeepPathT extends ReadonlyArray<number | string>,
+    ValueT,
+>(
+    obj: ObjT,
+>obj : ObjT
+
+    deepPath: DeepPathT,
+>deepPath : DeepPathT
+
+    predicate: (arg: unknown) => arg is ValueT,
+>predicate : (arg: unknown) => arg is ValueT
+>arg : unknown
+
+): obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>;
+
+
+type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
+>Foo : { value: {    type: 'A';}; a?: number | undefined; } | { value: {    type: 'B';}; b?: number | undefined; }
+>value : { type: 'A'; }
+>type : "A"
+>a : number | undefined
+>value : { type: 'B'; }
+>type : "B"
+>b : number | undefined
+
+declare function isA(arg: unknown): arg is 'A';
+>isA : (arg: unknown) => arg is "A"
+>arg : unknown
+
+declare function isB(arg: unknown): arg is 'B';
+>isB : (arg: unknown) => arg is "B"
+>arg : unknown
+
+declare function assert(condition: boolean): asserts condition;
+>assert : (condition: boolean) => asserts condition
+>condition : boolean
+
+function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
+>test1 : (foo: Foo) => {    value: {        type: 'A';    };    a?: number;}
+>foo : Foo
+>value : { type: 'A'; }
+>type : "A"
+>a : number | undefined
+
+    assert(doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA));
+>assert(doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA)) : void
+>assert : (condition: boolean) => asserts condition
+>doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA) : boolean
+>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+>foo : Foo
+>['value', 'type'] : ["value", "type"]
+>'value' : "value"
+>'type' : "type"
+>isA : (arg: unknown) => arg is "A"
+
+    return foo;
+>foo : { value: { type: "A"; }; a?: number | undefined; }
+}
+
+function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
+>test2 : (foo: Foo) => {    value: {        type: 'A';    };    a?: number;}
+>foo : Foo
+>value : { type: 'A'; }
+>type : "A"
+>a : number | undefined
+
+    assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB));
+>assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB)) : void
+>assert : (condition: boolean) => asserts condition
+>!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
+>doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
+>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+>foo : Foo
+>['value', 'type'] : ["value", "type"]
+>'value' : "value"
+>'type' : "type"
+>isB : (arg: unknown) => arg is "B"
+
+    return foo;
+>foo : { value: { type: "A"; }; a?: number | undefined; }
+}
+
