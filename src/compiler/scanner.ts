@@ -40,9 +40,15 @@ export function tokenIsIdentifierOrKeywordOrGreaterThan(token: SyntaxKind): bool
 }
 
 export interface Scanner {
+    /** @deprecated use {@link getTokenFullStart} */
     getStartPos(): number;
     getToken(): SyntaxKind;
+    getTokenFullStart(): number;
+    getTokenStart(): number;
+    getTokenEnd(): number;
+    /** @deprecated use {@link getTokenEnd} */
     getTextPos(): number;
+    /** @deprecated use {@link getTokenStart} */
     getTokenPos(): number;
     getTokenText(): string;
     getTokenValue(): string;
@@ -86,7 +92,9 @@ export interface Scanner {
     setOnError(onError: ErrorCallback | undefined): void;
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
+    /** @deprecated use {@link setTokenEnd} */
     setTextPos(textPos: number): void;
+    setTokenEnd(pos: number): void;
     /** @internal */
     setInJSDocType(inType: boolean): void;
     // Invokes the provided callback then unconditionally restores the scanner to the state it
@@ -989,9 +997,12 @@ export function createScanner(languageVersion: ScriptTarget,
     setText(text, start, length);
 
     var scanner: Scanner = {
+        getTokenFullStart: () => startPos,
         getStartPos: () => startPos,
+        getTokenEnd: () => pos,
         getTextPos: () => pos,
         getToken: () => token,
+        getTokenStart: () => tokenPos,
         getTokenPos: () => tokenPos,
         getTokenText: () => text.substring(tokenPos, pos),
         getTokenValue: () => tokenValue,
@@ -1027,7 +1038,8 @@ export function createScanner(languageVersion: ScriptTarget,
         setScriptTarget,
         setLanguageVariant,
         setOnError,
-        setTextPos,
+        setTokenEnd,
+        setTextPos: setTokenEnd,
         setInJSDocType,
         tryScan,
         lookAhead,
@@ -1039,7 +1051,7 @@ export function createScanner(languageVersion: ScriptTarget,
         Object.defineProperty(scanner, "__debugShowCurrentPositionInText", {
             get: () => {
                 const text = scanner.getText();
-                return text.slice(0, scanner.getStartPos()) + "║" + text.slice(scanner.getStartPos());
+                return text.slice(0, scanner.getTokenFullStart()) + "║" + text.slice(scanner.getTokenFullStart());
             },
         });
     }
@@ -2608,7 +2620,7 @@ export function createScanner(languageVersion: ScriptTarget,
     function setText(newText: string | undefined, start: number | undefined, length: number | undefined) {
         text = newText || "";
         end = length === undefined ? text.length : start! + length;
-        setTextPos(start || 0);
+        setTokenEnd(start || 0);
     }
 
     function setOnError(errorCallback: ErrorCallback | undefined) {
@@ -2623,7 +2635,7 @@ export function createScanner(languageVersion: ScriptTarget,
         languageVariant = variant;
     }
 
-    function setTextPos(textPos: number) {
+    function setTokenEnd(textPos: number) {
         Debug.assert(textPos >= 0);
         pos = textPos;
         startPos = textPos;

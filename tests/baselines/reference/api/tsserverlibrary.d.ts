@@ -8323,9 +8323,15 @@ declare namespace ts {
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
     type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
     interface Scanner {
+        /** @deprecated use {@link getTokenFullStart} */
         getStartPos(): number;
         getToken(): SyntaxKind;
+        getTokenFullStart(): number;
+        getTokenStart(): number;
+        getTokenEnd(): number;
+        /** @deprecated use {@link getTokenEnd} */
         getTextPos(): number;
+        /** @deprecated use {@link getTokenStart} */
         getTokenPos(): number;
         getTokenText(): string;
         getTokenValue(): string;
@@ -8356,7 +8362,9 @@ declare namespace ts {
         setOnError(onError: ErrorCallback | undefined): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
+        /** @deprecated use {@link setTokenEnd} */
         setTextPos(textPos: number): void;
+        setTokenEnd(pos: number): void;
         lookAhead<T>(callback: () => T): T;
         scanRange<T>(start: number, length: number, callback: () => T): T;
         tryScan<T>(callback: () => T): T;

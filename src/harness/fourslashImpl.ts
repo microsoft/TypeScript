@@ -4897,9 +4897,9 @@ function codeFence(code: string, lang?: string) {
 function getRangeOfIdentifierTouchingPosition(content: string, position: number): ts.TextRange | undefined {
     const scanner = ts.createScanner(ts.ScriptTarget.Latest, /*skipTrivia*/ true, ts.LanguageVariant.Standard, content);
     while (scanner.scan() !== ts.SyntaxKind.EndOfFileToken) {
-        const tokenStart = scanner.getStartPos();
-        if (scanner.getToken() === ts.SyntaxKind.Identifier && tokenStart <= position && scanner.getTextPos() >= position) {
-            return { pos: tokenStart, end: scanner.getTextPos() };
+        const tokenStart = scanner.getTokenFullStart();
+        if (scanner.getToken() === ts.SyntaxKind.Identifier && tokenStart <= position && scanner.getTokenEnd() >= position) {
+            return { pos: tokenStart, end: scanner.getTokenEnd() };
         }
         if (tokenStart > position) {
             break;

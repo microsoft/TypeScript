@@ -2150,8 +2150,8 @@ export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRang
 export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
     const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
     scanner.scan();
-    const start = scanner.getTokenPos();
-    return createTextSpanFromBounds(start, scanner.getTextPos());
+    const start = scanner.getTokenStart();
+    return createTextSpanFromBounds(start, scanner.getTokenEnd());
 }
 
 /** @internal */
@@ -9550,7 +9550,7 @@ export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean 
     // * a bigint can be scanned, and that when it is scanned, it is
     // * the full length of the input string (so the scanner is one character beyond the augmented input length)
     // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
-    return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
+    return success && result === SyntaxKind.BigIntLiteral && scanner.getTokenEnd() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
         && (!roundTripOnly || s === pseudoBigIntToString({ negative, base10Value: parsePseudoBigInt(scanner.getTokenValue()) }));
 }
 
