@@ -40,12 +40,9 @@ export function tokenIsIdentifierOrKeywordOrGreaterThan(token: SyntaxKind): bool
 }
 
 export interface Scanner {
-    /** @deprecated use getFullStart */
     getStartPos(): number;
     getToken(): SyntaxKind;
-    /** @deprecated use getEnd/getTokenEnd */
     getTextPos(): number;
-    /** @deprecated use getStart/getTokenStart */
     getTokenPos(): number;
     getTokenText(): string;
     getTokenValue(): string;
@@ -90,7 +87,6 @@ export interface Scanner {
     setOnError(onError: ErrorCallback | undefined): void;
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
-    /** @deprecated use setEnd/setTokenEnd */
     setTextPos(textPos: number): void;
     /** @internal */
     setInJSDocType(inType: boolean): void;
@@ -2471,13 +2467,9 @@ export function createScanner(languageVersion: ScriptTarget,
 
         let ch = codePointAt(text, pos);
         while (pos < end) {
-            if (isWhiteSpaceSingleLine(ch)) {
-                pos++;
-            }
-            else if (isIdentifierStart(ch, languageVersion)) {
-                let char = ch;
-                while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) || text.charCodeAt(pos) === CharacterCodes.minus)
-                    pos += charSize(char);
+            if (ch !== CharacterCodes.lineFeed && ch !== CharacterCodes.at && ch !== CharacterCodes.backtick && ch !== CharacterCodes.openBrace) {
+                // TODO: We can also be smarter about openBrace, backtick and at by looking at a tiny amount of context
+                pos++
             }
             else {
                 break;

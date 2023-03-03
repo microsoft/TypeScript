@@ -8350,6 +8350,7 @@ declare namespace ts {
         reScanInvalidIdentifier(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJsDocToken(): JSDocSyntaxKind;
+        scanBigJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
         getText(): string;
         setText(text: string | undefined, start?: number, length?: number): void;

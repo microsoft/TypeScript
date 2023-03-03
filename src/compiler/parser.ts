@@ -8577,7 +8577,7 @@ namespace Parser {
             let tagsEnd: number;
             let linkEnd: number;
             let commentsPos: number | undefined;
-            let comments: string[] = []; // TODO: Push this down!!
+            let comments: string[] = [];
             const parts: JSDocComment[] = [];
 
             // + 3 for leading /**, - 5 in total for /** */
