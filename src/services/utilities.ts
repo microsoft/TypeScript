@@ -23,6 +23,7 @@ import {
     first,
     firstDefined,
     firstOrUndefined,
+    forEach,
     identity,
     isArray,
     isWhiteSpaceLike,
@@ -92,6 +93,7 @@ import {
     isJSDocMemberName,
     isJSDocNameReference,
     isJSDocTemplateTag,
+    isJSDocTypedefTag,
     isJsxElement,
     isJsxExpression,
     isJsxText,
@@ -346,6 +348,7 @@ import {
     getJSDocReturnType,
     getJSDocType,
     getNameOfDeclaration,
+    hasJSDocNodes,
     idText,
     isBreakOrContinueStatement,
     isCallOrNewExpression,
@@ -4358,4 +4361,12 @@ export function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (Ca
                 return existingBigInts.has(pseudoBigIntToString(value));
         }
     }
+}
+
+/** @internal */
+export function getJSDocTypedefNode(node: Node): JSDocTypedefTag | undefined {
+    if (hasJSDocNodes(node)) {
+        return forEach(node.jsDoc, (node) => node.tags?.find(isJSDocTypedefTag));
+    }
+    return undefined;
 }

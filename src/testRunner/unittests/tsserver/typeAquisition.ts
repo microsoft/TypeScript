@@ -1,8 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost } from "../virtualFileSystemWithWatch";
 import {
+    baselineTsserverLogs,
     checkProjectActualFiles,
     configuredProjectAt,
+    createLoggerWithInMemoryLogs,
     createProjectService,
     TestTypingsInstaller,
     toExternalFile,
@@ -51,10 +53,15 @@ describe("unittests:: tsserver:: prefer typings to js", () => {
             content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: ["node_modules"] })
         };
         const host = createServerHost([f1, barjs, barTypings, config]);
-        const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller(typingsCacheLocation, /*throttleLimit*/ 5, host) });
+        const logger = createLoggerWithInMemoryLogs(host);
+        const projectService = createProjectService(host, {
+            typingsInstaller: new TestTypingsInstaller(typingsCacheLocation, /*throttleLimit*/ 5, host, logger),
+            logger,
+        });
 
         projectService.openClientFile(f1.path);
-        projectService.checkNumberOfProjects({ configuredProjects: 1 });
         checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, barTypings.path, config.path]);
+
+        baselineTsserverLogs("typeAquisition", "prefer typings in second pass", projectService);
     });
 });

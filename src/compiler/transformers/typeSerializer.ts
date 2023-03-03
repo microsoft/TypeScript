@@ -1,5 +1,4 @@
 import * as Debug from "../debug";
-import { factory } from "../factory/nodeFactory";
 import {
     isBinaryExpression,
     isConditionalExpression,
@@ -143,6 +142,7 @@ export interface RuntimeTypeSerializer {
 /** @internal */
 export function createRuntimeTypeSerializer(context: TransformationContext): RuntimeTypeSerializer {
     const {
+        factory,
         hoistVariableDeclaration
     } = context;
 

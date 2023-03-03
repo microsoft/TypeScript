@@ -2,7 +2,6 @@ import {
     addRange,
     some,
 } from "../compiler/core";
-import { Push } from "../compiler/corePublic";
 import { Diagnostics } from "../compiler/diagnosticInformationMap.generated";
 import {
     isBinaryExpression,
@@ -67,6 +66,7 @@ import {
 } from "../compiler/utilitiesPublic";
 import {
     compilerOptionsIndicateEsModules,
+    getJSDocTypedefNode,
     hasPropertyAccessExpressionWithName,
     parameterShouldGetTypeFromJSDoc,
     programContainsEsModules,
@@ -127,6 +127,11 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
                 }
             }
 
+            const jsdocTypedefNode = getJSDocTypedefNode(node);
+            if (jsdocTypedefNode) {
+                diags.push(createDiagnosticForNode(jsdocTypedefNode, Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type));
+            }
+
             if (parameterShouldGetTypeFromJSDoc(node)) {
                 diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
             }
@@ -176,7 +181,7 @@ function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Id
     }
 }
 
-function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
+function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
     // need to check function before checking map so that deeper levels of nested callbacks are checked
     if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
         diags.push(createDiagnosticForNode(

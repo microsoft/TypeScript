@@ -1,13 +1,4 @@
 Info 0    [00:01:14.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:15.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/container/compositeExec/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -365,12 +356,15 @@ declare namespace container {
 ======================================================================
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:01:15.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:16.000] Search path: /user/username/projects/container/compositeExec
 Info 3    [00:01:17.000] For info: /user/username/projects/container/compositeExec/index.ts :: Config file name: /user/username/projects/container/compositeExec/tsconfig.json
 Info 4    [00:01:18.000] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
@@ -416,9 +410,9 @@ Info 15   [00:01:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 16   [00:01:30.000] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 17   [00:01:31.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info 18   [00:01:32.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
-	/user/username/projects/container/compositeExec/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
+	/user/username/projects/container/compositeExec/index.ts SVC-1-0 "namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -446,32 +440,32 @@ Info 26   [00:01:45.000] -----------------------------------------------
 Info 26   [00:01:46.000] Open files: 
 Info 26   [00:01:47.000] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
 Info 26   [00:01:48.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 26   [00:01:49.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/container/compositeexec/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/container/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/container/compositeexec/tsconfig.json: *new*
+  {}
+/user/username/projects/container/lib/tsconfig.json: *new*
+  {}
+/user/username/projects/container/lib/index.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/container/tsconfig.json: *new*
+  {}
+
+Before request
+
 Info 27   [00:01:50.000] request:
     {
       "command": "open",
@@ -481,28 +475,6 @@ Info 27   [00:01:50.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 28   [00:01:51.000] Search path: /user/username/projects/temp
 Info 29   [00:01:52.000] For info: /user/username/projects/temp/temp.ts :: No config files found.
 Info 30   [00:01:53.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -513,8 +485,8 @@ Info 34   [00:01:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 35   [00:01:58.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 36   [00:01:59.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 37   [00:02:00.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/temp/temp.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/temp/temp.ts SVC-1-0 "let x = 10"
 
 
 	../../../../a/lib/lib.d.ts
@@ -540,6 +512,10 @@ Info 39   [00:02:12.000] 	FileName: /user/username/projects/container/compositeE
 Info 39   [00:02:13.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
 Info 39   [00:02:14.000] 	FileName: /user/username/projects/temp/temp.ts ProjectRootPath: undefined
 Info 39   [00:02:15.000] 		Projects: /dev/null/inferredProject1*
+Info 39   [00:02:16.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -547,11 +523,11 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json:
+/user/username/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json:
+/user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/temp/node_modules/@types:
+/user/username/projects/temp/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -566,12 +542,8 @@ FsWatches::
 /user/username/projects/container/tsconfig.json:
   {}
 
-FsWatchesRecursive::
+Before request
 
-Info 39   [00:02:16.000] response:
-    {
-      "responseRequired": false
-    }
 Info 40   [00:02:17.000] request:
     {
       "command": "rename",
@@ -583,34 +555,6 @@ Info 40   [00:02:17.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
 Info 41   [00:02:18.000] Search path: /user/username/projects/container/lib
 Info 42   [00:02:19.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
 Info 43   [00:02:20.000] Creating configuration project /user/username/projects/container/lib/tsconfig.json
@@ -622,8 +566,8 @@ Info 48   [00:02:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 49   [00:02:26.000] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 50   [00:02:27.000] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
 Info 51   [00:02:28.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -671,20 +615,23 @@ Info 57   [00:02:34.000] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info 58   [00:02:35.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info 59   [00:02:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info 60   [00:02:37.000] Finishing updateGraphWorker: Project: /user/username/projects/container/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 61   [00:02:38.000] Different program with same set of files
-Info 62   [00:02:39.000] Creating configuration project /user/username/projects/container/exec/tsconfig.json
-Info 63   [00:02:40.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
-Info 64   [00:02:41.000] Starting updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json
-Info 65   [00:02:42.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 66   [00:02:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 67   [00:02:44.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 68   [00:02:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 69   [00:02:46.000] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 70   [00:02:47.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
-Info 71   [00:02:48.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/container/lib/index.ts
-	/user/username/projects/container/exec/index.ts
+Info 61   [00:02:38.000] Project '/user/username/projects/container/tsconfig.json' (Configured)
+Info 62   [00:02:39.000] 	Files (0)
+
+Info 63   [00:02:40.000] -----------------------------------------------
+Info 64   [00:02:41.000] Creating configuration project /user/username/projects/container/exec/tsconfig.json
+Info 65   [00:02:42.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
+Info 66   [00:02:43.000] Starting updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json
+Info 67   [00:02:44.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 68   [00:02:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 69   [00:02:46.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 70   [00:02:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 71   [00:02:48.000] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 72   [00:02:49.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
+Info 73   [00:02:50.000] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\r\n    export const myConst = 30;\r\n}"
+	/user/username/projects/container/exec/index.ts Text-1 "namespace container {\r\n    export function getMyConst() {\r\n        return myConst;\r\n    }\r\n}"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -694,46 +641,10 @@ Info 71   [00:02:48.000] 	Files (3)
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 72   [00:02:49.000] -----------------------------------------------
-Info 73   [00:02:50.000] Search path: /user/username/projects/container/lib
-Info 74   [00:02:51.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
-  {}
-/user/username/projects/container/exec/index.ts:
-  {}
-
-FsWatchesRecursive::
-
-Info 75   [00:02:52.000] response:
+Info 74   [00:02:51.000] -----------------------------------------------
+Info 75   [00:02:52.000] Search path: /user/username/projects/container/lib
+Info 76   [00:02:53.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+Info 77   [00:02:54.000] response:
     {
       "response": {
         "info": {
@@ -811,41 +722,66 @@ Info 75   [00:02:52.000] response:
       },
       "responseRequired": true
     }
-Info 76   [00:02:53.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 77   [00:02:54.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 78   [00:02:55.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
-Info 79   [00:02:56.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
-Info 79   [00:02:57.000] 	Files (3)
+After request
 
-Info 79   [00:02:58.000] -----------------------------------------------
-Info 79   [00:02:59.000] Project '/user/username/projects/container/tsconfig.json' (Configured)
-Info 79   [00:03:00.000] 	Files (0)
+PolledWatches::
+/user/username/projects/container/compositeexec/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/temp/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/lib/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/container/exec/node_modules/@types: *new*
+  {"pollingInterval":500}
 
-Info 79   [00:03:01.000] -----------------------------------------------
-Info 79   [00:03:02.000] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
-Info 79   [00:03:03.000] 	Files (2)
+FsWatches::
+/user/username/projects/container/compositeexec/tsconfig.json:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/lib/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/container/tsconfig.json:
+  {}
+/user/username/projects/container/exec/tsconfig.json: *new*
+  {}
+/user/username/projects/container/exec/index.ts: *new*
+  {}
 
-Info 79   [00:03:04.000] -----------------------------------------------
-Info 79   [00:03:05.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
-Info 79   [00:03:06.000] 	Files (3)
+Info 78   [00:02:55.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 79   [00:02:56.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 80   [00:02:57.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
+Info 81   [00:02:58.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
+Info 81   [00:02:59.000] 	Files (3)
 
-Info 79   [00:03:07.000] -----------------------------------------------
-Info 79   [00:03:08.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 79   [00:03:09.000] 	Files (2)
+Info 81   [00:03:00.000] -----------------------------------------------
+Info 81   [00:03:01.000] Project '/user/username/projects/container/tsconfig.json' (Configured)
+Info 81   [00:03:02.000] 	Files (0)
 
-Info 79   [00:03:10.000] -----------------------------------------------
-Info 79   [00:03:11.000] Open files: 
-Info 79   [00:03:12.000] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
-Info 79   [00:03:13.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
-Info 79   [00:03:14.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/temp/temp.ts"
-      },
-      "seq": 4,
-      "type": "request"
-    }
+Info 81   [00:03:03.000] -----------------------------------------------
+Info 81   [00:03:04.000] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
+Info 81   [00:03:05.000] 	Files (2)
+
+Info 81   [00:03:06.000] -----------------------------------------------
+Info 81   [00:03:07.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
+Info 81   [00:03:08.000] 	Files (3)
+
+Info 81   [00:03:09.000] -----------------------------------------------
+Info 81   [00:03:10.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 81   [00:03:11.000] 	Files (2)
+
+Info 81   [00:03:12.000] -----------------------------------------------
+Info 81   [00:03:13.000] Open files: 
+Info 81   [00:03:14.000] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
+Info 81   [00:03:15.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
 Before request
 
 PolledWatches::
@@ -859,6 +795,12 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/container/compositeexec/tsconfig.json:
@@ -875,30 +817,26 @@ FsWatches::
   {}
 /user/username/projects/container/exec/index.ts:
   {}
-/user/username/projects/temp/temp.ts:
+/user/username/projects/temp/temp.ts: *new*
   {}
 
-FsWatchesRecursive::
-
-Info 80   [00:03:15.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
-Info 81   [00:03:16.000] Search path: /user/username/projects/temp
-Info 82   [00:03:17.000] For info: /user/username/projects/temp/temp.ts :: No config files found.
-Info 83   [00:03:18.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 84   [00:03:19.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 85   [00:03:20.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 86   [00:03:21.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 87   [00:03:22.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 88   [00:03:23.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/temp/temp.ts
-
-
-	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
-	temp.ts
-	  Root file specified for compilation
-
-Info 89   [00:03:24.000] -----------------------------------------------
+Info 81   [00:03:16.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/temp/temp.ts"
+      },
+      "seq": 4,
+      "type": "request"
+    }
+Info 82   [00:03:17.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
+Info 83   [00:03:18.000] Search path: /user/username/projects/temp
+Info 84   [00:03:19.000] For info: /user/username/projects/temp/temp.ts :: No config files found.
+Info 85   [00:03:20.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 86   [00:03:21.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 87   [00:03:22.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 88   [00:03:23.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info 89   [00:03:24.000] Same program as before
 Info 90   [00:03:25.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info 90   [00:03:26.000] 	Files (3)
 
@@ -924,6 +862,10 @@ Info 90   [00:03:41.000] 	FileName: /user/username/projects/container/compositeE
 Info 90   [00:03:42.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
 Info 90   [00:03:43.000] 	FileName: /user/username/projects/temp/temp.ts ProjectRootPath: undefined
 Info 90   [00:03:44.000] 		Projects: /dev/null/inferredProject1*
+Info 90   [00:03:45.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
@@ -937,9 +879,9 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json:
+/user/username/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json:
+/user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -958,12 +900,10 @@ FsWatches::
 /user/username/projects/container/exec/index.ts:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/temp/temp.ts:
+  {}
 
-Info 90   [00:03:45.000] response:
-    {
-      "responseRequired": false
-    }
 Info 91   [00:03:46.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/index.ts 500 undefined WatchType: Closed Script info
 Info 92   [00:03:47.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info 92   [00:03:48.000] 	Files (3)
@@ -1012,15 +952,6 @@ Info 95   [00:04:21.000] 	Files (2)
 
 Info 95   [00:04:22.000] -----------------------------------------------
 Info 95   [00:04:23.000] Open files: 
-Info 95   [00:04:24.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/temp/temp.ts"
-      },
-      "seq": 5,
-      "type": "request"
-    }
 Before request
 
 PolledWatches::
@@ -1034,6 +965,12 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/container/compositeexec/tsconfig.json:
@@ -1050,13 +987,20 @@ FsWatches::
   {}
 /user/username/projects/container/exec/index.ts:
   {}
-/user/username/projects/container/compositeexec/index.ts:
+/user/username/projects/container/compositeexec/index.ts: *new*
   {}
-/user/username/projects/temp/temp.ts:
+/user/username/projects/temp/temp.ts: *new*
   {}
 
-FsWatchesRecursive::
-
+Info 95   [00:04:24.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/temp/temp.ts"
+      },
+      "seq": 5,
+      "type": "request"
+    }
 Info 96   [00:04:25.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
 Info 97   [00:04:26.000] Search path: /user/username/projects/temp
 Info 98   [00:04:27.000] For info: /user/username/projects/temp/temp.ts :: No config files found.
@@ -1064,21 +1008,10 @@ Info 99   [00:04:28.000] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info 100  [00:04:29.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 101  [00:04:30.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 102  [00:04:31.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 103  [00:04:32.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 104  [00:04:33.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/temp/temp.ts
-
-
-	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
-	temp.ts
-	  Root file specified for compilation
-
-Info 105  [00:04:34.000] -----------------------------------------------
-Info 106  [00:04:35.000] `remove Project::
-Info 107  [00:04:36.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
-Info 108  [00:04:37.000] 	Files (3)
+Info 103  [00:04:32.000] Same program as before
+Info 104  [00:04:33.000] `remove Project::
+Info 105  [00:04:34.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
+Info 106  [00:04:35.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/container/lib/index.ts
 	/user/username/projects/container/compositeExec/index.ts
@@ -1091,25 +1024,25 @@ Info 108  [00:04:37.000] 	Files (3)
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 109  [00:04:38.000] -----------------------------------------------
-Info 110  [00:04:39.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info 111  [00:04:40.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info 112  [00:04:41.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info 113  [00:04:42.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info 114  [00:04:43.000] `remove Project::
-Info 115  [00:04:44.000] Project '/user/username/projects/container/tsconfig.json' (Configured)
-Info 116  [00:04:45.000] 	Files (0)
+Info 107  [00:04:36.000] -----------------------------------------------
+Info 108  [00:04:37.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info 109  [00:04:38.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info 110  [00:04:39.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info 111  [00:04:40.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info 112  [00:04:41.000] `remove Project::
+Info 113  [00:04:42.000] Project '/user/username/projects/container/tsconfig.json' (Configured)
+Info 114  [00:04:43.000] 	Files (0)
 
 
 
-Info 117  [00:04:46.000] -----------------------------------------------
-Info 118  [00:04:47.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
-Info 119  [00:04:48.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
-Info 120  [00:04:49.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
-Info 121  [00:04:50.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
-Info 122  [00:04:51.000] `remove Project::
-Info 123  [00:04:52.000] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
-Info 124  [00:04:53.000] 	Files (2)
+Info 115  [00:04:44.000] -----------------------------------------------
+Info 116  [00:04:45.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
+Info 117  [00:04:46.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
+Info 118  [00:04:47.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
+Info 119  [00:04:48.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
+Info 120  [00:04:49.000] `remove Project::
+Info 121  [00:04:50.000] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
+Info 122  [00:04:51.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/container/lib/index.ts
 
@@ -1119,14 +1052,14 @@ Info 124  [00:04:53.000] 	Files (2)
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 125  [00:04:54.000] -----------------------------------------------
-Info 126  [00:04:55.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info 127  [00:04:56.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info 128  [00:04:57.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info 129  [00:04:58.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info 130  [00:04:59.000] `remove Project::
-Info 131  [00:05:00.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
-Info 132  [00:05:01.000] 	Files (3)
+Info 123  [00:04:52.000] -----------------------------------------------
+Info 124  [00:04:53.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info 125  [00:04:54.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info 126  [00:04:55.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info 127  [00:04:56.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info 128  [00:04:57.000] `remove Project::
+Info 129  [00:04:58.000] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
+Info 130  [00:04:59.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/container/lib/index.ts
 	/user/username/projects/container/exec/index.ts
@@ -1139,40 +1072,65 @@ Info 132  [00:05:01.000] 	Files (3)
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 133  [00:05:02.000] -----------------------------------------------
-Info 134  [00:05:03.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
-Info 135  [00:05:04.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
-Info 136  [00:05:05.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 137  [00:05:06.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 138  [00:05:07.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 139  [00:05:08.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info 140  [00:05:09.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/index.ts 500 undefined WatchType: Closed Script info
-Info 141  [00:05:10.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/index.ts 500 undefined WatchType: Closed Script info
-Info 142  [00:05:11.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
-Info 143  [00:05:12.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 143  [00:05:13.000] 	Files (2)
+Info 131  [00:05:00.000] -----------------------------------------------
+Info 132  [00:05:01.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
+Info 133  [00:05:02.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
+Info 134  [00:05:03.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 135  [00:05:04.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 136  [00:05:05.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 137  [00:05:06.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
+Info 138  [00:05:07.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/index.ts 500 undefined WatchType: Closed Script info
+Info 139  [00:05:08.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/index.ts 500 undefined WatchType: Closed Script info
+Info 140  [00:05:09.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
+Info 141  [00:05:10.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 141  [00:05:11.000] 	Files (2)
 
-Info 143  [00:05:14.000] -----------------------------------------------
-Info 143  [00:05:15.000] Open files: 
-Info 143  [00:05:16.000] 	FileName: /user/username/projects/temp/temp.ts ProjectRootPath: undefined
-Info 143  [00:05:17.000] 		Projects: /dev/null/inferredProject1*
+Info 141  [00:05:12.000] -----------------------------------------------
+Info 141  [00:05:13.000] Open files: 
+Info 141  [00:05:14.000] 	FileName: /user/username/projects/temp/temp.ts ProjectRootPath: undefined
+Info 141  [00:05:15.000] 		Projects: /dev/null/inferredProject1*
+Info 141  [00:05:16.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json:
+/user/username/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json:
+/user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/user/username/projects/container/compositeexec/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/lib/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/exec/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
 
-FsWatchesRecursive::
-
-Info 143  [00:05:18.000] response:
-    {
-      "responseRequired": false
-    }
+FsWatches *deleted*::
+/user/username/projects/container/compositeexec/tsconfig.json:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/lib/index.ts:
+  {}
+/user/username/projects/container/tsconfig.json:
+  {}
+/user/username/projects/container/exec/tsconfig.json:
+  {}
+/user/username/projects/container/exec/index.ts:
+  {}
+/user/username/projects/container/compositeexec/index.ts:
+  {}
+/user/username/projects/temp/temp.ts:
+  {}

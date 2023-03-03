@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "5.0";
+    const versionMajorMinor = "5.1";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -2665,14 +2665,12 @@ declare namespace ts {
     }) | (void & {
         __escapedIdentifier: void;
     }) | InternalSymbolName;
-    /** ReadonlyMap where keys are `__String`s. */
-    interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
-    }
-    /** Map where keys are `__String`s. */
-    interface UnderscoreEscapedMap<T> extends Map<__String, T> {
-    }
+    /** @deprecated Use ReadonlyMap<__String, T> instead. */
+    type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
+    /** @deprecated Use Map<__String, T> instead. */
+    type UnderscoreEscapedMap<T> = Map<__String, T>;
     /** SymbolTable based on ES6 Map interface. */
-    type SymbolTable = UnderscoreEscapedMap<Symbol>;
+    type SymbolTable = Map<__String, Symbol>;
     enum TypeFlags {
         Any = 1,
         Unknown = 2,
@@ -4182,7 +4180,6 @@ declare namespace ts {
         noEmitHelpers?: boolean;
     }
     interface GetEffectiveTypeRootsHost {
-        directoryExists?(directoryName: string): boolean;
         getCurrentDirectory?(): string;
     }
     interface TextSpan {
@@ -6089,8 +6086,6 @@ declare namespace ts {
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         getFileReferences(fileName: string): ReferenceEntry[];
-        /** @deprecated */
-        getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined;
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;

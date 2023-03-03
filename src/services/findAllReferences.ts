@@ -23,7 +23,6 @@ import {
     tryAddToSet,
     tryCast,
 } from "../compiler/core";
-import { Push } from "../compiler/corePublic";
 import * as Debug from "../compiler/debug";
 import {
     isBinaryExpression,
@@ -1295,7 +1294,7 @@ export namespace Core {
             readonly cancellationToken: CancellationToken,
             readonly searchMeaning: SemanticMeaning,
             readonly options: Options,
-            private readonly result: Push<SymbolAndEntries>) {
+            private readonly result: SymbolAndEntries[]) {
         }
 
         includesSourceFile(sourceFile: SourceFile): boolean {

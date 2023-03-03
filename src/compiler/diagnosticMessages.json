@@ -5246,6 +5246,10 @@
         "category": "Message",
         "code": 6264
     },
+    "Resolving type reference directive for program that specifies custom typeRoots, skipping lookup in 'node_modules' folder.": {
+        "category": "Message",
+        "code": 6265
+    },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
         "category": "Message",
@@ -6694,7 +6698,15 @@
         "category": "Suggestion",
         "code": 80008
     },
-
+    "JSDoc typedef may be converted to TypeScript type.": {
+        "category": "Suggestion",
+        "code": 80009
+    },
+    "JSDoc typedefs may be converted to TypeScript types.": {
+        "category": "Suggestion",
+        "code": 80010
+    },
+    
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -7551,6 +7563,14 @@
     "Use `Number.isNaN` in all conditions.": {
         "category": "Message",
         "code": 95175
+    },
+    "Convert typedef to TypeScript type.": {
+        "category": "Message",
+        "code": 95176
+    },
+    "Convert all typedef to TypeScript types.": {
+        "category": "Message",
+        "code": 95177
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

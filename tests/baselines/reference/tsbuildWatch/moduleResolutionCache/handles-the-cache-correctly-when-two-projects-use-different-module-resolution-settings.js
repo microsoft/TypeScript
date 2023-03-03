@@ -108,26 +108,24 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/project1/node_modules/file/package.json:
+/user/username/projects/myproject/project1/node_modules/file/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/foo/package.json:
+/user/username/projects/myproject/node_modules/@types/foo/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/bar/package.json:
+/user/username/projects/myproject/node_modules/@types/bar/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/project1/tsconfig.json:
+/user/username/projects/myproject/project1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/project1/index.ts:
+/user/username/projects/myproject/project1/index.ts: *new*
   {}
-/user/username/projects/myproject/project2/tsconfig.json:
+/user/username/projects/myproject/project2/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/project2/index.ts:
+/user/username/projects/myproject/project2/index.ts: *new*
   {}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -332,28 +330,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project1/index.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/project1/node_modules/file/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/foo/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/bar/package.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/user/username/projects/myproject/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/project1/index.ts:
-  {}
-/user/username/projects/myproject/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/project2/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

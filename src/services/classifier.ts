@@ -8,7 +8,6 @@ import {
     lastOrUndefined,
     some,
 } from "../compiler/core";
-import { Push } from "../compiler/corePublic";
 import * as Debug from "../compiler/debug";
 import {
     isIdentifier,
@@ -328,7 +327,7 @@ function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplat
     }
 }
 
-function pushEncodedClassification(start: number, end: number, offset: number, classification: ClassificationType, result: Push<number>): void {
+function pushEncodedClassification(start: number, end: number, offset: number, classification: ClassificationType, result: number[]): void {
     if (classification === ClassificationType.whiteSpace) {
         // Don't bother with whitespace classifications.  They're not needed.
         return;

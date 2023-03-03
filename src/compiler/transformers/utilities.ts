@@ -21,6 +21,7 @@ import {
     createExternalHelpersImportDeclarationIfNeeded, getNodeForGeneratedName,
 } from "../factory/utilities";
 import {
+    __String,
     AccessorDeclaration,
     AllDecorators,
     BinaryOperator,
@@ -67,7 +68,6 @@ import {
     SuperCall,
     SyntaxKind,
     TransformationContext,
-    UnderscoreEscapedMap,
     VariableDeclaration,
     VariableStatement,
 } from "../types";
@@ -176,7 +176,7 @@ export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): bool
 /** @internal */
 export function collectExternalModuleInfo(context: TransformationContext, sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
     const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-    const exportSpecifiers = createMultiMap<ExportSpecifier>();
+    const exportSpecifiers = createMultiMap<string, ExportSpecifier>();
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
     let exportedNames: Identifier[] | undefined;
@@ -668,7 +668,7 @@ export interface PrivateEnvironment<TData, TEntry> {
     /**
      * A mapping of private names to information needed for transformation.
      */
-    identifiers?: UnderscoreEscapedMap<TEntry>;
+    identifiers?: Map<__String, TEntry>;
 
     /**
      * A mapping of generated private names to information needed for transformation.

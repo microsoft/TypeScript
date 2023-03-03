@@ -48,7 +48,6 @@ export type PerformanceObserverConstructor = new (callback: (list: PerformanceOb
 export type PerformanceEntryList = PerformanceEntry[];
 
 // Browser globals for the Web Performance User Timings API
-declare const process: any;
 declare const performance: Performance | undefined;
 declare const PerformanceObserver: PerformanceObserverConstructor | undefined;
 
@@ -82,10 +81,8 @@ function tryGetWebPerformanceHooks(): PerformanceHooks | undefined {
 function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
     if (isNodeLikeSystem()) {
         try {
-            let performance: Performance;
-            const { performance: nodePerformance, PerformanceObserver } = require("perf_hooks") as typeof import("perf_hooks");
-            if (hasRequiredAPI(nodePerformance as unknown as Performance, PerformanceObserver)) {
-                performance = nodePerformance as unknown as Performance;
+            const { performance, PerformanceObserver } = require("perf_hooks") as typeof import("perf_hooks");
+            if (hasRequiredAPI(performance, PerformanceObserver)) {
                 return {
                     // By default, only write native events when generating a cpu profile or using the v8 profiler.
                     shouldWriteNativeEvents: false,

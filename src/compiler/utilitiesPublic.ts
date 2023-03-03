@@ -14,10 +14,7 @@ import {
     sortAndDeduplicate,
     tryCast,
 } from "./core";
-import {
-    Push,
-    SortedReadonlyArray,
-} from "./corePublic";
+import { SortedReadonlyArray } from "./corePublic";
 import * as Debug from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
@@ -651,7 +648,7 @@ export function validateLocaleAndSetLanguage(
     // Set the UI locale for string collation
     setUILocale(locale);
 
-    function trySetLanguageAndTerritory(language: string, territory: string | undefined, errors?: Push<Diagnostic>): boolean {
+    function trySetLanguageAndTerritory(language: string, territory: string | undefined, errors?: Diagnostic[]): boolean {
         const compilerFilePath = normalizePath(sys.getExecutingFilePath());
         const containingDirectoryPath = getDirectoryPath(compilerFilePath);
 

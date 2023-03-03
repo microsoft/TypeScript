@@ -75,23 +75,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
 PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
+/user/username/projects/noemitonerror/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
+/user/username/projects/noemitonerror/tsconfig.json: *new*
   {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
+/user/username/projects/noemitonerror/shared/types/db.ts: *new*
   {}
-/user/username/projects/noemitonerror/src/main.ts:
+/user/username/projects/noemitonerror/src/main.ts: *new*
   {}
-/user/username/projects/noemitonerror/src/other.ts:
+/user/username/projects/noemitonerror/src/other.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror:
+/user/username/projects/noemitonerror: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -196,26 +196,6 @@ Input::
 
 Output::
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -251,26 +231,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -408,26 +368,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
@@ -534,26 +474,6 @@ Input::
 
 Output::
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -587,26 +507,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -701,26 +601,6 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
-
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
 
 exitCode:: ExitStatus.undefined
 

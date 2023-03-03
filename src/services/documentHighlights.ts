@@ -13,7 +13,6 @@ import {
     toArray,
     tryCast,
 } from "../compiler/core";
-import { Push } from "../compiler/corePublic";
 import * as Debug from "../compiler/debug";
 import {
     isAwaitExpression,
@@ -350,7 +349,7 @@ function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFl
     }
 }
 
-function pushKeywordIf(keywordList: Push<Node>, token: Node | undefined, ...expected: SyntaxKind[]): boolean {
+function pushKeywordIf(keywordList: Node[], token: Node | undefined, ...expected: SyntaxKind[]): boolean {
     if (token && contains(expected, token.kind)) {
         keywordList.push(token);
         return true;

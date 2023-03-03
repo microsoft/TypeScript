@@ -1680,7 +1680,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
     let structureIsReused: StructureIsReused;
     tracing?.push(tracing.Phase.Program, "tryReuseStructureFromOldProgram", {});
-    structureIsReused = tryReuseStructureFromOldProgram(); // eslint-disable-line prefer-const
+    structureIsReused = tryReuseStructureFromOldProgram();
     tracing?.pop();
     if (structureIsReused !== StructureIsReused.Completely) {
         processingDefaultLibFiles = [];
@@ -4371,7 +4371,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const version = typeScriptVersion || versionMajorMinor;
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
-            if (ignoreDeprecations === DeprecationVersion.v5_0 && (version === DeprecationVersion.v5_0 || version === DeprecationVersion.v5_5)) {
+            if (ignoreDeprecations === DeprecationVersion.v5_0 && version.startsWith("5.")) {
                 return;
             }
             else if (reportInvalidIgnoreDeprecations) {
