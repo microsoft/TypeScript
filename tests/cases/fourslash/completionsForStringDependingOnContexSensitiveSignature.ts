@@ -5,7 +5,7 @@
 ////   send: (ev: TEvent) => void
 //// }
 //// 
-//// type Action<TContext> {
+//// type Action<TContext> = {
 ////   (ctx: TContext): void
 //// }
 //// 
