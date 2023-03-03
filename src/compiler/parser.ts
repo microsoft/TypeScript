@@ -8703,9 +8703,9 @@ namespace Parser {
 
             function removeTrailingWhitespace(comments: string[]) {
                 while (comments.length) { // TODO: Bad code is still bad; should operate on an entire string
-                    const trimmed = comments[comments.length - 1].trim()
+                    const trimmed = comments[comments.length - 1].trim();
                     if (trimmed === "") {
-                        comments.pop()
+                        comments.pop();
                     }
                     else if (trimmed.length < comments[comments.length - 1].length) {
                         comments[comments.length - 1] = comments[comments.length - 1].trimEnd();
@@ -8922,7 +8922,7 @@ namespace Parser {
                                 if (margin !== undefined && indent + whitespace.length > margin) {
                                     comments.push(whitespace.slice(margin - indent));
                                 }
-                                indent += whitespace.length; // TODO: What happens if we start saving comments here? We don't support margins like  |                    * text text | do we?
+                                indent += whitespace.length; // TODO: What happens if we start saving comments here? We don't support margins like | <margin here> * text text | do we?
                             }
                             break;
                         case SyntaxKind.OpenBraceToken:

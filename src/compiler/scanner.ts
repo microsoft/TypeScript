@@ -2469,7 +2469,7 @@ export function createScanner(languageVersion: ScriptTarget,
         while (pos < end) {
             if (ch !== CharacterCodes.lineFeed && ch !== CharacterCodes.at && ch !== CharacterCodes.backtick && ch !== CharacterCodes.openBrace) {
                 // TODO: We can also be smarter about openBrace, backtick and at by looking at a tiny amount of context
-                pos++
+                pos++;
             }
             else {
                 break;
