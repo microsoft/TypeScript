@@ -186,3 +186,45 @@ async function brokenExample<AcceptableKeyType extends string = string>(structur
   const structure = await structurePromise;
   structure[key] = 1;
 }
+
+// repro from #46543
+
+type SelectAndInclude = {
+  select: any;
+  include: any;
+};
+type HasSelect = {
+  select: any;
+};
+type HasInclude = {
+  include: any;
+};
+
+type CheckSelect<T, S, U> = T extends SelectAndInclude
+  ? "Please either choose `select` or `include`"
+  : T extends HasSelect
+  ? U
+  : T extends HasInclude
+  ? U
+  : S;
+
+declare function findMany<T extends { select?: string; include?: string }>(
+  args: T
+): CheckSelect<T, Promise<1>, Promise<2>>;
+
+async function findManyWrapper<
+  T extends { select?: string; include?: string }
+>(args: T) {
+  const result = await findMany(args);
+  return result;
+}
+
+async function mainFindMany() {
+  const shouldBeErrorText = await findManyWrapper({
+    select: "foo",
+    include: "bar",
+  });
+  const itsOne = await findManyWrapper({});
+  const itsTwo1 = await findManyWrapper({ select: "foo" });
+  const itsTwo2 = await findManyWrapper({ include: "bar" });
+}
