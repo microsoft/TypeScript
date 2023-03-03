@@ -741,83 +741,12 @@ export class TestState {
         }
     }
 
-    public verifyGoToDefinitionIs(endMarker: ArrayOrSingle<string>) {
-        this.verifyGoToXWorker(/*startMarker*/ undefined, toArray(endMarker), () => this.getGoToDefinition());
-    }
-
     private getGoToDefinition(): readonly ts.DefinitionInfo[] {
         return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
     }
 
     private getGoToDefinitionAndBoundSpan(): ts.DefinitionInfoAndBoundSpan {
         return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition)!;
-    }
-
-    private verifyGoToXWorker(startMarker: string | undefined, endMarkers: readonly (string | { marker?: string, file?: string, unverified?: boolean })[], getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined, startMarkerName?: string) {
-        const defs = getDefs();
-        let definitions: readonly ts.DefinitionInfo[];
-        let testName: string;
-
-        if (!defs || ts.isArray(defs)) {
-            definitions = defs as ts.DefinitionInfo[] || [];
-            testName = "goToDefinitions";
-        }
-        else {
-            this.verifyDefinitionTextSpan(defs, startMarkerName!);
-
-            definitions = defs.definitions!; // TODO: GH#18217
-            testName = "goToDefinitionsAndBoundSpan";
-        }
-
-        if (endMarkers.length !== definitions.length) {
-            const markers = definitions.map(d => ({ text: "HERE", fileName: d.fileName, position: d.textSpan.start }));
-            const actual = this.renderMarkers(markers);
-            this.raiseError(`${testName} failed - expected to find ${endMarkers.length} definitions but got ${definitions.length}\n\n${actual}`);
-        }
-
-        ts.zipWith(endMarkers, definitions, (endMarkerOrFileResult, definition, i) => {
-            const markerName = typeof endMarkerOrFileResult === "string" ? endMarkerOrFileResult : endMarkerOrFileResult.marker;
-            const marker = markerName !== undefined ? this.getMarkerByName(markerName) : undefined;
-            const expectedFileName = marker?.fileName || typeof endMarkerOrFileResult !== "string" && endMarkerOrFileResult.file;
-            ts.Debug.assert(typeof expectedFileName === "string");
-            const expectedPosition = marker?.position || 0;
-            if (ts.comparePaths(expectedFileName, definition.fileName, /*ignoreCase*/ true) !== ts.Comparison.EqualTo || expectedPosition !== definition.textSpan.start) {
-                const markers = [{ text: "EXPECTED", fileName: expectedFileName, position: expectedPosition }, { text: "ACTUAL", fileName: definition.fileName, position: definition.textSpan.start }];
-                const text = this.renderMarkers(markers);
-                this.raiseError(`${testName} failed for definition ${markerName || expectedFileName} (${i}): expected ${expectedFileName} at ${expectedPosition}, got ${definition.fileName} at ${definition.textSpan.start}\n\n${text}\n`);
-            }
-            if (definition.unverified && (typeof endMarkerOrFileResult === "string" || !endMarkerOrFileResult.unverified)) {
-                const isFileResult = typeof endMarkerOrFileResult !== "string" && !!endMarkerOrFileResult.file;
-                this.raiseError(
-                    `${testName} failed for definition ${markerName || expectedFileName} (${i}): The actual definition was an \`unverified\` result. Use:\n\n` +
-                    `    verify.goToDefinition(${startMarker === undefined ? "startMarker" : `"${startMarker}"`}, { ${isFileResult ? `file: "${expectedFileName}"` : `marker: "${markerName}"`}, unverified: true })\n\n` +
-                    `if this is expected.`
-                );
-            }
-        });
-    }
-
-    private verifyDefinitionTextSpan(defs: ts.DefinitionInfoAndBoundSpan, startMarkerName: string) {
-        const range = this.testData.ranges.find(range => this.markerName(range.marker!) === startMarkerName);
-
-        if (!range && !defs.textSpan) {
-            return;
-        }
-
-        if (!range) {
-            const marker = this.getMarkerByName(startMarkerName);
-            const startFile = marker.fileName;
-            const fileContent = this.getFileContent(startFile);
-            const spanContent = fileContent.slice(defs.textSpan.start, ts.textSpanEnd(defs.textSpan));
-            const spanContentWithMarker = spanContent.slice(0, marker.position - defs.textSpan.start) + `/*${startMarkerName}*/` + spanContent.slice(marker.position - defs.textSpan.start);
-            const suggestedFileContent = (fileContent.slice(0, defs.textSpan.start) + `\x1b[1;4m[|${spanContentWithMarker}|]\x1b[0;31m` + fileContent.slice(ts.textSpanEnd(defs.textSpan)))
-                .split(/\r?\n/).map(line => " ".repeat(6) + line).join(ts.sys.newLine);
-            this.raiseError(`goToDefinitionsAndBoundSpan failed. Found a starting TextSpan around '${spanContent}' in '${startFile}' (at position ${defs.textSpan.start}). `
-                + `If this is the correct input span, put a fourslash range around it: \n\n${suggestedFileContent}\n`);
-        }
-        else {
-            this.assertTextSpanEqualsRange(defs.textSpan, range, "goToDefinitionsAndBoundSpan failed");
-        }
     }
 
     private renderMarkers(markers: { text: string, fileName: string, position: number }[], useTerminalBoldSequence = true) {
@@ -4120,12 +4049,6 @@ export class TestState {
         Harness.Baseline.runBaseline(baselineFile, text);
     }
 
-    private assertTextSpanEqualsRange(span: ts.TextSpan, range: Range, message?: string) {
-        if (!textSpanEqualsRange(span, range)) {
-            this.raiseError(`${prefixMessage(message)}Expected to find TextSpan ${JSON.stringify({ start: range.pos, length: range.end - range.pos })} but got ${JSON.stringify(span)} instead.`);
-        }
-    }
-
     private getLineContent(index: number) {
         const text = this.getFileContent(this.activeFile.fileName);
         const pos = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: index, character: 0 });
@@ -4306,14 +4229,6 @@ export class TestState {
 
         this.verifyCurrentFileContent(newFileContent);
     }
-}
-
-function prefixMessage(message: string | undefined) {
-    return message ? `${message} - ` : "";
-}
-
-function textSpanEqualsRange(span: ts.TextSpan, range: Range) {
-    return span.start === range.pos && span.length === range.end - range.pos;
 }
 
 function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: readonly ts.TextChange[]): ts.TextRange {

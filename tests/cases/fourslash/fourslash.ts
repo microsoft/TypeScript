@@ -310,8 +310,6 @@ declare namespace FourSlashInterface {
         currentLineContentIs(text: string): void;
         currentFileContentIs(text: string): void;
         formatDocumentChangesNothing(): void;
-        /** Verifies that goToDefinition at the current position would take you to `endMarker`. */
-        goToDefinitionIs(endMarkers: ArrayOrSingle<string>): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         baselineCommands(...commands: BaselineCommand[]): void;

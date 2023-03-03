@@ -13,8 +13,6 @@
 
 const [r0, r1Def, r1, r2] = test.ranges();
 const ranges = [r0, r1, r2];
-goTo.marker("use");
-verify.goToDefinitionIs("def");
 
 goTo.marker("use");
 verify.quickInfoIs("(parameter) foo: I", "I pity the foo");
@@ -24,4 +22,5 @@ verify.baselineCommands(
     { type: "findRenameLocations", markerOrRange: ranges },
     { type: "documentHighlights", markerOrRange: ranges },
     { type: "goToType", markerOrRange: "use" },
+    { type: "getDefinitionAtPosition", markerOrRange: "use" },
 );

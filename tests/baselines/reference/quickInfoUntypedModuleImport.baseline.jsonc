@@ -95,3 +95,44 @@
     ]
    }
   ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/node_modules/foo/index.js ===
+// [||]{}
+
+// === /tests/cases/fourslash/a.ts ===
+// import foo from /*GOTO DEF POS*/"foo";
+// foo();
+
+  // === Details ===
+  [
+   {
+    "name": "foo",
+    "kind": "script",
+    "failedAliasResolution": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|import /*GOTO DEF POS*/[|foo|] from "foo";|>
+// foo();
+
+  // === Details ===
+  [
+   {
+    "kind": "alias",
+    "name": "foo",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": true
+   }
+  ]

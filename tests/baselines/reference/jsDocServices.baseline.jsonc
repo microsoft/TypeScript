@@ -303,3 +303,29 @@
     "failedAliasResolution": false
    }
   ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param /*GOTO DEF POS*/foo I pity the foo
+//  */
+// function f(<|[|foo|]: I|>) {
+//     return foo;
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
