@@ -90,6 +90,7 @@ export interface Scanner {
     setOnError(onError: ErrorCallback | undefined): void;
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
+    /** @deprecated use setEnd/setTokenEnd */
     setTextPos(textPos: number): void;
     /** @internal */
     setInJSDocType(inType: boolean): void;
@@ -2460,8 +2461,8 @@ export function createScanner(languageVersion: ScriptTarget,
         return scanJsxAttributeValue();
     }
 
-    /** Note: starts with no unicode escape support since that's 2x the code */
-    function scanBigJsDocToken(): JSDocSyntaxKind {
+    /** TODO: might need to return WhitespaceTrivia if only whitespace was encountered? */
+    function scanBigJsDocToken(): JSDocSyntaxKind { // can be configurable to skip almost everything (except newline and backtick) if backticks is true
         startPos = tokenPos = pos;
         tokenFlags = TokenFlags.None;
         if (pos >= end) {

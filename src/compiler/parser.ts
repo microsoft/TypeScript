@@ -2165,7 +2165,7 @@ namespace Parser {
         return currentToken = scanner.scanJsDocToken();
     }
 
-    function nextTokenJSDocBig(): JSDocSyntaxKind {
+    function nextTokenJSDocBig(): JSDocSyntaxKind { // TODO: nextTokenJSDocCommentText
         return currentToken = scanner.scanBigJsDocToken();
     }
 
@@ -8604,11 +8604,9 @@ namespace Parser {
                     indent = 0;
                 }
                 loop: while (true) {
-                    let bigMode = false;
                     switch (token()) {
                         case SyntaxKind.Identifier:
                             state = JSDocState.SavingComments;
-                            bigMode = true
                             pushComment(scanner.getTokenValue());
                             break;
                         case SyntaxKind.AtToken:
@@ -8637,7 +8635,6 @@ namespace Parser {
                                 // If we've already seen an asterisk, then we can no longer parse a tag on this line
                                 state = JSDocState.SavingComments;
                                 pushComment(asterisk);
-                                bigMode = true;
                             }
                             else {
                                 // Ignore the first asterisk on a line
@@ -8650,7 +8647,6 @@ namespace Parser {
                             const whitespace = scanner.getTokenText();
                             if (state === JSDocState.SavingComments) {
                                 comments.push(whitespace);
-                                bigMode = true
                             }
                             else if (margin !== undefined && indent + whitespace.length > margin) {
                                 comments.push(whitespace.slice(margin - indent));
@@ -8661,7 +8657,6 @@ namespace Parser {
                             break loop;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
-                            bigMode = true
                             const commentEnd = scanner.getStartPos();
                             const linkStart = scanner.getTextPos() - 1;
                             const link = parseJSDocLink(linkStart);
@@ -8681,11 +8676,10 @@ namespace Parser {
                             // wasn't a tag, we can no longer parse a tag on this line until we hit the next
                             // line break.
                             state = JSDocState.SavingComments;
-                            bigMode = true
                             pushComment(scanner.getTokenText());
                             break;
                     }
-                    if (bigMode) { // TODO: or, state === SavingComments
+                    if (state === JSDocState.SavingComments) {
                         nextTokenJSDocBig();
                     }
                     else {
@@ -8894,6 +8888,12 @@ namespace Parser {
                 let tok = token() as JSDocSyntaxKind;
                 loop: while (true) {
                     switch (tok) {
+                        case SyntaxKind.Identifier:
+                            if (state !== JSDocState.SavingBackticks) {
+                                state = JSDocState.SavingComments; // leading identifiers start recording as well
+                            }
+                            pushComment(scanner.getTokenValue()); // getTokenValue gets the already-sliced identifier text (TODO: the scanner only pre-slices Identifiers, nothing else)
+                            break;
                         case SyntaxKind.NewLineTrivia:
                             state = JSDocState.BeginningOfLine;
                             // don't use pushComment here because we want to keep the margin unchanged
@@ -8901,7 +8901,7 @@ namespace Parser {
                             indent = 0;
                             break;
                         case SyntaxKind.AtToken:
-                            if (state === JSDocState.SavingBackticks
+                            if (state === JSDocState.SavingBackticks // TODO: nextTokenJSDocBig should be able to skip @ inside backticks
                                 || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
                                 // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
                                 comments.push(scanner.getTokenText());
@@ -8914,7 +8914,7 @@ namespace Parser {
                             break loop;
                         case SyntaxKind.WhitespaceTrivia:
                             if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
-                                pushComment(scanner.getTokenText());
+                                pushComment(scanner.getTokenText()); // TODO: This branch might not be needed anymore!
                             }
                             else {
                                 const whitespace = scanner.getTokenText();
@@ -8922,7 +8922,7 @@ namespace Parser {
                                 if (margin !== undefined && indent + whitespace.length > margin) {
                                     comments.push(whitespace.slice(margin - indent));
                                 }
-                                indent += whitespace.length;
+                                indent += whitespace.length; // TODO: What happens if we start saving comments here? We don't support margins like  |                    * text text | do we?
                             }
                             break;
                         case SyntaxKind.OpenBraceToken:
@@ -8949,7 +8949,7 @@ namespace Parser {
                             }
                             pushComment(scanner.getTokenText());
                             break;
-                        case SyntaxKind.AsteriskToken:
+                        case SyntaxKind.AsteriskToken: // TODO: and asterisk inside comments too
                             if (state === JSDocState.BeginningOfLine) {
                                 // leading asterisks start recording on the *next* (non-whitespace) token
                                 state = JSDocState.SawAsterisk;
@@ -8965,9 +8965,15 @@ namespace Parser {
                             pushComment(scanner.getTokenText());
                             break;
                     }
-                    previousWhitespace = token() === SyntaxKind.WhitespaceTrivia;
-                    // TODO: bigMode here
-                    tok = nextTokenJSDoc();
+                    // TODO: nextTokenJSDocBig always returns Identifier, even when that token ends with some whitespace.
+                    // Make this hack less hacky: call a isWhitespace function, and importantly, the state *currently* being SavingComments doesn't mean that the previous call was for a big token
+                    previousWhitespace = token() === SyntaxKind.WhitespaceTrivia || ((state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) && tok === SyntaxKind.Identifier && scanner.getTokenValue().at(-1) === " ");
+                    if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) { // TODO: Add another scanner method for scanning over the introductory " *" after BeginningOfLine
+                        tok = nextTokenJSDocBig(); // TODO: Maybe SawAsterisk could also call nextTokenJSDocBig?
+                    } // TODO: Maybe nextTokenJSDocBig is backward-compatible enough to just call all the time
+                    else {
+                        tok = nextTokenJSDoc();
+                    }
                 }
 
                 removeLeadingNewlines(comments);
