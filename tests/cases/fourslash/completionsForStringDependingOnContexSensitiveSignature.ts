@@ -15,7 +15,7 @@
 //// 
 //// declare function createMachine<TContext>(config: Config<TContext>): void
 //// 
-//// type EventFrom<T> = T extends ActorRef<infer TEvent> ? TEvent : { type: 'HAHAHA' }
+//// type EventFrom<T> = T extends ActorRef<infer TEvent> ? TEvent : never
 //// 
 //// declare function sendTo<
 ////   TContext,
