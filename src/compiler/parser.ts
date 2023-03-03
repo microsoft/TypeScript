@@ -1838,7 +1838,7 @@ namespace Parser {
             speculationHelper(() => {
                 const savedContextFlags = contextFlags;
                 contextFlags |= NodeFlags.AwaitContext;
-                scanner.setTokenEnd(nextStatement.pos);
+                scanner.resetTokenState(nextStatement.pos);
                 nextToken();
 
                 while (token() !== SyntaxKind.EndOfFileToken) {
@@ -3094,7 +3094,7 @@ namespace Parser {
 
     function consumeNode(node: Node) {
         // Move the scanner so it is after the node we just consumed.
-        scanner.setTokenEnd(node.end);
+        scanner.resetTokenState(node.end);
         nextToken();
         return node;
     }
@@ -8878,7 +8878,7 @@ namespace Parser {
                                 comments.push(scanner.getTokenText());
                                 break;
                             }
-                            scanner.setTokenEnd(scanner.getTokenEnd() - 1);
+                            scanner.resetTokenState(scanner.getTokenEnd() - 1);
                             // falls through
                         case SyntaxKind.EndOfFileToken:
                             // Done
@@ -9163,7 +9163,7 @@ namespace Parser {
                     }
                     else if (token === SyntaxKind.GreaterThanToken && inEmail) {
                         comments.push(scanner.getTokenText());
-                        scanner.setTokenEnd(scanner.getTokenEnd());
+                        scanner.resetTokenState(scanner.getTokenEnd());
                         break;
                     }
                     comments.push(scanner.getTokenText());

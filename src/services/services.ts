@@ -487,7 +487,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
 }
 
 function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node): void {
-    scanner.setTokenEnd(pos);
+    scanner.resetTokenState(pos);
     while (pos < end) {
         const token = scanner.scan();
         const textPos = scanner.getTokenEnd();

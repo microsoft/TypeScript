@@ -56,7 +56,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
     const scanner = languageVariant === LanguageVariant.JSX ? jsxScanner : standardScanner;
 
     scanner.setText(text);
-    scanner.setTokenEnd(startPos);
+    scanner.resetTokenState(startPos);
 
     let wasNewLine = true;
     let leadingTrivia: TextRangeWithTriviaKind[] | undefined;
@@ -199,7 +199,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
         if (scanner.getTokenFullStart() !== savedPos) {
             Debug.assert(lastTokenInfo !== undefined);
             // readTokenInfo was called before but scan action differs - rescan text
-            scanner.setTokenEnd(savedPos);
+            scanner.resetTokenState(savedPos);
             scanner.scan();
         }
 
@@ -314,7 +314,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
     }
 
     function skipToEndOf(node: Node | NodeArray<Node>): void {
-        scanner.setTokenEnd(node.end);
+        scanner.resetTokenState(node.end);
         savedPos = scanner.getTokenFullStart();
         lastScanAction = undefined;
         lastTokenInfo = undefined;
@@ -324,7 +324,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
     }
 
     function skipToStartOf(node: Node): void {
-        scanner.setTokenEnd(node.pos);
+        scanner.resetTokenState(node.pos);
         savedPos = scanner.getTokenFullStart();
         lastScanAction = undefined;
         lastTokenInfo = undefined;

@@ -700,7 +700,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
     }
 
     function classifyLeadingTriviaAndGetTokenStart(token: Node): number {
-        triviaScanner.setTokenEnd(token.pos);
+        triviaScanner.resetTokenState(token.pos);
         while (true) {
             const start = triviaScanner.getTokenEnd();
             // only bother scanning if we have something that could be trivia.
@@ -731,7 +731,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                     // Classifying a comment might cause us to reuse the trivia scanner
                     // (because of jsdoc comments).  So after we classify the comment make
                     // sure we set the scanner position back to where it needs to be.
-                    triviaScanner.setTokenEnd(end);
+                    triviaScanner.resetTokenState(end);
                     continue;
 
                 case SyntaxKind.ConflictMarkerTrivia:
@@ -989,7 +989,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
             }
         }
         pushClassification(start, i - start, ClassificationType.comment);
-        mergeConflictScanner.setTokenEnd(i);
+        mergeConflictScanner.resetTokenState(i);
 
         while (mergeConflictScanner.getTokenEnd() < end) {
             classifyDisabledCodeToken();

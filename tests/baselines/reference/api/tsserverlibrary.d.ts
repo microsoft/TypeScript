@@ -8362,9 +8362,9 @@ declare namespace ts {
         setOnError(onError: ErrorCallback | undefined): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
-        /** @deprecated use {@link setTokenEnd} */
+        /** @deprecated use {@link resetTokenState} */
         setTextPos(textPos: number): void;
-        setTokenEnd(pos: number): void;
+        resetTokenState(pos: number): void;
         lookAhead<T>(callback: () => T): T;
         scanRange<T>(start: number, length: number, callback: () => T): T;
         tryScan<T>(callback: () => T): T;

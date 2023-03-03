@@ -92,9 +92,9 @@ export interface Scanner {
     setOnError(onError: ErrorCallback | undefined): void;
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
-    /** @deprecated use {@link setTokenEnd} */
+    /** @deprecated use {@link resetTokenState} */
     setTextPos(textPos: number): void;
-    setTokenEnd(pos: number): void;
+    resetTokenState(pos: number): void;
     /** @internal */
     setInJSDocType(inType: boolean): void;
     // Invokes the provided callback then unconditionally restores the scanner to the state it
@@ -1038,8 +1038,8 @@ export function createScanner(languageVersion: ScriptTarget,
         setScriptTarget,
         setLanguageVariant,
         setOnError,
-        setTokenEnd,
-        setTextPos: setTokenEnd,
+        resetTokenState,
+        setTextPos: resetTokenState,
         setInJSDocType,
         tryScan,
         lookAhead,
@@ -2620,7 +2620,7 @@ export function createScanner(languageVersion: ScriptTarget,
     function setText(newText: string | undefined, start: number | undefined, length: number | undefined) {
         text = newText || "";
         end = length === undefined ? text.length : start! + length;
-        setTokenEnd(start || 0);
+        resetTokenState(start || 0);
     }
 
     function setOnError(errorCallback: ErrorCallback | undefined) {
@@ -2635,11 +2635,11 @@ export function createScanner(languageVersion: ScriptTarget,
         languageVariant = variant;
     }
 
-    function setTokenEnd(tokenEnd: number) {
-        Debug.assert(tokenEnd >= 0);
-        pos = tokenEnd;
-        fullStartPos = tokenEnd;
-        tokenStart = tokenEnd;
+    function resetTokenState(position: number) {
+        Debug.assert(position >= 0);
+        pos = position;
+        fullStartPos = position;
+        tokenStart = position;
         token = SyntaxKind.Unknown;
         tokenValue = undefined!;
         tokenFlags = TokenFlags.None;
