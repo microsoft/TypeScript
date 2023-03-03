@@ -210,3 +210,23 @@ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
     assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB));
     return foo;
 }
+
+// Repro from #53063
+
+interface Free {
+    premium: false;
+}
+
+interface Premium {
+    premium: true;
+}
+
+type Union = { premium: false } | { premium: true };
+
+declare const checkIsPremium: (a: Union) => a is Union & Premium;
+
+const f = (value: Union) => {
+    if (!checkIsPremium(value)) {
+        value.premium;
+    }
+};

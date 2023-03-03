@@ -514,3 +514,46 @@ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
 >foo : { value: { type: "A"; }; a?: number | undefined; }
 }
 
+// Repro from #53063
+
+interface Free {
+    premium: false;
+>premium : false
+>false : false
+}
+
+interface Premium {
+    premium: true;
+>premium : true
+>true : true
+}
+
+type Union = { premium: false } | { premium: true };
+>Union : { premium: false; } | { premium: true; }
+>premium : false
+>false : false
+>premium : true
+>true : true
+
+declare const checkIsPremium: (a: Union) => a is Union & Premium;
+>checkIsPremium : (a: Union) => a is { premium: true; } & Premium
+>a : Union
+
+const f = (value: Union) => {
+>f : (value: Union) => void
+>(value: Union) => {    if (!checkIsPremium(value)) {        value.premium;    }} : (value: Union) => void
+>value : Union
+
+    if (!checkIsPremium(value)) {
+>!checkIsPremium(value) : boolean
+>checkIsPremium(value) : boolean
+>checkIsPremium : (a: Union) => a is { premium: true; } & Premium
+>value : Union
+
+        value.premium;
+>value.premium : false
+>value : { premium: false; }
+>premium : false
+    }
+};
+

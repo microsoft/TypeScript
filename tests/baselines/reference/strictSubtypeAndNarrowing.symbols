@@ -556,3 +556,48 @@ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
 >foo : Symbol(foo, Decl(strictSubtypeAndNarrowing.ts, 206, 15))
 }
 
+// Repro from #53063
+
+interface Free {
+>Free : Symbol(Free, Decl(strictSubtypeAndNarrowing.ts, 209, 1))
+
+    premium: false;
+>premium : Symbol(Free.premium, Decl(strictSubtypeAndNarrowing.ts, 213, 16))
+}
+
+interface Premium {
+>Premium : Symbol(Premium, Decl(strictSubtypeAndNarrowing.ts, 215, 1))
+
+    premium: true;
+>premium : Symbol(Premium.premium, Decl(strictSubtypeAndNarrowing.ts, 217, 19))
+}
+
+type Union = { premium: false } | { premium: true };
+>Union : Symbol(Union, Decl(strictSubtypeAndNarrowing.ts, 219, 1))
+>premium : Symbol(premium, Decl(strictSubtypeAndNarrowing.ts, 221, 14))
+>premium : Symbol(premium, Decl(strictSubtypeAndNarrowing.ts, 221, 35))
+
+declare const checkIsPremium: (a: Union) => a is Union & Premium;
+>checkIsPremium : Symbol(checkIsPremium, Decl(strictSubtypeAndNarrowing.ts, 223, 13))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 223, 31))
+>Union : Symbol(Union, Decl(strictSubtypeAndNarrowing.ts, 219, 1))
+>a : Symbol(a, Decl(strictSubtypeAndNarrowing.ts, 223, 31))
+>Union : Symbol(Union, Decl(strictSubtypeAndNarrowing.ts, 219, 1))
+>Premium : Symbol(Premium, Decl(strictSubtypeAndNarrowing.ts, 215, 1))
+
+const f = (value: Union) => {
+>f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 225, 5))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 225, 11))
+>Union : Symbol(Union, Decl(strictSubtypeAndNarrowing.ts, 219, 1))
+
+    if (!checkIsPremium(value)) {
+>checkIsPremium : Symbol(checkIsPremium, Decl(strictSubtypeAndNarrowing.ts, 223, 13))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 225, 11))
+
+        value.premium;
+>value.premium : Symbol(premium, Decl(strictSubtypeAndNarrowing.ts, 221, 14))
+>value : Symbol(value, Decl(strictSubtypeAndNarrowing.ts, 225, 11))
+>premium : Symbol(premium, Decl(strictSubtypeAndNarrowing.ts, 221, 14))
+    }
+};
+
