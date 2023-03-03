@@ -4500,6 +4500,8 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
                 break;
             case SyntaxKind.AsteriskToken:
                 return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
+            case SyntaxKind.AsyncKeyword:
+                return tryCast(parent.parent, isObjectLiteralExpression);
             case SyntaxKind.Identifier:
                 return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
                     ? contextToken.parent.parent : undefined;
