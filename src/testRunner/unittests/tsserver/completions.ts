@@ -176,9 +176,10 @@ export interface BrowserRouterProps {
         ];
 
         const host = createServerHost(files, { windowsStyleRoot: "c:/" });
+        const logger = createLoggerWithInMemoryLogs(host);
         const session = createSession(host, {
-            typingsInstaller: new TestTypingsInstaller(globalCacheLocation, /*throttleLimit*/ 5, host),
-            logger: createLoggerWithInMemoryLogs(host),
+            typingsInstaller: new TestTypingsInstaller(globalCacheLocation, /*throttleLimit*/ 5, host, logger),
+            logger,
         });
         openFilesForSession([appFile], session);
         session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
