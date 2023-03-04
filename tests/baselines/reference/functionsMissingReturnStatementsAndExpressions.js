@@ -31,12 +31,12 @@ function f7(): void {
     return null;
 }
 
-function f8(): void {
+function f8(): any {
     // Fine since are typed any.
     return;
 }
 
-function f9(): void {
+function f9(): any {
     // Fine since we are typed any and return undefined
     return undefined;
 }
@@ -101,6 +101,10 @@ function f21(): number | string {
     // Not okay; union does not contain void or any
 }
 
+function f22(): undefined {
+    // Okay; implicitly returns undefined
+}
+
 class C {
     public get m1() {
         // Errors; get accessors must return a value.
@@ -127,6 +131,7 @@ class C {
         throw undefined.
     }
 }
+
 
 //// [functionsMissingReturnStatementsAndExpressions.js]
 function f1() {
@@ -208,6 +213,9 @@ function f20() {
 }
 function f21() {
     // Not okay; union does not contain void or any
+}
+function f22() {
+    // Okay; implicitly returns undefined
 }
 var C = /** @class */ (function () {
     function C() {
