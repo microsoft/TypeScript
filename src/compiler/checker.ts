@@ -11383,13 +11383,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : declaredType ? declaredType
                 : getAllSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                 : errorType;
-            
+
             if (!popTypeResolution()) {
-                if (!exportSymbol) {
-                    error(symbol.declarations?.[0], Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
+                if (exportSymbol) {
+                    // reportCircularityError(exportSymbol.declarations?.[0]);
+                    // error(exportSymbol.declarations?.[0], Diagnostics.Circular_definition_of_import_alias_0, symbolToString(exportSymbol));
                 }
                 else {
-                    error(exportSymbol.declarations?.[0], Diagnostics.Circular_definition_of_import_alias_0, symbolToString(exportSymbol));
+                    // getExportSymbolOfValueSymbolIfExported(resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node));
+
+                    reportCircularityError(symbol);
+                    // error(symbol.declarations?.[0], Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
                 }
                 return links.type = errorType;
             }
