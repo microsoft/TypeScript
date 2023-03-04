@@ -116,6 +116,7 @@ import {
     mapDefined,
     MethodSignature,
     Modifier,
+    NamedExports,
     NamedImportBindings,
     NamedImports,
     NamespaceImport,
@@ -1669,8 +1670,9 @@ namespace deleteDeclaration {
                 break;
 
             case SyntaxKind.ImportSpecifier:
-                const namedImports = (node as ImportSpecifier).parent;
-                if (namedImports.elements.length === 1) {
+            case SyntaxKind.ExportSpecifier:
+                const namedImports = (node as ImportSpecifier | NamedExports).parent;
+                if (isNamedImports(namedImports) && namedImports.elements.length === 1) {
                     deleteImportBinding(changes, sourceFile, namedImports);
                 }
                 else {

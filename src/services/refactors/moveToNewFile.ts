@@ -26,6 +26,8 @@ import {
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
+    ExportDeclaration,
+    ExportSpecifier,
     Expression,
     ExpressionStatement,
     extensionFromPath,
@@ -57,6 +59,7 @@ import {
     Identifier,
     ImportDeclaration,
     ImportEqualsDeclaration,
+    ImportSpecifier,
     insertImports,
     InterfaceDeclaration,
     InternalSymbolName,
@@ -64,6 +67,7 @@ import {
     isBinaryExpression,
     isBindingElement,
     isDeclarationName,
+    isExportDeclaration,
     isExpressionStatement,
     isExternalModuleReference,
     isIdentifier,
@@ -90,8 +94,10 @@ import {
     ModifierFlags,
     ModifierLike,
     ModuleDeclaration,
+    NamedExportBindings,
     NamedImportBindings,
     Node,
+    NodeArray,
     NodeFlags,
     nodeSeenTracker,
     normalizePath,
@@ -126,7 +132,7 @@ import {
     UserPreferences,
     VariableDeclaration,
     VariableDeclarationList,
-    VariableStatement,
+    VariableStatement
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
@@ -327,7 +333,7 @@ function updateImportsInOtherFiles(
     for (const sourceFile of program.getSourceFiles()) {
         if (sourceFile === oldFile) continue;
         for (const statement of sourceFile.statements) {
-            forEachImportInStatement(statement, importNode => {
+            forEachImportOrReexportInStatement(statement, importNode => {
                 if (checker.getSymbolAtLocation(moduleSpecifierFromImport(importNode)) !== oldFile.symbol) return;
 
                 const shouldMove = (name: Identifier): boolean => {
@@ -336,15 +342,19 @@ function updateImportsInOtherFiles(
                         : skipAlias(checker.getSymbolAtLocation(name)!, checker); // TODO: GH#18217
                     return !!symbol && movedSymbols.has(symbol);
                 };
-                deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
+                if (!isExportDeclaration(importNode)) {
+                    deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
+                }
 
                 const pathToNewFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), newFilename);
                 const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFileWithExtension, createModuleSpecifierResolutionHost(program, host));
-                const newImportDeclaration = filterImport(importNode, factory.createStringLiteral(newModuleSpecifier), shouldMove);
+                const newImportDeclaration = filterImportOrReexport(importNode, factory.createStringLiteral(newModuleSpecifier), shouldMove, node => changes.delete(sourceFile, node));
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
-                const ns = getNamespaceLikeImport(importNode);
-                if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleSpecifier, ns, importNode);
+                if(!isExportDeclaration(importNode)) {
+                    const ns = getNamespaceLikeImport(importNode);
+                    if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleSpecifier, ns, importNode);
+                }
             });
         }
     }
@@ -412,8 +422,8 @@ function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: 
     }
 }
 
-function moduleSpecifierFromImport(i: SupportedImport): StringLiteralLike {
-    return (i.kind === SyntaxKind.ImportDeclaration ? i.moduleSpecifier
+function moduleSpecifierFromImport(i: SupportedImportOrReexport): StringLiteralLike {
+    return ((i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ExportDeclaration) ? i.moduleSpecifier
         : i.kind === SyntaxKind.ImportEqualsDeclaration ? i.moduleReference.expression
         : i.initializer.arguments[0]);
 }
@@ -436,6 +446,15 @@ function forEachImportInStatement(statement: Statement, cb: (importNode: Support
     }
 }
 
+function forEachImportOrReexportInStatement(statement: Statement, cb: (importNode: SupportedImportOrReexport) => void): void {
+    if (isExportDeclaration(statement) && statement.moduleSpecifier) {
+        if (isStringLiteral(statement.moduleSpecifier)) cb(statement as SupportedImportOrReexport);
+        return;
+    }
+    forEachImportInStatement(statement, cb);
+}
+
+type SupportedImportOrReexport = SupportedImport | ExportDeclaration & { moduleSpecifier: StringLiteralLike };
 type SupportedImport =
     | ImportDeclaration & { moduleSpecifier: StringLiteralLike }
     | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteralLike } }
@@ -444,6 +463,7 @@ type SupportedImportStatement =
     | ImportDeclaration
     | ImportEqualsDeclaration
     | VariableStatement;
+type SupportedImportOrExportStatement = SupportedImportStatement | ExportDeclaration;
 
 function createOldFileImportsFromNewFile(
     sourceFile: SourceFile,
@@ -513,6 +533,7 @@ function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needEx
     });
 }
 
+// shared function to delete unused imports in both old and updating files
 function deleteUnusedImports(sourceFile: SourceFile, importDecl: SupportedImport, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
     switch (importDecl.kind) {
         case SyntaxKind.ImportDeclaration:
@@ -754,6 +775,24 @@ function isVariableDeclarationInImport(decl: VariableDeclaration) {
         !!decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
 }
 
+function filterImportOrReexport(i: SupportedImportOrReexport, moduleSpecifier: StringLiteralLike, keep: (name: Identifier) => boolean, deleteNode: ((node: Node) => void)): SupportedImportOrExportStatement | undefined {
+    switch (i.kind) {
+        case SyntaxKind.ExportDeclaration: {
+            const clause = i.exportClause;
+            if (!clause) return undefined;
+            const namedBindings = filterNamedBindings(clause, node => {
+                const toMove = keep(node);
+                if (toMove) deleteNode(node.parent);
+                return toMove;
+            });
+            return namedBindings
+                ? factory.createExportDeclaration(/*modifiers*/ undefined, i.isTypeOnly, namedBindings, moduleSpecifier, /*assertClause*/ undefined)
+                : undefined;
+        }
+        default:
+            return filterImport(i, moduleSpecifier, keep);
+    }
+}
 function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, keep: (name: Identifier) => boolean): SupportedImportStatement | undefined {
     switch (i.kind) {
         case SyntaxKind.ImportDeclaration: {
@@ -772,17 +811,25 @@ function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, ke
             return name ? makeVariableStatement(name, i.type, createRequireCall(moduleSpecifier), i.parent.flags) : undefined;
         }
         default:
-            return Debug.assertNever(i, `Unexpected import kind ${(i as SupportedImport).kind}`);
+            return Debug.assertNever(i, `Unexpected import kind ${(i as SupportedImportOrReexport).kind}`);
     }
 }
-function filterNamedBindings(namedBindings: NamedImportBindings, keep: (name: Identifier) => boolean): NamedImportBindings | undefined {
+function filterNamedBindings<T extends NamedImportBindings | NamedExportBindings>(namedBindings: T, keep: (name: Identifier) => boolean): T | undefined {
     if (namedBindings.kind === SyntaxKind.NamespaceImport) {
         return keep(namedBindings.name) ? namedBindings : undefined;
     }
-    else {
-        const newElements = namedBindings.elements.filter(e => keep(e.name));
-        return newElements.length ? factory.createNamedImports(newElements) : undefined;
+    if (namedBindings.kind === SyntaxKind.NamespaceExport) {
+        return;
     }
+
+    const newElements = (namedBindings.elements as NodeArray<ImportSpecifier | ExportSpecifier>).filter(e => keep(e.name));
+    return (
+        newElements.length ?
+        namedBindings.kind === SyntaxKind.NamedExports ?
+            factory.createNamedExports(newElements as ExportSpecifier[]) :
+                factory.createNamedImports(newElements as ImportSpecifier[]) :
+            undefined
+    ) as T | undefined;
 }
 function filterBindingName(name: BindingName, keep: (name: Identifier) => boolean): BindingName | undefined {
     switch (name.kind) {
