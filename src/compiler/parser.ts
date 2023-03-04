@@ -364,6 +364,7 @@ import {
     tracing,
     TransformFlags,
     trimString,
+    trimStringEnd,
     TryStatement,
     TupleTypeNode,
     TypeAliasDeclaration,
@@ -8680,7 +8681,7 @@ namespace Parser {
                         nextTokenJSDoc();
                     }
                 }
-                const trimmedComments = comments.join("").trimEnd(); // TODO: Use our helpers for trimEnd since they delegate to newer ES trim methods when present (always)
+                const trimmedComments = trimStringEnd(comments.join(""));
                 if (parts.length && trimmedComments.length) {
                     parts.push(finishNode(factory.createJSDocText(trimmedComments), linkEnd ?? start, commentsPos));
                 }
@@ -8690,19 +8691,19 @@ namespace Parser {
             });
 
             function removeLeadingNewlines(comments: string[]) {
-                while (comments.length && (comments[0] === "\n" || comments[0] === "\r")) { // TODO: Bad code is still bad
+                while (comments.length && (comments[0] === "\n" || comments[0] === "\r")) {
                     comments.shift();
                 }
             }
 
             function removeTrailingWhitespace(comments: string[]) {
-                while (comments.length) { // TODO: Bad code is still bad; should operate on an entire string
-                    const trimmed = comments[comments.length - 1].trim();
+                while (comments.length) {
+                    const trimmed = trimString(comments[comments.length - 1]);
                     if (trimmed === "") {
                         comments.pop();
                     }
                     else if (trimmed.length < comments[comments.length - 1].length) {
-                        comments[comments.length - 1] = comments[comments.length - 1].trimEnd();
+                        comments[comments.length - 1] = trimStringEnd(comments[comments.length - 1]);
                         break;
                     }
                     else {
@@ -8957,7 +8958,7 @@ namespace Parser {
                 }
 
                 removeLeadingNewlines(comments);
-                const trimmedComments = comments.join("").trimEnd();
+                const trimmedComments = trimStringEnd(comments.join(""));
                 if (parts.length) {
                     if (trimmedComments.length) {
                         parts.push(finishNode(factory.createJSDocText(trimmedComments), linkEnd ?? commentsPos));
