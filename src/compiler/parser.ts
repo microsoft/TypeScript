@@ -8886,7 +8886,7 @@ namespace Parser {
                             if (state !== JSDocState.SavingBackticks) {
                                 state = JSDocState.SavingComments; // leading identifiers start recording as well
                             }
-                            pushComment(scanner.getTokenValue()); // getTokenValue gets the already-sliced identifier text (TODO: the scanner only pre-slices Identifiers, nothing else)
+                            pushComment(scanner.getTokenValue());
                             break;
                         case SyntaxKind.NewLineTrivia:
                             state = JSDocState.BeginningOfLine;
@@ -8901,13 +8901,15 @@ namespace Parser {
                             // Done
                             break loop;
                         case SyntaxKind.WhitespaceTrivia:
+                            // TODO: This could simplify somewhat if the scanner could also parse leading whitespace-asterisk sequences
                             Debug.assert(state !== JSDocState.SavingComments && state !== JSDocState.SavingBackticks, "whitespace shouldn't come from the scanner while saving comment text")
                             const whitespace = scanner.getTokenText();
                             // if the whitespace crosses the margin, take only the whitespace that passes the margin
                             if (margin !== undefined && indent + whitespace.length > margin) {
                                 comments.push(whitespace.slice(margin - indent));
+                                state = JSDocState.SavingComments;
                             }
-                            indent += whitespace.length; // TODO: What happens if we start saving comments here? We don't support margins like | <margin here> * text text | do we?
+                            indent += whitespace.length;
                             break;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
