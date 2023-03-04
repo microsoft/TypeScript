@@ -1,3 +1,4 @@
+import * as performance from "../compiler/_namespaces/ts.performance";
 import * as ts from "./_namespaces/ts";
 import {
     arrayFrom,
@@ -19,8 +20,8 @@ import {
     createDiagnosticReporter,
     createGetCanonicalFileName,
     createIncrementalCompilerHost,
-    createProgram,
     CreateProgram,
+    createProgram,
     CreateProgramOptions,
     createSolutionBuilder,
     createSolutionBuilderHost,
@@ -51,7 +52,6 @@ import {
     getCompilerOptionsDiffValue,
     getConfigFileParsingDiagnostics,
     getDiagnosticText,
-    getEntries,
     getErrorSummaryText,
     getLineStarts,
     getNormalizedAbsolutePath,
@@ -88,7 +88,6 @@ import {
     WatchCompilerHost,
     WatchOptions,
 } from "./_namespaces/ts";
-import * as performance from "../compiler/_namespaces/ts.performance";
 
 interface Statistic {
     name: string;
@@ -400,7 +399,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     option.type.forEach((value, name) => {
                         (inverted[value] ||= []).push(name);
                     });
-                    return getEntries(inverted)
+                    return Object.entries(inverted)
                         .map(([, synonyms]) => synonyms.join("/"))
                         .join(", ");
             }
@@ -1159,8 +1158,8 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
 
             const lineCounts = countLines(program);
             if (compilerOptions.extendedDiagnostics) {
-                for (const key of arrayFrom(lineCounts.keys())) {
-                    reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
+                for (const [key, value] of lineCounts.entries()) {
+                    reportCountStatistic("Lines of " + key, value);
                 }
             }
             else {

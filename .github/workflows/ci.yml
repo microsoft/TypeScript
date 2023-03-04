@@ -39,7 +39,8 @@ jobs:
     - run:  npm ci
 
     - name: Tests
-      run:  npm run test -- --bundle=${{ matrix.bundle }}
+      # run tests, but lint separately
+      run:  npm run test -- --no-lint --bundle=${{ matrix.bundle }}
 
   lint:
     runs-on: ubuntu-latest

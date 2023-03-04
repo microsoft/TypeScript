@@ -1,13 +1,4 @@
 Info 0    [00:01:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:01:14.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/packages/A/src/index.ts"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -70,7 +61,7 @@ export declare function foo(): void;
 
 
 //// [/user/username/projects/myproject/packages/B/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./src/bar.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"},{"version":"4646078106-export function foo() { }","signature":"-5677608893-export declare function foo(): void;\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./lib/index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./src/bar.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"},{"version":"4646078106-export function foo() { }","signature":"-5677608893-export declare function foo(): void;\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./lib/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/B/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -107,6 +98,16 @@ export declare function foo(): void;
         "signature": "-5677608893-export declare function foo(): void;\n"
       }
     },
+    "root": [
+      [
+        2,
+        "./src/bar.ts"
+      ],
+      [
+        3,
+        "./src/index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "./lib",
@@ -122,7 +123,7 @@ export declare function foo(): void;
     "latestChangedDtsFile": "./lib/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 951
+  "size": 964
 }
 
 //// [/user/username/projects/myproject/packages/A/lib/index.js]
@@ -139,7 +140,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/lib/index.d.ts","../b/lib/bar.d.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-2904461644-export declare function bar(): void;\n",{"version":"8545527381-import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2],"latestChangedDtsFile":"./lib/index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/lib/index.d.ts","../b/lib/bar.d.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-2904461644-export declare function bar(): void;\n",{"version":"8545527381-import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2],"latestChangedDtsFile":"./lib/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -183,6 +184,12 @@ export {};
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        4,
+        "./src/index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "./lib",
@@ -204,16 +211,19 @@ export {};
     "latestChangedDtsFile": "./lib/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1036
+  "size": 1047
 }
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:01:14.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/packages/A/src/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:01:15.000] Search path: /user/username/projects/myproject/packages/A/src
 Info 3    [00:01:16.000] For info: /user/username/projects/myproject/packages/A/src/index.ts :: Config file name: /user/username/projects/myproject/packages/A/tsconfig.json
 Info 4    [00:01:17.000] Creating configuration project /user/username/projects/myproject/packages/A/tsconfig.json
@@ -276,10 +286,10 @@ Info 32   [00:01:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 33   [00:01:46.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 34   [00:01:47.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
 Info 35   [00:01:48.000] 	Files (4)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/packages/B/src/index.ts
-	/user/username/projects/myproject/packages/B/src/bar.ts
-	/user/username/projects/myproject/packages/A/src/index.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/packages/B/src/index.ts Text-1 "export function foo() { }"
+	/user/username/projects/myproject/packages/B/src/bar.ts Text-1 "export function bar() { }"
+	/user/username/projects/myproject/packages/A/src/index.ts SVC-1-0 "import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -307,46 +317,48 @@ Info 42   [00:01:57.000] -----------------------------------------------
 Info 42   [00:01:58.000] Open files: 
 Info 42   [00:01:59.000] 	FileName: /user/username/projects/myproject/packages/A/src/index.ts ProjectRootPath: undefined
 Info 42   [00:02:00.000] 		Projects: /user/username/projects/myproject/packages/A/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 42   [00:02:01.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/packages/a/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/packages/a/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/packages/b/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/packages/b/src/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/b/src/bar.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/packages/b/package.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/packages/a/src: *new*
+  {}
+/user/username/projects/myproject/packages/b/src: *new*
+  {}
+/user/username/projects/myproject/node_modules: *new*
+  {}
+
+Before request
+
 Info 43   [00:02:02.000] request:
     {
       "command": "geterr",
@@ -359,265 +371,25 @@ Info 43   [00:02:02.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 44   [00:02:03.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 Info 45   [00:02:04.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 Info 46   [00:02:05.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 Info 47   [00:02:06.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
@@ -625,39 +397,7 @@ Info 48   [00:02:07.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
+Before request
 
 Info 49   [00:02:08.000] request:
     {
@@ -685,83 +425,15 @@ Info 49   [00:02:08.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 50   [00:02:09.000] response:
     {
       "response": true,
       "responseRequired": true
     }
+After request
+
+Before request
+
 Info 51   [00:02:10.000] request:
     {
       "command": "geterr",
@@ -774,305 +446,38 @@ Info 51   [00:02:10.000] request:
       "seq": 4,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Info 52   [00:02:11.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Before checking timeout queue length (1) and running
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 Info 53   [00:02:12.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
 Info 54   [00:02:13.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 55   [00:02:14.000] Different program with same set of files
-Info 56   [00:02:15.000] event:
+Info 55   [00:02:14.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
+Info 56   [00:02:15.000] 	Files (4)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/packages/B/src/index.ts Text-1 "export function foo() { }"
+	/user/username/projects/myproject/packages/B/src/bar.ts Text-1 "export function bar() { }"
+	/user/username/projects/myproject/packages/A/src/index.ts SVC-1-1 "import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n\n"
+
+Info 57   [00:02:16.000] -----------------------------------------------
+Info 58   [00:02:17.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 After checking timeout queue length (1) and running
 
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
-Info 57   [00:02:16.000] event:
+Info 59   [00:02:18.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
-Info 58   [00:02:17.000] event:
+Info 60   [00:02:19.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
-Info 59   [00:02:18.000] event:
+Info 61   [00:02:20.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/b/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/a/src:
-  {}
-/user/username/projects/myproject/packages/b/src:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}

@@ -131,7 +131,7 @@ function fn() {
 >x : any
 >foo : any
 
-    try { } catch (/** @type {unknown} */ { x }) { console.log(x); } // should be OK
+    try { } catch (/** @type {unknown} */ { x }) { console.log(x); } // error in the destructure
 >x : any
 >console.log(x) : void
 >console.log : (...data: any[]) => void
@@ -139,7 +139,7 @@ function fn() {
 >log : (...data: any[]) => void
 >x : any
 
-    try { } catch (/** @type {Unknown} */ { x }) { console.log(x); } // should be OK
+    try { } catch (/** @type {Unknown} */ { x }) { console.log(x); } // error in the destructure
 >x : any
 >console.log(x) : void
 >console.log : (...data: any[]) => void

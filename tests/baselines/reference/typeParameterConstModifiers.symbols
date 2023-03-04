@@ -272,3 +272,27 @@ set(obj, ['a', 'b', 'c'], value);
 >obj : Symbol(obj, Decl(typeParameterConstModifiers.ts, 68, 11))
 >value : Symbol(value, Decl(typeParameterConstModifiers.ts, 69, 11))
 
+// Repro from #52007
+
+declare function inners<const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]): T;
+>inners : Symbol(inners, Decl(typeParameterConstModifiers.ts, 71, 33))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 75, 24))
+>args : Symbol(args, Decl(typeParameterConstModifiers.ts, 75, 56))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 75, 24))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 75, 24))
+
+const test = inners(1,2,3,4,5);
+>test : Symbol(test, Decl(typeParameterConstModifiers.ts, 77, 5))
+>inners : Symbol(inners, Decl(typeParameterConstModifiers.ts, 71, 33))
+
+declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
+>inners2 : Symbol(inners2, Decl(typeParameterConstModifiers.ts, 77, 31))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 79, 25))
+>args : Symbol(args, Decl(typeParameterConstModifiers.ts, 79, 57))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 79, 25))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 79, 25))
+
+const test2 = inners2([1,2,3,4,5]);
+>test2 : Symbol(test2, Decl(typeParameterConstModifiers.ts, 81, 5))
+>inners2 : Symbol(inners2, Decl(typeParameterConstModifiers.ts, 77, 31))
+

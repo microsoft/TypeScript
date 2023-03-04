@@ -1,15 +1,4 @@
 Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:28.000] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/user/username/projects/myproject/src/foo.ts",
-        "fileContent": "export function foo() { }",
-        "projectRootPath": "/user/username/projects/myproject"
-      },
-      "seq": 1,
-      "type": "request"
-    }
 Before request
 //// [/user/username/projects/myproject/src/foo.ts]
 export function foo() { }
@@ -34,12 +23,17 @@ interface Array<T> { length: number; [n: number]: T; }
 {"include":["./src"],"exclude":["./src/sub"]}
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
+Info 1    [00:00:28.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/foo.ts",
+        "fileContent": "export function foo() { }",
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info 2    [00:00:29.000] Search path: /user/username/projects/myproject/src
 Info 3    [00:00:30.000] For info: /user/username/projects/myproject/src/foo.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [00:00:31.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -65,9 +59,9 @@ Info 14   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 15   [00:00:42.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:43.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 17   [00:00:44.000] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/bar.ts
-	/user/username/projects/myproject/src/foo.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/bar.ts Text-1 "export function bar() { }"
+	/user/username/projects/myproject/src/foo.ts SVC-1-0 "export function foo() { }"
 
 
 	../../../../a/lib/lib.d.ts
@@ -91,31 +85,36 @@ Info 22   [00:00:51.000] -----------------------------------------------
 Info 22   [00:00:52.000] Open files: 
 Info 22   [00:00:53.000] 	FileName: /user/username/projects/myproject/src/foo.ts ProjectRootPath: /user/username/projects/myproject
 Info 22   [00:00:54.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Info 22   [00:00:55.000] response:
     {
       "responseRequired": false
     }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/src/bar.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src: *new*
+  {}
+
 Info 23   [00:00:58.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 24   [00:00:59.000] Project: /user/username/projects/myproject/tsconfig.json Detected excluded file: /user/username/projects/myproject/src/sub/fooBar.ts
 Info 25   [00:01:00.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Before request
+//// [/user/username/projects/myproject/src/sub/fooBar.ts]
+export function fooBar() { }
+
+
 Info 26   [00:01:01.000] request:
     {
       "command": "open",
@@ -127,27 +126,6 @@ Info 26   [00:01:01.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-//// [/user/username/projects/myproject/src/sub/fooBar.ts]
-export function fooBar() { }
-
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Info 27   [00:01:02.000] Search path: /user/username/projects/myproject/src/sub
 Info 28   [00:01:03.000] For info: /user/username/projects/myproject/src/sub/fooBar.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 29   [00:01:04.000] event:
@@ -167,8 +145,8 @@ Info 41   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 42   [00:01:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 43   [00:01:18.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 44   [00:01:19.000] 	Files (2)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/sub/fooBar.ts
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/src/sub/fooBar.ts SVC-1-0 "export function fooBar() { }"
 
 
 	../../../../../../a/lib/lib.d.ts
@@ -190,24 +168,28 @@ Info 46   [00:01:28.000] 	FileName: /user/username/projects/myproject/src/foo.ts
 Info 46   [00:01:29.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 46   [00:01:30.000] 	FileName: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject
 Info 46   [00:01:31.000] 		Projects: /dev/null/inferredProject1*
+Info 46   [00:01:32.000] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
+/user/username/projects/myproject/src/sub/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
+/user/username/projects/myproject/src/sub/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
+/user/username/projects/myproject/src/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
+/user/username/projects/myproject/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
+/user/username/projects/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
+/user/username/projects/myproject/src/sub/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
+/user/username/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -222,10 +204,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 46   [00:01:32.000] response:
-    {
-      "responseRequired": false
-    }
+Before request
+
 Info 47   [00:01:33.000] request:
     {
       "command": "geterr",
@@ -239,532 +219,50 @@ Info 47   [00:01:33.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
-After request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Info 48   [00:01:34.000] response:
     {
       "responseRequired": false
     }
+After request
+
 Checking timeout queue length: 1
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Before running timeout callback1
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 
 Info 49   [00:01:35.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
 After running timeout callback1
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 
 Info 50   [00:01:36.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 
 Info 51   [00:01:37.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Checking timeout queue length: 1
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Before running timeout callback2
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 
 Info 52   [00:01:38.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
 After running timeout callback2
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 
 Info 53   [00:01:39.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 
 Info 54   [00:01:40.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
 Info 55   [00:01:41.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Before running immediate callbacks and checking length (1)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/bar.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}

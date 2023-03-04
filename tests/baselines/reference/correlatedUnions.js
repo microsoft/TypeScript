@@ -174,7 +174,7 @@ function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 }
 
 function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
-    const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
+    const func: Func<K> = funcs[key];
     func(arg);
 }
 
@@ -235,6 +235,40 @@ type BarLookup = typeof BAR_LOOKUP;
 
 type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
 
+// repro from #43982
+
+interface Original {
+  prop1: {
+    subProp1: string;
+    subProp2: string;
+  };
+  prop2: {
+    subProp3: string;
+    subProp4: string;
+  };
+}
+type KeyOfOriginal = keyof Original;
+type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
+
+type SameKeys<T> = {
+  [K in keyof T]: {
+    [K2 in keyof T[K]]: number;
+  };
+};
+
+type MappedFromOriginal = SameKeys<Original>;
+
+const getStringAndNumberFromOriginalAndMapped = <
+  K extends KeyOfOriginal,
+  N extends NestedKeyOfOriginalFor<K>
+>(
+  original: Original,
+  mappedFromOriginal: MappedFromOriginal,
+  key: K,
+  nestedKey: N
+): [Original[K][N], MappedFromOriginal[K][N]] => {
+  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
+};
 
 //// [correlatedUnions.js]
 "use strict";
@@ -329,7 +363,7 @@ function f2(funcs, key, arg) {
     func(arg);
 }
 function f3(funcs, key, arg) {
-    var func = funcs[key]; // Error, Funcs[K] not assignable to Func<K>
+    var func = funcs[key];
     func(arg);
 }
 function f4(x, y) {
@@ -355,6 +389,9 @@ function foo(prop, f) {
 }
 var ALL_BARS = [{ name: 'a' }, { name: 'b' }];
 var BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
+var getStringAndNumberFromOriginalAndMapped = function (original, mappedFromOriginal, key, nestedKey) {
+    return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
+};
 
 
 //// [correlatedUnions.d.ts]
@@ -506,3 +543,22 @@ type BarLookup = typeof BAR_LOOKUP;
 type Baz = {
     [K in keyof BarLookup]: BarLookup[K]['name'];
 };
+interface Original {
+    prop1: {
+        subProp1: string;
+        subProp2: string;
+    };
+    prop2: {
+        subProp3: string;
+        subProp4: string;
+    };
+}
+type KeyOfOriginal = keyof Original;
+type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
+type SameKeys<T> = {
+    [K in keyof T]: {
+        [K2 in keyof T[K]]: number;
+    };
+};
+type MappedFromOriginal = SameKeys<Original>;
+declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]];

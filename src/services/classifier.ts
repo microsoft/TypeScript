@@ -61,7 +61,6 @@ import {
     nodeIsMissing,
     ParameterDeclaration,
     parseIsolatedJSDocComment,
-    Push,
     Scanner,
     ScriptTarget,
     SemanticMeaning,
@@ -312,7 +311,7 @@ function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplat
     }
 }
 
-function pushEncodedClassification(start: number, end: number, offset: number, classification: ClassificationType, result: Push<number>): void {
+function pushEncodedClassification(start: number, end: number, offset: number, classification: ClassificationType, result: number[]): void {
     if (classification === ClassificationType.whiteSpace) {
         // Don't bother with whitespace classifications.  They're not needed.
         return;

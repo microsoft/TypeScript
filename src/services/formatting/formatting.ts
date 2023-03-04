@@ -34,6 +34,7 @@ import {
     InterfaceDeclaration,
     isComment,
     isDecorator,
+    isGrammarError,
     isJSDoc,
     isLineBreak,
     isModifier,
@@ -803,7 +804,7 @@ function formatSpanWorker(
             isFirstListItem?: boolean): number {
             Debug.assert(!nodeIsSynthesized(child));
 
-            if (nodeIsMissing(child)) {
+            if (nodeIsMissing(child) || isGrammarError(parent, child)) {
                 return inheritedIndentation;
             }
 

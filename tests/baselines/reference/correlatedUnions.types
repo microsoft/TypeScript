@@ -601,7 +601,7 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 >key : K
 >arg : ArgMap[K]
 
-    const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
+    const func: Func<K> = funcs[key];
 >func : Func<K>
 >funcs[key] : Funcs[K]
 >funcs : Funcs
@@ -753,3 +753,78 @@ type BarLookup = typeof BAR_LOOKUP;
 type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
 >Baz : { a: "a"; b: "b"; }
 
+// repro from #43982
+
+interface Original {
+  prop1: {
+>prop1 : { subProp1: string; subProp2: string; }
+
+    subProp1: string;
+>subProp1 : string
+
+    subProp2: string;
+>subProp2 : string
+
+  };
+  prop2: {
+>prop2 : { subProp3: string; subProp4: string; }
+
+    subProp3: string;
+>subProp3 : string
+
+    subProp4: string;
+>subProp4 : string
+
+  };
+}
+type KeyOfOriginal = keyof Original;
+>KeyOfOriginal : keyof Original
+
+type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
+>NestedKeyOfOriginalFor : keyof Original[T]
+
+type SameKeys<T> = {
+>SameKeys : SameKeys<T>
+
+  [K in keyof T]: {
+    [K2 in keyof T[K]]: number;
+  };
+};
+
+type MappedFromOriginal = SameKeys<Original>;
+>MappedFromOriginal : SameKeys<Original>
+
+const getStringAndNumberFromOriginalAndMapped = <
+>getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
+><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
+
+  K extends KeyOfOriginal,
+  N extends NestedKeyOfOriginalFor<K>
+>(
+  original: Original,
+>original : Original
+
+  mappedFromOriginal: MappedFromOriginal,
+>mappedFromOriginal : SameKeys<Original>
+
+  key: K,
+>key : K
+
+  nestedKey: N
+>nestedKey : N
+
+): [Original[K][N], MappedFromOriginal[K][N]] => {
+  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
+>[original[key][nestedKey], mappedFromOriginal[key][nestedKey]] : [Original[K][N], SameKeys<Original>[K][N]]
+>original[key][nestedKey] : Original[K][N]
+>original[key] : Original[K]
+>original : Original
+>key : K
+>nestedKey : N
+>mappedFromOriginal[key][nestedKey] : SameKeys<Original>[K][N]
+>mappedFromOriginal[key] : SameKeys<Original>[K]
+>mappedFromOriginal : SameKeys<Original>
+>key : K
+>nestedKey : N
+
+};

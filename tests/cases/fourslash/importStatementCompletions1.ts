@@ -20,7 +20,7 @@
 //// [|import f/*4*/ =|]
 
 // @Filename: /index5.ts
-//// import f/*5*/ from "";
+//// [|import f/*5*/ from "";|]
 
 ([[0, true], [1, true], [2, false], [3, true], [4, true], [5, true]] as const).forEach(([marker, typeKeywordValid]) => {
   verify.completions({

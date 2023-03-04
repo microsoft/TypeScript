@@ -1,8 +1,9 @@
-import fs from "fs-extra";
-import path from "path";
-import glob from "glob";
-import url from "url";
 import del from "del";
+import fs from "fs-extra";
+import glob from "glob";
+import path from "path";
+import url from "url";
+
 import { localizationDirectories } from "./build/localization.mjs";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));

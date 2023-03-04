@@ -15,6 +15,10 @@ type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected
 type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
 type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
 
+type TUndefined = Awaited<undefined>;
+type TNull = Awaited<null>;
+type TNullOrUndefined = Awaited<null | undefined>;
+
 interface BadPromise { then(cb: (value: BadPromise) => void): void; }
 type T16 = Awaited<BadPromise>; // error
 
@@ -181,6 +185,49 @@ async function brokenExample<AcceptableKeyType extends string = string>(structur
   structure[key] = 1;
 }
 
+// repro from #46543
+
+type SelectAndInclude = {
+  select: any;
+  include: any;
+};
+type HasSelect = {
+  select: any;
+};
+type HasInclude = {
+  include: any;
+};
+
+type CheckSelect<T, S, U> = T extends SelectAndInclude
+  ? "Please either choose `select` or `include`"
+  : T extends HasSelect
+  ? U
+  : T extends HasInclude
+  ? U
+  : S;
+
+declare function findMany<T extends { select?: string; include?: string }>(
+  args: T
+): CheckSelect<T, Promise<1>, Promise<2>>;
+
+async function findManyWrapper<
+  T extends { select?: string; include?: string }
+>(args: T) {
+  const result = await findMany(args);
+  return result;
+}
+
+async function mainFindMany() {
+  const shouldBeErrorText = await findManyWrapper({
+    select: "foo",
+    include: "bar",
+  });
+  const itsOne = await findManyWrapper({});
+  const itsTwo1 = await findManyWrapper({ select: "foo" });
+  const itsTwo2 = await findManyWrapper({ include: "bar" });
+}
+
+
 //// [awaitedType.js]
 async function main() {
     let aaa;
@@ -294,4 +341,17 @@ async function f17_usage() {
 async function brokenExample(structurePromise, key) {
     const structure = await structurePromise;
     structure[key] = 1;
+}
+async function findManyWrapper(args) {
+    const result = await findMany(args);
+    return result;
+}
+async function mainFindMany() {
+    const shouldBeErrorText = await findManyWrapper({
+        select: "foo",
+        include: "bar",
+    });
+    const itsOne = await findManyWrapper({});
+    const itsTwo1 = await findManyWrapper({ select: "foo" });
+    const itsTwo2 = await findManyWrapper({ include: "bar" });
 }
