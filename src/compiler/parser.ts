@@ -8610,19 +8610,14 @@ namespace Parser {
                             pushComment(scanner.getTokenValue());
                             break;
                         case SyntaxKind.AtToken:
-                            if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
-                                removeTrailingWhitespace(comments);
-                                if (!commentsPos) commentsPos = getNodePos();
-                                addTag(parseTag(indent));
-                                // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
-                                // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
-                                // for malformed examples like `/** @param {string} x @returns {number} the length */`
-                                state = JSDocState.BeginningOfLine;
-                                margin = undefined;
-                            }
-                            else {
-                                pushComment(scanner.getTokenText());
-                            }
+                            removeTrailingWhitespace(comments);
+                            if (!commentsPos) commentsPos = getNodePos();
+                            addTag(parseTag(indent));
+                            // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
+                            // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
+                            // for malformed examples like `/** @param {string} x @returns {number} the length */`
+                            state = JSDocState.BeginningOfLine;
+                            margin = undefined;
                             break;
                         case SyntaxKind.NewLineTrivia:
                             comments.push(scanner.getTokenText());
@@ -8631,24 +8626,23 @@ namespace Parser {
                             break;
                         case SyntaxKind.AsteriskToken:
                             const asterisk = scanner.getTokenText();
-                            if (state === JSDocState.SawAsterisk || state === JSDocState.SavingComments) {
+                            if (state === JSDocState.SawAsterisk) {
                                 // If we've already seen an asterisk, then we can no longer parse a tag on this line
                                 state = JSDocState.SavingComments;
                                 pushComment(asterisk);
                             }
                             else {
+                                Debug.assert(state === JSDocState.BeginningOfLine);
                                 // Ignore the first asterisk on a line
                                 state = JSDocState.SawAsterisk;
                                 indent += asterisk.length;
                             }
                             break;
                         case SyntaxKind.WhitespaceTrivia:
+                            Debug.assert(state !== JSDocState.SavingComments, "whitespace shouldn't come from the scanner while saving top-level comment text");
                             // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
                             const whitespace = scanner.getTokenText();
-                            if (state === JSDocState.SavingComments) {
-                                comments.push(whitespace);
-                            }
-                            else if (margin !== undefined && indent + whitespace.length > margin) {
+                            if (margin !== undefined && indent + whitespace.length > margin) {
                                 comments.push(whitespace.slice(margin - indent));
                             }
                             indent += whitespace.length;
@@ -8686,7 +8680,7 @@ namespace Parser {
                         nextTokenJSDoc();
                     }
                 }
-                const trimmedComments = comments.join("").trimEnd();
+                const trimmedComments = comments.join("").trimEnd(); // TODO: Use our helpers for trimEnd since they delegate to newer ES trim methods when present (always)
                 if (parts.length && trimmedComments.length) {
                     parts.push(finishNode(factory.createJSDocText(trimmedComments), linkEnd ?? start, commentsPos));
                 }
@@ -8906,17 +8900,13 @@ namespace Parser {
                             // Done
                             break loop;
                         case SyntaxKind.WhitespaceTrivia:
-                            if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
-                                pushComment(scanner.getTokenText()); // TODO: This branch might not be needed anymore!
+                            Debug.assert(state !== JSDocState.SavingComments && state !== JSDocState.SavingBackticks, "whitespace shouldn't come from the scanner while saving comment text")
+                            const whitespace = scanner.getTokenText();
+                            // if the whitespace crosses the margin, take only the whitespace that passes the margin
+                            if (margin !== undefined && indent + whitespace.length > margin) {
+                                comments.push(whitespace.slice(margin - indent));
                             }
-                            else {
-                                const whitespace = scanner.getTokenText();
-                                // if the whitespace crosses the margin, take only the whitespace that passes the margin
-                                if (margin !== undefined && indent + whitespace.length > margin) {
-                                    comments.push(whitespace.slice(margin - indent));
-                                }
-                                indent += whitespace.length; // TODO: What happens if we start saving comments here? We don't support margins like | <margin here> * text text | do we?
-                            }
+                            indent += whitespace.length; // TODO: What happens if we start saving comments here? We don't support margins like | <margin here> * text text | do we?
                             break;
                         case SyntaxKind.OpenBraceToken:
                             state = JSDocState.SavingComments;
@@ -8942,7 +8932,7 @@ namespace Parser {
                             }
                             pushComment(scanner.getTokenText());
                             break;
-                        case SyntaxKind.AsteriskToken: // TODO: and asterisk inside comments too
+                        case SyntaxKind.AsteriskToken:
                             if (state === JSDocState.BeginningOfLine) {
                                 // leading asterisks start recording on the *next* (non-whitespace) token
                                 state = JSDocState.SawAsterisk;
