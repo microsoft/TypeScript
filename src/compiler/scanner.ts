@@ -75,7 +75,7 @@ export interface Scanner {
     reScanInvalidIdentifier(): SyntaxKind;
     scanJsxToken(): JsxTokenSyntaxKind;
     scanJsDocToken(): JSDocSyntaxKind;
-    scanBigJsDocToken(): JSDocSyntaxKind; // TODO: Should only be the Big Token kinds
+    scanBigJsDocToken(inBackticks: boolean): JSDocSyntaxKind;
     scan(): SyntaxKind;
 
     getText(): string;
@@ -2457,32 +2457,33 @@ export function createScanner(languageVersion: ScriptTarget,
         return scanJsxAttributeValue();
     }
 
-    /** TODO: might need to return WhitespaceTrivia if only whitespace was encountered? */
-    function scanBigJsDocToken(): JSDocSyntaxKind { // can be configurable to skip almost everything (except newline and backtick) if backticks is true
+    function scanBigJsDocToken(inBackticks: boolean): JSDocSyntaxKind {
         startPos = tokenPos = pos;
         tokenFlags = TokenFlags.None;
         if (pos >= end) {
             return token = SyntaxKind.EndOfFileToken;
         }
-
-        let ch = codePointAt(text, pos);
-        while (pos < end) {
-            if (ch !== CharacterCodes.lineFeed && ch !== CharacterCodes.at && ch !== CharacterCodes.backtick && ch !== CharacterCodes.openBrace) {
-                // TODO: We can also be smarter about openBrace, backtick and at by looking at a tiny amount of context
-                pos++;
+        // TODO: Probably need to increment pos in the initial part to avoid a double read
+        // TODO: Need to increment `pos += charSize(ch)`,
+        for (let ch = codePointAt(text, pos);
+             pos < end && (ch !== CharacterCodes.lineFeed && ch !== CharacterCodes.carriageReturn && ch !== CharacterCodes.backtick);
+             ch = codePointAt(text, ++pos)) {
+            if (!inBackticks) {
+                if (ch === CharacterCodes.openBrace) {
+                    break;
+                }
+                else if (ch === CharacterCodes.at
+                    && pos - 1 >= 0 && isWhiteSpaceSingleLine(codePointAt(text, pos - 1))
+                    && !(pos + 1 < end && isWhiteSpaceLike(codePointAt(text, pos + 1)))) {
+                    // @ doesn't start a new tag inside ``, and elsewhere, only after whitespace and before non-whitespace
+                    break;
+                }
             }
-            else {
-                break;
-            }
-            ch = codePointAt(text, pos);
         }
         if (pos === tokenPos) {
             return scanJsDocToken();
         }
-        else {
-            // TODO: Make sure this is right (and in the right place)
-            tokenValue = text.substring(tokenPos, pos);
-        }
+        tokenValue = text.substring(tokenPos, pos);
         return token = SyntaxKind.Identifier;
     }
 

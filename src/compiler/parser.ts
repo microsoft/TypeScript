@@ -2165,8 +2165,8 @@ namespace Parser {
         return currentToken = scanner.scanJsDocToken();
     }
 
-    function nextTokenJSDocBig(): JSDocSyntaxKind { // TODO: nextTokenJSDocCommentText
-        return currentToken = scanner.scanBigJsDocToken();
+    function nextTokenJSDocBig(inBackticks: boolean): JSDocSyntaxKind { // TODO: nextTokenJSDocCommentText
+        return currentToken = scanner.scanBigJsDocToken(inBackticks);
     }
 
     function reScanGreaterToken(): SyntaxKind {
@@ -8680,7 +8680,7 @@ namespace Parser {
                             break;
                     }
                     if (state === JSDocState.SavingComments) {
-                        nextTokenJSDocBig();
+                        nextTokenJSDocBig(/*inBackticks*/ false);
                     }
                     else {
                         nextTokenJSDoc();
@@ -8869,7 +8869,6 @@ namespace Parser {
                 const parts: JSDocComment[] = [];
                 let linkEnd;
                 let state = JSDocState.BeginningOfLine;
-                let previousWhitespace = true;
                 let margin: number | undefined;
                 function pushComment(text: string) {
                     if (!margin) {
@@ -8901,14 +8900,8 @@ namespace Parser {
                             indent = 0;
                             break;
                         case SyntaxKind.AtToken:
-                            if (state === JSDocState.SavingBackticks // TODO: nextTokenJSDocBig should be able to skip @ inside backticks
-                                || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
-                                // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
-                                comments.push(scanner.getTokenText());
-                                break;
-                            }
                             scanner.setTextPos(scanner.getTextPos() - 1);
-                            // falls through
+                            break loop;
                         case SyntaxKind.EndOfFileToken:
                             // Done
                             break loop;
@@ -8965,11 +8958,8 @@ namespace Parser {
                             pushComment(scanner.getTokenText());
                             break;
                     }
-                    // TODO: nextTokenJSDocBig always returns Identifier, even when that token ends with some whitespace.
-                    // Make this hack less hacky: call a isWhitespace function, and importantly, the state *currently* being SavingComments doesn't mean that the previous call was for a big token
-                    previousWhitespace = token() === SyntaxKind.WhitespaceTrivia || ((state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) && tok === SyntaxKind.Identifier && scanner.getTokenValue().at(-1) === " ");
                     if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) { // TODO: Add another scanner method for scanning over the introductory " *" after BeginningOfLine
-                        tok = nextTokenJSDocBig(); // TODO: Maybe SawAsterisk could also call nextTokenJSDocBig?
+                        tok = nextTokenJSDocBig(state === JSDocState.SavingBackticks); // TODO: Maybe SawAsterisk could also call nextTokenJSDocBig?
                     } // TODO: Maybe nextTokenJSDocBig is backward-compatible enough to just call all the time
                     else {
                         tok = nextTokenJSDoc();
@@ -8987,11 +8977,6 @@ namespace Parser {
                 else if (trimmedComments.length) {
                     return trimmedComments;
                 }
-            }
-
-            function isNextJSDocTokenWhitespace() {
-                const next = nextTokenJSDoc();
-                return next === SyntaxKind.WhitespaceTrivia || next === SyntaxKind.NewLineTrivia;
             }
 
             function parseJSDocLink(start: number) {
