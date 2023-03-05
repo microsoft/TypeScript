@@ -36967,7 +36967,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // There is no point in doing an assignability check if the function
         // has no explicit return type because the return type is directly computed
         // from the yield expressions.
-        const returnType = getReturnTypeFromAnnotation(func);
+        let returnType = getReturnTypeFromAnnotation(func);
+        if (returnType && returnType.flags & TypeFlags.Union) {
+            returnType = filterType(returnType, t => checkGeneratorInstantiationAssignabilityToReturnType(t, functionFlags, /*errorNode*/ undefined));
+        }
         const iterationTypes = returnType && getIterationTypesOfGeneratorFunctionReturnType(returnType, isAsync);
         const signatureYieldType = iterationTypes && iterationTypes.yieldType || anyType;
         const signatureNextType = iterationTypes && iterationTypes.nextType || anyType;
