@@ -1691,7 +1691,7 @@ type ArrayBufferLike = ArrayBufferTypes[keyof ArrayBufferTypes];
 
 interface ArrayBufferConstructor {
     readonly prototype: ArrayBuffer;
-    new(byteLength: number): ArrayBuffer;
+    new(byteLength?: number): ArrayBuffer;
     isView(arg: any): arg is ArrayBufferView;
 }
 declare var ArrayBuffer: ArrayBufferConstructor;
