@@ -108,6 +108,8 @@ jobs:
         git log --oneline -1 HEAD
         git log --oneline -1 HEAD^
         git log --oneline -1 HEAD~1
+        echo $GITHUB_REF
+        echo $GITHUB_SHA
     
     # - if: github.event_name == 'pull_request'
     #   run:  npm ci
