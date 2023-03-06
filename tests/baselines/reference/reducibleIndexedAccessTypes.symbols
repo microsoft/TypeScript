@@ -112,3 +112,24 @@ type GetPayload<P extends Payload, K extends keyof P> = P extends { dataType: K 
 >K : Symbol(K, Decl(reducibleIndexedAccessTypes.ts, 39, 34))
 >P : Symbol(P, Decl(reducibleIndexedAccessTypes.ts, 39, 16))
 
+// Repro from #51161
+
+type AnyOneof = { oneofKind: string; [k: string]: unknown } | { oneofKind: undefined };
+>AnyOneof : Symbol(AnyOneof, Decl(reducibleIndexedAccessTypes.ts, 39, 102))
+>oneofKind : Symbol(oneofKind, Decl(reducibleIndexedAccessTypes.ts, 43, 17))
+>k : Symbol(k, Decl(reducibleIndexedAccessTypes.ts, 43, 38))
+>oneofKind : Symbol(oneofKind, Decl(reducibleIndexedAccessTypes.ts, 43, 63))
+
+type AnyOneofKind<T extends AnyOneof> = T extends { oneofKind: keyof T }
+>AnyOneofKind : Symbol(AnyOneofKind, Decl(reducibleIndexedAccessTypes.ts, 43, 87))
+>T : Symbol(T, Decl(reducibleIndexedAccessTypes.ts, 44, 18))
+>AnyOneof : Symbol(AnyOneof, Decl(reducibleIndexedAccessTypes.ts, 39, 102))
+>T : Symbol(T, Decl(reducibleIndexedAccessTypes.ts, 44, 18))
+>oneofKind : Symbol(oneofKind, Decl(reducibleIndexedAccessTypes.ts, 44, 51))
+>T : Symbol(T, Decl(reducibleIndexedAccessTypes.ts, 44, 18))
+
+    ? T['oneofKind']
+>T : Symbol(T, Decl(reducibleIndexedAccessTypes.ts, 44, 18))
+
+    : never;
+

@@ -41,3 +41,10 @@ const payloads2: MappedPayload2 = {
 // Additional repro from 53030
 
 type GetPayload<P extends Payload, K extends keyof P> = P extends { dataType: K } ? P["data"] : never;
+
+// Repro from #51161
+
+type AnyOneof = { oneofKind: string; [k: string]: unknown } | { oneofKind: undefined };
+type AnyOneofKind<T extends AnyOneof> = T extends { oneofKind: keyof T }
+    ? T['oneofKind']
+    : never;
