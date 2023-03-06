@@ -1681,7 +1681,7 @@ namespace Parser {
                 contextFlags = NodeFlags.JavaScriptFile;
                 break;
             case ScriptKind.JSON:
-                contextFlags = NodeFlags.JavaScriptFile | NodeFlags.JsonFile;
+                contextFlags = NodeFlags.JsonFile;
                 break;
             default:
                 contextFlags = NodeFlags.None;
