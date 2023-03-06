@@ -99,20 +99,15 @@ jobs:
         node-version: "*"
         check-latest: true
     
+    # Pre-build the main branch so we can check lib folder size changes.
     - if: github.event_name == 'pull_request'
-      id: ref
-      run: echo "ref=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
+      run: git checkout $(git merge-base ${{ github.base_ref }} ${{ github.ref }})
     - if: github.event_name == 'pull_request'
-      run: |
-        git log --oneline -1 HEAD
-        git log --oneline -1 HEAD^
-        git log --oneline -1 HEAD~1
-        echo $GITHUB_REF
-        echo $GITHUB_SHA
-    
-    # - if: github.event_name == 'pull_request'
-    #   run:  npm ci
+      run: npm ci
+    - if: github.event_name == 'pull_request'
+      run: npx hereby lkg
+    - if: github.event_name == 'pull_request'
+      run: git checkout ${{ github.ref }}
 
     - run:  npm ci
 
