@@ -2166,8 +2166,8 @@ namespace Parser {
         return currentToken = scanner.scanJsDocToken();
     }
 
-    function nextTokenJSDocBig(inBackticks: boolean): JSDocSyntaxKind { // TODO: nextTokenJSDocCommentText
-        return currentToken = scanner.scanBigJsDocToken(inBackticks);
+    function nextJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind {
+        return currentToken = scanner.scanJSDocCommentTextToken(inBackticks);
     }
 
     function reScanGreaterToken(): SyntaxKind {
@@ -8606,7 +8606,7 @@ namespace Parser {
                 }
                 loop: while (true) {
                     switch (token()) {
-                        case SyntaxKind.Identifier:
+                        case SyntaxKind.JSDocCommentTextToken:
                             state = JSDocState.SavingComments;
                             pushComment(scanner.getTokenValue());
                             break;
@@ -8675,7 +8675,7 @@ namespace Parser {
                             break;
                     }
                     if (state === JSDocState.SavingComments) {
-                        nextTokenJSDocBig(/*inBackticks*/ false);
+                        nextJSDocCommentTextToken(/*inBackticks*/ false);
                     }
                     else {
                         nextTokenJSDoc();
@@ -8882,7 +8882,7 @@ namespace Parser {
                 let tok = token() as JSDocSyntaxKind;
                 loop: while (true) {
                     switch (tok) {
-                        case SyntaxKind.Identifier:
+                        case SyntaxKind.JSDocCommentTextToken:
                             if (state !== JSDocState.SavingBackticks) {
                                 state = JSDocState.SavingComments; // leading identifiers start recording as well
                             }
@@ -8901,8 +8901,7 @@ namespace Parser {
                             // Done
                             break loop;
                         case SyntaxKind.WhitespaceTrivia:
-                            // TODO: This could simplify somewhat if the scanner could also parse leading whitespace-asterisk sequences
-                            Debug.assert(state !== JSDocState.SavingComments && state !== JSDocState.SavingBackticks, "whitespace shouldn't come from the scanner while saving comment text")
+                            Debug.assert(state !== JSDocState.SavingComments && state !== JSDocState.SavingBackticks, "whitespace shouldn't come from the scanner while saving comment text");
                             const whitespace = scanner.getTokenText();
                             // if the whitespace crosses the margin, take only the whitespace that passes the margin
                             if (margin !== undefined && indent + whitespace.length > margin) {
@@ -8951,9 +8950,9 @@ namespace Parser {
                             pushComment(scanner.getTokenText());
                             break;
                     }
-                    if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) { // TODO: Add another scanner method for scanning over the introductory " *" after BeginningOfLine
-                        tok = nextTokenJSDocBig(state === JSDocState.SavingBackticks); // TODO: Maybe SawAsterisk could also call nextTokenJSDocBig?
-                    } // TODO: Maybe nextTokenJSDocBig is backward-compatible enough to just call all the time
+                    if (state === JSDocState.SavingComments || state === JSDocState.SavingBackticks) {
+                        tok = nextJSDocCommentTextToken(state === JSDocState.SavingBackticks);
+                    }
                     else {
                         tok = nextTokenJSDoc();
                     }

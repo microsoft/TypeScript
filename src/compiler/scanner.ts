@@ -75,7 +75,8 @@ export interface Scanner {
     reScanInvalidIdentifier(): SyntaxKind;
     scanJsxToken(): JsxTokenSyntaxKind;
     scanJsDocToken(): JSDocSyntaxKind;
-    scanBigJsDocToken(inBackticks: boolean): JSDocSyntaxKind;
+    /** @internal */
+    scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind;
     scan(): SyntaxKind;
 
     getText(): string;
@@ -257,6 +258,7 @@ const textToToken = new Map(Object.entries({
     "@": SyntaxKind.AtToken,
     "#": SyntaxKind.HashToken,
     "`": SyntaxKind.BacktickToken,
+    "JSDOC_COMMENT_TEXT": SyntaxKind.JSDocCommentTextToken,
 }));
 
 /*
@@ -1021,7 +1023,7 @@ export function createScanner(languageVersion: ScriptTarget,
         reScanInvalidIdentifier,
         scanJsxToken,
         scanJsDocToken,
-        scanBigJsDocToken,
+        scanJSDocCommentTextToken,
         scan,
         getText,
         clearCommentDirectives,
@@ -2457,17 +2459,15 @@ export function createScanner(languageVersion: ScriptTarget,
         return scanJsxAttributeValue();
     }
 
-    function scanBigJsDocToken(inBackticks: boolean): JSDocSyntaxKind {
+    function scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind {
         startPos = tokenPos = pos;
         tokenFlags = TokenFlags.None;
         if (pos >= end) {
             return token = SyntaxKind.EndOfFileToken;
         }
-        // TODO: Probably need to increment pos in the initial part to avoid a double read
-        // TODO: Need to increment `pos += charSize(ch)`,
         for (let ch = codePointAt(text, pos);
              pos < end && (ch !== CharacterCodes.lineFeed && ch !== CharacterCodes.carriageReturn && ch !== CharacterCodes.backtick);
-             ch = codePointAt(text, ++pos)) {
+             ch = codePointAt(text, pos += charSize(ch))) {
             if (!inBackticks) {
                 if (ch === CharacterCodes.openBrace) {
                     break;
@@ -2484,7 +2484,7 @@ export function createScanner(languageVersion: ScriptTarget,
             return scanJsDocToken();
         }
         tokenValue = text.substring(tokenPos, pos);
-        return token = SyntaxKind.Identifier;
+        return token = SyntaxKind.JSDocCommentTextToken;
     }
 
     function scanJsDocToken(): JSDocSyntaxKind {
