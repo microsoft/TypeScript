@@ -1,0 +1,111 @@
+=== tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts ===
+declare class TableClass<S = any> {
+>TableClass : Symbol(TableClass, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 0))
+>S : Symbol(S, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 25))
+
+    _field: S;
+>_field : Symbol(TableClass._field, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 35))
+>S : Symbol(S, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 25))
+}
+
+export type Table = TableClass;
+>Table : Symbol(Table, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 2, 1))
+>TableClass : Symbol(TableClass, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 0))
+
+interface Something {
+>Something : Symbol(Something, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 4, 31))
+
+    prop: number;
+>prop : Symbol(Something.prop, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 6, 21))
+}
+
+interface SomethingElse {
+>SomethingElse : Symbol(SomethingElse, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 8, 1))
+
+    prop2: string;
+>prop2 : Symbol(SomethingElse.prop2, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 10, 25))
+}
+
+declare let aBoolean: boolean;
+>aBoolean : Symbol(aBoolean, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 14, 11))
+
+declare let aStringOrNumber: string | number;
+>aStringOrNumber : Symbol(aStringOrNumber, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 15, 11))
+
+declare let aStringOrSomething: string | Something;
+>aStringOrSomething : Symbol(aStringOrSomething, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 16, 11))
+>Something : Symbol(Something, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 4, 31))
+
+declare let someUnion: Something | SomethingElse;
+>someUnion : Symbol(someUnion, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 17, 11))
+>Something : Symbol(Something, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 4, 31))
+>SomethingElse : Symbol(SomethingElse, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 8, 1))
+
+function fn<T extends Table>(o: T) {
+>fn : Symbol(fn, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 17, 49))
+>T : Symbol(T, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 19, 12))
+>Table : Symbol(Table, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 2, 1))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 19, 29))
+>T : Symbol(T, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 19, 12))
+
+    aBoolean = o;
+>aBoolean : Symbol(aBoolean, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 14, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 19, 29))
+
+    aStringOrNumber = o;
+>aStringOrNumber : Symbol(aStringOrNumber, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 15, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 19, 29))
+
+    aStringOrSomething = o;
+>aStringOrSomething : Symbol(aStringOrSomething, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 16, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 19, 29))
+
+    someUnion = o;
+>someUnion : Symbol(someUnion, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 17, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 19, 29))
+}
+
+function fn2<T extends TableClass>(o: T) {
+>fn2 : Symbol(fn2, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 24, 1))
+>T : Symbol(T, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 26, 13))
+>TableClass : Symbol(TableClass, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 0))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 26, 35))
+>T : Symbol(T, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 26, 13))
+
+    aBoolean = o;
+>aBoolean : Symbol(aBoolean, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 14, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 26, 35))
+
+    aStringOrNumber = o;
+>aStringOrNumber : Symbol(aStringOrNumber, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 15, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 26, 35))
+
+    aStringOrSomething = o;
+>aStringOrSomething : Symbol(aStringOrSomething, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 16, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 26, 35))
+
+    someUnion = o;
+>someUnion : Symbol(someUnion, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 17, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 26, 35))
+}
+
+declare const o: Table;
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 33, 13))
+>Table : Symbol(Table, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 2, 1))
+
+aBoolean = o;
+>aBoolean : Symbol(aBoolean, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 14, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 33, 13))
+
+aStringOrNumber = o;
+>aStringOrNumber : Symbol(aStringOrNumber, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 15, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 33, 13))
+
+aStringOrSomething = o;
+>aStringOrSomething : Symbol(aStringOrSomething, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 16, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 33, 13))
+
+someUnion = o;
+>someUnion : Symbol(someUnion, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 17, 11))
+>o : Symbol(o, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 33, 13))
+

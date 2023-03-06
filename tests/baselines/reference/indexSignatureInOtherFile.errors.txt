@@ -1,0 +1,49 @@
+tests/cases/compiler/index.ts(2,3): error TS2411: Property '[Symbol.iterator]' of type '() => IterableIterator<any>' is not assignable to 'symbol' index type 'string'.
+tests/cases/compiler/index.ts(2,3): error TS2411: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
+
+
+==== tests/cases/compiler/index.ts (2 errors) ====
+    class Test extends Array1 {
+      [key: symbol]: string
+      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[Symbol.iterator]' of type '() => IterableIterator<any>' is not assignable to 'symbol' index type 'string'.
+!!! related TS2728 tests/cases/compiler/other.ts:14:3: '[Symbol.iterator]' is declared here.
+      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
+!!! related TS2728 tests/cases/compiler/other.ts:23:3: '[Symbol.unscopables]' is declared here.
+    }
+    
+==== tests/cases/compiler/other.ts (0 errors) ====
+    interface Array1<T> {
+      length: number;
+      [n: number]: T;
+    }
+    
+    interface ArrayConstructor1 {
+      new(arrayLength?: number): Array1<any>;
+    }
+    
+    declare var Array1: ArrayConstructor1;
+    
+    // iterable.d.ts
+    interface Array1<T> {
+      [Symbol.iterator](): IterableIterator<T>;
+    }
+    
+    // symbol.wellknown.d.ts
+    interface Array1<T> {
+      /**
+       * Returns an object whose properties have the value 'true'
+       * when they will be absent when used in a 'with' statement.
+       */
+      [Symbol.unscopables](): {
+          copyWithin: boolean;
+          entries: boolean;
+          fill: boolean;
+          find: boolean;
+          findIndex: boolean;
+          keys: boolean;
+          values: boolean;
+      };
+    }
+    

@@ -58,23 +58,23 @@ Shape signatures in builder refreshed for::
 /a/b/c/f1.ts (used version)
 /a/b/d/f2.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/c/f1.ts:
-  {"fileName":"/a/b/c/f1.ts","pollingInterval":250}
-/a/b/d/f2.ts:
-  {"fileName":"/a/b/d/f2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/c/f1.ts: *new*
+  {}
+/a/b/d/f2.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

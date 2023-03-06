@@ -3,7 +3,7 @@ enum E {
 >E : E
 
  e = -(3
->e : E
+>e : E.e
 >-(3 : number
 >(3 : 3
 >3 : 3

@@ -54,33 +54,23 @@ Shape signatures in builder refreshed for::
 /project/src/deps.d.ts (used version)
 /project/src/index.ts (used version)
 
-WatchedFiles::
-/project/tsconfig.json:
-  {"fileName":"/project/tsconfig.json","pollingInterval":250}
-/project/src/deps.d.ts:
-  {"fileName":"/project/src/deps.d.ts","pollingInterval":250}
-/project/src/index.ts:
-  {"fileName":"/project/src/index.ts","pollingInterval":250}
-/a/lib/lib.es2020.full.d.ts:
-  {"fileName":"/a/lib/lib.es2020.full.d.ts","pollingInterval":250}
-/project/src/package.json:
-  {"fileName":"/project/src/package.json","pollingInterval":250}
-/project/package.json:
-  {"fileName":"/project/package.json","pollingInterval":250}
-/a/lib/package.json:
-  {"fileName":"/a/lib/package.json","pollingInterval":250}
-/a/package.json:
-  {"fileName":"/a/package.json","pollingInterval":250}
-/package.json:
-  {"fileName":"/package.json","pollingInterval":250}
+PolledWatches::
+/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/project/tsconfig.json: *new*
+  {}
+/project/src/deps.d.ts: *new*
+  {}
+/project/src/index.ts: *new*
+  {}
+/a/lib/lib.es2020.full.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/project/node_modules/@types:
-  {"directoryName":"/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/project:
-  {"directoryName":"/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/project: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -119,28 +109,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /project/src/index.ts (computed .d.ts)
-
-WatchedFiles::
-/project/tsconfig.json:
-  {"fileName":"/project/tsconfig.json","pollingInterval":250}
-/project/src/deps.d.ts:
-  {"fileName":"/project/src/deps.d.ts","pollingInterval":250}
-/project/src/index.ts:
-  {"fileName":"/project/src/index.ts","pollingInterval":250}
-/a/lib/lib.es2020.full.d.ts:
-  {"fileName":"/a/lib/lib.es2020.full.d.ts","pollingInterval":250}
-/project/src/package.json:
-  {"fileName":"/project/src/package.json","pollingInterval":250}
-/project/package.json:
-  {"fileName":"/project/package.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/project/node_modules/@types:
-  {"directoryName":"/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/project:
-  {"directoryName":"/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

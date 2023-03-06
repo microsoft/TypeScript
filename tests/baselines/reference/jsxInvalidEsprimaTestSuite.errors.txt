@@ -57,10 +57,8 @@ tests/cases/conformance/jsx/25.tsx(1,39): error TS1109: Expression expected.
 tests/cases/conformance/jsx/26.tsx(1,4): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 tests/cases/conformance/jsx/27.tsx(1,5): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 tests/cases/conformance/jsx/28.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
-tests/cases/conformance/jsx/28.tsx(1,6): error TS1005: '{' expected.
+tests/cases/conformance/jsx/28.tsx(1,6): error TS1145: '{' or JSX element expected.
 tests/cases/conformance/jsx/28.tsx(2,1): error TS1005: '</' expected.
-tests/cases/conformance/jsx/29.tsx(1,1): error TS2657: JSX expressions must have one parent element.
-tests/cases/conformance/jsx/29.tsx(1,6): error TS1005: '{' expected.
 tests/cases/conformance/jsx/29.tsx(1,7): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/29.tsx(2,1): error TS1005: '</' expected.
 tests/cases/conformance/jsx/3.tsx(1,1): error TS1109: Expression expected.
@@ -70,7 +68,7 @@ tests/cases/conformance/jsx/3.tsx(1,6): error TS1109: Expression expected.
 tests/cases/conformance/jsx/3.tsx(1,7): error TS1109: Expression expected.
 tests/cases/conformance/jsx/30.tsx(1,4): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
 tests/cases/conformance/jsx/31.tsx(1,4): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/4.tsx(1,6): error TS1005: '{' expected.
+tests/cases/conformance/jsx/4.tsx(1,6): error TS1145: '{' or JSX element expected.
 tests/cases/conformance/jsx/5.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 tests/cases/conformance/jsx/5.tsx(1,5): error TS1005: '</' expected.
 tests/cases/conformance/jsx/6.tsx(1,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
@@ -110,7 +108,7 @@ tests/cases/conformance/jsx/9.tsx(1,10): error TS2304: Cannot find name 'a:b'.
 ==== tests/cases/conformance/jsx/4.tsx (1 errors) ====
     <a b=d />;
          ~
-!!! error TS1005: '{' expected.
+!!! error TS1145: '{' or JSX element expected.
 ==== tests/cases/conformance/jsx/5.tsx (2 errors) ====
     <a>;
      ~
@@ -292,20 +290,15 @@ tests/cases/conformance/jsx/9.tsx(1,10): error TS2304: Cannot find name 'a:b'.
      ~
 !!! error TS17008: JSX element 'a' has no corresponding closing tag.
          ~
-!!! error TS1005: '{' expected.
+!!! error TS1145: '{' or JSX element expected.
     
     
 !!! error TS1005: '</' expected.
-==== tests/cases/conformance/jsx/29.tsx (4 errors) ====
+==== tests/cases/conformance/jsx/29.tsx (2 errors) ====
     <a b=<}>;
-    ~~~~~~~~~
-         ~
-!!! error TS1005: '{' expected.
           ~
 !!! error TS1003: Identifier expected.
     
-    
-!!! error TS2657: JSX expressions must have one parent element.
     
 !!! error TS1005: '</' expected.
 ==== tests/cases/conformance/jsx/30.tsx (1 errors) ====

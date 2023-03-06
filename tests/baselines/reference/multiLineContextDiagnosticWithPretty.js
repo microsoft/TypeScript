@@ -9,6 +9,6 @@ const x: {c: string} = {
 //// [multiLineContextDiagnosticWithPretty.js]
 var x = {
     a: {
-        b: ''
+        b: '',
     }
 };

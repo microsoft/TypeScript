@@ -1,0 +1,6 @@
+=== tests/cases/conformance/node/allowJs/foo.cjs ===
+
+// this file is a module despite having no imports
+=== tests/cases/conformance/node/allowJs/bar.js ===
+
+// however this file is _not_ a module

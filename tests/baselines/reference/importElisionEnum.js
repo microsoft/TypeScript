@@ -17,7 +17,7 @@ enum MyEnum {
 
 //// [enum.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyEnum = void 0;
 var MyEnum;
 (function (MyEnum) {
@@ -28,7 +28,7 @@ var MyEnum;
 })(MyEnum = exports.MyEnum || (exports.MyEnum = {}));
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var MyEnum;
 (function (MyEnum) {
     MyEnum[MyEnum["a"] = 0] = "a";

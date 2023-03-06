@@ -1,6 +1,6 @@
 === tests/cases/compiler/checkJsdocTypeTagOnExportAssignment6.js ===
 
-No type information for this code.=== tests/cases/compiler/a.js ===
+=== tests/cases/compiler/a.js ===
 /**
  * @typedef {Object} Foo
  * @property {number} a

@@ -3,9 +3,11 @@ tests/cases/compiler/interfacedeclWithIndexerErrors.ts(14,5): error TS2411: Prop
 tests/cases/compiler/interfacedeclWithIndexerErrors.ts(15,5): error TS2411: Property 'p5' of type '(s: number) => string' is not assignable to 'string' index type '() => string'.
 tests/cases/compiler/interfacedeclWithIndexerErrors.ts(19,5): error TS2411: Property 'f3' of type '(a: string) => number' is not assignable to 'string' index type '() => string'.
 tests/cases/compiler/interfacedeclWithIndexerErrors.ts(20,5): error TS2411: Property 'f4' of type '(s: number) => string' is not assignable to 'string' index type '() => string'.
+tests/cases/compiler/interfacedeclWithIndexerErrors.ts(44,21): error TS2840: An interface cannot extend a primitive type like 'number'; an interface can only extend named types and classes
+tests/cases/compiler/interfacedeclWithIndexerErrors.ts(48,18): error TS2693: 'string' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/compiler/interfacedeclWithIndexerErrors.ts (5 errors) ====
+==== tests/cases/compiler/interfacedeclWithIndexerErrors.ts (7 errors) ====
     interface a0 {
         (): string;
         (a, b, c?: string): number;
@@ -57,6 +59,17 @@ tests/cases/compiler/interfacedeclWithIndexerErrors.ts(20,5): error TS2411: Prop
     }
     
     interface d extends a {
+    }
+    
+    interface e extends number {
+                        ~~~~~~
+!!! error TS2840: An interface cannot extend a primitive type like 'number'; an interface can only extend named types and classes
+    }
+    
+    interface f {
+        prop: typeof string;
+                     ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
     }
     
     class c1 implements a {

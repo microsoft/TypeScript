@@ -106,6 +106,69 @@ function f12({ kind, payload }: Action) {
     }
 }
 
+// repro #50206
+function f13<T extends Action>({ kind, payload }: T) {
+>f13 : <T extends Action>({ kind, payload }: T) => void
+>kind : "A" | "B"
+>payload : string | number
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+        payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+        payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+    }
+}
+
+function f14<T extends Action>(t: T) {
+>f14 : <T extends Action>(t: T) => void
+>t : T
+
+    const { kind, payload } = t;
+>kind : "A" | "B"
+>payload : string | number
+>t : Action
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+        payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+        payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+    }
+}
+
 type Action2 =
 >Action2 : { kind: 'A'; payload: number | undefined; } | { kind: 'B'; payload: string | undefined; }
 
@@ -954,4 +1017,174 @@ function foo({
 >test9 : any
 
 }) {}
+
+// Repro from #49772
+
+function fa1(x: [true, number] | [false, string]) {
+>fa1 : (x: [true, number] | [false, string]) => void
+>x : [true, number] | [false, string]
+>true : true
+>false : false
+
+    const [guard, value] = x;
+>guard : boolean
+>value : string | number
+>x : [true, number] | [false, string]
+
+    if (guard) {
+>guard : boolean
+
+        for (;;) {
+            value;  // number
+>value : number
+        }
+    }
+    else {
+        while (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+            value;  // string
+>value : string
+        }
+    }
+}
+
+function fa2(x: { guard: true, value: number } | { guard: false, value: string }) {
+>fa2 : (x: {    guard: true;    value: number;} | {    guard: false;    value: string;}) => void
+>x : { guard: true; value: number; } | { guard: false; value: string; }
+>guard : true
+>true : true
+>value : number
+>guard : false
+>false : false
+>value : string
+
+    const { guard, value } = x;
+>guard : boolean
+>value : string | number
+>x : { guard: true; value: number; } | { guard: false; value: string; }
+
+    if (guard) {
+>guard : boolean
+
+        for (;;) {
+            value;  // number
+>value : number
+        }
+    }
+    else {
+        while (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+            value;  // string
+>value : string
+        }
+    }
+}
+
+const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) => {
+>fa3 : (...args: [true, number] | [false, string]) => void
+>args : [true, number] | [false, string]
+>true : true
+>false : false
+>(guard, value) => {    if (guard) {        for (;;) {            value;  // number        }    }    else {        while (!!true) {            value;  // string        }    }} : (guard: boolean, value: string | number) => void
+>guard : boolean
+>value : string | number
+
+    if (guard) {
+>guard : boolean
+
+        for (;;) {
+            value;  // number
+>value : number
+        }
+    }
+    else {
+        while (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+            value;  // string
+>value : string
+        }
+    }
+}
+
+// Repro from #52152
+
+interface ClientEvents {
+    warn: [message: string];
+>warn : [message: string]
+
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+>shardDisconnect : [closeEvent: CloseEvent, shardId: number]
+}
+  
+declare class Client {
+>Client : Client
+
+    public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+>on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>event : K
+>listener : (...args: ClientEvents[K]) => void
+>args : ClientEvents[K]
+}
+
+const bot = new Client();
+>bot : Client
+>new Client() : Client
+>Client : typeof Client
+
+bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+>bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`)) : void
+>bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>bot : Client
+>on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>"shardDisconnect" : "shardDisconnect"
+>(event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : (event: CloseEvent, shard: number) => void
+>event : CloseEvent
+>shard : number
+>console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}` : string
+>shard : number
+>event.code : number
+>event : CloseEvent
+>code : number
+>event.wasClean : boolean
+>event : CloseEvent
+>wasClean : boolean
+>event.reason : string
+>event : CloseEvent
+>reason : string
+
+bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+>bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`)) : void
+>bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>bot : Client
+>on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>"shardDisconnect" : "shardDisconnect"
+>event => console.log(`${event.code} ${event.wasClean} ${event.reason}`) : (event: CloseEvent) => void
+>event : CloseEvent
+>console.log(`${event.code} ${event.wasClean} ${event.reason}`) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>`${event.code} ${event.wasClean} ${event.reason}` : string
+>event.code : number
+>event : CloseEvent
+>code : number
+>event.wasClean : boolean
+>event : CloseEvent
+>wasClean : boolean
+>event.reason : string
+>event : CloseEvent
+>reason : string
 

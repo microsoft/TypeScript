@@ -46,10 +46,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var hybrid_1 = require("./hybrid");
 var path_1 = __importDefault(require("./path"));
 var fs = __importStar(require("./fs"));
-path_1["default"];
+path_1.default;
 (0, hybrid_1.sayHello)();
 fs;

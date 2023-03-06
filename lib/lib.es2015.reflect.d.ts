@@ -26,6 +26,11 @@ declare namespace Reflect {
      * @param thisArgument The object to be used as the this object.
      * @param argumentsList An array of argument values to be passed to the function.
      */
+    function apply<T, A extends readonly any[], R>(
+        target: (this: T, ...args: A) => R,
+        thisArgument: T,
+        argumentsList: Readonly<A>,
+    ): R;
     function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
 
     /**
@@ -35,6 +40,11 @@ declare namespace Reflect {
      * @param argumentsList An array of argument values to be passed to the constructor.
      * @param newTarget The constructor to be used as the `new.target` object.
      */
+    function construct<A extends readonly any[], R>(
+        target: new (...args: A) => R,
+        argumentsList: Readonly<A>,
+        newTarget?: new (...args: any) => any,
+    ): R;
     function construct(target: Function, argumentsList: ArrayLike<any>, newTarget?: Function): any;
 
     /**
@@ -44,7 +54,7 @@ declare namespace Reflect {
      * @param propertyKey The property name.
      * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
      */
-    function defineProperty(target: object, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
+    function defineProperty(target: object, propertyKey: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): boolean;
 
     /**
      * Removes a property from an object, equivalent to `delete target[propertyKey]`,
@@ -61,7 +71,11 @@ declare namespace Reflect {
      * @param receiver The reference to use as the `this` value in the getter function,
      *        if `target[propertyKey]` is an accessor property.
      */
-    function get(target: object, propertyKey: PropertyKey, receiver?: any): any;
+    function get<T extends object, P extends PropertyKey>(
+        target: T,
+        propertyKey: P,
+        receiver?: unknown,
+    ): P extends keyof T ? T[P] : any;
 
     /**
      * Gets the own property descriptor of the specified object.
@@ -69,7 +83,10 @@ declare namespace Reflect {
      * @param target Object that contains the property.
      * @param propertyKey The property name.
      */
-    function getOwnPropertyDescriptor(target: object, propertyKey: PropertyKey): PropertyDescriptor | undefined;
+    function getOwnPropertyDescriptor<T extends object, P extends PropertyKey>(
+        target: T,
+        propertyKey: P,
+    ): TypedPropertyDescriptor<P extends keyof T ? T[P] : any> | undefined;
 
     /**
      * Returns the prototype of an object.
@@ -111,6 +128,12 @@ declare namespace Reflect {
      * @param receiver The reference to use as the `this` value in the setter function,
      *        if `target[propertyKey]` is an accessor property.
      */
+    function set<T extends object, P extends PropertyKey>(
+        target: T,
+        propertyKey: P,
+        value: P extends keyof T ? T[P] : any,
+        receiver?: any,
+    ): boolean;
     function set(target: object, propertyKey: PropertyKey, value: any, receiver?: any): boolean;
 
     /**

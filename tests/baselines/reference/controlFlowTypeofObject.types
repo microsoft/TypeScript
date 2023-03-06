@@ -16,7 +16,7 @@ function f1(x: unknown) {
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : unknown
+>x : {}
 >'object' : "object"
 
         obj(x);
@@ -40,7 +40,7 @@ function f2(x: unknown) {
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : unknown
+>x : {} | undefined
 >'object' : "object"
 
         obj(x);
@@ -64,7 +64,7 @@ function f3(x: unknown) {
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : unknown
+>x : {}
 >'object' : "object"
 
         obj(x);
@@ -88,7 +88,7 @@ function f4(x: unknown) {
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : unknown
+>x : {}
 >'object' : "object"
 
         obj(x);
@@ -126,7 +126,7 @@ function f5(x: unknown) {
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : unknown
+>x : {} | undefined
 >'object' : "object"
 
         obj(x);
@@ -150,12 +150,12 @@ function f6(x: unknown) {
     }
     else {
         x;
->x : unknown
+>x : {} | undefined
 
         if (typeof x === 'object') {
 >typeof x === 'object' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : unknown
+>x : {} | undefined
 >'object' : "object"
 
             obj(x);

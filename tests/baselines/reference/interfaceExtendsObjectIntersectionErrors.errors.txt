@@ -29,7 +29,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(31,11): error TS2430: Interface 'I11' incorrectly extends interface 'typeof EX'.
   Types of property 'C' are incompatible.
-    Type 'string' is not assignable to type 'EX'.
+    Type 'string' is not assignable to type 'EX.C'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(32,11): error TS2430: Interface 'I12' incorrectly extends interface 'typeof NX'.
   Types of property 'a' are incompatible.
     Type 'number' is not assignable to type '"hello"'.
@@ -130,7 +130,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
               ~~~
 !!! error TS2430: Interface 'I11' incorrectly extends interface 'typeof EX'.
 !!! error TS2430:   Types of property 'C' are incompatible.
-!!! error TS2430:     Type 'string' is not assignable to type 'EX'.
+!!! error TS2430:     Type 'string' is not assignable to type 'EX.C'.
     interface I12 extends TNX { a: number }
               ~~~
 !!! error TS2430: Interface 'I12' incorrectly extends interface 'typeof NX'.

@@ -318,7 +318,7 @@ declare module "Object/ListOf" {
 >__ListOf : __ListOf<O, K, LN, I>
 
         0: __ListOf<O, Exclude<K, Key<I>>, PickIfEntry<O, LN, I>, Next<I>>;
->0 : __ListOf<O, Exclude<K, I[2]>, PickIfEntry<O, LN, I>, Next<I>>
+>0 : __ListOf<O, Exclude<K, Key<I>>, PickIfEntry<O, LN, I>, Next<I>>
 
         1: LN;
 >1 : LN
@@ -357,7 +357,7 @@ declare module "Object/NonNullable" {
 >Keys : any
 
     export type NonNullableFlat<O> = {
->NonNullableFlat : { [K in keyof O]: import("Union/Exclude").Exclude<O[K], null | undefined>; }
+>NonNullableFlat : { [K in keyof O]: UNonNullable<O[K]>; }
 
         [K in keyof O]: UNonNullable<O[K]>;
     } & {};
@@ -386,7 +386,7 @@ declare module "Object/NonNullable" {
 >1 : NonNullablePart<O, depth>
 
         0: MergeFlat<NonNullablePart<Pick<O, K>, depth>, O>;
->0 : import("Any/Compute").Compute<NonNullablePart<Pick<O, K>, depth> & import("Object/Omit")._Omit<O, keyof NonNullablePart<Pick<O, K>, depth>>>
+>0 : MergeFlat<NonNullablePart<Pick<O, K>, depth>, O>
 
     }[Implements<Keys<O>, K>] & {};
 }
@@ -592,7 +592,7 @@ declare module "List/Reverse" {
 >__Reverse : __Reverse<L, LO, I>
 
         0: __Reverse<L, Prepend<LO, L[Pos<I>]>, Next<I>>;
->0 : __Reverse<L, [head: L[I[3]], ...args: LO], Next<I>>
+>0 : __Reverse<L, [head: L[Pos<I>], ...args: LO], Next<I>>
 
         1: LO;
 >1 : LO
@@ -674,7 +674,7 @@ declare module "List/Drop" {
 >DropBack : DropBack<L, N, I, LN>
 
         0: DropBack<L, N, Prev<I>, Prepend<LN, L[Pos<I>]>>;
->0 : DropBack<L, N, Prev<I>, [head: L[I[3]], ...args: LN]>
+>0 : DropBack<L, N, Prev<I>, [head: L[Pos<I>], ...args: LN]>
 
         1: LN;
 >1 : LN
@@ -1211,7 +1211,7 @@ declare module "List/NonNullable" {
 >NonNullable : NonNullable<L, K, depth>
 
         1: Cast<ONonNullable<L, Key, depth>, List>;
->1 : Cast<ONonNullable<L, Key, depth>, List<any>>
+>1 : Cast<ONonNullable<L, Key, depth>, List>
 
         0: ListOf<ONonNullable<ObjectOf<L>, NumberOf<K>, depth>>;
 >0 : ListOf<ONonNullable<ObjectOf<L>, NumberOf<K>, depth>>
@@ -1329,7 +1329,7 @@ declare module "Function/Curry" {
 >0 : _GapsOf<L1, L2, GapOf<L1, L2, LN, I>, Next<I>>
 
         1: _Concat<LN, _Drop<L2, Key<I>>>;
->1 : import("List/Reverse")._Reverse<import("List/Reverse")._Reverse<LN, []>, _Drop<L2, I[2], "->">>
+>1 : _Concat<LN, _Drop<L2, Key<I>>>
 
     }[Extends<Pos<I>, Length<L1>>];
 
@@ -1345,9 +1345,9 @@ declare module "Function/Curry" {
     export type Curry<F extends Function> = <L extends List>(...args: Cast<L, Gaps<Parameters<F>>>) => GapsOf<L, Parameters<F>> extends infer G ? Length<Cast<G, List>> extends infer L ? L extends 0 ? Return<F> : L extends 1 ? Curry<(...args: Cast<G, List>) => Return<F>> & ((...args: Cast<G, List>) => Return<F>) : Curry<(...args: Cast<G, List>) => Return<F>> : never : never;
 >Curry : Curry<F>
 >args : Cast<L, Gaps<Parameters<F>>>
->args : Cast<G, List<any>>
->args : Cast<G, List<any>>
->args : Cast<G, List<any>>
+>args : Cast<G, List>
+>args : Cast<G, List>
+>args : Cast<G, List>
 }
 
 

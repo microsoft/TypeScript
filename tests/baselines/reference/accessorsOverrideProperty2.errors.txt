@@ -14,5 +14,5 @@ tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProp
     }
     
     const obj = new Derived(); // nothing printed
-    console.log(obj.x); // 1
+    console.log(obj.x); // number
     

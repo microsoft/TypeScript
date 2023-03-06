@@ -1,7 +1,7 @@
-tests/cases/conformance/node/index.cts(3,23): error TS1471: Module 'inner/mjs/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/node_modules/inner/index.d.cts(3,22): error TS1471: Module 'inner/mjs/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(3,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
+tests/cases/conformance/node/node_modules/inner/index.d.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
 tests/cases/conformance/node/node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
-tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1471: Module 'inner/mjs/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
 
 
 ==== tests/cases/conformance/node/index.ts (0 errors) ====
@@ -25,7 +25,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1471: 
     import * as cjsi from "inner/cjs/index";
     import * as mjsi from "inner/mjs/index";
                           ~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module 'inner/mjs/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
     import * as typei from "inner/js/index";
     cjsi;
     mjsi;
@@ -37,7 +37,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1471: 
 !!! error TS2303: Circular definition of import alias 'cjs'.
     import * as mjs from "inner/mjs/index";
                          ~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module 'inner/mjs/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
     import * as type from "inner/js/index";
     export { cjs };
     export { mjs };
@@ -55,7 +55,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1471: 
     import * as cjs from "inner/cjs/index";
     import * as mjs from "inner/mjs/index";
                          ~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module 'inner/mjs/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
     import * as type from "inner/js/index";
     export { cjs };
     export { mjs };

@@ -66,4 +66,4 @@ export type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> =
 
 //// [circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,0 +1,99 @@
+=== tests/cases/compiler/typePredicateFreshLiteralWidening.ts ===
+type Narrowable = string | number | bigint | boolean;
+>Narrowable : Symbol(Narrowable, Decl(typePredicateFreshLiteralWidening.ts, 0, 0))
+
+type Narrow<A> = (A extends Narrowable ? A : never) | ({
+>Narrow : Symbol(Narrow, Decl(typePredicateFreshLiteralWidening.ts, 0, 53))
+>A : Symbol(A, Decl(typePredicateFreshLiteralWidening.ts, 2, 12))
+>A : Symbol(A, Decl(typePredicateFreshLiteralWidening.ts, 2, 12))
+>Narrowable : Symbol(Narrowable, Decl(typePredicateFreshLiteralWidening.ts, 0, 0))
+>A : Symbol(A, Decl(typePredicateFreshLiteralWidening.ts, 2, 12))
+
+    [K in keyof A]: Narrow<A[K]>;
+>K : Symbol(K, Decl(typePredicateFreshLiteralWidening.ts, 3, 5))
+>A : Symbol(A, Decl(typePredicateFreshLiteralWidening.ts, 2, 12))
+>Narrow : Symbol(Narrow, Decl(typePredicateFreshLiteralWidening.ts, 0, 53))
+>A : Symbol(A, Decl(typePredicateFreshLiteralWidening.ts, 2, 12))
+>K : Symbol(K, Decl(typePredicateFreshLiteralWidening.ts, 3, 5))
+
+});
+
+const satisfies =
+>satisfies : Symbol(satisfies, Decl(typePredicateFreshLiteralWidening.ts, 6, 5))
+
+  <TWide,>() =>
+>TWide : Symbol(TWide, Decl(typePredicateFreshLiteralWidening.ts, 7, 3))
+
+  <TNarrow extends TWide>(narrow: Narrow<TNarrow>) =>
+>TNarrow : Symbol(TNarrow, Decl(typePredicateFreshLiteralWidening.ts, 8, 3))
+>TWide : Symbol(TWide, Decl(typePredicateFreshLiteralWidening.ts, 7, 3))
+>narrow : Symbol(narrow, Decl(typePredicateFreshLiteralWidening.ts, 8, 26))
+>Narrow : Symbol(Narrow, Decl(typePredicateFreshLiteralWidening.ts, 0, 53))
+>TNarrow : Symbol(TNarrow, Decl(typePredicateFreshLiteralWidening.ts, 8, 3))
+
+    narrow;
+>narrow : Symbol(narrow, Decl(typePredicateFreshLiteralWidening.ts, 8, 26))
+
+/* ========================================================================== */
+
+const isNotNull = <T,>(value: T | null): value is T => value !== null;
+>isNotNull : Symbol(isNotNull, Decl(typePredicateFreshLiteralWidening.ts, 13, 5))
+>T : Symbol(T, Decl(typePredicateFreshLiteralWidening.ts, 13, 19))
+>value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 13, 23))
+>T : Symbol(T, Decl(typePredicateFreshLiteralWidening.ts, 13, 19))
+>value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 13, 23))
+>T : Symbol(T, Decl(typePredicateFreshLiteralWidening.ts, 13, 19))
+>value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 13, 23))
+
+type Item = { value: string | null };
+>Item : Symbol(Item, Decl(typePredicateFreshLiteralWidening.ts, 13, 70))
+>value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 15, 13))
+
+const item1 = satisfies<Item>()({ value: "1" });
+>item1 : Symbol(item1, Decl(typePredicateFreshLiteralWidening.ts, 17, 5))
+>satisfies : Symbol(satisfies, Decl(typePredicateFreshLiteralWidening.ts, 6, 5))
+>Item : Symbol(Item, Decl(typePredicateFreshLiteralWidening.ts, 13, 70))
+>value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 17, 33))
+
+const item2 = satisfies<Item>()({ value: "2" });
+>item2 : Symbol(item2, Decl(typePredicateFreshLiteralWidening.ts, 18, 5))
+>satisfies : Symbol(satisfies, Decl(typePredicateFreshLiteralWidening.ts, 6, 5))
+>Item : Symbol(Item, Decl(typePredicateFreshLiteralWidening.ts, 13, 70))
+>value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 18, 33))
+
+const item3 = satisfies<Item>()({ value: null });
+>item3 : Symbol(item3, Decl(typePredicateFreshLiteralWidening.ts, 19, 5))
+>satisfies : Symbol(satisfies, Decl(typePredicateFreshLiteralWidening.ts, 6, 5))
+>Item : Symbol(Item, Decl(typePredicateFreshLiteralWidening.ts, 13, 70))
+>value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 19, 33))
+
+const values2: Array<"1" | "2" | null> = ["1", "2", null];
+>values2 : Symbol(values2, Decl(typePredicateFreshLiteralWidening.ts, 21, 5))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const filteredValues2 = values2.filter(isNotNull);
+>filteredValues2 : Symbol(filteredValues2, Decl(typePredicateFreshLiteralWidening.ts, 22, 5))
+>values2.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values2 : Symbol(values2, Decl(typePredicateFreshLiteralWidening.ts, 21, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isNotNull : Symbol(isNotNull, Decl(typePredicateFreshLiteralWidening.ts, 13, 5))
+
+const values1 = [item1, item2, item3].map(item => item.value);
+>values1 : Symbol(values1, Decl(typePredicateFreshLiteralWidening.ts, 24, 5))
+>[item1, item2, item3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>item1 : Symbol(item1, Decl(typePredicateFreshLiteralWidening.ts, 17, 5))
+>item2 : Symbol(item2, Decl(typePredicateFreshLiteralWidening.ts, 18, 5))
+>item3 : Symbol(item3, Decl(typePredicateFreshLiteralWidening.ts, 19, 5))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(typePredicateFreshLiteralWidening.ts, 24, 42))
+>item.value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 17, 33), Decl(typePredicateFreshLiteralWidening.ts, 18, 33), Decl(typePredicateFreshLiteralWidening.ts, 19, 33))
+>item : Symbol(item, Decl(typePredicateFreshLiteralWidening.ts, 24, 42))
+>value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 17, 33), Decl(typePredicateFreshLiteralWidening.ts, 18, 33), Decl(typePredicateFreshLiteralWidening.ts, 19, 33))
+
+const filteredValues1 = values1.filter(isNotNull);
+>filteredValues1 : Symbol(filteredValues1, Decl(typePredicateFreshLiteralWidening.ts, 25, 5))
+>values1.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values1 : Symbol(values1, Decl(typePredicateFreshLiteralWidening.ts, 24, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isNotNull : Symbol(isNotNull, Decl(typePredicateFreshLiteralWidening.ts, 13, 5))
+

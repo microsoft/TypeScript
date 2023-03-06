@@ -63,7 +63,7 @@ verify.codeFix({
         // 8 type args
         this.foo3<1,2,3,4,5,6,7,8>();
     }
-    foo3<T0, T1, T2, T3, T4, T5, T6, T7>() {
+    foo3<T, U, V, W, X, Y, Z, T7>() {
         throw new Error("Method not implemented.");
     }
     foo2<T, U, V, W, X, Y, Z>() {

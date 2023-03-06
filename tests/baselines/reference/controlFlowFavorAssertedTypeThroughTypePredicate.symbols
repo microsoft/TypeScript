@@ -1,0 +1,84 @@
+=== tests/cases/compiler/controlFlowFavorAssertedTypeThroughTypePredicate.ts ===
+// repro 49988#issuecomment-1192016929
+
+declare function isObject1(value: unknown): value is Record<string, unknown>;
+>isObject1 : Symbol(isObject1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 0, 0))
+>value : Symbol(value, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 2, 27))
+>value : Symbol(value, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 2, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+declare const obj1: {};
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+
+if (isObject1(obj1)) {
+>isObject1 : Symbol(isObject1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 0, 0))
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+
+    obj1;
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+
+    obj1['attr'];
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+}
+// check type after conditional block
+obj1;
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+
+declare const obj2: {} | undefined;
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+
+if (isObject1(obj2)) {
+>isObject1 : Symbol(isObject1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 0, 0))
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+
+    obj2;
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+
+    obj2['attr'];
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+}
+// check type after conditional block
+obj2;
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+
+declare function isObject2(value: unknown): value is {};
+>isObject2 : Symbol(isObject2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 18, 5))
+>value : Symbol(value, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 20, 27))
+>value : Symbol(value, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 20, 27))
+
+declare const obj3: Record<string, unknown>;
+>obj3 : Symbol(obj3, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 22, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+if (isObject2(obj3)) {
+>isObject2 : Symbol(isObject2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 18, 5))
+>obj3 : Symbol(obj3, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 22, 13))
+
+    obj3;
+>obj3 : Symbol(obj3, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 22, 13))
+
+    obj3['attr'];
+>obj3 : Symbol(obj3, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 22, 13))
+}
+// check type after conditional block
+obj3;
+>obj3 : Symbol(obj3, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 22, 13))
+
+declare const obj4: Record<string, unknown> | undefined;
+>obj4 : Symbol(obj4, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 30, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+if (isObject2(obj4)) {
+>isObject2 : Symbol(isObject2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 18, 5))
+>obj4 : Symbol(obj4, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 30, 13))
+
+    obj4;
+>obj4 : Symbol(obj4, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 30, 13))
+
+    obj4['attr'];
+>obj4 : Symbol(obj4, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 30, 13))
+}
+// check type after conditional block
+obj4;
+>obj4 : Symbol(obj4, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 30, 13))
+

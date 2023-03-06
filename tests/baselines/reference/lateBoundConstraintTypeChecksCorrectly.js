@@ -22,7 +22,7 @@ function f<T extends Foo<number>>(x: T) {
 
 //// [lateBoundConstraintTypeChecksCorrectly.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function f(x) {
     var abc = x[fooProp]; // expected: 'T[typeof fooProp]'
     /**

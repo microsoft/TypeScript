@@ -7,13 +7,15 @@ export function func() {}
 >func : Symbol(func, Decl(func.js, 0, 0))
 
 === tests/cases/conformance/jsdoc/declarations/bar.js ===
+
 export * from "./cls";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsdoc/declarations/bar2.js ===
+
+=== tests/cases/conformance/jsdoc/declarations/bar2.js ===
+
 export * from "./func";
-No type information for this code.export * from "./cls";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsdoc/declarations/baz.js ===
+export * from "./cls";
+
+=== tests/cases/conformance/jsdoc/declarations/baz.js ===
 import {Foo} from "./cls";
 >Foo : Symbol(Foo, Decl(baz.js, 0, 8))
 
@@ -95,15 +97,15 @@ module.exports.names = ns;
 >ns : Symbol(ns, Decl(cjs4.js, 0, 5))
 
 === tests/cases/conformance/jsdoc/declarations/includeAll.js ===
+
 import "./cjs4";
-No type information for this code.import "./cjs3";
-No type information for this code.import "./cjs2";
-No type information for this code.import "./cjs";
-No type information for this code.import "./bol";
-No type information for this code.import "./ban";
-No type information for this code.import "./bat";
-No type information for this code.import "./baz";
-No type information for this code.import "./bar";
-No type information for this code.import "./bar2";
-No type information for this code.
-No type information for this code.
+import "./cjs3";
+import "./cjs2";
+import "./cjs";
+import "./bol";
+import "./ban";
+import "./bat";
+import "./baz";
+import "./bar";
+import "./bar2";
+

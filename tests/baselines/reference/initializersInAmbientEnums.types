@@ -3,15 +3,15 @@ declare enum E {
 >E : E
 
     a = 10,
->a : E
+>a : E.a
 >10 : 10
 
     b = a,
->b : E
->a : E
+>b : E.a
+>a : E.a
 
     e = 10 << 2 * 8,
->e : E
+>e : E.e
 >10 << 2 * 8 : number
 >10 : 10
 >2 * 8 : number

@@ -2,6 +2,93 @@ Exit Code: null
 Standard output:
 ../../../../built/local/lib.es5.d.ts(1529,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../node_modules/@types/node/globals.d.ts(34,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(78,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(95,28): error TS2339: Property 'response' does not exist on type 'EventTarget'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(147,37): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(270,9): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+  Type 'void' is not assignable to type 'undefined'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(280,5): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(525,9): error TS2322: Type 'Window' is not assignable to type 'Window & typeof globalThis'.
+  Type 'Window' is missing the following properties from type 'typeof globalThis': globalThis, eval, parseInt, parseFloat, and 889 more.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(527,55): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'new () => any' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Window & typeof globalThis' provides no match for the signature 'new (): any'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(539,24): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(693,7): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
+  Type 'boolean' is not assignable to type 'undefined'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(705,5): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(715,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(729,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(746,5): error TS2322: Type 'Window | {}' is not assignable to type 'Window'.
+  Type '{}' is missing the following properties from type 'Window': clientInformation, closed, customElements, devicePixelRatio, and 193 more.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(1083,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(1088,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(107,5): error TS2322: Type 'Timeout' is not assignable to type 'number'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(203,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(208,10): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(221,12): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(378,17): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(397,10): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(416,10): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(440,10): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(475,10): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(571,33): error TS2339: Property 'deprecatedRunAfterPendingDispatches' does not exist on type 'typeof InspectorBackend'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(590,57): error TS2554: Expected 0 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(591,21): error TS2339: Property '_target' does not exist on type 'DeviceModeModel'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(619,44): error TS2339: Property 'emulationAgent' does not exist on type 'Target'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(666,38): error TS2339: Property 'inputAgent' does not exist on type 'Target'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(668,38): error TS2339: Property 'inputAgent' does not exist on type 'Target'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(673,38): error TS2339: Property 'inputAgent' does not exist on type 'Target'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(675,38): error TS2339: Property 'inputAgent' does not exist on type 'Target'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(677,38): error TS2339: Property 'inputAgent' does not exist on type 'Target'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(679,38): error TS2339: Property 'inputAgent' does not exist on type 'Target'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(687,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(711,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(717,36): error TS2339: Property 'inputAgent' does not exist on type 'Target'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(719,36): error TS2339: Property 'inputAgent' does not exist on type 'Target'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(735,10): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(814,38): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(816,12): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(847,14): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(848,14): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(890,17): error TS2339: Property '_instanceForTest' does not exist on type 'typeof Main'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(893,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(894,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(895,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(897,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(898,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(899,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(917,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(918,12): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(934,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(935,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(959,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(960,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(961,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(965,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(966,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(967,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(968,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(969,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(970,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(974,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(975,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(976,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(977,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(978,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(986,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(988,10): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1033,32): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1040,30): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1084,27): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1140,27): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1186,10): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1199,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1199,35): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1229,10): error TS2339: Property 'uiTests' does not exist on type 'Window & typeof globalThis'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1229,41): error TS2339: Property 'domAutomationController' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(9,13): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
   Type 'TemplateStringsArray' is missing the following properties from type 'string[]': pop, push, reverse, shift, and 6 more.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(11,48): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
@@ -3355,6 +3442,8 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68410,39): error TS2339: Property 'height' does not exist on type 'constructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69037,13): error TS2339: Property 'displayName' does not exist on type '(image: any, quality: any) => any'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69550,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70231,38): error TS2339: Property 'version' does not exist on type 'SemVer | {}'.
+  Property 'version' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,4): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,26): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70753,6): error TS2531: Object is possibly 'null'.
@@ -6041,42 +6130,6 @@ node_modules/chrome-devtools-frontend/front_end/emulation/MediaQueryInspector.js
 node_modules/chrome-devtools-frontend/front_end/emulation/MediaQueryInspector.js(266,32): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/emulation/MediaQueryInspector.js(271,14): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/emulation/MediaQueryInspector.js(272,33): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/MediaQueryInspector.js(277,14): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/MediaQueryInspector.js(281,32): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/MediaQueryInspector.js(285,14): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/MediaQueryInspector.js(286,33): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(18,25): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(25,25): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(34,32): error TS2339: Property '_instanceObject' does not exist on type 'typeof SensorsView'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(35,29): error TS2339: Property '_instanceObject' does not exist on type 'typeof SensorsView'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(36,34): error TS2339: Property '_instanceObject' does not exist on type 'typeof SensorsView'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(43,40): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(55,55): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(82,25): error TS2339: Property 'value' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(91,26): error TS2339: Property 'value' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(122,27): error TS2339: Property 'focus' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(127,29): error TS2339: Property 'value' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(127,64): error TS2339: Property 'value' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(144,48): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(157,58): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(203,39): error TS2339: Property 'disabled' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(206,39): error TS2339: Property 'disabled' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(220,26): error TS2339: Property 'focus' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(243,63): error TS2339: Property 'options' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(244,19): error TS2339: Property 'selectedIndex' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(250,32): error TS2339: Property 'value' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(250,64): error TS2339: Property 'value' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(250,97): error TS2339: Property 'value' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(279,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(280,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(281,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(298,29): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(301,11): error TS2339: Property 'type' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(313,39): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(362,11): error TS2339: Property 'consume' does not exist on type 'MouseEvent'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(402,11): error TS2339: Property 'consume' does not exist on type 'MouseEvent'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(424,44): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/emulation/SensorsView.js(514,3): error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'ShowActionDelegate' does not extend another class.
 
 
 

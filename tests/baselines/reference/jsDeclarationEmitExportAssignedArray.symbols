@@ -1,0 +1,9 @@
+=== tests/cases/compiler/file.js ===
+module.exports = [{ name: 'other', displayName: 'Other', defaultEnabled: true }];
+>module.exports : Symbol(module.exports, Decl(file.js, 0, 0))
+>module : Symbol(export=, Decl(file.js, 0, 0))
+>exports : Symbol(export=, Decl(file.js, 0, 0))
+>name : Symbol(name, Decl(file.js, 0, 19))
+>displayName : Symbol(displayName, Decl(file.js, 0, 34))
+>defaultEnabled : Symbol(defaultEnabled, Decl(file.js, 0, 56))
+

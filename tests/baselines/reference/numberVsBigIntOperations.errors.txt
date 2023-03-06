@@ -47,10 +47,10 @@ tests/cases/compiler/numberVsBigIntOperations.ts(25,43): error TS2365: Operator 
 tests/cases/compiler/numberVsBigIntOperations.ts(38,1): error TS2365: Operator '>>>=' cannot be applied to types 'bigint' and '1n'.
 tests/cases/compiler/numberVsBigIntOperations.ts(39,10): error TS2365: Operator '>>>' cannot be applied to types 'bigint' and '1n'.
 tests/cases/compiler/numberVsBigIntOperations.ts(40,8): error TS2736: Operator '+' cannot be applied to type 'bigint'.
-tests/cases/compiler/numberVsBigIntOperations.ts(50,10): error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
-tests/cases/compiler/numberVsBigIntOperations.ts(51,10): error TS2367: This condition will always return 'true' since the types 'bigint' and 'number' have no overlap.
-tests/cases/compiler/numberVsBigIntOperations.ts(52,10): error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
-tests/cases/compiler/numberVsBigIntOperations.ts(53,10): error TS2367: This condition will always return 'true' since the types 'bigint' and 'number' have no overlap.
+tests/cases/compiler/numberVsBigIntOperations.ts(50,10): error TS2367: This comparison appears to be unintentional because the types 'bigint' and 'number' have no overlap.
+tests/cases/compiler/numberVsBigIntOperations.ts(51,10): error TS2367: This comparison appears to be unintentional because the types 'bigint' and 'number' have no overlap.
+tests/cases/compiler/numberVsBigIntOperations.ts(52,10): error TS2367: This comparison appears to be unintentional because the types 'bigint' and 'number' have no overlap.
+tests/cases/compiler/numberVsBigIntOperations.ts(53,10): error TS2367: This comparison appears to be unintentional because the types 'bigint' and 'number' have no overlap.
 tests/cases/compiler/numberVsBigIntOperations.ts(56,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/numberVsBigIntOperations.ts(56,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/numberVsBigIntOperations.ts(57,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -62,9 +62,11 @@ tests/cases/compiler/numberVsBigIntOperations.ts(61,1): error TS2365: Operator '
 tests/cases/compiler/numberVsBigIntOperations.ts(70,2): error TS2736: Operator '+' cannot be applied to type 'number | bigint'.
 tests/cases/compiler/numberVsBigIntOperations.ts(86,7): error TS1155: 'const' declarations must be initialized.
 tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' declarations must be initialized.
+tests/cases/compiler/numberVsBigIntOperations.ts(98,6): error TS2736: Operator '+' cannot be applied to type 'S'.
+tests/cases/compiler/numberVsBigIntOperations.ts(99,5): error TS2365: Operator '+' cannot be applied to types 'number' and 'S'.
 
 
-==== tests/cases/compiler/numberVsBigIntOperations.ts (64 errors) ====
+==== tests/cases/compiler/numberVsBigIntOperations.ts (66 errors) ====
     // Cannot mix bigints and numbers
     let bigInt = 1n, num = 2;
     bigInt = 1n; bigInt = 2; num = 1n; num = 2;
@@ -214,16 +216,16 @@ tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' de
     // Trying to compare for equality is likely an error (since 1 == "1" is disallowed)
     result = bigInt == num;
              ~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'bigint' and 'number' have no overlap.
     result = bigInt != num;
              ~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'bigint' and 'number' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'bigint' and 'number' have no overlap.
     result = bigInt === num;
              ~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'bigint' and 'number' have no overlap.
     result = bigInt !== num;
              ~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'bigint' and 'number' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'bigint' and 'number' have no overlap.
     
     // Types of arithmetic operations on other types
     num = "3" & 5; num = 2 ** false; // should error, but infer number
@@ -287,3 +289,14 @@ tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' de
           ~~~~~~~~~~~~
 !!! error TS1155: 'const' declarations must be initialized.
     if (bigZeroOrOne) isOne(bigZeroOrOne);
+    
+    type NumberOrBigint = number | bigint;
+    function getKey<S extends NumberOrBigint>(key: S) {
+        +key;   // should error
+         ~~~
+!!! error TS2736: Operator '+' cannot be applied to type 'S'.
+        0 + key;    // should error
+        ~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'S'.
+    }
+    

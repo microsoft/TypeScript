@@ -6,7 +6,7 @@ function f1<T extends string | number, U extends string | number>(x: T & U) {
     // Combined constraint of 'T & U' is 'string | number'
     let y: string | number = x;
 >y : string | number
->x : T & U
+>x : string | number
 }
 
 function f2<T extends string | number | undefined, U extends string | null | undefined>(x: T & U) {
@@ -16,30 +16,30 @@ function f2<T extends string | number | undefined, U extends string | null | und
 
     let y1: string | number = x;     // Error
 >y1 : string | number
->x : T & U
+>x : string | undefined
 
     let y2: string | null = x;       // Error
 >y2 : string | null
 >null : null
->x : T & U
+>x : string | undefined
 
     let y3: string | undefined = x;
 >y3 : string | undefined
->x : T & U
+>x : string | undefined
 
     let y4: number | null = x;       // Error
 >y4 : number | null
 >null : null
->x : T & U
+>x : string | undefined
 
     let y5: number | undefined = x;  // Error
 >y5 : number | undefined
->x : T & U
+>x : string | undefined
 
     let y6: null | undefined = x;    // Error
 >y6 : null | undefined
 >null : null
->x : T & U
+>x : string | undefined
 }
 
 type T1 = (string | number | undefined) & (string | null | undefined);  // string | undefined
@@ -52,7 +52,7 @@ function f3<T extends string | number | undefined>(x: T & (number | object | und
 
     const y: number | undefined = x;
 >y : number | undefined
->x : T & (number | object | undefined)
+>x : number | undefined
 }
 
 function f4<T extends string | number>(x: T & (number | object)) {
@@ -61,7 +61,7 @@ function f4<T extends string | number>(x: T & (number | object)) {
 
     const y: number = x;
 >y : number
->x : T & (number | object)
+>x : number
 }
 
 function f5<T, U extends keyof T>(x: keyof T & U) {
@@ -70,7 +70,7 @@ function f5<T, U extends keyof T>(x: keyof T & U) {
 
     let y: keyof any = x;
 >y : string | number | symbol
->x : keyof T & U
+>x : string | number | symbol
 }
 
 // Repro from #23648

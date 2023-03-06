@@ -1,0 +1,150 @@
+=== tests/cases/compiler/mappedTypeGenericIndexedAccess.ts ===
+// Repro from #49242
+
+type Types = {
+>Types : Symbol(Types, Decl(mappedTypeGenericIndexedAccess.ts, 0, 0))
+
+    first: { a1: true };
+>first : Symbol(first, Decl(mappedTypeGenericIndexedAccess.ts, 2, 14))
+>a1 : Symbol(a1, Decl(mappedTypeGenericIndexedAccess.ts, 3, 12))
+
+    second: { a2: true };
+>second : Symbol(second, Decl(mappedTypeGenericIndexedAccess.ts, 3, 24))
+>a2 : Symbol(a2, Decl(mappedTypeGenericIndexedAccess.ts, 4, 13))
+
+    third: { a3: true };
+>third : Symbol(third, Decl(mappedTypeGenericIndexedAccess.ts, 4, 25))
+>a3 : Symbol(a3, Decl(mappedTypeGenericIndexedAccess.ts, 5, 12))
+}
+
+class Test {
+>Test : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
+
+    entries: { [T in keyof Types]?: Types[T][] };
+>entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 9, 16))
+>Types : Symbol(Types, Decl(mappedTypeGenericIndexedAccess.ts, 0, 0))
+>Types : Symbol(Types, Decl(mappedTypeGenericIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 9, 16))
+
+    constructor() {
+        this.entries = {};
+>this.entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+>this : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
+>entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+    }
+
+    addEntry<T extends keyof Types>(name: T, entry: Types[T]) {
+>addEntry : Symbol(Test.addEntry, Decl(mappedTypeGenericIndexedAccess.ts, 13, 5))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 15, 13))
+>Types : Symbol(Types, Decl(mappedTypeGenericIndexedAccess.ts, 0, 0))
+>name : Symbol(name, Decl(mappedTypeGenericIndexedAccess.ts, 15, 36))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 15, 13))
+>entry : Symbol(entry, Decl(mappedTypeGenericIndexedAccess.ts, 15, 44))
+>Types : Symbol(Types, Decl(mappedTypeGenericIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 15, 13))
+
+        if (!this.entries[name]) {
+>this.entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+>this : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
+>entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+>name : Symbol(name, Decl(mappedTypeGenericIndexedAccess.ts, 15, 36))
+
+            this.entries[name] = [];
+>this.entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+>this : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
+>entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+>name : Symbol(name, Decl(mappedTypeGenericIndexedAccess.ts, 15, 36))
+        }
+        this.entries[name]?.push(entry);
+>this.entries[name]?.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+>this : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
+>entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+>name : Symbol(name, Decl(mappedTypeGenericIndexedAccess.ts, 15, 36))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>entry : Symbol(entry, Decl(mappedTypeGenericIndexedAccess.ts, 15, 44))
+    }
+}
+
+// Repro from #49338
+
+type TypesMap = {
+>TypesMap : Symbol(TypesMap, Decl(mappedTypeGenericIndexedAccess.ts, 21, 1))
+
+    [0]: { foo: 'bar'; };
+>[0] : Symbol([0], Decl(mappedTypeGenericIndexedAccess.ts, 25, 17))
+>0 : Symbol([0], Decl(mappedTypeGenericIndexedAccess.ts, 25, 17))
+>foo : Symbol(foo, Decl(mappedTypeGenericIndexedAccess.ts, 26, 10))
+
+    [1]: { a: 'b'; };
+>[1] : Symbol([1], Decl(mappedTypeGenericIndexedAccess.ts, 26, 25))
+>1 : Symbol([1], Decl(mappedTypeGenericIndexedAccess.ts, 26, 25))
+>a : Symbol(a, Decl(mappedTypeGenericIndexedAccess.ts, 27, 10))
+
+};
+
+type P<T extends keyof TypesMap> = { t: T; } & TypesMap[T];
+>P : Symbol(P, Decl(mappedTypeGenericIndexedAccess.ts, 28, 2))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 30, 7))
+>TypesMap : Symbol(TypesMap, Decl(mappedTypeGenericIndexedAccess.ts, 21, 1))
+>t : Symbol(t, Decl(mappedTypeGenericIndexedAccess.ts, 30, 36))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 30, 7))
+>TypesMap : Symbol(TypesMap, Decl(mappedTypeGenericIndexedAccess.ts, 21, 1))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 30, 7))
+
+type TypeHandlers = {
+>TypeHandlers : Symbol(TypeHandlers, Decl(mappedTypeGenericIndexedAccess.ts, 30, 59))
+
+    [T in keyof TypesMap]?: (p: P<T>) => void;
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 33, 5))
+>TypesMap : Symbol(TypesMap, Decl(mappedTypeGenericIndexedAccess.ts, 21, 1))
+>p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 33, 29))
+>P : Symbol(P, Decl(mappedTypeGenericIndexedAccess.ts, 28, 2))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 33, 5))
+
+};
+
+const typeHandlers: TypeHandlers = {
+>typeHandlers : Symbol(typeHandlers, Decl(mappedTypeGenericIndexedAccess.ts, 36, 5))
+>TypeHandlers : Symbol(TypeHandlers, Decl(mappedTypeGenericIndexedAccess.ts, 30, 59))
+
+    [0]: (p) => console.log(p.foo),
+>[0] : Symbol([0], Decl(mappedTypeGenericIndexedAccess.ts, 36, 36))
+>0 : Symbol([0], Decl(mappedTypeGenericIndexedAccess.ts, 36, 36))
+>p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 37, 10))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>p.foo : Symbol(foo, Decl(mappedTypeGenericIndexedAccess.ts, 26, 10))
+>p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 37, 10))
+>foo : Symbol(foo, Decl(mappedTypeGenericIndexedAccess.ts, 26, 10))
+
+    [1]: (p) => console.log(p.a),
+>[1] : Symbol([1], Decl(mappedTypeGenericIndexedAccess.ts, 37, 35))
+>1 : Symbol([1], Decl(mappedTypeGenericIndexedAccess.ts, 37, 35))
+>p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 38, 10))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>p.a : Symbol(a, Decl(mappedTypeGenericIndexedAccess.ts, 27, 10))
+>p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 38, 10))
+>a : Symbol(a, Decl(mappedTypeGenericIndexedAccess.ts, 27, 10))
+
+};
+
+const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
+>onSomeEvent : Symbol(onSomeEvent, Decl(mappedTypeGenericIndexedAccess.ts, 41, 5))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 41, 21))
+>TypesMap : Symbol(TypesMap, Decl(mappedTypeGenericIndexedAccess.ts, 21, 1))
+>p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 41, 47))
+>P : Symbol(P, Decl(mappedTypeGenericIndexedAccess.ts, 28, 2))
+>T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 41, 21))
+
+    typeHandlers[p.t]?.(p);
+>typeHandlers : Symbol(typeHandlers, Decl(mappedTypeGenericIndexedAccess.ts, 36, 5))
+>p.t : Symbol(t, Decl(mappedTypeGenericIndexedAccess.ts, 30, 36))
+>p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 41, 47))
+>t : Symbol(t, Decl(mappedTypeGenericIndexedAccess.ts, 30, 36))
+>p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 41, 47))
+

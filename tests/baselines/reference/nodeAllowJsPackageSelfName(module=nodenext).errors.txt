@@ -1,5 +1,5 @@
 error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'tests/cases/conformance/node/allowJs/package.json'. Supply the `rootDir` compiler option to disambiguate.
-tests/cases/conformance/node/allowJs/index.cjs(2,23): error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(2,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
 
 
 !!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'tests/cases/conformance/node/allowJs/package.json'. Supply the `rootDir` compiler option to disambiguate.
@@ -15,7 +15,7 @@ tests/cases/conformance/node/allowJs/index.cjs(2,23): error TS1471: Module 'pack
     // esm format file
     import * as self from "package";
                           ~~~~~~~~~
-!!! error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
     self;
 ==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
     {

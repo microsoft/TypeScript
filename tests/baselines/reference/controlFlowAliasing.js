@@ -664,7 +664,7 @@ declare function f40(obj: {
     kind: 'bar';
     bar?: number;
 }): void;
-declare type Data = {
+type Data = {
     kind: 'str';
     payload: string;
 } | {

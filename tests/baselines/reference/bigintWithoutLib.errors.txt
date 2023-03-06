@@ -11,13 +11,13 @@ tests/cases/compiler/bigintWithoutLib.ts(13,38): error TS2554: Expected 0 argume
 tests/cases/compiler/bigintWithoutLib.ts(14,38): error TS2554: Expected 0 arguments, but got 2.
 tests/cases/compiler/bigintWithoutLib.ts(15,38): error TS2554: Expected 0 arguments, but got 2.
 tests/cases/compiler/bigintWithoutLib.ts(18,18): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-tests/cases/compiler/bigintWithoutLib.ts(18,38): error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
-tests/cases/compiler/bigintWithoutLib.ts(19,19): error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
-tests/cases/compiler/bigintWithoutLib.ts(20,19): error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
+tests/cases/compiler/bigintWithoutLib.ts(18,38): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+tests/cases/compiler/bigintWithoutLib.ts(19,19): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+tests/cases/compiler/bigintWithoutLib.ts(20,19): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 tests/cases/compiler/bigintWithoutLib.ts(20,34): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 tests/cases/compiler/bigintWithoutLib.ts(20,38): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 tests/cases/compiler/bigintWithoutLib.ts(20,42): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-tests/cases/compiler/bigintWithoutLib.ts(21,19): error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
+tests/cases/compiler/bigintWithoutLib.ts(21,19): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 tests/cases/compiler/bigintWithoutLib.ts(22,19): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 tests/cases/compiler/bigintWithoutLib.ts(23,19): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 tests/cases/compiler/bigintWithoutLib.ts(24,19): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
@@ -97,16 +97,13 @@ tests/cases/compiler/bigintWithoutLib.ts(56,36): error TS2345: Argument of type 
                      ~~~~~~~~~~~~~
 !!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
                                          ~~~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
-!!! related TS2728 tests/cases/compiler/bigintWithoutLib.ts:18:5: 'bigIntArray' is declared here.
+!!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     bigIntArray = new BigInt64Array(10);
                       ~~~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
-!!! related TS2728 tests/cases/compiler/bigintWithoutLib.ts:18:5: 'bigIntArray' is declared here.
+!!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     bigIntArray = new BigInt64Array([1n, 2n, 3n]);
                       ~~~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
-!!! related TS2728 tests/cases/compiler/bigintWithoutLib.ts:18:5: 'bigIntArray' is declared here.
+!!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
                                      ~~
 !!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
                                          ~~
@@ -115,8 +112,7 @@ tests/cases/compiler/bigintWithoutLib.ts(56,36): error TS2345: Argument of type 
 !!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     bigIntArray = new BigInt64Array([1, 2, 3]);
                       ~~~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
-!!! related TS2728 tests/cases/compiler/bigintWithoutLib.ts:18:5: 'bigIntArray' is declared here.
+!!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     bigIntArray = new BigInt64Array(new ArrayBuffer(80));
                       ~~~~~~~~~~~~~
 !!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.

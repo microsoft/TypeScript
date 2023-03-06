@@ -164,6 +164,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.ProjectReferenceCycle_OutputsSkupped
+exitCode:: ExitStatus.ProjectReferenceCycle_OutputsSkipped
 
 

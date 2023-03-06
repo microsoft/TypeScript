@@ -1,0 +1,17 @@
+/*====== /tests/cases/fourslash/foo.js ======*/
+
+/**
+ * @overload
+ * @param {number} x
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} x
+ * @returns {string} 
+ *
+ * @param {unknown} RENAME
+ * @returns {unknown} 
+ */
+function foo([|RENAME|]) {
+  return RENAME;
+}

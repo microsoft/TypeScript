@@ -49,9 +49,10 @@ export interface StyledOtherComponent<A, B, C> {}
 >C : Symbol(C, Decl(index.d.ts, 9, 43))
 
 === tests/cases/compiler/node_modules/create-emotion-styled/index.d.ts ===
+
 export * from "./types/react";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/node_modules/react-emotion/index.d.ts ===
+
+=== tests/cases/compiler/node_modules/react-emotion/index.d.ts ===
 import {StyledOtherComponent, StyledOtherComponentList} from "create-emotion-styled";
 >StyledOtherComponent : Symbol(StyledOtherComponent, Decl(index.d.ts, 0, 8))
 >StyledOtherComponentList : Symbol(StyledOtherComponentList, Decl(index.d.ts, 0, 29))

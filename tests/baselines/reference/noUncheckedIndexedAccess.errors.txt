@@ -1,6 +1,7 @@
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(3,32): error TS2344: Type 'boolean | undefined' does not satisfy the constraint 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(12,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(13,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(14,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(15,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
@@ -54,6 +55,7 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS232
     const e1: boolean = strMap["foo"];
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e2: boolean = strMap.bar;
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.

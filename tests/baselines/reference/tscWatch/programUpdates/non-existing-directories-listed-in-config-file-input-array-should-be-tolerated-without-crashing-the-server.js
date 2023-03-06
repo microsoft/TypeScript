@@ -42,21 +42,19 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/app: *new*
+  {"pollingInterval":500}
+/a/b/test: *new*
+  {"pollingInterval":500}
+/a/b/something: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/a/b/app:
-  {"directoryName":"/a/b/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/test:
-  {"directoryName":"/a/b/test","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/something:
-  {"directoryName":"/a/b/something","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b/tsconfig.json: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

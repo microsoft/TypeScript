@@ -9,9 +9,9 @@ export default {
 
 //// [QSpinner.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var QSpinner_1 = require("./QSpinner");
-exports["default"] = {
-    mixins: [QSpinner_1["default"]],
+exports.default = {
+    mixins: [QSpinner_1.default],
     name: 'QSpinner'
 };

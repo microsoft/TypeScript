@@ -34,7 +34,7 @@ var visModel = new moduleMap[moduleName].VisualizationModel();
 
 //// [extendingClassFromAliasAndUsageInIndexer_backbone.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = void 0;
 var Model = /** @class */ (function () {
     function Model() {
@@ -59,7 +59,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
 var Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 var VisualizationModel = /** @class */ (function (_super) {
@@ -87,7 +87,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
 var Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 var VisualizationModel = /** @class */ (function (_super) {
@@ -100,7 +100,7 @@ var VisualizationModel = /** @class */ (function (_super) {
 exports.VisualizationModel = VisualizationModel;
 //// [extendingClassFromAliasAndUsageInIndexer_main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var moduleA = require("./extendingClassFromAliasAndUsageInIndexer_moduleA");
 var moduleB = require("./extendingClassFromAliasAndUsageInIndexer_moduleB");
 var moduleATyped = moduleA;

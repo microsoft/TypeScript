@@ -20,7 +20,7 @@ export var x: SubModule.m.m3.c;
 //// [declFileAmbientExternalModuleWithSingleExportedModule_0.js]
 //// [declFileAmbientExternalModuleWithSingleExportedModule_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 
 

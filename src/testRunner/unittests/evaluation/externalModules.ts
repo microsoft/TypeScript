@@ -1,3 +1,5 @@
+import * as evaluator from "../../_namespaces/evaluator";
+
 describe("unittests:: evaluation:: externalModules", () => {
     // https://github.com/microsoft/TypeScript/issues/35420
     it("Correct 'this' in function exported from external module", async () => {

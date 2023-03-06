@@ -70,3 +70,64 @@ module Z {
 >Y : number
 >12 : 12
 }
+
+//
+
+module a {
+  export type A = number;
+>A : number
+}
+
+module b {
+>b : typeof b
+
+  export import A = a.A;
+>A : any
+>a : any
+>A : number
+
+  export module A {}
+}
+
+module c {
+  import any = b.A;
+>any : any
+>b : typeof b
+>A : number
+}
+
+//
+
+module q {
+>q : typeof q
+
+  export const Q = {};
+>Q : {}
+>{} : {}
+}
+
+module r {
+>r : typeof r
+
+  export import Q = q.Q;
+>Q : {}
+>q : typeof q
+>Q : {}
+
+  export type Q = number;
+>Q : number
+}
+
+module s {
+>s : typeof s
+
+  import Q = r.Q;
+>Q : 0
+>r : typeof r
+>Q : number
+
+  const Q = 0;
+>Q : 0
+>0 : 0
+}
+

@@ -56,19 +56,17 @@ Shape signatures in builder refreshed for::
 /a/f1.ts (used version)
 /a/d/f0.ts (used version)
 
-WatchedFiles::
-/a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
-/a/f1.ts:
-  {"fileName":"/a/f1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
+/a/d/f0.ts: *new*
+  {}
+/a/f1.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -79,7 +77,7 @@ foo();
 //// [/a/d/f0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 
@@ -129,26 +127,12 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
-WatchedFiles::
-/a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
-/a/f1.ts:
-  {"fileName":"/a/f1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/d/f0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var x = 1;
 });
 
@@ -165,7 +149,7 @@ Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/d/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+[96ma/d/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 [7m1[0m import {x} from "f2"
 [7m [0m [91m                ~~~~[0m
@@ -187,28 +171,32 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
-WatchedFiles::
-/a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/node_modules: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/d/f0.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/: *new*
+  {}
+
+FsWatches *deleted*::
+/a/f1.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/node_modules:
-  {"directoryName":"/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/d/f0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 
@@ -255,19 +243,25 @@ Shape signatures in builder refreshed for::
 /a/f1.ts (computed .d.ts)
 /a/d/f0.ts (computed .d.ts)
 
-WatchedFiles::
-/a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/f1.ts:
-  {"fileName":"/a/f1.ts","pollingInterval":250}
+PolledWatches *deleted*::
+/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/d/f0.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/f1.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/:
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -10,6 +10,6 @@ verify.codeFix({
     index: 0,
     newRangeContent:
 `type Foo = {
-    test(arg0: number, arg1: number, arg2: string);
+    test(arg0: number, arg1: number, arg2: string): unknown;
 };`
 });

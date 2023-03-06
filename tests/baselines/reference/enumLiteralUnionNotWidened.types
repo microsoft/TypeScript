@@ -19,7 +19,7 @@ type C = A | B.foo;
 >B : any
 
 type D = A | "foo";
->D : A | "foo"
+>D : "foo" | A
 
 class List<T>
 >List : List<T>

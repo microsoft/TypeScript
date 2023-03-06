@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/server/referencesToNonPropertyNameStringLiteral.ts",
+      "kind": "var",
+      "name": "hello",
+      "textSpan": {
+        "start": 21,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": []
+  }
+]

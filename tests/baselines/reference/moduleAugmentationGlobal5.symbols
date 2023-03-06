@@ -1,11 +1,12 @@
 === tests/cases/compiler/f3.ts ===
+
 /// <reference path="f1.d.ts"/>
-No type information for this code./// <reference path="f2.d.ts"/>
-No type information for this code.import "A";
-No type information for this code.import "B";
-No type information for this code.
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/f1.d.ts ===
+/// <reference path="f2.d.ts"/>
+import "A";
+import "B";
+
+
+=== tests/cases/compiler/f1.d.ts ===
 declare module "A" {
 >"A" : Symbol("A", Decl(f1.d.ts, 0, 0))
 

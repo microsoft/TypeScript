@@ -104,7 +104,7 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 
 //// [quickinfoTypeAtReturnPositionsInaccurate.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.listFiles = void 0;
 var NumClass = /** @class */ (function () {
     function NumClass() {

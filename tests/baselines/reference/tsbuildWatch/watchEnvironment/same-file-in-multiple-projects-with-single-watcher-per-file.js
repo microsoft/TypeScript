@@ -59,19 +59,19 @@ Output::
 
 [[90m12:00:50 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:00:53 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output file 'pkg1/index.js' does not exist
+[[90m12:00:54 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output file 'pkg1/index.js' does not exist
 
-[[90m12:00:54 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:00:55 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:00:57 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output file 'pkg2/index.js' does not exist
+[[90m12:00:59 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output file 'pkg2/index.js' does not exist
 
-[[90m12:00:58 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:01 AM[0m] Project 'pkg3/tsconfig.json' is out of date because output file 'pkg3/index.js' does not exist
+[[90m12:01:04 AM[0m] Project 'pkg3/tsconfig.json' is out of date because output file 'pkg3/index.js' does not exist
 
-[[90m12:01:02 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:01:05 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:01:05 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:09 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -147,66 +147,64 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg3/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg0/index.ts: *new*
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts: *new*
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg2/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg3/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg3/index.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg0: *new*
+  {}
+/user/username/projects/myproject/pkg1: *new*
+  {}
+/user/username/projects/myproject/pkg2: *new*
+  {}
+/user/username/projects/myproject/pkg3: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg0 = void 0;
 exports.pkg0 = 0;
 
 
 //// [/user/username/projects/myproject/pkg1/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg1 = void 0;
 exports.pkg1 = 1;
 
 
 //// [/user/username/projects/myproject/pkg2/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg2 = void 0;
 exports.pkg2 = 2;
 
 
 //// [/user/username/projects/myproject/pkg3/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg3 = void 0;
 exports.pkg3 = 3;
 
@@ -221,33 +219,33 @@ export const typing = 10;export const typing1 = 10;
 
 Output::
 >> Screen clear
-[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:10 AM[0m] Project 'pkg0/tsconfig.json' is out of date because oldest output 'pkg0/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:14 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/index.js' is older than input 'typings/xterm.d.ts'
 
-[[90m12:01:11 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+[[90m12:01:15 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:01:13 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+[[90m12:01:16 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:01:14 AM[0m] Project 'pkg1/tsconfig.json' is out of date because oldest output 'pkg1/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:18 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'typings/xterm.d.ts'
 
-[[90m12:01:15 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:01:19 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:17 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:01:20 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:18 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:22 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'typings/xterm.d.ts'
 
-[[90m12:01:19 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:23 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:21 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:24 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:22 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:26 AM[0m] Project 'pkg3/tsconfig.json' is out of date because output 'pkg3/index.js' is older than input 'typings/xterm.d.ts'
 
-[[90m12:01:23 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:01:27 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:01:25 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:01:28 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -307,40 +305,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
@@ -357,39 +321,47 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:30 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:35 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg3/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/pkg3:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -403,27 +375,27 @@ export const typing = 10;
 
 Output::
 >> Screen clear
-[[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:36 AM[0m] Project 'pkg0/tsconfig.json' is out of date because oldest output 'pkg0/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:40 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/index.js' is older than input 'typings/xterm.d.ts'
 
-[[90m12:01:37 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+[[90m12:01:41 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:01:39 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+[[90m12:01:42 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:01:40 AM[0m] Project 'pkg1/tsconfig.json' is out of date because oldest output 'pkg1/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:44 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'typings/xterm.d.ts'
 
-[[90m12:01:41 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:01:45 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:43 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:01:46 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:44 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:48 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'typings/xterm.d.ts'
 
-[[90m12:01:45 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:49 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:47 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:50 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:52 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -469,34 +441,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
@@ -512,24 +456,44 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:52 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:57 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/user/username/projects/myproject/tsconfig.json' is empty.
 
 [7m1[0m {"files":[],"include":[],"references":[]}
 [7m [0m [91m         ~~[0m
 
-[[90m12:01:53 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:58 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/pkg0:
+  {}
+/user/username/projects/myproject/pkg1:
+  {}
+/user/username/projects/myproject/pkg2:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -542,14 +506,6 @@ export const typing = 10;export const typing1 = 10;
 
 
 Output::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

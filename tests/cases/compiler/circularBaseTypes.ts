@@ -10,3 +10,10 @@ type M3 = M2[keyof M2];  // Error
 function f(m: M3) {
   return m.value;
 }
+
+// Repro from #32581
+
+type X<T> = { [K in keyof T]: string } & { b: string };
+interface Y extends X<Y> {
+  a: "";
+}

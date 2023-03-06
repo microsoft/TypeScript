@@ -14,11 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Use node version 14.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14.x
-    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.inputs.branch_name || github.event.client_payload.branch_name }}
         fetch-depth: 0

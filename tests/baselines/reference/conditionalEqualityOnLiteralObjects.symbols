@@ -1,0 +1,92 @@
+=== tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts ===
+const a = { a: 1 }
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 11))
+
+const b = [1]
+>b : Symbol(b, Decl(conditionalEqualityOnLiteralObjects.ts, 1, 5))
+
+if ({ a: 1 } === { a: 1 }) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 3, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 3, 18))
+}
+if ([1] === [1]) {
+}
+if (a === { a: 1 }) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 7, 11))
+}
+if (b === [1]) {
+>b : Symbol(b, Decl(conditionalEqualityOnLiteralObjects.ts, 1, 5))
+}
+if ({ a: 1 } === a) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 11, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 5))
+}
+if ([1] === b) {
+>b : Symbol(b, Decl(conditionalEqualityOnLiteralObjects.ts, 1, 5))
+}
+
+if ({ a: 1 } !== { a: 1 }) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 16, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 16, 18))
+}
+if ([1] !== [1]) {
+}
+if (a !== { a: 1 }) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 20, 11))
+}
+if (b !== [1]) {
+>b : Symbol(b, Decl(conditionalEqualityOnLiteralObjects.ts, 1, 5))
+}
+if ({ a: 1 } !== a) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 24, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 5))
+}
+if ([1] !== b) {
+>b : Symbol(b, Decl(conditionalEqualityOnLiteralObjects.ts, 1, 5))
+}
+
+if ({ a: 1 } == { a: 1 }) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 29, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 29, 17))
+}
+if ([1] == [1]) {
+}
+if (a == { a: 1 }) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 33, 10))
+}
+if (b == [1]) {
+>b : Symbol(b, Decl(conditionalEqualityOnLiteralObjects.ts, 1, 5))
+}
+if ({ a: 1 } == a) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 37, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 5))
+}
+if ([1] == b) {
+>b : Symbol(b, Decl(conditionalEqualityOnLiteralObjects.ts, 1, 5))
+}
+
+if ({ a: 1 } != { a: 1 }) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 42, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 42, 17))
+}
+if ([1] != [1]) {
+}
+if (a != { a: 1 }) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 46, 10))
+}
+if (b != [1]) {
+>b : Symbol(b, Decl(conditionalEqualityOnLiteralObjects.ts, 1, 5))
+}
+if ({ a: 1 } != a) {
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 50, 5))
+>a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 5))
+}
+if ([1] != b) {
+>b : Symbol(b, Decl(conditionalEqualityOnLiteralObjects.ts, 1, 5))
+}
+

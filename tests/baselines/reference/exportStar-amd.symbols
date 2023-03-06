@@ -26,11 +26,12 @@ export { x, y, z };
 >z : Symbol(z, Decl(t3.ts, 3, 14))
 
 === tests/cases/conformance/es6/modules/t4.ts ===
+
 export * from "./t1";
-No type information for this code.export * from "./t2";
-No type information for this code.export * from "./t3";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/es6/modules/main.ts ===
+export * from "./t2";
+export * from "./t3";
+
+=== tests/cases/conformance/es6/modules/main.ts ===
 import hello, { x, y, z, foo } from "./t4";
 >hello : Symbol(hello, Decl(main.ts, 0, 6))
 >x : Symbol(x, Decl(main.ts, 0, 15))

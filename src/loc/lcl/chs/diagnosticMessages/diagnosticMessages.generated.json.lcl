@@ -61,7 +61,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A bigint literal cannot use exponential notation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[bigint 文本不能使用指数符号。]]></Val>
+            <Val><![CDATA[BigInt 字面量中不能使用指数符号。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -70,7 +70,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A bigint literal must be an integer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[bigint 文本必须是整数。]]></Val>
+            <Val><![CDATA[BigInt 字面量必须是整数。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -217,7 +217,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["const" 断言只能用于引用枚举成员、字符串、数字、布尔值、数组或对象文本。]]></Val>
+            <Val><![CDATA['const' 断言只能作用于枚举成员、字符串、数字、布尔值、数组或对象字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -388,7 +388,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A function that is called with the 'new' keyword cannot have a 'this' type that is 'void'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用 "new" 关键字调用的函数不可具有“失效”的 "this" 类型。]]></Val>
+            <Val><![CDATA[使用 'new' 关键字调用的函数的 'this' 类型不能为 'void'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -568,7 +568,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would update output of project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非干燥生成将更新项目 "{0}" 的输出]]></Val>
+            <Val><![CDATA[非 dry 生成将更新项目 '{0}' 的输出]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -577,7 +577,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would update timestamps for output of project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非干燥生成将更新项目 "{0}" 的输出的时间戳]]></Val>
+            <Val><![CDATA[非 dry 生成将更新项目 '{0}' 的输出的时间戳]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -622,7 +622,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A promise must have a 'then' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[承诺必须具有 "then" 方法。]]></Val>
+            <Val><![CDATA['Promise' 必须具有 'then' 方法。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -900,6 +900,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_tuple_type_cannot_be_indexed_with_a_negative_value_2514" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A tuple type cannot be indexed with a negative value.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不能使用负值为元组类型编制索引。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Con_17007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.]]></Val>
@@ -1093,7 +1102,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add all missing function declarations]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[添加缺少的所有函数声明]]></Val>
+            <Val><![CDATA[添加所有缺少的函数声明]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1147,7 +1156,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add all missing super calls]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[添加所有缺失的超级调用]]></Val>
+            <Val><![CDATA[添加所有缺失的 super() 调用]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1238,6 +1247,24 @@
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[添加 "export {}"，将此文件变为模块]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_extends_constraint_2211" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add `extends` constraint.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[添加 `extends` 约束。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_extends_constraint_to_all_type_parameters_2212" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add `extends` constraint to all type parameters]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[将 `extends` 约束添加到所有类型参数]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1462,7 +1489,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'undefined' type to property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[向属性“{0}”添加“未定义”类型]]></Val>
+            <Val><![CDATA[向属性“{0}”添加 "undefined" 类型]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1489,7 +1516,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[将 "void" 添加到已解析但没有值的承诺]]></Val>
+            <Val><![CDATA[将 "void" 添加到已解析但没有值的 Promise]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1498,7 +1525,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[将 "void" 添加到所有已解析但没有值的承诺]]></Val>
+            <Val><![CDATA[将 "void" 添加到所有已解析但没有值的 Promise]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1552,7 +1579,7 @@
         <Str Cat="Text">
           <Val><![CDATA[All destructured elements are unused.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未取消使用任何解构元素。]]></Val>
+            <Val><![CDATA[所有解构出的成员都未使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1561,7 +1588,7 @@
         <Str Cat="Text">
           <Val><![CDATA[All imports in import declaration are unused.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未使用导入声明中的所有导入。]]></Val>
+            <Val><![CDATA[导入声明中的所有导入都未使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1712,6 +1739,15 @@
           <Val><![CDATA[An accessor cannot have type parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[访问器不能具有类型参数。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_accessor_property_cannot_be_declared_optional_1276" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An 'accessor' property cannot be declared optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["accessor" 属性不能声明为可选。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1927,7 +1963,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An identifier or keyword cannot immediately follow a numeric literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[标识符或关键字不能紧跟在数字文本之后。]]></Val>
+            <Val><![CDATA[标识符或关键字不能紧跟在数字字面量之后。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2094,6 +2130,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";An_instantiation_expression_cannot_be_followed_by_a_property_access_1477" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An instantiation expression cannot be followed by a property access.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[实例化表达式不能后跟属性访问。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments_2499" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An interface can only extend an identifier/qualified-name with optional type arguments.]]></Val>
@@ -2108,6 +2153,15 @@
           <Val><![CDATA[An interface can only extend an object type or intersection of object types with statically known members.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[接口只能扩展使用静态已知成员的对象类型或对象类型的交集。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_interface_cannot_extend_a_primitive_type_like_0_an_interface_can_only_extend_named_types_and_clas_2840" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[接口无法扩展基元类型，如“{0}”；接口只能扩展命名类型和类]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2380,7 +2434,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Await expression cannot be used inside a class static block.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法在类静态块内使用 Await 表达式。]]></Val>
+            <Val><![CDATA[无法在类静态块内使用 await 表达式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2398,7 +2452,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Backwards Compatibility]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[后向兼容性]]></Val>
+            <Val><![CDATA[向后兼容性]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2443,7 +2497,7 @@
         <Str Cat="Text">
           <Val><![CDATA[BigInt literals are not available when targeting lower than ES2020.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[目标低于 ES2020 时，bigInt 文本不可用。]]></Val>
+            <Val><![CDATA[目标低于 ES2020 时，BigInt 字面量不可用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2710,7 +2764,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot assign to '{0}' because it is a read-only property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法分配到 "{0}" ，因为它是只读属性。]]></Val>
+            <Val><![CDATA[无法为“{0}”赋值，因为它是只读属性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2737,7 +2791,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot assign to '{0}' because it is not a variable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法分配到“{0}”，因为它不是变量。]]></Val>
+            <Val><![CDATA[无法为“{0}”赋值，因为它不是变量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2746,7 +2800,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot assign to private method '{0}'. Private methods are not writable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法分配给专用方法 "{0}"。专用方法不可写。]]></Val>
+            <Val><![CDATA[无法赋值给私有方法“{0}”。私有方法不可写。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2818,7 +2872,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot extend an interface '{0}'. Did you mean 'implements'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法扩展接口‘{0}’。您的意思是‘实施’吗？]]></Val>
+            <Val><![CDATA[无法扩展接口“{0}”。您是否想使用 "implements"?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3025,7 +3079,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名称 "{0}"。是否需要为节点安装类型定义? 请尝试使用 `npm i --save-dev @types/node`。]]></Val>
+            <Val><![CDATA[找不到名称“{0}”。是否需要安装 Node.js 的类型定义? 请尝试运行 `npm i --save-dev @types/node`。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3034,7 +3088,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名称“{0}”。是否需要为节点安装类型定义? 请尝试使用 `npm i --save-dev @types/node`，然后将 “node” 添加到类型字段。]]></Val>
+            <Val><![CDATA[找不到名称“{0}”。是否需要安装 Node.js 的类型定义? 请尝试运行 `npm i --save-dev @types/node`，然后将 "node" 添加到 tsconfig 的 types 字段。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add `node` to the types field in your tsconfig.]]></Val>
@@ -3361,7 +3415,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Change all jsdoc-style types to TypeScript]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[将所有 jsdoc 样式类型都更改为 TypeScript]]></Val>
+            <Val><![CDATA[将所有 JSDoc 样式类型都更改为 TypeScript]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3370,7 +3424,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Change all jsdoc-style types to TypeScript (and add '| undefined' to nullable types)]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[将所有 jsdoc 样式类型都更改为 TypeScript (并将 "| undefined" 添加到可以为 null 的类型)]]></Val>
+            <Val><![CDATA[将所有 JSDoc 样式类型都更改为 TypeScript (并将 "| undefined" 添加到可以为 null 的类型)]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3515,6 +3569,24 @@
           <Val><![CDATA[Class '{0}' used before its declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[类“{0}”用于其声明前。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Class_constructor_may_not_be_a_generator_1368" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class constructor may not be a generator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[类构造函数可能不是生成器。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Class_constructor_may_not_be_an_accessor_1341" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class constructor may not be an accessor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[类构造函数可能不是访问器。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3945,6 +4017,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_all_const_to_let_95102" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all 'const' to 'let']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[将所有 'const' 转换为 'let']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_all_constructor_functions_to_classes_95045" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all constructor functions to classes]]></Val>
@@ -4003,7 +4084,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all to bigint numeric literals]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[全部转换为 bigint 数字文本]]></Val>
+            <Val><![CDATA[全部转换为 BigInt 数字字面量]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4165,7 +4246,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to a bigint numeric literal]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[转换为 bigint 数字文本]]></Val>
+            <Val><![CDATA[转换为 BigInt 数字字面量]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6072,6 +6153,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Export_0_from_module_1_90059" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Export '{0}' from module '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[从模块“{1}”导出“{0}”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Export_all_referenced_locals_90060" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Export all referenced locals]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出所有引用的局部变量]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or__1203" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.]]></Val>
@@ -6471,6 +6570,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_0_does_not_have_field_type_1460" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because '{0}' does not have field "type"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[文件是 CommonJS 模块，因为“{0}”没有字段 “type”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module_1459" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because '{0}' has field "type" whose value is not "module"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[文件是 CommonJS 模块，因为“{0}”具有值不是 “module” 的字段 “type”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_package_json_was_not_found_1461" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because 'package.json' was not found]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[文件是 CommonJS 模块，因为找不到 “package.json”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_ECMAScript_module_because_0_has_field_type_with_value_module_1458" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is ECMAScript module because '{0}' has field "type" with value "module"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[文件是 ECMAScript 模块，因为“{0}”具有值为 “module” 的字段 “type”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File is a CommonJS module; it may be converted to an ES module.]]></Val>
@@ -6688,7 +6823,7 @@
         <Str Cat="Text">
           <Val><![CDATA['For await' loops cannot be used inside a class static block.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法在类静态块内使用 “For await 循环。]]></Val>
+            <Val><![CDATA[无法在类静态块内使用 for...await 循环。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7145,6 +7280,15 @@
           <Val><![CDATA[Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[应为标识符。转换 ECMAScript 模块时，"__esModule" 保留为导出标记。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Identifier_or_string_literal_expected_1478" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Identifier or string literal expected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[应为标识符或字符串字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7797,6 +7941,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Invalid_optional_chain_from_new_expression_Did_you_mean_to_call_0_1209" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Invalid optional chain from new expression. Did you mean to call '{0}()'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[新表达式中的可选链无效。是否要调用“{0}()”?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Invalid_reference_directive_syntax_1084" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Invalid 'reference' directive syntax.]]></Val>
@@ -8325,6 +8478,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Matched_0_condition_1_6403" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Matched '{0}' condition '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[匹配的“{0}”条件“{1}”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Matched_by_default_include_pattern_Asterisk_Asterisk_Slash_Asterisk_1457" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Matched by default include pattern '**/*']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[默认情况下匹配包括模式 “**/*”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Matched_by_include_pattern_0_in_1_1407" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Matched by include pattern '{0}' in '{1}']]></Val>
@@ -8435,10 +8606,13 @@
       </Item>
       <Item ItemId=";Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法使用此构造导入模块 '{0}'。说明符仅解析为无法同步导入的 ES 模块。请改用动态导入。]]></Val>
+            <Val><![CDATA[无法使用此构造导入模块“{0}”。说明符仅解析为 ES 模块，后者不能使用“require”进行导入。请改用 ECMAScript 导入。]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8974,7 +9148,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[对象文字可以只指定已知属性，并且“{0}”不在类型“{1}”中。]]></Val>
+            <Val><![CDATA[对象字面量只能指定已知属性，并且“{0}”不在类型“{1}”中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8983,7 +9157,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object literal may only specify known properties, but '{0}' does not exist in type '{1}'. Did you mean to write '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[对象文字只能指定已知的属性，但“{0}”中不存在类型“{1}”。是否要写入 {2}?]]></Val>
+            <Val><![CDATA[对象字面量只能指定已知的属性，但“{0}”中不存在类型“{1}”。是否要写入 {2}?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8992,7 +9166,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object literal's property '{0}' implicitly has an '{1}' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[对象文字的属性“{0}”隐式含有“{1}”类型。]]></Val>
+            <Val><![CDATA[对象字面量的属性“{0}”隐式含有“{1}”类型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10056,6 +10230,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_some_of_the_changes_were_not_emitte_6399" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is out of date because buildinfo file '{1}' indicates that some of the changes were not emitted]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[项目“{0}”已过期，因为 buildinfo 文件“{1}”指示某些更改未发出]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Project_0_is_out_of_date_because_its_dependency_1_is_out_of_date_6353" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is out of date because its dependency '{1}' is out of date]]></Val>
@@ -10065,11 +10248,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2_6350" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Project_0_is_out_of_date_because_output_1_is_older_than_input_2_6350" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}']]></Val>
+          <Val><![CDATA[Project '{0}' is out of date because output '{1}' is older than input '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[项目“{0}”已过期，因为最早的输出“{1}”早于最新的输入“{2}”]]></Val>
+            <Val><![CDATA[项目“{0}”已过期，因为输出“{1}”早于输入“{2}”]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10101,6 +10284,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Project_0_is_out_of_date_because_there_was_error_reading_file_1_6401" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is out of date because there was error reading file '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[项目“{0}”已过期，因为读取文件“{1}”时出错]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Project_0_is_up_to_date_6361" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is up to date]]></Val>
@@ -10110,11 +10302,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2_6351" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Project_0_is_up_to_date_because_newest_input_1_is_older_than_output_2_6351" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}']]></Val>
+          <Val><![CDATA[Project '{0}' is up to date because newest input '{1}' is older than output '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[项目“{0}”已是最新，因为最新的输入“{1}”早于最早的输出“{2}”]]></Val>
+            <Val><![CDATA[项目“{0}”是最新的，因为最新的输入“{1}”早于输出“{2}”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Project_0_is_up_to_date_but_needs_to_update_timestamps_of_output_files_that_are_older_than_input_fil_6400" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is up to date but needs to update timestamps of output files that are older than input files]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[项目“{0}”是最新的，但需要更新早于输入文件的输出文件的时间戳]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10151,6 +10352,15 @@
           <Val><![CDATA[Projects in this build: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[此生成中的项目: {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Properties_with_the_accessor_modifier_are_only_available_when_targeting_ECMAScript_2015_and_higher_18045" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只有在面向 ECMAScript 2015 及更高版本时，才可使用带有 "accessor" 修饰符的属性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10534,7 +10744,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[属性值只能是字符串文本、数字文本、"true"、"false"、"null"、对象文字或数组文本。]]></Val>
+            <Val><![CDATA[属性值只能是字符串、数字、"true"、"false"、"null"、对象或数组等类型的字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11115,20 +11325,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Resolution_modes_are_only_supported_when_moduleResolution_is_node16_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Resolution modes are only supported when `moduleResolution` is `node16` or `nodenext`.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅当 `moduleResolution` 为 `node16` 或 `nodenext` 时才支持解析模式。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[只将 "keyof" 解析为字符串值的属性名称(不含数字或符号)。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Resolving_in_0_mode_with_conditions_1_6402" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolving in {0} mode with conditions {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[正在 {0} 模式下解析，条件为 {1}。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11645,6 +11855,15 @@
           <Val><![CDATA[Save .tsbuildinfo files to allow for incremental compilation of projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[保存 .tsbuildinfo 文件以允许项目增量编译。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Saw_non_matching_condition_0_6405" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Saw non-matching condition '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[看到了不匹配的条件“{0}”。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12388,7 +12607,7 @@
         <Str Cat="Text">
           <Val><![CDATA[String literal expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[应为字符串文本。]]></Val>
+            <Val><![CDATA[应为字符串字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12397,7 +12616,7 @@
         <Str Cat="Text">
           <Val><![CDATA[String literal with double quotes expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[应为带双引号的字符串文字。]]></Val>
+            <Val><![CDATA[应为带双引号的字符串字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12490,7 +12709,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Suppress excess property checks for object literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[取消对象文字的多余属性检查。]]></Val>
+            <Val><![CDATA[取消对对象字面量的多余属性检查。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12701,6 +12920,15 @@
           <Val><![CDATA[The current file is a CommonJS module and cannot use 'await' at the top level.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[当前文件是 CommonJS 模块，因此不能在顶级使用 “await”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_reference_1479" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("{0}")' call instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[当前文件是 CommonJS 模块，其导入将生成“require”调用；但是，引用的文件是 ECMAScript 模块，它不能使用“require”进行导入。请考虑改为编写动态“import("{0}")”调用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13044,15 +13272,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_left_hand_side_of_an_in_expression_must_be_a_private_identifier_or_of_type_any_string_number_or__2360" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["in" 表达式的左侧必须是专用标识符或其类型必须为 "any"、"string"、"number" 或 "symbol"。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_paramete_2358" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.]]></Val>
@@ -13242,15 +13461,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_right_hand_side_of_an_in_expression_must_not_be_a_primitive_2361" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The right-hand side of an 'in' expression must not be a primitive.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["in" 表达式的右侧不得是基元。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_F_2359" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.]]></Val>
@@ -13380,6 +13590,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_type_of_this_expression_cannot_be_named_without_a_resolution_mode_assertion_which_is_an_unstable_2841" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[如果没有“resolution-mode”断言(这是不稳定的功能)，则无法命名此表达式的类型。请使用夜间 TypeScript 来消除此错误。请尝试使用“npm install -D typescript@next”进行更新。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized_4118" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The type of this node cannot be serialized because its property '{0}' cannot be serialized.]]></Val>
@@ -13421,6 +13640,15 @@
           <Val><![CDATA[The types returned by '{0}' are incompatible between these types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[在这些类型中，"{0}" 返回的类型不兼容。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_value_0_cannot_be_used_here_18050" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The value '{0}' cannot be used here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此处不能使用值“{0}”。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13470,11 +13698,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap_2367" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap_2367" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.]]></Val>
+          <Val><![CDATA[This comparison appears to be unintentional because the types '{0}' and '{1}' have no overlap.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此条件将始终返回 "{0}"，因为类型 "{1}" 和 "{2}" 没有重叠。]]></Val>
+            <Val><![CDATA[此比较似乎是无意的，因为类型“{0}”和“{1}”没有重叠。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_condition_will_always_return_0_2845" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This condition will always return '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此条件将始终返回“{0}”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value_2839" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This condition will always return '{0}' since JavaScript compares objects by reference, not value.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此条件将始终返回“{0}”，因为 JavaScript 按引用而不是值比较对象。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13659,11 +13905,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the__2594" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_module_is_declared_with_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag_2594" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
+          <Val><![CDATA[This module is declared with 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此模块是使用 "export =" 声明的，只能在使用 "{0}" 标志时进行默认导入。]]></Val>
+            <Val><![CDATA[此模块是使用 “export =” 声明的，只能在使用“{0}”标志时用于默认导入。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13758,11 +14004,56 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_type_parameter_might_need_an_extends_0_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This type parameter might need an `extends {0}` constraint.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此类型参数可能需要 `extends {0}` 约束。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot__1326" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[“import” 的这种用法无效。可以写入 “import()” 调用，但它们必须具有括号，并且不能带有类型参数。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0_1482" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, add the field `"type": "module"` to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[若要将此文件转换为 ECMAScript 模块，请将字段“"type": "module"”添加到“{0}”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Co_1481" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}', or add the field `"type": "module"` to '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[若要将此文件转换为 ECMAScript 模块，请将其文件扩展名更改为“{0}”，或将字段“"type": "module"”添加到“{1}”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_create_a_local_packag_1480" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}' or create a local package.json file with `{ "type": "module" }`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[若要将此文件转换为 ECMAScript 模块，请将其文件扩展名更改为“{0}”，或者使用“{ "type": "module" }”创建本地 package.json 文件。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module_1483" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, create a local package.json file with `{ "type": "module" }`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[若要将此文件转换为 ECMAScript 模块，请使用“{ "type": "module" }”创建本地 package.json 文件。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13901,6 +14192,15 @@
           <Val><![CDATA[Type '{0}' does not satisfy the constraint '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[类型“{0}”不满足约束“{1}”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_does_not_satisfy_the_expected_type_1_1360" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' does not satisfy the expected type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[类型“{0}”不满足预期类型“{1}”。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14090,6 +14390,15 @@
           <Val><![CDATA[Type '{0}' is not generic.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[类型“{0}”不是泛型类型。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operato_2638" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[类型 "{0}" 可以表示基元值，该值不允许作为“in”运算符的右操作数。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14352,6 +14661,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor_2844" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[实例成员变量“{0}”的类型不能引用构造函数中声明的标识符“{1}”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_con_1322" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.]]></Val>
@@ -14594,6 +14912,24 @@
           <Val><![CDATA[======== Type reference directive '{0}' was successfully resolved to '{1}' with Package ID '{2}', primary: {3}. ========]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[======== 类型引用指令 "{0}" 已成功解析为 "{1}" ，包 ID 为 "{2}"，主要: {3}。========]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files_8037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type satisfaction expressions can only be used in TypeScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[类型满意度表达式只能在 TypeScript 文件中使用。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Types_cannot_appear_in_export_declarations_in_JavaScript_files_18043" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Types cannot appear in export declarations in JavaScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[类型不能出现在 JavaScript 文件的导出声明中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14872,7 +15208,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unterminated regular expression literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未终止的正则表达式文本。]]></Val>
+            <Val><![CDATA[未终止的正则表达式字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14881,7 +15217,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unterminated string literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未终止的字符串文本。]]></Val>
+            <Val><![CDATA[未终止的字符串字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14890,7 +15226,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unterminated template literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未终止的模板文本。]]></Val>
+            <Val><![CDATA[未终止的模板字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14958,6 +15294,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Use_0_95174" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use `{0}`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[使用 `{0}`]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Use_Number_isNaN_in_all_conditions_95175" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use `Number.isNaN` in all conditions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在所有条件下使用 `Number.isNaN`。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Use_element_access_for_0_95145" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Use element access for '{0}']]></Val>
@@ -14981,6 +15335,15 @@
           <Val><![CDATA[Use synthetic 'default' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[使用综合的“默认”成员。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Using_0_subpath_1_with_target_2_6404" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Using '{0}' subpath '{1}' with target '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[将“{0}”子路径“{1}”与目标“{2}”一起使用]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15183,6 +15546,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here_2843" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[We can only write a type for '{0}' by adding a type for the entire parameter here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[我们只能通过在此处为整个参数添加类型来写入“{0}”的类型。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";When_assigning_functions_check_to_ensure_parameters_and_the_return_values_are_subtype_compatible_6698" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[When assigning functions, check to ensure parameters and the return values are subtype-compatible.]]></Val>
@@ -15226,7 +15598,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Wrap all object literal with parentheses]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[用括号将所有对象文字括起来]]></Val>
+            <Val><![CDATA[用括号括起所有对象字面量]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15262,7 +15634,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Wrap the following body with parentheses which should be an object literal]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[用括号将以下应为对象文字的正文括起来]]></Val>
+            <Val><![CDATA[用括号括起以下应为对象字面量的内容]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15281,6 +15653,24 @@
           <Val><![CDATA[You cannot rename a module via a global import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[不能通过全局导入对模块进行重命名。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_a_node_modules_folder_8035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You cannot rename elements that are defined in a 'node_modules' folder.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不能重命名已在 “node_modules” 文件夹中定义的元素。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_another_node_modules_folder_8036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You cannot rename elements that are defined in another 'node_modules' folder.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不能重命名已在另一个 “node_modules” 文件夹中定义的元素。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15528,6 +15918,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_a_type_and_cannot_be_imported_in_JavaScript_files_Use_1_in_a_JSDoc_type_annotation_18042" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is a type and cannot be imported in JavaScript files. Use '{1}' in a JSDoc type annotation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”是一种类型，无法在 JavaScript 文件中导入。请在 JSDoc 类型批注中使用“{1}”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedMod_1444" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
@@ -15537,11 +15936,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_an_unused_renaming_of_1_Did_you_intend_to_use_it_as_a_type_annotation_2842" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”是“{1}”的未使用重命名。是否打算将其用作类型批注?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_5075" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA["{0}" 可赋给 "{1}" 类型的约束，但可以使用约束 "{2}" 的其他子类型实例化 "{1}"。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_automatically_exported_here_18044" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is automatically exported here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”自动导出到此处。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15626,6 +16043,42 @@
           <Val><![CDATA['{0}' is not allowed as a variable declaration name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[“{0}”不得用作变量声明名称。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_of_type_unknown_18046" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is of type 'unknown'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”的类型为“未知”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_possibly_null_18047" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is possibly 'null'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”可能为 “null”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_possibly_null_or_undefined_18049" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is possibly 'null' or 'undefined'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0}可能为 “null” 或“未定义”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_possibly_undefined_18048" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is possibly 'undefined'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”可能为“未定义”。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15951,6 +16404,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";accessor_modifier_can_only_appear_on_a_property_declaration_1275" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['accessor' modifier can only appear on a property declaration.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["accessor" 修饰符只能出现在属性声明中。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";and_here_6204" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[and here.]]></Val>
@@ -16099,7 +16561,7 @@
         <Str Cat="Text">
           <Val><![CDATA[const enum member initializers can only contain literal values and other computed enum values.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[常量枚举成员初始值设定项只能包含文字值和其他计算的枚举值。]]></Val>
+            <Val><![CDATA[常量枚举成员初始值设定项只能包含字面量值和其他计算的枚举值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16404,6 +16866,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";or_JSX_element_expected_1145" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{' or JSX element expected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[应为 “{” 或 JSX 元素。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";or_expected_1144" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{' or ';' expected.]]></Val>
@@ -16525,7 +16996,7 @@
         <Str Cat="Text">
           <Val><![CDATA['readonly' type modifier is only permitted on array and tuple literal types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅允许对数组和元组文本类型使用 "readonly" 类型修饰符。]]></Val>
+            <Val><![CDATA[仅允许对数组和元组字面量类型使用 "readonly" 类型修饰符。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16534,7 +17005,25 @@
         <Str Cat="Text">
           <Val><![CDATA['require' call may be converted to an import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[可将“要求”调用转换为导入。]]></Val>
+            <Val><![CDATA[可将 "require" 调用转换为 import 语句。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[仅当“moduleResolution”为“node16”或“nodenext”时才支持“resolution-mode”断言。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_wi_4125" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“resolution-mode”断言不稳定。请使用夜间 TypeScript 消除此错误。请尝试使用“npm install -D typescript@next”进行更新。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16591,7 +17080,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' can only be referenced in members of derived classes or object literal expressions.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅可在派生类或对象文字表达式的成员中引用 "super"。]]></Val>
+            <Val><![CDATA[仅可在派生类或对象字面量表达式的成员中引用 "super"。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16618,7 +17107,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["target" 选项为 "ES2015" 或更高版本时，仅对象文字表达式的成员中允许 "super"。]]></Val>
+            <Val><![CDATA["target" 选项为 "ES2015" 或更高版本时，仅对象字面量表达式的成员中允许 "super"。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

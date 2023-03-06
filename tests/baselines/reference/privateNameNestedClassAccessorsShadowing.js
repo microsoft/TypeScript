@@ -23,6 +23,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _Base_instances, _Base_x_get;
 class Base {
+    ;
     constructor() {
         var _Derived_instances, _Derived_x_get;
         _Base_instances.add(this);
@@ -40,6 +41,5 @@ class Base {
         }
         _Derived_instances = new WeakSet(), _Derived_x_get = function _Derived_x_get() { return 1; };
     }
-    ;
 }
 _Base_instances = new WeakSet(), _Base_x_get = function _Base_x_get() { return 1; };

@@ -1,15 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-//// const a/*a*/ = { a: 123 };
+//// const a = { a: 123 };
 
-const markers = test.markers();
-verify.getInlayHints([
-    {
-        text: ': { a: number; }',
-        position: markers[0].position,
-        kind: ts.InlayHintKind.Type,
-        whitespaceBefore: true
-    },
-], undefined, {
+verify.getInlayHints([], undefined, {
     includeInlayVariableTypeHints: true
 });

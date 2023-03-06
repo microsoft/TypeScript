@@ -1,9 +1,43 @@
-Exit Code: 0
+Exit Code: 2
 Standard output:
+pyright-internal: src/common/collectionUtils.ts(299,34): error TS2769: No overload matches this call.
+pyright-internal:   Overload 1 of 2, '(to: (T | readonly T[])[], from: readonly (T | readonly T[])[] | undefined, start?: number | undefined, end?: number | undefined): (T | readonly T[])[]', gave the following error.
+pyright-internal:     Argument of type '(T | readonly T[] | T[]) & readonly {}[]' is not assignable to parameter of type 'readonly (T | readonly T[])[] | undefined'.
+pyright-internal:       Type 'T & readonly {}[]' is not assignable to type 'readonly (T | readonly T[])[] | undefined'.
+pyright-internal:         Type 'T & readonly {}[]' is not assignable to type 'readonly (T | readonly T[])[]'.
+pyright-internal:           Type '{}' is not assignable to type 'T | readonly T[]'.
+pyright-internal:   Overload 2 of 2, '(to: (T | readonly T[])[] | undefined, from: readonly (T | readonly T[])[] | undefined, start?: number | undefined, end?: number | undefined): (T | readonly T[])[] | undefined', gave the following error.
+pyright-internal:     Argument of type '(T | readonly T[] | T[]) & readonly {}[]' is not assignable to parameter of type 'readonly (T | readonly T[])[] | undefined'.
+pyright-internal: src/common/collectionUtils.ts(305,5): error TS2322: Type '(T | readonly T[])[]' is not assignable to type 'T[]'.
+pyright-internal:   Type 'T | readonly T[]' is not assignable to type 'T'.
+pyright-internal:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T | readonly T[]'.
+pyright: ../pyright-internal/src/common/collectionUtils.ts(299,34): error TS2769: No overload matches this call.
+pyright:   Overload 1 of 2, '(to: (T | readonly T[])[], from: readonly (T | readonly T[])[] | undefined, start?: number | undefined, end?: number | undefined): (T | readonly T[])[]', gave the following error.
+pyright:     Argument of type '(T | readonly T[] | T[]) & readonly {}[]' is not assignable to parameter of type 'readonly (T | readonly T[])[] | undefined'.
+pyright:       Type 'T & readonly {}[]' is not assignable to type 'readonly (T | readonly T[])[] | undefined'.
+pyright:         Type 'T & readonly {}[]' is not assignable to type 'readonly (T | readonly T[])[]'.
+pyright:           Type '{}' is not assignable to type 'T | readonly T[]'.
+pyright:   Overload 2 of 2, '(to: (T | readonly T[])[] | undefined, from: readonly (T | readonly T[])[] | undefined, start?: number | undefined, end?: number | undefined): (T | readonly T[])[] | undefined', gave the following error.
+pyright:     Argument of type '(T | readonly T[] | T[]) & readonly {}[]' is not assignable to parameter of type 'readonly (T | readonly T[])[] | undefined'.
+pyright: ../pyright-internal/src/common/collectionUtils.ts(305,5): error TS2322: Type '(T | readonly T[])[]' is not assignable to type 'T[]'.
+pyright:   Type 'T | readonly T[]' is not assignable to type 'T'.
+pyright:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T | readonly T[]'.
+vscode-pyright: ../pyright-internal/src/common/collectionUtils.ts(299,34): error TS2769: No overload matches this call.
+vscode-pyright:   Overload 1 of 2, '(to: (T | readonly T[])[], from: readonly (T | readonly T[])[] | undefined, start?: number | undefined, end?: number | undefined): (T | readonly T[])[]', gave the following error.
+vscode-pyright:     Argument of type '(T | readonly T[] | T[]) & readonly {}[]' is not assignable to parameter of type 'readonly (T | readonly T[])[] | undefined'.
+vscode-pyright:       Type 'T & readonly {}[]' is not assignable to type 'readonly (T | readonly T[])[] | undefined'.
+vscode-pyright:         Type 'T & readonly {}[]' is not assignable to type 'readonly (T | readonly T[])[]'.
+vscode-pyright:           Type '{}' is not assignable to type 'T | readonly T[]'.
+vscode-pyright:   Overload 2 of 2, '(to: (T | readonly T[])[] | undefined, from: readonly (T | readonly T[])[] | undefined, start?: number | undefined, end?: number | undefined): (T | readonly T[])[] | undefined', gave the following error.
+vscode-pyright:     Argument of type '(T | readonly T[] | T[]) & readonly {}[]' is not assignable to parameter of type 'readonly (T | readonly T[])[] | undefined'.
+vscode-pyright: ../pyright-internal/src/common/collectionUtils.ts(305,5): error TS2322: Type '(T | readonly T[])[]' is not assignable to type 'T[]'.
+vscode-pyright:   Type 'T | readonly T[]' is not assignable to type 'T'.
+vscode-pyright:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T | readonly T[]'.
 
 
 
 Standard error:
 lerna notice cli vX.X.X
 lerna info Executing command in 3 packages: "tsc --noEmit"
+lerna ERR! Received non-zero exit code 2 during execution
 lerna success exec Executed command in 3 packages: "tsc --noEmit"

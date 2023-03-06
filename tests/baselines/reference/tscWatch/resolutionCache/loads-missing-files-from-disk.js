@@ -21,7 +21,7 @@ Output::
 >> Screen clear
 [[90m12:00:11 AM[0m] Starting compilation in watch mode...
 
-[96ma/foo.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+[96ma/foo.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 [7m1[0m import {x} from "bar"
 [7m [0m [91m                ~~~~~[0m
@@ -45,28 +45,28 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/foo.ts (used version)
 
-WatchedFiles::
-/a/foo.ts:
-  {"fileName":"/a/foo.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/node_modules: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/foo.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/: *new*
+  {}
 
 FsWatchesRecursive::
-/a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/node_modules:
-  {"directoryName":"/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/foo.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 
@@ -105,19 +105,25 @@ Shape signatures in builder refreshed for::
 /a/bar.d.ts (used version)
 /a/foo.ts (computed .d.ts)
 
-WatchedFiles::
-/a/foo.ts:
-  {"fileName":"/a/foo.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/bar.d.ts:
-  {"fileName":"/a/bar.d.ts","pollingInterval":250}
+PolledWatches *deleted*::
+/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/foo.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/bar.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/:
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

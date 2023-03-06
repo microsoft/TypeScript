@@ -102,9 +102,9 @@ declare class CX { a: number }
 
 declare enum EX { A, B, C }
 >EX : EX
->A : EX
->B : EX
->C : EX
+>A : EX.A
+>B : EX.B
+>C : EX.C
 
 declare namespace NX { export const a = 1 }
 >NX : typeof NX

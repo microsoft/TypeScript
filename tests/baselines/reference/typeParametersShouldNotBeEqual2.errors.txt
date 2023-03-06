@@ -24,6 +24,7 @@ tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+!!! related TS2208 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45: This type parameter might need an `extends T` constraint.
         z = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'V'.
@@ -32,6 +33,7 @@ tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+!!! related TS2208 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45: This type parameter might need an `extends U` constraint.
         z = y;  // Error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'V'.

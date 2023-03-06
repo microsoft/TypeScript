@@ -1,0 +1,84 @@
+tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts(13,9): error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type '{ l2: Schema1<boolean>; }'.
+  Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema1<boolean>; }'.
+tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts(26,9): error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type '{ l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+  Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts(39,9): error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type '{ l2: Schema3<boolean>; }'.
+  Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema3<boolean>; }'.
+tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts(52,9): error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type 'Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+  Object literal may only specify known properties, and 'invalid' does not exist in type 'Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+
+
+==== tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts (4 errors) ====
+    // repro from #44750
+    
+    type Request = { l1: { l2: boolean } };
+    type Example<T> = { ex?: T | null };
+    
+    type Schema1<T> = (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema1<T[P]> }; }) & Example<T>;
+    
+    export const schemaObj1: Schema1<Request> = {
+      props: {
+        l1: {
+          props: {
+            l2: { type: 'boolean' },
+            invalid: false,
+            ~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type '{ l2: Schema1<boolean>; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema1<boolean>; }'.
+!!! related TS6500 tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts:6:65: The expected type comes from property 'props' which is declared here on type 'Schema1<{ l2: boolean; }>'
+          },
+        },
+      },
+    }
+    
+    type Schema2<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: { [P in keyof T]: Schema2<T[P]> }; } & Example<T>);
+    
+    export const schemaObj2: Schema2<Request> = {
+      props: {
+        l1: {
+          props: {
+            l2: { type: 'boolean' },
+            invalid: false,
+            ~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type '{ l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+!!! related TS6500 tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts:19:78: The expected type comes from property 'props' which is declared here on type '{ props: { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; } & Example<{ l2: boolean; }>'
+          },
+        },
+      },
+    }
+    
+    type Schema3<T> = Example<T> & (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema3<T[P]> }; });
+    
+    export const schemaObj3: Schema3<Request> = {
+      props: {
+        l1: {
+          props: {
+            l2: { type: 'boolean' },
+            invalid: false,
+            ~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type '{ l2: Schema3<boolean>; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema3<boolean>; }'.
+!!! related TS6500 tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts:32:78: The expected type comes from property 'props' which is declared here on type 'Schema3<{ l2: boolean; }>'
+          },
+        },
+      },
+    }
+    
+    type Schema4<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: Example<T> & { [P in keyof T]: Schema4<T[P]> }; });
+    
+    export const schemaObj4: Schema4<Request> = {
+      props: {
+        l1: {
+          props: {
+            l2: { type: 'boolean' },
+            invalid: false,
+            ~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type 'Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'invalid' does not exist in type 'Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+!!! related TS6500 tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts:45:78: The expected type comes from property 'props' which is declared here on type '{ props: Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; }'
+          },
+        },
+      },
+    }
+    

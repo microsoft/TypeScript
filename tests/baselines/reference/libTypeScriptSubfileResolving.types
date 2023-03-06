@@ -1,6 +1,7 @@
 === /node_modules/@typescript/lib-dom/index.d.ts ===
+
 // NOOP
-No type information for this code.=== /node_modules/@typescript/lib-dom/iterable.d.ts ===
+=== /node_modules/@typescript/lib-dom/iterable.d.ts ===
 interface DOMIterable { abc: string }
 >abc : string
 

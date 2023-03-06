@@ -6,18 +6,18 @@ declare enum E {
 >E : E
 
     a, // E.a
->a : E
+>a : E.a
 
     b, // E.b
->b : E
+>b : E.b
 }
 
 declare const enum E1 {
 >E1 : E1
 
     a, // E.a = 0
->a : E1
+>a : E1.a
 
     b, // E.b = 1
->b : E1
+>b : E1.b
 }

@@ -55,7 +55,7 @@ function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
 
     let s2: string = y;
 >s2 : string
->y : NonNullable<T>
+>y : string
 }
 
 function f3<T>(x: Partial<T>[keyof T], y: NonNullable<Partial<T>[keyof T]>) {
@@ -96,7 +96,7 @@ function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"
 
     let s2: string = y;
 >s2 : string
->y : NonNullable<T["x"]>
+>y : string
 }
 
 type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: boolean };

@@ -26,10 +26,10 @@ let x04: A & B & C;
 >x04 : A & B
 
 let x05: string & C;
->x05 : string & C
+>x05 : string
 
 let x06: C & string;
->x06 : C & string
+>x06 : string
 
 let x07: C;
 >x07 : C
@@ -230,6 +230,6 @@ mock(import('./ex'))
 >'./ex' : "./ex"
 
 === tests/cases/conformance/types/intersection/ex.d.ts ===
+
 export {}
-No type information for this code.
-No type information for this code.
+

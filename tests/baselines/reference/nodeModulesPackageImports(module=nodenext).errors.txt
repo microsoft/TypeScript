@@ -1,5 +1,5 @@
-tests/cases/conformance/node/index.cts(3,22): error TS1471: Module '#mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(4,23): error TS1471: Module '#type' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
+tests/cases/conformance/node/index.cts(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
 
 
 ==== tests/cases/conformance/node/index.ts (0 errors) ====
@@ -23,10 +23,10 @@ tests/cases/conformance/node/index.cts(4,23): error TS1471: Module '#type' canno
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
                          ~~~~~~
-!!! error TS1471: Module '#mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
     import * as type from "#type";
                           ~~~~~~~
-!!! error TS1471: Module '#type' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
     cjs;
     mjs;
     type;
