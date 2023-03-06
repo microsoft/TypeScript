@@ -113,9 +113,13 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(131,5): e
     }
     
     function f22(): undefined {
-        // Okay; implicitly returns undefined
+        // Okay; return type allows implicit return of undefined
     }
     
+    function f23(): undefined | number {
+        // Okay; return type allows implicit return of undefined
+    }
+
     class C {
         public get m1() {
                    ~~
