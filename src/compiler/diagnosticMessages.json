@@ -1868,7 +1868,7 @@
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'void' nor 'any' must return a value.": {
+    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
     },
@@ -6706,7 +6706,7 @@
         "category": "Suggestion",
         "code": 80010
     },
-    
+
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001

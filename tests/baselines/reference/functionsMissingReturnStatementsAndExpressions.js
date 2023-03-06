@@ -102,7 +102,11 @@ function f21(): number | string {
 }
 
 function f22(): undefined {
-    // Okay; implicitly returns undefined
+    // Okay; return type allows implicit return of undefined
+}
+
+function f23(): undefined | number {
+    // Error; because `undefined | number` becomes `number` without strictNullChecks.
 }
 
 class C {
@@ -215,7 +219,10 @@ function f21() {
     // Not okay; union does not contain void or any
 }
 function f22() {
-    // Okay; implicitly returns undefined
+    // Okay; return type allows implicit return of undefined
+}
+function f23() {
+    // Error; because `undefined | number` becomes `number` without strictNullChecks.
 }
 var C = /** @class */ (function () {
     function C() {

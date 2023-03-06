@@ -162,7 +162,13 @@ function f21(): number | string {
 function f22(): undefined {
 >f22 : () => undefined
 
-    // Okay; implicitly returns undefined
+    // Okay; return type allows implicit return of undefined
+}
+
+function f23(): undefined | number {
+>f23 : () => undefined | number
+
+    // Error; because `undefined | number` becomes `number` without strictNullChecks.
 }
 
 class C {
