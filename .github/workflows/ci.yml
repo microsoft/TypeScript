@@ -104,7 +104,7 @@ jobs:
       run: echo "ref=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
     - if: github.event_name == 'pull_request'
-      run:
+      run: |
         git log --oneline -1 HEAD
         git log --oneline -1 HEAD^
         git log --oneline -1 HEAD~1
