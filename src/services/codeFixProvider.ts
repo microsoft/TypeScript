@@ -49,6 +49,7 @@ function createCodeFixActionWorker(fixName: string, description: string, changes
 /** @internal */
 export function registerCodeFix(reg: CodeFixRegistration) {
     for (const error of reg.errorCodes) {
+        errorCodeToFixesArray = undefined;
         errorCodeToFixes.add(String(error), reg);
     }
     if (reg.fixIds) {
@@ -59,9 +60,10 @@ export function registerCodeFix(reg: CodeFixRegistration) {
     }
 }
 
+let errorCodeToFixesArray: readonly string[] | undefined;
 /** @internal */
 export function getSupportedErrorCodes(): readonly string[] {
-    return arrayFrom(errorCodeToFixes.keys());
+    return errorCodeToFixesArray ??= arrayFrom(errorCodeToFixes.keys());
 }
 
 function removeFixIdIfFixAllUnavailable(registration: CodeFixRegistration, diagnostics: Diagnostic[]) {

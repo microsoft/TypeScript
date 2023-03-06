@@ -428,3 +428,117 @@ async function brokenExample<AcceptableKeyType extends string = string>(structur
 >key : AcceptableKeyType
 >1 : 1
 }
+
+// repro from #46543
+
+type SelectAndInclude = {
+>SelectAndInclude : { select: any; include: any; }
+
+  select: any;
+>select : any
+
+  include: any;
+>include : any
+
+};
+type HasSelect = {
+>HasSelect : { select: any; }
+
+  select: any;
+>select : any
+
+};
+type HasInclude = {
+>HasInclude : { include: any; }
+
+  include: any;
+>include : any
+
+};
+
+type CheckSelect<T, S, U> = T extends SelectAndInclude
+>CheckSelect : CheckSelect<T, S, U>
+
+  ? "Please either choose `select` or `include`"
+  : T extends HasSelect
+  ? U
+  : T extends HasInclude
+  ? U
+  : S;
+
+declare function findMany<T extends { select?: string; include?: string }>(
+>findMany : <T extends { select?: string; include?: string; }>(args: T) => CheckSelect<T, Promise<1>, Promise<2>>
+>select : string
+>include : string
+
+  args: T
+>args : T
+
+): CheckSelect<T, Promise<1>, Promise<2>>;
+
+async function findManyWrapper<
+>findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
+
+  T extends { select?: string; include?: string }
+>select : string
+>include : string
+
+>(args: T) {
+>args : T
+
+  const result = await findMany(args);
+>result : Awaited<CheckSelect<T, Promise<1>, Promise<2>>>
+>await findMany(args) : Awaited<CheckSelect<T, Promise<1>, Promise<2>>>
+>findMany(args) : CheckSelect<T, Promise<1>, Promise<2>>
+>findMany : <T extends { select?: string; include?: string; }>(args: T) => CheckSelect<T, Promise<1>, Promise<2>>
+>args : T
+
+  return result;
+>result : Awaited<CheckSelect<T, Promise<1>, Promise<2>>>
+}
+
+async function mainFindMany() {
+>mainFindMany : () => Promise<void>
+
+  const shouldBeErrorText = await findManyWrapper({
+>shouldBeErrorText : "Please either choose `select` or `include`"
+>await findManyWrapper({    select: "foo",    include: "bar",  }) : "Please either choose `select` or `include`"
+>findManyWrapper({    select: "foo",    include: "bar",  }) : Promise<"Please either choose `select` or `include`">
+>findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
+>{    select: "foo",    include: "bar",  } : { select: string; include: string; }
+
+    select: "foo",
+>select : string
+>"foo" : "foo"
+
+    include: "bar",
+>include : string
+>"bar" : "bar"
+
+  });
+  const itsOne = await findManyWrapper({});
+>itsOne : 1
+>await findManyWrapper({}) : 1
+>findManyWrapper({}) : Promise<Promise<1>>
+>findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
+>{} : {}
+
+  const itsTwo1 = await findManyWrapper({ select: "foo" });
+>itsTwo1 : 2
+>await findManyWrapper({ select: "foo" }) : 2
+>findManyWrapper({ select: "foo" }) : Promise<Promise<2>>
+>findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
+>{ select: "foo" } : { select: string; }
+>select : string
+>"foo" : "foo"
+
+  const itsTwo2 = await findManyWrapper({ include: "bar" });
+>itsTwo2 : 2
+>await findManyWrapper({ include: "bar" }) : 2
+>findManyWrapper({ include: "bar" }) : Promise<Promise<2>>
+>findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
+>{ include: "bar" } : { include: string; }
+>include : string
+>"bar" : "bar"
+}
+
