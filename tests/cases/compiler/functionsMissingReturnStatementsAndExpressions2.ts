@@ -1,4 +1,3 @@
-// @allowUnreachableCode: true
 // @strictNullChecks: true
 
 // @target: es5
