@@ -14,7 +14,7 @@ const dest = path.join(root, "lib");
 
 async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
-    await (fs.rm ?? fs.rmdir)(dest, { recursive: true });
+    await (fs.rm || fs.rmdir)(dest, { recursive: true, force: true });
     await fs.mkdirp(dest);
     await copyLibFiles();
     await copyLocalizedDiagnostics();
