@@ -2166,7 +2166,7 @@ namespace Parser {
         return currentToken = scanner.scanJsDocToken();
     }
 
-    function nextJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind {
+    function nextJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken {
         return currentToken = scanner.scanJSDocCommentTextToken(inBackticks);
     }
 
@@ -8879,7 +8879,7 @@ namespace Parser {
                     }
                     state = JSDocState.SawAsterisk;
                 }
-                let tok = token() as JSDocSyntaxKind;
+                let tok = token() as JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken;
                 loop: while (true) {
                     switch (tok) {
                         case SyntaxKind.JSDocCommentTextToken:

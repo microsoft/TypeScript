@@ -76,7 +76,7 @@ export interface Scanner {
     scanJsxToken(): JsxTokenSyntaxKind;
     scanJsDocToken(): JSDocSyntaxKind;
     /** @internal */
-    scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind;
+    scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken;
     scan(): SyntaxKind;
 
     getText(): string;
@@ -2459,7 +2459,7 @@ export function createScanner(languageVersion: ScriptTarget,
         return scanJsxAttributeValue();
     }
 
-    function scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind {
+    function scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken {
         startPos = tokenPos = pos;
         tokenFlags = TokenFlags.None;
         if (pos >= end) {
