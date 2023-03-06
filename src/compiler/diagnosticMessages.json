@@ -1868,7 +1868,7 @@
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
+    "A function whose declared type is neither 'void' nor 'any' must return a value. 'undefined' is also allowed with --strictNullChecks.": {
         "category": "Error",
         "code": 2355
     },
