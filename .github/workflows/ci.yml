@@ -92,8 +92,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
     - uses: actions/setup-node@v3
       with:
         node-version: "*"
@@ -101,13 +99,15 @@ jobs:
     
     # Pre-build the main branch so we can check lib folder size changes.
     - if: github.event_name == 'pull_request'
-      run: git checkout $(git merge-base ${{ github.base_ref }} ${{ github.ref }})
+      run: |
+        git fetch origin ${{ github.base_ref }}
+        git checkout ${{ github.base_ref }}
     - if: github.event_name == 'pull_request'
       run: npm ci
     - if: github.event_name == 'pull_request'
       run: npx hereby lkg
     - if: github.event_name == 'pull_request'
-      run: git checkout ${{ github.ref }}
+      run: git checkout ${{ github.sha }}
 
     - run:  npm ci
 
