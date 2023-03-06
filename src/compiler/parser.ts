@@ -8698,12 +8698,12 @@ namespace Parser {
 
             function removeTrailingWhitespace(comments: string[]) {
                 while (comments.length) {
-                    const trimmed = trimString(comments[comments.length - 1]);
+                    const trimmed = trimStringEnd(comments[comments.length - 1]);
                     if (trimmed === "") {
                         comments.pop();
                     }
                     else if (trimmed.length < comments[comments.length - 1].length) {
-                        comments[comments.length - 1] = trimStringEnd(comments[comments.length - 1]);
+                        comments[comments.length - 1] = trimmed;
                         break;
                     }
                     else {

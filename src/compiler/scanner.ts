@@ -2465,16 +2465,16 @@ export function createScanner(languageVersion: ScriptTarget,
         if (pos >= end) {
             return token = SyntaxKind.EndOfFileToken;
         }
-        for (let ch = codePointAt(text, pos);
-             pos < end && (ch !== CharacterCodes.lineFeed && ch !== CharacterCodes.carriageReturn && ch !== CharacterCodes.backtick);
-             ch = codePointAt(text, pos += charSize(ch))) {
+        for (let ch = text.charCodeAt(pos);
+             pos < end && (!isLineBreak(ch) && ch !== CharacterCodes.backtick);
+             ch = codePointAt(text, ++pos)) {
             if (!inBackticks) {
                 if (ch === CharacterCodes.openBrace) {
                     break;
                 }
                 else if (ch === CharacterCodes.at
-                    && pos - 1 >= 0 && isWhiteSpaceSingleLine(codePointAt(text, pos - 1))
-                    && !(pos + 1 < end && isWhiteSpaceLike(codePointAt(text, pos + 1)))) {
+                    && pos - 1 >= 0 && isWhiteSpaceSingleLine(text.charCodeAt(pos - 1))
+                    && !(pos + 1 < end && isWhiteSpaceLike(text.charCodeAt(pos + 1)))) {
                     // @ doesn't start a new tag inside ``, and elsewhere, only after whitespace and before non-whitespace
                     break;
                 }
