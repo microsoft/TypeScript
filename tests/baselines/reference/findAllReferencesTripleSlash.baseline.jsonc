@@ -32,8 +32,7 @@
           "length": 4
         },
         "fileName": "/a.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -41,8 +40,7 @@
           "length": 5
         },
         "fileName": "/c.js",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -82,8 +80,7 @@
           "length": 7
         },
         "fileName": "/a.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -91,8 +88,7 @@
           "length": 9
         },
         "fileName": "/c.js",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

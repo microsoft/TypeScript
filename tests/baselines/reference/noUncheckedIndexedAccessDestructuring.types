@@ -133,6 +133,41 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >toFixed : (fractionDigits?: number | undefined) => string
 }
 
+{
+    const { x, ...q } = numMapPoint;
+>x : number
+>q : { [s: string]: number; y: number; }
+>numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+
+    x.
+>x.    toFixed() : string
+>x.    toFixed : (fractionDigits?: number | undefined) => string
+>x : number
+
+    toFixed(); // Should OK
+>toFixed : (fractionDigits?: number | undefined) => string
+
+    q.
+>q.    y.toFixed() : string
+>q.    y.toFixed : (fractionDigits?: number | undefined) => string
+>q.    y : number
+>q : { [s: string]: number; y: number; }
+
+    y.toFixed(); // Should OK
+>y : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+    q.
+>q.    z.toFixed() : string
+>q.    z.toFixed : (fractionDigits?: number | undefined) => string
+>q.    z : number | undefined
+>q : { [s: string]: number; y: number; }
+
+    z.toFixed(); // Should error
+>z : number | undefined
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
 
 declare let target_string: string;
 >target_string : string

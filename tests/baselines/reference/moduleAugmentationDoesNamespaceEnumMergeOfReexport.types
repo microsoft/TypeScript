@@ -7,8 +7,9 @@ export namespace Root {
     }
 }
 === tests/cases/compiler/reexport.ts ===
+
 export * from "./file";
-No type information for this code.=== tests/cases/compiler/augment.ts ===
+=== tests/cases/compiler/augment.ts ===
 import * as ns from "./reexport";
 >ns : typeof ns
 
@@ -20,13 +21,13 @@ declare module "./reexport" {
 >Root : Root
 
         A,
->A : Root
+>A : Root.A
 
         B,
->B : Root
+>B : Root.B
 
         C
->C : Root
+>C : Root.C
     }
 }
 
@@ -38,11 +39,11 @@ declare const f: ns.Root.Foo;
 const g: ns.Root = ns.Root.A;
 >g : ns.Root
 >ns : any
->ns.Root.A : ns.Root
+>ns.Root.A : ns.Root.A
 >ns.Root : typeof ns.Root
 >ns : typeof ns
 >Root : typeof ns.Root
->A : ns.Root
+>A : ns.Root.A
 
 f.x;
 >f.x : number

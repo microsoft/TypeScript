@@ -4,5 +4,5 @@ export interface i {
 }
 
 === tests/cases/compiler/es6ImportWithoutFromClauseNonInstantiatedModule_1.ts ===
+
 import "es6ImportWithoutFromClauseNonInstantiatedModule_0";
-No type information for this code.

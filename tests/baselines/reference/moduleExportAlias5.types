@@ -5,19 +5,19 @@ const webpack = function (){
 >function (){} : { (): void; WebpackOptionsDefaulter: number; }
 }
 exports = module.exports = webpack;
->exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: number; }
->exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
->module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: number; }
->module.exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
->module : { exports: { (): void; WebpackOptionsDefaulter: number; version: number; }; }
->exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>module.exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>module : { exports: { (): void; WebpackOptionsDefaulter: number; version: 1001; }; }
+>exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
 >webpack : { (): void; WebpackOptionsDefaulter: number; }
 
 exports.version = 1001;
 >exports.version = 1001 : 1001
->exports.version : number
->exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
->version : number
+>exports.version : 1001
+>exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>version : 1001
 >1001 : 1001
 
 webpack.WebpackOptionsDefaulter = 1111;

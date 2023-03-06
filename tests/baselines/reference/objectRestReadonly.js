@@ -32,7 +32,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 var obj = {
     foo: 'bar',
     baz: 'qux',
-    quux: 'quuz'
+    quux: 'quuz',
 };
 var foo = obj.foo, rest = __rest(obj, ["foo"]);
 delete rest.baz;

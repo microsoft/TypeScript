@@ -78,7 +78,7 @@ function f2(x: 0 | 1 | 2) {
 }
 
 type Falsy = false | 0 | "" | null | undefined;
->Falsy : Falsy
+>Falsy : false | "" | 0 | null | undefined
 >false : false
 >null : null
 

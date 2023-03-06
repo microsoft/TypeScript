@@ -231,8 +231,7 @@
           "start": 18,
           "length": 18
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -244,8 +243,7 @@
           "start": 84,
           "length": 29
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -257,8 +255,7 @@
           "start": 124,
           "length": 26
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -270,8 +267,7 @@
           "start": 161,
           "length": 30
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -283,8 +279,7 @@
           "start": 210,
           "length": 27
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -377,8 +372,7 @@
           "start": 18,
           "length": 18
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -390,8 +384,7 @@
           "start": 84,
           "length": 29
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -403,8 +396,7 @@
           "start": 124,
           "length": 26
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -416,8 +408,7 @@
           "start": 161,
           "length": 30
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -429,8 +420,7 @@
           "start": 210,
           "length": 27
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

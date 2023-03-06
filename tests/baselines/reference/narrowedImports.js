@@ -26,13 +26,13 @@ if (b1) x = b1;
 
 //// [x.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
 var b0 = require("./b");
 var b1 = require("./b");
 var x;
-if (a_1["default"])
-    x = a_1["default"];
+if (a_1.default)
+    x = a_1.default;
 if (a_1.a1)
     x = a_1.a1;
 if (a_1.a1)

@@ -9,6 +9,6 @@ y = x;
 
 //// [elaboratedErrorsOnNullableTargets01.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.y;
 exports.y = exports.x;

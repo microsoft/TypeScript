@@ -1,7 +1,8 @@
 === tests/cases/conformance/jsdoc/declarations/index1.js ===
+
 export default 12;
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsdoc/declarations/index2.js ===
+
+=== tests/cases/conformance/jsdoc/declarations/index2.js ===
 export default function foo() {
 >foo : () => typeof foo
 
@@ -51,13 +52,14 @@ export default Bar;
 >Bar : Bar
 
 === tests/cases/conformance/jsdoc/declarations/index5.js ===
+
 // merge type alias and const (OK)
-No type information for this code.export default 12;
-No type information for this code./**
-No type information for this code. * @typedef {string | number} default
-No type information for this code. */
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsdoc/declarations/index6.js ===
+export default 12;
+/**
+ * @typedef {string | number} default
+ */
+
+=== tests/cases/conformance/jsdoc/declarations/index6.js ===
 // merge type alias and function (OK)
 export default function func() {};
 >func : () => void

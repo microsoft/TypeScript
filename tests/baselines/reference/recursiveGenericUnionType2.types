@@ -8,7 +8,7 @@ declare module Test1 {
 
     };
     export type IStringContainer = Container<string>;
->IStringContainer : IStringContainer
+>IStringContainer : string | { [i: string]: Container<string>[]; }
 }
 
 declare module Test2 {
@@ -20,7 +20,7 @@ declare module Test2 {
 
     };
     export type IStringContainer = Container<string>;
->IStringContainer : IStringContainer
+>IStringContainer : string | { [i: string]: Container<string>[]; }
 }
 
 var x: Test1.Container<number>;

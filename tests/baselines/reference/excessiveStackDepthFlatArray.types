@@ -30,17 +30,17 @@ declare namespace React {
 >children : ReactNode
   }
   type ReactNode = ReactChild | ReactFragment | boolean | null | undefined;
->ReactNode : ReactNode
+>ReactNode : boolean | ReactText | ReactFragment
 >null : null
 
   type ReactText = string | number;
->ReactText : ReactText
+>ReactText : string | number
 
   type ReactChild = ReactText;
 >ReactChild : ReactText
 
   type ReactFragment = {} | ReactNodeArray;
->ReactFragment : ReactFragment
+>ReactFragment : {} | ReactNodeArray
 
   interface ReactNodeArray extends Array<ReactNode> {}
 }

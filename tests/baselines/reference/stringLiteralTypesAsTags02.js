@@ -46,7 +46,7 @@ function hasKind(entity, kind) {
 }
 var x = {
     kind: "A",
-    a: 100
+    a: 100,
 };
 if (hasKind(x, "A")) {
     var a = x;
@@ -63,7 +63,7 @@ else {
 
 
 //// [stringLiteralTypesAsTags02.d.ts]
-declare type Kind = "A" | "B";
+type Kind = "A" | "B";
 interface Entity {
     kind: Kind;
 }

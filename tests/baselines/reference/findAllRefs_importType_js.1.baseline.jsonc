@@ -15,7 +15,7 @@
       "containerName": "",
       "fileName": "/a.js",
       "kind": "local class",
-      "name": "(local class) C",
+      "name": "(local class) C\nmodule C",
       "textSpan": {
         "start": 23,
         "length": 1
@@ -32,6 +32,22 @@
         {
           "text": ")",
           "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "module",
+          "kind": "keyword"
         },
         {
           "text": " ",

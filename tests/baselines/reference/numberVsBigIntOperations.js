@@ -94,6 +94,13 @@ if (zeroOrBigOne) isOne(zeroOrBigOne);
 const bigZeroOrOne: 0n | 1;
 if (bigZeroOrOne) isOne(bigZeroOrOne);
 
+type NumberOrBigint = number | bigint;
+function getKey<S extends NumberOrBigint>(key: S) {
+    +key;   // should error
+    0 + key;    // should error
+}
+
+
 //// [numberVsBigIntOperations.js]
 // Cannot mix bigints and numbers
 let bigInt = 1n, num = 2;
@@ -272,3 +279,7 @@ if (zeroOrBigOne)
 const bigZeroOrOne;
 if (bigZeroOrOne)
     isOne(bigZeroOrOne);
+function getKey(key) {
+    +key; // should error
+    0 + key; // should error
+}

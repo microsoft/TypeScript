@@ -5,7 +5,7 @@ declare function dearray<T>(ara: ReadonlyArray<T>): T;
 >ara : readonly T[]
 
 type LiteralType = "foo" | "bar";
->LiteralType : LiteralType
+>LiteralType : "foo" | "bar"
 
 declare var alt: Array<LiteralType>;
 >alt : LiteralType[]

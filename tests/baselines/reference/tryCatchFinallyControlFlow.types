@@ -592,7 +592,7 @@ function t1() {
 // Repro from #39043
 
 type State = { tag: "one" } | { tag: "two" } | { tag: "three" };
->State : State
+>State : { tag: "one"; } | { tag: "two"; } | { tag: "three"; }
 >tag : "one"
 >tag : "two"
 >tag : "three"

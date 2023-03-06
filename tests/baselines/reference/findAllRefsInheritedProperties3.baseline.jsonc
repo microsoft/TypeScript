@@ -1114,8 +1114,7 @@
           "start": 34,
           "length": 13
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -1196,8 +1195,7 @@
           "start": 118,
           "length": 16
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1278,8 +1276,7 @@
           "start": 215,
           "length": 13
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1287,8 +1284,7 @@
           "length": 7
         },
         "fileName": "/tests/cases/fourslash/findAllRefsInheritedProperties3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1634,8 +1630,7 @@
           "start": 52,
           "length": 17
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1708,8 +1703,7 @@
           "start": 139,
           "length": 17
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1782,8 +1776,7 @@
           "start": 233,
           "length": 17
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1791,8 +1784,7 @@
           "length": 8
         },
         "fileName": "/tests/cases/fourslash/findAllRefsInheritedProperties3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

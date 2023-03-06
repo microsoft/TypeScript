@@ -1,0 +1,15 @@
+=== tests/cases/compiler/classMemberInitializerScoping2.ts ===
+const x = 1
+>x : Symbol(x, Decl(classMemberInitializerScoping2.ts, 0, 5))
+
+class C {
+>C : Symbol(C, Decl(classMemberInitializerScoping2.ts, 0, 11))
+
+    p = x
+>p : Symbol(C.p, Decl(classMemberInitializerScoping2.ts, 1, 9))
+>x : Symbol(x, Decl(classMemberInitializerScoping2.ts, 0, 5))
+
+    constructor(x: string) { }
+>x : Symbol(x, Decl(classMemberInitializerScoping2.ts, 3, 16))
+}
+

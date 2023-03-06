@@ -26,6 +26,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _a, _A3_method;
 class A3 {
+    ;
     constructor(a, b) {
         var _b, _c;
         __classPrivateFieldSet(A3, _a, () => { }, "m"); // Error, not writable 
@@ -35,6 +36,5 @@ class A3 {
         let x = __classPrivateFieldGet(A3, _a, "m", _A3_method);
         __classPrivateFieldSet(_b = b, _a, (_c = __classPrivateFieldGet(_b, _a, "m", _A3_method), _c++, _c), "m"); //Error, not writable 
     }
-    ;
 }
 _a = A3, _A3_method = function _A3_method() { };

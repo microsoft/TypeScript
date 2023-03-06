@@ -10,17 +10,17 @@ module.exports = m.default;
 >module.exports : typeof m.default
 >module : { exports: typeof m.default; }
 >exports : typeof m.default
->m.default : { (): void; memberName: string; }
+>m.default : { (): void; memberName: "thing"; }
 >m : typeof m
->default : { (): void; memberName: string; }
+>default : { (): void; memberName: "thing"; }
 
 module.exports.memberName = "thing";
 >module.exports.memberName = "thing" : "thing"
->module.exports.memberName : string
+>module.exports.memberName : "thing"
 >module.exports : typeof m.default
 >module : { exports: typeof m.default; }
 >exports : typeof m.default
->memberName : string
+>memberName : "thing"
 >"thing" : "thing"
 
 === tests/cases/conformance/jsdoc/declarations/exporter.js ===

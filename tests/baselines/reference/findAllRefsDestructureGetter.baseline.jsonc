@@ -313,8 +313,7 @@
           "start": 66,
           "length": 28
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -322,8 +321,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsDestructureGetter.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -644,8 +642,7 @@
           "start": 66,
           "length": 28
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -653,8 +650,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsDestructureGetter.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

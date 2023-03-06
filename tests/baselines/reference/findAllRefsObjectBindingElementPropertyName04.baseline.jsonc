@@ -197,8 +197,7 @@
           "start": 18,
           "length": 18
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -210,8 +209,7 @@
           "start": 74,
           "length": 20
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -223,8 +221,7 @@
           "start": 107,
           "length": 16
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -483,8 +480,7 @@
           "start": 107,
           "length": 16
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -492,8 +488,7 @@
           "length": 9
         },
         "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName04.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

@@ -1,0 +1,39 @@
+=== tests/cases/compiler/restElementAssignable.ts ===
+{
+    const { ...props } = {};
+>props : Symbol(props, Decl(restElementAssignable.ts, 1, 11))
+
+    // Use to fail
+    const t1: { [x: symbol]: unknown } = props;
+>t1 : Symbol(t1, Decl(restElementAssignable.ts, 3, 9))
+>x : Symbol(x, Decl(restElementAssignable.ts, 3, 17))
+>props : Symbol(props, Decl(restElementAssignable.ts, 1, 11))
+
+    // Working equivalent
+    const t2: { [x: symbol]: unknown } = {};
+>t2 : Symbol(t2, Decl(restElementAssignable.ts, 5, 9))
+>x : Symbol(x, Decl(restElementAssignable.ts, 5, 17))
+}
+
+{
+    const { ...props } = { a: 1, b: false, c: "str" };
+>props : Symbol(props, Decl(restElementAssignable.ts, 9, 11))
+>a : Symbol(a, Decl(restElementAssignable.ts, 9, 26))
+>b : Symbol(b, Decl(restElementAssignable.ts, 9, 32))
+>c : Symbol(c, Decl(restElementAssignable.ts, 9, 42))
+
+    // Use to fail
+    const t1: { [x: string]: number | boolean | string } = props;
+>t1 : Symbol(t1, Decl(restElementAssignable.ts, 11, 9))
+>x : Symbol(x, Decl(restElementAssignable.ts, 11, 17))
+>props : Symbol(props, Decl(restElementAssignable.ts, 9, 11))
+
+    // Working equivalent
+    const t2: { [x: string]: number | boolean | string } = { a: 1, b: false, c: "str" };;
+>t2 : Symbol(t2, Decl(restElementAssignable.ts, 13, 9))
+>x : Symbol(x, Decl(restElementAssignable.ts, 13, 17))
+>a : Symbol(a, Decl(restElementAssignable.ts, 13, 60))
+>b : Symbol(b, Decl(restElementAssignable.ts, 13, 66))
+>c : Symbol(c, Decl(restElementAssignable.ts, 13, 76))
+}
+

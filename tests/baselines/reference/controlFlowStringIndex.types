@@ -1,6 +1,6 @@
 === tests/cases/conformance/controlFlow/controlFlowStringIndex.ts ===
 type A = {
->A : A
+>A : { [index: string]: number | null; other: number | null; }
 
     other: number | null;
 >other : number | null

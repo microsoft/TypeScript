@@ -1,6 +1,6 @@
 === tests/cases/compiler/doubleMixinConditionalTypeBaseClassWorks.ts ===
 type Constructor = new (...args: any[]) => {};
->Constructor : Constructor
+>Constructor : new (...args: any[]) => {}
 >args : any[]
 
 const Mixin1 = <C extends Constructor>(Base: C) => class extends Base { private _fooPrivate: {}; }

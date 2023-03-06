@@ -6,13 +6,13 @@
 //     ...   Identifier   TypeAnnotation(opt)
 
 type arrayString = Array<String>
->arrayString : arrayString
+>arrayString : String[]
 
 type someArray = Array<String> | number[];
->someArray : someArray
+>someArray : String[] | number[]
 
 type stringOrNumArray = Array<String|Number>;
->stringOrNumArray : stringOrNumArray
+>stringOrNumArray : (String | Number)[]
 
 function a0(...x: [number, number, string]) { }  // Error, rest parameter must be array type
 >a0 : (x_0: number, x_1: number, x_2: string) => void

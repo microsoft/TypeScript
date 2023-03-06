@@ -543,7 +543,7 @@ var TypeScript;
                 if (searchArray[i] == key) {
                     return {
                         key: this.keys[i],
-                        data: this.values[i]
+                        data: this.values[i],
                     };
                 }
             }

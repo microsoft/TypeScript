@@ -13,17 +13,22 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(19,5): error TS232
   '{ [key: string]: number; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ [key: string]: number; }'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(26,7): error TS2339: Property 'x' does not exist on type 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(27,5): error TS2322: Type 'number' is not assignable to type 'T[keyof T]'.
+  'number' is assignable to the constraint of type 'T[keyof T]', but 'T[keyof T]' could be instantiated with a different subtype of constraint 'number'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(31,5): error TS2322: Type '{ [key: string]: number; }' is not assignable to type '{ [P in K]: number; }'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(38,5): error TS2322: Type '{ [x: string]: number; }' is not assignable to type '{ [P in K]: number; }'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(50,3): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Item'.
   No index signature with a parameter of type 'string' was found on type 'Item'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(51,3): error TS2322: Type 'number' is not assignable to type 'never'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(52,3): error TS2322: Type 'number' is not assignable to type 'T[keyof T]'.
+  'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(53,3): error TS2322: Type 'number' is not assignable to type 'T[K]'.
+  'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(65,7): error TS2339: Property 'foo' does not exist on type 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(66,3): error TS2536: Type 'string' cannot be used to index type 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(67,3): error TS2322: Type 'number' is not assignable to type 'T[keyof T]'.
+  'number' is assignable to the constraint of type 'T[keyof T]', but 'T[keyof T]' could be instantiated with a different subtype of constraint 'number'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(68,3): error TS2322: Type 'number' is not assignable to type 'T[K]'.
+  'number' is assignable to the constraint of type 'T[K]', but 'T[K]' could be instantiated with a different subtype of constraint 'number'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS2322: Type '123' is not assignable to type 'Type[K]'.
   Type 'number' is not assignable to type 'never'.
 
@@ -83,6 +88,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
         c[k] = 1; // Error, cannot write to index signature through constraint
         ~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'T[keyof T]'.
+!!! error TS2322:   'number' is assignable to the constraint of type 'T[keyof T]', but 'T[keyof T]' could be instantiated with a different subtype of constraint 'number'.
     }
     
     function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
@@ -119,9 +125,11 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
       obj[k3] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'T[keyof T]'.
+!!! error TS2322:   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'number'.
       obj[k4] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'T[K]'.
+!!! error TS2322:   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'number'.
     }
     
     type Dict = Record<string, number>;
@@ -142,9 +150,11 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
       obj[k2] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'T[keyof T]'.
+!!! error TS2322:   'number' is assignable to the constraint of type 'T[keyof T]', but 'T[keyof T]' could be instantiated with a different subtype of constraint 'number'.
       obj[k3] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'T[K]'.
+!!! error TS2322:   'number' is assignable to the constraint of type 'T[K]', but 'T[K]' could be instantiated with a different subtype of constraint 'number'.
     }
     
     // Repro from #27895

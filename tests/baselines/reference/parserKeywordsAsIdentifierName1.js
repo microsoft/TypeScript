@@ -8,7 +8,7 @@ var big = {
 
 //// [parserKeywordsAsIdentifierName1.js]
 var big = {
-    "break": 0,
-    "super": 0,
-    "const": 0
+    break: 0,
+    super: 0,
+    const: 0
 };

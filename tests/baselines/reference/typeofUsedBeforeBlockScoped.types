@@ -1,6 +1,6 @@
 === tests/cases/compiler/typeofUsedBeforeBlockScoped.ts ===
 type T = typeof C & typeof C.s & typeof o & typeof o.n;
->T : T
+>T : typeof C & number & { n: number; }
 >C : typeof C
 >C.s : number
 >C : typeof C

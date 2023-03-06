@@ -928,8 +928,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -941,8 +940,7 @@
           "start": 0,
           "length": 33
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -954,8 +952,7 @@
           "start": 0,
           "length": 37
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1052,8 +1049,7 @@
           "start": 0,
           "length": 33
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -1150,8 +1146,7 @@
           "start": 0,
           "length": 26
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1159,8 +1154,7 @@
           "length": 3
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1257,8 +1251,7 @@
           "start": 0,
           "length": 37
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1270,8 +1263,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1368,8 +1360,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -1466,8 +1457,7 @@
           "start": 89,
           "length": 23
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1475,8 +1465,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1573,8 +1562,7 @@
           "start": 27,
           "length": 22
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1582,8 +1570,7 @@
           "length": 3
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1680,8 +1667,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1689,8 +1675,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1777,8 +1762,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1790,8 +1774,7 @@
           "start": 0,
           "length": 33
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1803,8 +1786,7 @@
           "start": 0,
           "length": 37
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1901,8 +1883,7 @@
           "start": 0,
           "length": 33
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -1999,8 +1980,7 @@
           "start": 0,
           "length": 26
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2008,8 +1988,7 @@
           "length": 3
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -2106,8 +2085,7 @@
           "start": 0,
           "length": 37
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2119,8 +2097,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -2217,8 +2194,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -2315,8 +2291,7 @@
           "start": 89,
           "length": 23
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2324,8 +2299,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -2422,8 +2396,7 @@
           "start": 27,
           "length": 22
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2431,8 +2404,7 @@
           "length": 3
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -2529,8 +2501,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2538,8 +2509,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -3085,8 +3055,7 @@
           "start": 0,
           "length": 26
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3094,8 +3063,7 @@
           "length": 3
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -3192,8 +3160,7 @@
           "start": 0,
           "length": 33
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -3852,8 +3819,7 @@
           "start": 0,
           "length": 37
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -3865,8 +3831,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -3963,8 +3928,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -4061,8 +4025,7 @@
           "start": 89,
           "length": 23
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -4070,8 +4033,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -4168,8 +4130,7 @@
           "start": 27,
           "length": 22
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -4177,8 +4138,7 @@
           "length": 3
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -4275,8 +4235,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -4284,8 +4243,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -5793,8 +5751,7 @@
           "start": 27,
           "length": 22
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -5802,8 +5759,7 @@
           "length": 3
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -5900,8 +5856,7 @@
           "start": 0,
           "length": 37
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -5913,8 +5868,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -6011,8 +5965,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -6109,8 +6062,7 @@
           "start": 89,
           "length": 23
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -6118,8 +6070,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -6216,8 +6167,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -6225,8 +6175,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -6450,8 +6399,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -6459,8 +6407,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -7428,8 +7375,7 @@
           "start": 89,
           "length": 23
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -7437,8 +7383,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -7535,8 +7480,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -7601,8 +7545,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -7614,8 +7557,7 @@
           "start": 0,
           "length": 33
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -7627,8 +7569,7 @@
           "start": 0,
           "length": 37
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -7725,8 +7666,7 @@
           "start": 0,
           "length": 33
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -7823,8 +7763,7 @@
           "start": 0,
           "length": 26
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -7832,8 +7771,7 @@
           "length": 3
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -7930,8 +7868,7 @@
           "start": 0,
           "length": 37
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -7943,8 +7880,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -8041,8 +7977,7 @@
           "start": 27,
           "length": 22
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -8050,8 +7985,7 @@
           "length": 3
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -8148,8 +8082,7 @@
           "start": 50,
           "length": 38
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -8157,8 +8090,7 @@
           "length": 4
         },
         "fileName": "/e.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

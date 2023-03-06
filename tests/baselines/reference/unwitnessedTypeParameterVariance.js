@@ -27,7 +27,7 @@ b = a;
 //// [unwitnessedTypeParameterVariance.js]
 "use strict";
 // Repros from #33872
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function foo() {
     var unk = { read: function (origin) { return unk; } };
     var x = unk;

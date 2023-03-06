@@ -1,0 +1,8 @@
+=== tests/cases/compiler/a.js ===
+( y = 1 ; 2 )
+>( y = 1 : 1
+>y = 1 : 1
+>y : any
+>1 : 1
+>2 : 2
+

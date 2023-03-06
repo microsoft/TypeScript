@@ -1,0 +1,64 @@
+=== tests/cases/compiler/objectAssignLikeNonUnionResult.ts ===
+interface Interface {
+>Interface : Symbol(Interface, Decl(objectAssignLikeNonUnionResult.ts, 0, 0))
+
+    field: number;
+>field : Symbol(Interface.field, Decl(objectAssignLikeNonUnionResult.ts, 0, 21))
+}
+const defaultValue: Interface = { field: 1 };
+>defaultValue : Symbol(defaultValue, Decl(objectAssignLikeNonUnionResult.ts, 3, 5))
+>Interface : Symbol(Interface, Decl(objectAssignLikeNonUnionResult.ts, 0, 0))
+>field : Symbol(field, Decl(objectAssignLikeNonUnionResult.ts, 3, 33))
+
+declare function assign<T, U>(target: T, source: U): T & U;
+>assign : Symbol(assign, Decl(objectAssignLikeNonUnionResult.ts, 3, 45))
+>T : Symbol(T, Decl(objectAssignLikeNonUnionResult.ts, 5, 24))
+>U : Symbol(U, Decl(objectAssignLikeNonUnionResult.ts, 5, 26))
+>target : Symbol(target, Decl(objectAssignLikeNonUnionResult.ts, 5, 30))
+>T : Symbol(T, Decl(objectAssignLikeNonUnionResult.ts, 5, 24))
+>source : Symbol(source, Decl(objectAssignLikeNonUnionResult.ts, 5, 40))
+>U : Symbol(U, Decl(objectAssignLikeNonUnionResult.ts, 5, 26))
+>T : Symbol(T, Decl(objectAssignLikeNonUnionResult.ts, 5, 24))
+>U : Symbol(U, Decl(objectAssignLikeNonUnionResult.ts, 5, 26))
+
+// Displayed type: Interface & { field: number }
+// Underlying type: Something else...
+const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
+>data1 : Symbol(data1, Decl(objectAssignLikeNonUnionResult.ts, 9, 5))
+>assign : Symbol(assign, Decl(objectAssignLikeNonUnionResult.ts, 3, 45))
+>defaultValue : Symbol(defaultValue, Decl(objectAssignLikeNonUnionResult.ts, 3, 5))
+>Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
+>field : Symbol(field, Decl(objectAssignLikeNonUnionResult.ts, 9, 53))
+
+type ExtractRawComponent<T> = T extends { __raw: infer C } ? [L1: T, L2: C] : [R1: T];
+>ExtractRawComponent : Symbol(ExtractRawComponent, Decl(objectAssignLikeNonUnionResult.ts, 9, 71))
+>T : Symbol(T, Decl(objectAssignLikeNonUnionResult.ts, 11, 25))
+>T : Symbol(T, Decl(objectAssignLikeNonUnionResult.ts, 11, 25))
+>__raw : Symbol(__raw, Decl(objectAssignLikeNonUnionResult.ts, 11, 41))
+>C : Symbol(C, Decl(objectAssignLikeNonUnionResult.ts, 11, 54))
+>T : Symbol(T, Decl(objectAssignLikeNonUnionResult.ts, 11, 25))
+>C : Symbol(C, Decl(objectAssignLikeNonUnionResult.ts, 11, 54))
+>T : Symbol(T, Decl(objectAssignLikeNonUnionResult.ts, 11, 25))
+
+type t1 = ExtractRawComponent<typeof data1>;
+>t1 : Symbol(t1, Decl(objectAssignLikeNonUnionResult.ts, 11, 86))
+>ExtractRawComponent : Symbol(ExtractRawComponent, Decl(objectAssignLikeNonUnionResult.ts, 9, 71))
+>data1 : Symbol(data1, Decl(objectAssignLikeNonUnionResult.ts, 9, 5))
+
+// ???
+type Explode<T> = T extends { x: infer A } ? [A] : 'X';
+>Explode : Symbol(Explode, Decl(objectAssignLikeNonUnionResult.ts, 12, 44))
+>T : Symbol(T, Decl(objectAssignLikeNonUnionResult.ts, 15, 13))
+>T : Symbol(T, Decl(objectAssignLikeNonUnionResult.ts, 15, 13))
+>x : Symbol(x, Decl(objectAssignLikeNonUnionResult.ts, 15, 29))
+>A : Symbol(A, Decl(objectAssignLikeNonUnionResult.ts, 15, 38))
+>A : Symbol(A, Decl(objectAssignLikeNonUnionResult.ts, 15, 38))
+
+// 'X' | [unknown] -- why?
+type e1 = Explode<typeof data1>;
+>e1 : Symbol(e1, Decl(objectAssignLikeNonUnionResult.ts, 15, 55))
+>Explode : Symbol(Explode, Decl(objectAssignLikeNonUnionResult.ts, 12, 44))
+>data1 : Symbol(data1, Decl(objectAssignLikeNonUnionResult.ts, 9, 5))
+

@@ -42,9 +42,8 @@
 //
 // TODO: figure out a better solution to the API exposure problem.
 
-/// <reference path="../../../src/compiler/diagnosticInformationMap.generated.ts" />
-
 declare module ts {
+    export const Diagnostics: typeof import("../../../src/compiler/diagnosticInformationMap.generated").Diagnostics;
     export type MapKey = string | number;
     export interface Map<T> {
         forEach(action: (value: T, key: string) => void): void;
@@ -91,6 +90,12 @@ declare module ts {
         Message
     }
 
+    enum OrganizeImportsMode {
+      All = "All",
+      SortAndCombine = "SortAndCombine",
+      RemoveUnused = "RemoveUnused",
+  }
+
     interface DiagnosticMessage {
         key: string;
         category: DiagnosticCategory;
@@ -108,6 +113,7 @@ declare module ts {
         fileName?: string;
         ambientModuleName?: string;
         isPackageJsonImport?: true;
+        moduleSpecifier?: string;
         exportName: string;
     }
 
@@ -271,15 +277,21 @@ declare namespace FourSlashInterface {
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name: string, actionName?: string): void;
+        refactorAvailable(name: string, actionName?: string, actionDescription?: string): void;
         refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
         refactorKindAvailable(refactorKind: string, expected: string[], preferences?: {}): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completions(...options: CompletionsOptions[]): void;
-        applyCodeActionFromCompletion(markerName: string, options: {
+        completions(...options: CompletionsOptions[]): { andApplyCodeAction(options: {
+            name: string,
+            source: string,
+            description: string,
+            newFileContent?: string,
+            newRangeContent?: string,
+        }): void };
+        applyCodeActionFromCompletion(markerName: string | undefined, options: {
             name: string,
             source?: string,
             data?: ts.CompletionEntryData,
@@ -317,14 +329,19 @@ declare namespace FourSlashInterface {
         goToDefinition(startsAndEnds: { [startMarkerName: string]: ArrayOrSingle<string> }): void;
         /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
         goToDefinitionForMarkers(...markerNames: string[]): void;
+        goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, fileResult: { file: string, unverified?: boolean }): void;
+        goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string | { marker: string, unverified?: boolean }>): void;
+        goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         goToType(startsAndEnds: { [startMarkerName: string]: ArrayOrSingle<string> }): void;
         goToType(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         baselineFindAllReferences(...markerNames: string[]): void;
+        baselineFindAllReferencesMulti(seq: number, ...markerNames: string[]): void;
         baselineGetFileReferences(fileName: string): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
+        typeAtLocation(range: Range, expected: string): void;
         /** @deprecated Use baselineFindAllReferences instead */
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[] | string): void;
         rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;
@@ -345,7 +362,7 @@ declare namespace FourSlashInterface {
         baselineSyntacticDiagnostics(): void;
         baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
-        baselineCompletions(): void;
+        baselineCompletions(preferences?: UserPreferences): void;
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;
         baselineSignatureHelp(): void;
@@ -365,6 +382,7 @@ declare namespace FourSlashInterface {
         getAndApplyCodeFix(errorCode?: number, index?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: UserPreferences): void;
         importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[], options?: UserPreferences): void;
+        baselineAutoImports(marker: string, fullNamesForCodeFix?: string[], options?: UserPreferences): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
@@ -374,8 +392,10 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
-        /** Prefer semanticClassificationsAre for more descriptive tests */
-        encodedSemanticClassificationsLength(format: "original" | "2020", length: number)
+        /** Prefer {@link syntacticClassificationsAre} for more descriptive tests */
+        encodedSyntacticClassificationsLength(expected: number): void;
+        /** Prefer {@link semanticClassificationsAre} for more descriptive tests */
+        encodedSemanticClassificationsLength(format: "original" | "2020", length: number): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -393,8 +413,8 @@ declare namespace FourSlashInterface {
         }[]): void;
         /** Edits the current testfile and replaces with the semantic classifications */
         replaceWithSemanticClassifications(format: "2020")
-        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
-        renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
+        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, preferences?: UserPreferences): void;
+        renameInfoFailed(message?: string, preferences?: UserPreferences): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
         baselineRename(marker: string, options: RenameOptions): void;
 
@@ -435,7 +455,7 @@ declare namespace FourSlashInterface {
 
         generateTypes(...options: GenerateTypesOptions[]): void;
 
-        organizeImports(newContent: string): void;
+        organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: UserPreferences): void;
 
         toggleLineComment(newFileContent: string): void;
         toggleMultilineComment(newFileContent: string): void;
@@ -647,6 +667,8 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
@@ -654,12 +676,22 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
+        readonly autoImportFileExcludePatterns?: readonly string[];
+        readonly organizeImportsIgnoreCase?: "auto" | boolean;
+        readonly organizeImportsCollation?: "unicode" | "ordinal";
+        readonly organizeImportsLocale?: string;
+        readonly organizeImportsNumericCollation?: boolean;
+        readonly organizeImportsAccentCollation?: boolean;
+        readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
@@ -698,6 +730,12 @@ declare namespace FourSlashInterface {
         readonly documentation?: string;
         readonly tags?: ReadonlyArray<JSDocTagInfo>;
         readonly sourceDisplay?: string;
+        readonly labelDetails?: ExpectedCompletionEntryLabelDetails;
+    }
+
+    export interface ExpectedCompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     interface VerifySignatureHelpOptions {
@@ -838,27 +876,29 @@ declare namespace completion {
     interface GlobalsPlusOptions {
         noLib?: boolean;
     }
-    export const enum SortText {
-        LocalDeclarationPriority = "10",
-        LocationPriority = "11",
-        OptionalMember = "12",
-        MemberDeclaredBySpreadAssignment = "13",
-        SuggestedClassMembers = "14",
-        GlobalsOrKeywords = "15",
-        AutoImportSuggestions = "16",
-        JavascriptIdentifiers = "17",
-        DeprecatedLocalDeclarationPriority = "18",
-        DeprecatedLocationPriority = "19",
-        DeprecatedOptionalMember = "20",
-        DeprecatedMemberDeclaredBySpreadAssignment = "21",
-        DeprecatedSuggestedClassMembers = "22",
-        DeprecatedGlobalsOrKeywords = "23",
-        DeprecatedAutoImportSuggestions = "24"
-    }
+    export type SortText = string & { __sortText: any };
+    export const SortText: {
+        LocalDeclarationPriority: SortText,
+        LocationPriority: SortText,
+        OptionalMember: SortText,
+        MemberDeclaredBySpreadAssignment: SortText,
+        SuggestedClassMembers: SortText,
+        GlobalsOrKeywords: SortText,
+        AutoImportSuggestions: SortText,
+        ClassMemberSnippets: SortText,
+        JavascriptIdentifiers: SortText,
+
+        Deprecated(sortText: SortText): SortText,
+        ObjectLiteralProperty(presetSortText: SortText, symbolDisplayName: string): SortText,
+        SortBelow(sortText: SortText): SortText,
+    };
+
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/",
         ClassMemberSnippet = "ClassMemberSnippet/",
         TypeOnlyAlias = "TypeOnlyAlias/",
+        ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
+        SwitchCases = "SwitchCases/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

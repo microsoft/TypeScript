@@ -505,8 +505,7 @@
           "start": 30,
           "length": 10
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       }
     ]
   },
@@ -579,8 +578,7 @@
           "start": 68,
           "length": 10
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -653,8 +651,7 @@
           "start": 134,
           "length": 10
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       }
     ]
   },
@@ -731,8 +728,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/referencesForUnionProperties.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

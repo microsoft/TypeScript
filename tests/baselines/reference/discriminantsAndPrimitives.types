@@ -142,7 +142,7 @@ const enum EnumTypeNode {
 }
 
 type NodeA = Disjunction | Pattern;
->NodeA : NodeA
+>NodeA : Disjunction | Pattern
 
 interface NodeBase {
     type: NodeA["type"]

@@ -6,6 +6,7 @@
 
 
 //// [tsxReactEmit8.js]
+import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
 const _jsxFileName = "tests/cases/conformance/jsx/tsxReactEmit8.tsx";
 /// <reference path="react16.d.ts" />
 _jsxDEV("div", { children: "1" }, void 0, false, { fileName: _jsxFileName, lineNumber: 1, columnNumber: 1 }, this);

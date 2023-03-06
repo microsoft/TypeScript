@@ -1,0 +1,19 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock28.ts ===
+let foo: number;
+>foo : Symbol(foo, Decl(classStaticBlock28.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(classStaticBlock28.ts, 0, 16))
+
+    static {
+        foo = 1
+>foo : Symbol(foo, Decl(classStaticBlock28.ts, 0, 3))
+    }
+}
+
+console.log(foo)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>foo : Symbol(foo, Decl(classStaticBlock28.ts, 0, 3))
+

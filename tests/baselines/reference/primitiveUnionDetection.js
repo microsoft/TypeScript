@@ -15,7 +15,7 @@ var result = getInterfaceFromString({ type: 'two' });
 
 
 //// [primitiveUnionDetection.d.ts]
-declare type Kind = "one" | "two" | "three";
+type Kind = "one" | "two" | "three";
 declare function getInterfaceFromString<T extends Kind>(options?: {
     type?: T;
 } & {

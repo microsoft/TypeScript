@@ -58,9 +58,9 @@
 ////}|]
 ////
 ////// function expressions
-////(function f()[| {
+////[|(function f()[| {
 ////
-////}|])
+////}|])|]
 ////
 ////// trivia handeling
 ////class ClassFooWithTrivia[| /*  some comments */

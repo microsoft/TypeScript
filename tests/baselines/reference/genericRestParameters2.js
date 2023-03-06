@@ -149,16 +149,16 @@ declare let f13: (a: number, b: string, ...c: boolean[]) => void;
 declare const ns: [number, string];
 declare const sn: [string, number];
 declare const f20: <T extends unknown[]>(...args: T) => T;
-declare type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
-declare type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
-declare type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
-declare type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) => void>;
-declare type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
-declare type T06 = T05<[number, ...boolean[]]>;
-declare type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? {
+type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
+type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
+type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
+type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) => void>;
+type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
+type T06 = T05<[number, ...boolean[]]>;
+type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? {
     head: A;
     tail: B;
 } : any[];
-declare type T10 = P1<(x: number, y: string, ...z: boolean[]) => void>;
-declare type T11 = P1<(...z: number[]) => void>;
-declare type T12 = P1<(x: number, y: number) => void>;
+type T10 = P1<(x: number, y: string, ...z: boolean[]) => void>;
+type T11 = P1<(...z: number[]) => void>;
+type T12 = P1<(x: number, y: number) => void>;

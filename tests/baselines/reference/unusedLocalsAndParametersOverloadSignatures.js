@@ -24,7 +24,7 @@ export function genericFunc(details: number, message: any): any {
 
 //// [unusedLocalsAndParametersOverloadSignatures.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.genericFunc = exports.C = exports.func = void 0;
 function func(details, message) {
     return details + message;

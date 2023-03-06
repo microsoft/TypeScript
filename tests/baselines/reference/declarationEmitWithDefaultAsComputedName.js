@@ -35,7 +35,7 @@ exports.obj = (_a = {},
 
 
 //// [other.d.ts]
-declare type Experiment<Name> = {
+type Experiment<Name> = {
     name: Name;
 };
 declare const _default: Experiment<"foo">;

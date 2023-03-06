@@ -1,26 +1,39 @@
 Exit Code: 0
 Standard output:
 yarn run vX.X.X
-$ node --max-old-space-size=3072 ./scripts/build/build.js
+$ node ./scripts/build/build.mjs
  Building packages 
 index.js.......................   DONE  
 doc.js.........................   DONE  
 standalone.js..................   DONE  
+  esm/standalone.mjs...........   DONE  
 bin-prettier.js................   DONE  
+cli.js.........................   DONE  
 third-party.js.................   DONE  
 parser-babel.js................   DONE  
+  esm/parser-babel.mjs.........   DONE  
 parser-flow.js.................   DONE  
+  esm/parser-flow.mjs..........   DONE  
 parser-typescript.js...........   DONE  
+  esm/parser-typescript.mjs....   DONE  
 parser-espree.js...............   DONE  
+  esm/parser-espree.mjs........   DONE  
 parser-meriyah.js..............   DONE  
+  esm/parser-meriyah.mjs.......   DONE  
 parser-angular.js..............   DONE  
+  esm/parser-angular.mjs.......   DONE  
 parser-postcss.js..............   DONE  
-esm/parser-postcss.mjs.........   DONE  
+  esm/parser-postcss.mjs.......   DONE  
 parser-graphql.js..............   DONE  
+  esm/parser-graphql.mjs.......   DONE  
 parser-markdown.js.............   DONE  
+  esm/parser-markdown.mjs......   DONE  
 parser-glimmer.js..............   DONE  
+  esm/parser-glimmer.mjs.......   DONE  
 parser-html.js.................   DONE  
+  esm/parser-html.mjs..........   DONE  
 parser-yaml.js.................   DONE  
+  esm/parser-yaml.mjs..........   DONE  
 Done in ?s.
 
 

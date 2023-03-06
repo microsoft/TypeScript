@@ -1,0 +1,37 @@
+tests/cases/compiler/genericWithNoConstraintComparableWithCurlyCurly.ts(23,5): error TS2352: Conversion of type '{}' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  'T' could be instantiated with an arbitrary type which could be unrelated to '{}'.
+
+
+==== tests/cases/compiler/genericWithNoConstraintComparableWithCurlyCurly.ts (1 errors) ====
+    function foo<T>() {
+        let x = {};
+        x as T;
+    }
+    
+    function bar<T extends unknown>() {
+        let x = {};
+        x as T;
+    }
+    
+    function baz<T extends {}>() {
+        let x = {};
+        x as T;
+    }
+    
+    function bat<T extends object>() {
+        let x = {};
+        x as T;
+    }
+    
+    function no<T extends null | undefined>() {
+        let x = {};
+        x as T; // should error
+        ~~~~~~
+!!! error TS2352: Conversion of type '{}' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   'T' could be instantiated with an arbitrary type which could be unrelated to '{}'.
+    }
+    
+    function yes<T extends object | null | undefined>() {
+        let x = {};
+        x as T;
+    }

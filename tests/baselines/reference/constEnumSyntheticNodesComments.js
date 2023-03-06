@@ -24,13 +24,13 @@ function assert(x) {
 }
 function verify(a) {
     switch (a) {
-        case 0 /* A */:
+        case 0 /* En.A */:
             return assert(a);
-        case 1 /* "B" */:
+        case 1 /* En["B"] */:
             return assert(a);
-        case 2 /* `C` */:
+        case 2 /* En[`C`] */:
             return assert(a);
-        case 3 /* "\u{44}" */:
+        case 3 /* En["\u{44}"] */:
             return assert(a);
     }
 }

@@ -121,7 +121,7 @@ var n4: {
 }[];
 
 var d4: {
->d4 : { foo(n: string, x: { x: number; y: number; }): { x: number; y: number; }; }
+>d4 : { foo(n: string, x: {    x: number;    y: number;}): {    x: number;    y: number;}; }
 
     foo(n: string, x: { x: number; y: number; }): {
 >foo : (n: string, x: {    x: number;    y: number;}) => {    x: number;    y: number;}

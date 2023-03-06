@@ -131,8 +131,7 @@
           "start": 0,
           "length": 13
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -140,8 +139,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -149,8 +147,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -219,8 +216,7 @@
           "start": 14,
           "length": 25
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -228,8 +224,7 @@
           "length": 12
         },
         "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -329,7 +324,7 @@ undefined
           "length": 21
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -342,7 +337,7 @@ undefined
           "length": 11
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -440,7 +435,7 @@ undefined
           "length": 21
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -453,7 +448,7 @@ undefined
           "length": 11
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -523,7 +518,7 @@ undefined
           "length": 29
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -592,8 +587,7 @@ undefined
           "start": 0,
           "length": 13
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -601,8 +595,7 @@ undefined
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -610,8 +603,7 @@ undefined
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -703,7 +695,7 @@ undefined
           "length": 12
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -773,7 +765,7 @@ undefined
           "length": 10
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -843,7 +835,7 @@ undefined
           "length": 15
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -913,7 +905,7 @@ undefined
           "length": 12
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -1085,7 +1077,7 @@ undefined
           "length": 6
         },
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -1167,7 +1159,7 @@ undefined
           "length": 6
         },
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -1249,7 +1241,7 @@ undefined
           "length": 12
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }

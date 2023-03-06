@@ -2,7 +2,7 @@
 // Repro from #37475
 
 export type A = "number" | "null" | A[];
->A : A
+>A : "number" | "null" | A[]
 
 export type F<T> = null extends T
 >F : F<T>

@@ -1,0 +1,31 @@
+=== tests/cases/compiler/constructorWithSuperAndPrologue.es5.ts ===
+// https://github.com/microsoft/TypeScript/issues/48761
+"use strict";
+
+class A {
+>A : Symbol(A, Decl(constructorWithSuperAndPrologue.es5.ts, 1, 13))
+
+    public constructor() {
+        console.log("A")
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+}
+
+class B extends A  {
+>B : Symbol(B, Decl(constructorWithSuperAndPrologue.es5.ts, 7, 1))
+>A : Symbol(A, Decl(constructorWithSuperAndPrologue.es5.ts, 1, 13))
+
+    constructor() {
+        "ngInject";
+        console.log("B")
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        super();
+>super : Symbol(A, Decl(constructorWithSuperAndPrologue.es5.ts, 1, 13))
+    }
+}
+

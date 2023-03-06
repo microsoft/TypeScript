@@ -358,7 +358,7 @@ export module m3 {
 
 //// [privacyImportParseErrors.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m3 = exports.glo_im2_public = exports.glo_im1_public = exports.glo_im4_private_v4_public = exports.glo_im4_private_v3_public = exports.glo_im4_private_v2_public = exports.glo_im4_private_v1_public = exports.glo_im3_private_v4_public = exports.glo_im3_private_v3_public = exports.glo_im3_private_v2_public = exports.glo_im3_private_v1_public = exports.glo_im2_private_v4_public = exports.glo_im2_private_v3_public = exports.glo_im2_private_v2_public = exports.glo_im2_private_v1_public = exports.glo_im1_private_v4_public = exports.glo_im1_private_v3_public = exports.glo_im1_private_v2_public = exports.glo_im1_private_v1_public = exports.glo_M3_private = exports.glo_M1_public = exports.m1 = void 0;
 var m1;
 (function (m1) {

@@ -122,7 +122,7 @@ var a = <Blah2>
 >Blah2 : (props: PropsArr) => JSX.Element
 
 type Cb = (x: number) => string;
->Cb : Cb
+>Cb : (x: number) => string
 >x : number
 
 interface PropsMixed {

@@ -10,10 +10,10 @@ interface C {
 
 //// [paramterDestrcuturingDeclaration.d.ts]
 interface C {
-    ({ p: name }: {
+    ({ p }: {
         p: any;
     }): any;
-    new ({ p: boolean }: {
+    new ({ p }: {
         p: any;
     }): any;
 }

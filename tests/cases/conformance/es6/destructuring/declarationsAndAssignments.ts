@@ -19,7 +19,7 @@ function f1() {
 }
 
 function f2() {
-    var { } = { x: 5, y: "hello" };       // Error, no x and y in target
+    var { } = { x: 5, y: "hello" };       // Ok, empty binding pattern means nothing
     var { x } = { x: 5, y: "hello" };     // Error, no y in target
     var { y } = { x: 5, y: "hello" };     // Error, no x in target
     var { x, y } = { x: 5, y: "hello" };

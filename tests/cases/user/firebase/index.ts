@@ -1,1 +1,1 @@
-import firebase = require("firebase");
+import firebase = require("firebase/app");

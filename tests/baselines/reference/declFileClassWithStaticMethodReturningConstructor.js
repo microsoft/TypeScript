@@ -7,7 +7,7 @@ export class Enhancement {
 
 //// [declFileClassWithStaticMethodReturningConstructor.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Enhancement = void 0;
 var Enhancement = /** @class */ (function () {
     function Enhancement() {

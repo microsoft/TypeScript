@@ -25,7 +25,7 @@ function fn<T extends string | undefined, U extends string>(one: T, two: U) {
     foo(two!);
 >foo(two!) : void
 >foo : (p: string) => void
->two! : NonNullable<U>
+>two! : U
 >two : U
 
     foo(three!); // this line is the important one

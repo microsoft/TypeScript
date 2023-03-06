@@ -3,7 +3,7 @@ export as namespace UMD;
 >UMD : typeof import("tests/cases/compiler/node_modules/umd")
 
 export type Thing = {
->Thing : Thing
+>Thing : { a: number; }
 
     a: number;
 >a : number

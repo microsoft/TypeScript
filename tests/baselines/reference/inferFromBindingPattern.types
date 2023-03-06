@@ -60,7 +60,7 @@ interface Person {
 }
 
 declare function selectJohn<K = Person>(props?: SelectProps<Person, K>): SelectResult<Person, K>;
->selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
+>selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
 >props : SelectProps<Person, K> | undefined
 
 const [person] = selectJohn();
@@ -91,7 +91,7 @@ declare function makeTuple<T1>(arg: T1): [T1];
 >arg : T1
 
 declare function stringy<T = string>(arg?: T): T;
->stringy : <T = string>(arg?: T | undefined) => T
+>stringy : <T = string>(arg?: T) => T
 >arg : T | undefined
 
 const isStringTuple = makeTuple(stringy());  // [string]

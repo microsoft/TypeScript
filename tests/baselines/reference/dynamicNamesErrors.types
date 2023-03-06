@@ -127,7 +127,7 @@ export class ClassMemberVisibility {
 }
 
 export type ObjectTypeVisibility = {
->ObjectTypeVisibility : ObjectTypeVisibility
+>ObjectTypeVisibility : { [x]: number; [y](): number; }
 
     [x]: number;
 >[x] : number

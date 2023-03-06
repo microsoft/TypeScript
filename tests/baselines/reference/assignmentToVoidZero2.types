@@ -1,9 +1,9 @@
 === tests/cases/conformance/salsa/assignmentToVoidZero2.js ===
 exports.j = 1;
 >exports.j = 1 : 1
->exports.j : number
+>exports.j : 1
 >exports : typeof import("tests/cases/conformance/salsa/assignmentToVoidZero2")
->j : number
+>j : 1
 >1 : 1
 
 exports.k = void 0;
@@ -76,11 +76,11 @@ c.p + c.q
 
 === tests/cases/conformance/salsa/importer.js ===
 import { j, k } from './assignmentToVoidZero2'
->j : number
+>j : 1
 >k : any
 
 j + k
 >j + k : any
->j : number
+>j : 1
 >k : any
 

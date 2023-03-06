@@ -532,36 +532,36 @@ declare let dom: {
 };
 declare const y1: string;
 declare const y2: string;
-declare type Funcs = {
+type Funcs = {
     [key: `s${string}`]: (x: string) => void;
     [key: `n${string}`]: (x: number) => void;
 };
 declare const funcs: Funcs;
-declare type Duplicates = {
+type Duplicates = {
     [key: string | number]: any;
     [key: number | symbol]: any;
     [key: symbol | `foo${string}`]: any;
     [key: `foo${string}`]: any;
 };
-declare type Conflicting = {
+type Conflicting = {
     [key: `a${string}`]: 'a';
     [key: `${string}a`]: 'b';
     [key: `a${string}a`]: 'c';
 };
-declare type Invalid<T extends string> = {
+type Invalid<T extends string> = {
     [key: 'a' | 'b' | 'c']: string;
     [key: T | number]: string;
     [key: Error]: string;
     [key: T & string]: string;
 };
-declare type Tag1 = {
+type Tag1 = {
     __tag1__: void;
 };
-declare type Tag2 = {
+type Tag2 = {
     __tag2__: void;
 };
-declare type TaggedString1 = string & Tag1;
-declare type TaggedString2 = string & Tag2;
+type TaggedString1 = string & Tag1;
+type TaggedString2 = string & Tag2;
 declare let s0: string;
 declare let s1: TaggedString1;
 declare let s2: TaggedString2;
@@ -635,23 +635,23 @@ declare function foo<TArg, TRet, TDir>(options: {
 declare let case1: void;
 declare let case2: void;
 declare let case3: void;
-declare type Pseudo = `&:${string}`;
+type Pseudo = `&:${string}`;
 declare const AmIPseudo1: Pseudo;
 declare const AmIPseudo: Pseudo;
-declare type PseudoDeclaration = {
+type PseudoDeclaration = {
     [key in Pseudo]: string;
 };
 declare const test: PseudoDeclaration;
-declare type FieldPattern = `/${string}`;
+type FieldPattern = `/${string}`;
 declare const path1: FieldPattern;
 declare const path2: FieldPattern;
-declare type PathsObject = {
+type PathsObject = {
     [P in FieldPattern]: object;
 };
 declare const pathObject: PathsObject;
-declare type IdType = `${number}-${number}-${number}-${number}`;
+type IdType = `${number}-${number}-${number}-${number}`;
 declare const id: IdType;
-declare type A = Record<IdType, string>;
+type A = Record<IdType, string>;
 declare const a: A;
 declare let aid: string;
 interface AA {
@@ -669,12 +669,12 @@ declare const obj2: {
 declare const obj3: {
     [key: number]: string;
 };
-declare type Id = string & {
+type Id = string & {
     __tag: 'id ';
 };
-declare type Rec1 = {
+type Rec1 = {
     [key: Id]: number;
 };
-declare type Rec2 = Record<Id, number>;
-declare type K1 = keyof Rec1;
-declare type K2 = keyof Rec2;
+type Rec2 = Record<Id, number>;
+type K1 = keyof Rec1;
+type K2 = keyof Rec2;

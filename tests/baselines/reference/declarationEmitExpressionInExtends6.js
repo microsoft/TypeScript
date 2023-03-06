@@ -3,14 +3,25 @@
 //// [index.d.ts]
 declare const require: any;
 
-//// [a.js]
+//// [a.ts]
 export class Foo {}
 
 //// [b.ts]
-const { Foo } = require("./a");
+import * as A from "./a";
+const { Foo } = A;
 export default class extends Foo {}
 
 
+//// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
+exports.Foo = Foo;
 //// [b.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -28,8 +39,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
-var Foo = require("./a").Foo;
+Object.defineProperty(exports, "__esModule", { value: true });
+var A = require("./a");
+var Foo = A.Foo;
 var default_1 = /** @class */ (function (_super) {
     __extends(default_1, _super);
     function default_1() {
@@ -37,4 +49,15 @@ var default_1 = /** @class */ (function (_super) {
     }
     return default_1;
 }(Foo));
-exports["default"] = default_1;
+exports.default = default_1;
+
+
+//// [a.d.ts]
+export declare class Foo {
+}
+//// [b.d.ts]
+import * as A from "./a";
+declare const Foo: typeof A.Foo;
+export default class extends Foo {
+}
+export {};

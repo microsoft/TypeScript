@@ -16,7 +16,7 @@ interface Component {
 }
 
 type T = {
->T : T
+>T : { [onInit]: any; }
 
   [onInit]: any;
 >[onInit] : any

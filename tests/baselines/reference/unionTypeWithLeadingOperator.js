@@ -13,8 +13,8 @@ export type D =
 
 //// [unionTypeWithLeadingOperator.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [unionTypeWithLeadingOperator.d.ts]
-export declare type D = /*leading1*/ 1 | /*leading2*/ 2;
+export type D = /*leading1*/ 1 | /*leading2*/ 2;

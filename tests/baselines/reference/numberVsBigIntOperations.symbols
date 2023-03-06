@@ -348,3 +348,20 @@ if (bigZeroOrOne) isOne(bigZeroOrOne);
 >isOne : Symbol(isOne, Decl(numberVsBigIntOperations.ts, 90, 5))
 >bigZeroOrOne : Symbol(bigZeroOrOne, Decl(numberVsBigIntOperations.ts, 92, 5))
 
+type NumberOrBigint = number | bigint;
+>NumberOrBigint : Symbol(NumberOrBigint, Decl(numberVsBigIntOperations.ts, 93, 38))
+
+function getKey<S extends NumberOrBigint>(key: S) {
+>getKey : Symbol(getKey, Decl(numberVsBigIntOperations.ts, 95, 38))
+>S : Symbol(S, Decl(numberVsBigIntOperations.ts, 96, 16))
+>NumberOrBigint : Symbol(NumberOrBigint, Decl(numberVsBigIntOperations.ts, 93, 38))
+>key : Symbol(key, Decl(numberVsBigIntOperations.ts, 96, 42))
+>S : Symbol(S, Decl(numberVsBigIntOperations.ts, 96, 16))
+
+    +key;   // should error
+>key : Symbol(key, Decl(numberVsBigIntOperations.ts, 96, 42))
+
+    0 + key;    // should error
+>key : Symbol(key, Decl(numberVsBigIntOperations.ts, 96, 42))
+}
+

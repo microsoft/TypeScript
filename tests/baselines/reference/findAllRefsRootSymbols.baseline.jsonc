@@ -89,7 +89,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
       "kind": "property",
-      "name": "(property) x: {} & string",
+      "name": "(property) x: string",
       "textSpan": {
         "start": 14,
         "length": 1
@@ -117,26 +117,6 @@
         },
         {
           "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "&",
           "kind": "punctuation"
         },
         {
@@ -258,7 +238,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
       "kind": "property",
-      "name": "(property) x: {} & string",
+      "name": "(property) x: string",
       "textSpan": {
         "start": 14,
         "length": 1
@@ -286,26 +266,6 @@
         },
         {
           "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "&",
           "kind": "punctuation"
         },
         {
@@ -415,7 +375,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
       "kind": "property",
-      "name": "(property) x: {} & string",
+      "name": "(property) x: string",
       "textSpan": {
         "start": 14,
         "length": 1
@@ -443,26 +403,6 @@
         },
         {
           "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "&",
           "kind": "punctuation"
         },
         {
@@ -573,8 +513,7 @@
           "start": 14,
           "length": 6
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       }
     ]
   },
@@ -651,8 +590,7 @@
           "start": 37,
           "length": 6
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       }
     ]
   },
@@ -717,8 +655,7 @@
           "start": 75,
           "length": 9
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       }
     ]
   },
@@ -728,7 +665,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
       "kind": "property",
-      "name": "(property) x: {} & string",
+      "name": "(property) x: string",
       "textSpan": {
         "start": 14,
         "length": 1
@@ -763,26 +700,6 @@
           "kind": "space"
         },
         {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "&",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
           "text": "string",
           "kind": "keyword"
         }
@@ -799,8 +716,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

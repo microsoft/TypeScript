@@ -4,17 +4,13 @@
 //// declare module JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
-////         [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}div|]: {
+////         /*1*/div: {
 ////             name?: string;
 ////             isOpen?: boolean;
-////         };|]
+////         };
 ////         span: { n: string; };
 ////     }
 //// }
-//// var x = [|<[|{| "contextRangeIndex": 2 |}div|] />|];
+//// var x = /*2*/</*3*/div />;
 
-verify.singleReferenceGroup(
-    `(property) JSX.IntrinsicElements.div: {
-    name?: string;
-    isOpen?: boolean;
-}`, "div");
+verify.baselineFindAllReferences('1', '2', '3');

@@ -36,6 +36,9 @@ const x: B = { x: "" };
 >x : Symbol(x, Decl(index.ts, 2, 14))
 
 B.zzz;
+>B.zzz : Symbol(OriginalB.zzz, Decl(b.ts, 0, 12))
+>B : Symbol(B, Decl(index.ts, 0, 8))
+>zzz : Symbol(OriginalB.zzz, Decl(b.ts, 0, 12))
 
 import * as OriginalB from "./b";
 >OriginalB : Symbol(OriginalB, Decl(index.ts, 5, 6))

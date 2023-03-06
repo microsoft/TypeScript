@@ -1,9 +1,10 @@
 tests/cases/conformance/functions/functionImplementationErrors.ts(25,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/conformance/functions/functionImplementationErrors.ts(30,17): error TS2373: Parameter 'n' cannot reference identifier 'm' declared after it.
 tests/cases/conformance/functions/functionImplementationErrors.ts(35,17): error TS2373: Parameter 'n' cannot reference identifier 'm' declared after it.
+tests/cases/conformance/functions/functionImplementationErrors.ts(40,1): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
 
 
-==== tests/cases/conformance/functions/functionImplementationErrors.ts (3 errors) ====
+==== tests/cases/conformance/functions/functionImplementationErrors.ts (4 errors) ====
     // FunctionExpression with no return type annotation with multiple return statements with unrelated types
     var f1 = function () {
         return '';
@@ -50,9 +51,14 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(35,17): error 
     // FunctionExpression with non -void return type annotation with a throw, no return, and other code
     // Should be error but isn't
     undefined === function (): number {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         throw undefined;
+    ~~~~~~~~~~~~~~~~~~~~
         var x = 4;
+    ~~~~~~~~~~~~~~
     };
+    ~
+!!! error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
     
     class Base { private x; }
     class AnotherClass { private y; }

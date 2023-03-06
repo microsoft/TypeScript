@@ -7,6 +7,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@types/bluebird": "^3.5.17",
+    "@types/sax": "latest",
     "soap": "latest"
   }
 }

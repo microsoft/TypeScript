@@ -5,7 +5,7 @@ interface Box<T> { data: T }
 >data : T
 
 type BoxTypes = Box<{ x: string }> | Box<{ y: string }>;
->BoxTypes : BoxTypes
+>BoxTypes : Box<{ x: string; }> | Box<{ y: string; }>
 >x : string
 >y : string
 

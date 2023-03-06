@@ -1,0 +1,33 @@
+=== tests/cases/compiler/singletonLabeledTuple.ts ===
+type AliasOptional = [p?: number]
+>AliasOptional : Symbol(AliasOptional, Decl(singletonLabeledTuple.ts, 0, 0))
+
+// literal type vs type alias
+type Literal = [p?: number] extends [unknown] ? true : false // Expect `Literal` to be `false`
+>Literal : Symbol(Literal, Decl(singletonLabeledTuple.ts, 0, 33))
+
+type Alias = AliasOptional extends [unknown] ? true : false     // Expect `Alias` to be `false`
+>Alias : Symbol(Alias, Decl(singletonLabeledTuple.ts, 3, 60))
+>AliasOptional : Symbol(AliasOptional, Decl(singletonLabeledTuple.ts, 0, 0))
+
+// labeled tuple vs normal tuple
+type Labeled = [p?: number] extends [unknown] ? true : false   // Expect `Labeled` to be `false`
+>Labeled : Symbol(Labeled, Decl(singletonLabeledTuple.ts, 4, 59))
+
+type Normal = [number?] extends [unknown] ? true : false       // Expect `Normal` to be `false`
+>Normal : Symbol(Normal, Decl(singletonLabeledTuple.ts, 7, 60))
+
+
+type AliasRest = [...p: number[]];
+>AliasRest : Symbol(AliasRest, Decl(singletonLabeledTuple.ts, 8, 56))
+
+type LiteralRest = [...p: number[]] extends [unknown] ? true : false; // Expect `LiteralRest` to be `false`
+>LiteralRest : Symbol(LiteralRest, Decl(singletonLabeledTuple.ts, 11, 34))
+
+type AliasedRest = AliasRest extends [unknown] ? true : false; // Expect `AliasedRest` to be `false`
+>AliasedRest : Symbol(AliasedRest, Decl(singletonLabeledTuple.ts, 13, 69))
+>AliasRest : Symbol(AliasRest, Decl(singletonLabeledTuple.ts, 8, 56))
+
+type NormalRest = [...number[]] extends [unknown] ? true : false; // Expect `NormalRest` to be `false`
+>NormalRest : Symbol(NormalRest, Decl(singletonLabeledTuple.ts, 14, 62))
+

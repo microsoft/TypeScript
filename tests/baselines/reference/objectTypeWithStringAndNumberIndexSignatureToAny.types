@@ -176,7 +176,7 @@ function f2(sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringTo<an
 }
 
 type NumberToNumber = NumberTo<number>;
->NumberToNumber : NumberToNumber
+>NumberToNumber : NumberTo<number>
 
 interface StringToAnyNumberToNumber extends StringTo<any>, NumberToNumber {
 }

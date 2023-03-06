@@ -39,4 +39,4 @@ declare namespace defaultProps {
     const bar_1: boolean;
     export { bar_1 as bar };
 }
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';

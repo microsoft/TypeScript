@@ -49,29 +49,29 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile.ts (used version)
 /a/b/file1.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
-/a/b/modulefile.ts:
-  {"fileName":"/a/b/moduleFile.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json: *new*
+  {}
+/a/b/file1.ts: *new*
+  {}
+/a/b/modulefile.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
@@ -80,7 +80,7 @@ exports.bar = bar;
 
 //// [/a/b/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var T = require("./moduleFile");
 T.bar();
 
@@ -124,34 +124,38 @@ Shape signatures in builder refreshed for::
 /a/b/file1.ts (computed .d.ts)
 /a/b/modulefile1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b/tsconfig.json:
+  {}
+/a/b/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b: *new*
+  {}
+/a/b/modulefile1.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/a/b/modulefile.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/modulefile:
-  {"directoryName":"/a/b/moduleFile","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1.js] file written with same contents
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
@@ -191,30 +195,40 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile.ts (computed .d.ts)
 /a/b/file1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/modulefile.ts:
-  {"fileName":"/a/b/moduleFile.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/a/b/modulefile:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/modulefile.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/a/b:
+  {}
+/a/b/modulefile1.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1.js] file written with same contents
 //// [/a/b/moduleFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;

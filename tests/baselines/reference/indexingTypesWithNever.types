@@ -1,6 +1,6 @@
 === tests/cases/compiler/indexingTypesWithNever.ts ===
 type TestObj = {
->TestObj : TestObj
+>TestObj : { a: string; b: number; }
 
   a: string;
 >a : string
@@ -15,7 +15,7 @@ type Result1 = TestObj[never];
 >Result1 : never
 
 type EmptyObj = {};
->EmptyObj : EmptyObj
+>EmptyObj : {}
 
 // Should be never but without an error
 type Result2 = EmptyObj[keyof EmptyObj];
@@ -127,25 +127,25 @@ type ExpectType<Exp, Act> = Match<Exp, Act> extends "Match"
   : "Did not match";
 
 type P3 = { a: string; b: number; c?: boolean };
->P3 : P3
+>P3 : { a: string; b: number; c?: boolean | undefined; }
 >a : string
 >b : number
 >c : boolean | undefined
 
 type P2 = { a: string; c?: boolean };
->P2 : P2
+>P2 : { a: string; c?: boolean | undefined; }
 >a : string
 >c : boolean | undefined
 
 type P1 = { c?: boolean };
->P1 : P1
+>P1 : { c?: boolean | undefined; }
 >c : boolean | undefined
 
 type P0 = {};
->P0 : P0
+>P0 : {}
 
 type P3Names = RequiredPropNames<P3>; // expect 'a' | 'b'
->P3Names : P3Names
+>P3Names : "a" | "b"
 
 type P2Names = RequiredPropNames<P2>; // expect 'a'
 >P2Names : "a"
@@ -169,16 +169,16 @@ declare const p0NameTest: ExpectType<never, P0Names>;
 >p0NameTest : "Match"
 
 type P3Props = RequiredProps<P3>; // expect { a: string; b: number }
->P3Props : P3Props
+>P3Props : { a: string; b: number; }
 
 type P2Props = RequiredProps<P2>; // expect { a: string; }
->P2Props : P2Props
+>P2Props : { a: string; }
 
 type P1Props = RequiredProps<P1>; // expect {}
->P1Props : P1Props
+>P1Props : {}
 
 type P0Props = RequiredProps<P0>; // expect {}
->P0Props : P0Props
+>P0Props : {}
 
 declare const p3Test: ExpectType<{ a: string; b: number }, P3Props>;
 >p3Test : "Match"
@@ -196,25 +196,25 @@ declare const p0Test: ExpectType<{}, P0Props>;
 >p0Test : "Match"
 
 type O3 = { a?: string; b?: number; c: boolean };
->O3 : O3
+>O3 : { a?: string | undefined; b?: number | undefined; c: boolean; }
 >a : string | undefined
 >b : number | undefined
 >c : boolean
 
 type O2 = { a?: string; c: boolean };
->O2 : O2
+>O2 : { a?: string | undefined; c: boolean; }
 >a : string | undefined
 >c : boolean
 
 type O1 = { c: boolean };
->O1 : O1
+>O1 : { c: boolean; }
 >c : boolean
 
 type O0 = {};
->O0 : O0
+>O0 : {}
 
 type O3Names = OptionalPropNames<O3>; // expect 'a' | 'b'
->O3Names : O3Names
+>O3Names : "a" | "b"
 
 type O2Names = OptionalPropNames<O2>; // expect 'a'
 >O2Names : "a"
@@ -238,16 +238,16 @@ declare const o0NameTest: ExpectType<never, O0Names>;
 >o0NameTest : "Match"
 
 type O3Props = OptionalProps<O3>; // expect { a?: string | undefined; b?: number | undefined }
->O3Props : O3Props
+>O3Props : { a?: string | undefined; b?: number | undefined; }
 
 type O2Props = OptionalProps<O2>; // expect { a?: string | undefined; }
->O2Props : O2Props
+>O2Props : { a?: string | undefined; }
 
 type O1Props = OptionalProps<O1>; // expect {}
->O1Props : O1Props
+>O1Props : {}
 
 type O0Props = OptionalProps<O0>; // expect {}
->O0Props : O0Props
+>O0Props : {}
 
 declare const o3Test: ExpectType<{ a?: string; b?: number }, O3Props>;
 >o3Test : "Match"

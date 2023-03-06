@@ -1,3 +1,6 @@
+import * as evaluator from "../../_namespaces/evaluator";
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: evaluation:: superInStaticInitializer", () => {
     it("super-property-get in es2015", () => {
         const result = evaluator.evaluateTypeScript(`

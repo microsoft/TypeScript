@@ -65,6 +65,27 @@ function init2(foo: DeepOptional) {
     }
 }
 
+// Repro from #48289
+
+type Fish = { type: 'fish', hasFins: true }
+type Dog = { type: 'dog', saysWoof: true }
+
+type Pet = Fish | Dog;
+
+function handleDogBroken<PetType extends Pet>(pet: PetType) {
+    if(pet.type === 'dog') {
+        const _okay1 = pet.saysWoof;
+        const _okay2: typeof pet.saysWoof = pet.saysWoof;
+    }
+}
+
+function handleDogWorking(pet: Pet) {
+    if(pet.type === 'dog') {
+        const _okay1 = pet.saysWoof;
+        const _okay2: typeof pet.saysWoof = pet.saysWoof;
+    }
+}
+
 //// [narrowingOfQualifiedNames.js]
 "use strict";
 // Repro from #43411
@@ -92,5 +113,17 @@ function init2(foo) {
                 }
             }
         }
+    }
+}
+function handleDogBroken(pet) {
+    if (pet.type === 'dog') {
+        var _okay1 = pet.saysWoof;
+        var _okay2 = pet.saysWoof;
+    }
+}
+function handleDogWorking(pet) {
+    if (pet.type === 'dog') {
+        var _okay1 = pet.saysWoof;
+        var _okay2 = pet.saysWoof;
     }
 }

@@ -1,18 +1,18 @@
 === tests/cases/compiler/nonNullReferenceMatching.ts ===
 type ElementRef = (element: HTMLElement | null) => void;
->ElementRef : ElementRef
+>ElementRef : (element: HTMLElement | null) => void
 >element : HTMLElement | null
 >null : null
 
 type ThumbProps = {
->ThumbProps : ThumbProps
+>ThumbProps : { elementRef?: ElementRef | undefined; }
 
     elementRef?: ElementRef;
 >elementRef : ElementRef | undefined
 }
 
 type ComponentProps = {
->ComponentProps : ComponentProps
+>ComponentProps : { thumbYProps?: ThumbProps | undefined; thumbXProps: ThumbProps; }
 
     thumbYProps?: ThumbProps;
 >thumbYProps : ThumbProps | undefined

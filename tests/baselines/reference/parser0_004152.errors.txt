@@ -1,6 +1,6 @@
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,28): error TS2304: Cannot find name 'DisplayPosition'.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,45): error TS1137: Expression or comma expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,46): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,46): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,49): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,51): error TS2300: Duplicate identifier '3'.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,52): error TS1005: ';' expected.
@@ -41,7 +41,7 @@ tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(3,25): error T
                                                 ~
 !!! error TS1137: Expression or comma expected.
                                                  ~
-!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1005: ';' expected.
                                                     ~
 !!! error TS1005: ';' expected.
                                                       ~

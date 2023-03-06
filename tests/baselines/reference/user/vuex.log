@@ -1,0 +1,7 @@
+Exit Code: 2
+Standard output:
+node_modules/@vue/runtime-core/dist/runtime-core.d.ts(1826,33): error TS2344: Type 'HostElement' does not satisfy the constraint 'RendererElement'.
+
+
+
+Standard error:

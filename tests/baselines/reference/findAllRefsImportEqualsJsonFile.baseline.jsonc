@@ -162,8 +162,7 @@
           "start": 0,
           "length": 31
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -171,8 +170,7 @@
           "length": 1
         },
         "fileName": "/a.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -227,8 +225,7 @@
           "start": 0,
           "length": 31
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -240,8 +237,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -249,8 +245,7 @@
           "length": 10
         },
         "fileName": "/j.json",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -305,8 +300,7 @@
           "start": 0,
           "length": 31
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -318,8 +312,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -327,8 +320,7 @@
           "length": 10
         },
         "fileName": "/j.json",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -442,8 +434,7 @@
           "start": 0,
           "length": 30
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -451,8 +442,7 @@
           "length": 1
         },
         "fileName": "/b.js",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

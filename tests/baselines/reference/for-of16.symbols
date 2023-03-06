@@ -20,3 +20,7 @@ for (v of new StringIterator) { } // Should fail
 >v : Symbol(v, Decl(for-of16.ts, 6, 3))
 >StringIterator : Symbol(StringIterator, Decl(for-of16.ts, 0, 0))
 
+for (v of new StringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
+>v : Symbol(v, Decl(for-of16.ts, 6, 3))
+>StringIterator : Symbol(StringIterator, Decl(for-of16.ts, 0, 0))
+

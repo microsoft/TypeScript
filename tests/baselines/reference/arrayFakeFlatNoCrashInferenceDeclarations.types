@@ -19,7 +19,7 @@ type BadFlatArray<Arr, Depth extends number> = {obj: {
 >1 : 1
 
 declare function flat<A, D extends number = 1>(
->flat : <A, D extends number = 1>(arr: A, depth?: D | undefined) => BadFlatArray<A, D>[]
+>flat : <A, D extends number = 1>(arr: A, depth?: D) => BadFlatArray<A, D>[]
 
     arr: A,
 >arr : A

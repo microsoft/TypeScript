@@ -2,7 +2,7 @@
 // Repro from #20196
 
 type A = {
->A : A
+>A : { a: (x: number) => string; }
 
   a: (x: number) => string
 >a : (x: number) => string
@@ -10,7 +10,7 @@ type A = {
 
 };
 type B = {
->B : B
+>B : { a: (x: boolean) => string; }
 
   a: (x: boolean) => string
 >a : (x: boolean) => string

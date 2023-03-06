@@ -6,7 +6,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@types/node": "^8.0.47",
+    "@types/node": "^17.0.21",
     "discord.js": "latest"
   }
 }

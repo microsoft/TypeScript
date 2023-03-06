@@ -26,16 +26,16 @@ import j from "./jquery.js"
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 0;
 // No extension: '.ts' added
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 // '.js' extension: stripped and replaced with '.ts'
 //// [d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [jquery_user_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

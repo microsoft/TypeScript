@@ -21,4 +21,5 @@ tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOpera
             ~~~~~~
 !!! error TS2322: Type 'T2' is not assignable to type 'T1'.
 !!! error TS2322:   'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
+!!! related TS2208 tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts:9:19: This type parameter might need an `extends T1` constraint.
     }

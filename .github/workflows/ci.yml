@@ -11,40 +11,180 @@ on:
       - release-*
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version:
+          - "19"
+          - "18"
+          - "16"
+          - "14"
+        bundle:
+          - "true"
+        include:
+          - node-version: "*"
+            bundle: "false"
+
+    name: Test Node ${{ matrix.node-version }} with --bundle=${{ matrix.bundle }}
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 5
+    - uses: actions/checkout@v3
     - name: Use node version ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Remove existing TypeScript
-      run: |
-        npm uninstall typescript --no-save
-        npm uninstall tslint --no-save
+        check-latest: true
     - run:  npm ci
 
-    # Re: https://github.com/actions/setup-node/pull/125
-    - name: Register Problem Matcher for TSC
-      run: echo "##[add-matcher].github/tsc.json"
-
     - name: Tests
-      run:  npm test -- --no-lint
+      # run tests, but lint separately
+      run:  npm run test -- --no-lint --bundle=${{ matrix.bundle }}
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
 
     - name: Linter
-      run:  npm run lint:ci
+      run:  npm run lint
+
+  browser-integration:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
 
     - name: Adding playwright
       run: npm install --no-save --no-package-lock playwright
 
     - name: Validate the browser can import TypeScript
-      run: gulp test-browser-integration
+      run: npx hereby test-browser-integration
 
+  typecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - name: Build src
+      run: npx hereby build-src
+
+  smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - run: npx hereby lkg
+    - run: |
+        npm pack
+        mv typescript*.tgz typescript.tgz
+        echo "PACKAGE=$PWD/typescript.tgz" >> $GITHUB_ENV
+
+    - name: Smoke test
+      run: |
+        cd "$(mktemp -d)"
+        npm init --yes
+        npm install $PACKAGE tslib
+
+        echo "Testing tsc..."
+        npx tsc --version
+
+        echo "Testing tsserver..."
+        echo '{"seq": 1, "command": "status"}' | npx tsserver
+
+        cat > smoke.js << 'EOF'
+        console.log(`Testing ${process.argv[2]}...`);
+        const { __importDefault, __importStar } = require("tslib");
+        const ts = require(process.argv[2]);
+
+        // See: https://github.com/microsoft/TypeScript/pull/51474#issuecomment-1310871623
+        const fns = [
+          [() => ts.version,                          true],
+          [() => ts.default.version,                  false],
+          [() => __importDefault(ts).version,         false],
+          [() => __importDefault(ts).default.version, true],
+          [() => __importStar(ts).version,            true],
+          [() => __importStar(ts).default.version,    true],
+        ];
+
+        for (const [fn, shouldSucceed] of fns) {
+          let success = false;
+          try {
+            success = !!fn();
+          }
+          catch {}
+          const status = success ? "succeeded" : "failed";
+          if (success === shouldSucceed) {
+            console.log(`${fn.toString()} ${status} as expected.`);
+          }
+          else {
+            console.log(`${fn.toString()} unexpectedly ${status}.`);
+            process.exitCode = 1;
+          }
+        }
+        console.log("ok");
+        EOF
+
+        node ./smoke.js typescript
+        node ./smoke.js typescript/lib/tsserverlibrary
+
+  misc:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - name: Build scripts
+      run: npx hereby scripts
+
+    - name: ESLint tests
+      run: npx hereby run-eslint-rules-tests
+
+  self-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - name: Build tsc
+      run: npx hereby tsc
+
+    - name: Clean
+      run: npx hereby clean-src
+
+    - name: Self build
+      run: npx hereby build-src --built

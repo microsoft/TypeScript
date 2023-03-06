@@ -242,7 +242,7 @@ function f20<Data>(carrier: DataCarrier<Data>) {
 // Repro from #28935
 
 type Foo = { tag: true, x: number } | { tag: false, y: number } | { [x: string]: string };
->Foo : Foo
+>Foo : { tag: true; x: number; } | { tag: false; y: number; } | { [x: string]: string; }
 >tag : true
 >true : true
 >x : number
@@ -292,7 +292,7 @@ function f31(foo: Foo) {
 // Repro from #33448
 
 type a = {
->a : a
+>a : { type: 'a'; data: string; }
 
     type: 'a',
 >type : "a"
@@ -301,7 +301,7 @@ type a = {
 >data : string
 }
 type b = {
->b : b
+>b : { type: 'b'; name: string; }
 
     type: 'b',
 >type : "b"
@@ -310,7 +310,7 @@ type b = {
 >name : string
 }
 type c = {
->c : c
+>c : { type: 'c'; other: string; }
 
     type: 'c',
 >type : "c"
@@ -320,7 +320,7 @@ type c = {
 }
 
 type abc = a | b | c;
->abc : abc
+>abc : a | b | c
 
 function f(problem: abc & (b | c)) {
 >f : (problem: abc & (b | c)) => void
@@ -347,7 +347,7 @@ function f(problem: abc & (b | c)) {
 }
 
 type RuntimeValue =
->RuntimeValue : RuntimeValue
+>RuntimeValue : { type: 'number'; value: number; } | { type: 'string'; value: string; } | { type: 'boolean'; value: boolean; }
 
     | { type: 'number', value: number }
 >type : "number"

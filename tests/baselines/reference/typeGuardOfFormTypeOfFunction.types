@@ -182,3 +182,40 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
     }
 }
 
+// Repro from #49316
+
+function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
+>configureStore : <S extends object>(reducer: (() => void) | Record<keyof S, () => void>) => void
+>reducer : Record<keyof S, () => void> | (() => void)
+
+    let rootReducer: () => void;
+>rootReducer : () => void
+
+    if (typeof reducer === 'function') {
+>typeof reducer === 'function' : boolean
+>typeof reducer : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>reducer : Record<keyof S, () => void> | (() => void)
+>'function' : "function"
+
+        rootReducer = reducer;
+>rootReducer = reducer : () => void
+>rootReducer : () => void
+>reducer : () => void
+    }
+}
+
+function f101(x: string | Record<string, any>) {
+>f101 : (x: string | Record<string, any>) => any
+>x : string | Record<string, any>
+
+    return typeof x === "object" && x.anything;
+>typeof x === "object" && x.anything : any
+>typeof x === "object" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | Record<string, any>
+>"object" : "object"
+>x.anything : any
+>x : Record<string, any>
+>anything : any
+}
+

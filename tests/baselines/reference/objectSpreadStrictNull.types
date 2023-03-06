@@ -86,7 +86,7 @@ function f(
 }
 
 type Movie = {
->Movie : Movie
+>Movie : { title: string; yearReleased: number; }
 
     title: string;
 >title : string

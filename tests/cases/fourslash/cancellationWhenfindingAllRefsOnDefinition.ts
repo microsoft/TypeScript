@@ -7,9 +7,9 @@
 ////
 ////    }
 ////
-////    [|public /**/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}start|](){
+////    public /*1*/start(){
 ////        return this;
-////    }|]
+////    }
 ////
 ////    public stop(){
 ////        return this;
@@ -20,8 +20,10 @@
 ////import Second = require("./findAllRefsOnDefinition-import");
 ////
 ////var second = new Second.Test()
-////second.[|start|]();
+////second./*2*/start();
 ////second.stop();
+
+let count = 1;
 
 checkRefs();
 
@@ -33,5 +35,5 @@ cancellation.resetCancelled();
 checkRefs();
 
 function checkRefs() {
-    verify.singleReferenceGroup("(method) Test.start(): this", "start");
+    verify.baselineFindAllReferencesMulti(count++, '1');
 }

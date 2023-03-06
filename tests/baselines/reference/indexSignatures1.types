@@ -179,7 +179,7 @@ dom = { date123: 'hello' };  // Error
 // Contextual typing by index signature with template literal pattern
 
 type Funcs = {
->Funcs : Funcs
+>Funcs : { [key: `s${string}`]: (x: string) => void; [key: `n${string}`]: (x: number) => void; }
 
     [key: `s${string}`]: (x: string) => void,
 >key : `s${string}`
@@ -214,7 +214,7 @@ const funcs: Funcs = {
 // Duplicate index signature checking
 
 type Duplicates = {
->Duplicates : Duplicates
+>Duplicates : { [key: string]: any; [key: number]: any; [key: symbol]: any; [key: `foo${string}`]: any; }
 
     [key: string | number]: any;  // Error
 >key : string | number
@@ -232,7 +232,7 @@ type Duplicates = {
 // Conflicting index signature checking
 
 type Conflicting = {
->Conflicting : Conflicting
+>Conflicting : { [key: `a${string}`]: "a"; [key: `${string}a`]: "b"; [key: `a${string}a`]: "c"; }
 
     [key: `a${string}`]: 'a';
 >key : `a${string}`
@@ -265,18 +265,18 @@ type Invalid<T extends string> = {
 // Intersections in index signatures
 
 type Tag1 = { __tag1__: void };
->Tag1 : Tag1
+>Tag1 : { __tag1__: void; }
 >__tag1__ : void
 
 type Tag2 = { __tag2__: void };
->Tag2 : Tag2
+>Tag2 : { __tag2__: void; }
 >__tag2__ : void
 
 type TaggedString1 = string & Tag1;
->TaggedString1 : TaggedString1
+>TaggedString1 : string & Tag1
 
 type TaggedString2 = string & Tag2;
->TaggedString2 : TaggedString2
+>TaggedString2 : string & Tag2
 
 declare let s0: string;
 >s0 : string
@@ -958,7 +958,7 @@ const AmIPseudo: Pseudo = '&';  // Error
 >'&' : "&"
 
 type PseudoDeclaration = { [key in Pseudo]: string };
->PseudoDeclaration : PseudoDeclaration
+>PseudoDeclaration : { [x: `&:${string}`]: string; }
 
 const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
 >test : PseudoDeclaration
@@ -978,7 +978,7 @@ const path2: FieldPattern = 'two';  // Error
 >'two' : "two"
 
 type PathsObject = { [P in FieldPattern]: object; };
->PathsObject : PathsObject
+>PathsObject : { [x: `/${string}`]: object; }
 
 const pathObject: PathsObject = 123;  // Error
 >pathObject : PathsObject
@@ -992,7 +992,7 @@ const id: IdType = '0000-0000-0000-0001';
 >'0000-0000-0000-0001' : "0000-0000-0000-0001"
 
 type A = Record<IdType, string>;
->A : A
+>A : { [x: `${number}-${number}-${number}-${number}`]: string; }
 
 const a: A = { [id]: 'test' }
 >a : A
@@ -1054,15 +1054,15 @@ const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
 // Repro from #45772
 
 type Id = string & { __tag: 'id '};
->Id : Id
+>Id : string & { __tag: 'id '; }
 >__tag : "id "
 
 type Rec1 = { [key: Id]: number };
->Rec1 : Rec1
+>Rec1 : { [key: Id]: number; }
 >key : Id
 
 type Rec2 = Record<Id, number>;
->Rec2 : Rec2
+>Rec2 : { [x: string & { __tag: "id "; }]: number; }
 
 type K1 = keyof Rec1;  // Id
 >K1 : Id

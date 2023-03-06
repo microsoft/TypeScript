@@ -4,5 +4,5 @@ export var a = 10;
 >10 : 10
 
 === tests/cases/compiler/client.ts ===
+
 export import "server";
-No type information for this code.

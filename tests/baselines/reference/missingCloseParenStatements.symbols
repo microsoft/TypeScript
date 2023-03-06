@@ -1,0 +1,37 @@
+=== tests/cases/compiler/missingCloseParenStatements.ts ===
+var a1, a2, a3 = 0;
+>a1 : Symbol(a1, Decl(missingCloseParenStatements.ts, 0, 3))
+>a2 : Symbol(a2, Decl(missingCloseParenStatements.ts, 0, 7))
+>a3 : Symbol(a3, Decl(missingCloseParenStatements.ts, 0, 11))
+
+if ( a1 && (a2 + a3 > 0) {
+>a1 : Symbol(a1, Decl(missingCloseParenStatements.ts, 0, 3))
+>a2 : Symbol(a2, Decl(missingCloseParenStatements.ts, 0, 7))
+>a3 : Symbol(a3, Decl(missingCloseParenStatements.ts, 0, 11))
+
+    while( (a2 > 0) && a1
+>a2 : Symbol(a2, Decl(missingCloseParenStatements.ts, 0, 7))
+>a1 : Symbol(a1, Decl(missingCloseParenStatements.ts, 0, 3))
+    {
+        do {
+            var i = i + 1;
+>i : Symbol(i, Decl(missingCloseParenStatements.ts, 5, 15))
+>i : Symbol(i, Decl(missingCloseParenStatements.ts, 5, 15))
+
+            a1 = a1 + i;
+>a1 : Symbol(a1, Decl(missingCloseParenStatements.ts, 0, 3))
+>a1 : Symbol(a1, Decl(missingCloseParenStatements.ts, 0, 3))
+>i : Symbol(i, Decl(missingCloseParenStatements.ts, 5, 15))
+
+            with ((a2 + a3 > 0) && a1 {
+>a2 : Symbol(a2, Decl(missingCloseParenStatements.ts, 0, 7))
+>a3 : Symbol(a3, Decl(missingCloseParenStatements.ts, 0, 11))
+>a1 : Symbol(a1, Decl(missingCloseParenStatements.ts, 0, 3))
+
+                console.log(x);
+              }
+        } while (i < 5 && (a1 > 5);
+>i : Symbol(i, Decl(missingCloseParenStatements.ts, 5, 15))
+>a1 : Symbol(a1, Decl(missingCloseParenStatements.ts, 0, 3))
+    }
+}

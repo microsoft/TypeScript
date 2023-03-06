@@ -593,8 +593,7 @@
           "start": 17,
           "length": 10
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -606,8 +605,7 @@
           "start": 98,
           "length": 9
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -615,8 +613,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -681,8 +678,7 @@
           "start": 51,
           "length": 10
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -690,8 +686,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -768,8 +763,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -852,8 +846,7 @@
           "start": 17,
           "length": 10
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -865,8 +858,7 @@
           "start": 98,
           "length": 9
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -874,8 +866,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -940,8 +931,7 @@
           "start": 51,
           "length": 10
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -949,8 +939,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1027,8 +1016,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1111,8 +1099,7 @@
           "start": 17,
           "length": 10
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1124,8 +1111,7 @@
           "start": 98,
           "length": 9
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1133,8 +1119,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1199,8 +1184,7 @@
           "start": 51,
           "length": 10
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1208,8 +1192,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1286,8 +1269,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

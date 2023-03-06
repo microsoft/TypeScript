@@ -10,6 +10,6 @@ var z = foo.x + 10;
 
 //// [foo_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = require("vs/foo");
 var z = foo.x + 10;

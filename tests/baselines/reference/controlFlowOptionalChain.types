@@ -635,7 +635,7 @@ function f01(x: unknown) {
 }
 
 type Thing = { foo: string | number, bar(): number, baz: object };
->Thing : Thing
+>Thing : { foo: string | number; bar(): number; baz: object; }
 >foo : string | number
 >bar : () => number
 >baz : object
@@ -1243,9 +1243,9 @@ function f15(o: Thing | undefined, value: number) {
     }
     else {
         o.foo;
->o.foo : number
+>o.foo : string | number
 >o : Thing
->foo : number
+>foo : string | number
     }
 }
 
@@ -1768,9 +1768,9 @@ function f30(o: Thing | undefined) {
 >foo : string | number | undefined
 
         o.foo;
->o.foo : string | number
+>o.foo : NonNullable<string | number | undefined>
 >o : Thing
->foo : string | number
+>foo : NonNullable<string | number | undefined>
     }
 }
 
@@ -1870,7 +1870,7 @@ function f41(o: Thing | undefined) {
 // Repros from #34570
 
 type Shape =
->Shape : Shape
+>Shape : { type: 'rectangle'; width: number; height: number; } | { type: 'circle'; radius: number; }
 
     | { type: 'rectangle', width: number, height: number }
 >type : "rectangle"
@@ -1882,7 +1882,7 @@ type Shape =
 >radius : number
 
 function getArea(shape?: Shape) {
->getArea : (shape?: Shape | undefined) => number
+>getArea : (shape?: Shape) => number
 >shape : Shape | undefined
 
     switch (shape?.type) {
@@ -1923,7 +1923,7 @@ function getArea(shape?: Shape) {
 }
 
 type Feature = {
->Feature : Feature
+>Feature : { id: string; geometry?: { type: string; coordinates: number[]; } | undefined; }
 
   id: string;
 >id : string
@@ -2073,3 +2073,48 @@ while (arr[i]?.tag === "left") {
     }
 }
 
+
+// Repro from #51941
+
+type Test5 = {
+>Test5 : { main?: { childs: Record<string, Test5>; } | undefined; }
+
+  main?: {
+>main : { childs: Record<string, Test5>; } | undefined
+
+    childs: Record<string, Test5>;
+>childs : Record<string, Test5>
+
+  };
+};
+
+function f50(obj: Test5) {
+>f50 : (obj: Test5) => Test5 | null
+>obj : Test5
+
+   for (const key in obj.main?.childs) {
+>key : string
+>obj.main?.childs : Record<string, Test5> | undefined
+>obj.main : { childs: Record<string, Test5>; } | undefined
+>obj : Test5
+>main : { childs: Record<string, Test5>; } | undefined
+>childs : Record<string, Test5> | undefined
+
+      if (obj.main.childs[key] === obj) {
+>obj.main.childs[key] === obj : boolean
+>obj.main.childs[key] : Test5
+>obj.main.childs : Record<string, Test5>
+>obj.main : { childs: Record<string, Test5>; }
+>obj : Test5
+>main : { childs: Record<string, Test5>; }
+>childs : Record<string, Test5>
+>key : string
+>obj : Test5
+
+        return obj;
+>obj : Test5
+      }
+   }
+   return null;
+>null : null
+}

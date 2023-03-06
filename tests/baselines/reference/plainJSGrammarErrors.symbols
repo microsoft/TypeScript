@@ -455,7 +455,6 @@ export let noMeta = import.metal
 function foo() { new.targe }
 >foo : Symbol(foo, Decl(plainJSGrammarErrors.js, 200, 32))
 >new.targe : Symbol(foo, Decl(plainJSGrammarErrors.js, 200, 32))
->targe : Symbol(foo, Decl(plainJSGrammarErrors.js, 200, 32))
 
 const nullaryDynamicImport = import()
 >nullaryDynamicImport : Symbol(nullaryDynamicImport, Decl(plainJSGrammarErrors.js, 202, 5))

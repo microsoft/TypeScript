@@ -1,6 +1,6 @@
 === tests/cases/compiler/varianceCallbacksAndIndexedAccesses.ts ===
 type Source = {
->Source : Source
+>Source : { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
 
     <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 >type : K
@@ -57,7 +57,7 @@ interface WindowLike<T> extends PostMessageObject<T> {
 >handler : Action1<any>
 }
 type Target = {
->Target : Target
+>Target : { (type: "message", handler: Action1<MessageEventLike<any>>): void; (type: string, handler: Action1<any>): void; }
 
     (type: "message", handler: Action1<MessageEventLike<any>>): void;
 >type : "message"

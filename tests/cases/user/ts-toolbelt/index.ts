@@ -5,7 +5,7 @@ import {I, T, Test} from "ts-toolbelt";
 const {check, checks} = Test;
 
 // iterates over `T` and returns the `Iteration` position when finished
-type StdRecursiveIteration<T extends any[], I extends I.Iteration = I.IterationOf<'0'>> = {
+type StdRecursiveIteration<T extends any[], I extends I.Iteration = I.IterationOf<0>> = {
     0: StdRecursiveIteration<T, I.Next<I>>;
     1: I.Pos<I>;
 }[

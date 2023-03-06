@@ -33,7 +33,7 @@ interface Bool extends Base<boolean> {
 }
 
 type Primitive = Int | Float | Str | Bool;
->Primitive : Primitive
+>Primitive : Int | Float | Str | Bool
 
 const foo: Primitive = {
 >foo : Primitive
@@ -58,7 +58,7 @@ const foo: Primitive = {
 
 
 type DisjointDiscriminants = { p1: 'left'; p2: true; p3: number } | { p1: 'right'; p2: false; p4: string } | { p1: 'left'; p2: boolean };
->DisjointDiscriminants : DisjointDiscriminants
+>DisjointDiscriminants : { p1: 'left'; p2: true; p3: number; } | { p1: 'right'; p2: false; p4: string; } | { p1: 'left'; p2: boolean; }
 >p1 : "left"
 >p2 : true
 >true : true
