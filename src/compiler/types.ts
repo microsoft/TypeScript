@@ -109,11 +109,6 @@ export const enum SyntaxKind {
     BacktickToken,
     /** Only the JSDoc scanner produces HashToken. The normal scanner produces PrivateIdentifier. */
     HashToken,
-    /**
-     * Only the special JSDoc comment text scanner produces JSDocCommentTextTokes. One of these tokens spans all text after a tag comment's start and before the next @
-     * @internal
-     */
-    JSDocCommentTextToken,
     // Assignments
     EqualsToken,
     PlusEqualsToken,
@@ -134,6 +129,11 @@ export const enum SyntaxKind {
     // Identifiers and PrivateIdentifiers
     Identifier,
     PrivateIdentifier,
+    /**
+     * Only the special JSDoc comment text scanner produces JSDocCommentTextTokes. One of these tokens spans all text after a tag comment's start and before the next @
+     * @internal
+     */
+    JSDocCommentTextToken,
     // Reserved words
     BreakKeyword,
     CaseKeyword,
