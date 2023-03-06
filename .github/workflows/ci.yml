@@ -96,6 +96,20 @@ jobs:
       with:
         node-version: "*"
         check-latest: true
+    
+    - if: github.event_name == 'pull_request'
+      id: ref
+      run: echo "ref=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+    - if: github.event_name == 'pull_request'
+      run:
+        git log --oneline -1 HEAD
+        git log --oneline -1 HEAD^
+        git log --oneline -1 HEAD~1
+    
+    # - if: github.event_name == 'pull_request'
+    #   run:  npm ci
+
     - run:  npm ci
 
     - run: npx hereby lkg
