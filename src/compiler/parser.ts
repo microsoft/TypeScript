@@ -8636,14 +8636,14 @@ namespace Parser {
                             break;
                         case SyntaxKind.WhitespaceTrivia:
                             // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
-                            const whitespace = scanner.getTokenText();
+                            const whitespaceLength = scanner.getTextPos() - scanner.getTokenPos();
                             if (state === JSDocState.SavingComments) {
-                                comments.push(whitespace);
+                                comments.push(scanner.getTokenText());
                             }
-                            else if (margin !== undefined && indent + whitespace.length > margin) {
-                                comments.push(whitespace.slice(margin - indent));
+                            else if (margin !== undefined && indent + whitespaceLength > margin) {
+                                comments.push(scanner.getTokenText().slice(margin - indent));
                             }
-                            indent += whitespace.length;
+                            indent += whitespaceLength;
                             break;
                         case SyntaxKind.EndOfFileToken:
                             break loop;
@@ -8888,12 +8888,12 @@ namespace Parser {
                                 pushComment(scanner.getTokenText());
                             }
                             else {
-                                const whitespace = scanner.getTokenText();
+                                const whitespaceLength = scanner.getTextPos() - scanner.getTokenPos();
                                 // if the whitespace crosses the margin, take only the whitespace that passes the margin
-                                if (margin !== undefined && indent + whitespace.length > margin) {
-                                    comments.push(whitespace.slice(margin - indent));
+                                if (margin !== undefined && indent + whitespaceLength > margin) {
+                                    comments.push(scanner.getTokenText().slice(margin - indent));
                                 }
-                                indent += whitespace.length;
+                                indent += whitespaceLength;
                             }
                             break;
                         case SyntaxKind.OpenBraceToken:
