@@ -1,9 +1,9 @@
-error TS5101: Flag 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+error TS5101: Flag 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 tests/cases/compiler/noImplicitAnyIndexingSuppressed.ts(19,9): error TS2339: Property 'hi' does not exist on type '{}'.
 tests/cases/compiler/noImplicitAnyIndexingSuppressed.ts(22,9): error TS2339: Property '10' does not exist on type '{}'.
 
 
-!!! error TS5101: Flag 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+!!! error TS5101: Flag 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 ==== tests/cases/compiler/noImplicitAnyIndexingSuppressed.ts (2 errors) ====
     enum MyEmusEnum {
         emu

@@ -3,6 +3,7 @@ import {
     __String,
     addInternalEmitFlags,
     addRange,
+    addRelatedInfo,
     append,
     arrayFrom,
     arrayIsEqualTo,
@@ -68,6 +69,7 @@ import {
     DirectoryStructureHost,
     emitFiles,
     EmitHost,
+    emitModuleKindIsNonNodeESM,
     EmitOnly,
     EmitResult,
     emptyArray,
@@ -117,6 +119,7 @@ import {
     getEmitScriptTarget,
     getErrorSpanForNode,
     getExternalModuleName,
+    getIsolatedModules,
     getJSXImplicitImportBase,
     getJSXRuntimeImport,
     getLineAndCharacterOfPosition,
@@ -961,14 +964,14 @@ export function createModuleResolutionLoader(
 ): ResolutionLoader<StringLiteralLike, ResolvedModuleWithFailedLookupLocations, SourceFile> {
     return {
         nameAndMode: moduleResolutionNameAndModeGetter,
-        resolve: (moduleName, resoluionMode) => resolveModuleName(
+        resolve: (moduleName, resolutionMode) => resolveModuleName(
             moduleName,
             containingFile,
             options,
             host,
             cache,
             redirectedReference,
-            resoluionMode,
+            resolutionMode,
         ),
     };
 }
@@ -1630,7 +1633,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
     let structureIsReused: StructureIsReused;
     tracing?.push(tracing.Phase.Program, "tryReuseStructureFromOldProgram", {});
-    structureIsReused = tryReuseStructureFromOldProgram(); // eslint-disable-line prefer-const
+    structureIsReused = tryReuseStructureFromOldProgram();
     tracing?.pop();
     if (structureIsReused !== StructureIsReused.Completely) {
         processingDefaultLibFiles = [];
@@ -2957,14 +2960,21 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         }
                         else if (isClassDeclaration(parent)) {
                             const exportIndex = findIndex(parent.modifiers, isExportModifier);
-                            const defaultIndex = findIndex(parent.modifiers, isDefaultModifier);
-                            if (exportIndex >= 0 && decoratorIndex < exportIndex) {
-                                // report illegal decorator before `export default`
-                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_must_come_after_export_or_export_default_in_JavaScript_files));
-                            }
-                            else if (defaultIndex >= 0 && decoratorIndex < defaultIndex) {
-                                // report illegal decorator before `export default`
-                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
+                            if (exportIndex >= 0) {
+                                const defaultIndex = findIndex(parent.modifiers, isDefaultModifier);
+                                if (decoratorIndex > exportIndex && defaultIndex >= 0 && decoratorIndex < defaultIndex) {
+                                    // report illegal decorator between `export` and `default`
+                                    diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
+                                }
+                                else if (exportIndex >= 0 && decoratorIndex < exportIndex) {
+                                    const trailingDecoratorIndex = findIndex(parent.modifiers, isDecorator, exportIndex);
+                                    if (trailingDecoratorIndex >= 0) {
+                                        diagnostics.push(addRelatedInfo(
+                                            createDiagnosticForNode(parent.modifiers[trailingDecoratorIndex], Diagnostics.Decorators_may_not_appear_after_export_or_export_default_if_they_also_appear_before_export),
+                                            createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorator_used_before_export_here),
+                                        ));
+                                    }
+                                }
                             }
                         }
                     }
@@ -3178,7 +3188,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         // If we are importing helpers, we need to add a synthetic reference to resolve the
         // helpers library.
-        if ((options.isolatedModules || isExternalModuleFile)
+        if ((getIsolatedModules(options) || isExternalModuleFile)
             && !file.isDeclarationFile) {
             if (options.importHelpers) {
                 // synthesize 'import "tslib"' declaration
@@ -3984,13 +3994,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "exactOptionalPropertyTypes", "strictNullChecks");
         }
 
-        if (options.isolatedModules) {
+        if (options.isolatedModules || options.verbatimModuleSyntax) {
             if (options.out) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "isolatedModules");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules");
             }
 
             if (options.outFile) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", "isolatedModules");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules");
             }
         }
 
@@ -4232,11 +4242,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.preserveValueImports && getEmitModuleKind(options) < ModuleKind.ES2015) {
-            createDiagnosticForOptionName(Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later, "preserveValueImports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_es2015_or_later, "preserveValueImports");
         }
 
+        const moduleKind = getEmitModuleKind(options);
         if (options.verbatimModuleSyntax) {
-            const moduleKind = getEmitModuleKind(options);
             if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
                 createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
             }
@@ -4257,13 +4267,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         const moduleResolution = getEmitModuleResolutionKind(options);
         if (options.resolvePackageJsonExports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("resolvePackageJsonExports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonExports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonExports");
         }
         if (options.resolvePackageJsonImports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("resolvePackageJsonImports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonImports");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonImports");
         }
         if (options.customConditions && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("customConditions", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
+            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
+        }
+
+        if (moduleResolution === ModuleResolutionKind.Bundler && !emitModuleKindIsNonNodeESM(moduleKind)) {
+            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_es2015_or_later, "bundler");
         }
 
         // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
@@ -4310,7 +4324,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const version = typeScriptVersion || versionMajorMinor;
         const ignoreDeprecations = options.ignoreDeprecations;
         if (ignoreDeprecations) {
-            if (ignoreDeprecations === DeprecationVersion.v5_0 && (version === DeprecationVersion.v5_0 || version === DeprecationVersion.v5_5)) {
+            if (ignoreDeprecations === DeprecationVersion.v5_0 && version.startsWith("5.")) {
                 return;
             }
             else if (reportInvalidIgnoreDeprecations) {
@@ -4395,7 +4409,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createDiagnostic(Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
         }
         else {
-            createDiagnostic(Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
+            createDiagnostic(Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
         }
     }
 

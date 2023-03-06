@@ -20,9 +20,9 @@ let C = (() => {
     let _member_decorators_1;
     return class C {
         static {
-            __esDecorate(this, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _member_decorators, { kind: "method", name: "method2", static: false, private: false }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _member_decorators_1, { kind: "method", name: _a, static: false, private: false }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, get: obj => obj.method1 } }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _member_decorators, { kind: "method", name: "method2", static: false, private: false, access: { has: obj => "method2" in obj, get: obj => obj["method2"] } }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _member_decorators_1, { kind: "method", name: _a, static: false, private: false, access: { has: obj => _a in obj, get: obj => obj[_a] } }, null, _instanceExtraInitializers);
         }
         method1() { }
         ["method2"]() { }

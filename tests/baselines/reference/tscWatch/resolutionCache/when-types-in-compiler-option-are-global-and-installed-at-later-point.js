@@ -51,19 +51,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib/app.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/lib/app.ts:
+/user/username/projects/myproject/lib/app.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -85,6 +85,24 @@ declare namespace myapp {
     function component(str: string): number;
 }
 
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/lib/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/node_modules: *new*
+  {}
 
 Output::
 sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
@@ -113,8 +131,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {}
@@ -122,9 +138,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts:
+/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json:
+/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -142,26 +158,6 @@ Change:: No change, just check program
 Input::
 
 Output::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/lib/app.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts:
-  {}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
 
 exitCode:: ExitStatus.undefined
 

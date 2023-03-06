@@ -9,10 +9,8 @@ export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | 
 export type CompilerTestKind = "conformance" | "compiler";
 export type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
 
-/* eslint-disable prefer-const */
 export let shards = 1;
 export let shardId = 1;
-/* eslint-enable prefer-const */
 
 // The following have setters as while they're read here in the harness, they're only set in the runner
 export function setShards(count: number) {

@@ -25,7 +25,7 @@ let C = (() => {
         },
         (() => {
             _static_private_field1_decorators = [dec];
-            __esDecorate(null, null, _static_private_field1_decorators, { kind: "field", name: "#field1", static: true, private: true }, _static_private_field1_initializers, _staticExtraInitializers);
+            __esDecorate(null, null, _static_private_field1_decorators, { kind: "field", name: "#field1", static: true, private: true, access: { has: obj => __classPrivateFieldIn(_a, obj), get: obj => __classPrivateFieldGet(obj, _a, "f", _C_field1), set: (obj, value) => { __classPrivateFieldSet(obj, _a, value, "f", _C_field1); } } }, _static_private_field1_initializers, _staticExtraInitializers);
             __runInitializers(_a, _staticExtraInitializers);
         })(),
         _C_field1 = { value: __runInitializers(_a, _static_private_field1_initializers, 0) },

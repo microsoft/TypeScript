@@ -117,8 +117,6 @@ declare namespace ts {
                 Navto = "navto",
                 NavTree = "navtree",
                 NavTreeFull = "navtree-full",
-                /** @deprecated */
-                Occurrences = "occurrences",
                 DocumentHighlights = "documentHighlights",
                 Open = "open",
                 Quickinfo = "quickinfo",
@@ -878,30 +876,6 @@ declare namespace ts {
             }
             interface JsxClosingTagResponse extends Response {
                 readonly body: TextInsertion;
-            }
-            /**
-             * @deprecated
-             * Get occurrences request; value of command field is
-             * "occurrences". Return response giving spans that are relevant
-             * in the file at a given line and column.
-             */
-            interface OccurrencesRequest extends FileLocationRequest {
-                command: CommandTypes.Occurrences;
-            }
-            /** @deprecated */
-            interface OccurrencesResponseItem extends FileSpanWithContext {
-                /**
-                 * True if the occurrence is a write location, false otherwise.
-                 */
-                isWriteAccess: boolean;
-                /**
-                 * True if the occurrence is in a string, undefined otherwise;
-                 */
-                isInString?: true;
-            }
-            /** @deprecated */
-            interface OccurrencesResponse extends Response {
-                body?: OccurrencesResponseItem[];
             }
             /**
              * Get document highlights request; value of command field is
@@ -3065,10 +3039,6 @@ declare namespace ts {
             remove(path: NormalizedPath): void;
         }
         function isDynamicFileName(fileName: NormalizedPath): boolean;
-        interface ScriptInfoVersion {
-            svc: number;
-            text: number;
-        }
         class ScriptInfo {
             private readonly host;
             readonly fileName: NormalizedPath;
@@ -3081,10 +3051,9 @@ declare namespace ts {
             readonly containingProjects: Project[];
             private formatSettings;
             private preferences;
-            private textStorage;
-            constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
+            constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: number);
             isScriptOpen(): boolean;
-            open(newText: string): void;
+            open(newText: string | undefined): void;
             close(fileExists?: boolean): void;
             getSnapshot(): IScriptSnapshot;
             private ensureRealPath;
@@ -3874,7 +3843,6 @@ declare namespace ts {
             private getTypeDefinition;
             private mapImplementationLocations;
             private getImplementation;
-            private getOccurrences;
             private getSyntacticDiagnosticsSync;
             private getSemanticDiagnosticsSync;
             private getSuggestionDiagnosticsSync;
@@ -3989,7 +3957,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.0";
+    const versionMajorMinor = "5.1";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -6636,14 +6604,12 @@ declare namespace ts {
     }) | (void & {
         __escapedIdentifier: void;
     }) | InternalSymbolName;
-    /** ReadonlyMap where keys are `__String`s. */
-    interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
-    }
-    /** Map where keys are `__String`s. */
-    interface UnderscoreEscapedMap<T> extends Map<__String, T> {
-    }
+    /** @deprecated Use ReadonlyMap<__String, T> instead. */
+    type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
+    /** @deprecated Use Map<__String, T> instead. */
+    type UnderscoreEscapedMap<T> = Map<__String, T>;
     /** SymbolTable based on ES6 Map interface. */
-    type SymbolTable = UnderscoreEscapedMap<Symbol>;
+    type SymbolTable = Map<__String, Symbol>;
     enum TypeFlags {
         Any = 1,
         Unknown = 2,
@@ -6675,7 +6641,8 @@ declare namespace ts {
         TemplateLiteral = 134217728,
         StringMapping = 268435456,
         Literal = 2944,
-        Unit = 109440,
+        Unit = 109472,
+        Freshable = 2976,
         StringOrNumberLiteral = 384,
         PossiblyFalsy = 117724,
         StringLike = 402653316,
@@ -6727,10 +6694,12 @@ declare namespace ts {
         isClass(): this is InterfaceType;
         isIndexType(): this is IndexType;
     }
-    interface LiteralType extends Type {
+    interface FreshableType extends Type {
+        freshType: FreshableType;
+        regularType: FreshableType;
+    }
+    interface LiteralType extends FreshableType {
         value: string | number | PseudoBigInt;
-        freshType: LiteralType;
-        regularType: LiteralType;
     }
     interface UniqueESSymbolType extends Type {
         symbol: Symbol;
@@ -6745,7 +6714,7 @@ declare namespace ts {
     interface BigIntLiteralType extends LiteralType {
         value: PseudoBigInt;
     }
-    interface EnumType extends Type {
+    interface EnumType extends FreshableType {
     }
     enum ObjectFlags {
         None = 0,
@@ -8150,7 +8119,6 @@ declare namespace ts {
         noEmitHelpers?: boolean;
     }
     interface GetEffectiveTypeRootsHost {
-        directoryExists?(directoryName: string): boolean;
         getCurrentDirectory?(): string;
     }
     interface TextSpan {
@@ -9988,8 +9956,6 @@ declare namespace ts {
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         getFileReferences(fileName: string): ReferenceEntry[];
-        /** @deprecated */
-        getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined;
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;
@@ -10070,6 +10036,13 @@ declare namespace ts {
          */
         triggerCharacter?: CompletionsTriggerCharacter;
         triggerKind?: CompletionTriggerKind;
+        /**
+         * Include a `symbol` property on each completion entry object.
+         * Symbols reference cyclic data structures and sometimes an entire TypeChecker instance,
+         * so use caution when serializing or retaining completion entries retrieved with this option.
+         * @default false
+         */
+        includeSymbol?: boolean;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
@@ -10590,6 +10563,7 @@ declare namespace ts {
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
          */
         exportName: string;
+        exportMapKey?: string;
         moduleSpecifier?: string;
         /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
@@ -10599,7 +10573,6 @@ declare namespace ts {
         isPackageJsonImport?: true;
     }
     interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
-        /** The key in the `ExportMapCache` where the completion entry's `SymbolExportInfo[]` is found */
         exportMapKey: string;
     }
     interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
@@ -10627,6 +10600,12 @@ declare namespace ts {
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
         isImportStatementCompletion?: true;
+        /**
+         * For API purposes.
+         * Included for non-string completions only when `includeSymbol: true` option is passed to `getCompletionsAtPosition`.
+         * @example Get declaration of completion: `symbol.valueDeclaration`
+         */
+        symbol?: Symbol;
         /**
          * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
          * that allows TS Server to look up the symbol represented by the completion item, disambiguating

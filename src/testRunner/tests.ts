@@ -53,6 +53,7 @@ import "./unittests/services/extract/constants";
 import "./unittests/services/extract/functions";
 import "./unittests/services/extract/symbolWalker";
 import "./unittests/services/extract/ranges";
+import "./unittests/services/findAllReferences";
 import "./unittests/services/hostNewLineSupport";
 import "./unittests/services/languageService";
 import "./unittests/services/organizeImports";
