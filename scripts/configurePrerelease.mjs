@@ -49,11 +49,10 @@ function main() {
         throw new Error(err + "\n");
     }
 
-    const currentCommit = spawnSync("git", ["rev-parse", "HEAD"]).stdout.toString().trim();
-
     // Finally write the changes to disk.
     // Modify the package.json structure
-    packageJsonValue.version = `${majorMinor}.${prereleasePatch}+${currentCommit}`;
+    packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
+    packageJsonValue.gitHead = spawnSync("git", ["rev-parse", "HEAD"]).stdout.toString().trim();
     writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
     writeFileSync(tsFilePath, modifiedTsFileContents);
 }
